@@ -1,0 +1,195 @@
+{
+  "birthday": "1984-10-18",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/zMoYwvJhf5CPr1D0kecFyuEjCmo.jpg",
+  "id": 692,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm1457472",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 10903,
+        "media_type": "movie",
+        "title": "Seven Days Sunday",
+        "credit_id": "52fe43cd9251416c7501eaed",
+        "release_date": "2007-03-05",
+        "original_title": "Sieben Tage Sonntag",
+        "adult": false,
+        "poster_path": "/jwDa2AHmK7iIJCBtCDZqyVh572t.jpg",
+        "character": "Ella"
+      },
+      {
+        "id": 7456,
+        "media_type": "movie",
+        "title": "Die Wolke",
+        "credit_id": "52fe447ec3a36847f80996cf",
+        "release_date": "2006-03-16",
+        "original_title": "Die Wolke",
+        "adult": false,
+        "poster_path": "/ngbJICKm5nDCx6DT6NO1LbQIHu0.jpg",
+        "character": "Meike"
+      },
+      {
+        "id": 7735,
+        "media_type": "movie",
+        "title": "The Wave",
+        "credit_id": "52fe4484c3a36847f809aae7",
+        "release_date": "2008-03-11",
+        "original_title": "Die Welle",
+        "adult": false,
+        "poster_path": "/h3FL7Un5LA5dAbg0AoRNjeWvsTK.jpg",
+        "character": "Karo"
+      },
+      {
+        "id": 36920,
+        "media_type": "movie",
+        "title": "The School Trip",
+        "credit_id": "52fe461a9251416c91049301",
+        "release_date": "2004-10-27",
+        "original_title": "Klassenfahrt - Geknutscht wird immer",
+        "adult": false,
+        "poster_path": "/rt2d8bXxZ8AyWjea2VM9QYrh0Vs.jpg",
+        "character": "Mira"
+      },
+      {
+        "id": 46474,
+        "media_type": "movie",
+        "title": "Albert Schweitzer",
+        "credit_id": "52fe46f9c3a36847f811ccb7",
+        "release_date": "2009-12-24",
+        "original_title": "Albert Schweitzer - Ein Leben für Afrika",
+        "adult": false,
+        "poster_path": "/6fSPijK8RLDlsNgnrrfnAJ7oUHC.jpg",
+        "character": "Nurse Susi Sandler"
+      },
+      {
+        "id": 52587,
+        "media_type": "movie",
+        "title": "We Are the Night",
+        "credit_id": "52fe4834c3a36847f815c659",
+        "release_date": "2010-10-28",
+        "original_title": "Wir sind die Nacht",
+        "adult": false,
+        "poster_path": "/cddXRgqtvNQ3iqnjfBR6JQmxrXT.jpg",
+        "character": "Charlotte"
+      },
+      {
+        "id": 96714,
+        "media_type": "movie",
+        "title": "Diaz: Don't Clean Up This Blood",
+        "credit_id": "52fe49be9251416c750d1f17",
+        "release_date": "2012-04-13",
+        "original_title": "Diaz: Don't Clean Up This Blood",
+        "adult": false,
+        "poster_path": "/tGTdHucyUXm2cxupLmAjUG4G4W8.jpg",
+        "character": "Alma Koch"
+      },
+      {
+        "id": 142410,
+        "media_type": "movie",
+        "title": "Room 205 of Fear",
+        "credit_id": "52fe4adf9251416c750f0def",
+        "release_date": "2011-12-02",
+        "original_title": "205 - Zimmer der Angst",
+        "adult": false,
+        "poster_path": "/8MHW81SipdkEFJYfDnLcMKyCBhu.jpg",
+        "character": "Katrin Nadolny"
+      },
+      {
+        "id": 86,
+        "media_type": "movie",
+        "title": "The Elementary Particles",
+        "credit_id": "52fe4215c3a36847f8002b39",
+        "release_date": "2006-02-10",
+        "original_title": "Elementarteilchen",
+        "adult": false,
+        "poster_path": "/6IgQZl06sNRSBZE1Te74ENb6mhx.jpg",
+        "character": "Johanna"
+      },
+      {
+        "id": 172561,
+        "media_type": "movie",
+        "title": "Herztöne",
+        "credit_id": "52fe4d22c3a36847f825073d",
+        "release_date": "2013-02-24",
+        "original_title": "Herztöne",
+        "adult": false,
+        "poster_path": null,
+        "character": "Lissie Lensen"
+      },
+      {
+        "id": 211158,
+        "media_type": "movie",
+        "title": "Ein Teil von mir",
+        "credit_id": "52fe4d8fc3a368484e1efd75",
+        "release_date": "2009-10-14",
+        "original_title": "Ein Teil von mir",
+        "adult": false,
+        "poster_path": "/5y6hZcHKLuaAY2tqPtBNOYJRzpG.jpg",
+        "character": "Jeanette"
+      },
+      {
+        "id": 227195,
+        "media_type": "movie",
+        "title": "Wüstenherz - Der Trip meines Lebens",
+        "credit_id": "52fe4e989251416c7515bc6f",
+        "release_date": "2013-10-09",
+        "original_title": "Wüstenherz - Der Trip meines Lebens",
+        "adult": false,
+        "poster_path": "/tyzjLYWe9KCC4I9CNg27IWxOJkn.jpg",
+        "character": "Lucie"
+      },
+      {
+        "id": 258339,
+        "media_type": "movie",
+        "title": "Vidiots",
+        "credit_id": "5319dcf7c3a3685c5d0030df",
+        "release_date": "2006-07-27",
+        "original_title": "Vidiots",
+        "adult": false,
+        "poster_path": null,
+        "character": "Lea"
+      },
+      {
+        "id": 272426,
+        "media_type": "movie",
+        "title": "H3 - Halloween Horror Hostel",
+        "credit_id": "5385f63dc3a3681aed0013b4",
+        "release_date": "2008-03-18",
+        "original_title": "H3 - Halloween Horror Hostel",
+        "adult": false,
+        "poster_path": "/lOpxqLf3SrD7kc3IgSHnVTmYs3W.jpg",
+        "character": "Janin"
+      },
+      {
+        "id": 286635,
+        "media_type": "movie",
+        "title": "Der gestiefelte Kater",
+        "credit_id": "53ebaa78c3a368706e000458",
+        "release_date": "2009-12-25",
+        "original_title": "Der gestiefelte Kater",
+        "adult": false,
+        "poster_path": "/g0dzVCKJ9NPuoY9b84da2Z3GCNn.jpg",
+        "character": "Prinzessin Frieda"
+      },
+      {
+        "id": 14210,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5380ac420e0a2624b400802d",
+        "name": "Polizeiruf 110",
+        "poster_path": "/y29g252ERvrv85jIl5XSVkds7tM.jpg",
+        "original_name": "Polizeiruf 110",
+        "first_air_date": "1971-06-27",
+        "character": "Steffi König"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Jennifer Ulrich",
+  "place_of_birth": null,
+  "popularity": "1.95592983462489"
+}

@@ -1,0 +1,13 @@
+{
+  "id": 3,
+  "logo_path": "/8fjxXca7tbKwTpGqOa2PuiLmn0c.png",
+  "description": null,
+  "name": "Pixar Animation Studios",
+  "parent_company": {
+    "id": 2,
+    "logo_path": "/jGaqSWErdoohxIi6Y6wpd9xPPVt.png",
+    "name": "Walt Disney Pictures"
+  },
+  "homepage": null,
+  "headquarters": null
+}

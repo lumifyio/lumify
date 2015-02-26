@@ -1,0 +1,206 @@
+{
+  "birthday": "1978-02-17",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nAshton Holmes (born February 17, 1978 height 5' 8½\" (1,74 m)) is an American actor of film and television and a former soap opera actor, best known for the role of Jack Stall in A History of Violence and Private Sidney Phillips in the HBO miniseries The Pacific.\n\nDescription above from the Wikipedia article Ashton Holmes, licensed under CC-BY-SA, full list of contributors on Wikipedia.    ",
+  "homepage": "",
+  "profile_path": "/glpPD22Zk2b7bGSOAFoy9ucPDmj.jpg",
+  "id": 225,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm1525948",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 20478,
+        "media_type": "movie",
+        "title": "Normal Adolescent Behavior",
+        "credit_id": "52fe43e8c3a368484e0052e3",
+        "release_date": "2007-04-27",
+        "original_title": "Normal Adolescent Behavior",
+        "adult": false,
+        "poster_path": "/yliqJ1k8Cmk6HUEr7fZIb3gS7Nw.jpg",
+        "character": "Sean"
+      },
+      {
+        "id": 13689,
+        "media_type": "movie",
+        "title": "Peaceful Warrior",
+        "credit_id": "52fe458c9251416c7505a505",
+        "release_date": "2006-03-30",
+        "original_title": "Peaceful Warrior",
+        "adult": false,
+        "poster_path": "/ntQaS7FQ6Q9f45fjEJjz02gD4TG.jpg",
+        "character": "Tommy"
+      },
+      {
+        "id": 14223,
+        "media_type": "movie",
+        "title": "Wind Chill",
+        "credit_id": "52fe45da9251416c75064c13",
+        "release_date": "2007-04-27",
+        "original_title": "Wind Chill",
+        "adult": false,
+        "poster_path": "/pEVChTdLzgXO1fBvlSYFsukWlP4.jpg",
+        "character": "Guy"
+      },
+      {
+        "id": 38541,
+        "media_type": "movie",
+        "title": "The Divide",
+        "credit_id": "52fe46c49251416c9105f0fb",
+        "release_date": "2011-03-13",
+        "original_title": "The Divide",
+        "adult": false,
+        "poster_path": "/g6ASXhqIV6fDxkFYAD6kVZcMdb3.jpg",
+        "character": "Adrien"
+      },
+      {
+        "id": 59,
+        "media_type": "movie",
+        "title": "A History of Violence",
+        "credit_id": "52fe4212c3a36847f8001933",
+        "release_date": "2005-09-23",
+        "original_title": "A History of Violence",
+        "adult": false,
+        "poster_path": "/qhAoUIDin2d9oNZJqLW6XqPY7XQ.jpg",
+        "character": "Jack Stall"
+      },
+      {
+        "id": 189197,
+        "media_type": "movie",
+        "title": "The Pacific",
+        "credit_id": "52fe4d529251416c75137555",
+        "release_date": "2010-05-16",
+        "original_title": "The Pacific",
+        "adult": false,
+        "poster_path": "/x6hO6F06iurqTn9mQOqpil1ZMLL.jpg",
+        "character": "PFC Sidney Phillips / ... (7 episodes, 2010)"
+      },
+      {
+        "id": 231308,
+        "media_type": "movie",
+        "title": "Cold Turkey",
+        "credit_id": "52fe4debc3a36847f8274aab",
+        "release_date": "2013-11-15",
+        "original_title": "Cold Turkey",
+        "adult": false,
+        "poster_path": "/846tuPN2IUfVsC6mXtNu66KFec0.jpg",
+        "character": "Jacob"
+      },
+      {
+        "id": 12890,
+        "media_type": "movie",
+        "title": "Smart People",
+        "credit_id": "53d5ebfe0e0a26283b006894",
+        "release_date": "2008-04-11",
+        "original_title": "Smart People",
+        "adult": false,
+        "poster_path": "/t6yBtAMb1FHCgLZZoBYOBsrQfLd.jpg",
+        "character": ""
+      },
+      {
+        "id": 2734,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525743e0760ee36aaa0de95a",
+        "name": "Law & Order: Special Victims Unit",
+        "poster_path": "/tsxiLPFlpNlJaMFlKIFqffGkiJt.jpg",
+        "original_name": "Law & Order: Special Victims Unit",
+        "first_air_date": "1999-09-20",
+        "character": ""
+      },
+      {
+        "id": 32868,
+        "media_type": "tv",
+        "episode_count": 22,
+        "credit_id": "5258a607760ee3466169e6c1",
+        "name": "Nikita",
+        "poster_path": "/85MQLqvTcfym2OCplbn6kU8eao8.jpg",
+        "original_name": "Nikita",
+        "first_air_date": "2010-09-09",
+        "character": "Thom"
+      },
+      {
+        "id": 39358,
+        "media_type": "tv",
+        "episode_count": 60,
+        "credit_id": "5258f02e760ee346618f9102",
+        "name": "Revenge",
+        "poster_path": "/1hg5vMgJvLs7JhD5PGRfbABKSYt.jpg",
+        "original_name": "Revenge",
+        "first_air_date": "2011-09-21",
+        "character": "Tyler Barrol"
+      },
+      {
+        "id": 1408,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5256ccac19c2956ff60772bd",
+        "name": "House",
+        "poster_path": "/j2Ny9P6RY9i3lfxdyePEUVSN4o5.jpg",
+        "original_name": "House",
+        "first_air_date": "2004-11-16",
+        "character": ""
+      },
+      {
+        "id": 1606,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570da919c2957114020a8a",
+        "name": "Ghost Whisperer",
+        "poster_path": "/5iRA7DHyR6WXmhV68ACq25r0gmr.jpg",
+        "original_name": "Ghost Whisperer",
+        "first_air_date": "2005-09-23",
+        "character": ""
+      },
+      {
+        "id": 2171,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257259a760ee3776a2583c8",
+        "name": "Cold Case",
+        "poster_path": "/lc0FIYUzisq5jbqXpmZkDCY99kL.jpg",
+        "original_name": "Cold Case",
+        "first_air_date": "2003-09-28",
+        "character": ""
+      },
+      {
+        "id": 4598,
+        "media_type": "tv",
+        "episode_count": 5,
+        "credit_id": "525773e2760ee36aaa4ee6c7",
+        "name": "Boston Legal",
+        "poster_path": "/3C9DBd8AatiYKGVfTshBErFv2KC.jpg",
+        "original_name": "Boston Legal",
+        "first_air_date": "2004-10-03",
+        "character": ""
+      },
+      {
+        "id": 4601,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525774a9760ee36aaa50207e",
+        "name": "Law & Order: Criminal Intent",
+        "poster_path": "/kczraR4CczRU4n2ssr9QnHHu8d1.jpg",
+        "original_name": "Law & Order: Criminal Intent",
+        "first_air_date": "2001-09-30",
+        "character": ""
+      },
+      {
+        "id": 16997,
+        "media_type": "tv",
+        "episode_count": 11,
+        "credit_id": "52584fd7760ee3466103bfc0",
+        "name": "The Pacific",
+        "poster_path": "/eitGOLIzvddgR4ZGx5GkAtX38h1.jpg",
+        "original_name": "The Pacific",
+        "first_air_date": null,
+        "character": "PFC Sidney Phillips"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Ashton Holmes",
+  "place_of_birth": "Albany - New York - USA",
+  "popularity": "1.03389137573988"
+}

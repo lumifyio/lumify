@@ -1,0 +1,178 @@
+{
+  "budget": 350000,
+  "vote_average": 7,
+  "backdrop_path": null,
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3841,
+        "order": 0,
+        "credit_id": "52fe4230c3a36847f800ab15",
+        "name": "Samuel Finzi",
+        "cast_id": 6,
+        "profile_path": "/3F8yBdO0NvbfZwMAV7M51iWHxVt.jpg",
+        "character": "Oliver"
+      },
+      {
+        "id": 685,
+        "order": 1,
+        "credit_id": "52fe4230c3a36847f800ab0d",
+        "name": "Nina Kronjäger",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Sofia"
+      },
+      {
+        "id": 3840,
+        "order": 2,
+        "credit_id": "52fe4230c3a36847f800ab11",
+        "name": "Anna Maria Mühe",
+        "cast_id": 5,
+        "profile_path": "/dWupK9IEYo63U3UvWKi08PPJG5J.jpg",
+        "character": "Maya"
+      },
+      {
+        "id": 15380,
+        "order": 3,
+        "credit_id": "52fe4230c3a36847f800ab31",
+        "name": "Margot Nagel",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Edna"
+      },
+      {
+        "id": 15381,
+        "order": 4,
+        "credit_id": "52fe4230c3a36847f800ab35",
+        "name": "Harald Warmbrunn",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Horst"
+      }
+    ],
+    "crew": [
+      {
+        "id": 867,
+        "credit_id": "52fe4230c3a36847f800aafd",
+        "department": "Directing",
+        "name": "Marc Meyer",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 868,
+        "credit_id": "52fe4230c3a36847f800ab03",
+        "department": "Production",
+        "name": "Faysal Omer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 867,
+        "credit_id": "52fe4230c3a36847f800ab09",
+        "department": "Writing",
+        "name": "Marc Meyer",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 875,
+        "credit_id": "52fe4230c3a36847f800ab1b",
+        "department": "Camera",
+        "name": "Peter Polsak-Lohmann",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 919,
+        "credit_id": "52fe4230c3a36847f800ab21",
+        "department": "Camera",
+        "name": "Jan Raiber",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 850,
+        "credit_id": "52fe4230c3a36847f800ab27",
+        "department": "Editing",
+        "name": "Diana Karsten",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 15360,
+        "credit_id": "52fe4230c3a36847f800ab2d",
+        "department": "Sound",
+        "name": "Christian Biegai",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 867,
+        "credit_id": "52fe4230c3a36847f800ab3b",
+        "department": "Production",
+        "name": "Marc Meyer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 58280,
+        "credit_id": "52fe4230c3a36847f800ab41",
+        "department": "Art",
+        "name": "Agi Ariunsaichan Dawaachu",
+        "job": "Set Designer",
+        "profile_path": null
+      },
+      {
+        "id": 58281,
+        "credit_id": "52fe4230c3a36847f800ab47",
+        "department": "Art",
+        "name": "Frank Noack",
+        "job": "Set Decoration",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 98,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 270,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Wir sagen Du! Schatz.",
+  "overview": "Oliver doesn\u2019t have a family so he steals one.",
+  "production_companies": [{
+    "id": 111,
+    "name": "miko-film"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0997275",
+  "release_date": "2007-11-01",
+  "original_title": "Wir sagen Du! Schatz.",
+  "vote_count": 1,
+  "poster_path": "/9HpZNAs23BHJ37KFy2V65SgWVbh.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.215359032899964"
+}

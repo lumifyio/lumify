@@ -1,0 +1,291 @@
+{
+  "budget": 1800000,
+  "vote_average": 6.8,
+  "backdrop_path": "/yKIZzfWsDuACZgxesFZS8FqjzSr.jpg",
+  "genres": [{
+    "id": 27,
+    "name": "Horror"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5139,
+        "order": 0,
+        "credit_id": "52fe423cc3a36847f800e5c1",
+        "name": "Robert Englund",
+        "cast_id": 1,
+        "profile_path": "/1xIUyS7kzi99Yv4qeg9Ep7QtHDS.jpg",
+        "character": "Freddy Krueger"
+      },
+      {
+        "id": 5141,
+        "order": 1,
+        "credit_id": "52fe423cc3a36847f800e5d5",
+        "name": "Heather Langenkamp",
+        "cast_id": 5,
+        "profile_path": "/aRcb9i4iMLpgycEDn5uTcBka8HK.jpg",
+        "character": "Nancy Thompson"
+      },
+      {
+        "id": 85,
+        "order": 2,
+        "credit_id": "52fe423cc3a36847f800e5d1",
+        "name": "Johnny Depp",
+        "cast_id": 4,
+        "profile_path": "/5sc2pu4YWItxCaXSvrFpg64zN9J.jpg",
+        "character": "Glen Lantz"
+      },
+      {
+        "id": 13652,
+        "order": 3,
+        "credit_id": "52fe423cc3a36847f800e5d9",
+        "name": "Ronee Blakley",
+        "cast_id": 6,
+        "profile_path": "/3NFJ8OZshHNfmiSMXbpxQF4RZNH.jpg",
+        "character": "Marge Thompson"
+      },
+      {
+        "id": 11163,
+        "order": 4,
+        "credit_id": "52fe423cc3a36847f800e5dd",
+        "name": "John Saxon",
+        "cast_id": 7,
+        "profile_path": "/jggn6H9ezT1iizRHI0hJUDJ2jOo.jpg",
+        "character": "Lt. Thompson"
+      },
+      {
+        "id": 13656,
+        "order": 5,
+        "credit_id": "52fe423cc3a36847f800e5e1",
+        "name": "Amanda Wyss",
+        "cast_id": 8,
+        "profile_path": "/1HEqQELnhQ7NAC6unYqc4CQ1ib.jpg",
+        "character": "Tina Gray"
+      },
+      {
+        "id": 13657,
+        "order": 6,
+        "credit_id": "52fe423cc3a36847f800e5e5",
+        "name": "Jsu Garcia",
+        "cast_id": 9,
+        "profile_path": "/wbmmHxDtEMECvgmjwsgGX5HRmsr.jpg",
+        "character": "Rod Lane"
+      },
+      {
+        "id": 12826,
+        "order": 7,
+        "credit_id": "52fe423cc3a36847f800e5e9",
+        "name": "Charles Fleischer",
+        "cast_id": 10,
+        "profile_path": "/vlF5j4y3lEKO6wXJ1R98ixUmebx.jpg",
+        "character": "Dr. King"
+      },
+      {
+        "id": 13660,
+        "order": 8,
+        "credit_id": "52fe423cc3a36847f800e5ed",
+        "name": "Joseph Whipp",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Sgt. Parker"
+      },
+      {
+        "id": 7401,
+        "order": 9,
+        "credit_id": "52fe423cc3a36847f800e5f1",
+        "name": "Lin Shaye",
+        "cast_id": 12,
+        "profile_path": "/erD3UM1YDkRS46D3XkhTSNXtRyg.jpg",
+        "character": "Teacher"
+      },
+      {
+        "id": 13661,
+        "order": 10,
+        "credit_id": "52fe423cc3a36847f800e5f5",
+        "name": "Joe Unger",
+        "cast_id": 13,
+        "profile_path": "/ebDUtKHeOv2mZthv8cLfKWev2Vi.jpg",
+        "character": "Sgt. Garcia"
+      },
+      {
+        "id": 13662,
+        "order": 11,
+        "credit_id": "52fe423cc3a36847f800e5f9",
+        "name": "Mimi Craven",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Nurse"
+      },
+      {
+        "id": 7219,
+        "order": 12,
+        "credit_id": "52fe423cc3a36847f800e64b",
+        "name": "David Andrews",
+        "cast_id": 28,
+        "profile_path": "/pxmxn29UHW9r6uvLrd7bEwLswlQ.jpg",
+        "character": "Foreman"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5140,
+        "credit_id": "52fe423cc3a36847f800e5c7",
+        "department": "Writing",
+        "name": "Wes Craven",
+        "job": "Screenplay",
+        "profile_path": "/qwjz10FiAyMvxD2b3XNEUsRb0zz.jpg"
+      },
+      {
+        "id": 5140,
+        "credit_id": "52fe423cc3a36847f800e5cd",
+        "department": "Directing",
+        "name": "Wes Craven",
+        "job": "Director",
+        "profile_path": "/qwjz10FiAyMvxD2b3XNEUsRb0zz.jpg"
+      },
+      {
+        "id": 13663,
+        "credit_id": "52fe423cc3a36847f800e5ff",
+        "department": "Production",
+        "name": "Robert Shaye",
+        "job": "Producer",
+        "profile_path": "/ylgPcVcvDAZ9IykvDVN4894cEJh.jpg"
+      },
+      {
+        "id": 13664,
+        "credit_id": "52fe423cc3a36847f800e605",
+        "department": "Production",
+        "name": "John Burrows",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13665,
+        "credit_id": "52fe423cc3a36847f800e60b",
+        "department": "Production",
+        "name": "Stanley Dudelson",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13667,
+        "credit_id": "52fe423cc3a36847f800e611",
+        "department": "Production",
+        "name": "Joseph Wolf",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13668,
+        "credit_id": "52fe423cc3a36847f800e617",
+        "department": "Production",
+        "name": "Sara Risher",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13669,
+        "credit_id": "52fe423cc3a36847f800e61d",
+        "department": "Sound",
+        "name": "Charles Bernstein",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 13670,
+        "credit_id": "52fe423cc3a36847f800e623",
+        "department": "Camera",
+        "name": "Jacques Haitkin",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 13672,
+        "credit_id": "52fe423cc3a36847f800e629",
+        "department": "Editing",
+        "name": "Patrick McMahon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13673,
+        "credit_id": "52fe423cc3a36847f800e62f",
+        "department": "Editing",
+        "name": "Rick Shaine",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13674,
+        "credit_id": "52fe423cc3a36847f800e635",
+        "department": "Production",
+        "name": "Annette Benson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 13675,
+        "credit_id": "52fe423cc3a36847f800e63b",
+        "department": "Art",
+        "name": "Gregg Fonseca",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 13677,
+        "credit_id": "52fe423cc3a36847f800e641",
+        "department": "Art",
+        "name": "Anne H. Ahrens",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 13678,
+        "credit_id": "52fe423cc3a36847f800e647",
+        "department": "Costume & Make-Up",
+        "name": "Dana Lyman",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 91,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 377,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "A Nightmare on Elm Street",
+  "overview": "Teenagers in a small town are dropping like flies, apparently in the grip of mass hysteria causing their suicides. A cop's daughter, Nancy Thompson (Heather Langenkamp) traces the cause to child molester Fred Krueger (Robert Englund), who was burned alive by angry parents many years before. Krueger has now come back in the dreams of his killers' children, claiming their lives as his revenge. Nancy and her boyfriend, Glen (Johnny Depp), must devise a plan to lure the monster out of the realm of nightmares and into the real world...",
+  "production_companies": [
+    {
+      "id": 12,
+      "name": "New Line Cinema"
+    },
+    {
+      "id": 1531,
+      "name": "Smart Egg Pictures"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 8581,
+    "backdrop_path": "/fg0HtE2tm61vJPrusIaSfQK03vd.jpg",
+    "name": "A Nightmare on Elm Street Collection",
+    "poster_path": "/BcgmrOz69AUBRukw5LLGeYsOgo.jpg"
+  },
+  "imdb_id": "tt0087800",
+  "release_date": "1984-11-15",
+  "original_title": "A Nightmare on Elm Street",
+  "vote_count": 173,
+  "poster_path": "/sXFlyjfWv544uKOJmPd2vVsaFm9.jpg",
+  "tagline": "A scream that wakes you up, might be your own...",
+  "revenue": 25504513,
+  "popularity": 1.3765441555284
+}

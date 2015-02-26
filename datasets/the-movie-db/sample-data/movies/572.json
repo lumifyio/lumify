@@ -1,0 +1,259 @@
+{
+  "budget": 2400000,
+  "vote_average": 6.8,
+  "backdrop_path": "/yrfvcc3HJ4H6wZsFWLhjhpVZz7S.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 7742,
+        "order": 0,
+        "credit_id": "52fe4254c3a36847f8015b47",
+        "name": "Kristoffer Joner",
+        "cast_id": 9,
+        "profile_path": "/rTGAHSO5ZHRDLS7aFwxSfBXxk6.jpg",
+        "character": "John"
+      },
+      {
+        "id": 7743,
+        "order": 1,
+        "credit_id": "52fe4254c3a36847f8015b4b",
+        "name": "Cecilie A. Mosli",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Anne"
+      },
+      {
+        "id": 7744,
+        "order": 2,
+        "credit_id": "52fe4254c3a36847f8015b4f",
+        "name": "Julia Schacht",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Kim"
+      },
+      {
+        "id": 6283,
+        "order": 3,
+        "credit_id": "52fe4254c3a36847f8015b57",
+        "name": "Michael Nyqvist",
+        "cast_id": 13,
+        "profile_path": "/1Wb5FxaHF9Ysn8cnu8epUem3nDm.jpg",
+        "character": "Åke"
+      },
+      {
+        "id": 7745,
+        "order": 4,
+        "credit_id": "52fe4254c3a36847f8015b53",
+        "name": "Anna Bache-Wiig",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Ingrid"
+      },
+      {
+        "id": 7760,
+        "order": 5,
+        "credit_id": "52fe4254c3a36847f8015b79",
+        "name": "Magne Kipperrud",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Kollega"
+      },
+      {
+        "id": 7761,
+        "order": 6,
+        "credit_id": "52fe4254c3a36847f8015b7d",
+        "name": "Øystein Martinsen",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Peter"
+      },
+      {
+        "id": 7762,
+        "order": 7,
+        "credit_id": "52fe4254c3a36847f8015b81",
+        "name": "Odd Arno Midtsjø",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Gammel Mand"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7736,
+        "credit_id": "52fe4254c3a36847f8015b19",
+        "department": "Directing",
+        "name": "Pål Sletaune",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 7736,
+        "credit_id": "52fe4254c3a36847f8015b1f",
+        "department": "Writing",
+        "name": "Pål Sletaune",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7737,
+        "credit_id": "52fe4254c3a36847f8015b25",
+        "department": "Production",
+        "name": "Anna Anthony",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7738,
+        "credit_id": "52fe4254c3a36847f8015b2b",
+        "department": "Production",
+        "name": "Hans Bitsch",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7739,
+        "credit_id": "52fe4254c3a36847f8015b31",
+        "department": "Production",
+        "name": "Hugo Hagemann Føsker",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7740,
+        "credit_id": "52fe4254c3a36847f8015b37",
+        "department": "Production",
+        "name": "Marius Holst",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7736,
+        "credit_id": "52fe4254c3a36847f8015b3d",
+        "department": "Production",
+        "name": "Pål Sletaune",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7741,
+        "credit_id": "52fe4254c3a36847f8015b43",
+        "department": "Sound",
+        "name": "Simon Boswell",
+        "job": "Original Music Composer",
+        "profile_path": "/docJpHQG30F8wdMxKhQJpOuYkK0.jpg"
+      },
+      {
+        "id": 7746,
+        "credit_id": "52fe4254c3a36847f8015b5d",
+        "department": "Editing",
+        "name": "John Andreas Andersen",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7747,
+        "credit_id": "52fe4254c3a36847f8015b63",
+        "department": "Production",
+        "name": "Ellen Michelsen",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7746,
+        "credit_id": "52fe4254c3a36847f8015b69",
+        "department": "Camera",
+        "name": "John Andreas Andersen",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7758,
+        "credit_id": "52fe4254c3a36847f8015b6f",
+        "department": "Editing",
+        "name": "Darek Hodor",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7759,
+        "credit_id": "52fe4254c3a36847f8015b75",
+        "department": "Art",
+        "name": "Jack Van Domburg",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 75,
+  "spoken_languages": [
+    {
+      "iso_639_1": "no",
+      "name": "Norsk"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.rinjin-nextdoor.jp/",
+  "id": 572,
+  "production_countries": [
+    {
+      "name": "Denmark",
+      "iso_3166_1": "DK"
+    },
+    {
+      "name": "Norway",
+      "iso_3166_1": "NO"
+    },
+    {
+      "name": "Sweden",
+      "iso_3166_1": "SE"
+    }
+  ],
+  "title": "Next Door",
+  "overview": "A psychological thriller, where the main character, John, have recently been dumped by his girlfriend, Ingrid. He is seduced by his beautiful neighbors, Anne and Kim, and is taken to a mystical and frightful world where he isn't able to tell reality from fantasy.",
+  "production_companies": [
+    {
+      "id": 327,
+      "name": "Columbia TriStar Nordisk Film Distributors A/S"
+    },
+    {
+      "id": 328,
+      "name": "TLA Releasing"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0453383",
+  "release_date": "2005-03-10",
+  "original_title": "Naboer",
+  "vote_count": 2,
+  "poster_path": "/9QgWi9Nf8vnzRtl8ABOYVdo5Wxh.jpg",
+  "tagline": "Some doors should never be opened.",
+  "revenue": 0,
+  "popularity": "0.392096987080244"
+}

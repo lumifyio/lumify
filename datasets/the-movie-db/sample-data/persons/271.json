@@ -1,0 +1,184 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/3HBwhHXeCBOkf4Cx0jO5MEOmaf6.jpg",
+  "id": 271,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0781700",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 17812,
+        "media_type": "movie",
+        "title": "El cártel",
+        "credit_id": "52fe474a9251416c75094111",
+        "release_date": "2009-05-12",
+        "original_title": "El cártel",
+        "adult": false,
+        "poster_path": "/ncUJWH527cUKXYZXC6E3nT7aNGz.jpg",
+        "character": "Don Amilkar"
+      },
+      {
+        "id": 151708,
+        "media_type": "movie",
+        "title": "Colosio: El Asesinato",
+        "credit_id": "52fe4b099251416c910cdd79",
+        "release_date": "2012-06-08",
+        "original_title": "Colosio: El Asesinato",
+        "adult": false,
+        "poster_path": "/vgzh9vV8Ry6e7txJhWdt73L9uLp.jpg",
+        "character": "Torres"
+      },
+      {
+        "id": 55,
+        "media_type": "movie",
+        "title": "Amores Perros",
+        "credit_id": "52fe4211c3a36847f8001771",
+        "release_date": "2000-03-14",
+        "original_title": "Amores perros",
+        "adult": false,
+        "poster_path": "/8gEXmIzw1tDnBfOaCFPimkNIkmm.jpg",
+        "character": "Leonardo"
+      },
+      {
+        "id": 197354,
+        "media_type": "movie",
+        "title": "Tequila, historia de una pasión",
+        "credit_id": "52fe4d539251416c911123ff",
+        "release_date": "2011-11-04",
+        "original_title": "Tequila, historia de una pasión",
+        "adult": false,
+        "poster_path": "/38Ketc1CNS0vCM7NHudp38ObLPL.jpg",
+        "character": "Sixto"
+      },
+      {
+        "id": 216440,
+        "media_type": "movie",
+        "title": "Paradise",
+        "credit_id": "52fe4e1ac3a368484e20e4f9",
+        "release_date": "2013-11-30",
+        "original_title": "Paraíso",
+        "adult": false,
+        "poster_path": "/tjlyszRAo83zviuGt5f7utx3224.jpg",
+        "character": "Papá de Carmen"
+      },
+      {
+        "id": 217381,
+        "media_type": "movie",
+        "title": "Potosí",
+        "credit_id": "52fe4e30c3a368484e213257",
+        "release_date": "2013-07-21",
+        "original_title": "Potosí",
+        "adult": false,
+        "poster_path": "/cGluTY2yLHZoVJvggkZbE2H8ZlW.jpg",
+        "character": "Tapón"
+      },
+      {
+        "id": 227620,
+        "media_type": "movie",
+        "title": "Meet The Head Of Juan Perez",
+        "credit_id": "52fe4eab9251416c7515e403",
+        "release_date": "2009-11-06",
+        "original_title": "Conozca la cabeza de Juan Pérez",
+        "adult": false,
+        "poster_path": "/3EJdjzEMxukPecMsfuYqTA0hbqO.jpg",
+        "character": "Gorgo"
+      },
+      {
+        "id": 243672,
+        "media_type": "movie",
+        "title": "Puños rosas",
+        "credit_id": "52fe4ee1c3a36847f82aded7",
+        "release_date": "2005-02-11",
+        "original_title": "Puños rosas",
+        "adult": false,
+        "poster_path": "/d5q5ndiZjWuRVwr50IuDfoaEvDZ.jpg",
+        "character": "Chato"
+      },
+      {
+        "id": 264402,
+        "media_type": "movie",
+        "title": "The 4th Company",
+        "credit_id": "5349fe89c3a3682de4000bb1",
+        "release_date": null,
+        "original_title": "La 4ta Compañía",
+        "adult": false,
+        "poster_path": "/o3AfT6wxJRogy3NqUo0wUiY0hBg.jpg",
+        "character": "Memo López"
+      },
+      {
+        "id": 264519,
+        "media_type": "movie",
+        "title": "The Beginning of Time",
+        "credit_id": "534b01470e0a2640c8002410",
+        "release_date": null,
+        "original_title": "El comienzo del tiempo",
+        "adult": false,
+        "poster_path": "/56B2oa0FVaKK6yHHDefeETWZROe.jpg",
+        "character": ""
+      },
+      {
+        "id": 265323,
+        "media_type": "movie",
+        "title": "Doctor Funes Formula",
+        "credit_id": "535092ecc3a3681d87000720",
+        "release_date": null,
+        "original_title": "La fórmula del Doctor Funes",
+        "adult": false,
+        "poster_path": "/eBpz1BUgmjWNmwPCKTplUqKZ6GF.jpg",
+        "character": ""
+      },
+      {
+        "id": 265503,
+        "media_type": "movie",
+        "title": "The Dead Sea",
+        "credit_id": "5361c875c3a3683956000c26",
+        "release_date": "2013-11-29",
+        "original_title": "El mar muerto",
+        "adult": false,
+        "poster_path": "/gWYn1jsAeaAhKgC0oVOWDHs6G5c.jpg",
+        "character": ""
+      },
+      {
+        "id": 173141,
+        "media_type": "movie",
+        "title": "Así es la Suerte",
+        "credit_id": "53703637c3a3687e6c0024fd",
+        "release_date": "2011-08-18",
+        "original_title": "Así es la Suerte",
+        "adult": false,
+        "poster_path": "/zofxrCdEFZ8MCDf06kLtGVwgxhY.jpg",
+        "character": ""
+      },
+      {
+        "id": 272096,
+        "media_type": "movie",
+        "title": "Los Reyes del Juego",
+        "credit_id": "5383d3320e0a2624b700da4a",
+        "release_date": null,
+        "original_title": "Los Reyes del Juego",
+        "adult": false,
+        "poster_path": null,
+        "character": "Armando Santos"
+      },
+      {
+        "id": 275086,
+        "media_type": "movie",
+        "title": "Desafío",
+        "credit_id": "539546b20e0a266dc5005ac9",
+        "release_date": null,
+        "original_title": "Desafío",
+        "adult": false,
+        "poster_path": "/abzOvz3pEtycyV3UFCYrlUjYg9r.jpg",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "José Sefami",
+  "place_of_birth": null,
+  "popularity": "1.85000108079654"
+}

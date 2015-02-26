@@ -1,0 +1,342 @@
+{
+  "budget": 1800000,
+  "vote_average": 4,
+  "backdrop_path": "/oVWpuiT3bJKf4Vzaz9fpDFkYgPL.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 258,
+        "order": 0,
+        "credit_id": "52fe424fc3a36847f801442b",
+        "name": "Gael García Bernal",
+        "cast_id": 4,
+        "profile_path": "/o4sdHKTBbF8GpooIwp5bvliubyY.jpg",
+        "character": "Padre Amaro"
+      },
+      {
+        "id": 7351,
+        "order": 1,
+        "credit_id": "52fe424fc3a36847f801442f",
+        "name": "Ana Claudia Talancón",
+        "cast_id": 5,
+        "profile_path": "/jIpkrRKo8ZICUVIUIvvwO9puATY.jpg",
+        "character": "Amelia"
+      },
+      {
+        "id": 7352,
+        "order": 2,
+        "credit_id": "52fe424fc3a36847f8014433",
+        "name": "Sancho Gracia",
+        "cast_id": 6,
+        "profile_path": "/g5Sbx8vDHD6YzkcSj3hEPw9WbVe.jpg",
+        "character": "Padre Benito Díaz"
+      },
+      {
+        "id": 7353,
+        "order": 3,
+        "credit_id": "52fe424fc3a36847f8014437",
+        "name": "Angélica Aragón",
+        "cast_id": 7,
+        "profile_path": "/wm27bFdxAk45a9ZUf5sdENLONMX.jpg",
+        "character": "Augustina Sanjuanera"
+      },
+      {
+        "id": 7368,
+        "order": 4,
+        "credit_id": "52fe424fc3a36847f801448f",
+        "name": "Ernesto Gómez Cruz",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Obispo"
+      },
+      {
+        "id": 7369,
+        "order": 5,
+        "credit_id": "52fe424fc3a36847f8014493",
+        "name": "Gastón Melo",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Martín"
+      },
+      {
+        "id": 7370,
+        "order": 6,
+        "credit_id": "52fe424fc3a36847f8014497",
+        "name": "Damián Alcázar",
+        "cast_id": 24,
+        "profile_path": "/kGdrBKHr01ZzX4fDwpSo4fNVst7.jpg",
+        "character": "Padre Natalio Pérez"
+      },
+      {
+        "id": 7371,
+        "order": 7,
+        "credit_id": "52fe424fc3a36847f801449b",
+        "name": "Andrés Montiel",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Rubén de la Rosa"
+      },
+      {
+        "id": 7372,
+        "order": 8,
+        "credit_id": "52fe424fc3a36847f801449f",
+        "name": "Pedro Armendáriz, Jr.",
+        "cast_id": 26,
+        "profile_path": "/lD2cQnulU6CL2yM9xlXdFselrOr.jpg",
+        "character": "El Presidente Municipal Gordo"
+      },
+      {
+        "id": 7373,
+        "order": 9,
+        "credit_id": "52fe424fc3a36847f80144a3",
+        "name": "Blanca Loaria",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Getsemaní"
+      },
+      {
+        "id": 7374,
+        "order": 10,
+        "credit_id": "52fe424fc3a36847f80144a7",
+        "name": "Juan Ignacio Aranda",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Chato Aguilar"
+      },
+      {
+        "id": 7375,
+        "order": 11,
+        "credit_id": "52fe424fc3a36847f80144ab",
+        "name": "Verónica Langer",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Amparito"
+      },
+      {
+        "id": 7376,
+        "order": 12,
+        "credit_id": "52fe424fc3a36847f80144af",
+        "name": "Jorge Zárate",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Padre Mauro"
+      },
+      {
+        "id": 7377,
+        "order": 13,
+        "credit_id": "52fe424fc3a36847f80144b3",
+        "name": "Lorenzo de Rodas",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Don Paco de la Rosa"
+      },
+      {
+        "id": 7378,
+        "order": 14,
+        "credit_id": "52fe424fc3a36847f80144b7",
+        "name": "Roger Nevares",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Padre Galván"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7348,
+        "credit_id": "52fe424fc3a36847f801441b",
+        "department": "Directing",
+        "name": "Carlos Carrera",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 7349,
+        "credit_id": "52fe424fc3a36847f8014421",
+        "department": "Writing",
+        "name": "Eça de Queirós",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 7350,
+        "credit_id": "52fe424fc3a36847f8014427",
+        "department": "Writing",
+        "name": "Vicente Leñero",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7354,
+        "credit_id": "52fe424fc3a36847f801443d",
+        "department": "Production",
+        "name": "Daniel Birman Ripstein",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7355,
+        "credit_id": "52fe424fc3a36847f8014443",
+        "department": "Production",
+        "name": "Alfredo Ripstein hijo",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7356,
+        "credit_id": "52fe424fc3a36847f8014449",
+        "department": "Production",
+        "name": "José María Morales",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7357,
+        "credit_id": "52fe424fc3a36847f801444f",
+        "department": "Production",
+        "name": "Claudia Becker",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7358,
+        "credit_id": "52fe424fc3a36847f8014455",
+        "department": "Production",
+        "name": "Scot Evans",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7359,
+        "credit_id": "52fe424fc3a36847f801445b",
+        "department": "Production",
+        "name": "Atahualpa Lichy",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7360,
+        "credit_id": "52fe424fc3a36847f8014461",
+        "department": "Production",
+        "name": "Laura Imperiale",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7361,
+        "credit_id": "52fe424fc3a36847f8014467",
+        "department": "Sound",
+        "name": "Rosino Serrano",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7362,
+        "credit_id": "52fe424fc3a36847f801446d",
+        "department": "Camera",
+        "name": "Guillermo Granillo",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7363,
+        "credit_id": "52fe424fc3a36847f8014473",
+        "department": "Editing",
+        "name": "Óscar Figueroa",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7364,
+        "credit_id": "52fe424fc3a36847f8014479",
+        "department": "Production",
+        "name": "Sandra León Becker",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7365,
+        "credit_id": "52fe424fc3a36847f801447f",
+        "department": "Art",
+        "name": "Carmen Giménez Cacho",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7366,
+        "credit_id": "52fe424fc3a36847f8014485",
+        "department": "Art",
+        "name": "Ivonne Fuentes",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7367,
+        "credit_id": "52fe424fc3a36847f801448b",
+        "department": "Costume & Make-Up",
+        "name": "María Estela Fernández",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 118,
+  "spoken_languages": [{
+    "iso_639_1": "es",
+    "name": "Español"
+  }],
+  "adult": false,
+  "homepage": "http://padreamaro.ad2.com/site/home_eng.htm",
+  "id": 542,
+  "production_countries": [{
+    "name": "Mexico",
+    "iso_3166_1": "MX"
+  }],
+  "title": "The Crime of Padre Amaro",
+  "overview": "The young Father Amaro is put to the test. He is sent to Mexico to help take care of aging Father Benito when he meets a 16-year-old girl that he begins and affair with. It turns out the girls mother had been having an affair with Father Benito. Father Amaro must soon choose between the holy or the sinful life.",
+  "production_companies": [
+    {
+      "id": 299,
+      "name": "Instituto Mexicano de Cinematografía"
+    },
+    {
+      "id": 300,
+      "name": "Alameda Films"
+    },
+    {
+      "id": 301,
+      "name": "Cinecolor-México"
+    },
+    {
+      "id": 303,
+      "name": "Cinecolor-Argentina"
+    },
+    {
+      "id": 304,
+      "name": "Artcam y Fonds Sud Cinéma"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0313196",
+  "release_date": "2002-10-25",
+  "original_title": "El Crimen del Padre Amaro",
+  "vote_count": 1,
+  "poster_path": "/q9V0L2GioEleoz9G1lINiVvcRBx.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.516518184926727"
+}

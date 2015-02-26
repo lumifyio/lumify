@@ -1,0 +1,321 @@
+{
+  "budget": 42000000,
+  "vote_average": 6.6,
+  "backdrop_path": "/scRw6gAoO3CfgQnZjHCh2ZgU4Z1.jpg",
+  "genres": [
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 10748,
+      "name": "Suspense"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5469,
+        "order": 0,
+        "credit_id": "52fe4231c3a36847f800b3a1",
+        "name": "Ralph Fiennes",
+        "cast_id": 9,
+        "profile_path": "/aCWuFbc9AXVy2owUnqFX2IXf97.jpg",
+        "character": "Lenny Nero"
+      },
+      {
+        "id": 9780,
+        "order": 1,
+        "credit_id": "52fe4231c3a36847f800b3a5",
+        "name": "Angela Bassett",
+        "cast_id": 10,
+        "profile_path": "/3CZcwcM89MM8F3cG7956Q7TncKJ.jpg",
+        "character": "Lornette 'Mace' Mason"
+      },
+      {
+        "id": 3197,
+        "order": 2,
+        "credit_id": "52fe4231c3a36847f800b3a9",
+        "name": "Tom Sizemore",
+        "cast_id": 11,
+        "profile_path": "/zmmNvyDm2PNOrBEYFtPQ0Kp62Nb.jpg",
+        "character": "Max Peltier"
+      },
+      {
+        "id": 3196,
+        "order": 3,
+        "credit_id": "52fe4231c3a36847f800b3ad",
+        "name": "Juliette Lewis",
+        "cast_id": 12,
+        "profile_path": "/mo6YNE53gYEnziEJLux3kudVB4U.jpg",
+        "character": "Faith Justin"
+      },
+      {
+        "id": 7132,
+        "order": 4,
+        "credit_id": "52fe4231c3a36847f800b3b1",
+        "name": "Vincent D'Onofrio",
+        "cast_id": 13,
+        "profile_path": "/aJkrWtECvceecCGDbpB3HccedJS.jpg",
+        "character": "Burton Steckler"
+      },
+      {
+        "id": 886,
+        "order": 5,
+        "credit_id": "52fe4231c3a36847f800b3b5",
+        "name": "William Fichtner",
+        "cast_id": 14,
+        "profile_path": "/oIGjbztWvTqn4tnolW9rDCjpgxu.jpg",
+        "character": "Dwayne Engelman"
+      },
+      {
+        "id": 7486,
+        "order": 6,
+        "credit_id": "52fe4231c3a36847f800b3b9",
+        "name": "Michael Wincott",
+        "cast_id": 15,
+        "profile_path": "/vLDoCwT09xKIuMde3FBziSrrqEU.jpg",
+        "character": "Philo Gant"
+      },
+      {
+        "id": 2683,
+        "order": 7,
+        "credit_id": "52fe4231c3a36847f800b3bd",
+        "name": "Glenn Plummer",
+        "cast_id": 16,
+        "profile_path": "/s0Dwke7OKL8Yhk2WalJm4ntP51A.jpg",
+        "character": "Jeriko One"
+      },
+      {
+        "id": 14607,
+        "order": 8,
+        "credit_id": "52fe4231c3a36847f800b3c1",
+        "name": "Brigitte Bako",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Iris"
+      },
+      {
+        "id": 11024,
+        "order": 9,
+        "credit_id": "52ffb8429251416ae4097e20",
+        "name": "Kelly Hu",
+        "cast_id": 22,
+        "profile_path": "/ldIqkVNQoig6tFdF6b1ql1iylAD.jpg",
+        "character": "Anchor Woman"
+      },
+      {
+        "id": 14792,
+        "order": 10,
+        "credit_id": "536fd9a40e0a2647cb012eb6",
+        "name": "Josef Sommer",
+        "cast_id": 23,
+        "profile_path": "/3mR6yfeMhFS1UGsb7btjjLaiTu1.jpg",
+        "character": "Palmer Strickland"
+      },
+      {
+        "id": 151433,
+        "order": 11,
+        "credit_id": "536fd9ffc3a368124100ee4d",
+        "name": "Joe Urla",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Keith"
+      },
+      {
+        "id": 46921,
+        "order": 12,
+        "credit_id": "536fda36c3a36839c1004db4",
+        "name": "Michael Jace",
+        "cast_id": 25,
+        "profile_path": "/7iTtCeZZnAPeE4x5TiXtinb0izJ.jpg",
+        "character": "Wade Beemer"
+      },
+      {
+        "id": 11024,
+        "order": 13,
+        "credit_id": "536fdafc0e0a2647d1012a1a",
+        "name": "Kelly Hu",
+        "cast_id": 26,
+        "profile_path": "/ldIqkVNQoig6tFdF6b1ql1iylAD.jpg",
+        "character": "Anchor Woman"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6479,
+        "credit_id": "53788fb3c3a368552500381f",
+        "department": "Production",
+        "name": "Sharon Bialy",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 25830,
+        "credit_id": "53788fc9c3a368552c00375b",
+        "department": "Production",
+        "name": "Debi Manwiller",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2624,
+        "credit_id": "53788fdcc3a3685554003a0c",
+        "department": "Production",
+        "name": "Richard Pagano",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1320910,
+        "credit_id": "53789048c3a3685554003a1a",
+        "department": "Production",
+        "name": "Melissa M. Thomas",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1320911,
+        "credit_id": "537890a5c3a368554a0038e7",
+        "department": "Costume & Make-Up",
+        "name": "Linda Grimes",
+        "job": "Makeup Department Head",
+        "profile_path": null
+      },
+      {
+        "id": 14392,
+        "credit_id": "52fe4231c3a36847f800b373",
+        "department": "Directing",
+        "name": "Kathryn Bigelow",
+        "job": "Director",
+        "profile_path": "/z48vj4tHjwWATfA5OIwtXdVMmPA.jpg"
+      },
+      {
+        "id": 2710,
+        "credit_id": "52fe4231c3a36847f800b379",
+        "department": "Writing",
+        "name": "James Cameron",
+        "job": "Screenplay",
+        "profile_path": "/6Zk8h1XsPGKUM8M8cKUHAnmnc8O.jpg"
+      },
+      {
+        "id": 14393,
+        "credit_id": "52fe4231c3a36847f800b37f",
+        "department": "Writing",
+        "name": "Jay Cocks",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2710,
+        "credit_id": "52fe4231c3a36847f800b385",
+        "department": "Production",
+        "name": "James Cameron",
+        "job": "Producer",
+        "profile_path": "/6Zk8h1XsPGKUM8M8cKUHAnmnc8O.jpg"
+      },
+      {
+        "id": 2093,
+        "credit_id": "52fe4231c3a36847f800b38b",
+        "department": "Production",
+        "name": "Steven-Charles Jaffe",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5912,
+        "credit_id": "52fe4231c3a36847f800b391",
+        "department": "Sound",
+        "name": "Graeme Revell",
+        "job": "Original Music Composer",
+        "profile_path": "/g2Nhv2OCV8ygLYxkeDbhlqnrv7Z.jpg"
+      },
+      {
+        "id": 2507,
+        "credit_id": "52fe4231c3a36847f800b397",
+        "department": "Camera",
+        "name": "Matthew F. Leonetti",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1941,
+        "credit_id": "52fe4231c3a36847f800b39d",
+        "department": "Editing",
+        "name": "Howard A. Smith",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 9199,
+        "credit_id": "52fe4231c3a36847f800b3c7",
+        "department": "Art",
+        "name": "Lilly Kilvert",
+        "job": "Production Design",
+        "profile_path": "/c1OtwQAEToq4GSFIFY0WYHPkGr9.jpg"
+      },
+      {
+        "id": 14608,
+        "credit_id": "52fe4231c3a36847f800b3cd",
+        "department": "Art",
+        "name": "John Warnke",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 14609,
+        "credit_id": "52fe4231c3a36847f800b3d3",
+        "department": "Art",
+        "name": "Kara Lindstrom",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7735,
+        "credit_id": "52fe4231c3a36847f800b3d9",
+        "department": "Costume & Make-Up",
+        "name": "Ellen Mirojnick",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 145,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.strange-days.com",
+  "id": 281,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Strange Days",
+  "overview": "Lenny Nero, a retired police officer turned street-hustler, accidentally uncovers a conspiracy on New Years' Eve.",
+  "production_companies": [
+    {
+      "id": 574,
+      "name": "Lightstorm Entertainment"
+    },
+    {
+      "id": 25,
+      "name": "20th Century Fox"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0114558",
+  "release_date": "1995-10-13",
+  "original_title": "Strange Days",
+  "vote_count": 36,
+  "poster_path": "/rmETofJwEXXffkfD1YlpHzNpFMv.jpg",
+  "tagline": "You know you want it.",
+  "revenue": 0,
+  "popularity": "0.28086148115393"
+}

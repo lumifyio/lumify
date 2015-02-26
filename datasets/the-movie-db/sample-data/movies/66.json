@@ -1,0 +1,303 @@
+{
+  "budget": 50000000,
+  "vote_average": 6.5,
+  "backdrop_path": "/5sPo9OrfKOu71ABtLLdHf1eXdlZ.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10748,
+      "name": "Suspense"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 190,
+        "order": 0,
+        "credit_id": "52fe4212c3a36847f8001ce1",
+        "name": "Clint Eastwood",
+        "cast_id": 5,
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg",
+        "character": "Luther Whitney"
+      },
+      {
+        "id": 193,
+        "order": 1,
+        "credit_id": "52fe4212c3a36847f8001ce5",
+        "name": "Gene Hackman",
+        "cast_id": 6,
+        "profile_path": "/qEKcmwc1XstymEniGuCs3KIsGfP.jpg",
+        "character": "President Allen Richmond"
+      },
+      {
+        "id": 228,
+        "order": 2,
+        "credit_id": "52fe4212c3a36847f8001ce9",
+        "name": "Ed Harris",
+        "cast_id": 7,
+        "profile_path": "/a9ITc3shCAWjV4qKf3rgR0Opu3y.jpg",
+        "character": "Seth Frank"
+      },
+      {
+        "id": 349,
+        "order": 3,
+        "credit_id": "52fe4212c3a36847f8001ced",
+        "name": "Scott Glenn",
+        "cast_id": 8,
+        "profile_path": "/5dRSvuksyw4tRlV81QTjsQtOW3S.jpg",
+        "character": "Bill Burton"
+      },
+      {
+        "id": 350,
+        "order": 4,
+        "credit_id": "52fe4212c3a36847f8001cf1",
+        "name": "Laura Linney",
+        "cast_id": 9,
+        "profile_path": "/unRRWITXrZsbk9iTmnjVxd6yZv9.jpg",
+        "character": "Kate Whitney"
+      },
+      {
+        "id": 351,
+        "order": 5,
+        "credit_id": "52fe4212c3a36847f8001cf5",
+        "name": "Judy Davis",
+        "cast_id": 10,
+        "profile_path": "/xQMA72T6yz6ebJXv1pCuZC1fDJo.jpg",
+        "character": "Gloria Russell"
+      },
+      {
+        "id": 352,
+        "order": 6,
+        "credit_id": "52fe4212c3a36847f8001cf9",
+        "name": "Dennis Haysbert",
+        "cast_id": 11,
+        "profile_path": "/j1EYrUmZQuZwUBZJ8qYjdb73hWJ.jpg",
+        "character": "Tim Collin"
+      },
+      {
+        "id": 389,
+        "order": 7,
+        "credit_id": "52fe4212c3a36847f8001d45",
+        "name": "Alison Eastwood",
+        "cast_id": 24,
+        "profile_path": "/mRXDleUiPyNFSv3mOF4PNR7nhkY.jpg",
+        "character": "Art Student"
+      },
+      {
+        "id": 404,
+        "order": 8,
+        "credit_id": "52fe4212c3a36847f8001d49",
+        "name": "Melora Hardin",
+        "cast_id": 25,
+        "profile_path": "/uecs9JKOqgYj3PrSGECaFzc3E2r.jpg",
+        "character": "Christy Sullivan"
+      },
+      {
+        "id": 5249,
+        "order": 9,
+        "credit_id": "52fe4212c3a36847f8001d53",
+        "name": "E. G. Marshall",
+        "cast_id": 27,
+        "profile_path": "/iQnivIob2OiXuVCepECf72xS2tQ.jpg",
+        "character": "Walter Sullivan"
+      }
+    ],
+    "crew": [
+      {
+        "id": 190,
+        "credit_id": "52fe4212c3a36847f8001cd1",
+        "department": "Directing",
+        "name": "Clint Eastwood",
+        "job": "Director",
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg"
+      },
+      {
+        "id": 190,
+        "credit_id": "52fe4212c3a36847f8001cd7",
+        "department": "Production",
+        "name": "Clint Eastwood",
+        "job": "Producer",
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg"
+      },
+      {
+        "id": 348,
+        "credit_id": "52fe4212c3a36847f8001cdd",
+        "department": "Writing",
+        "name": "William Goldman",
+        "job": "Screenplay",
+        "profile_path": "/7eBlS4cj4WAGzI38ef3EXAIKmOg.jpg"
+      },
+      {
+        "id": 355,
+        "credit_id": "52fe4212c3a36847f8001cff",
+        "department": "Writing",
+        "name": "David Baldacci",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 356,
+        "credit_id": "52fe4212c3a36847f8001d05",
+        "department": "Camera",
+        "name": "Jack N. Green",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 369,
+        "credit_id": "52fe4212c3a36847f8001d0b",
+        "department": "Art",
+        "name": "Henry Bumstead",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 370,
+        "credit_id": "52fe4212c3a36847f8001d11",
+        "department": "Art",
+        "name": "Jack G. Taylor Jr.",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 371,
+        "credit_id": "52fe4212c3a36847f8001d17",
+        "department": "Camera",
+        "name": "Bill Coe",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 373,
+        "credit_id": "52fe4212c3a36847f8001d23",
+        "department": "Sound",
+        "name": "Doug Jackson",
+        "job": "Sound Effects Editor",
+        "profile_path": null
+      },
+      {
+        "id": 375,
+        "credit_id": "52fe4212c3a36847f8001d29",
+        "department": "Sound",
+        "name": "Bub Asman",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 379,
+        "credit_id": "52fe4212c3a36847f8001d2f",
+        "department": "Sound",
+        "name": "Donald Harris",
+        "job": "Music Editor",
+        "profile_path": null
+      },
+      {
+        "id": 384,
+        "credit_id": "52fe4212c3a36847f8001d35",
+        "department": "Editing",
+        "name": "Joel Cox",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 195,
+        "credit_id": "52fe4212c3a36847f8001d3b",
+        "department": "Sound",
+        "name": "Lennie Niehaus",
+        "job": "Original Music Composer",
+        "profile_path": "/tiGnFqQ4o4m81Y10Roghm4bycvo.jpg"
+      },
+      {
+        "id": 190,
+        "credit_id": "52fe4212c3a36847f8001d41",
+        "department": "Sound",
+        "name": "Clint Eastwood",
+        "job": "Original Music Composer",
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg"
+      },
+      {
+        "id": 423,
+        "credit_id": "52fe4212c3a36847f8001d4f",
+        "department": "Production",
+        "name": "Phyllis Huffman",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 168769,
+        "credit_id": "52fe4212c3a36847f8001d59",
+        "department": "Production",
+        "name": "Michael Maurer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1102089,
+        "credit_id": "52fe4212c3a36847f8001d5f",
+        "department": "Production",
+        "name": "Karen S. Spiegel",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 347,
+        "credit_id": "52fe4212c3a36847f8001d65",
+        "department": "Production",
+        "name": "Tom Rooker",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 121,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 66,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Absolute Power",
+  "overview": "A master thief coincidentally is robbing a house where a murder in which the President of The United States is involved occurs in front of his eyes. He is forced to run yet may hold evidence that could convict the President. A political thriller from and starring Clint Eastwood and based on a novel by David Baldacci.",
+  "production_companies": [
+    {
+      "id": 97,
+      "name": "Castle Rock Entertainment"
+    },
+    {
+      "id": 171,
+      "name": "Malpaso Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0118548",
+  "release_date": "1997-02-13",
+  "original_title": "Absolute Power",
+  "vote_count": 22,
+  "poster_path": "/oJQdp09Oc51DkArsMDvgDLdWiDu.jpg",
+  "tagline": "Corrupts Absolutely.",
+  "revenue": 50068310,
+  "popularity": "0.702807768761613"
+}

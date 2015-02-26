@@ -1,0 +1,294 @@
+{
+  "budget": 135000000,
+  "vote_average": 5.6,
+  "backdrop_path": "/cxiwBBPdBAFV1SbMCRt7CMgLhLi.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 134,
+        "order": 0,
+        "credit_id": "52fe4215c3a36847f800291f",
+        "name": "Jamie Foxx",
+        "cast_id": 5,
+        "profile_path": "/1yr8Pv1tSWnQkCwDLrzUIzZVurM.jpg",
+        "character": "Detective Ricardo \"Rico\" Tubbs"
+      },
+      {
+        "id": 72466,
+        "order": 1,
+        "credit_id": "52fe4215c3a36847f8002977",
+        "name": "Colin Farrell",
+        "cast_id": 25,
+        "profile_path": "/9FDzNq8cixv5PzJwjNXx1mJKAhU.jpg",
+        "character": "Detective James \"Sonny\" Crockett"
+      },
+      {
+        "id": 643,
+        "order": 2,
+        "credit_id": "52fe4215c3a36847f8002923",
+        "name": "Gong Li",
+        "cast_id": 7,
+        "profile_path": "/dgGWKMAP5vbgACkXTazZXt3JQoT.jpg",
+        "character": "Isabella"
+      },
+      {
+        "id": 16867,
+        "order": 3,
+        "credit_id": "52fe4215c3a36847f800292d",
+        "name": "Luis Tosar",
+        "cast_id": 9,
+        "profile_path": "/5Kf67jG2idashdtAOeOMOFAhr80.jpg",
+        "character": "Montoya"
+      },
+      {
+        "id": 2038,
+        "order": 4,
+        "credit_id": "52fe4215c3a36847f8002931",
+        "name": "Naomie Harris",
+        "cast_id": 10,
+        "profile_path": "/3Y55D8wZgg4CkKadhXvSh91Q121.jpg",
+        "character": "Trudy Joplin"
+      },
+      {
+        "id": 15009,
+        "order": 5,
+        "credit_id": "52fe4215c3a36847f8002935",
+        "name": "Justin Theroux",
+        "cast_id": 11,
+        "profile_path": "/3Ed13zSHQlJW1sMGugtOZW1My74.jpg",
+        "character": "Zito"
+      },
+      {
+        "id": 8785,
+        "order": 6,
+        "credit_id": "52fe4215c3a36847f8002939",
+        "name": "Ciarán Hinds",
+        "cast_id": 12,
+        "profile_path": "/2HJ3egmUeZFVHLkgGuKbM0lhgx4.jpg",
+        "character": "FBI Agent Fujima"
+      },
+      {
+        "id": 40543,
+        "order": 7,
+        "credit_id": "52fe4215c3a36847f800293d",
+        "name": "John Ortiz",
+        "cast_id": 13,
+        "profile_path": "/eLAPF96eGKcnpV837CciBiFsI7C.jpg",
+        "character": "Jose Yero"
+      },
+      {
+        "id": 65421,
+        "order": 8,
+        "credit_id": "52fe4215c3a36847f8002941",
+        "name": "Elizabeth Rodriguez",
+        "cast_id": 14,
+        "profile_path": "/lwJXQ7DDRY9W4pdzQzJKdeKuCFl.jpg",
+        "character": "Gina Calabrese"
+      },
+      {
+        "id": 17941,
+        "order": 9,
+        "credit_id": "52fe4215c3a36847f8002945",
+        "name": "Domenick Lombardozzi",
+        "cast_id": 15,
+        "profile_path": "/wDRD21PpTrP8MDAskbQ0NsftM57.jpg",
+        "character": "Switek"
+      },
+      {
+        "id": 1665,
+        "order": 10,
+        "credit_id": "52fe4215c3a36847f8002949",
+        "name": "Eddie Marsan",
+        "cast_id": 16,
+        "profile_path": "/zcJ2W9BuiBPohtOkPFcYuFfCzji.jpg",
+        "character": "Nicholas"
+      },
+      {
+        "id": 16861,
+        "order": 11,
+        "credit_id": "52fe4215c3a36847f800294d",
+        "name": "John Hawkes",
+        "cast_id": 17,
+        "profile_path": "/bz4usMR7NWEgVgWTxVBLEjCo3Dv.jpg",
+        "character": "Alonzo Stevens"
+      },
+      {
+        "id": 65422,
+        "order": 12,
+        "credit_id": "52fe4215c3a36847f8002951",
+        "name": "Vivienne Sendaydiego",
+        "cast_id": 18,
+        "profile_path": "/b3JChYQNrdQKMsqscShvEwPWsGe.jpg",
+        "character": "ER Doctor"
+      },
+      {
+        "id": 65423,
+        "order": 13,
+        "credit_id": "52fe4215c3a36847f8002955",
+        "name": "Mike Pniewski",
+        "cast_id": 19,
+        "profile_path": "/6oJOSX84GXwuR9HA9RXTOeTeiKC.jpg",
+        "character": "ER Doctor"
+      },
+      {
+        "id": 4812,
+        "order": 14,
+        "credit_id": "53565f050e0a262861002f4a",
+        "name": "Isaach De Bankolé",
+        "cast_id": 26,
+        "profile_path": "/vZuBg729XF1H29QPdQynZoAgZvn.jpg",
+        "character": "Neptune"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1225462,
+        "credit_id": "53e2b5fec3a368484d00118f",
+        "department": "Writing",
+        "name": "Anthony Yerkovich",
+        "job": "Writer",
+        "profile_path": null
+      },
+      {
+        "id": 638,
+        "credit_id": "53e53d870e0a2628d1000034",
+        "department": "Directing",
+        "name": "Michael Mann",
+        "job": "Director",
+        "profile_path": "/A4UGak1ZIZ1BGZmZjQwSDCa2JZp.jpg"
+      },
+      {
+        "id": 638,
+        "credit_id": "53e2b5eec3a368485c001147",
+        "department": "Writing",
+        "name": "Michael Mann",
+        "job": "Writer",
+        "profile_path": "/A4UGak1ZIZ1BGZmZjQwSDCa2JZp.jpg"
+      },
+      {
+        "id": 638,
+        "credit_id": "52fe4215c3a36847f800290f",
+        "department": "Production",
+        "name": "Michael Mann",
+        "job": "Producer",
+        "profile_path": "/A4UGak1ZIZ1BGZmZjQwSDCa2JZp.jpg"
+      },
+      {
+        "id": 639,
+        "credit_id": "52fe4215c3a36847f8002915",
+        "department": "Production",
+        "name": "Pieter Jan Brugge",
+        "job": "Producer",
+        "profile_path": "/wSaIhLLvLSxxgOPugUx7M8ZBpD8.jpg"
+      },
+      {
+        "id": 638,
+        "credit_id": "52fe4215c3a36847f800291b",
+        "department": "Writing",
+        "name": "Michael Mann",
+        "job": "Author",
+        "profile_path": "/A4UGak1ZIZ1BGZmZjQwSDCa2JZp.jpg"
+      },
+      {
+        "id": 647,
+        "credit_id": "52fe4215c3a36847f8002929",
+        "department": "Camera",
+        "name": "Dion Beebe",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 960,
+        "credit_id": "52fe4215c3a36847f800295b",
+        "department": "Sound",
+        "name": "John Murphy",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 15841,
+        "credit_id": "52fe4215c3a36847f8002961",
+        "department": "Editing",
+        "name": "William Goldenberg",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10816,
+        "credit_id": "52fe4215c3a36847f8002967",
+        "department": "Editing",
+        "name": "Paul Rubell",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6410,
+        "credit_id": "52fe4215c3a36847f800296d",
+        "department": "Production",
+        "name": "Francine Maisler",
+        "job": "Casting",
+        "profile_path": "/7kOKhRSuwDXqyd2Dm2xdWdi18lQ.jpg"
+      },
+      {
+        "id": 3188,
+        "credit_id": "52fe4215c3a36847f8002973",
+        "department": "Art",
+        "name": "Victor Kempster",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 134,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 82,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Miami Vice",
+  "overview": "Miami Vice is an feature film based on the 1980's action drama TV series. The film tells the story of vice detectives Crockett and Tubbs and how their personal and professional lives are dangerously getting mixed.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0430357",
+  "release_date": "2006-07-27",
+  "original_title": "Miami Vice",
+  "vote_count": 72,
+  "poster_path": "/3BsNsigWcET4tKLZZhJegw7eOjF.jpg",
+  "tagline": "No Law. No Rules. No Order.",
+  "revenue": 63478838,
+  "popularity": "0.938561786697716"
+}

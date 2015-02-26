@@ -1,0 +1,203 @@
+{
+  "budget": 1500000,
+  "vote_average": 7.9,
+  "backdrop_path": "/57pbj8Ch2VzzikD2kyNXFJ3YpMW.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 13848,
+        "order": 0,
+        "credit_id": "52fe428ac3a36847f8026bf3",
+        "name": "Charles Chaplin",
+        "cast_id": 11,
+        "profile_path": "/bVb2oQLRef7oixkSvqj7KGelM9Q.jpg",
+        "character": "Tramp"
+      },
+      {
+        "id": 13852,
+        "order": 1,
+        "credit_id": "52fe428ac3a36847f8026bd9",
+        "name": "Virginia Cherrill",
+        "cast_id": 5,
+        "profile_path": "/hzhEzAEFb5R0nxrqgNlgESOqExo.jpg",
+        "character": "A Blind Girl"
+      },
+      {
+        "id": 13853,
+        "order": 2,
+        "credit_id": "52fe428ac3a36847f8026bdd",
+        "name": "Florence Lee",
+        "cast_id": 6,
+        "profile_path": "/eW96SJfOVw7VlE7HSuSujndKmQs.jpg",
+        "character": "The Blind Girl's Grandmother"
+      },
+      {
+        "id": 13854,
+        "order": 3,
+        "credit_id": "52fe428ac3a36847f8026be1",
+        "name": "Harry Myers",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "An Eccentric Millionaire"
+      },
+      {
+        "id": 13855,
+        "order": 4,
+        "credit_id": "52fe428ac3a36847f8026be5",
+        "name": "Al Ernest Garcia",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "The Eccentric Millionaire's Butler"
+      },
+      {
+        "id": 13856,
+        "order": 5,
+        "credit_id": "52fe428ac3a36847f8026be9",
+        "name": "Hank Mann",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "A Prizefighter"
+      }
+    ],
+    "crew": [
+      {
+        "id": 13848,
+        "credit_id": "52fe428ac3a36847f8026bc9",
+        "department": "Directing",
+        "name": "Charles Chaplin",
+        "job": "Director",
+        "profile_path": "/bVb2oQLRef7oixkSvqj7KGelM9Q.jpg"
+      },
+      {
+        "id": 13849,
+        "credit_id": "52fe428ac3a36847f8026bcf",
+        "department": "Camera",
+        "name": "Gordon Pollock",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 13851,
+        "credit_id": "52fe428ac3a36847f8026bd5",
+        "department": "Sound",
+        "name": "Theodore Reed",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 13848,
+        "credit_id": "52fe428ac3a36847f8026bef",
+        "department": "Writing",
+        "name": "Charles Chaplin",
+        "job": "Screenplay",
+        "profile_path": "/bVb2oQLRef7oixkSvqj7KGelM9Q.jpg"
+      },
+      {
+        "id": 13848,
+        "credit_id": "52fe428ac3a36847f8026bf9",
+        "department": "Editing",
+        "name": "Charles Chaplin",
+        "job": "Editor",
+        "profile_path": "/bVb2oQLRef7oixkSvqj7KGelM9Q.jpg"
+      },
+      {
+        "id": 13848,
+        "credit_id": "52fe428ac3a36847f8026bff",
+        "department": "Sound",
+        "name": "Charles Chaplin",
+        "job": "Original Music Composer",
+        "profile_path": "/bVb2oQLRef7oixkSvqj7KGelM9Q.jpg"
+      },
+      {
+        "id": 13855,
+        "credit_id": "52fe428ac3a36847f8026c05",
+        "department": "Production",
+        "name": "Al Ernest Garcia",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1120772,
+        "credit_id": "52fe428ac3a36847f8026c0b",
+        "department": "Writing",
+        "name": "Harry Clive",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 147963,
+        "credit_id": "52fe428ac3a36847f8026c11",
+        "department": "Writing",
+        "name": "Harry Crocker",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 13848,
+        "credit_id": "52fe428ac3a36847f8026c17",
+        "department": "Production",
+        "name": "Charles Chaplin",
+        "job": "Producer",
+        "profile_path": "/bVb2oQLRef7oixkSvqj7KGelM9Q.jpg"
+      },
+      {
+        "id": 14020,
+        "credit_id": "52fe428ac3a36847f8026c1d",
+        "department": "Camera",
+        "name": "Roland Totheroh",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14021,
+        "credit_id": "52fe428ac3a36847f8026c23",
+        "department": "Editing",
+        "name": "Willard Nico",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 87,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.charliechaplin.com/biography/articles/4-City-Lights",
+  "id": 901,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "City Lights",
+  "overview": "City Lights is the first silent film that Charlie Chaplin directed after he established himself with sound accompanied films. The film is about a penniless man who falls in love with a flower girl. The film was a great success and today is deemed a cult classic.",
+  "production_companies": [{
+    "id": 1315,
+    "name": "Charles Chaplin Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0021749",
+  "release_date": "1931-01-30",
+  "original_title": "City Lights",
+  "vote_count": 41,
+  "poster_path": "/kZTzat2Da2ZEVn90FNW15tIU9wQ.jpg",
+  "tagline": "",
+  "revenue": 19181,
+  "popularity": "0.72173601895645"
+}

@@ -1,0 +1,176 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/fHd0bvqXMv0MaT8rCRBmVQuycY.jpg",
+  "id": 334,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0589077",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 10060,
+        "media_type": "movie",
+        "title": "Get Rich or Die Tryin'",
+        "credit_id": "52fe43179251416c75003095",
+        "release_date": "2005-11-09",
+        "original_title": "Get Rich or Die Tryin'",
+        "adult": false,
+        "poster_path": "/kmP2EA5O760ylJsQHybEI9CwPA1.jpg",
+        "character": "Keryl"
+      },
+      {
+        "id": 4380,
+        "media_type": "movie",
+        "title": "Shall We Dance?",
+        "credit_id": "52fe43bec3a36847f806c205",
+        "release_date": "2004-10-15",
+        "original_title": "Shall We Dance?",
+        "adult": false,
+        "poster_path": "/ntKMVXdb1tVr4q3sT9vJOV9wnfN.jpg",
+        "character": "Vern"
+      },
+      {
+        "id": 14325,
+        "media_type": "movie",
+        "title": "The Express",
+        "credit_id": "52fe45e69251416c750664c5",
+        "release_date": "2008-10-10",
+        "original_title": "The Express",
+        "adult": false,
+        "poster_path": "/9JgWVLMeqXvuIVVYPfjvrkbnwwW.jpg",
+        "character": "Jack Buckley"
+      },
+      {
+        "id": 68974,
+        "media_type": "movie",
+        "title": "Gordon Glass",
+        "credit_id": "52fe47b1c3a368484e0d4b09",
+        "release_date": "2007-01-01",
+        "original_title": "Gordon Glass",
+        "adult": false,
+        "poster_path": "/8HgIX7ObcniUSrrxCI1xmzq2MEz.jpg",
+        "character": "Gordon Glass"
+      },
+      {
+        "id": 204082,
+        "media_type": "movie",
+        "title": "Homefront",
+        "credit_id": "52fe4cecc3a368484e1cd1bb",
+        "release_date": "2013-11-27",
+        "original_title": "Homefront",
+        "adult": false,
+        "poster_path": "/sIK9jFS9iaq4CDJC2t0mg8X4rhN.jpg",
+        "character": "Tito"
+      },
+      {
+        "id": 12412,
+        "media_type": "movie",
+        "title": "Miracle at St. Anna",
+        "credit_id": "52fe44dd9251416c75043acf",
+        "release_date": "2008-09-15",
+        "original_title": "Miracle at St. Anna",
+        "adult": false,
+        "poster_path": "/hXJgJ7TQWaDmmSNrjMzsV2YZvW3.jpg",
+        "character": "Private First Class Sam Train"
+      },
+      {
+        "id": 27022,
+        "media_type": "movie",
+        "title": "The Sorcerer's Apprentice",
+        "credit_id": "52fe4528c3a368484e04b9b1",
+        "release_date": "2010-07-13",
+        "original_title": "The Sorcerer's Apprentice",
+        "adult": false,
+        "poster_path": "/ZNSrRpdJ6FjMy4Iu6JpRTJ5Q87.jpg",
+        "character": "Bennet"
+      },
+      {
+        "id": 1620,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52570ecc760ee3776a0a408f",
+        "name": "CSI: Miami",
+        "poster_path": "/9brFwnnRmnHykxcrvn7ez79dXb6.jpg",
+        "original_name": "CSI: Miami",
+        "first_air_date": "2002-09-23",
+        "character": ""
+      },
+      {
+        "id": 1620,
+        "media_type": "tv",
+        "episode_count": 41,
+        "credit_id": "52570edd760ee3776a0a5b59",
+        "name": "CSI: Miami",
+        "poster_path": "/9brFwnnRmnHykxcrvn7ez79dXb6.jpg",
+        "original_name": "CSI: Miami",
+        "first_air_date": "2002-09-23",
+        "character": "Walter Simmons"
+      },
+      {
+        "id": 1661,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "52570fba760ee3776a0b1110",
+        "name": "Sex, Love & Secrets",
+        "poster_path": "/n7X1ku9Ce7OoylNQPNq1vPLflgB.jpg",
+        "original_name": "Sex, Love & Secrets",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 2734,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525743ba760ee36aaa0dbab6",
+        "name": "Law & Order: Special Victims Unit",
+        "poster_path": "/tsxiLPFlpNlJaMFlKIFqffGkiJt.jpg",
+        "original_name": "Law & Order: Special Victims Unit",
+        "first_air_date": "1999-09-20",
+        "character": ""
+      },
+      {
+        "id": 688,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52538ecc19c2957940276b3b",
+        "name": "The West Wing",
+        "poster_path": "/lNa8CmIPeTgZuyCn7cyY3qdqF4Y.jpg",
+        "original_name": "The West Wing",
+        "first_air_date": "1999-09-22",
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 68974,
+        "media_type": "movie",
+        "title": "Gordon Glass",
+        "credit_id": "52fe47b1c3a368484e0d4aff",
+        "department": "Directing",
+        "release_date": "2007-01-01",
+        "original_title": "Gordon Glass",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/8HgIX7ObcniUSrrxCI1xmzq2MEz.jpg"
+      },
+      {
+        "id": 68974,
+        "media_type": "movie",
+        "title": "Gordon Glass",
+        "credit_id": "52fe47b1c3a368484e0d4b05",
+        "department": "Writing",
+        "release_date": "2007-01-01",
+        "original_title": "Gordon Glass",
+        "job": "Writer",
+        "adult": false,
+        "poster_path": "/8HgIX7ObcniUSrrxCI1xmzq2MEz.jpg"
+      }
+    ]
+  },
+  "name": "Omar Benson Miller",
+  "place_of_birth": null,
+  "popularity": "1.05532810630156"
+}

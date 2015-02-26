@@ -1,0 +1,286 @@
+{
+  "budget": 2000000,
+  "vote_average": 7.8,
+  "backdrop_path": "/86yhBiDcxe2Psicwn82QMD7cHlM.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 678,
+        "order": 0,
+        "credit_id": "52fe4256c3a36847f801640b",
+        "name": "Martina Gedeck",
+        "cast_id": 7,
+        "profile_path": "/a6eR9unTwZk4xqsVKZvJySnVt5A.jpg",
+        "character": "Christa-Maria Sieland"
+      },
+      {
+        "id": 8196,
+        "order": 1,
+        "credit_id": "52fe4256c3a36847f801640f",
+        "name": "Ulrich Mühe",
+        "cast_id": 8,
+        "profile_path": "/jpWubOAj7GnSfxmf1DlcpMpvseY.jpg",
+        "character": "Gerd Wiesler"
+      },
+      {
+        "id": 8197,
+        "order": 2,
+        "credit_id": "52fe4256c3a36847f8016413",
+        "name": "Sebastian Koch",
+        "cast_id": 9,
+        "profile_path": "/prOBkJMjlvPJL3ja20fcwpm9XZA.jpg",
+        "character": "Georg Dreyman"
+      },
+      {
+        "id": 8198,
+        "order": 3,
+        "credit_id": "52fe4256c3a36847f8016417",
+        "name": "Ulrich Tukur",
+        "cast_id": 10,
+        "profile_path": "/assJYvivgfukHFWim6o9T3sUmu9.jpg",
+        "character": "Anton Grubitz"
+      },
+      {
+        "id": 8199,
+        "order": 4,
+        "credit_id": "52fe4256c3a36847f801641b",
+        "name": "Thomas Thieme",
+        "cast_id": 11,
+        "profile_path": "/izFcVDulGPf6lhV8zUbRtecCJu7.jpg",
+        "character": "Bruno Hempf"
+      },
+      {
+        "id": 8200,
+        "order": 5,
+        "credit_id": "52fe4256c3a36847f801641f",
+        "name": "Hans-Uwe Bauer",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Paul Hauser"
+      },
+      {
+        "id": 8201,
+        "order": 6,
+        "credit_id": "52fe4256c3a36847f8016423",
+        "name": "Volkmar Kleinert",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Albert Jerska"
+      },
+      {
+        "id": 8202,
+        "order": 7,
+        "credit_id": "52fe4256c3a36847f8016427",
+        "name": "Matthias Brenner",
+        "cast_id": 14,
+        "profile_path": "/pUGJZ3PB6simHPLpcLrt51EOeBt.jpg",
+        "character": "Karl Wallner"
+      },
+      {
+        "id": 8203,
+        "order": 8,
+        "credit_id": "52fe4256c3a36847f801642b",
+        "name": "Bastian Trost",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Häftling 227"
+      },
+      {
+        "id": 8204,
+        "order": 9,
+        "credit_id": "52fe4256c3a36847f801642f",
+        "name": "Charly Hübner",
+        "cast_id": 16,
+        "profile_path": "/AgsnHOC7ZsRL4wsBsgJJVJNWpAd.jpg",
+        "character": "Udo"
+      },
+      {
+        "id": 1081,
+        "order": 10,
+        "credit_id": "52fe4256c3a36847f8016433",
+        "name": "Herbert Knaup",
+        "cast_id": 17,
+        "profile_path": "/cH0TG69o6Sc6of7ZaZP9BwQ3tHX.jpg",
+        "character": "Gregor Hessenstein"
+      },
+      {
+        "id": 8205,
+        "order": 11,
+        "credit_id": "52fe4256c3a36847f8016437",
+        "name": "Marie Gruber",
+        "cast_id": 18,
+        "profile_path": "/9MDP9S9uaeIOrs8ni4fuYhUtmh9.jpg",
+        "character": "Frau Meineke"
+      },
+      {
+        "id": 8206,
+        "order": 12,
+        "credit_id": "52fe4256c3a36847f801643b",
+        "name": "Hinnerk Schönemann",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Axel Stigler"
+      },
+      {
+        "id": 8207,
+        "order": 13,
+        "credit_id": "52fe4256c3a36847f801643f",
+        "name": "Thomas Arnold",
+        "cast_id": 20,
+        "profile_path": "/mKHJ71sdW7oY40zVoQ96RxZeUw6.jpg",
+        "character": "Nowack"
+      },
+      {
+        "id": 5214,
+        "order": 14,
+        "credit_id": "52fe4256c3a36847f8016443",
+        "name": "Ludwig Blochberger",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Benedikt Lehmann"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8193,
+        "credit_id": "52fe4256c3a36847f80163e9",
+        "department": "Writing",
+        "name": "Florian Henckel von Donnersmarck",
+        "job": "Screenplay",
+        "profile_path": "/wQA7iaeaSWbAFB7oOFV0NRGjUMa.jpg"
+      },
+      {
+        "id": 8193,
+        "credit_id": "52fe4256c3a36847f80163ef",
+        "department": "Directing",
+        "name": "Florian Henckel von Donnersmarck",
+        "job": "Director",
+        "profile_path": "/wQA7iaeaSWbAFB7oOFV0NRGjUMa.jpg"
+      },
+      {
+        "id": 8194,
+        "credit_id": "52fe4256c3a36847f80163f5",
+        "department": "Camera",
+        "name": "Hagen Bogdanski",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4528,
+        "credit_id": "52fe4256c3a36847f80163fb",
+        "department": "Editing",
+        "name": "Patricia Rommel",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5488,
+        "credit_id": "52fe4256c3a36847f8016401",
+        "department": "Sound",
+        "name": "Gabriel Yared",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8195,
+        "credit_id": "52fe4256c3a36847f8016407",
+        "department": "Sound",
+        "name": "Stéphane Moucha",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8208,
+        "credit_id": "52fe4256c3a36847f8016449",
+        "department": "Production",
+        "name": "Max Wiedemann",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8209,
+        "credit_id": "52fe4256c3a36847f801644f",
+        "department": "Production",
+        "name": "Quirin Berg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1121517,
+        "credit_id": "52fe4256c3a36847f8016455",
+        "department": "Production",
+        "name": "Dirk Hamm",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8193,
+        "credit_id": "52fe4256c3a36847f801645b",
+        "department": "Production",
+        "name": "Florian Henckel von Donnersmarck",
+        "job": "Producer",
+        "profile_path": "/wQA7iaeaSWbAFB7oOFV0NRGjUMa.jpg"
+      },
+      {
+        "id": 4222,
+        "credit_id": "52fe4256c3a36847f8016461",
+        "department": "Production",
+        "name": "Simone Bär",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 137,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 582,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "The Lives of Others",
+  "overview": "A tragic love story set in East Berlin with the backdrop of an undercover Stasi controlled culture. Stasi captain Wieler is ordered to follow author Dreyman and plunges deeper and deeper into his life until he reaches the threshold of doubting the system.",
+  "production_companies": [
+    {
+      "id": 201,
+      "name": "Arte"
+    },
+    {
+      "id": 336,
+      "name": "Wiedemann & Berg Filmproduktion"
+    },
+    {
+      "id": 337,
+      "name": "Creado Film"
+    },
+    {
+      "id": 7333,
+      "name": "Bayerischer Rundfunk (BR)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0405094",
+  "release_date": "2006-03-15",
+  "original_title": "Das Leben der Anderen",
+  "vote_count": 224,
+  "poster_path": "/6kxCD1v4yi61cOuGk5iYKjQisp.jpg",
+  "tagline": "Before the Fall of the Berlin Wall, East Germany's Secret Police Listened to Your Secrets.",
+  "revenue": 70000000,
+  "popularity": "1.22933411868816"
+}

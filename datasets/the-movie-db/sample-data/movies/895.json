@@ -1,0 +1,286 @@
+{
+  "budget": 0,
+  "vote_average": 8.1,
+  "backdrop_path": "/8iIVnCOTn3QcVicgnrcLrnm3JBS.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8475,
+        "order": 0,
+        "credit_id": "52fe4289c3a36847f802685b",
+        "name": "Anatoliy Solonitsyn",
+        "cast_id": 15,
+        "profile_path": "/mTz5gtiX2Y8B5TajEjQbnTTXlgP.jpg",
+        "character": "Andrej Rubljow"
+      },
+      {
+        "id": 13706,
+        "order": 1,
+        "credit_id": "52fe4289c3a36847f802685f",
+        "name": "Ivan Lapikov",
+        "cast_id": 16,
+        "profile_path": "/w38JEKgAI0iM5jeDWW8DnfoCXbJ.jpg",
+        "character": "Kirill"
+      },
+      {
+        "id": 1190992,
+        "order": 2,
+        "credit_id": "52fe4289c3a36847f8026895",
+        "name": "Nikolay Grinko",
+        "cast_id": 33,
+        "profile_path": "/kSppXUS2WdGwVSNFZZpmXCdlKia.jpg",
+        "character": "Danil Chorny"
+      },
+      {
+        "id": 1191198,
+        "order": 3,
+        "credit_id": "52fe4289c3a36847f8026899",
+        "name": "Rolan Bykov",
+        "cast_id": 34,
+        "profile_path": "/2Ltpt7JSUggvwN6hKu7c7tfudRB.jpg",
+        "character": "Der Narr"
+      },
+      {
+        "id": 13707,
+        "order": 4,
+        "credit_id": "52fe4289c3a36847f8026863",
+        "name": "Николай Сергеев",
+        "cast_id": 18,
+        "profile_path": "/PHbKHcIWTL3C08EHYJyZivCmcD.jpg",
+        "character": "Theophanes"
+      },
+      {
+        "id": 13714,
+        "order": 5,
+        "credit_id": "52fe4289c3a36847f802687b",
+        "name": "Bolot Bejshenaliyev",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Tatar Khan"
+      },
+      {
+        "id": 13708,
+        "order": 6,
+        "credit_id": "52fe4289c3a36847f8026867",
+        "name": "Irma Raush",
+        "cast_id": 19,
+        "profile_path": "/lKt0OKMxf4gFrdAYJLZbv9WWmVb.jpg",
+        "character": "Durochka"
+      },
+      {
+        "id": 13709,
+        "order": 7,
+        "credit_id": "52fe4289c3a36847f802686b",
+        "name": "Nikolay Burlyaev",
+        "cast_id": 20,
+        "profile_path": "/4nBiJykc5V8K15RYucekRAPhzjz.jpg",
+        "character": "Boriska"
+      },
+      {
+        "id": 13710,
+        "order": 8,
+        "credit_id": "52fe4289c3a36847f802686f",
+        "name": "Yuriy Nazarov",
+        "cast_id": 21,
+        "profile_path": "/afmJMuaeaoQwHmYLiHFZojOiIKO.jpg",
+        "character": "Großer Prinz/Sein Bruder"
+      },
+      {
+        "id": 13713,
+        "order": 10,
+        "credit_id": "52fe4289c3a36847f8026877",
+        "name": "Mikhail Kononov",
+        "cast_id": 24,
+        "profile_path": "/e6zVHbjcHACr2szYPEc0LGewpOy.jpg",
+        "character": "Foma"
+      },
+      {
+        "id": 86680,
+        "order": 11,
+        "credit_id": "52fe4289c3a36847f802687f",
+        "name": "Yuriy Nikulin",
+        "cast_id": 27,
+        "profile_path": "/xoAb5MoIkrypREgycXPCcvAty0k.jpg",
+        "character": "Pater Patrikey"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8480,
+        "credit_id": "52fe4289c3a36847f8026815",
+        "department": "Production",
+        "name": "Tamara Ogorodnikova",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8461,
+        "credit_id": "52fe4289c3a36847f802681b",
+        "department": "Sound",
+        "name": "Vyacheslav Ovchinnikov",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8462,
+        "credit_id": "52fe4289c3a36847f8026821",
+        "department": "Camera",
+        "name": "Vadim Yusov",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 8463,
+        "credit_id": "52fe4289c3a36847f8026827",
+        "department": "Editing",
+        "name": "Lyudmila Feiginova",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13698,
+        "credit_id": "52fe4289c3a36847f802682d",
+        "department": "Editing",
+        "name": "Olga Shevkunenko",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13699,
+        "credit_id": "52fe4289c3a36847f8026833",
+        "department": "Editing",
+        "name": "Tatyana Yegorychyova",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13700,
+        "credit_id": "52fe4289c3a36847f8026839",
+        "department": "Art",
+        "name": "Yevgeni Chernyayev",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 13701,
+        "credit_id": "52fe4289c3a36847f802683f",
+        "department": "Art",
+        "name": "Ippolit Novoderyozhkin",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 13702,
+        "credit_id": "52fe4289c3a36847f8026845",
+        "department": "Art",
+        "name": "Sergei Voronkov",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 13703,
+        "credit_id": "52fe4289c3a36847f802684b",
+        "department": "Costume & Make-Up",
+        "name": "Maya Abar-Baranovskaya",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 13704,
+        "credit_id": "52fe4289c3a36847f8026851",
+        "department": "Costume & Make-Up",
+        "name": "Lidiya Novi",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 13705,
+        "credit_id": "52fe4289c3a36847f8026857",
+        "department": "Sound",
+        "name": "Inna Zelentsova",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 8452,
+        "credit_id": "52fe4289c3a36847f8026885",
+        "department": "Directing",
+        "name": "Andrei Tarkovsky",
+        "job": "Director",
+        "profile_path": "/kHK6uZclCj8ZHOZRI9Hq8Q8YXOg.jpg"
+      },
+      {
+        "id": 58728,
+        "credit_id": "52fe4289c3a36847f802688b",
+        "department": "Writing",
+        "name": "Andrei Konchalovsky",
+        "job": "Writer",
+        "profile_path": "/6RzqNCx3ZaFCrVN7cfpB0trhdEQ.jpg"
+      },
+      {
+        "id": 8452,
+        "credit_id": "52fe4289c3a36847f8026891",
+        "department": "Writing",
+        "name": "Andrei Tarkovsky",
+        "job": "Writer",
+        "profile_path": "/kHK6uZclCj8ZHOZRI9Hq8Q8YXOg.jpg"
+      }
+    ]
+  },
+  "runtime": 205,
+  "spoken_languages": [
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    },
+    {
+      "iso_639_1": "tt",
+      "name": ""
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 895,
+  "production_countries": [{
+    "name": "Russian Federation",
+    "iso_3166_1": "RU"
+  }],
+  "title": "Andrei Rublev",
+  "overview": "After four years of production the film by Russian director Andrei Tarkovsky would be banned soon after it\u2019s release leading it to be shown only at foreign film festivals. The film is about a Russian icon painter Andrej Rubljow and the relationship of artists and their unique power.",
+  "production_companies": [{
+    "id": 5120,
+    "name": "Mosfilm"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0060107",
+  "release_date": "1966-12-16",
+  "original_title": "Андрей Рублёв",
+  "vote_count": 14,
+  "poster_path": "/nntvcLm6yZgHWwhLVu70NVOQftA.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.38230618937847"
+}

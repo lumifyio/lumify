@@ -1,0 +1,74 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.  Knut Berger is a German actor. He was born in 1975 in Gelsenkirchen, North Rhine-Westphalia. He played Axel Himmelman in the 2004 Israeli film Walk on Water.\n\nDescription above from the Wikipedia article Knut Berger, licensed under CC-BY-SA, full list of contributors on Wikipedia.     ",
+  "homepage": "",
+  "profile_path": null,
+  "id": 165,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0074257",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 26,
+        "media_type": "movie",
+        "title": "Walk on Water",
+        "credit_id": null,
+        "release_date": "2004-03-18",
+        "original_title": "LaLehet Al HaMayim",
+        "adult": false,
+        "poster_path": "/2lMVKr9EtBuNvp0nCEFt207bykA.jpg",
+        "character": "Axel Himmelman"
+      },
+      {
+        "id": 12161,
+        "media_type": "movie",
+        "title": "Jerichow",
+        "credit_id": null,
+        "release_date": "2008-01-01",
+        "original_title": "Jerichow",
+        "adult": false,
+        "poster_path": "/yelmNboSLEUhAeDcsKQU9tqF1B2.jpg",
+        "character": "Polizist"
+      },
+      {
+        "id": 12768,
+        "media_type": "movie",
+        "title": "Wir",
+        "credit_id": null,
+        "release_date": "2003-01-15",
+        "original_title": "Wir",
+        "adult": false,
+        "poster_path": "/nkGTV7mTc0hOBDdwG7gXBDMmAuL.jpg",
+        "character": "Carsten"
+      },
+      {
+        "id": 171517,
+        "media_type": "movie",
+        "title": "Stillstand",
+        "credit_id": null,
+        "release_date": "2009-09-17",
+        "original_title": "Stillstand",
+        "adult": false,
+        "poster_path": null,
+        "character": "Guido"
+      },
+      {
+        "id": 229691,
+        "media_type": "movie",
+        "title": "Im nächsten Leben",
+        "credit_id": null,
+        "release_date": "2009-05-28",
+        "original_title": "Im nächsten Leben",
+        "adult": false,
+        "poster_path": "/zVz5m6r3utZgLzyRauuxbOTvIie.jpg",
+        "character": "Jörn Steiner"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Knut Berger",
+  "place_of_birth": "Gelsenkirchen, North Rhine-Westphalia.",
+  "popularity": 1.00006265755
+}

@@ -1,0 +1,356 @@
+{
+  "budget": 4000000,
+  "vote_average": 6.4,
+  "backdrop_path": "/c2BoYhEq7AIGSqJKhaRmHqiNoNI.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6487,
+        "order": 0,
+        "credit_id": "52fe4248c3a36847f80123b7",
+        "name": "Richard Roundtree",
+        "cast_id": 4,
+        "profile_path": "/3OyAx3Vrv1mQLOvl7YHaIaFwDuW.jpg",
+        "character": "John Shaft"
+      },
+      {
+        "id": 6561,
+        "order": 1,
+        "credit_id": "52fe4248c3a36847f80123bb",
+        "name": "Moses Gunn",
+        "cast_id": 5,
+        "profile_path": "/lpFU9TYL9X2uz2RE9zKWL59CkNF.jpg",
+        "character": "Bumpy Jonas"
+      },
+      {
+        "id": 6354,
+        "order": 2,
+        "credit_id": "52fe4248c3a36847f80123bf",
+        "name": "Charles Cioffi",
+        "cast_id": 6,
+        "profile_path": "/1AfKCCW4AJXOjwKbiccYpYvyatL.jpg",
+        "character": "Vic Androzzi"
+      },
+      {
+        "id": 6562,
+        "order": 3,
+        "credit_id": "52fe4248c3a36847f80123c3",
+        "name": "Christopher St. John",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Ben Buford"
+      },
+      {
+        "id": 6563,
+        "order": 4,
+        "credit_id": "52fe4248c3a36847f80123c7",
+        "name": "Gwenn Mitchell",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Ellie Moore"
+      },
+      {
+        "id": 6564,
+        "order": 5,
+        "credit_id": "52fe4248c3a36847f80123cb",
+        "name": "Lawrence Pressman",
+        "cast_id": 9,
+        "profile_path": "/mot6LcTgUnZKd1U60iZNxytNpdQ.jpg",
+        "character": "Sergeant Tom Hannon"
+      },
+      {
+        "id": 6565,
+        "order": 6,
+        "credit_id": "52fe4248c3a36847f80123cf",
+        "name": "Victor Arnold",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Charlie"
+      },
+      {
+        "id": 6566,
+        "order": 7,
+        "credit_id": "52fe4248c3a36847f80123d3",
+        "name": "Sherri Brewer",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Marcy"
+      },
+      {
+        "id": 6567,
+        "order": 8,
+        "credit_id": "52fe4248c3a36847f80123d7",
+        "name": "Rex Robbins",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Rollie"
+      },
+      {
+        "id": 1127145,
+        "order": 9,
+        "credit_id": "52fe4248c3a36847f8012429",
+        "name": "Camille Yarbrough",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Dina Greene"
+      },
+      {
+        "id": 1127146,
+        "order": 10,
+        "credit_id": "52fe4248c3a36847f801242d",
+        "name": "Margaret Warncke",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Linda"
+      },
+      {
+        "id": 240772,
+        "order": 11,
+        "credit_id": "52fe4248c3a36847f8012431",
+        "name": "Joseph Leon",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Byron Leibowitz"
+      },
+      {
+        "id": 131832,
+        "order": 12,
+        "credit_id": "52fe4248c3a36847f8012435",
+        "name": "Arnold Johnson",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Cul"
+      },
+      {
+        "id": 16647,
+        "order": 13,
+        "credit_id": "52fe4248c3a36847f8012439",
+        "name": "Dominic Barto",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Patsy"
+      },
+      {
+        "id": 1127147,
+        "order": 14,
+        "credit_id": "52fe4248c3a36847f801243d",
+        "name": "George Strus",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Carmen"
+      },
+      {
+        "id": 55672,
+        "order": 15,
+        "credit_id": "52fe4248c3a36847f8012447",
+        "name": "Tony King",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Davies"
+      },
+      {
+        "id": 84878,
+        "order": 16,
+        "credit_id": "52fe4248c3a36847f801244b",
+        "name": "Antonio Fargas",
+        "cast_id": 35,
+        "profile_path": "/siMNtLWW3G7bKOYhEGb0wL2Yp6w.jpg",
+        "character": "Bunky"
+      },
+      {
+        "id": 32384,
+        "order": 17,
+        "credit_id": "52fe4248c3a36847f801244f",
+        "name": "Eddie Barth",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Tony"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6558,
+        "credit_id": "52fe4248c3a36847f80123b3",
+        "department": "Directing",
+        "name": "Gordon Parks",
+        "job": "Director",
+        "profile_path": "/odKljjRjP7It2oTTVA61RFkERnf.jpg"
+      },
+      {
+        "id": 6568,
+        "credit_id": "52fe4248c3a36847f80123dd",
+        "department": "Production",
+        "name": "Joel Freeman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6542,
+        "credit_id": "52fe4248c3a36847f80123e3",
+        "department": "Sound",
+        "name": "Isaac Hayes",
+        "job": "Original Music Composer",
+        "profile_path": "/4igh7emwzt4xBLw1r05gCUHxwzD.jpg"
+      },
+      {
+        "id": 6569,
+        "credit_id": "52fe4248c3a36847f80123e9",
+        "department": "Sound",
+        "name": "J.J. Johnson",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6570,
+        "credit_id": "52fe4248c3a36847f80123ef",
+        "department": "Camera",
+        "name": "Urs Furrer",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6571,
+        "credit_id": "52fe4248c3a36847f80123f5",
+        "department": "Editing",
+        "name": "Hugh A. Robertson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6572,
+        "credit_id": "52fe4248c3a36847f80123fb",
+        "department": "Production",
+        "name": "Judith Lamb",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6483,
+        "credit_id": "52fe4248c3a36847f8012401",
+        "department": "Writing",
+        "name": "Ernest Tidyman",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 6483,
+        "credit_id": "52fe4248c3a36847f8012407",
+        "department": "Writing",
+        "name": "Ernest Tidyman",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 160447,
+        "credit_id": "52fe4248c3a36847f801240d",
+        "department": "Writing",
+        "name": "John D.F. Black",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6776,
+        "credit_id": "52fe4248c3a36847f8012413",
+        "department": "Production",
+        "name": "Roger Lewis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6779,
+        "credit_id": "52fe4248c3a36847f8012419",
+        "department": "Production",
+        "name": "Stirling Silliphant",
+        "job": "Executive Producer",
+        "profile_path": "/rU0rdr05rqlBotVaSoYPUnDxAB.jpg"
+      },
+      {
+        "id": 6483,
+        "credit_id": "52fe4248c3a36847f801241f",
+        "department": "Production",
+        "name": "Ernest Tidyman",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 958997,
+        "credit_id": "52fe4248c3a36847f8012425",
+        "department": "Art",
+        "name": "Emanuel Gerard",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 1180131,
+        "credit_id": "52fe4248c3a36847f8012443",
+        "department": "Production",
+        "name": "David Golden",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 482,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Shaft",
+  "overview": "Cool black private eye John Shaft is hired by a crime lord to find and retrieve his kidnapped daughter.",
+  "production_companies": [
+    {
+      "id": 8411,
+      "name": "Metro-Goldwyn-Mayer (MGM)"
+    },
+    {
+      "id": 12145,
+      "name": "Shaft Productions Ltd."
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 495,
+    "backdrop_path": "/muZrPdBs937VAx03Giw66x1XGus.jpg",
+    "name": "Shaft Collection",
+    "poster_path": "/8ljhkrxlVzNFzKLwRpsgAtwk7oJ.jpg"
+  },
+  "imdb_id": "tt0067741",
+  "release_date": "1971-07-02",
+  "original_title": "Shaft",
+  "vote_count": 11,
+  "poster_path": "/69TL5UkLy6IwCg4DtYBxXS6bJb1.jpg",
+  "tagline": "The mob wanted Harlem back. They got shaft...up to here.",
+  "revenue": 12121618,
+  "popularity": "0.276990873331941"
+}

@@ -1,0 +1,323 @@
+{
+  "budget": 0,
+  "vote_average": 8,
+  "backdrop_path": "/hZwOsHwVc84AuhkMwgIRbpFLkf0.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 1115,
+      "name": "Road Movie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1084,
+        "order": 0,
+        "credit_id": "52fe426fc3a36847f801e5ad",
+        "name": "Joachim Król",
+        "cast_id": 2,
+        "profile_path": "/swED4GruvGgMdqpbshKKdzLIm1e.jpg",
+        "character": "Hannes Weber"
+      },
+      {
+        "id": 11070,
+        "order": 1,
+        "credit_id": "52fe426fc3a36847f801e5b1",
+        "name": "Outi Mäenpää",
+        "cast_id": 3,
+        "profile_path": "/qru1QEi8O6FlyOweC63B7OSXhdp.jpg",
+        "character": "Sirpa Salonen"
+      },
+      {
+        "id": 11071,
+        "order": 2,
+        "credit_id": "52fe426fc3a36847f801e5b5",
+        "name": "Peter Lohmeyer",
+        "cast_id": 4,
+        "profile_path": "/m9FLofOQQQMBZln5TmCAysYwuPE.jpg",
+        "character": "Kommissar Franck"
+      },
+      {
+        "id": 4936,
+        "order": 3,
+        "credit_id": "52fe426fc3a36847f801e5b9",
+        "name": "Jochen Nickel",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Lothar"
+      },
+      {
+        "id": 1082,
+        "order": 4,
+        "credit_id": "52fe426fc3a36847f801e60b",
+        "name": "Nina Petri",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Frau Kößner, Sekretärin"
+      },
+      {
+        "id": 11255,
+        "order": 5,
+        "credit_id": "52fe426fc3a36847f801e60f",
+        "name": "Charlie Hendricks",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Kalle, Entlassener"
+      },
+      {
+        "id": 11256,
+        "order": 6,
+        "credit_id": "52fe426fc3a36847f801e613",
+        "name": "Johannes Herrschmann",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Chef"
+      },
+      {
+        "id": 11257,
+        "order": 7,
+        "credit_id": "52fe426fc3a36847f801e617",
+        "name": "Dagmar Sachse",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Schachspielerin"
+      },
+      {
+        "id": 11258,
+        "order": 8,
+        "credit_id": "52fe426fc3a36847f801e61b",
+        "name": "Hilmi Sözer",
+        "cast_id": 23,
+        "profile_path": "/lvyoPkilNn23h0UUgxJl4pTuPeQ.jpg",
+        "character": "Harry, Assistent"
+      },
+      {
+        "id": 11259,
+        "order": 9,
+        "credit_id": "52fe426fc3a36847f801e61f",
+        "name": "Oliver Marlo",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Lako, Schlafwagenschaffner"
+      },
+      {
+        "id": 11260,
+        "order": 10,
+        "credit_id": "52fe426fc3a36847f801e623",
+        "name": "Peter Franke",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Karl-Heinz, Inari-Fan"
+      },
+      {
+        "id": 11261,
+        "order": 11,
+        "credit_id": "52fe426fc3a36847f801e627",
+        "name": "Vibeke Andersen",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Schwedische Polizistin"
+      },
+      {
+        "id": 11262,
+        "order": 12,
+        "credit_id": "52fe426fc3a36847f801e62b",
+        "name": "Friedrich Küppersbusch",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Schröder, Fahrplanexperte"
+      },
+      {
+        "id": 11263,
+        "order": 13,
+        "credit_id": "52fe426fc3a36847f801e62f",
+        "name": "Peter Franzén",
+        "cast_id": 28,
+        "profile_path": "/q74NKZPwKkjH5KyyxBV4TcfMv5V.jpg",
+        "character": "Lako's Lover"
+      },
+      {
+        "id": 11264,
+        "order": 14,
+        "credit_id": "52fe426fc3a36847f801e633",
+        "name": "Marko Lakobrija",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Wettkampfleiter"
+      },
+      {
+        "id": 11265,
+        "order": 15,
+        "credit_id": "52fe426fc3a36847f801e637",
+        "name": "Nina Vorbrodt",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Karen Higgens"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11069,
+        "credit_id": "52fe426fc3a36847f801e5a9",
+        "department": "Directing",
+        "name": "Peter Lichtefeld",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11069,
+        "credit_id": "52fe426fc3a36847f801e5bf",
+        "department": "Writing",
+        "name": "Peter Lichtefeld",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 11244,
+        "credit_id": "52fe426fc3a36847f801e5c5",
+        "department": "Production",
+        "name": "Claes Olsson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11245,
+        "credit_id": "52fe426fc3a36847f801e5cb",
+        "department": "Production",
+        "name": "Jörn Rettig",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11246,
+        "credit_id": "52fe426fc3a36847f801e5d1",
+        "department": "Production",
+        "name": "Ira von Gienanth",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11247,
+        "credit_id": "52fe426fc3a36847f801e5d7",
+        "department": "Production",
+        "name": "Heike Hempel",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11248,
+        "credit_id": "52fe426fc3a36847f801e5dd",
+        "department": "Sound",
+        "name": "Christian Steyer",
+        "job": "Original Music Composer",
+        "profile_path": "/9SYf1kTaFt2tWBBAdroWQCXCZYl.jpg"
+      },
+      {
+        "id": 1077,
+        "credit_id": "52fe426fc3a36847f801e5e3",
+        "department": "Camera",
+        "name": "Frank Griebe",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11249,
+        "credit_id": "52fe426fc3a36847f801e5e9",
+        "department": "Editing",
+        "name": "Bernd Euscher",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11250,
+        "credit_id": "52fe426fc3a36847f801e5ef",
+        "department": "Art",
+        "name": "Anke Osterloh",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 11251,
+        "credit_id": "52fe426fc3a36847f801e5f5",
+        "department": "Costume & Make-Up",
+        "name": "Beatrix Albl",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 11252,
+        "credit_id": "52fe426fc3a36847f801e5fb",
+        "department": "Costume & Make-Up",
+        "name": "Helen Janssen-Gerwalin",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 11253,
+        "credit_id": "52fe426fc3a36847f801e601",
+        "department": "Sound",
+        "name": "Axel Arft",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 11254,
+        "credit_id": "52fe426fc3a36847f801e607",
+        "department": "Art",
+        "name": "Claudia Kiefer",
+        "job": "Set Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 87,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "fi",
+      "name": "suomi"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 743,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "Finland",
+      "iso_3166_1": "FI"
+    }
+  ],
+  "title": "Train Birds",
+  "overview": "Hannes is a beer-truck driver in Dortmund. His biggest dream is to win the first prize at the International Time-Table Contest in Inari (Finland). When his new boss cancels his extra holidays to go there, Hans goes mad... On his journey to Finland by train, followed by the police, he meets lot of folks and the love of his life.",
+  "production_companies": [
+    {
+      "id": 439,
+      "name": "Prokino Filmproduktion"
+    },
+    {
+      "id": 440,
+      "name": "Kinotuotanto OY"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0129659",
+  "release_date": "1998-01-01",
+  "original_title": "Zugvögel \u2013 einmal nach Inari",
+  "vote_count": 1,
+  "poster_path": "/whKyUqCfO0R3MvP0RSWSBzJYJ5H.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.144105424633876"
+}

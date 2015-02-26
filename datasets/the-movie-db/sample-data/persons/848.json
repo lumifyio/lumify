@@ -1,0 +1,272 @@
+{
+  "birthday": "1964-04-14",
+  "adult": false,
+  "biography": "",
+  "homepage": "",
+  "profile_path": "/fz211JlJ6QrWPVZTj8x817NBiow.jpg",
+  "id": 848,
+  "also_known_as": ["Hans-Werner Meyer"],
+  "deathday": "",
+  "imdb_id": "nm0583143",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 10415,
+        "media_type": "movie",
+        "title": "Marlene",
+        "credit_id": "52fe436a9251416c7500f873",
+        "release_date": "2000-03-07",
+        "original_title": "Marlene",
+        "adult": false,
+        "poster_path": "/wXHTjaRfZVE8DQeOApYGvEy2MQ5.jpg",
+        "character": "Josef von Sternberg"
+      },
+      {
+        "id": 4364,
+        "media_type": "movie",
+        "title": "Vera Brühne",
+        "credit_id": "52fe43bcc3a36847f806ba71",
+        "release_date": "2001-01-24",
+        "original_title": "Vera Brühne",
+        "adult": false,
+        "poster_path": null,
+        "character": "Dr. Heddenhorst"
+      },
+      {
+        "id": 5184,
+        "media_type": "movie",
+        "title": "Contergan",
+        "credit_id": "52fe43fbc3a36847f807bb1b",
+        "release_date": "2007-11-07",
+        "original_title": "Contergan",
+        "adult": false,
+        "poster_path": "/pUDkEatUClVjLRlcddiaKwtFX4R.jpg",
+        "character": "Horst Bauer"
+      },
+      {
+        "id": 5950,
+        "media_type": "movie",
+        "title": "Es geschah am hellichten Tag",
+        "credit_id": "52fe4430c3a36847f8087857",
+        "release_date": "1997-01-04",
+        "original_title": "Es geschah am hellichten Tag",
+        "adult": false,
+        "poster_path": "/pMJw7iclx2b2Gn4hnMfMtbLJTZX.jpg",
+        "character": "Mann vom LKA"
+      },
+      {
+        "id": 7215,
+        "media_type": "movie",
+        "title": "The Secret of Loch Ness",
+        "credit_id": "52fe4473c3a36847f8096d65",
+        "release_date": "2008-02-05",
+        "original_title": "Das Wunder von Loch Ness",
+        "adult": false,
+        "poster_path": "/qyxZgt6glSVSjlyqo63mIIV5Fpu.jpg",
+        "character": "Eric Winter"
+      },
+      {
+        "id": 60303,
+        "media_type": "movie",
+        "title": "The Secret of Loch Ness II",
+        "credit_id": "52fe461fc3a368484e07ff1b",
+        "release_date": "2010-09-27",
+        "original_title": "Das zweite Wunder von Loch Ness",
+        "adult": false,
+        "poster_path": "/1BHopwpOOTgVPLN0RGyTk7G8PES.jpg",
+        "character": "Eric Winter"
+      },
+      {
+        "id": 46474,
+        "media_type": "movie",
+        "title": "Albert Schweitzer",
+        "credit_id": "52fe46f9c3a36847f811ccb3",
+        "release_date": "2009-12-24",
+        "original_title": "Albert Schweitzer - Ein Leben für Afrika",
+        "adult": false,
+        "poster_path": "/6fSPijK8RLDlsNgnrrfnAJ7oUHC.jpg",
+        "character": "Dr. Erik Hals"
+      },
+      {
+        "id": 85469,
+        "media_type": "movie",
+        "title": "Einer wie Bruno",
+        "credit_id": "52fe49449251416c910a7d37",
+        "release_date": "2012-04-12",
+        "original_title": "Einer wie Bruno",
+        "adult": false,
+        "poster_path": "/8ruPs0KTfKDkZuGxfJKNzmRnWc0.jpg",
+        "character": "Rolf Schmidtbauer"
+      },
+      {
+        "id": 76934,
+        "media_type": "movie",
+        "title": "Beate Uhse - das Recht auf Liebe",
+        "credit_id": "52fe4953c3a368484e125c0d",
+        "release_date": "2011-10-09",
+        "original_title": "Beate Uhse - das Recht auf Liebe",
+        "adult": false,
+        "poster_path": "/kvoKXYaFBXmW3aPp3tUFwenNgMA.jpg",
+        "character": "Ewe"
+      },
+      {
+        "id": 152606,
+        "media_type": "movie",
+        "title": "Rosamunde Pilcher: Die andere Frau",
+        "credit_id": "52fe4b269251416c910d1715",
+        "release_date": "2012-12-27",
+        "original_title": "Rosamunde Pilcher: Die andere Frau",
+        "adult": false,
+        "poster_path": "/vWEdst5sPpBbUGGLSCc2xqi38MH.jpg",
+        "character": "Harry Goodwin"
+      },
+      {
+        "id": 129613,
+        "media_type": "movie",
+        "title": "The Wall - The Final Days",
+        "credit_id": "52fe4b41c3a368484e17fbeb",
+        "release_date": "2008-10-06",
+        "original_title": "Wir sind das Volk - Liebe kennt keine Grenzen",
+        "adult": false,
+        "poster_path": "/tcUqpVu3flRxhxU0Qgf9t2HWPCt.jpg",
+        "character": "Andreas Wagner"
+      },
+      {
+        "id": 94,
+        "media_type": "movie",
+        "title": "Kunstgriff",
+        "credit_id": "52fe4216c3a36847f80030f1",
+        "release_date": "2002-05-18",
+        "original_title": "Kunstgriff",
+        "adult": false,
+        "poster_path": null,
+        "character": "Taschendieb"
+      },
+      {
+        "id": 200101,
+        "media_type": "movie",
+        "title": "Lapislazuli - Im Auge des Bären",
+        "credit_id": "52fe4c7cc3a368484e1b9355",
+        "release_date": "2006-02-14",
+        "original_title": "Lapislazuli - Im Auge des Bären",
+        "adult": false,
+        "poster_path": "/iU9GydKVYOv8lFGBzBdfpiC5cR3.jpg",
+        "character": "Tom"
+      },
+      {
+        "id": 183583,
+        "media_type": "movie",
+        "title": "Wer Kollegen hat, braucht keine Feinde",
+        "credit_id": "52fe4ca69251416c7512115d",
+        "release_date": "1995-12-13",
+        "original_title": "Wer Kollegen hat, braucht keine Feinde",
+        "adult": false,
+        "poster_path": null,
+        "character": "Mark Heller"
+      },
+      {
+        "id": 250796,
+        "media_type": "movie",
+        "title": "Adieu Paris",
+        "credit_id": "52fe4dfd9251416c91122edd",
+        "release_date": "2013-07-11",
+        "original_title": "Adieu Paris",
+        "adult": false,
+        "poster_path": "/n6cgGSn13Emkf8bReqyXy7kgEQy.jpg",
+        "character": "Frank Berndssen"
+      },
+      {
+        "id": 226572,
+        "media_type": "movie",
+        "title": "An Unusual Affair",
+        "credit_id": "52fe4e809251416c7515891b",
+        "release_date": "2002-01-02",
+        "original_title": "Eine aussergewöhnliche Affäre",
+        "adult": false,
+        "poster_path": "/eN54sCLsZle9oEWbyCcAyLywiJn.jpg",
+        "character": "Jochen Wenzel"
+      },
+      {
+        "id": 243122,
+        "media_type": "movie",
+        "title": "Kleine Schiffe",
+        "credit_id": "52fe4ed9c3a36847f82ac057",
+        "release_date": "2013-12-06",
+        "original_title": "Kleine Schiffe",
+        "adult": false,
+        "poster_path": null,
+        "character": "Andreas Funk"
+      },
+      {
+        "id": 182250,
+        "media_type": "movie",
+        "title": "Tsunami - Das Leben danach",
+        "credit_id": "52fe4c7f9251416c7511c3e3",
+        "release_date": "2012-02-05",
+        "original_title": "Tsunami - Das Leben danach",
+        "adult": false,
+        "poster_path": "/sjC18JFoHTYOrTu1FKqm398XTVh.jpg",
+        "character": "Michael Schäffer"
+      },
+      {
+        "id": 6968,
+        "media_type": "movie",
+        "title": "The Baader Meinhof Complex",
+        "credit_id": "5341ca88c3a368151e0022ae",
+        "release_date": "2008-09-25",
+        "original_title": "Der Baader Meinhof Komplex",
+        "adult": false,
+        "poster_path": "/y4cu8ZbY7JKWSGfi4URCDTQyrbj.jpg",
+        "character": "Klaus Rainer Röhl"
+      },
+      {
+        "id": 25236,
+        "media_type": "movie",
+        "title": "Mordshunger",
+        "credit_id": "5368c10ec3a3681212005de5",
+        "release_date": "2008-05-22",
+        "original_title": "Mordshunger",
+        "adult": false,
+        "poster_path": "/bvCRZumeteohmqCozWj50Qp6nGZ.jpg",
+        "character": ""
+      },
+      {
+        "id": 14210,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "53904c050e0a262979002040",
+        "name": "Polizeiruf 110",
+        "poster_path": "/y29g252ERvrv85jIl5XSVkds7tM.jpg",
+        "original_name": "Polizeiruf 110",
+        "first_air_date": "1971-06-27",
+        "character": "Frank Preyer"
+      },
+      {
+        "id": 3034,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "53959495c3a368641d004389",
+        "name": "Scene of the Crime",
+        "poster_path": "/aFWiM04UmCEnd53GNL1uFy2Qfll.jpg",
+        "original_name": "Tatort",
+        "first_air_date": "1970-11-29",
+        "character": "Michael Joswig"
+      },
+      {
+        "id": 40759,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "53b48eb80e0a2676c40000fa",
+        "name": "Die Cleveren",
+        "poster_path": "/peBDTAFNiiZYz9NnFBH1SLv0HXS.jpg",
+        "original_name": "Die Cleveren",
+        "first_air_date": "1998-03-10",
+        "character": "Dr. Dominik Born"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Hans Werner Meyer",
+  "place_of_birth": null,
+  "popularity": 1.0000000598538
+}

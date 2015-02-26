@@ -1,0 +1,309 @@
+{
+  "budget": 5000000,
+  "vote_average": 6.9,
+  "backdrop_path": "/xZ5qlcdZPyUKnoAugPE58XQyPXz.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 478,
+        "order": 0,
+        "credit_id": "52fe4213c3a36847f800211d",
+        "name": "Jamie Bell",
+        "cast_id": 16,
+        "profile_path": "/7HgepK5YE8u0xrv3lJZjaEoENwl.jpg",
+        "character": "Billy Elliot"
+      },
+      {
+        "id": 477,
+        "order": 1,
+        "credit_id": "52fe4213c3a36847f8002119",
+        "name": "Julie Walters",
+        "cast_id": 15,
+        "profile_path": "/eu2HP6pGt5YhSif8l2qWinMSJKp.jpg",
+        "character": "Mrs. Wilkinson"
+      },
+      {
+        "id": 481,
+        "order": 2,
+        "credit_id": "52fe4213c3a36847f8002129",
+        "name": "Jean Heywood",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Grandmother"
+      },
+      {
+        "id": 479,
+        "order": 3,
+        "credit_id": "52fe4213c3a36847f8002121",
+        "name": "Jamie Draven",
+        "cast_id": 17,
+        "profile_path": "/tC1EJV652XHWPDITZfKe1JrH7Ii.jpg",
+        "character": "Tony Elliot"
+      },
+      {
+        "id": 480,
+        "order": 4,
+        "credit_id": "52fe4213c3a36847f8002125",
+        "name": "Gary Lewis",
+        "cast_id": 18,
+        "profile_path": "/2wze744r8mSAYWHBDDR03O3c2P8.jpg",
+        "character": "Jackie Elliot"
+      },
+      {
+        "id": 482,
+        "order": 5,
+        "credit_id": "52fe4213c3a36847f800212d",
+        "name": "Stuart Wells",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Michael Caffrey"
+      },
+      {
+        "id": 483,
+        "order": 6,
+        "credit_id": "52fe4213c3a36847f8002131",
+        "name": "Nicola Blackwell",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Debbie Wilkinson"
+      },
+      {
+        "id": 487,
+        "order": 7,
+        "credit_id": "52fe4213c3a36847f8002135",
+        "name": "Janine Birkett",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Billy's mother"
+      },
+      {
+        "id": 107381,
+        "order": 8,
+        "credit_id": "536910720e0a2647c400865d",
+        "name": "Joe Renton",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Gary Poulson"
+      },
+      {
+        "id": 116991,
+        "order": 9,
+        "credit_id": "536910820e0a2647c80086a5",
+        "name": "Colin MacLachlan",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Mr. Tom Wilkinson"
+      },
+      {
+        "id": 938824,
+        "order": 10,
+        "credit_id": "536910960e0a2647d1008161",
+        "name": "Trevor Fox",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "PC Jeff Peverly"
+      },
+      {
+        "id": 1041491,
+        "order": 11,
+        "credit_id": "536910a40e0a2647d4008162",
+        "name": "Charlie Hardwick",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Sheila Briggs"
+      }
+    ],
+    "crew": [
+      {
+        "id": 462,
+        "credit_id": "52fe4213c3a36847f80020c7",
+        "department": "Production",
+        "name": "Greg Brenman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 463,
+        "credit_id": "52fe4213c3a36847f80020cd",
+        "department": "Production",
+        "name": "Jonathan Finn",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 464,
+        "credit_id": "52fe4213c3a36847f80020d3",
+        "department": "Production",
+        "name": "Charles Brand",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 465,
+        "credit_id": "52fe4213c3a36847f80020d9",
+        "department": "Production",
+        "name": "Tessa Ross",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 466,
+        "credit_id": "52fe4213c3a36847f80020df",
+        "department": "Production",
+        "name": "David M. Thompson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 467,
+        "credit_id": "52fe4213c3a36847f80020e5",
+        "department": "Production",
+        "name": "Natascha Wharton",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 468,
+        "credit_id": "52fe4213c3a36847f80020eb",
+        "department": "Directing",
+        "name": "Stephen Daldry",
+        "job": "Director",
+        "profile_path": "/1MdxJ4q6Iw1BITZ4mlhDbAtFzMO.jpg"
+      },
+      {
+        "id": 469,
+        "credit_id": "52fe4213c3a36847f80020f1",
+        "department": "Sound",
+        "name": "Stephen Warbeck",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 470,
+        "credit_id": "52fe4213c3a36847f80020f7",
+        "department": "Writing",
+        "name": "Lee Hall",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 471,
+        "credit_id": "52fe4213c3a36847f80020fd",
+        "department": "Art",
+        "name": "Maria Djurkovic",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 472,
+        "credit_id": "52fe4213c3a36847f8002103",
+        "department": "Sound",
+        "name": "Mark Holding",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 473,
+        "credit_id": "52fe4213c3a36847f8002109",
+        "department": "Camera",
+        "name": "Brian Tufano",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 474,
+        "credit_id": "52fe4213c3a36847f800210f",
+        "department": "Production",
+        "name": "Jina Jay",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 476,
+        "credit_id": "52fe4213c3a36847f8002115",
+        "department": "Editing",
+        "name": "John Wilson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1576,
+        "credit_id": "52fe4213c3a36847f800213b",
+        "department": "Crew",
+        "name": "Peter Darling",
+        "job": "Choreographer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 110,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 71,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    }
+  ],
+  "title": "Billy Elliot",
+  "overview": "Set against the background of the 1984 Miner's Strike, Billy Elliot is an 11 year old boy who stumbles out of the boxing ring and onto the ballet floor. He faces many trials and triumphs as he strives to conquer his family's set ways, inner conflict, and standing on his toes!",
+  "production_companies": [
+    {
+      "id": 718,
+      "name": "Arts Council of England"
+    },
+    {
+      "id": 288,
+      "name": "BBC Films"
+    },
+    {
+      "id": 5870,
+      "name": "Studio Canal"
+    },
+    {
+      "id": 686,
+      "name": "Tiger Aspect Productions"
+    },
+    {
+      "id": 10462,
+      "name": "WT2 Productions"
+    },
+    {
+      "id": 10163,
+      "name": "Working Title Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0249462",
+  "release_date": "2000-10-13",
+  "original_title": "Billy Elliot",
+  "vote_count": 72,
+  "poster_path": "/x0ySHQPAxQYD0D79BeDY2XhPzXg.jpg",
+  "tagline": "Inside every one of us is a special talent waiting to come out. The trick is finding it.",
+  "revenue": 110000000,
+  "popularity": "0.659137614302692"
+}

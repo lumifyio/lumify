@@ -1,0 +1,355 @@
+{
+  "budget": 250000,
+  "vote_average": 6.5,
+  "backdrop_path": "/8Tm0NrxF8GclL9orUHW1JWzwLTq.jpg",
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5888,
+        "order": 0,
+        "credit_id": "52fe4242c3a36847f8010777",
+        "name": "Nicole de Boer",
+        "cast_id": 5,
+        "profile_path": "/qTTlOZ3Z7H9LIhkQI9f3gaAqWV1.jpg",
+        "character": "Leaven"
+      },
+      {
+        "id": 5889,
+        "order": 1,
+        "credit_id": "52fe4242c3a36847f801077b",
+        "name": "Nicky Guadagni",
+        "cast_id": 6,
+        "profile_path": "/2HJwL5EmMQSggNKfO9xc6DANmL6.jpg",
+        "character": "Holloway"
+      },
+      {
+        "id": 5892,
+        "order": 2,
+        "credit_id": "52fe4242c3a36847f801077f",
+        "name": "David Hewlett",
+        "cast_id": 7,
+        "profile_path": "/89V1KCHVWBNPh6QWQcO9hdUyAPt.jpg",
+        "character": "Worth"
+      },
+      {
+        "id": 5894,
+        "order": 3,
+        "credit_id": "52fe4242c3a36847f8010783",
+        "name": "Andrew Miller",
+        "cast_id": 8,
+        "profile_path": "/3m96GLYnwuostBF7ANSkafwWJnv.jpg",
+        "character": "Kazan"
+      },
+      {
+        "id": 2320,
+        "order": 4,
+        "credit_id": "52fe4242c3a36847f8010787",
+        "name": "Julian Richings",
+        "cast_id": 9,
+        "profile_path": "/bbVRUCBwztY0mUzXdAmMgHocNSU.jpg",
+        "character": "Alderson"
+      },
+      {
+        "id": 5897,
+        "order": 5,
+        "credit_id": "52fe4243c3a36847f801078b",
+        "name": "Wayne Robson",
+        "cast_id": 10,
+        "profile_path": "/x1nuwmSBx49UXYxrVYyr8sZi12t.jpg",
+        "character": "Rennes"
+      },
+      {
+        "id": 5900,
+        "order": 6,
+        "credit_id": "52fe4243c3a36847f801078f",
+        "name": "Maurice Dean Wint",
+        "cast_id": 11,
+        "profile_path": "/wIw9x9BAGzeGe9SudxOUdagfNMD.jpg",
+        "character": "Quentin"
+      }
+    ],
+    "crew": [
+      {
+        "id": 107630,
+        "credit_id": "53bfa8c80e0a2615890063da",
+        "department": "Crew",
+        "name": "William Phillips",
+        "job": "Post Production Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 1340332,
+        "credit_id": "53bfaab30e0a26158200624b",
+        "department": "Crew",
+        "name": "Gene Alexander",
+        "job": "Property Master",
+        "profile_path": null
+      },
+      {
+        "id": 1340333,
+        "credit_id": "53bfab0ac3a3684cdb004fc6",
+        "department": "Editing",
+        "name": "Sue Conley",
+        "job": "Dialogue Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1340334,
+        "credit_id": "53bfab37c3a3684cf900481e",
+        "department": "Sound",
+        "name": "Michelle Schubert",
+        "job": "Foley",
+        "profile_path": null
+      },
+      {
+        "id": 1338134,
+        "credit_id": "53bfab4ac3a3684cec00479d",
+        "department": "Sound",
+        "name": "John Sievert",
+        "job": "Foley",
+        "profile_path": null
+      },
+      {
+        "id": 1340335,
+        "credit_id": "53bfab6ac3a3684ce900478d",
+        "department": "Sound",
+        "name": "Virginia Storey",
+        "job": "Foley",
+        "profile_path": null
+      },
+      {
+        "id": 1340336,
+        "credit_id": "53bfab85c3a3684cdb004fd3",
+        "department": "Sound",
+        "name": "Darcy Kite",
+        "job": "Sound Re-Recording Mixer",
+        "profile_path": null
+      },
+      {
+        "id": 1340337,
+        "credit_id": "53bfab9ec3a3684ce900479a",
+        "department": "Sound",
+        "name": "Todd Warren",
+        "job": "Sound Re-Recording Mixer",
+        "profile_path": null
+      },
+      {
+        "id": 1340338,
+        "credit_id": "53bfabb5c3a3687e59004403",
+        "department": "Sound",
+        "name": "Jeff Wachsmann",
+        "job": "Boom Operator",
+        "profile_path": null
+      },
+      {
+        "id": 15229,
+        "credit_id": "53bfac20c3a3684cef004be3",
+        "department": "Crew",
+        "name": "John Stoneham Jr.",
+        "job": "Stunt Coordinator",
+        "profile_path": null
+      },
+      {
+        "id": 7800,
+        "credit_id": "53bfac4ac3a3684cf9004843",
+        "department": "Production",
+        "name": "Deirdre Bowen",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1340339,
+        "credit_id": "53bfac68c3a3684cdf004740",
+        "department": "Editing",
+        "name": "Frank Leone",
+        "job": "Color Timer",
+        "profile_path": null
+      },
+      {
+        "id": 1340343,
+        "credit_id": "53bfac91c3a3684cec0047c4",
+        "department": "Directing",
+        "name": "Lisa Burling",
+        "job": "Script Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 1340345,
+        "credit_id": "53bfad05c3a3684cef004bfb",
+        "department": "Sound",
+        "name": "Craig Henighan",
+        "job": "Sound Effects Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1340346,
+        "credit_id": "53bfad28c3a3684cef004c00",
+        "department": "Sound",
+        "name": "Jill Purdy",
+        "job": "Sound Effects Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5877,
+        "credit_id": "52fe4242c3a36847f8010773",
+        "department": "Directing",
+        "name": "Vincenzo Natali",
+        "job": "Director",
+        "profile_path": "/4rdmLwBRQKs1gpjEfrTxabOUerv.jpg"
+      },
+      {
+        "id": 5901,
+        "credit_id": "52fe4243c3a36847f8010795",
+        "department": "Production",
+        "name": "Mehra Meh",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5904,
+        "credit_id": "52fe4243c3a36847f801079b",
+        "department": "Production",
+        "name": "Betty Orr",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5907,
+        "credit_id": "52fe4243c3a36847f80107a1",
+        "department": "Sound",
+        "name": "Mark Korven",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5908,
+        "credit_id": "52fe4243c3a36847f80107a7",
+        "department": "Camera",
+        "name": "Derek Rogers",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5909,
+        "credit_id": "52fe4243c3a36847f80107ad",
+        "department": "Editing",
+        "name": "John Sanders",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5910,
+        "credit_id": "52fe4243c3a36847f80107b3",
+        "department": "Art",
+        "name": "Jasna Stefanovic",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5880,
+        "credit_id": "52fe4243c3a36847f80107b9",
+        "department": "Writing",
+        "name": "André Bijelic",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5877,
+        "credit_id": "52fe4243c3a36847f80107bf",
+        "department": "Writing",
+        "name": "Vincenzo Natali",
+        "job": "Screenplay",
+        "profile_path": "/4rdmLwBRQKs1gpjEfrTxabOUerv.jpg"
+      },
+      {
+        "id": 5883,
+        "credit_id": "52fe4243c3a36847f80107c5",
+        "department": "Writing",
+        "name": "Graeme Manson",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1208480,
+        "credit_id": "52fe4243c3a36847f80107cb",
+        "department": "Costume & Make-Up",
+        "name": "Wendy May Moore",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 90,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 431,
+  "production_countries": [{
+    "name": "Canada",
+    "iso_3166_1": "CA"
+  }],
+  "title": "Cube",
+  "overview": "The claustrophobic debut of Canadian director Vincenzo Natali takes seven strangers out of their daily lives and places them mysteriously in a deadly cube where they all agree they must find their way out. A mix of thriller and psychodrama and a small budget film that gained cult status.",
+  "production_companies": [
+    {
+      "id": 22207,
+      "name": "Cube Libre"
+    },
+    {
+      "id": 21953,
+      "name": "Feature Film Project"
+    },
+    {
+      "id": 22208,
+      "name": "Harold Greenberg Fund"
+    },
+    {
+      "id": 22209,
+      "name": "Odeon Films"
+    },
+    {
+      "id": 22210,
+      "name": "Ontario Film Development Corporation"
+    },
+    {
+      "id": 806,
+      "name": "Téléfilm Canada"
+    },
+    {
+      "id": 22211,
+      "name": "Viacom Canada"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 432,
+    "backdrop_path": "/4SdZhO4M5vJ48dqp7r8PieZ37RJ.jpg",
+    "name": "Cube Collection",
+    "poster_path": "/pRshONhwgQYb2IYcxhEIMDFc62d.jpg"
+  },
+  "imdb_id": "tt0123755",
+  "release_date": "1997-09-09",
+  "original_title": "Cube",
+  "vote_count": 154,
+  "poster_path": "/u50r6chJGO2iqxVAvtQ07obiCkB.jpg",
+  "tagline": "Don't Look For A Reason... Look For A Way Out",
+  "revenue": 501818,
+  "popularity": "1.75085575683017"
+}

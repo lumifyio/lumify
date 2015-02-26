@@ -12,7 +12,7 @@
 1. Export your Palantir data to sequence files:
 
         java \
-          -cp sdoapi.jar:sdoutl.jar:ojdbc6.jar:datasets/palantir/data-to-sequence-file/target/lumify-palantir-data-to-sequence-file-*-SNAPSHOT-with-dependencies.jar \
+          -cp sdoapi.jar:sdoutl.jar:ojdbc6.jar:lumify-palantir-data-to-sequence-file-*-SNAPSHOT-with-dependencies.jar \
           io.lumify.palantir.DataToSequenceFile \
           --namespace=<oracle namespace> \
           --connectionstring=jdbc:oracle:thin:@localhost:1521/ORCL \

@@ -1,0 +1,13 @@
+{
+  "id": 97,
+  "logo_path": "/7znWcbDd4PcJzJUlJxYqAlPPykp.png",
+  "description": null,
+  "name": "Castle Rock Entertainment",
+  "parent_company": {
+    "id": 17,
+    "logo_path": "/rU25OVCsksXegdnb6GUFvLYY9Gd.png",
+    "name": "Warner Bros. Entertainment"
+  },
+  "homepage": null,
+  "headquarters": null
+}

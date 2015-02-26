@@ -1,0 +1,286 @@
+{
+  "budget": 0,
+  "vote_average": 7.5,
+  "backdrop_path": "/5gZBGpKA2sHAfEdNZ2sAGsHqIAc.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2895,
+        "order": 0,
+        "credit_id": "52fe4229c3a36847f8008c7f",
+        "name": "Emil Jannings",
+        "cast_id": 7,
+        "profile_path": "/r7kDnkaMUig9zeOqEndngx787HI.jpg",
+        "character": "Professor Immanuel Rath"
+      },
+      {
+        "id": 2896,
+        "order": 1,
+        "credit_id": "52fe4229c3a36847f8008c83",
+        "name": "Marlene Dietrich",
+        "cast_id": 8,
+        "profile_path": "/eZFuvNCV0kkI9MHFKxTKYegAfIK.jpg",
+        "character": "Lola Lola"
+      },
+      {
+        "id": 2897,
+        "order": 2,
+        "credit_id": "52fe4229c3a36847f8008c87",
+        "name": "Kurt Gerron",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Kiepert der Magier"
+      },
+      {
+        "id": 2898,
+        "order": 3,
+        "credit_id": "52fe4229c3a36847f8008c8b",
+        "name": "Rosa Valetti",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Guste, Frau des Magiers"
+      },
+      {
+        "id": 2899,
+        "order": 4,
+        "credit_id": "52fe4229c3a36847f8008c8f",
+        "name": "Hans Albers",
+        "cast_id": 11,
+        "profile_path": "/pblBTtgHt9jf0DzsxTKwKn1LTnI.jpg",
+        "character": "Mazeppa"
+      },
+      {
+        "id": 2903,
+        "order": 5,
+        "credit_id": "52fe4229c3a36847f8008ca5",
+        "name": "Reinhold Bernt",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Clown"
+      },
+      {
+        "id": 2904,
+        "order": 6,
+        "credit_id": "52fe4229c3a36847f8008ca9",
+        "name": "Eduard von Winterstein",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Schuldirektor"
+      },
+      {
+        "id": 2905,
+        "order": 7,
+        "credit_id": "52fe4229c3a36847f8008cad",
+        "name": "Hans Roth",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Schulhausmeister"
+      },
+      {
+        "id": 2906,
+        "order": 8,
+        "credit_id": "52fe4229c3a36847f8008cb1",
+        "name": "Rolf Müller",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Schüler Angst"
+      },
+      {
+        "id": 2907,
+        "order": 9,
+        "credit_id": "52fe4229c3a36847f8008cb5",
+        "name": "Roland Varno",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Schüler Lohmann"
+      },
+      {
+        "id": 2908,
+        "order": 10,
+        "credit_id": "52fe4229c3a36847f8008cb9",
+        "name": "Carl Balhaus",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Schüler Ertzum"
+      },
+      {
+        "id": 2910,
+        "order": 11,
+        "credit_id": "52fe4229c3a36847f8008cbd",
+        "name": "Robert Klein Lörk",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Schüler Goldstaub"
+      },
+      {
+        "id": 2911,
+        "order": 12,
+        "credit_id": "52fe4229c3a36847f8008cc1",
+        "name": "Charles Puffy",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Gastwirt"
+      },
+      {
+        "id": 2912,
+        "order": 13,
+        "credit_id": "52fe4229c3a36847f8008cc5",
+        "name": "Wilhelm Diegelmann",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Käptain"
+      },
+      {
+        "id": 2913,
+        "order": 14,
+        "credit_id": "52fe4229c3a36847f8008cc9",
+        "name": "Gerhard Bienert",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Polizist"
+      },
+      {
+        "id": 2914,
+        "order": 15,
+        "credit_id": "52fe4229c3a36847f8008ccd",
+        "name": "Ilse Fürstenberg",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Professor Raths Dienstmädchen"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2891,
+        "credit_id": "52fe4229c3a36847f8008c5d",
+        "department": "Directing",
+        "name": "Josef von Sternberg",
+        "job": "Director",
+        "profile_path": "/siga6Dwj4710U1AInP0lUddr3pa.jpg"
+      },
+      {
+        "id": 2892,
+        "credit_id": "52fe4229c3a36847f8008c63",
+        "department": "Writing",
+        "name": "Heinrich Mann",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 67,
+        "credit_id": "52fe4229c3a36847f8008c69",
+        "department": "Production",
+        "name": "Erich Pommer",
+        "job": "Producer",
+        "profile_path": "/oClAs4W1TRc2jtYCU4CdtXlEhPZ.jpg"
+      },
+      {
+        "id": 71,
+        "credit_id": "52fe4229c3a36847f8008c6f",
+        "department": "Camera",
+        "name": "Günther Rittau",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2893,
+        "credit_id": "52fe4229c3a36847f8008c75",
+        "department": "Editing",
+        "name": "Walter Klee",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2894,
+        "credit_id": "52fe4229c3a36847f8008c7b",
+        "department": "Editing",
+        "name": "Sam Winston",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2900,
+        "credit_id": "52fe4229c3a36847f8008c95",
+        "department": "Writing",
+        "name": "Carl Zuckmayer",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2901,
+        "credit_id": "52fe4229c3a36847f8008c9b",
+        "department": "Writing",
+        "name": "Karl Vollmöller",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2902,
+        "credit_id": "52fe4229c3a36847f8008ca1",
+        "department": "Writing",
+        "name": "Robert Liebmann",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2891,
+        "credit_id": "52fe4229c3a36847f8008cd3",
+        "department": "Writing",
+        "name": "Josef von Sternberg",
+        "job": "Author",
+        "profile_path": "/siga6Dwj4710U1AInP0lUddr3pa.jpg"
+      },
+      {
+        "id": 2915,
+        "credit_id": "52fe4229c3a36847f8008cd9",
+        "department": "Camera",
+        "name": "Hans Schneeberger",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2916,
+        "credit_id": "52fe4229c3a36847f8008cdf",
+        "department": "Sound",
+        "name": "Friedrich Hollaender",
+        "job": "Original Music Composer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 108,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 228,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "The Blue Angel",
+  "overview": "The Blue Angel follows Immanuel Rath (Emil Jannings) through a transformation from esteemed educator at the local Gymnasium (college preparatory high school) to a cabaret clown in Weimar Germany. Rath's descent begins when he punishes several of his students for circulating photographs of the beautiful Lola Lola (Marlene Dietrich) the headliner for the local cabaret, The Blue Angel. Hoping to catch the boys at the club, Professor Rath goes there later that evening and meets Lola herself. Consumed with desire and determined to remain at Lola's side, Rath returns to the night club the following evening (to return a pair of panties that were smuggled into his coat by one of his students) and stays the night with her. The next morning, reeling from his night of passion, Rath arrives late to school to find his classroom in chaos and the principal furious with his behavior.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0020697",
+  "release_date": "1930-04-01",
+  "original_title": "Der blaue Engel",
+  "vote_count": 4,
+  "poster_path": "/zzjwkKxcRWoW1K0FT8TOpjeVZSL.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.416042820122989"
+}

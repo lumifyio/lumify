@@ -1,0 +1,210 @@
+{
+  "budget": 0,
+  "vote_average": 8.3,
+  "backdrop_path": "/Ug80ZiiiXhpR7LUOLJVrBJygTb.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6394,
+        "order": 0,
+        "credit_id": "52fe4247c3a36847f8011d8b",
+        "name": "John Lurie",
+        "cast_id": 1,
+        "profile_path": "/aYzAHIg1f2KkEDUcUhMyH2zTXkc.jpg",
+        "character": "Willie"
+      },
+      {
+        "id": 6395,
+        "order": 1,
+        "credit_id": "52fe4247c3a36847f8011d95",
+        "name": "Eszter Balint",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Eva"
+      },
+      {
+        "id": 6396,
+        "order": 2,
+        "credit_id": "52fe4247c3a36847f8011d99",
+        "name": "Richard Edson",
+        "cast_id": 4,
+        "profile_path": "/7YegwxrBppretnwGEEMxEI453Ef.jpg",
+        "character": "Eddy"
+      },
+      {
+        "id": 6397,
+        "order": 3,
+        "credit_id": "52fe4247c3a36847f8011d9d",
+        "name": "Cecillia Stark",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Aunt Lotte"
+      },
+      {
+        "id": 6398,
+        "order": 4,
+        "credit_id": "52fe4247c3a36847f8011da1",
+        "name": "Danny Rosen",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Billy"
+      },
+      {
+        "id": 6399,
+        "order": 5,
+        "credit_id": "52fe4247c3a36847f8011da5",
+        "name": "Rammellzee",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Man with money"
+      },
+      {
+        "id": 6400,
+        "order": 6,
+        "credit_id": "52fe4247c3a36847f8011da9",
+        "name": "Tom DiCillo",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Airline Agent"
+      },
+      {
+        "id": 4811,
+        "order": 7,
+        "credit_id": "52fe4247c3a36847f8011dad",
+        "name": "Richard Boes",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Factory Worker"
+      },
+      {
+        "id": 6401,
+        "order": 8,
+        "credit_id": "52fe4247c3a36847f8011db1",
+        "name": "Rockets Redglare",
+        "cast_id": 10,
+        "profile_path": "/ytzTZMZifn86lpZhMCc8UhFbVz3.jpg",
+        "character": "Poker player"
+      },
+      {
+        "id": 6402,
+        "order": 9,
+        "credit_id": "52fe4247c3a36847f8011db5",
+        "name": "Harvey Perr",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Poker player"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4429,
+        "credit_id": "52fe4247c3a36847f8011d91",
+        "department": "Directing",
+        "name": "Jim Jarmusch",
+        "job": "Director",
+        "profile_path": "/mIVPpuU5vbyZ4KO0YXKwXVi71h.jpg"
+      },
+      {
+        "id": 4429,
+        "credit_id": "52fe4247c3a36847f8011dbb",
+        "department": "Writing",
+        "name": "Jim Jarmusch",
+        "job": "Screenplay",
+        "profile_path": "/mIVPpuU5vbyZ4KO0YXKwXVi71h.jpg"
+      },
+      {
+        "id": 6403,
+        "credit_id": "52fe4247c3a36847f8011dc1",
+        "department": "Production",
+        "name": "Sara Driver",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6404,
+        "credit_id": "52fe4247c3a36847f8011dc7",
+        "department": "Production",
+        "name": "Otto Grokenberger",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6394,
+        "credit_id": "52fe4247c3a36847f8011dcd",
+        "department": "Sound",
+        "name": "John Lurie",
+        "job": "Original Music Composer",
+        "profile_path": "/aYzAHIg1f2KkEDUcUhMyH2zTXkc.jpg"
+      },
+      {
+        "id": 6400,
+        "credit_id": "52fe4247c3a36847f8011dd3",
+        "department": "Camera",
+        "name": "Tom DiCillo",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4429,
+        "credit_id": "52fe4247c3a36847f8011dd9",
+        "department": "Editing",
+        "name": "Jim Jarmusch",
+        "job": "Editor",
+        "profile_path": "/mIVPpuU5vbyZ4KO0YXKwXVi71h.jpg"
+      },
+      {
+        "id": 6406,
+        "credit_id": "52fe4247c3a36847f8011ddf",
+        "department": "Editing",
+        "name": "Melody London",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 89,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 469,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Stranger Than Paradise",
+  "overview": "Rootless Hungarian émigré Willie, his pal Eddie, and visiting sixteen-year-old cousin Eva always manage to make the least of any situation, whether aimlessly traversing the drab interiors and environs of New York City, Cleveland, or an anonymous Florida suburb.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0088184",
+  "release_date": "1984-05-01",
+  "original_title": "Stranger Than Paradise",
+  "vote_count": 9,
+  "poster_path": "/iEIXqQBmVqkZT2Xpvk5luQSvsTS.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.300753799143805"
+}

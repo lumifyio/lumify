@@ -1,0 +1,275 @@
+{
+  "budget": 1661530,
+  "vote_average": 7.5,
+  "backdrop_path": "/7z0SvbS3SFTWh3vO1hFn5oRv9A.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8252,
+        "order": 0,
+        "credit_id": "52fe4261c3a36847f8019d5b",
+        "name": "William Holden",
+        "cast_id": 18,
+        "profile_path": "/6sa5f8p1KBhYxJDEmCLxn7QLcBe.jpg",
+        "character": "Sefton"
+      },
+      {
+        "id": 9108,
+        "order": 1,
+        "credit_id": "52fe4261c3a36847f8019d5f",
+        "name": "Don Taylor",
+        "cast_id": 19,
+        "profile_path": "/eE5H6GSOgqCM5rWHMTDbMYMTXBb.jpg",
+        "character": "Lt. Dunbar"
+      },
+      {
+        "id": 834,
+        "order": 2,
+        "credit_id": "52fe4261c3a36847f8019d63",
+        "name": "Otto Preminger",
+        "cast_id": 20,
+        "profile_path": "/alStMSBOhJbl3ZXIdSCfhrman3c.jpg",
+        "character": "Col. von Scherbach"
+      },
+      {
+        "id": 7347,
+        "order": 3,
+        "credit_id": "52fe4261c3a36847f8019d67",
+        "name": "Robert Strauss",
+        "cast_id": 21,
+        "profile_path": "/4fqnmvafx9qmn3R45iwKpAtei2k.jpg",
+        "character": "Stanislas Kasava"
+      },
+      {
+        "id": 9109,
+        "order": 4,
+        "credit_id": "52fe4261c3a36847f8019d6b",
+        "name": "Harvey Lembeck",
+        "cast_id": 22,
+        "profile_path": "/ylpix3VG43GY9D2kkxOxcR5FvSI.jpg",
+        "character": "Harry Shapiro"
+      },
+      {
+        "id": 9110,
+        "order": 5,
+        "credit_id": "52fe4261c3a36847f8019d6f",
+        "name": "Richard Erdman",
+        "cast_id": 23,
+        "profile_path": "/rhjiP9WV2tIsAPhwDpc6mPtX0Qs.jpg",
+        "character": "Hoffy"
+      },
+      {
+        "id": 9111,
+        "order": 6,
+        "credit_id": "52fe4261c3a36847f8019d73",
+        "name": "Peter Graves",
+        "cast_id": 24,
+        "profile_path": "/sR9B0mE399EGI9aRxMbWMpk2GKT.jpg",
+        "character": "Price"
+      },
+      {
+        "id": 9112,
+        "order": 7,
+        "credit_id": "52fe4261c3a36847f8019d77",
+        "name": "Neville Brand",
+        "cast_id": 25,
+        "profile_path": "/oqHFJx2CUOLuZU3l1acZWUDFlVN.jpg",
+        "character": "Duke"
+      },
+      {
+        "id": 2497,
+        "order": 8,
+        "credit_id": "52fe4261c3a36847f8019d7b",
+        "name": "Sig Ruman",
+        "cast_id": 26,
+        "profile_path": "/dLIbjEEB2eB4miGFYdPTOyGAF0j.jpg",
+        "character": "Sgt. Schulz"
+      },
+      {
+        "id": 9113,
+        "order": 9,
+        "credit_id": "52fe4261c3a36847f8019d7f",
+        "name": "William Pierson",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Marko the Mailman"
+      },
+      {
+        "id": 9114,
+        "order": 10,
+        "credit_id": "52fe4261c3a36847f8019d83",
+        "name": "Gil Stratton",
+        "cast_id": 28,
+        "profile_path": "/l6k4C7xKynP01LUYZIfv2PZWxu3.jpg",
+        "character": "Clarence Harvey Cook"
+      },
+      {
+        "id": 9115,
+        "order": 11,
+        "credit_id": "52fe4261c3a36847f8019d87",
+        "name": "Jay Lawrence",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Bagradian"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3146,
+        "credit_id": "52fe4261c3a36847f8019d0f",
+        "department": "Directing",
+        "name": "Billy Wilder",
+        "job": "Director",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 9098,
+        "credit_id": "52fe4261c3a36847f8019d15",
+        "department": "Writing",
+        "name": "Donald Bevan",
+        "job": "Theatre Play",
+        "profile_path": null
+      },
+      {
+        "id": 9099,
+        "credit_id": "52fe4261c3a36847f8019d1b",
+        "department": "Writing",
+        "name": "Edmund Trzcinski",
+        "job": "Theatre Play",
+        "profile_path": null
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe4261c3a36847f8019d21",
+        "department": "Writing",
+        "name": "Billy Wilder",
+        "job": "Screenplay",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 9100,
+        "credit_id": "52fe4261c3a36847f8019d27",
+        "department": "Writing",
+        "name": "Edwin Blum",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe4261c3a36847f8019d2d",
+        "department": "Production",
+        "name": "Billy Wilder",
+        "job": "Producer",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 9103,
+        "credit_id": "52fe4261c3a36847f8019d33",
+        "department": "Camera",
+        "name": "Ernest Laszlo",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2655,
+        "credit_id": "52fe4261c3a36847f8019d39",
+        "department": "Editing",
+        "name": "George Tomasini",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 9104,
+        "credit_id": "52fe4261c3a36847f8019d3f",
+        "department": "Art",
+        "name": "Franz Bachelin",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5188,
+        "credit_id": "52fe4261c3a36847f8019d45",
+        "department": "Art",
+        "name": "Hal Pereira",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7687,
+        "credit_id": "52fe4261c3a36847f8019d4b",
+        "department": "Art",
+        "name": "Sam Comer",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7688,
+        "credit_id": "52fe4261c3a36847f8019d51",
+        "department": "Art",
+        "name": "Ray Moyer",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7689,
+        "credit_id": "52fe4261c3a36847f8019d57",
+        "department": "Costume & Make-Up",
+        "name": "Wally Westmore",
+        "job": "Makeup Artist",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 120,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 632,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Stalag 17",
+  "overview": "Stalag 17 is a war time film from director Billy Wilder set in a German prison camp. The story follows a group of Americans that want to break out and a cynical serviceman who has to prove he's not an informer.",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0046359",
+  "release_date": "1953-08-10",
+  "original_title": "Stalag 17",
+  "vote_count": 18,
+  "poster_path": "/mj6MY8Wr0bAFVdYCqGKQOjd7Zl9.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.573106085854112"
+}

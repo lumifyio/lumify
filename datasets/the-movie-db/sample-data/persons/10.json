@@ -1,0 +1,169 @@
+{
+  "birthday": "1961-01-18",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nRobert \"Bob\" Peterson (born\r\nJanuary 1961) is an American animator, screenwriter, director and\r\nvoice actor, who has worked for Pixar since 1994. His first job was\r\nworking as a layout artist and animator on Toy Story. He was\r\nnominated for an Oscar for his screenplay for Finding Nemo. Peterson\r\nis a co-director and the writer of Up, which gained him his second\r\nOscar nomination. He also performed the voices of Roz in Monsters,\r\nInc., Mr. Ray in Finding Nemo, Dug the dog and Alpha the dog in Up[1]\r\nand in Dug's Special Mission, and the Janitor in Toy Story 3.  Peterson  was born in Wooster, Ohio, his family moved to Dover,\r\nOhio, where he graduated from Dover High School. He received his\r\nundergraduate degree from Ohio Northern University, and a Master's\r\ndegree in mechanical engineering from Purdue University in 1986.\r\nWhile attending Purdue, he wrote and illustrated the comic strip Loco\r\nMotives for the Purdue Exponent. Prior to coming to Pixar, Peterson\r\nworked at Wavefront Technologies and Rezn8 Productions.  In 2008,  Peterson played the part of Terry Cane, a puppeteer in\r\nDan Scanlon's first feature film Tracy. He also played additional\r\nvoices in Tokyo Mater in 2008, and the voice of Mr. Ray for the\r\nFinding Nemo Submarine Voyage ride at Disneyland Park in 2007.  His most  recent job at Pixar was voicing the Janitor at Sunnyside\r\nDaycare Center in Pixar's 11th film, Toy Story 3, which was released\r\non June 18, 2010.\n\nDescription above from the Wikipedia article Bob  Peterson\r\n(animator), licensed under CC-BY-SA, full list of contributors on\r\nWikipedia.",
+  "homepage": "",
+  "profile_path": "/13YNM8lBKnK26MYd2Lp3OpU6JdI.jpg",
+  "id": 10,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0677037",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 12,
+        "media_type": "movie",
+        "title": "Finding Nemo",
+        "credit_id": "52fe420ec3a36847f80006d9",
+        "release_date": "2003-05-30",
+        "original_title": "Finding Nemo",
+        "adult": false,
+        "poster_path": "/zjqInUwldOBa0q07fOyohYCWxWX.jpg",
+        "character": "Mr. Ray"
+      },
+      {
+        "id": 585,
+        "media_type": "movie",
+        "title": "Monsters, Inc.",
+        "credit_id": "52fe4256c3a36847f801691b",
+        "release_date": "2001-11-01",
+        "original_title": "Monsters, Inc.",
+        "adult": false,
+        "poster_path": "/93Y9BGx8blzmZOPSoivkFfaifqU.jpg",
+        "character": "Roz"
+      },
+      {
+        "id": 13929,
+        "media_type": "movie",
+        "title": "Geri's Game",
+        "credit_id": "52fe45b59251416c7505fc65",
+        "release_date": "1997-11-24",
+        "original_title": "Geri's Game",
+        "adult": false,
+        "poster_path": "/rDJ9gi8SiZAKFbIdvn1LctbaYkV.jpg",
+        "character": "Geri (voice)"
+      },
+      {
+        "id": 14160,
+        "media_type": "movie",
+        "title": "Up",
+        "credit_id": "52fe45d19251416c75063881",
+        "release_date": "2009-09-30",
+        "original_title": "Up",
+        "adult": false,
+        "poster_path": "/zh9DXJhBdHVVaWiDURTipADamcK.jpg",
+        "character": "Dug / Alpha (voice)"
+      },
+      {
+        "id": 62211,
+        "media_type": "movie",
+        "title": "Monsters University",
+        "credit_id": "52fe4675c3a368484e091e31",
+        "release_date": "2013-06-21",
+        "original_title": "Monsters University",
+        "adult": false,
+        "poster_path": "/flXrt9Dh0Tki6zOgX0TOq63KpG8.jpg",
+        "character": "Roz (voice)"
+      },
+      {
+        "id": 72962,
+        "media_type": "movie",
+        "title": "George & A.J.",
+        "credit_id": "52fe4886c3a368484e0fd23f",
+        "release_date": "2009-11-10",
+        "original_title": "George & A.J.",
+        "adult": false,
+        "poster_path": "/4lEld06GKFAO2Z1PwfXyneFpKFF.jpg",
+        "character": "Dug"
+      },
+      {
+        "id": 24589,
+        "media_type": "movie",
+        "title": "Dug's Special Mission",
+        "credit_id": "52fe449fc3a368484e02d57b",
+        "release_date": "2009-11-09",
+        "original_title": "Dug's Special Mission",
+        "adult": false,
+        "poster_path": "/gcWhEXk5dnZ8UkGESdfgJ7OIaxF.jpg",
+        "character": "Dug / Alpha (voice)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 12,
+        "media_type": "movie",
+        "title": "Finding Nemo",
+        "credit_id": "52fe420ec3a36847f800066b",
+        "department": "Writing",
+        "release_date": "2003-05-30",
+        "original_title": "Finding Nemo",
+        "job": "Author",
+        "adult": false,
+        "poster_path": "/zjqInUwldOBa0q07fOyohYCWxWX.jpg"
+      },
+      {
+        "id": 12,
+        "media_type": "movie",
+        "title": "Finding Nemo",
+        "credit_id": "52fe420ec3a36847f80006b7",
+        "department": "Writing",
+        "release_date": "2003-05-30",
+        "original_title": "Finding Nemo",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/zjqInUwldOBa0q07fOyohYCWxWX.jpg"
+      },
+      {
+        "id": 585,
+        "media_type": "movie",
+        "title": "Monsters, Inc.",
+        "credit_id": "52fe4256c3a36847f801689f",
+        "department": "Sound",
+        "release_date": "2001-11-01",
+        "original_title": "Monsters, Inc.",
+        "job": "Music",
+        "adult": false,
+        "poster_path": "/93Y9BGx8blzmZOPSoivkFfaifqU.jpg"
+      },
+      {
+        "id": 105864,
+        "media_type": "movie",
+        "title": "The Good Dinosaur",
+        "credit_id": "52fe4a58c3a36847f81c8a07",
+        "department": "Writing",
+        "release_date": "2015-11-25",
+        "original_title": "The Good Dinosaur",
+        "job": "Story",
+        "adult": false,
+        "poster_path": "/gEGgVZ8jGUOkFqxlQkuAOydazd0.jpg"
+      },
+      {
+        "id": 14160,
+        "media_type": "movie",
+        "title": "Up",
+        "credit_id": "52fe45d19251416c7506386b",
+        "department": "Directing",
+        "release_date": "2009-09-30",
+        "original_title": "Up",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/zh9DXJhBdHVVaWiDURTipADamcK.jpg"
+      },
+      {
+        "id": 14160,
+        "media_type": "movie",
+        "title": "Up",
+        "credit_id": "52fe45d19251416c75063871",
+        "department": "Writing",
+        "release_date": "2009-09-30",
+        "original_title": "Up",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/zh9DXJhBdHVVaWiDURTipADamcK.jpg"
+      }
+    ]
+  },
+  "name": "Bob Peterson",
+  "place_of_birth": "Wooster, Ohio, USA",
+  "popularity": 1.026635985326
+}

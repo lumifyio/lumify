@@ -1,0 +1,278 @@
+{
+  "budget": 3000000,
+  "vote_average": 7.7,
+  "backdrop_path": "/wm7TBeMeuomoXW4kkDnsY2Na8pW.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3635,
+        "order": 0,
+        "credit_id": "52fe422fc3a36847f800a6ab",
+        "name": "Elizabeth Taylor",
+        "cast_id": 4,
+        "profile_path": "/rPbfZlBX18OIj7H1Bahq7YcJL0v.jpg",
+        "character": "Maggie"
+      },
+      {
+        "id": 3636,
+        "order": 1,
+        "credit_id": "52fe422fc3a36847f800a6af",
+        "name": "Paul Newman",
+        "cast_id": 5,
+        "profile_path": "/4S5XlqZCIkq5Pd9EpqzuqJcsEOH.jpg",
+        "character": "Brick"
+      },
+      {
+        "id": 2753,
+        "order": 2,
+        "credit_id": "52fe422fc3a36847f800a6b3",
+        "name": "Burl Ives",
+        "cast_id": 6,
+        "profile_path": "/yE5nF7tSxzK7nnYQHfsfpDDnk0u.jpg",
+        "character": "Harvey \u201eBig Daddy\u201d Pollitt"
+      },
+      {
+        "id": 3362,
+        "order": 3,
+        "credit_id": "52fe422fc3a36847f800a6d1",
+        "name": "Judith Anderson",
+        "cast_id": 12,
+        "profile_path": "/ryTVWN7XI2WejLsFhicfx3yJ6y9.jpg",
+        "character": "Big Momma"
+      },
+      {
+        "id": 2672,
+        "order": 4,
+        "credit_id": "52fe422fc3a36847f800a6c9",
+        "name": "Jack Carson",
+        "cast_id": 10,
+        "profile_path": "/7Ys9ZSd9vspOkmWrFJkVDnknRCi.jpg",
+        "character": "Gooper"
+      },
+      {
+        "id": 3639,
+        "order": 5,
+        "credit_id": "52fe422fc3a36847f800a6cd",
+        "name": "Madeleine Sherwood",
+        "cast_id": 11,
+        "profile_path": "/cX1T4TZPr2rIDk85tpOQ5o9pP8Q.jpg",
+        "character": "Mae"
+      },
+      {
+        "id": 3641,
+        "order": 6,
+        "credit_id": "52fe422fc3a36847f800a6d9",
+        "name": "Vaughn Taylor",
+        "cast_id": 14,
+        "profile_path": "/uS8OlzIPv5mthaAiAuNEX8AUEDt.jpg",
+        "character": "Deacon Davis"
+      },
+      {
+        "id": 3640,
+        "order": 7,
+        "credit_id": "52fe422fc3a36847f800a6d5",
+        "name": "Larry Gates",
+        "cast_id": 13,
+        "profile_path": "/ldSjOmthzI5gl1cgSXzUMSTsVEN.jpg",
+        "character": "Dr. Baugh"
+      },
+      {
+        "id": 3752,
+        "order": 8,
+        "credit_id": "52fe422fc3a36847f800a713",
+        "name": "Zelda Cleaver",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Servant"
+      },
+      {
+        "id": 195830,
+        "order": 9,
+        "credit_id": "52fe422fc3a36847f800a717",
+        "name": "Brian Corcoran",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Boy"
+      },
+      {
+        "id": 274868,
+        "order": 10,
+        "credit_id": "52fe422fc3a36847f800a71b",
+        "name": "Rusty Stevens",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Sonny Pollitt"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3632,
+        "credit_id": "52fe422fc3a36847f800a69b",
+        "department": "Directing",
+        "name": "Richard Brooks",
+        "job": "Director",
+        "profile_path": "/2xTXd8iz1kKrH0sV4KFuEwZs62O.jpg"
+      },
+      {
+        "id": 3633,
+        "credit_id": "52fe422fc3a36847f800a6a1",
+        "department": "Production",
+        "name": "Lawrence Weingarten",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3634,
+        "credit_id": "52fe422fc3a36847f800a6a7",
+        "department": "Writing",
+        "name": "Tennessee Williams",
+        "job": "Theatre Play",
+        "profile_path": "/aveul43uW4WRhIVHbl4y5oTz8Cz.jpg"
+      },
+      {
+        "id": 3637,
+        "credit_id": "52fe422fc3a36847f800a6b9",
+        "department": "Camera",
+        "name": "William H. Daniels",
+        "job": "Director of Photography",
+        "profile_path": "/x4mBrFygn6zYjB6VPzcPhETuVnB.jpg"
+      },
+      {
+        "id": 3632,
+        "credit_id": "52fe422fc3a36847f800a6bf",
+        "department": "Writing",
+        "name": "Richard Brooks",
+        "job": "Screenplay",
+        "profile_path": "/2xTXd8iz1kKrH0sV4KFuEwZs62O.jpg"
+      },
+      {
+        "id": 3638,
+        "credit_id": "52fe422fc3a36847f800a6c5",
+        "department": "Writing",
+        "name": "James Poe",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3642,
+        "credit_id": "52fe422fc3a36847f800a6df",
+        "department": "Sound",
+        "name": "Charles Wolcott",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3643,
+        "credit_id": "52fe422fc3a36847f800a6e5",
+        "department": "Editing",
+        "name": "Ferris Webster",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3644,
+        "credit_id": "52fe422fc3a36847f800a6eb",
+        "department": "Crew",
+        "name": "Dean Smith",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 3645,
+        "credit_id": "52fe422fc3a36847f800a6f1",
+        "department": "Crew",
+        "name": "Lee LeBlanc",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 2658,
+        "credit_id": "52fe422fc3a36847f800a6f7",
+        "department": "Sound",
+        "name": "Van Allen James",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3646,
+        "credit_id": "52fe422fc3a36847f800a6fd",
+        "department": "Sound",
+        "name": "Wesley C. Miller",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3647,
+        "credit_id": "52fe422fc3a36847f800a703",
+        "department": "Costume & Make-Up",
+        "name": "Helen Rose",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 3648,
+        "credit_id": "52fe422fc3a36847f800a709",
+        "department": "Art",
+        "name": "Henry Grace",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 3649,
+        "credit_id": "52fe422fc3a36847f800a70f",
+        "department": "Art",
+        "name": "Robert Priestley",
+        "job": "Set Decoration",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 108,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 261,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Cat on a Hot Tin Roof",
+  "overview": "Brick, an alcoholic ex-football player, drinks his days away and resists the affections of his wife, Maggie. His reunion with his father, Big Daddy, who is dying of cancer, jogs a host of memories and revelations for both father and son.",
+  "production_companies": [{
+    "id": 100,
+    "name": "Avon Production"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0051459",
+  "release_date": "1958-09-20",
+  "original_title": "Cat on a Hot Tin Roof",
+  "vote_count": 14,
+  "poster_path": "/sYn1CgYBDmz4xKVaapFFnRd7jD8.jpg",
+  "tagline": "Just one pillow on her bed ... and just one desire in her heart!",
+  "revenue": 17000000,
+  "popularity": "1.12053132492386"
+}

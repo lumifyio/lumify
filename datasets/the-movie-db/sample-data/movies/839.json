@@ -1,0 +1,207 @@
+{
+  "budget": 450000,
+  "vote_average": 7.8,
+  "backdrop_path": "/h6NUGnzIG7q0g8mfIIIQcHIagsz.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 12422,
+        "order": 0,
+        "credit_id": "52fe427ec3a36847f802338f",
+        "name": "Dennis Weaver",
+        "cast_id": 9,
+        "profile_path": "/rNyOqLREeMxxlGIOHimesPkyUt7.jpg",
+        "character": "David Mann"
+      },
+      {
+        "id": 12423,
+        "order": 1,
+        "credit_id": "52fe427ec3a36847f8023393",
+        "name": "Eddie Firestone",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Cafe Owner"
+      },
+      {
+        "id": 12424,
+        "order": 2,
+        "credit_id": "52fe427ec3a36847f8023397",
+        "name": "Eugene Dynarski",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Man in Cafe"
+      },
+      {
+        "id": 12425,
+        "order": 3,
+        "credit_id": "52fe427ec3a36847f802339b",
+        "name": "Tim Herbert",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Gas Station Attendant"
+      },
+      {
+        "id": 12426,
+        "order": 4,
+        "credit_id": "52fe427ec3a36847f802339f",
+        "name": "Charles Seel",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Old Man"
+      },
+      {
+        "id": 12427,
+        "order": 5,
+        "credit_id": "52fe427ec3a36847f80233a3",
+        "name": "Alexander Lockwood",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Old Man in Car"
+      },
+      {
+        "id": 12428,
+        "order": 6,
+        "credit_id": "52fe427ec3a36847f80233a7",
+        "name": "Amy Douglass",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Old Woman in Car"
+      },
+      {
+        "id": 12429,
+        "order": 7,
+        "credit_id": "52fe427ec3a36847f80233ab",
+        "name": "Shirley O'Hara",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Waitress"
+      },
+      {
+        "id": 12430,
+        "order": 8,
+        "credit_id": "52fe427ec3a36847f80233af",
+        "name": "Lucille Benson",
+        "cast_id": 17,
+        "profile_path": "/rgf9wB5Q3XrZoeO11tuf6NkGMk8.jpg",
+        "character": "Lady at Snakerama"
+      },
+      {
+        "id": 12431,
+        "order": 9,
+        "credit_id": "52fe427ec3a36847f80233b3",
+        "name": "Carey Loftin",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "The Truck Driver"
+      }
+    ],
+    "crew": [
+      {
+        "id": 488,
+        "credit_id": "52fe427ec3a36847f8023361",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 12415,
+        "credit_id": "52fe427ec3a36847f8023367",
+        "department": "Writing",
+        "name": "Richard Matheson",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 12416,
+        "credit_id": "52fe427ec3a36847f802336d",
+        "department": "Production",
+        "name": "George Eckstein",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12417,
+        "credit_id": "52fe427ec3a36847f8023373",
+        "department": "Sound",
+        "name": "Billy Goldenberg",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 12418,
+        "credit_id": "52fe427ec3a36847f8023379",
+        "department": "Camera",
+        "name": "Jack A. Marta",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12419,
+        "credit_id": "52fe427ec3a36847f802337f",
+        "department": "Editing",
+        "name": "Frank Morriss",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12420,
+        "credit_id": "52fe427ec3a36847f8023385",
+        "department": "Art",
+        "name": "Robert S. Smith",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 12421,
+        "credit_id": "52fe427ec3a36847f802338b",
+        "department": "Art",
+        "name": "Sal Blydenburgh",
+        "job": "Set Decoration",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 90,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 839,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Duel",
+  "overview": "Travelling businessman, David Mann, angers the driver of a rusty tanker whilst crossing the Californian desert. A simple trip turns deadly as Mann struggles to stay on the road while the tanker plays cat and mouse with his life.",
+  "production_companies": [{
+    "id": 537,
+    "name": "Universal TV"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0067023",
+  "release_date": "1971-11-10",
+  "original_title": "Duel",
+  "vote_count": 32,
+  "poster_path": "/tr7YTVjGPSCheYtObfoNRkMV82L.jpg",
+  "tagline": "Fear is the driving force.",
+  "revenue": 0,
+  "popularity": "0.587329985049904"
+}

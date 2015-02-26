@@ -1,0 +1,417 @@
+{
+  "budget": 12000000,
+  "vote_average": 6.8,
+  "backdrop_path": "/oT8RNPVSaZzEhimXcWihQxQPxKy.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2230,
+        "order": 0,
+        "credit_id": "52fe4223c3a36847f80070ef",
+        "name": "Pam Grier",
+        "cast_id": 2,
+        "profile_path": "/8NaNIFhKySQ2fkwSlhoOGFgqtHO.jpg",
+        "character": "Jackie Brown"
+      },
+      {
+        "id": 2231,
+        "order": 1,
+        "credit_id": "52fe4223c3a36847f80070f3",
+        "name": "Samuel L. Jackson",
+        "cast_id": 3,
+        "profile_path": "/dlW6prW9HwYDsIRXNoFYtyHpSny.jpg",
+        "character": "Ordell Robbie"
+      },
+      {
+        "id": 5694,
+        "order": 2,
+        "credit_id": "52fe4224c3a36847f800710f",
+        "name": "Robert Forster",
+        "cast_id": 10,
+        "profile_path": "/82v4FngEiGvtTHQm399t6eaLfXw.jpg",
+        "character": "Max Cherry"
+      },
+      {
+        "id": 2233,
+        "order": 3,
+        "credit_id": "52fe4224c3a36847f800713b",
+        "name": "Bridget Fonda",
+        "cast_id": 18,
+        "profile_path": "/uO9IfxsPKhCpcaB8217fKhgwfft.jpg",
+        "character": "Melanie Ralston"
+      },
+      {
+        "id": 2232,
+        "order": 4,
+        "credit_id": "52fe4223c3a36847f80070f7",
+        "name": "Michael Keaton",
+        "cast_id": 5,
+        "profile_path": "/jSG7yQxSsGzz1TbDjq0811W5LK4.jpg",
+        "character": "Ray Nicolette"
+      },
+      {
+        "id": 380,
+        "order": 5,
+        "credit_id": "52fe4224c3a36847f8007147",
+        "name": "Robert De Niro",
+        "cast_id": 22,
+        "profile_path": "/8Bgdfv1oN9Mw0YuMHP6fw8KzDkc.jpg",
+        "character": "Louis Gara"
+      },
+      {
+        "id": 2234,
+        "order": 6,
+        "credit_id": "52fe4223c3a36847f80070fb",
+        "name": "Michael Bowen",
+        "cast_id": 6,
+        "profile_path": "/wQmxAvRQzNR3TBdgQAG3jJYVF4b.jpg",
+        "character": "Mark Dargus"
+      },
+      {
+        "id": 66,
+        "order": 7,
+        "credit_id": "52fe4223c3a36847f80070ff",
+        "name": "Chris Tucker",
+        "cast_id": 7,
+        "profile_path": "/1ePd2AOg8YYlvVT7HxXkqFFEk83.jpg",
+        "character": "Beaumont Livingston"
+      },
+      {
+        "id": 64908,
+        "order": 8,
+        "credit_id": "52fe4224c3a36847f800713f",
+        "name": "Lisa Gay Hamilton",
+        "cast_id": 19,
+        "profile_path": "/a9DRGto0Dm63mbqq56dhw4aZBzM.jpg",
+        "character": "Sheronda"
+      },
+      {
+        "id": 8396,
+        "order": 9,
+        "credit_id": "52fe4224c3a36847f8007143",
+        "name": "Tommy Lister",
+        "cast_id": 20,
+        "profile_path": "/UY4xouwBs8p9QmcXbnP8iy2uYp.jpg",
+        "character": "Winston"
+      },
+      {
+        "id": 5695,
+        "order": 10,
+        "credit_id": "52fe4224c3a36847f8007113",
+        "name": "Sid Haig",
+        "cast_id": 11,
+        "profile_path": "/gi3AjgRi6WySyzUFRjIiB6IYEZ4.jpg",
+        "character": "Judge"
+      },
+      {
+        "id": 35545,
+        "order": 11,
+        "credit_id": "52fe4224c3a36847f800714b",
+        "name": "Aimee Graham",
+        "cast_id": 23,
+        "profile_path": "/nWcKO2LokRckgnRWywWlRfyIUyX.jpg",
+        "character": "Amy, Billingsley Sales Girl"
+      },
+      {
+        "id": 169705,
+        "order": 12,
+        "credit_id": "52fe4224c3a36847f800714f",
+        "name": "Ellis Williams",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Cockatoo Bartender"
+      },
+      {
+        "id": 97260,
+        "order": 13,
+        "credit_id": "52fe4224c3a36847f8007153",
+        "name": "Tangie Ambrose",
+        "cast_id": 25,
+        "profile_path": "/xyNaxHNwD3ZXx74jRRIqHXCDaW7.jpg",
+        "character": "Billingsley Sales Girl #2"
+      },
+      {
+        "id": 534301,
+        "order": 14,
+        "credit_id": "52fe4224c3a36847f8007157",
+        "name": "T'Keyah Crystal Keymah",
+        "cast_id": 26,
+        "profile_path": "/10xtbGjEHEmxxUlfEVe5d1O1bQx.jpg",
+        "character": "Raynelle, Ordell's Junkie Friend"
+      },
+      {
+        "id": 1265427,
+        "order": 15,
+        "credit_id": "52fe4224c3a36847f800715b",
+        "name": "Vanessia Valentino",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Cabo Flight Attendant"
+      },
+      {
+        "id": 1214957,
+        "order": 16,
+        "credit_id": "52fe4224c3a36847f800715f",
+        "name": "Diana Uribe",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Anita Lopez"
+      },
+      {
+        "id": 1265428,
+        "order": 17,
+        "credit_id": "52fe4224c3a36847f8007163",
+        "name": "Renee Kelly",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Cocktail Waitress"
+      },
+      {
+        "id": 1265429,
+        "order": 18,
+        "credit_id": "52fe4224c3a36847f8007167",
+        "name": "Elizabeth McInerney",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Bartender at Sam's"
+      },
+      {
+        "id": 1265430,
+        "order": 19,
+        "credit_id": "52fe4224c3a36847f800716b",
+        "name": "Colleen Mayne",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Girl at Security Gate"
+      },
+      {
+        "id": 11807,
+        "order": 20,
+        "credit_id": "52fe4224c3a36847f800716f",
+        "name": "Laura Lovelace",
+        "cast_id": 32,
+        "profile_path": "/hty1tWzaBThqc6AwuBlpanIeT4x.jpg",
+        "character": "Steakhouse Waitress"
+      },
+      {
+        "id": 106886,
+        "order": 21,
+        "credit_id": "52fe4224c3a36847f8007173",
+        "name": "Christine Lydon",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Tec-9 Sidney - Chicks Who Love Guns"
+      },
+      {
+        "id": 1265431,
+        "order": 22,
+        "credit_id": "52fe4224c3a36847f8007177",
+        "name": "Julia Ervin",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Steyr AUG Cindy - Chicks Who Love Guns"
+      },
+      {
+        "id": 1265432,
+        "order": 23,
+        "credit_id": "52fe4224c3a36847f800717b",
+        "name": "Juliet Long",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "AK-47 Gloria - Chicks Who Love Guns"
+      },
+      {
+        "id": 1265433,
+        "order": 24,
+        "credit_id": "52fe4224c3a36847f800717f",
+        "name": "Michelle Berube",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Baretta 12S Brittany - Chicks Who Love Guns"
+      },
+      {
+        "id": 1265434,
+        "order": 25,
+        "credit_id": "52fe4224c3a36847f8007183",
+        "name": "Gillian Iliana-Waters",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Mossberg 500 Tammy Jo - Chicks Who Love Guns"
+      },
+      {
+        "id": 1265435,
+        "order": 26,
+        "credit_id": "52fe4224c3a36847f8007187",
+        "name": "Candice Briese",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "The Deputy"
+      },
+      {
+        "id": 1265436,
+        "order": 27,
+        "credit_id": "52fe4224c3a36847f800718b",
+        "name": "Gary Mann",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "The Deputy"
+      },
+      {
+        "id": 1265437,
+        "order": 28,
+        "credit_id": "52fe4224c3a36847f800718f",
+        "name": "Jeffrey Deedrick",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "The Sheriff"
+      },
+      {
+        "id": 1265438,
+        "order": 29,
+        "credit_id": "52fe4224c3a36847f8007193",
+        "name": "Roy Nesvold",
+        "cast_id": 41,
+        "profile_path": null,
+        "character": "The Sheriff"
+      },
+      {
+        "id": 1265439,
+        "order": 30,
+        "credit_id": "52fe4224c3a36847f8007197",
+        "name": "Herbert Hans Wilmsen",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "The Sheriff"
+      },
+      {
+        "id": 1212688,
+        "order": 31,
+        "credit_id": "52fe4224c3a36847f800719b",
+        "name": "Hattie Winston",
+        "cast_id": 43,
+        "profile_path": "/dwiglObCKhTDJsp6Rn8KsHfFWmz.jpg",
+        "character": "Simone"
+      }
+    ],
+    "crew": [
+      {
+        "id": 138,
+        "credit_id": "52fe4223c3a36847f80070eb",
+        "department": "Directing",
+        "name": "Quentin Tarantino",
+        "job": "Director",
+        "profile_path": "/6grjDWpEIPL5QdRbUZFxVEp5TCd.jpg"
+      },
+      {
+        "id": 138,
+        "credit_id": "52fe4224c3a36847f8007105",
+        "department": "Writing",
+        "name": "Quentin Tarantino",
+        "job": "Author",
+        "profile_path": "/6grjDWpEIPL5QdRbUZFxVEp5TCd.jpg"
+      },
+      {
+        "id": 2235,
+        "credit_id": "52fe4224c3a36847f800710b",
+        "department": "Writing",
+        "name": "Elmore Leonard",
+        "job": "Novel",
+        "profile_path": "/vL1oMCp0EE8kgSNJEPDPrMs7qVs.jpg"
+      },
+      {
+        "id": 2545,
+        "credit_id": "52fe4224c3a36847f8007119",
+        "department": "Production",
+        "name": "Lawrence Bender",
+        "job": "Producer",
+        "profile_path": "/5EzlP8qdCYQrhqEYB2MTmY74KFB.jpg"
+      },
+      {
+        "id": 3113,
+        "credit_id": "52fe4224c3a36847f800711f",
+        "department": "Camera",
+        "name": "Guillermo Navarro",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 156,
+        "credit_id": "52fe4224c3a36847f8007125",
+        "department": "Editing",
+        "name": "Sally Menke",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5776,
+        "credit_id": "52fe4224c3a36847f800712b",
+        "department": "Production",
+        "name": "Jaki Brown",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5777,
+        "credit_id": "52fe4224c3a36847f8007131",
+        "department": "Production",
+        "name": "Robyn M. Mitchell",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5779,
+        "credit_id": "52fe4224c3a36847f8007137",
+        "department": "Art",
+        "name": "David Wasco",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 154,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 184,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Jackie Brown",
+  "overview": "Jackie Brown is a flight attendant who gets caught in the middle of smuggling cash into the country for her gunrunner boss. When the cops try to use Jackie to get to her boss, she hatches a plan\u2014with help from a bail bondsman\u2014to keep the money for herself. Based on Elmore Leonard's novel \u201cRum Punch\u201d.",
+  "production_companies": [{
+    "id": 14,
+    "name": "Miramax Films"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0119396",
+  "release_date": "1997-12-24",
+  "original_title": "Jackie Brown",
+  "vote_count": 179,
+  "poster_path": "/5AiK0vIBuhC6sXlDMLEyHOc8Laj.jpg",
+  "tagline": "Six players on the trail of a half a million in Cash. There's only one question... Who's playing who?",
+  "revenue": 39673162,
+  "popularity": "1.85993571921481"
+}

@@ -1,0 +1,217 @@
+{
+  "birthday": "1982-11-29",
+  "adult": false,
+  "biography": "Lucas York Black (born November 29, 1982) is an American film and television actor. He is known for his roles in the CBS television series American Gothic as well as roles in films such as Sling Blade, Jarhead, Friday Night Lights, The Fast and the Furious: Tokyo Drift, Legion and Get Low.\n\nDescription above from the Wikipedia article Lucas Black , licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/41qZZc6vRVm5ZOoXWfEf5NGoIZR.jpg",
+  "id": 155,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0085407",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 2289,
+        "media_type": "movie",
+        "title": "Cold Mountain",
+        "credit_id": "52fe434ac3a36847f804909f",
+        "release_date": "2003-12-24",
+        "original_title": "Cold Mountain",
+        "adult": false,
+        "poster_path": "/4da24dJQZSGep4FJ2U9jU9G8qJr.jpg",
+        "character": "Oakley"
+      },
+      {
+        "id": 21355,
+        "media_type": "movie",
+        "title": "All the Pretty Horses",
+        "credit_id": "52fe4415c3a368484e00e8c9",
+        "release_date": "2000-12-11",
+        "original_title": "All the Pretty Horses",
+        "adult": false,
+        "poster_path": "/dvaBfInDqjzIDHGn8t5OJ9uQuwO.jpg",
+        "character": "Jimmy Blevins"
+      },
+      {
+        "id": 22894,
+        "media_type": "movie",
+        "title": "Legion",
+        "credit_id": "52fe4454c3a368484e01cf71",
+        "release_date": "2010-01-22",
+        "original_title": "Legion",
+        "adult": false,
+        "poster_path": "/mXJJPsVfQdf0OWxgoWgDUFyzJQo.jpg",
+        "character": "Jeep Hanson"
+      },
+      {
+        "id": 31306,
+        "media_type": "movie",
+        "title": "Crazy in Alabama",
+        "credit_id": "52fe44729251416c910110d9",
+        "release_date": "1999-01-01",
+        "original_title": "Crazy in Alabama",
+        "adult": false,
+        "poster_path": "/pomzJulFwRudsJUYWaPsmxSE9Ai.jpg",
+        "character": "Peter Joseph 'Peejoe' Bullis"
+      },
+      {
+        "id": 26007,
+        "media_type": "movie",
+        "title": "Killer Diller",
+        "credit_id": "52fe44e9c3a368484e03e02f",
+        "release_date": "2004-01-01",
+        "original_title": "Killer Diller",
+        "adult": false,
+        "poster_path": "/blI5jnrGKa9LRAzyYw6ecctGnGs.jpg",
+        "character": "Vernon"
+      },
+      {
+        "id": 12498,
+        "media_type": "movie",
+        "title": "Sling Blade",
+        "credit_id": "52fe44ee9251416c75045ea9",
+        "release_date": "1996-08-30",
+        "original_title": "Sling Blade",
+        "adult": false,
+        "poster_path": "/tUQRe2VQWdiIdSjpD28w7Rm8Ccb.jpg",
+        "character": "Frank Wheatley"
+      },
+      {
+        "id": 9615,
+        "media_type": "movie",
+        "title": "The Fast and the Furious: Tokyo Drift",
+        "credit_id": "52fe4511c3a36847f80ba9f3",
+        "release_date": "2006-06-03",
+        "original_title": "The Fast and the Furious: Tokyo Drift",
+        "adult": false,
+        "poster_path": "/7zcstia8qDvxLhAQD80uLAlCsL9.jpg",
+        "character": "Sean Boswell"
+      },
+      {
+        "id": 9915,
+        "media_type": "movie",
+        "title": "Deepwater",
+        "credit_id": "52fe4548c3a36847f80c55b9",
+        "release_date": "2005-06-09",
+        "original_title": "Deepwater",
+        "adult": false,
+        "poster_path": "/7qkOLpFUYfSbXHWLjLX6jJUCfSy.png",
+        "character": "Nat Banyon"
+      },
+      {
+        "id": 13416,
+        "media_type": "movie",
+        "title": "Friday Night Lights",
+        "credit_id": "52fe45669251416c75055197",
+        "release_date": "2004-10-08",
+        "original_title": "Friday Night Lights",
+        "adult": false,
+        "poster_path": "/uvs1mubs3VsURZF6r3QgtK7UlPh.jpg",
+        "character": "Mike Winchell"
+      },
+      {
+        "id": 44718,
+        "media_type": "movie",
+        "title": "Get Low",
+        "credit_id": "52fe4698c3a36847f810792d",
+        "release_date": "2009-09-20",
+        "original_title": "Get Low",
+        "adult": false,
+        "poster_path": "/a0PAJXgY5TKRPaX00v4pz1bDs1V.jpg",
+        "character": "Buddy"
+      },
+      {
+        "id": 70876,
+        "media_type": "movie",
+        "title": "Seven Days in Utopia",
+        "credit_id": "52fe4816c3a368484e0e8bdf",
+        "release_date": "2011-09-02",
+        "original_title": "Seven Days in Utopia",
+        "adult": false,
+        "poster_path": "/e0FimGplYYfJRTH98jzt9930SYA.jpg",
+        "character": "Luke Chisholm"
+      },
+      {
+        "id": 109410,
+        "media_type": "movie",
+        "title": "42",
+        "credit_id": "52fe4ab2c3a36847f81dcdff",
+        "release_date": "2013-04-12",
+        "original_title": "42",
+        "adult": false,
+        "poster_path": "/vlP18ooLmvYVNnqidbot0FupY05.jpg",
+        "character": "Pee Wee Reese"
+      },
+      {
+        "id": 1163,
+        "media_type": "movie",
+        "title": "The Miracle Worker",
+        "credit_id": "52fe42e9c3a36847f802c1cb",
+        "release_date": "2000-11-12",
+        "original_title": "The Miracle Worker",
+        "adult": false,
+        "poster_path": "/82fbnYZASQ6q9KCjNaXUCusuoou.jpg",
+        "character": "James Keller"
+      },
+      {
+        "id": 25,
+        "media_type": "movie",
+        "title": "Jarhead",
+        "credit_id": "52fe4210c3a36847f800114f",
+        "release_date": "2005-11-04",
+        "original_title": "Jarhead",
+        "adult": false,
+        "poster_path": "/kmbyO0XUHRHcMyxVSZAWDdrpxIu.jpg",
+        "character": "Kruger"
+      },
+      {
+        "id": 133694,
+        "media_type": "movie",
+        "title": "Promised Land",
+        "credit_id": "52fe4bb8c3a368484e196947",
+        "release_date": "2012-12-28",
+        "original_title": "Promised Land",
+        "adult": false,
+        "poster_path": "/dzbv1mDRERrEvhUIJIRqvFB3IVL.jpg",
+        "character": "Paul Geary"
+      },
+      {
+        "id": 185759,
+        "media_type": "movie",
+        "title": "Our Friend, Martin",
+        "credit_id": "52fe4cea9251416c75129bc9",
+        "release_date": "1999-01-12",
+        "original_title": "Our Friend, Martin",
+        "adult": false,
+        "poster_path": "/A7pbveh2qmFY3CYZtiVcjnxPwRh.jpg",
+        "character": ""
+      },
+      {
+        "id": 318,
+        "media_type": "tv",
+        "episode_count": 22,
+        "credit_id": "52534d7519c2957940101419",
+        "name": "American Gothic",
+        "poster_path": "/8ui76eYpCUBqhLV6RlY7pAcXFNt.jpg",
+        "original_name": "American Gothic",
+        "first_air_date": "1995-09-22",
+        "character": ""
+      },
+      {
+        "id": 6467,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525786cc19c29531db2a09b0",
+        "name": "Chicago Hope",
+        "poster_path": "/xyWHvpa73jspstjIefBvGz53Nde.jpg",
+        "original_name": "Chicago Hope",
+        "first_air_date": "1994-09-28",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Lucas Black",
+  "place_of_birth": "Speake - Alabama - USA",
+  "popularity": "1.46108133764188"
+}

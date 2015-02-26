@@ -1,0 +1,253 @@
+{
+  "budget": 0,
+  "vote_average": 7.4,
+  "backdrop_path": "/qvtzzhdr8ne2eb6lMaoCeXWye09.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3317,
+        "order": 0,
+        "credit_id": "52fe422cc3a36847f8009c27",
+        "name": "Takeshi Kitano",
+        "cast_id": 13,
+        "profile_path": "/blZ2IDxDR7Z4pV06R7iWrIyOSqK.jpg",
+        "character": "Zatôichi"
+      },
+      {
+        "id": 13275,
+        "order": 1,
+        "credit_id": "52fe422cc3a36847f8009c2b",
+        "name": "Tadanobu Asano",
+        "cast_id": 14,
+        "profile_path": "/7tGR6KqfMRd9NEpkslunjx7OJCV.jpg",
+        "character": "Hattori, der Leibwächter"
+      },
+      {
+        "id": 13276,
+        "order": 2,
+        "credit_id": "52fe422cc3a36847f8009c2f",
+        "name": "Michiyo Ookusu",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Tante O-Ume"
+      },
+      {
+        "id": 13277,
+        "order": 3,
+        "credit_id": "52fe422cc3a36847f8009c33",
+        "name": "Gadarukanaru Taka",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Shinkichi"
+      },
+      {
+        "id": 13278,
+        "order": 4,
+        "credit_id": "52fe422cc3a36847f8009c37",
+        "name": "Daigorō Tachibana",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Geisha O-Sei"
+      },
+      {
+        "id": 13257,
+        "order": 5,
+        "credit_id": "52fe422cc3a36847f8009c4b",
+        "name": "Yûko Daike",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Geisha O-Kinu"
+      },
+      {
+        "id": 13280,
+        "order": 6,
+        "credit_id": "52fe422cc3a36847f8009c3b",
+        "name": "Yui Natsukawa",
+        "cast_id": 18,
+        "profile_path": "/y49Kk0dslXP0zXJjUYKB9X7Jbk9.jpg",
+        "character": "Hattoris Frau"
+      },
+      {
+        "id": 13281,
+        "order": 7,
+        "credit_id": "52fe422cc3a36847f8009c3f",
+        "name": "Ittoku Kishibe",
+        "cast_id": 19,
+        "profile_path": "/zisEtz9j0k1AjExiSsgxMdhOYMh.jpg",
+        "character": "Ginzo"
+      },
+      {
+        "id": 13282,
+        "order": 8,
+        "credit_id": "52fe422cc3a36847f8009c43",
+        "name": "Saburo Ishikura",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Ogi"
+      },
+      {
+        "id": 13283,
+        "order": 9,
+        "credit_id": "52fe422cc3a36847f8009c47",
+        "name": "Akira Emoto",
+        "cast_id": 21,
+        "profile_path": "/9jh1u0EGmIoeAuXgTWE76lB0DDr.jpg",
+        "character": "Kneipenbesitzer"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3317,
+        "credit_id": "52fe422cc3a36847f8009be1",
+        "department": "Directing",
+        "name": "Takeshi Kitano",
+        "job": "Director",
+        "profile_path": "/6mrQkOKdicqR7a6QBW6asc953er.jpg"
+      },
+      {
+        "id": 3435,
+        "credit_id": "53683e370e0a2647d1006a90",
+        "department": "Writing",
+        "name": "Kan Shimosawa",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 3317,
+        "credit_id": "52fe422cc3a36847f8009bed",
+        "department": "Writing",
+        "name": "Takeshi Kitano",
+        "job": "Screenplay",
+        "profile_path": "/6mrQkOKdicqR7a6QBW6asc953er.jpg"
+      },
+      {
+        "id": 7452,
+        "credit_id": "52fe422cc3a36847f8009bf3",
+        "department": "Production",
+        "name": "Masayuki Mori",
+        "job": "Producer",
+        "profile_path": "/rqzt1uXnruuRQfVbv3PuD1nV2LX.jpg"
+      },
+      {
+        "id": 13272,
+        "credit_id": "52fe422cc3a36847f8009bf9",
+        "department": "Production",
+        "name": "Tsunehisa Saitô",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3436,
+        "credit_id": "52fe422cc3a36847f8009bff",
+        "department": "Sound",
+        "name": "Keiichi Suzuki",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4998,
+        "credit_id": "52fe422cc3a36847f8009c05",
+        "department": "Camera",
+        "name": "Katsumi Yanagijima",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3317,
+        "credit_id": "52fe422cc3a36847f8009c0b",
+        "department": "Editing",
+        "name": "Takeshi Kitano",
+        "job": "Editor",
+        "profile_path": "/6mrQkOKdicqR7a6QBW6asc953er.jpg"
+      },
+      {
+        "id": 4999,
+        "credit_id": "52fe422cc3a36847f8009c11",
+        "department": "Editing",
+        "name": "Yoshinori Ôta",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13273,
+        "credit_id": "52fe422cc3a36847f8009c17",
+        "department": "Production",
+        "name": "Takefumi Yoshikawa",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5000,
+        "credit_id": "52fe422cc3a36847f8009c1d",
+        "department": "Art",
+        "name": "Norihiro Isoda",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 13247,
+        "credit_id": "52fe422cc3a36847f8009c23",
+        "department": "Costume & Make-Up",
+        "name": "Yohji Yamamoto",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 111,
+  "spoken_languages": [{
+    "iso_639_1": "ja",
+    "name": "日本語"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 246,
+  "production_countries": [{
+    "name": "Japan",
+    "iso_3166_1": "JP"
+  }],
+  "title": "Zatoichi: The Blind Swordsman",
+  "overview": "Zatôichi is a 19th century blind nomad who makes his living as a gambler and masseur. However, behind this humble facade, he is a master swordsman gifted with a lightning-fast draw and breathtaking precision. While wandering, Zatôichi discovers a remote mountain village at the mercy of Ginzo, a ruthless gang-leader. Ginzo disposes of anyone who gets in his way, especially after hiring the mighty samurai ronin, Hattori, as a bodyguard. After a raucous night of gambling in town, Zatôichi encounters a pair of geishas--as dangerous as they are beautiful--who've come to avenge their parents' murder. As the paths of these and other colorful characters intertwine, Ginzo's henchmen are soon after Zatôichi. With his legendary cane sword at his side, the stage is set for a riveting showdown.",
+  "production_companies": [
+    {
+      "id": 567,
+      "name": "Office Kitano"
+    },
+    {
+      "id": 568,
+      "name": "Saito Entertainment"
+    },
+    {
+      "id": 569,
+      "name": "Tokyo FM Broadcasting Company"
+    },
+    {
+      "id": 570,
+      "name": "Bandai Visual Company (JAPAN)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0363226",
+  "release_date": "2003-09-06",
+  "original_title": "Zatôichi",
+  "vote_count": 32,
+  "poster_path": "/xNFaRG30R3IiVFMgX8X8kAFGxCP.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.566300777648585"
+}

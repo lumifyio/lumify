@@ -1,0 +1,13 @@
+{
+  "id": 60,
+  "logo_path": null,
+  "description": null,
+  "name": "United Artists",
+  "parent_company": {
+    "id": 21,
+    "logo_path": "/zcxym93i5BTqqjhVvAhV5HPwYTR.png",
+    "name": "Metro-Goldwyn-Mayer"
+  },
+  "homepage": null,
+  "headquarters": null
+}

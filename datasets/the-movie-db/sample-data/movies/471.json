@@ -1,0 +1,218 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/aN966UyyQ12ldrhQEPKnTSmPOZq.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1844,
+        "order": 0,
+        "credit_id": "52fe4247c3a36847f8011ed1",
+        "name": "Til Schweiger",
+        "cast_id": 3,
+        "profile_path": "/mRQ9URazBbImeV0NxHZsGS3Px7D.jpg",
+        "character": "Brute"
+      },
+      {
+        "id": 6416,
+        "order": 1,
+        "credit_id": "52fe4247c3a36847f8011ed5",
+        "name": "Polly Walker",
+        "cast_id": 4,
+        "profile_path": "/swfioO83iyf5aB2svD0tgIWlCSr.jpg",
+        "character": "Mara"
+      },
+      {
+        "id": 6419,
+        "order": 2,
+        "credit_id": "52fe4247c3a36847f8011ed9",
+        "name": "Ida Jablonska",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Elena"
+      },
+      {
+        "id": 6420,
+        "order": 3,
+        "credit_id": "52fe4247c3a36847f8011edd",
+        "name": "Bartek Pieniazek",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Moscu"
+      },
+      {
+        "id": 6421,
+        "order": 4,
+        "credit_id": "52fe4247c3a36847f8011ee1",
+        "name": "Wojciech Brzezinski",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Jorgu"
+      },
+      {
+        "id": 4935,
+        "order": 5,
+        "credit_id": "52fe4247c3a36847f8011f21",
+        "name": "Pete Postlethwaite",
+        "cast_id": 18,
+        "profile_path": "/5nbSzrwyDcLhC15buncGdrQqJ8e.jpg",
+        "character": "Sincai"
+      },
+      {
+        "id": 5049,
+        "order": 6,
+        "credit_id": "52fe4247c3a36847f8011f25",
+        "name": "John Hurt",
+        "cast_id": 19,
+        "profile_path": "/rpuH2YRLpxJjMxHq4T1QdOSVtlN.jpg",
+        "character": "Babits"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6414,
+        "credit_id": "52fe4247c3a36847f8011ec7",
+        "department": "Directing",
+        "name": "Maciej Dejczer",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 6415,
+        "credit_id": "52fe4247c3a36847f8011ecd",
+        "department": "Writing",
+        "name": "Cezary Harasimowicz",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6422,
+        "credit_id": "52fe4247c3a36847f8011ee7",
+        "department": "Sound",
+        "name": "Michał Lorenc",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5864,
+        "credit_id": "52fe4247c3a36847f8011eed",
+        "department": "Production",
+        "name": "Claus Boje",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6423,
+        "credit_id": "52fe4247c3a36847f8011ef3",
+        "department": "Production",
+        "name": "Leonardo De La Fuente",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6424,
+        "credit_id": "52fe4247c3a36847f8011ef9",
+        "department": "Production",
+        "name": "Edouard Douek",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6425,
+        "credit_id": "52fe4247c3a36847f8011eff",
+        "department": "Production",
+        "name": "Lew Rywin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6426,
+        "credit_id": "52fe4247c3a36847f8011f05",
+        "department": "Camera",
+        "name": "Marian Prokop",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6427,
+        "credit_id": "52fe4247c3a36847f8011f0b",
+        "department": "Camera",
+        "name": "Artur Reinhart",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6428,
+        "credit_id": "52fe4247c3a36847f8011f11",
+        "department": "Editing",
+        "name": "Arpad Bondy",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5433,
+        "credit_id": "52fe4247c3a36847f8011f17",
+        "department": "Editing",
+        "name": "Scott Stevenson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6430,
+        "credit_id": "52fe4247c3a36847f8011f1d",
+        "department": "Editing",
+        "name": "Katarzyna Rudnik",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 102,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 471,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Poland",
+      "iso_3166_1": "PL"
+    }
+  ],
+  "title": "Bandyta",
+  "overview": "Bastard depicts the distress of needy children and the love of a nurse and a hard boiled criminal. A film from Polish director Maciej Dejczer and actor Til Schweiger\u2019s first international film.",
+  "production_companies": [{
+    "id": 259,
+    "name": "Douek Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0129774",
+  "release_date": "1997-01-01",
+  "original_title": "Bandyta",
+  "vote_count": 0,
+  "poster_path": "/73d8HxtublBXQDhHuhtQ8ysOYUe.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.406780536169343"
+}

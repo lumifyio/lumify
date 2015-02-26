@@ -1,0 +1,424 @@
+{
+  "budget": 100000000,
+  "vote_average": 6.3,
+  "backdrop_path": "/fAIsURX9nwzvghwQYQ00mo7UZ3q.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 9640,
+        "order": 0,
+        "credit_id": "52fe4263c3a36847f801a9cf",
+        "name": "Haley Joel Osment",
+        "cast_id": 18,
+        "profile_path": "/znbiMgFoGnY3NMANOa8u13wJqFm.jpg",
+        "character": "David"
+      },
+      {
+        "id": 1518,
+        "order": 1,
+        "credit_id": "52fe4263c3a36847f801a9d3",
+        "name": "Frances O'Connor",
+        "cast_id": 19,
+        "profile_path": "/wMV5BrWn6iRZUPIQtqwcMVo31bM.jpg",
+        "character": "Monica Swinton"
+      },
+      {
+        "id": 8213,
+        "order": 2,
+        "credit_id": "52fe4263c3a36847f801a9d7",
+        "name": "Sam Robards",
+        "cast_id": 20,
+        "profile_path": "/xBfl2c80eQtbjKTH6dOwFBnFlE7.jpg",
+        "character": "Henry Swinton"
+      },
+      {
+        "id": 9641,
+        "order": 3,
+        "credit_id": "52fe4263c3a36847f801a9db",
+        "name": "Jake Thomas",
+        "cast_id": 21,
+        "profile_path": "/eln9pyfOrEAZ0vNDay8cm8syhIQ.jpg",
+        "character": "Martin Swinton"
+      },
+      {
+        "id": 9642,
+        "order": 4,
+        "credit_id": "52fe4263c3a36847f801a9df",
+        "name": "Jude Law",
+        "cast_id": 22,
+        "profile_path": "/4077Cyuo1mw53u1gNjLyQkqeZN0.jpg",
+        "character": "Gigolo Joe"
+      },
+      {
+        "id": 227,
+        "order": 5,
+        "credit_id": "52fe4263c3a36847f801a9e3",
+        "name": "William Hurt",
+        "cast_id": 23,
+        "profile_path": "/mf5GiYZjURQ72CPtY1kBva7mqIK.jpg",
+        "character": "Prof. Hobby"
+      },
+      {
+        "id": 2157,
+        "order": 6,
+        "credit_id": "52fe4263c3a36847f801a9e7",
+        "name": "Robin Williams",
+        "cast_id": 24,
+        "profile_path": "/9QmmscSVCR5pJiUFyjxik5NYhCM.jpg",
+        "character": "Dr. Know (voice)"
+      },
+      {
+        "id": 2282,
+        "order": 7,
+        "credit_id": "52fe4263c3a36847f801a9eb",
+        "name": "Ben Kingsley",
+        "cast_id": 25,
+        "profile_path": "/n0cVP5K2VxlohkAf7LoRwPt4xhu.jpg",
+        "character": "Specialist (voice)"
+      },
+      {
+        "id": 5064,
+        "order": 8,
+        "credit_id": "52fe4263c3a36847f801a9ef",
+        "name": "Meryl Streep",
+        "cast_id": 26,
+        "profile_path": "/uyalVm3tH5DaUoxCmvILS9sUFsR.jpg",
+        "character": "Blue Mecha (voice)"
+      },
+      {
+        "id": 2632,
+        "order": 9,
+        "credit_id": "52fe4263c3a36847f801a9f3",
+        "name": "Chris Rock",
+        "cast_id": 27,
+        "profile_path": "/5JCYKerIL0SdiqygtLUpG9Sw37P.jpg",
+        "character": "Comedian (voice)"
+      },
+      {
+        "id": 2131,
+        "order": 10,
+        "credit_id": "52fe4263c3a36847f801aa03",
+        "name": "Ken Leung",
+        "cast_id": 30,
+        "profile_path": "/844XvbJQdxSalpFi2EVGNGVpHnO.jpg",
+        "character": "Syatyoo-Sama"
+      },
+      {
+        "id": 9048,
+        "order": 11,
+        "credit_id": "52fe4263c3a36847f801aa07",
+        "name": "Clark Gregg",
+        "cast_id": 31,
+        "profile_path": "/t8CLS2Zcy7IjcZkE1vtxl40h9rh.jpg",
+        "character": "Supernerd"
+      },
+      {
+        "id": 60633,
+        "order": 12,
+        "credit_id": "52fe4263c3a36847f801aa0b",
+        "name": "Kevin Sussman",
+        "cast_id": 32,
+        "profile_path": "/zOOZhDHHj4oWH9jOhZrfNs1eWE8.jpg",
+        "character": "Supernerd"
+      },
+      {
+        "id": 27030,
+        "order": 13,
+        "credit_id": "52fe4263c3a36847f801aa0f",
+        "name": "Tom Gallop",
+        "cast_id": 33,
+        "profile_path": "/vk3ittMhuynueCIgHqxgl3U3mhb.jpg",
+        "character": "Supernerd"
+      },
+      {
+        "id": 1004155,
+        "order": 14,
+        "credit_id": "52fe4263c3a36847f801aa13",
+        "name": "Eugene Osment",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Supernerd"
+      },
+      {
+        "id": 10691,
+        "order": 15,
+        "credit_id": "52fe4263c3a36847f801aa17",
+        "name": "April Grace",
+        "cast_id": 35,
+        "profile_path": "/9vHFcPQS463AjDgst7vFJy6ZUnA.jpg",
+        "character": "Female Colleague"
+      },
+      {
+        "id": 35521,
+        "order": 16,
+        "credit_id": "52fe4263c3a36847f801aa1b",
+        "name": "Matt Winston",
+        "cast_id": 36,
+        "profile_path": "/vjXom4PhSWEkXlQDhh8ubTFoiIq.jpg",
+        "character": "Executive"
+      },
+      {
+        "id": 142736,
+        "order": 17,
+        "credit_id": "52fe4263c3a36847f801aa1f",
+        "name": "Sabrina Grdevich",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Sheila"
+      },
+      {
+        "id": 167195,
+        "order": 18,
+        "credit_id": "52fe4263c3a36847f801aa23",
+        "name": "Theo Greenly",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Todd"
+      },
+      {
+        "id": 91030,
+        "order": 19,
+        "credit_id": "539974960e0a263e300018a7",
+        "name": "Michael Mantell",
+        "cast_id": 41,
+        "profile_path": "/80CLXfrPC9BoqhjsV5k5rzm5XQL.jpg",
+        "character": "Dr. Frazier at Cryogenic Institute"
+      },
+      {
+        "id": 15318,
+        "order": 20,
+        "credit_id": "53b951560e0a2676c7009c2d",
+        "name": "Keith Campbell",
+        "cast_id": 42,
+        "profile_path": "/1PQSshXQ2AgifwYbykqXEyQYmDg.jpg",
+        "character": "Roadworker"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1321004,
+        "credit_id": "539973b10e0a263e41001852",
+        "department": "Costume & Make-Up",
+        "name": "David Rawley",
+        "job": "Costume Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4263c3a36847f801a96b",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 9636,
+        "credit_id": "52fe4263c3a36847f801a971",
+        "department": "Writing",
+        "name": "Ian Watson",
+        "job": "Screenplay",
+        "profile_path": "/6sVfSDLQ2EmINmR4O1zS5zKZMfk.jpg"
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4263c3a36847f801a977",
+        "department": "Writing",
+        "name": "Steven Spielberg",
+        "job": "Screenplay",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 2210,
+        "credit_id": "52fe4263c3a36847f801a97d",
+        "department": "Production",
+        "name": "Bonnie Curtis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5016,
+        "credit_id": "52fe4263c3a36847f801a983",
+        "department": "Production",
+        "name": "Jan Harlan",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2212,
+        "credit_id": "52fe4263c3a36847f801a989",
+        "department": "Production",
+        "name": "Walter F. Parkes",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4263c3a36847f801a98f",
+        "department": "Production",
+        "name": "Steven Spielberg",
+        "job": "Producer",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 491,
+        "credit_id": "52fe4263c3a36847f801a995",
+        "department": "Sound",
+        "name": "John Williams",
+        "job": "Original Music Composer",
+        "profile_path": "/d7NNRZQAIzLBSaoez550QHLpTk.jpg"
+      },
+      {
+        "id": 492,
+        "credit_id": "52fe4263c3a36847f801a99b",
+        "department": "Camera",
+        "name": "Janusz Kaminski",
+        "job": "Director of Photography",
+        "profile_path": "/5LNGARjEfMDOcEP6fMNtJypAGYx.jpg"
+      },
+      {
+        "id": 493,
+        "credit_id": "52fe4263c3a36847f801a9a1",
+        "department": "Editing",
+        "name": "Michael Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2952,
+        "credit_id": "52fe4263c3a36847f801a9a7",
+        "department": "Production",
+        "name": "Avy Kaufman",
+        "job": "Casting",
+        "profile_path": "/yQPGktsmkKkhkOQAUlmYlxHJOiJ.jpg"
+      },
+      {
+        "id": 496,
+        "credit_id": "52fe4263c3a36847f801a9ad",
+        "department": "Art",
+        "name": "Rick Carter",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8285,
+        "credit_id": "52fe4263c3a36847f801a9b3",
+        "department": "Art",
+        "name": "Richard L. Johnson",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8679,
+        "credit_id": "52fe4263c3a36847f801a9b9",
+        "department": "Art",
+        "name": "William James Teegarden",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9639,
+        "credit_id": "52fe4263c3a36847f801a9bf",
+        "department": "Art",
+        "name": "Thomas Valentine",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 555,
+        "credit_id": "52fe4263c3a36847f801a9c5",
+        "department": "Art",
+        "name": "Nancy Haigh",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 2530,
+        "credit_id": "52fe4263c3a36847f801a9cb",
+        "department": "Costume & Make-Up",
+        "name": "Bob Ringwood",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 489,
+        "credit_id": "52fe4263c3a36847f801a9f9",
+        "department": "Production",
+        "name": "Kathleen Kennedy",
+        "job": "Producer",
+        "profile_path": "/uHEExgTTzJNDX1Gal9CW5n3QdEJ.jpg"
+      },
+      {
+        "id": 210110,
+        "credit_id": "52fe4263c3a36847f801a9ff",
+        "department": "Crew",
+        "name": "Chris Cunningham",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 406204,
+        "credit_id": "52fe4263c3a36847f801aa29",
+        "department": "Costume & Make-Up",
+        "name": "Ve Neill",
+        "job": "Makeup Artist",
+        "profile_path": "/yaAwlGtPlQXcMum3eWL2xbas4BV.jpg"
+      }
+    ]
+  },
+  "runtime": 146,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.warnerbros.de/video/ai/",
+  "id": 644,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "A.I. Artificial Intelligence",
+  "overview": "Eleven-year-old David is the first android with human feelings. He is adopted by the Swinton family to test his ability to function. Before they are done testing him though David goes off on his own following his wish to be a human. He is on an odyssey to understand the secret to his existence. A science fiction film from Steven Spielberg taken over from Stanley Kubrick.",
+  "production_companies": [
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 385,
+      "name": "Stanley Kubrick Productions"
+    },
+    {
+      "id": 27,
+      "name": "DreamWorks SKG"
+    },
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0212720",
+  "release_date": "2001-06-25",
+  "original_title": "Artificial Intelligence: AI",
+  "vote_count": 312,
+  "poster_path": "/seJhtsUcytRuRGa6oUGYhjVYL8g.jpg",
+  "tagline": "Journey to a world where robots dream and desire.",
+  "revenue": 235926552,
+  "popularity": "2.47895885100755"
+}

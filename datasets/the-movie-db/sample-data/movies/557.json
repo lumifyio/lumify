@@ -1,0 +1,460 @@
+{
+  "budget": 139000000,
+  "vote_average": 6.2,
+  "backdrop_path": "/jz6NCADCgj4dWU8RM81Xvrokey4.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2219,
+        "order": 0,
+        "credit_id": "52fe4251c3a36847f8014f77",
+        "name": "Tobey Maguire",
+        "cast_id": 31,
+        "profile_path": "/g423LRluvo5JjxGtEgnclsNdX7Y.jpg",
+        "character": "Spider-Man / Peter Parker"
+      },
+      {
+        "id": 5293,
+        "order": 1,
+        "credit_id": "52fe4251c3a36847f8014f7b",
+        "name": "Willem Dafoe",
+        "cast_id": 32,
+        "profile_path": "/4Wuww8ORt6nrHyBSUBLTHWt24EZ.jpg",
+        "character": "Green Goblin / Norman Osborn"
+      },
+      {
+        "id": 205,
+        "order": 2,
+        "credit_id": "52fe4251c3a36847f8014f11",
+        "name": "Kirsten Dunst",
+        "cast_id": 10,
+        "profile_path": "/3fjUI92bQaGOnbxHBbyR0z9h619.jpg",
+        "character": "Mary Jane Watson"
+      },
+      {
+        "id": 17051,
+        "order": 3,
+        "credit_id": "52fe4251c3a36847f8014f15",
+        "name": "James Franco",
+        "cast_id": 11,
+        "profile_path": "/4YD963D57MqgwiqXS7VrSNOyNFh.jpg",
+        "character": "Harry Osborn"
+      },
+      {
+        "id": 19153,
+        "order": 4,
+        "credit_id": "52fe4251c3a36847f8014f83",
+        "name": "Cliff Robertson",
+        "cast_id": 34,
+        "profile_path": "/brkuCYbMRJqPAucyIf3szNhA5h5.jpg",
+        "character": "Ben Parker"
+      },
+      {
+        "id": 18999,
+        "order": 5,
+        "credit_id": "52fe4251c3a36847f8014f19",
+        "name": "J.K. Simmons",
+        "cast_id": 12,
+        "profile_path": "/f2D5wGCqF9t4xsXuaUtIusVKDc1.jpg",
+        "character": "J. Jonah Jameson"
+      },
+      {
+        "id": 20580,
+        "order": 6,
+        "credit_id": "52fe4251c3a36847f8014f1d",
+        "name": "Joe Manganiello",
+        "cast_id": 13,
+        "profile_path": "/tYJSo5dSZEZjvcTKySnkYHMEb2J.jpg",
+        "character": "Flash Thompson"
+      },
+      {
+        "id": 19468,
+        "order": 7,
+        "credit_id": "52fe4251c3a36847f8014f7f",
+        "name": "Gerry Becker",
+        "cast_id": 33,
+        "profile_path": "/4oXmbOtBU18w0eB5Jaj7OACvEpG.jpg",
+        "character": "Maximilian Fargas"
+      },
+      {
+        "id": 18998,
+        "order": 8,
+        "credit_id": "52fe4251c3a36847f8014f87",
+        "name": "Rosemary Harris",
+        "cast_id": 35,
+        "profile_path": "/lkbjFfS5VhDhWoThG5akyjH4AR9.jpg",
+        "character": "May Parker"
+      },
+      {
+        "id": 5502,
+        "order": 9,
+        "credit_id": "52fe4251c3a36847f8014f8b",
+        "name": "Bill Nunn",
+        "cast_id": 36,
+        "profile_path": "/cT4sK7SCranK3yeelYTHMlTaq3a.jpg",
+        "character": "Joseph 'Robbie' Robertson"
+      },
+      {
+        "id": 11357,
+        "order": 10,
+        "credit_id": "52fe4251c3a36847f8014f2d",
+        "name": "Bruce Campbell",
+        "cast_id": 17,
+        "profile_path": "/ox3Mf0pXGEiWfRO2TYcua0EHUQN.jpg",
+        "character": "Ring Announcer"
+      },
+      {
+        "id": 15253,
+        "order": 11,
+        "credit_id": "52fe4252c3a36847f8014f8f",
+        "name": "Stanley Anderson",
+        "cast_id": 37,
+        "profile_path": "/xZg3C31ElqV54dXC6fc6Akf6K1z.jpg",
+        "character": "General Slocum"
+      },
+      {
+        "id": 125024,
+        "order": 12,
+        "credit_id": "52fe4252c3a36847f8014f93",
+        "name": "Ron Perkins",
+        "cast_id": 38,
+        "profile_path": "/mlmdELJA9yAwIIOh7JhxYW2hJtM.jpg",
+        "character": "Dr. Mendell Stromm"
+      },
+      {
+        "id": 20582,
+        "order": 13,
+        "credit_id": "52fe4251c3a36847f8014f29",
+        "name": "Michael Papajohn",
+        "cast_id": 16,
+        "profile_path": "/t4LF4IJkF5juv9C7DDZQqsMfpLc.jpg",
+        "character": "Carjacker"
+      },
+      {
+        "id": 6945,
+        "order": 14,
+        "credit_id": "52fe4251c3a36847f8014f39",
+        "name": "K. K. Dodds",
+        "cast_id": 20,
+        "profile_path": "/n9d6ovtwlfZ5Xvvo2oaJd3rUGvp.jpg",
+        "character": "Simkins"
+      },
+      {
+        "id": 20581,
+        "order": 15,
+        "credit_id": "52fe4251c3a36847f8014f21",
+        "name": "Jack Betts",
+        "cast_id": 14,
+        "profile_path": "/wX6KWBh4sH2L7sHDIsgDBv6ktXQ.jpg",
+        "character": "Henry Balkan"
+      },
+      {
+        "id": 9281,
+        "order": 16,
+        "credit_id": "52fe4251c3a36847f8014f25",
+        "name": "Elizabeth Banks",
+        "cast_id": 15,
+        "profile_path": "/w2RrVNLQa4ApXhpIgWTkpNVS2kd.jpg",
+        "character": "Miss Brant"
+      },
+      {
+        "id": 20583,
+        "order": 17,
+        "credit_id": "52fe4251c3a36847f8014f31",
+        "name": "Shan Omar Huey",
+        "cast_id": 18,
+        "profile_path": "/dKQvlvIOK1yn9NOFeKhxTZp5ouH.jpg",
+        "character": "Teacher"
+      },
+      {
+        "id": 20584,
+        "order": 18,
+        "credit_id": "52fe4251c3a36847f8014f35",
+        "name": "Lucy Lawless",
+        "cast_id": 19,
+        "profile_path": "/mspAPb0Ce3yGdSwEBjisd6jCJQf.jpg",
+        "character": "Punk Rock Girl"
+      },
+      {
+        "id": 55648,
+        "order": 19,
+        "credit_id": "52fe4251c3a36847f8014f73",
+        "name": "Robert Kerman",
+        "cast_id": 30,
+        "profile_path": "/v6tD0f9D0k08TWObRvShYCTfV1x.jpg",
+        "character": "Tugboat Captain"
+      },
+      {
+        "id": 11769,
+        "order": 20,
+        "credit_id": "52fe4252c3a36847f8014f97",
+        "name": "Ted Raimi",
+        "cast_id": 39,
+        "profile_path": "/fOykmd0HFrmcO9nRepehOnfxiGa.jpg",
+        "character": "Hoffman"
+      },
+      {
+        "id": 19326,
+        "order": 21,
+        "credit_id": "52fe4252c3a36847f8014f9b",
+        "name": "John Paxton",
+        "cast_id": 40,
+        "profile_path": "/bizhhVVs4y8CfHzPfqPYNEvs2eZ.jpg",
+        "character": "Houseman"
+      },
+      {
+        "id": 6944,
+        "order": 22,
+        "credit_id": "52fe4252c3a36847f8014fa3",
+        "name": "Octavia Spencer",
+        "cast_id": 42,
+        "profile_path": "/4FEVru6fBFyJECqwqjHwlZdsL4c.jpg",
+        "character": "Check-In Girl"
+      },
+      {
+        "id": 89023,
+        "order": 23,
+        "credit_id": "52fe4252c3a36847f8014f9f",
+        "name": "Randy Savage",
+        "cast_id": 41,
+        "profile_path": "/rcpPJQvX2uqt7oVaTVwAKhdcdN8.jpg",
+        "character": "Bone Saw McGraw"
+      },
+      {
+        "id": 21130,
+        "order": 24,
+        "credit_id": "52fe4252c3a36847f8014fa7",
+        "name": "Jayce Bartok",
+        "cast_id": 43,
+        "profile_path": "/xDhwbN0QGGZ1YtvcML3EX8d5JJj.jpg",
+        "character": "Subway Guitarist"
+      },
+      {
+        "id": 125055,
+        "order": 25,
+        "credit_id": "52fe4252c3a36847f8014fab",
+        "name": "Sara Ramirez",
+        "cast_id": 44,
+        "profile_path": "/iXX6xCTvgMfqlWQZ2xdFxrOxhrz.jpg",
+        "character": "Cop at Carjacking"
+      },
+      {
+        "id": 154644,
+        "order": 26,
+        "credit_id": "52fe4252c3a36847f8014faf",
+        "name": "Una Damon",
+        "cast_id": 45,
+        "profile_path": "/d3dcUIwjXY0mH6QplM98L8fswzA.jpg",
+        "character": "Lab Tour Guide"
+      },
+      {
+        "id": 7624,
+        "order": 27,
+        "credit_id": "52fe4252c3a36847f8014fb3",
+        "name": "Stan Lee",
+        "cast_id": 46,
+        "profile_path": "/dTr2gJPL7jELKVkcjtoNx80uVKR.jpg",
+        "character": "Man in Fair"
+      }
+    ],
+    "crew": [
+      {
+        "id": 531,
+        "credit_id": "52fe4251c3a36847f8014edd",
+        "department": "Sound",
+        "name": "Danny Elfman",
+        "job": "Original Music Composer",
+        "profile_path": "/nBx84zlelMMlbVvkBQHyfF7eCov.jpg"
+      },
+      {
+        "id": 7623,
+        "credit_id": "52fe4251c3a36847f8014ee3",
+        "department": "Directing",
+        "name": "Sam Raimi",
+        "job": "Director",
+        "profile_path": "/LaCTPq1oh0nAs3mzwsc057OaPr.jpg"
+      },
+      {
+        "id": 7624,
+        "credit_id": "52fe4251c3a36847f8014ee9",
+        "department": "Production",
+        "name": "Stan Lee",
+        "job": "Producer",
+        "profile_path": "/dTr2gJPL7jELKVkcjtoNx80uVKR.jpg"
+      },
+      {
+        "id": 7624,
+        "credit_id": "52fe4251c3a36847f8014eef",
+        "department": "Writing",
+        "name": "Stan Lee",
+        "job": "Author",
+        "profile_path": "/dTr2gJPL7jELKVkcjtoNx80uVKR.jpg"
+      },
+      {
+        "id": 508,
+        "credit_id": "52fe4251c3a36847f8014ef5",
+        "department": "Writing",
+        "name": "David Koepp",
+        "job": "Screenplay",
+        "profile_path": "/3A7kfyMXaVjGcSbGdRD25msbHcj.jpg"
+      },
+      {
+        "id": 7625,
+        "credit_id": "52fe4251c3a36847f8014efb",
+        "department": "Writing",
+        "name": "Steve Ditko",
+        "job": "Author",
+        "profile_path": "/pdKXvMPcHgSC2947apMa4gQwahT.jpg"
+      },
+      {
+        "id": 36,
+        "credit_id": "52fe4251c3a36847f8014f01",
+        "department": "Camera",
+        "name": "Don Burgess",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 800,
+        "credit_id": "52fe4251c3a36847f8014f07",
+        "department": "Editing",
+        "name": "Arthur Coburn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7712,
+        "credit_id": "52fe4251c3a36847f8014f0d",
+        "department": "Editing",
+        "name": "Bob Murawski",
+        "job": "Editor",
+        "profile_path": "/fADtjxosjUDT8AyZxTlqFYXUKuY.jpg"
+      },
+      {
+        "id": 9987,
+        "credit_id": "52fe4251c3a36847f8014f3f",
+        "department": "Production",
+        "name": "Ian Bryce",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7627,
+        "credit_id": "52fe4251c3a36847f8014f45",
+        "department": "Production",
+        "name": "Laura Ziskin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7626,
+        "credit_id": "52fe4251c3a36847f8014f4b",
+        "department": "Production",
+        "name": "Avi Arad",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11411,
+        "credit_id": "52fe4251c3a36847f8014f51",
+        "department": "Art",
+        "name": "Neil Spisak",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6410,
+        "credit_id": "52fe4251c3a36847f8014f57",
+        "department": "Production",
+        "name": "Francine Maisler",
+        "job": "Casting",
+        "profile_path": "/7kOKhRSuwDXqyd2Dm2xdWdi18lQ.jpg"
+      },
+      {
+        "id": 20585,
+        "credit_id": "52fe4251c3a36847f8014f5d",
+        "department": "Art",
+        "name": "Karen O'Hara",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 8794,
+        "credit_id": "52fe4251c3a36847f8014f63",
+        "department": "Art",
+        "name": "Tony Fanning",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 20586,
+        "credit_id": "52fe4251c3a36847f8014f69",
+        "department": "Art",
+        "name": "Stella Vaccaro",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11386,
+        "credit_id": "52fe4251c3a36847f8014f6f",
+        "department": "Costume & Make-Up",
+        "name": "James Acheson",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 121,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://spiderman.sonypictures.com/index.php",
+  "id": 557,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Spider-Man",
+  "overview": "After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers.",
+  "production_companies": [
+    {
+      "id": 5,
+      "name": "Columbia Pictures"
+    },
+    {
+      "id": 325,
+      "name": "Marvel Entertainment, LLC"
+    },
+    {
+      "id": 326,
+      "name": "Laura Ziskin Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 556,
+    "backdrop_path": "/waZqriYTuBE3WqXI3SDGi3kfDQE.jpg",
+    "name": "Spider-Man Collection",
+    "poster_path": "/aNknE3vw8QC5gDHBRYpOz9gzuPc.jpg"
+  },
+  "imdb_id": "tt0145487",
+  "release_date": "2002-05-02",
+  "original_title": "Spider-Man",
+  "vote_count": 1511,
+  "poster_path": "/rZd0y1X1Gw4t5B3f01Qzj8DYY66.jpg",
+  "tagline": "With great power comes great responsibility.",
+  "revenue": 806000000,
+  "popularity": "4.33262538753647"
+}

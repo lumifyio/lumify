@@ -1,0 +1,294 @@
+{
+  "budget": 6000000,
+  "vote_average": 7,
+  "backdrop_path": "/ufqPsRItWyFzdFz3MevDkxRF8pT.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 13022,
+        "order": 0,
+        "credit_id": "52fe4277c3a36847f8020d47",
+        "name": "Tom Berenger",
+        "cast_id": 36,
+        "profile_path": "/gueEBgqv1sWFemMXyI4TJ2peuMA.jpg",
+        "character": "Sgt. Bob Barnes"
+      },
+      {
+        "id": 6952,
+        "order": 1,
+        "credit_id": "52fe4277c3a36847f8020d1b",
+        "name": "Charlie Sheen",
+        "cast_id": 15,
+        "profile_path": "/3sl1p2ZAfdotM2LEmu4JiNAZbc6.jpg",
+        "character": "Pvt. Chris Taylor"
+      },
+      {
+        "id": 5293,
+        "order": 2,
+        "credit_id": "52fe4277c3a36847f8020d1f",
+        "name": "Willem Dafoe",
+        "cast_id": 16,
+        "profile_path": "/4Wuww8ORt6nrHyBSUBLTHWt24EZ.jpg",
+        "character": "Sgt. Elias Grodin"
+      },
+      {
+        "id": 2178,
+        "order": 3,
+        "credit_id": "52fe4277c3a36847f8020d23",
+        "name": "Forest Whitaker",
+        "cast_id": 17,
+        "profile_path": "/4pMQkelS5lK661m9Kz3oIxLYiyS.jpg",
+        "character": "Big Harold"
+      },
+      {
+        "id": 11885,
+        "order": 4,
+        "credit_id": "52fe4277c3a36847f8020d2b",
+        "name": "John C. McGinley",
+        "cast_id": 19,
+        "profile_path": "/6AJL0ylRtJ9vcR57yEenhWHXHFt.jpg",
+        "character": "Sgt. Red O'Neill"
+      },
+      {
+        "id": 6863,
+        "order": 5,
+        "credit_id": "52fe4277c3a36847f8020d27",
+        "name": "Kevin Dillon",
+        "cast_id": 18,
+        "profile_path": "/cePW2pwfTv82du2glTNKklKldAf.jpg",
+        "character": "Bunny"
+      },
+      {
+        "id": 85,
+        "order": 6,
+        "credit_id": "52fe4277c3a36847f8020d4b",
+        "name": "Johnny Depp",
+        "cast_id": 37,
+        "profile_path": "/5sc2pu4YWItxCaXSvrFpg64zN9J.jpg",
+        "character": "Private Gator Lerner"
+      },
+      {
+        "id": 11886,
+        "order": 7,
+        "credit_id": "52fe4277c3a36847f8020d2f",
+        "name": "Francesco Quinn",
+        "cast_id": 20,
+        "profile_path": "/xTSSmTuRg2xu2fKnDYyvT0GqLD7.jpg",
+        "character": "Rhah"
+      },
+      {
+        "id": 6396,
+        "order": 8,
+        "credit_id": "52fe4277c3a36847f8020d33",
+        "name": "Richard Edson",
+        "cast_id": 21,
+        "profile_path": "/7YegwxrBppretnwGEEMxEI453Ef.jpg",
+        "character": "Sal"
+      },
+      {
+        "id": 65827,
+        "order": 9,
+        "credit_id": "52fe4277c3a36847f8020d37",
+        "name": "Keith David",
+        "cast_id": 23,
+        "profile_path": "/nwAC9TgwRkj0Ritq93O8GeublyL.jpg",
+        "character": "King"
+      },
+      {
+        "id": 11889,
+        "order": 10,
+        "credit_id": "52fe4277c3a36847f8020d3b",
+        "name": "Mark Moses",
+        "cast_id": 25,
+        "profile_path": "/98Pkb6phOJldkCHud8MXt7ftFL4.jpg",
+        "character": "Lt. Wolfe"
+      },
+      {
+        "id": 11890,
+        "order": 11,
+        "credit_id": "52fe4277c3a36847f8020d3f",
+        "name": "Chris Pedersen",
+        "cast_id": 26,
+        "profile_path": "/y8v3KTTxcuMFR7cKxGF3sJCEZ0W.jpg",
+        "character": "Crawford"
+      },
+      {
+        "id": 1152,
+        "order": 12,
+        "credit_id": "52fe4277c3a36847f8020d43",
+        "name": "Oliver Stone",
+        "cast_id": 35,
+        "profile_path": "/y3Ernjw1FYo6ZvahEHcoqJ5mzV4.jpg",
+        "character": "Alpha Company major in bunker"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1152,
+        "credit_id": "52fe4277c3a36847f8020cc9",
+        "department": "Directing",
+        "name": "Oliver Stone",
+        "job": "Director",
+        "profile_path": "/y3Ernjw1FYo6ZvahEHcoqJ5mzV4.jpg"
+      },
+      {
+        "id": 1152,
+        "credit_id": "52fe4277c3a36847f8020ccf",
+        "department": "Writing",
+        "name": "Oliver Stone",
+        "job": "Screenplay",
+        "profile_path": "/y3Ernjw1FYo6ZvahEHcoqJ5mzV4.jpg"
+      },
+      {
+        "id": 10764,
+        "credit_id": "52fe4277c3a36847f8020cd5",
+        "department": "Production",
+        "name": "Arnold Kopelson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2621,
+        "credit_id": "52fe4277c3a36847f8020cdb",
+        "department": "Production",
+        "name": "A. Kitman Ho",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2720,
+        "credit_id": "52fe4277c3a36847f8020ce1",
+        "department": "Production",
+        "name": "Derek Gibson",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2721,
+        "credit_id": "52fe4277c3a36847f8020ce7",
+        "department": "Production",
+        "name": "John Daly",
+        "job": "Executive Producer",
+        "profile_path": "/aSn9EdjxbU5VkmF7INPdumGfJWG.jpg"
+      },
+      {
+        "id": 3535,
+        "credit_id": "52fe4277c3a36847f8020ced",
+        "department": "Sound",
+        "name": "Georges Delerue",
+        "job": "Original Music Composer",
+        "profile_path": "/yAlgcnY7fXUQLrxfknp0Jv4dUTv.jpg"
+      },
+      {
+        "id": 149,
+        "credit_id": "52fe4277c3a36847f8020cf3",
+        "department": "Camera",
+        "name": "Robert Richardson",
+        "job": "Director of Photography",
+        "profile_path": "/7G3fK147n8EdVMgLcLoO30Nj4Ik.jpg"
+      },
+      {
+        "id": 11880,
+        "credit_id": "52fe4277c3a36847f8020cf9",
+        "department": "Editing",
+        "name": "Claire Simpson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8971,
+        "credit_id": "52fe4277c3a36847f8020cff",
+        "department": "Production",
+        "name": "Pat Golden",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 11881,
+        "credit_id": "52fe4277c3a36847f8020d05",
+        "department": "Production",
+        "name": "Warren McLean",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 11882,
+        "credit_id": "52fe4277c3a36847f8020d0b",
+        "department": "Production",
+        "name": "Bob Morones",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5709,
+        "credit_id": "52fe4277c3a36847f8020d11",
+        "department": "Art",
+        "name": "Bruno Rubeo",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 11883,
+        "credit_id": "52fe4277c3a36847f8020d17",
+        "department": "Art",
+        "name": "Rodell Cruz",
+        "job": "Art Direction",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 120,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "vi",
+      "name": "Tiếng Việt"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 792,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Platoon",
+  "overview": "Chris Taylor, a young, naive recruit in Vietnam, faces a moral crisis when confronted with the horrors of war and the duality of man.",
+  "production_companies": [{
+    "id": 469,
+    "name": "Hemdale Film Corporation"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0091763",
+  "release_date": "1986-12-18",
+  "original_title": "Platoon",
+  "vote_count": 254,
+  "poster_path": "/sYPOQI57JVNmjiLI3KeZ5KA8O9i.jpg",
+  "tagline": "The first casualty of war is innocence.",
+  "revenue": 138530565,
+  "popularity": "2.45911938371373"
+}

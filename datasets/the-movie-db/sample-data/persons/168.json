@@ -1,0 +1,151 @@
+{
+  "birthday": "1943-04-02",
+  "adult": false,
+  "biography": "",
+  "homepage": "",
+  "profile_path": null,
+  "id": 168,
+  "also_known_as": [],
+  "deathday": "2011-11-29",
+  "imdb_id": "nm0716686",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 5235,
+        "media_type": "movie",
+        "title": "The Fisherman and His Wife",
+        "credit_id": "52fe43fec3a36847f807c31b",
+        "release_date": "2005-09-22",
+        "original_title": "Der Fischer und seine Frau",
+        "adult": false,
+        "poster_path": "/nvdW7fOdIyIpPDL6RVW9BzyZL5n.jpg",
+        "character": "Frau Wagenbach"
+      },
+      {
+        "id": 5728,
+        "media_type": "movie",
+        "title": "Day of the Idiots",
+        "credit_id": "52fe441dc3a36847f80830b9",
+        "release_date": "1982-03-26",
+        "original_title": "Tag der Idioten",
+        "adult": false,
+        "poster_path": "/mzFOLKjc0SF0gCemNu1lreuQsNr.jpg",
+        "character": "Ninon"
+      },
+      {
+        "id": 6317,
+        "media_type": "movie",
+        "title": "Rosenstrasse",
+        "credit_id": "52fe444ac3a36847f808d8b3",
+        "release_date": "2003-09-18",
+        "original_title": "Rosenstraße",
+        "adult": false,
+        "poster_path": "/4PFRxQMxAI2897bY1h7KBp7YKEZ.jpg",
+        "character": "Rachel Rosenbauer"
+      },
+      {
+        "id": 42091,
+        "media_type": "movie",
+        "title": "A Man Like Eva",
+        "credit_id": "52fe45ecc3a36847f80e259f",
+        "release_date": "1984-02-17",
+        "original_title": "Ein Mann wie EVA",
+        "adult": false,
+        "poster_path": "/trJm7OG7JzCuDKbqxwoO4VmqppR.jpg",
+        "character": "Else"
+      },
+      {
+        "id": 55232,
+        "media_type": "movie",
+        "title": "Das Zimmermädchen und der Millionär",
+        "credit_id": "52fe48c2c3a36847f8177f9d",
+        "release_date": "2004-10-12",
+        "original_title": "Das Zimmermädchen und der Millionär",
+        "adult": false,
+        "poster_path": "/bApJP0hH2BwXAstOK9yxGjCU8cJ.jpg",
+        "character": "Lady"
+      },
+      {
+        "id": 269560,
+        "media_type": "movie",
+        "title": "Reise nach Tulum",
+        "credit_id": "53714d21c3a3684349000183",
+        "release_date": "2011-07-01",
+        "original_title": "Reise nach Tulum",
+        "adult": false,
+        "poster_path": "/ovzx8soIJ5UZkzLiyarPhmLUoCv.jpg",
+        "character": ""
+      },
+      {
+        "id": 26,
+        "media_type": "movie",
+        "title": "Walk on Water",
+        "credit_id": "52fe4210c3a36847f80011dd",
+        "release_date": "2004-03-18",
+        "original_title": "LaLehet Al HaMayim",
+        "adult": false,
+        "poster_path": "/2lMVKr9EtBuNvp0nCEFt207bykA.jpg",
+        "character": "Axel's Mother"
+      },
+      {
+        "id": 232076,
+        "media_type": "movie",
+        "title": "Hexenküsse",
+        "credit_id": "52fe4dfcc3a36847f82780b3",
+        "release_date": "2005-01-01",
+        "original_title": "Hexenküsse",
+        "adult": false,
+        "poster_path": "/tLVcYdTvL0KqnPKf1ecX7vDHzxa.jpg",
+        "character": "Frau Weinrich"
+      },
+      {
+        "id": 227471,
+        "media_type": "movie",
+        "title": "Mörder in Weiß - Der Tod lauert im OP",
+        "credit_id": "52fe4ea49251416c7515d5a9",
+        "release_date": "2005-01-01",
+        "original_title": "Mörder in Weiß - Der Tod lauert im OP",
+        "adult": false,
+        "poster_path": null,
+        "character": "Dr. Anna Milberg"
+      },
+      {
+        "id": 197973,
+        "media_type": "movie",
+        "title": "Fabian",
+        "credit_id": "534bcf4ac3a3682ded002be7",
+        "release_date": "1980-04-25",
+        "original_title": "Fabian",
+        "adult": false,
+        "poster_path": null,
+        "character": "Frau Kulp"
+      },
+      {
+        "id": 255991,
+        "media_type": "movie",
+        "title": "No Mercy No Future",
+        "credit_id": "53749f31c3a3681518002894",
+        "release_date": "1981-11-18",
+        "original_title": "Die Berührte",
+        "adult": false,
+        "poster_path": "/vpEhUx5SRyklmiAe7CR0FFsZej0.jpg",
+        "character": "Ärztin"
+      },
+      {
+        "id": 285574,
+        "media_type": "movie",
+        "title": "Kleine Lüge für die Liebe",
+        "credit_id": "53e26d190e0a262b9100173e",
+        "release_date": "2008-09-28",
+        "original_title": "Kleine Lüge für die Liebe",
+        "adult": false,
+        "poster_path": null,
+        "character": "Regina Sattler"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Carola Regnier",
+  "place_of_birth": null,
+  "popularity": "1.00091125001304"
+}

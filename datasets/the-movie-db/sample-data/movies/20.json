@@ -1,0 +1,311 @@
+{
+  "budget": 0,
+  "vote_average": 7.8,
+  "backdrop_path": "/eTsvfl9STtRwqpzl7eecwq8T7My.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 98,
+        "order": 0,
+        "credit_id": "52fe420fc3a36847f8000d33",
+        "name": "Sarah Polley",
+        "cast_id": 5,
+        "profile_path": "/px9pkAuUh3upN8fYyPr1B6y3SNl.jpg",
+        "character": "Ann"
+      },
+      {
+        "id": 99,
+        "order": 1,
+        "credit_id": "52fe420fc3a36847f8000d37",
+        "name": "Amanda Plummer",
+        "cast_id": 6,
+        "profile_path": "/uICpVUj29yBcwCEGVZzE77FL98W.jpg",
+        "character": "Laurie"
+      },
+      {
+        "id": 100,
+        "order": 2,
+        "credit_id": "52fe420fc3a36847f8000d3b",
+        "name": "Scott Speedman",
+        "cast_id": 7,
+        "profile_path": "/cAee8I38a550wEz2pEYVtiNHqNd.jpg",
+        "character": "Don"
+      },
+      {
+        "id": 101,
+        "order": 3,
+        "credit_id": "52fe420fc3a36847f8000d3f",
+        "name": "Leonor Watling",
+        "cast_id": 8,
+        "profile_path": "/6M9s0VigBmmVOBbkRTQz1K0LbN4.jpg",
+        "character": "Neighbor Ann"
+      },
+      {
+        "id": 102,
+        "order": 4,
+        "credit_id": "52fe420fc3a36847f8000d43",
+        "name": "Debbie Harry",
+        "cast_id": 9,
+        "profile_path": "/1I0WW7NaSXKeQjrIKLwnzvBq5d8.jpg",
+        "character": "Ann's Mother"
+      },
+      {
+        "id": 103,
+        "order": 5,
+        "credit_id": "52fe420fc3a36847f8000d47",
+        "name": "Mark Ruffalo",
+        "cast_id": 10,
+        "profile_path": "/isQ747u0MU8U9gdsNlPngjABclH.jpg",
+        "character": "Lee"
+      },
+      {
+        "id": 2319,
+        "order": 6,
+        "credit_id": "52fe420fc3a36847f8000d5d",
+        "name": "Maria de Medeiros",
+        "cast_id": 14,
+        "profile_path": "/54cKyuWqzDbbyV2M5GfGBTIdUHQ.jpg",
+        "character": "Hairdresser"
+      },
+      {
+        "id": 2320,
+        "order": 7,
+        "credit_id": "52fe420fc3a36847f8000d61",
+        "name": "Julian Richings",
+        "cast_id": 15,
+        "profile_path": "/bbVRUCBwztY0mUzXdAmMgHocNSU.jpg",
+        "character": "Dr. Thompson"
+      },
+      {
+        "id": 2321,
+        "order": 8,
+        "credit_id": "52fe420fc3a36847f8000d65",
+        "name": "Jessica Amlee",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Penny"
+      },
+      {
+        "id": 2322,
+        "order": 9,
+        "credit_id": "52fe420fc3a36847f8000d69",
+        "name": "Kenya Jo Kennedy",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Patsy"
+      },
+      {
+        "id": 2323,
+        "order": 10,
+        "credit_id": "52fe420fc3a36847f8000d6d",
+        "name": "Camille Martinez",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Camille Martínez"
+      },
+      {
+        "id": 658,
+        "order": 11,
+        "credit_id": "52fe420fc3a36847f8000d71",
+        "name": "Alfred Molina",
+        "cast_id": 19,
+        "profile_path": "/uJQVkqEVJGLMaJbwI2tTDlJ9Oo0.jpg",
+        "character": "Ann's Father"
+      }
+    ],
+    "crew": [
+      {
+        "id": 90,
+        "credit_id": "52fe420fc3a36847f8000d1d",
+        "department": "Directing",
+        "name": "Isabel Coixet",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 93,
+        "credit_id": "52fe420fc3a36847f8000d23",
+        "department": "Production",
+        "name": "Esther García",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 96,
+        "credit_id": "52fe420fc3a36847f8000d29",
+        "department": "Production",
+        "name": "Gordon McLennan",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 97,
+        "credit_id": "52fe420fc3a36847f8000d2f",
+        "department": "Writing",
+        "name": "Nanci Kincaid",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 104,
+        "credit_id": "52fe420fc3a36847f8000d4d",
+        "department": "Camera",
+        "name": "Jean-Claude Larrieu",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 105,
+        "credit_id": "52fe420fc3a36847f8000d53",
+        "department": "Editing",
+        "name": "Lisa Robison",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 106,
+        "credit_id": "52fe420fc3a36847f8000d59",
+        "department": "Sound",
+        "name": "Alfonso Vilallonga",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 952,
+        "credit_id": "52fe420fc3a36847f8000d77",
+        "department": "Production",
+        "name": "Agustín Almodóvar",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 309,
+        "credit_id": "52fe420fc3a36847f8000d7d",
+        "department": "Production",
+        "name": "Pedro Almodóvar",
+        "job": "Executive Producer",
+        "profile_path": "/Y32fKy8z0xTRq4LESm2yN6W7NJ.jpg"
+      },
+      {
+        "id": 2324,
+        "credit_id": "52fe420fc3a36847f8000d83",
+        "department": "Production",
+        "name": "Heidi Levitt",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2325,
+        "credit_id": "52fe420fc3a36847f8000d89",
+        "department": "Production",
+        "name": "Monika Mikkelsen",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2326,
+        "credit_id": "52fe420fc3a36847f8000d8f",
+        "department": "Art",
+        "name": "Shelley Bolton",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 2327,
+        "credit_id": "52fe420fc3a36847f8000d95",
+        "department": "Costume & Make-Up",
+        "name": "Katia Stano",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 2328,
+        "credit_id": "52fe420fc3a36847f8000d9b",
+        "department": "Sound",
+        "name": "Manuel Corrales",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 2329,
+        "credit_id": "52fe420fc3a36847f8000da1",
+        "department": "Sound",
+        "name": "Viorel Ghiocel",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 2330,
+        "credit_id": "52fe420fc3a36847f8000da7",
+        "department": "Sound",
+        "name": "Patrick Ghislain",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 2331,
+        "credit_id": "52fe420fc3a36847f8000dad",
+        "department": "Sound",
+        "name": "Albert Manera",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 106,
+  "spoken_languages": [
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.clubcultura.com/clubcine/clubcineastas/isabelcoixet/mividasinmi/index.htm",
+  "id": 20,
+  "production_countries": [
+    {
+      "name": "Canada",
+      "iso_3166_1": "CA"
+    },
+    {
+      "name": "Spain",
+      "iso_3166_1": "ES"
+    }
+  ],
+  "title": "My Life Without Me",
+  "overview": "A Pedro Almodovar production in which a fatally ill mother with only two months to live creates a list of things she wants to do before she dies with out telling her family of her illness.",
+  "production_companies": [
+    {
+      "id": 49,
+      "name": "El Deseo"
+    },
+    {
+      "id": 77,
+      "name": "Milestone Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0314412",
+  "release_date": "2003-09-26",
+  "original_title": "My Life Without Me",
+  "vote_count": 8,
+  "poster_path": "/vVj92VBFUBzjqzLvBiPVVlJDp78.jpg",
+  "tagline": "",
+  "revenue": 9726954,
+  "popularity": "0.183451644137718"
+}

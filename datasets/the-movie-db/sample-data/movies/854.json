@@ -1,0 +1,277 @@
+{
+  "budget": 23000000,
+  "vote_average": 6.4,
+  "backdrop_path": "/kQlLZ8JgzVhFH6hlZovZycQSxbP.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 206,
+        "order": 0,
+        "credit_id": "52fe4282c3a36847f80247c1",
+        "name": "Jim Carrey",
+        "cast_id": 17,
+        "profile_path": "/o6bOiFNpkmszElC23kwAdn87M32.jpg",
+        "character": "Stanley Ipkiss"
+      },
+      {
+        "id": 6941,
+        "order": 1,
+        "credit_id": "52fe4282c3a36847f80247c5",
+        "name": "Cameron Diaz",
+        "cast_id": 18,
+        "profile_path": "/ahFkUN9Sm8oF1txUHE5JcJ95Ere.jpg",
+        "character": "Tina Carlyle"
+      },
+      {
+        "id": 42168,
+        "order": 2,
+        "credit_id": "52fe4282c3a36847f80247c9",
+        "name": "Nancy Fish",
+        "cast_id": 19,
+        "profile_path": "/rYbk1PFFTYgqrAkdp2wuV8G3juy.jpg",
+        "character": "Mrs. Peenman"
+      },
+      {
+        "id": 53400,
+        "order": 3,
+        "credit_id": "52fe4282c3a36847f80247cd",
+        "name": "Tim Bagley",
+        "cast_id": 20,
+        "profile_path": "/eijzmkkXb4NstAdvpMZ1m91cRxY.jpg",
+        "character": "Irv"
+      },
+      {
+        "id": 53401,
+        "order": 4,
+        "credit_id": "52fe4282c3a36847f80247d1",
+        "name": "Johnny Williams",
+        "cast_id": 21,
+        "profile_path": "/ft15amt3pyRLYG8iOjHlgS3nLaf.jpg",
+        "character": "Burt"
+      },
+      {
+        "id": 20899,
+        "order": 5,
+        "credit_id": "52fe4282c3a36847f80247d5",
+        "name": "Peter Riegert",
+        "cast_id": 22,
+        "profile_path": "/szAJjIZY23cRhPUKLb6X3IbGEc5.jpg",
+        "character": "Lieutenant Mitch Kellaway"
+      },
+      {
+        "id": 11803,
+        "order": 6,
+        "credit_id": "52fe4282c3a36847f80247d9",
+        "name": "Peter Greene",
+        "cast_id": 23,
+        "profile_path": "/6jUi6c9bH8bubXerrpidGpbdYen.jpg",
+        "character": "Dorian Tyrrell"
+      },
+      {
+        "id": 1219,
+        "order": 7,
+        "credit_id": "52fe4282c3a36847f80247dd",
+        "name": "Amy Yasbeck",
+        "cast_id": 24,
+        "profile_path": "/bj9b88sOtscojQgA1GfRH50Vugh.jpg",
+        "character": "Peggy Brandt"
+      },
+      {
+        "id": 53402,
+        "order": 8,
+        "credit_id": "52fe4282c3a36847f80247e1",
+        "name": "Richard Jeni",
+        "cast_id": 25,
+        "profile_path": "/egpfZBXrgLAMf9Evu4VowemfKnd.jpg",
+        "character": "Charlie Schumaker"
+      },
+      {
+        "id": 53403,
+        "order": 9,
+        "credit_id": "52fe4282c3a36847f80247e5",
+        "name": "Orestes Matacena",
+        "cast_id": 26,
+        "profile_path": "/1HhuYbx3DlFpjfwdwTfG1z1aRC4.jpg",
+        "character": "Niko"
+      },
+      {
+        "id": 29214,
+        "order": 10,
+        "credit_id": "52fe4282c3a36847f80247e9",
+        "name": "Anne Fletcher",
+        "cast_id": 27,
+        "profile_path": "/piR4AwJX9lqJt454iVsI7sQf6Y0.jpg",
+        "character": "Dancer"
+      }
+    ],
+    "crew": [
+      {
+        "id": 12772,
+        "credit_id": "52fe4282c3a36847f802477b",
+        "department": "Crew",
+        "name": "Rick Barker",
+        "job": "Stunt Coordinator",
+        "profile_path": null
+      },
+      {
+        "id": 12774,
+        "credit_id": "52fe4282c3a36847f8024781",
+        "department": "Production",
+        "name": "Deborah Moore",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12775,
+        "credit_id": "52fe4282c3a36847f8024787",
+        "department": "Production",
+        "name": "Joe Fineman",
+        "job": "Executive In Charge Of Post Production",
+        "profile_path": null
+      },
+      {
+        "id": 12777,
+        "credit_id": "52fe4282c3a36847f802478d",
+        "department": "Production",
+        "name": "Lisa Van Cott",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 12778,
+        "credit_id": "52fe4282c3a36847f8024793",
+        "department": "Production",
+        "name": "M.K. Gleason",
+        "job": "Production Accountant",
+        "profile_path": null
+      },
+      {
+        "id": 12780,
+        "credit_id": "52fe4282c3a36847f8024799",
+        "department": "Production",
+        "name": "Barbara Coston",
+        "job": "Production Accountant",
+        "profile_path": null
+      },
+      {
+        "id": 12781,
+        "credit_id": "52fe4282c3a36847f802479f",
+        "department": "Production",
+        "name": "David Crockett",
+        "job": "Production Accountant",
+        "profile_path": null
+      },
+      {
+        "id": 26713,
+        "credit_id": "52fe4282c3a36847f80247a5",
+        "department": "Directing",
+        "name": "Chuck Russell",
+        "job": "Director",
+        "profile_path": "/xy6y3QHm567oX6T3JWwUILu7YJD.jpg"
+      },
+      {
+        "id": 11402,
+        "credit_id": "52fe4282c3a36847f80247ab",
+        "department": "Writing",
+        "name": "Mike Werb",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 14712,
+        "credit_id": "52fe4282c3a36847f80247b1",
+        "department": "Sound",
+        "name": "Randy Edelman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 26714,
+        "credit_id": "52fe4282c3a36847f80247b7",
+        "department": "Camera",
+        "name": "John R. Leonetti",
+        "job": "Director of Photography",
+        "profile_path": "/7cKC9u81p5OL5loj2PzjepPcjFV.jpg"
+      },
+      {
+        "id": 800,
+        "credit_id": "52fe4282c3a36847f80247bd",
+        "department": "Editing",
+        "name": "Arthur Coburn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10809,
+        "credit_id": "52fe4282c3a36847f80247ef",
+        "department": "Production",
+        "name": "Robert Engelman",
+        "job": "Unit Production Manager",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 101,
+  "spoken_languages": [
+    {
+      "iso_639_1": "sv",
+      "name": "svenska"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 854,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Mask",
+  "overview": "A meek, milquetoast bank teller discovers a magical ancient mask that unleashes his deepest desires -- and gives him the superhuman ability to act on them. Accompanied by his canine sidekick, the mischievous action hero goes gaga for a singer. Meanwhile, he battles gangsters who seek the mask's powers.",
+  "production_companies": [
+    {
+      "id": 552,
+      "name": "Dark Horse Entertainment"
+    },
+    {
+      "id": 12,
+      "name": "New Line Cinema"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 43072,
+    "backdrop_path": null,
+    "name": "The Mask Collection",
+    "poster_path": "/8dKnmoWDXIKzf59pmVtP3wY2jCe.jpg"
+  },
+  "imdb_id": "tt0110475",
+  "release_date": "1994-07-29",
+  "original_title": "The Mask",
+  "vote_count": 394,
+  "poster_path": "/v8x8p441l1Bep8p82pAG6rduBoK.jpg",
+  "tagline": "From zero to hero.",
+  "revenue": 351583407,
+  "popularity": "1.34860171955618"
+}

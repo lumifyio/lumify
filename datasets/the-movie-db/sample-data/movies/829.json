@@ -1,0 +1,582 @@
+{
+  "budget": 3200000,
+  "vote_average": 7.3,
+  "backdrop_path": "/mwo3gk3BWXt9f2LSTmQar5Nu6I3.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 514,
+        "order": 0,
+        "credit_id": "52fe427dc3a36847f8022cfd",
+        "name": "Jack Nicholson",
+        "cast_id": 17,
+        "profile_path": "/z5kVLyn3sxj0wNRlFgVgT6deeRO.jpg",
+        "character": "Jake Gittes"
+      },
+      {
+        "id": 6450,
+        "order": 1,
+        "credit_id": "52fe427dc3a36847f8022d01",
+        "name": "Faye Dunaway",
+        "cast_id": 18,
+        "profile_path": "/qXbFT4RBkxVW4DRBO9HhDos5Xpa.jpg",
+        "character": "Evelyn Cross Mulwray"
+      },
+      {
+        "id": 6593,
+        "order": 2,
+        "credit_id": "52fe427dc3a36847f8022d05",
+        "name": "John Huston",
+        "cast_id": 19,
+        "profile_path": "/x5P9KPVj6i8XnrgeEEWiiYKCSdd.jpg",
+        "character": "Noah Cross"
+      },
+      {
+        "id": 12295,
+        "order": 3,
+        "credit_id": "52fe427dc3a36847f8022d09",
+        "name": "Perry Lopez",
+        "cast_id": 20,
+        "profile_path": "/bpw3oCVkAasOd8A2uwy60pnSXoD.jpg",
+        "character": "Lieutenant Lou Escobar"
+      },
+      {
+        "id": 12296,
+        "order": 4,
+        "credit_id": "52fe427dc3a36847f8022d0d",
+        "name": "John Hillerman",
+        "cast_id": 21,
+        "profile_path": "/93n8VRJIlZivnNES3W1utuWfvkp.jpg",
+        "character": "Russ Yelburton"
+      },
+      {
+        "id": 12297,
+        "order": 5,
+        "credit_id": "52fe427dc3a36847f8022d11",
+        "name": "Darrell Zwerling",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Hollis I. Mulwray"
+      },
+      {
+        "id": 6587,
+        "order": 6,
+        "credit_id": "52fe427dc3a36847f8022d15",
+        "name": "Diane Ladd",
+        "cast_id": 23,
+        "profile_path": "/sjYwUGAFcSsAcK44hnO8UwVtKX3.jpg",
+        "character": "Ida Sessions"
+      },
+      {
+        "id": 12298,
+        "order": 7,
+        "credit_id": "52fe427dc3a36847f8022d19",
+        "name": "Roy Jenson",
+        "cast_id": 24,
+        "profile_path": "/swkMoVqkIw3CKTKkIzR2yHEfyF3.jpg",
+        "character": "Claude Mulvihill"
+      },
+      {
+        "id": 3556,
+        "order": 8,
+        "credit_id": "52fe427dc3a36847f8022d1d",
+        "name": "Roman Polanski",
+        "cast_id": 25,
+        "profile_path": "/qI12N0XzSQanAUv6sTucTLWi3az.jpg",
+        "character": "Man with Knife"
+      },
+      {
+        "id": 12299,
+        "order": 9,
+        "credit_id": "52fe427dc3a36847f8022d21",
+        "name": "Richard Bakalyan",
+        "cast_id": 26,
+        "profile_path": "/flHUIu0hpigaZYXb7XfkEFmPc7j.jpg",
+        "character": "Detective Loach"
+      },
+      {
+        "id": 10194,
+        "order": 10,
+        "credit_id": "52fe427dc3a36847f8022d25",
+        "name": "Bruce Glover",
+        "cast_id": 27,
+        "profile_path": "/xVS6edZlUempGkjWqSnPnkGcRTw.jpg",
+        "character": "Duffy"
+      },
+      {
+        "id": 78937,
+        "order": 11,
+        "credit_id": "52fe427dc3a36847f8022d29",
+        "name": "Joe Mantell",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Walsh"
+      },
+      {
+        "id": 1077252,
+        "order": 12,
+        "credit_id": "52fe427dc3a36847f8022d2d",
+        "name": "Nandu Hinds",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Sophie"
+      },
+      {
+        "id": 95265,
+        "order": 13,
+        "credit_id": "52fe427dc3a36847f8022d31",
+        "name": "James O'Rear",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Lawyer"
+      },
+      {
+        "id": 20904,
+        "order": 14,
+        "credit_id": "52fe427dc3a36847f8022d35",
+        "name": "James Hong",
+        "cast_id": 31,
+        "profile_path": "/8k4RrDRsqkvJDePU8ciMOOx5Zso.jpg",
+        "character": "Evelyn's Butler"
+      },
+      {
+        "id": 156813,
+        "order": 15,
+        "credit_id": "52fe427dc3a36847f8022d39",
+        "name": "Beulah Quo",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Maid"
+      },
+      {
+        "id": 164712,
+        "order": 16,
+        "credit_id": "52fe427dc3a36847f8022d3d",
+        "name": "Jerry Fujikawa",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Gardener"
+      },
+      {
+        "id": 1077253,
+        "order": 17,
+        "credit_id": "52fe427dc3a36847f8022d41",
+        "name": "Belinda Palmer",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Katherine"
+      },
+      {
+        "id": 19400,
+        "order": 18,
+        "credit_id": "52fe427dc3a36847f8022d45",
+        "name": "Roy Roberts",
+        "cast_id": 35,
+        "profile_path": "/zKGk6q2As8QFkE4V0OHD3JmF4yA.jpg",
+        "character": "Mayor Bagby"
+      },
+      {
+        "id": 31005,
+        "order": 19,
+        "credit_id": "52fe427dc3a36847f8022d49",
+        "name": "Noble Willingham",
+        "cast_id": 36,
+        "profile_path": "/stdQUjYtyjfuJRgA89DyzkZEyai.jpg",
+        "character": "Councilman"
+      },
+      {
+        "id": 1077254,
+        "order": 20,
+        "credit_id": "52fe427dc3a36847f8022d4d",
+        "name": "Elliott Montgomery",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Councilman"
+      },
+      {
+        "id": 22250,
+        "order": 21,
+        "credit_id": "53832a30c3a368059b00858c",
+        "name": "Rance Howard",
+        "cast_id": 49,
+        "profile_path": "/i7tkpb7GLJXjwUNyrpOy63FiStt.jpg",
+        "character": "Irate Farmer"
+      },
+      {
+        "id": 5259,
+        "order": 22,
+        "credit_id": "52fe427dc3a36847f8022d55",
+        "name": "George Justin",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Barber"
+      },
+      {
+        "id": 7690,
+        "order": 23,
+        "credit_id": "52fe427dc3a36847f8022d59",
+        "name": "C.O. Erickson",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Customer"
+      },
+      {
+        "id": 153640,
+        "order": 24,
+        "credit_id": "52fe427dc3a36847f8022d5d",
+        "name": "Fritzi Burr",
+        "cast_id": 41,
+        "profile_path": null,
+        "character": "Mulwray's Secretary"
+      },
+      {
+        "id": 943879,
+        "order": 25,
+        "credit_id": "52fe427dc3a36847f8022d61",
+        "name": "Charles Knapp",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "Mortician"
+      },
+      {
+        "id": 980729,
+        "order": 26,
+        "credit_id": "52fe427dc3a36847f8022d65",
+        "name": "Claudio Martinez",
+        "cast_id": 43,
+        "profile_path": null,
+        "character": "Boy on Horseback"
+      },
+      {
+        "id": 1077255,
+        "order": 27,
+        "credit_id": "52fe427dc3a36847f8022d69",
+        "name": "Federico Roberto",
+        "cast_id": 44,
+        "profile_path": null,
+        "character": "Cross' Butler"
+      },
+      {
+        "id": 1005536,
+        "order": 28,
+        "credit_id": "52fe427dc3a36847f8022d6d",
+        "name": "Allan Warnick",
+        "cast_id": 45,
+        "profile_path": null,
+        "character": "Clerk"
+      },
+      {
+        "id": 126656,
+        "order": 29,
+        "credit_id": "53a48a8c0e0a2614360000bf",
+        "name": "John Holland",
+        "cast_id": 50,
+        "profile_path": null,
+        "character": "Farmer in the Valley"
+      },
+      {
+        "id": 12123,
+        "order": 30,
+        "credit_id": "52fe427dc3a36847f8022d7b",
+        "name": "Jesse Vint",
+        "cast_id": 48,
+        "profile_path": "/yJKMTKJgvoqEdy4ExnJlNjrszVi.jpg",
+        "character": "Farmer in the Valley"
+      },
+      {
+        "id": 4521,
+        "order": 31,
+        "credit_id": "52fe427dc3a36847f8022d71",
+        "name": "Burt Young",
+        "cast_id": 46,
+        "profile_path": "/aBbBzPS7pGgyfRYZdafMvtrmpnB.jpg",
+        "character": "Curly"
+      },
+      {
+        "id": 159024,
+        "order": 32,
+        "credit_id": "53a48af00e0a2614320000c6",
+        "name": "Jim Burk",
+        "cast_id": 51,
+        "profile_path": null,
+        "character": "Farmer in the Valley"
+      },
+      {
+        "id": 80303,
+        "order": 33,
+        "credit_id": "53a48b0e0e0a2614390000bd",
+        "name": "Denny Arnold",
+        "cast_id": 52,
+        "profile_path": null,
+        "character": "Farmer in the Valley"
+      },
+      {
+        "id": 1332366,
+        "order": 34,
+        "credit_id": "53a48b2a0e0a26143c0000f5",
+        "name": "Elizabeth Harding",
+        "cast_id": 53,
+        "profile_path": null,
+        "character": "Curly's Wife"
+      },
+      {
+        "id": 1332367,
+        "order": 35,
+        "credit_id": "53a48b5b0e0a2614490000de",
+        "name": "John Rogers",
+        "cast_id": 54,
+        "profile_path": null,
+        "character": "Mr. Palmer"
+      },
+      {
+        "id": 126013,
+        "order": 36,
+        "credit_id": "53a48b730e0a2614420000ec",
+        "name": "Cecil Elliott",
+        "cast_id": 55,
+        "profile_path": null,
+        "character": "Emma Dill"
+      },
+      {
+        "id": 158868,
+        "order": 37,
+        "credit_id": "53a48b850e0a2614490000e4",
+        "name": "Paul Jenkins",
+        "cast_id": 56,
+        "profile_path": null,
+        "character": "Policeman"
+      },
+      {
+        "id": 106768,
+        "order": 38,
+        "credit_id": "53a48b9e0e0a2614490000e7",
+        "name": "Lee de Broux",
+        "cast_id": 57,
+        "profile_path": "/mqrbS1epUSBe8SgV3JNz2ifkiAC.jpg",
+        "character": "Policeman"
+      },
+      {
+        "id": 152744,
+        "order": 39,
+        "credit_id": "53a48bb10e0a2614320000d1",
+        "name": "Bob Golden",
+        "cast_id": 58,
+        "profile_path": null,
+        "character": "Policeman"
+      },
+      {
+        "id": 1332368,
+        "order": 40,
+        "credit_id": "53a48bc70e0a26143c000101",
+        "name": "Richard Warren",
+        "cast_id": 59,
+        "profile_path": null,
+        "character": "Driver (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3556,
+        "credit_id": "52fe427dc3a36847f8022c9f",
+        "department": "Directing",
+        "name": "Roman Polanski",
+        "job": "Director",
+        "profile_path": "/qI12N0XzSQanAUv6sTucTLWi3az.jpg"
+      },
+      {
+        "id": 11057,
+        "credit_id": "52fe427dc3a36847f8022ca5",
+        "department": "Writing",
+        "name": "Robert Towne",
+        "job": "Screenplay",
+        "profile_path": "/hF5R8kmpreIZsv47mIYzDN5XX2Q.jpg"
+      },
+      {
+        "id": 12288,
+        "credit_id": "52fe427dc3a36847f8022cab",
+        "department": "Production",
+        "name": "Robert Evans",
+        "job": "Producer",
+        "profile_path": "/pSzHgQKT3qnCuAFyh3IpilopKt0.jpg"
+      },
+      {
+        "id": 7690,
+        "credit_id": "52fe427dc3a36847f8022cb1",
+        "department": "Production",
+        "name": "C.O. Erickson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1760,
+        "credit_id": "52fe427dc3a36847f8022cb7",
+        "department": "Sound",
+        "name": "Jerry Goldsmith",
+        "job": "Original Music Composer",
+        "profile_path": "/uQdaeP2awJgDc0ps9dohHw5quQ2.jpg"
+      },
+      {
+        "id": 1153,
+        "credit_id": "52fe427dc3a36847f8022cbd",
+        "department": "Camera",
+        "name": "John A. Alonzo",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12015,
+        "credit_id": "52fe427dc3a36847f8022cc3",
+        "department": "Editing",
+        "name": "Sam O'Steen",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 597,
+        "credit_id": "52fe427dc3a36847f8022cc9",
+        "department": "Production",
+        "name": "Jane Feinberg",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 598,
+        "credit_id": "52fe427dc3a36847f8022ccf",
+        "department": "Production",
+        "name": "Mike Fenton",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 12017,
+        "credit_id": "52fe427dc3a36847f8022cd5",
+        "department": "Art",
+        "name": "Richard Sylbert",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 12291,
+        "credit_id": "52fe427dc3a36847f8022cdb",
+        "department": "Art",
+        "name": "W. Stewart Campbell",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 12292,
+        "credit_id": "52fe427dc3a36847f8022ce1",
+        "department": "Art",
+        "name": "Ruby R. Levitt",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 12020,
+        "credit_id": "52fe427dc3a36847f8022ce7",
+        "department": "Costume & Make-Up",
+        "name": "Anthea Sylbert",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 12294,
+        "credit_id": "52fe427dc3a36847f8022ced",
+        "department": "Sound",
+        "name": "Bob Cornett",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3106,
+        "credit_id": "52fe427dc3a36847f8022cf3",
+        "department": "Sound",
+        "name": "John C. Hammell",
+        "job": "Music Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3457,
+        "credit_id": "52fe427dc3a36847f8022cf9",
+        "department": "Crew",
+        "name": "Logan Frazee",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 7648,
+        "credit_id": "52fe427dc3a36847f8022d77",
+        "department": "Camera",
+        "name": "Stanley Cortez",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 130,
+  "spoken_languages": [
+    {
+      "iso_639_1": "cn",
+      "name": "广州话 / 廣州話"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 829,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Chinatown",
+  "overview": "A private detective investigating an adultery case stumbles on to a scheme of murder that has something to do with water.",
+  "production_companies": [
+    {
+      "id": 4,
+      "name": "Paramount Pictures"
+    },
+    {
+      "id": 6226,
+      "name": "Penthouse"
+    },
+    {
+      "id": 10208,
+      "name": "Long Road Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0071315",
+  "release_date": "1974-06-20",
+  "original_title": "Chinatown",
+  "vote_count": 122,
+  "poster_path": "/iIHO6FzF6lL4mA90rrmk3Y705XS.jpg",
+  "tagline": "Gittes: Dam nosey detective",
+  "revenue": 29200000,
+  "popularity": "1.88969096423246"
+}

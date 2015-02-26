@@ -1,0 +1,195 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.  Scott MacDonald (born 1959) is an American actor. He is best known for his recurring roles as Captain Manning on short-lived series Threshold, Burley from HBO series Carnivàle, and as Commander Dolim from Star Trek: Enterprise, and as the title character from 1996 horror film Jack Frost.\n\nHe grew up in Libby, Montana and graduated from Washington State University and received an MFA in acting/theatre from the California Institute of the Arts. He has also done stage acting, including on Broadway.\n\nDescription above from the Wikipedia article Scott MacDonald (actor), licensed under CC-BY-SA, full list of contributors on Wikipedia.     ",
+  "homepage": null,
+  "profile_path": null,
+  "id": 132,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0531924",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 27318,
+        "media_type": "movie",
+        "title": "Jack Frost",
+        "credit_id": "52fe4541c3a368484e04fb2f",
+        "release_date": "1997-11-18",
+        "original_title": "Jack Frost",
+        "adult": false,
+        "poster_path": "/tEaN0iMFa1jHyuyicXKNPGXLDWn.jpg",
+        "character": "Jack Frost"
+      },
+      {
+        "id": 27320,
+        "media_type": "movie",
+        "title": "Jack Frost 2: Revenge of the Mutant Killer Snowman",
+        "credit_id": "52fe4541c3a368484e04fb65",
+        "release_date": "2000-01-01",
+        "original_title": "Jack Frost 2: Revenge of the Mutant Killer Snowman",
+        "adult": false,
+        "poster_path": "/a6K4TPywD94j5X0zE7Pm88oHiGi.jpg",
+        "character": "Jack Frost Voice"
+      },
+      {
+        "id": 41849,
+        "media_type": "movie",
+        "title": "Straight Into Darkness",
+        "credit_id": "52fe45e0c3a36847f80df88b",
+        "release_date": "2004-01-01",
+        "original_title": "Straight Into Darkness",
+        "adult": false,
+        "poster_path": "/3bEhrpa5rN58k8JXKqk8oFf4EE2.jpg",
+        "character": "Deming"
+      },
+      {
+        "id": 15613,
+        "media_type": "movie",
+        "title": "Fire in the Sky",
+        "credit_id": "52fe466b9251416c75077c63",
+        "release_date": "1993-03-12",
+        "original_title": "Fire in the Sky",
+        "adult": false,
+        "poster_path": "/hnkSlNotn3otswZdtq3JlKe8AEW.jpg",
+        "character": "Dan Walton"
+      },
+      {
+        "id": 25,
+        "media_type": "movie",
+        "title": "Jarhead",
+        "credit_id": "52fe4210c3a36847f800110b",
+        "release_date": "2005-11-04",
+        "original_title": "Jarhead",
+        "adult": false,
+        "poster_path": "/kmbyO0XUHRHcMyxVSZAWDdrpxIu.jpg",
+        "character": "D.I. Fitch"
+      },
+      {
+        "id": 10916,
+        "media_type": "movie",
+        "title": "Babylon 5: A Call to Arms",
+        "credit_id": "539d77af0e0a2613250045d8",
+        "release_date": "1999-01-03",
+        "original_title": "Babylon 5: A Call to Arms",
+        "adult": false,
+        "poster_path": "/qr1pKTcPu7YZ6cjsMvmbLtDnqGy.jpg",
+        "character": "First Officer"
+      },
+      {
+        "id": 314,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52534d0019c29579400fde47",
+        "name": "Star Trek: Enterprise",
+        "poster_path": "/9mRz3v97QMeU4I25ol8PxWx6tuG.jpg",
+        "original_name": "Star Trek: Enterprise",
+        "first_air_date": "2001-09-26",
+        "character": ""
+      },
+      {
+        "id": 185,
+        "media_type": "tv",
+        "episode_count": 14,
+        "credit_id": "5253441719c29579400b50fb",
+        "name": "Carnivàle",
+        "poster_path": "/ur8kXMzoxc9XdUF3UW8AcXqEfhT.jpg",
+        "original_name": "Carnivàle",
+        "first_air_date": "2003-09-07",
+        "character": ""
+      },
+      {
+        "id": 655,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52538d9119c29579402665c1",
+        "name": "Star Trek: The Next Generation",
+        "poster_path": "/ahSthwnjI5iAsEBGT88My1CWOI1.jpg",
+        "original_name": "Star Trek: The Next Generation",
+        "first_air_date": "1987-09-28",
+        "character": ""
+      },
+      {
+        "id": 688,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52538ef219c2957940278c3a",
+        "name": "The West Wing",
+        "poster_path": "/lNa8CmIPeTgZuyCn7cyY3qdqF4Y.jpg",
+        "original_name": "The West Wing",
+        "first_air_date": "1999-09-22",
+        "character": ""
+      },
+      {
+        "id": 1695,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257112119c295711404b084",
+        "name": "Monk",
+        "poster_path": "/g1bhNPYoe1RI2BCNNih3dNzFYCZ.jpg",
+        "original_name": "Monk",
+        "first_air_date": "2002-07-12",
+        "character": ""
+      },
+      {
+        "id": 3452,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52575100760ee36aaa1badb6",
+        "name": "Frasier",
+        "poster_path": "/pp2vDEl72PhI5jCc4Asy6tnqcpU.jpg",
+        "original_name": "Frasier",
+        "first_air_date": "1993-09-16",
+        "character": ""
+      },
+      {
+        "id": 4087,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52575ec0760ee36aaa2cd0ca",
+        "name": "The X-Files",
+        "poster_path": "/9QLl0uPDJ676lob32hSpaboPIwn.jpg",
+        "original_name": "The X-Files",
+        "first_air_date": "1993-09-10",
+        "character": ""
+      },
+      {
+        "id": 6467,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525786b919c29531db29f45e",
+        "name": "Chicago Hope",
+        "poster_path": "/xyWHvpa73jspstjIefBvGz53Nde.jpg",
+        "original_name": "Chicago Hope",
+        "first_air_date": "1994-09-28",
+        "character": ""
+      },
+      {
+        "id": 9877,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257f88f19c29531db2d63a5",
+        "name": "Family Law",
+        "poster_path": null,
+        "original_name": "Family Law",
+        "first_air_date": "1999-09-20",
+        "character": ""
+      },
+      {
+        "id": 1405,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "526e871e760ee3201c0078a3",
+        "name": "Dexter",
+        "poster_path": "/eIoAzf9czDSWqYneE1fZTQ3iJhB.jpg",
+        "original_name": "Dexter",
+        "first_air_date": "2006-10-01",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Scott MacDonald",
+  "place_of_birth": null,
+  "popularity": "1.02690550375824"
+}

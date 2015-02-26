@@ -1,0 +1,206 @@
+{
+  "birthday": "1994-08-25",
+  "adult": false,
+  "biography": "\u200bFrom Wikipedia, the free encyclopedia.  \n\nJoshua Alexander Flitter (born August 25, 1994) is an American actor. He is known for playing Corky in Nancy Drew, Eddie in The Greatest Game Ever Played, and voiced Rudy in the 2008 animated film Horton Hears a Who!.\n\nDescription above from the Wikipedia article Josh Flitter, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": null,
+  "profile_path": "/6RCA8tDWBxIVk9N3IqUjJEAzYGv.jpg",
+  "id": 216,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm1346160",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 38,
+        "media_type": "movie",
+        "title": "Eternal Sunshine of the Spotless Mind",
+        "credit_id": "52fe4211c3a36847f80016a3",
+        "release_date": "2004-03-19",
+        "original_title": "Eternal Sunshine of the Spotless Mind",
+        "adult": false,
+        "poster_path": "/gutwXkVChJkpIrclokNESybj0GC.jpg",
+        "character": "Young Bully"
+      },
+      {
+        "id": 2959,
+        "media_type": "movie",
+        "title": "License To Wed",
+        "credit_id": "52fe4376c3a36847f805604d",
+        "release_date": "2007-07-31",
+        "original_title": "License To Wed",
+        "adult": false,
+        "poster_path": "/9I8NiY5cfFmwgI8Y5NKQqsuDawS.jpg",
+        "character": "Choir Boy"
+      },
+      {
+        "id": 9973,
+        "media_type": "movie",
+        "title": "Air Buddies",
+        "credit_id": "52fe4554c3a36847f80c8321",
+        "release_date": "2006-12-12",
+        "original_title": "Air Buddies",
+        "adult": false,
+        "poster_path": "/wO2nRsEA1JeMaNDLgbr86Eb3IIr.jpg",
+        "character": "Budderball"
+      },
+      {
+        "id": 14043,
+        "media_type": "movie",
+        "title": "Nancy Drew",
+        "credit_id": "52fe45c69251416c7506206f",
+        "release_date": "2007-06-15",
+        "original_title": "Nancy Drew",
+        "adult": false,
+        "poster_path": "/49XjF9iuqGmcz9N6LvB5INnkdCl.jpg",
+        "character": "Corky Veinshtein"
+      },
+      {
+        "id": 15338,
+        "media_type": "movie",
+        "title": "Ace Ventura Jr: Pet Detective",
+        "credit_id": "52fe464e9251416c7507424b",
+        "release_date": "2009-03-03",
+        "original_title": "Ace Ventura Jr: Pet Detective",
+        "adult": false,
+        "poster_path": "/7PO7jnvjwjS33Gt2lqh4HAMhmPY.jpg",
+        "character": "Ace Ventura Jr."
+      },
+      {
+        "id": 15487,
+        "media_type": "movie",
+        "title": "The Greatest Game Ever Played",
+        "credit_id": "52fe465f9251416c750763f7",
+        "release_date": "2005-09-30",
+        "original_title": "The Greatest Game Ever Played",
+        "adult": false,
+        "poster_path": "/a9FL10WwHnmKubHkW5WPQdyLhCn.jpg",
+        "character": "Eddie Lowery"
+      },
+      {
+        "id": 257489,
+        "media_type": "movie",
+        "title": "Running on Empty",
+        "credit_id": "53114d36c3a36829e2001d6b",
+        "release_date": "2014-09-19",
+        "original_title": "Running on Empty",
+        "adult": false,
+        "poster_path": null,
+        "character": "Charlie"
+      },
+      {
+        "id": 71726,
+        "media_type": "movie",
+        "title": "Snowmen",
+        "credit_id": "52fe4845c3a368484e0f08f1",
+        "release_date": "2011-10-21",
+        "original_title": "Snowmen",
+        "adult": false,
+        "poster_path": "/ygHhoUhtL6kXLaxk00JYSaeCCsL.jpg",
+        "character": "Jason Bound"
+      },
+      {
+        "id": 227172,
+        "media_type": "movie",
+        "title": "Hallows' Eve",
+        "credit_id": "52fe4e979251416c7515bb47",
+        "release_date": "2013-10-01",
+        "original_title": "Hallows' Eve",
+        "adult": false,
+        "poster_path": "/7U0CzQJUCObiWRFA9J6MHLrUPSy.jpg",
+        "character": "Marty"
+      },
+      {
+        "id": 12222,
+        "media_type": "movie",
+        "title": "Horton Hears a Who!",
+        "credit_id": "52fe44cc9251416c750415e3",
+        "release_date": "2008-03-03",
+        "original_title": "Horton Hears a Who!",
+        "adult": false,
+        "poster_path": "/rcRoduyCzOA0orAS9By8w9gTxy8.jpg",
+        "character": "Rudy"
+      },
+      {
+        "id": 1528,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570b9919c2957114004f9e",
+        "name": "Phil of the Future",
+        "poster_path": "/1xjFVVTfezAUU3WIJS0kOGUHufW.jpg",
+        "original_name": "Phil of the Future",
+        "first_air_date": "2004-06-18",
+        "character": ""
+      },
+      {
+        "id": 2518,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52573bec760ee36aaa02504e",
+        "name": "The Tonight Show with Jay Leno",
+        "poster_path": "/8mrWLDC4t1KsiyYta7B7iXGgsXz.jpg",
+        "original_name": "The Tonight Show with Jay Leno",
+        "first_air_date": "1992-05-25",
+        "character": ""
+      },
+      {
+        "id": 673,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52538e4019c295794026f648",
+        "name": "Whoopi",
+        "poster_path": "/irHwHJ1AOCJtDWwvAtQyjiRp4Ai.jpg",
+        "original_name": "Whoopi",
+        "first_air_date": "2003-09-09",
+        "character": ""
+      },
+      {
+        "id": 1489,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570827760ee3776a03c91b",
+        "name": "Jimmy Kimmel Live!",
+        "poster_path": "/jXr3zcyfgB0D7qbBBWZ5ncYMrg0.jpg",
+        "original_name": "Jimmy Kimmel Live!",
+        "first_air_date": "2003-01-26",
+        "character": ""
+      },
+      {
+        "id": 1926,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52571b7d760ee3776a1a38fc",
+        "name": "Ed",
+        "poster_path": "/cQggSryQnU5aLGUBF7n63NQN0sI.jpg",
+        "original_name": "Ed",
+        "first_air_date": "2000-10-08",
+        "character": ""
+      },
+      {
+        "id": 4856,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52577afe760ee36aaa57b7e9",
+        "name": "Mike's Super Short Show",
+        "poster_path": null,
+        "original_name": "Mike's Super Short Show",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 19773,
+        "media_type": "tv",
+        "episode_count": 8,
+        "credit_id": "52585c1b760ee3466110f3f0",
+        "name": "Situation: Comedy",
+        "poster_path": null,
+        "original_name": "Situation: Comedy",
+        "first_air_date": "2005-07-26",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Josh Flitter",
+  "place_of_birth": null,
+  "popularity": "1.77201072031152"
+}

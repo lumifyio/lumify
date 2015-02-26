@@ -1,0 +1,294 @@
+{
+  "budget": 11000000,
+  "vote_average": 7.1,
+  "backdrop_path": "/j7ctTLHSOrvY6fl63CjBNbmkTWq.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11357,
+        "order": 0,
+        "credit_id": "52fe4273c3a36847f801f9c3",
+        "name": "Bruce Campbell",
+        "cast_id": 18,
+        "profile_path": "/ox3Mf0pXGEiWfRO2TYcua0EHUQN.jpg",
+        "character": "Ash"
+      },
+      {
+        "id": 6368,
+        "order": 1,
+        "credit_id": "52fe4273c3a36847f801f9c7",
+        "name": "Embeth Davidtz",
+        "cast_id": 19,
+        "profile_path": "/gmc4nZtGc6bge9DnriR57VYq0dA.jpg",
+        "character": "Sheila"
+      },
+      {
+        "id": 11763,
+        "order": 2,
+        "credit_id": "52fe4273c3a36847f801f9cb",
+        "name": "Marcus Gilbert",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Lord Arthur"
+      },
+      {
+        "id": 11764,
+        "order": 3,
+        "credit_id": "52fe4273c3a36847f801f9cf",
+        "name": "Ian Abercrombie",
+        "cast_id": 21,
+        "profile_path": "/qci9vBTZJXQNLIFpCtIpXU881g8.jpg",
+        "character": "Wiseman"
+      },
+      {
+        "id": 11765,
+        "order": 4,
+        "credit_id": "52fe4273c3a36847f801f9d3",
+        "name": "Richard Grove",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Duke Henry the Red"
+      },
+      {
+        "id": 11766,
+        "order": 5,
+        "credit_id": "52fe4273c3a36847f801f9d7",
+        "name": "Timothy Patrick Quill",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Blacksmith"
+      },
+      {
+        "id": 11767,
+        "order": 6,
+        "credit_id": "52fe4273c3a36847f801f9db",
+        "name": "Michael Earl Reid",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Gold Tooth"
+      },
+      {
+        "id": 2233,
+        "order": 7,
+        "credit_id": "52fe4273c3a36847f801f9df",
+        "name": "Bridget Fonda",
+        "cast_id": 25,
+        "profile_path": "/uO9IfxsPKhCpcaB8217fKhgwfft.jpg",
+        "character": "Linda"
+      },
+      {
+        "id": 11768,
+        "order": 8,
+        "credit_id": "52fe4273c3a36847f801f9e3",
+        "name": "Patricia Tallman",
+        "cast_id": 26,
+        "profile_path": "/jl8F0Nv4dQJqg1014baS5eiHWaR.jpg",
+        "character": "Possessed Witch"
+      },
+      {
+        "id": 11769,
+        "order": 9,
+        "credit_id": "52fe4273c3a36847f801f9e7",
+        "name": "Ted Raimi",
+        "cast_id": 27,
+        "profile_path": "/fOykmd0HFrmcO9nRepehOnfxiGa.jpg",
+        "character": "Cowardly Warrior/Second Supportive Villager/S-Mart Clerk"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7623,
+        "credit_id": "52fe4273c3a36847f801f95f",
+        "department": "Directing",
+        "name": "Sam Raimi",
+        "job": "Director",
+        "profile_path": "/LaCTPq1oh0nAs3mzwsc057OaPr.jpg"
+      },
+      {
+        "id": 7623,
+        "credit_id": "52fe4273c3a36847f801f965",
+        "department": "Writing",
+        "name": "Sam Raimi",
+        "job": "Screenplay",
+        "profile_path": "/LaCTPq1oh0nAs3mzwsc057OaPr.jpg"
+      },
+      {
+        "id": 7629,
+        "credit_id": "52fe4273c3a36847f801f96b",
+        "department": "Writing",
+        "name": "Ivan Raimi",
+        "job": "Screenplay",
+        "profile_path": "/lGLCZC2OJkspij5rZbH6xhUFXc0.jpg"
+      },
+      {
+        "id": 11357,
+        "credit_id": "52fe4273c3a36847f801f971",
+        "department": "Production",
+        "name": "Bruce Campbell",
+        "job": "Producer",
+        "profile_path": "/ox3Mf0pXGEiWfRO2TYcua0EHUQN.jpg"
+      },
+      {
+        "id": 5398,
+        "credit_id": "52fe4273c3a36847f801f977",
+        "department": "Production",
+        "name": "Dino De Laurentiis",
+        "job": "Executive Producer",
+        "profile_path": "/dPmGC0nArXLjWGzcI0TYOlkjeLJ.jpg"
+      },
+      {
+        "id": 11359,
+        "credit_id": "52fe4273c3a36847f801f97d",
+        "department": "Production",
+        "name": "Robert Tapert",
+        "job": "Producer",
+        "profile_path": "/vFKPuVMuMykvXJTd5zT3RfG46CX.jpg"
+      },
+      {
+        "id": 11468,
+        "credit_id": "52fe4273c3a36847f801f983",
+        "department": "Sound",
+        "name": "Joseph LoDuca",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 531,
+        "credit_id": "52fe4273c3a36847f801f989",
+        "department": "Sound",
+        "name": "Danny Elfman",
+        "job": "Original Music Composer",
+        "profile_path": "/nBx84zlelMMlbVvkBQHyfF7eCov.jpg"
+      },
+      {
+        "id": 9341,
+        "credit_id": "52fe4273c3a36847f801f98f",
+        "department": "Camera",
+        "name": "Bill Pope",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11757,
+        "credit_id": "52fe4273c3a36847f801f995",
+        "department": "Editing",
+        "name": "Sonny Baskin",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7712,
+        "credit_id": "52fe4273c3a36847f801f99b",
+        "department": "Editing",
+        "name": "Bob Murawski",
+        "job": "Editor",
+        "profile_path": "/fADtjxosjUDT8AyZxTlqFYXUKuY.jpg"
+      },
+      {
+        "id": 7623,
+        "credit_id": "52fe4273c3a36847f801f9a1",
+        "department": "Editing",
+        "name": "Sam Raimi",
+        "job": "Editor",
+        "profile_path": "/LaCTPq1oh0nAs3mzwsc057OaPr.jpg"
+      },
+      {
+        "id": 11758,
+        "credit_id": "52fe4273c3a36847f801f9a7",
+        "department": "Production",
+        "name": "Ira Belgrade",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 11759,
+        "credit_id": "52fe4273c3a36847f801f9ad",
+        "department": "Art",
+        "name": "Anthony Tremblay",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 11760,
+        "credit_id": "52fe4273c3a36847f801f9b3",
+        "department": "Art",
+        "name": "Aram Allan",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11761,
+        "credit_id": "52fe4273c3a36847f801f9b9",
+        "department": "Art",
+        "name": "Michele Poulik",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 11762,
+        "credit_id": "52fe4273c3a36847f801f9bf",
+        "department": "Costume & Make-Up",
+        "name": "Ida Gearon",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 81,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 766,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Army of Darkness",
+  "overview": "A man is accidentally transported to 1300 A.D., where he must battle an army of the dead and retrieve the Necronomicon so he can return home.",
+  "production_companies": [
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    },
+    {
+      "id": 10308,
+      "name": "Dino De Laurentiis Company"
+    },
+    {
+      "id": 467,
+      "name": "Renaissance Pictures"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 1960,
+    "backdrop_path": "/jrLLRe7pctP1aFDRuD9mt59YGHX.jpg",
+    "name": "Evil Dead Collection",
+    "poster_path": "/eWFADubShlTEUiNsPcN6BMOKakr.jpg"
+  },
+  "imdb_id": "tt0106308",
+  "release_date": "1992-10-09",
+  "original_title": "Army of Darkness",
+  "vote_count": 201,
+  "poster_path": "/2eZKDIwLNnySbwqQtAaUz0kYDIL.jpg",
+  "tagline": "Trapped in time. Surrounded by evil. Low on gas.",
+  "revenue": 0,
+  "popularity": "2.04031389201637"
+}

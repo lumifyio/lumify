@@ -1,0 +1,272 @@
+{
+  "birthday": "1974-09-18",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nAlvin Nathaniel Joiner IV (born September 18, 1974), better known by his stage name Xzibit (pronounced as \"exhibit\"), is an American rapper, actor, and television host. He is known as the host of the MTV show Pimp my Ride, which brought him mainstream success. Before hosting the show, he achieved fame in the West Coast hip-hop scene as a rapper, debuting with his acclaimed At the Speed of Life and gathering chart success with his follow-up albums Restless, Man vs. Machine and Weapons of Mass Destruction, working with high-profile artists such as Eminem, Snoop Dogg, Dr. Dre, Method Man, Game and 50 Cent. After his largely unsuccessful sixth studio album Full Circle, his rap career was put on hold. He also built himself a second leg as an actor, starring in Hollywood blockbusters such as 8 Mile, xXx: State of the Union, Hoodwinked, Gridiron Gang, The X-Files: I Want to Believe and Bad Lieutenant: Port of Call New Orleans.\n\nDescription above from the Wikipedia article Xzibit, licensed under CC-BY-SA, full list of contributors on Wikipedia",
+  "homepage": "",
+  "profile_path": "/kTQu0lhfCYLgtJ1FsU2ksRSxFkc.jpg",
+  "id": 336,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0944702",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 10982,
+        "media_type": "movie",
+        "title": "Hoodwinked!",
+        "credit_id": "52fe43dc9251416c75021009",
+        "release_date": "2005-12-16",
+        "original_title": "Hoodwinked!",
+        "adult": false,
+        "poster_path": "/cx7CmTKBa5sgZqLp6680CdMrZc1.jpg",
+        "character": "Chief Grizzly (voice)"
+      },
+      {
+        "id": 11679,
+        "media_type": "movie",
+        "title": "xXx: State of the Union",
+        "credit_id": "52fe44779251416c75035ccf",
+        "release_date": "2005-04-29",
+        "original_title": "xXx: State of the Union",
+        "adult": false,
+        "poster_path": "/1rKeQyy4eyyuVcNNBlyEfLuh7Cu.jpg",
+        "character": "Zeke"
+      },
+      {
+        "id": 11699,
+        "media_type": "movie",
+        "title": "The Bad Lieutenant: Port of Call - New Orleans",
+        "credit_id": "52fe447c9251416c7503669b",
+        "release_date": "2009-11-20",
+        "original_title": "The Bad Lieutenant: Port of Call - New Orleans",
+        "adult": false,
+        "poster_path": "/aznE6p9hytgOXHOw6Pq9hStuPtz.jpg",
+        "character": "Big Fate"
+      },
+      {
+        "id": 8836,
+        "media_type": "movie",
+        "title": "The X Files: I Want to Believe",
+        "credit_id": "52fe44bcc3a36847f80a7237",
+        "release_date": "2008-07-25",
+        "original_title": "The X Files: I Want to Believe",
+        "adult": false,
+        "poster_path": "/kp24ckPKVTOyvvXs7bVofDiupPe.jpg",
+        "character": "Agent Mosley Drummy"
+      },
+      {
+        "id": 8999,
+        "media_type": "movie",
+        "title": "Derailed",
+        "credit_id": "52fe44d0c3a36847f80ab82b",
+        "release_date": "2005-11-11",
+        "original_title": "Derailed",
+        "adult": false,
+        "poster_path": "/fWZK40LvrjJ2w7IBuuadJMdHgVK.jpg",
+        "character": "Dexter"
+      },
+      {
+        "id": 9766,
+        "media_type": "movie",
+        "title": "Gridiron Gang",
+        "credit_id": "52fe4529c3a36847f80bfb4d",
+        "release_date": "2006-09-15",
+        "original_title": "Gridiron Gang",
+        "adult": false,
+        "poster_path": "/zLMsFU6XoDPMxULYbBBmneJqKUr.jpg",
+        "character": "Malcolm Moore"
+      },
+      {
+        "id": 19349,
+        "media_type": "movie",
+        "title": "The Up in Smoke Tour",
+        "credit_id": "52fe47d29251416c750a68a7",
+        "release_date": "2000-12-02",
+        "original_title": "The Up in Smoke Tour",
+        "adult": false,
+        "poster_path": "/ftczixKYZy4aivvL1dE4SKdTi2X.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 69934,
+        "media_type": "movie",
+        "title": "Full Clip",
+        "credit_id": "52fe47e3c3a368484e0dee0f",
+        "release_date": "2003-01-01",
+        "original_title": "Full Clip",
+        "adult": false,
+        "poster_path": "/sDS5M2GGaAGzeXMd9P0XnQxarhy.jpg",
+        "character": ""
+      },
+      {
+        "id": 82742,
+        "media_type": "movie",
+        "title": "Tha Eastsidaz",
+        "credit_id": "52fe48729251416c9108ccc1",
+        "release_date": "2005-02-17",
+        "original_title": "Tha Eastsidaz",
+        "adult": false,
+        "poster_path": "/mEFAum3pWpsI485M0WDWPUv06f5.jpg",
+        "character": "Blue"
+      },
+      {
+        "id": 57623,
+        "media_type": "movie",
+        "title": "Mixtape, Inc.",
+        "credit_id": "52fe493dc3a36847f81901a1",
+        "release_date": "2007-05-22",
+        "original_title": "Mixtape, Inc.",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 99670,
+        "media_type": "movie",
+        "title": "Gumball 3000: LDN 2 NYC",
+        "credit_id": "52fe4a3c9251416c750e2379",
+        "release_date": "2011-01-01",
+        "original_title": "Gumball 3000: LDN 2 NYC",
+        "adult": false,
+        "poster_path": "/10SKHOKyx5QiBrF6lnyoY6kpVqe.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 104780,
+        "media_type": "movie",
+        "title": "Xzibit: Restless Xposed",
+        "credit_id": "52fe4a3dc3a36847f81c2d37",
+        "release_date": "2001-12-11",
+        "original_title": "Xzibit: Restless Xposed",
+        "adult": false,
+        "poster_path": "/lJ4GZQqJ3m9Gpl6QgKw0Q8VLcoX.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 130267,
+        "media_type": "movie",
+        "title": "Seal Team Six: The Raid on Osama Bin Laden",
+        "credit_id": "52fe4b55c3a368484e183d05",
+        "release_date": "2012-11-04",
+        "original_title": "Seal Team Six: The Raid on Osama Bin Laden",
+        "adult": false,
+        "poster_path": "/60Al7aqy6zbDfiRThA9Yf2vO43J.jpg",
+        "character": "Mule"
+      },
+      {
+        "id": 273181,
+        "media_type": "movie",
+        "title": "Eminem: All Acces Europe",
+        "credit_id": "538a1af7c3a3686fd50002eb",
+        "release_date": "2002-06-18",
+        "original_title": "Eminem: All Acces Europe",
+        "adult": false,
+        "poster_path": "/rPTKuo9HUEuTskQjJoxs64BWGOz.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 84342,
+        "media_type": "movie",
+        "title": "Something from Nothing: The Art of Rap",
+        "credit_id": "53ca468a0e0a264748001d82",
+        "release_date": "2012-06-15",
+        "original_title": "Something from Nothing: The Art of Rap",
+        "adult": false,
+        "poster_path": "/yQDNYOHDiC3pGhTnTu0A6RXq6dc.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 1566,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570cd619c2957114017ecc",
+        "name": "All of Us",
+        "poster_path": null,
+        "original_name": "All of Us",
+        "first_air_date": "2003-09-16",
+        "character": ""
+      },
+      {
+        "id": 1976,
+        "media_type": "tv",
+        "episode_count": 78,
+        "credit_id": "52571d9219c29571140fc7dd",
+        "name": "Pimp My Ride",
+        "poster_path": "/lUK4HcbnX8m4Qqm0sE57K0An6EK.jpg",
+        "original_name": "Pimp My Ride",
+        "first_air_date": "2004-03-04",
+        "character": ""
+      },
+      {
+        "id": 2604,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52573e41760ee36aaa05e711",
+        "name": "The Boondocks",
+        "poster_path": "/2ju2H3ObHSjrPJqXazfqXvECi9P.jpg",
+        "original_name": "The Boondocks",
+        "first_air_date": "2005-11-06",
+        "character": ""
+      },
+      {
+        "id": 4573,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52577160760ee36aaa49a39e",
+        "name": "Late Night with Conan O'Brien",
+        "poster_path": "/v4N5l6JooObhXbjXoFaKbx92wB9.jpg",
+        "original_name": "Late Night with Conan O'Brien",
+        "first_air_date": "1993-09-13",
+        "character": ""
+      },
+      {
+        "id": 1489,
+        "media_type": "tv",
+        "episode_count": 6,
+        "credit_id": "525707bc760ee3776a03708d",
+        "name": "Jimmy Kimmel Live!",
+        "poster_path": "/jXr3zcyfgB0D7qbBBWZ5ncYMrg0.jpg",
+        "original_name": "Jimmy Kimmel Live!",
+        "first_air_date": "2003-01-26",
+        "character": ""
+      },
+      {
+        "id": 1620,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570e1d760ee3776a09638f",
+        "name": "CSI: Miami",
+        "poster_path": "/9brFwnnRmnHykxcrvn7ez79dXb6.jpg",
+        "original_name": "CSI: Miami",
+        "first_air_date": "2002-09-23",
+        "character": ""
+      },
+      {
+        "id": 3585,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52575343760ee36aaa1ead7c",
+        "name": "Too Late with Adam Carolla",
+        "poster_path": "/AkiihVQssqlNGCKVeCqqolBdxCI.jpg",
+        "original_name": "Too Late with Adam Carolla",
+        "first_air_date": "2005-08-08",
+        "character": ""
+      },
+      {
+        "id": 4469,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52576b2d760ee36aaa3ea8b6",
+        "name": "MADtv",
+        "poster_path": "/cA1w1chKhZEYqzBljUOkuQbw3a0.jpg",
+        "original_name": "MADtv",
+        "first_air_date": "1995-10-14",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Xzibit",
+  "place_of_birth": "Detroit, Michigan, U.S.",
+  "popularity": "1.00000318844323"
+}

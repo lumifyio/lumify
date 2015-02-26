@@ -1,0 +1,104 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": null,
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1393,
+        "order": 0,
+        "credit_id": "52fe421bc3a36847f80048c9",
+        "name": "Wacław Ulewicz",
+        "cast_id": 2,
+        "profile_path": null,
+        "character": "Erster Sekretär PZPR"
+      },
+      {
+        "id": 1394,
+        "order": 1,
+        "credit_id": "52fe421bc3a36847f80048cd",
+        "name": "Mirosław Siedler",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Streikführer"
+      },
+      {
+        "id": 1395,
+        "order": 2,
+        "credit_id": "52fe421bc3a36847f80048d1",
+        "name": "Paweł Nowisz",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Chauffeur des Ersten Sekretärs"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1126,
+        "credit_id": "52fe421bc3a36847f80048c5",
+        "department": "Directing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Director",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      },
+      {
+        "id": 1396,
+        "credit_id": "52fe421bc3a36847f80048d7",
+        "department": "Directing",
+        "name": "Hanna Krall",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 1397,
+        "credit_id": "52fe421bc3a36847f80048dd",
+        "department": "Camera",
+        "name": "Krzysztof Pakulski",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1398,
+        "credit_id": "52fe421bc3a36847f80048e3",
+        "department": "Sound",
+        "name": "Jan Kanty Pawluskiewicz",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1399,
+        "credit_id": "52fe421bc3a36847f80048e9",
+        "department": "Production",
+        "name": "Andrzej Rafal Waltenberger",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 73,
+  "spoken_languages": [{
+    "iso_639_1": "pl",
+    "name": "Polski"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 126,
+  "production_countries": [],
+  "title": "Short Working Day",
+  "overview": "A polish film by Oscar nominated director Krzysztof Kieślowski. His most famous films are \u2018Three Colors\u2019 and \u2018The Decalogue\u2019 and this one.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0082631",
+  "release_date": "1981-08-06",
+  "original_title": "Krótki dzień pracy",
+  "vote_count": 0,
+  "poster_path": "/2SzD3cpPQyayMJxgynHjA7cLh6b.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.219993373857172"
+}

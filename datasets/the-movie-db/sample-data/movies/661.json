@@ -1,0 +1,370 @@
+{
+  "budget": 0,
+  "vote_average": 5.5,
+  "backdrop_path": "/mvZbgOQpePfktmAeeFzMwrR0UKO.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3734,
+        "order": 0,
+        "credit_id": "52fe4266c3a36847f801b625",
+        "name": "Hanna Schygulla",
+        "cast_id": 1,
+        "profile_path": "/8F74kS6FiO89S8tPQw5OrjKqedt.jpg",
+        "character": "Maria Braun"
+      },
+      {
+        "id": 9927,
+        "order": 1,
+        "credit_id": "52fe4266c3a36847f801b629",
+        "name": "Klaus Löwitsch",
+        "cast_id": 2,
+        "profile_path": "/yYXgYmh4HxSGsUO8q3ijWnOlf6d.jpg",
+        "character": "Hermann Braun"
+      },
+      {
+        "id": 9928,
+        "order": 2,
+        "credit_id": "52fe4266c3a36847f801b62d",
+        "name": "Ivan Desny",
+        "cast_id": 3,
+        "profile_path": "/s1UPN4N3CiIsfyiPU2VV3ynpInS.jpg",
+        "character": "Karl Oswald"
+      },
+      {
+        "id": 9929,
+        "order": 3,
+        "credit_id": "52fe4266c3a36847f801b631",
+        "name": "George Eagles",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Bill"
+      },
+      {
+        "id": 9930,
+        "order": 4,
+        "credit_id": "52fe4266c3a36847f801b635",
+        "name": "Gisela Uhlen",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Mother"
+      },
+      {
+        "id": 9931,
+        "order": 5,
+        "credit_id": "52fe4266c3a36847f801b639",
+        "name": "Elisabeth Trissenaar",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Betti Klenze"
+      },
+      {
+        "id": 3757,
+        "order": 6,
+        "credit_id": "52fe4266c3a36847f801b63d",
+        "name": "Gottfried John",
+        "cast_id": 7,
+        "profile_path": "/hOVrTlQwZX4THosi9usXISC7mNS.jpg",
+        "character": "Willi Klenze"
+      },
+      {
+        "id": 1865,
+        "order": 7,
+        "credit_id": "52fe4266c3a36847f801b641",
+        "name": "Hark Bohm",
+        "cast_id": 8,
+        "profile_path": "/ptmIE7lSIiCS6mlXHOz3WgT7D43.jpg",
+        "character": "Senkenberg"
+      },
+      {
+        "id": 9932,
+        "order": 8,
+        "credit_id": "52fe4266c3a36847f801b645",
+        "name": "Günter Lamprecht",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Hans Wetzel"
+      },
+      {
+        "id": 2740,
+        "order": 9,
+        "credit_id": "52fe4266c3a36847f801b649",
+        "name": "Lilo Pempeit",
+        "cast_id": 10,
+        "profile_path": "/6x2TXUeJvyiaVuKuvUCSdscDF3Z.jpg",
+        "character": "Frau Ehmke"
+      },
+      {
+        "id": 3769,
+        "order": 10,
+        "credit_id": "52fe4266c3a36847f801b6e3",
+        "name": "Michael Ballhaus",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Counsel"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2725,
+        "credit_id": "52fe4266c3a36847f801b64f",
+        "department": "Directing",
+        "name": "Rainer Werner Fassbinder",
+        "job": "Director",
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg"
+      },
+      {
+        "id": 9933,
+        "credit_id": "52fe4266c3a36847f801b655",
+        "department": "Writing",
+        "name": "Pea Fröhlich",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 9934,
+        "credit_id": "52fe4266c3a36847f801b65b",
+        "department": "Writing",
+        "name": "Peter Märthesheimer",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 9935,
+        "credit_id": "52fe4266c3a36847f801b661",
+        "department": "Production",
+        "name": "Michael Fengler",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9936,
+        "credit_id": "52fe4266c3a36847f801b667",
+        "department": "Production",
+        "name": "Hanns Eckelkamp",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3767,
+        "credit_id": "52fe4266c3a36847f801b66d",
+        "department": "Sound",
+        "name": "Peer Raben",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3769,
+        "credit_id": "52fe4266c3a36847f801b673",
+        "department": "Camera",
+        "name": "Michael Ballhaus",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2725,
+        "credit_id": "52fe4266c3a36847f801b679",
+        "department": "Editing",
+        "name": "Rainer Werner Fassbinder",
+        "job": "Editor",
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg"
+      },
+      {
+        "id": 3770,
+        "credit_id": "52fe4266c3a36847f801b67f",
+        "department": "Editing",
+        "name": "Juliane Lorenz",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 9937,
+        "credit_id": "52fe4266c3a36847f801b685",
+        "department": "Art",
+        "name": "Helga Ballhaus",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 9939,
+        "credit_id": "52fe4266c3a36847f801b68b",
+        "department": "Art",
+        "name": "Norbert Scherer",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 9940,
+        "credit_id": "52fe4266c3a36847f801b691",
+        "department": "Art",
+        "name": "Arno Mathes",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9941,
+        "credit_id": "52fe4266c3a36847f801b697",
+        "department": "Art",
+        "name": "Hans-Peter Sandmeier",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9942,
+        "credit_id": "52fe4266c3a36847f801b69d",
+        "department": "Art",
+        "name": "Andreas Willim",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9943,
+        "credit_id": "52fe4266c3a36847f801b6a3",
+        "department": "Costume & Make-Up",
+        "name": "Barbara Baum",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 9944,
+        "credit_id": "52fe4266c3a36847f801b6a9",
+        "department": "Costume & Make-Up",
+        "name": "Georg Kuhn",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 9945,
+        "credit_id": "52fe4266c3a36847f801b6af",
+        "department": "Costume & Make-Up",
+        "name": "Inge Proeller",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 9946,
+        "credit_id": "52fe4266c3a36847f801b6b5",
+        "department": "Costume & Make-Up",
+        "name": "Susi Reichel",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 9948,
+        "credit_id": "52fe4266c3a36847f801b6bb",
+        "department": "Costume & Make-Up",
+        "name": "Anni Nöbauer",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 9949,
+        "credit_id": "52fe4266c3a36847f801b6c1",
+        "department": "Sound",
+        "name": "Milan Bor",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 9950,
+        "credit_id": "52fe4266c3a36847f801b6c7",
+        "department": "Sound",
+        "name": "Jim Willis",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 39571,
+        "credit_id": "52fe4266c3a36847f801b6cd",
+        "department": "Art",
+        "name": "Claus Kottmann",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2725,
+        "credit_id": "52fe4266c3a36847f801b6d3",
+        "department": "Writing",
+        "name": "Rainer Werner Fassbinder",
+        "job": "Idea",
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg"
+      },
+      {
+        "id": 1023152,
+        "credit_id": "52fe4266c3a36847f801b6d9",
+        "department": "Production",
+        "name": "Wolf-Dietrich Brücker",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1121613,
+        "credit_id": "52fe4266c3a36847f801b6df",
+        "department": "Production",
+        "name": "Volker Canaris",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 116,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 661,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "The Marriage of Maria Braun",
+  "overview": "The Marriage of Maria Braun is a collage of the times in Germany after the war, economic miracles, and a portrait of a woman who in her circumstances wants to emancipate and have a successful and happy career.",
+  "production_companies": [
+    {
+      "id": 8568,
+      "name": "Albatros Filmproduktion"
+    },
+    {
+      "id": 11625,
+      "name": "Fengler Films"
+    },
+    {
+      "id": 10869,
+      "name": "Filmverlag der Autoren"
+    },
+    {
+      "id": 11626,
+      "name": "Tango Film"
+    },
+    {
+      "id": 10482,
+      "name": "Trio Films"
+    },
+    {
+      "id": 7025,
+      "name": "Westdeutscher Rundfunk (WDR)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0079095",
+  "release_date": "1979-02-20",
+  "original_title": "Die Ehe der Maria Braun",
+  "vote_count": 4,
+  "poster_path": "/umHMlDhZoO0lSd6YadufzisxvBw.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.618847590825454"
+}

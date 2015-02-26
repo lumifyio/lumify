@@ -1,0 +1,298 @@
+{
+  "budget": 10000000,
+  "vote_average": 6.6,
+  "backdrop_path": "/lFiEdW3zVjR2Wujxu3yZLpL2N8n.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 14463,
+        "order": 0,
+        "credit_id": "52fe427ac3a36847f8021d3d",
+        "name": "David Naughton",
+        "cast_id": 16,
+        "profile_path": "/hXqWaZtACgDXJZs1pQsL5k60GbH.jpg",
+        "character": "David Kessler"
+      },
+      {
+        "id": 14464,
+        "order": 1,
+        "credit_id": "52fe427ac3a36847f8021d41",
+        "name": "Jenny Agutter",
+        "cast_id": 17,
+        "profile_path": "/2AwYEHV0cXXo3vtjiuwHMEkqh6R.jpg",
+        "character": "Nurse Alex Price"
+      },
+      {
+        "id": 2171,
+        "order": 2,
+        "credit_id": "52fe427ac3a36847f8021d45",
+        "name": "Griffin Dunne",
+        "cast_id": 18,
+        "profile_path": "/v3ahyscvpy5kt97TmfnGJ6w5xL6.jpg",
+        "character": "Jack Goodman"
+      },
+      {
+        "id": 14465,
+        "order": 3,
+        "credit_id": "52fe427ac3a36847f8021d49",
+        "name": "John Woodvine",
+        "cast_id": 19,
+        "profile_path": "/9re40l4z8VnSNtCjncUbALSBvXE.jpg",
+        "character": "Dr. J. S. Hirsch"
+      },
+      {
+        "id": 14466,
+        "order": 4,
+        "credit_id": "52fe427ac3a36847f8021d4d",
+        "name": "Lila Kaye",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Barmaid"
+      },
+      {
+        "id": 14467,
+        "order": 5,
+        "credit_id": "52fe427ac3a36847f8021d51",
+        "name": "Joe Belcher",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Truck Driver"
+      },
+      {
+        "id": 939,
+        "order": 6,
+        "credit_id": "52fe427ac3a36847f8021d55",
+        "name": "David Schofield",
+        "cast_id": 22,
+        "profile_path": "/6FdYsGTI85M5s5QDbFCogmQWsOR.jpg",
+        "character": "Dart Player"
+      },
+      {
+        "id": 14468,
+        "order": 7,
+        "credit_id": "52fe427ac3a36847f8021d59",
+        "name": "Brian Glover",
+        "cast_id": 23,
+        "profile_path": "/dUqgIdAO8jctUM4ordJ0cbovR4M.jpg",
+        "character": "Chess Player"
+      },
+      {
+        "id": 14469,
+        "order": 8,
+        "credit_id": "52fe427ac3a36847f8021d5d",
+        "name": "Rik Mayall",
+        "cast_id": 24,
+        "profile_path": "/wntKz7ORqD8mAsME6CFJdWTn6m.jpg",
+        "character": "2nd Chess Player"
+      },
+      {
+        "id": 14470,
+        "order": 9,
+        "credit_id": "52fe427ac3a36847f8021d61",
+        "name": "Sean Baker",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "2nd Dart Player"
+      },
+      {
+        "id": 14471,
+        "order": 10,
+        "credit_id": "52fe427ac3a36847f8021d65",
+        "name": "Paddy Ryan",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "First Werewolf"
+      },
+      {
+        "id": 14472,
+        "order": 11,
+        "credit_id": "52fe427ac3a36847f8021d69",
+        "name": "Anne-Marie Davies",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Nurse Susan Gallagher"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4610,
+        "credit_id": "52fe427ac3a36847f8021cf1",
+        "department": "Directing",
+        "name": "John Landis",
+        "job": "Director",
+        "profile_path": "/pHqwE4XKehtONaRVyXAml0I3mSy.jpg"
+      },
+      {
+        "id": 7184,
+        "credit_id": "52fe427ac3a36847f8021cf7",
+        "department": "Production",
+        "name": "George Folsey Jr.",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7182,
+        "credit_id": "52fe427ac3a36847f8021cfd",
+        "department": "Sound",
+        "name": "Elmer Bernstein",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 14456,
+        "credit_id": "52fe427ac3a36847f8021d03",
+        "department": "Camera",
+        "name": "Robert Paynter",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14457,
+        "credit_id": "52fe427ac3a36847f8021d09",
+        "department": "Editing",
+        "name": "Malcolm Campbell",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10496,
+        "credit_id": "52fe427ac3a36847f8021d0f",
+        "department": "Production",
+        "name": "Debbie McWilliams",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5059,
+        "credit_id": "52fe427ac3a36847f8021d15",
+        "department": "Art",
+        "name": "Leslie Dilley",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7211,
+        "credit_id": "52fe427ac3a36847f8021d1b",
+        "department": "Costume & Make-Up",
+        "name": "Deborah Nadoolman",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14458,
+        "credit_id": "52fe427ac3a36847f8021d21",
+        "department": "Costume & Make-Up",
+        "name": "Robin Grantham",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 11381,
+        "credit_id": "52fe427ac3a36847f8021d27",
+        "department": "Production",
+        "name": "Joyce Herlihy",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 14459,
+        "credit_id": "52fe427ac3a36847f8021d2d",
+        "department": "Sound",
+        "name": "John Poyner",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 14460,
+        "credit_id": "52fe427ac3a36847f8021d33",
+        "department": "Crew",
+        "name": "Martin Gutteridge",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 14461,
+        "credit_id": "52fe427ac3a36847f8021d39",
+        "department": "Crew",
+        "name": "Roy Alon",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 4610,
+        "credit_id": "52fe427ac3a36847f8021d75",
+        "department": "Writing",
+        "name": "John Landis",
+        "job": "Screenplay",
+        "profile_path": "/pHqwE4XKehtONaRVyXAml0I3mSy.jpg"
+      }
+    ]
+  },
+  "runtime": 97,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 814,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "An American Werewolf in London",
+  "overview": "Two American tourists in England are attacked by a werewolf that none of the locals will admit exists.",
+  "production_companies": [
+    {
+      "id": 276,
+      "name": "Guber/Peters Company"
+    },
+    {
+      "id": 606,
+      "name": "American Werewolf Inc."
+    },
+    {
+      "id": 607,
+      "name": "Lyncanthrope Films"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 9380,
+    "backdrop_path": null,
+    "name": "American Werewolf Collection",
+    "poster_path": "/lmGA5MhSb0jFzRdR74yzsUqgtgI.jpg"
+  },
+  "imdb_id": "tt0082010",
+  "release_date": "1981-08-21",
+  "original_title": "An American Werewolf in London",
+  "vote_count": 94,
+  "poster_path": "/kIEKSlUNEoU1lVFHqjaxqNRppym.jpg",
+  "tagline": "Beware the Moon.",
+  "revenue": 31973249,
+  "popularity": "0.626627948813349"
+}

@@ -1,0 +1,272 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nRichard Young (born in 19...) is an American actor who has starred in film and in television. His first feature film part was in 1972. Among his best known films are the 1984 movie The Ice Pirates and in the 1985 horror film Friday the 13th: A New Beginning (as Matt). He also played a part in the opening sequence of Indiana Jones and the Last Crusade (1989) as \"Fedora\", the leader of the tomb-robbers who chases the young Indiana Jones then gives the young Jones his own fedora which later becomes Jones' hat.\n\nYoung has starred in the soap opera Texas as Mr. Hannibal in 1982. He also has starred in TV-movies. He has made many guest appearances on many tv shows including The Avengers, Kung Fu, Flamingo Road, Knight Rider, and Murder, She Wrote.\n\nDescription above from the Wikipedia article Richard Young (actor), licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/WAnB3iXDZ5eOWOpDQBHr04ifiX.jpg",
+  "id": 745,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0949985",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 89,
+        "media_type": "movie",
+        "title": "Indiana Jones and the Last Crusade",
+        "credit_id": "52fe4216c3a36847f8002e45",
+        "release_date": "1989-05-24",
+        "original_title": "Indiana Jones and the Last Crusade",
+        "adult": false,
+        "poster_path": "/4p1N2Qrt8j0H8xMHMHvtRxv9weZ.jpg",
+        "character": "Fedora"
+      },
+      {
+        "id": 85966,
+        "media_type": "movie",
+        "title": "Night Call Nurses",
+        "credit_id": "52fe496a9251416c910ac851",
+        "release_date": "1972-06-01",
+        "original_title": "Night Call Nurses",
+        "adult": false,
+        "poster_path": "/1cZRVb9YGjJFq3v0uUw4CWT2cls.jpg",
+        "character": "Kyle Toby"
+      },
+      {
+        "id": 113908,
+        "media_type": "movie",
+        "title": "Cry Your Purple Heart Out",
+        "credit_id": "52fe4b41c3a36847f81fa61d",
+        "release_date": "1976-01-01",
+        "original_title": "Cry Your Purple Heart Out",
+        "adult": false,
+        "poster_path": "/mLs4U6a9lY82KsbNLofeBkFId5w.jpg",
+        "character": "Frank"
+      },
+      {
+        "id": 222320,
+        "media_type": "movie",
+        "title": "Saigon Commandos",
+        "credit_id": "52fe4de99251416c75145333",
+        "release_date": "1988-01-01",
+        "original_title": "Saigon Commandos",
+        "adult": false,
+        "poster_path": "/fJTX8LHGN9z6Fbjl8NKw4sB52zK.jpg",
+        "character": ""
+      },
+      {
+        "id": 251524,
+        "media_type": "movie",
+        "title": "Swim Team",
+        "credit_id": "52fe4e1b9251416c91126b1b",
+        "release_date": "1979-05-02",
+        "original_title": "Swim Team",
+        "adult": false,
+        "poster_path": "/gvHsfcuRE9aXmCfPRJPOV84UZzg.jpg",
+        "character": "Johnny"
+      },
+      {
+        "id": 9731,
+        "media_type": "movie",
+        "title": "Friday the 13th: A New Beginning",
+        "credit_id": "52fe4523c3a36847f80bea2b",
+        "release_date": "1985-03-22",
+        "original_title": "Friday the 13th: A New Beginning",
+        "adult": false,
+        "poster_path": "/aoc6F4Oif0JskHKO1tzZOaopYbF.jpg",
+        "character": "Matthew Letter"
+      },
+      {
+        "id": 2006,
+        "media_type": "tv",
+        "episode_count": 5,
+        "credit_id": "52571e91760ee3776a1d8e54",
+        "name": "Flamingo Road",
+        "poster_path": "/qO5g6CEVaZ97Vm2JT84KXWU2T1p.jpg",
+        "original_name": "Flamingo Road",
+        "first_air_date": "1980-05-12",
+        "character": ""
+      },
+      {
+        "id": 2223,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525729e3760ee3776a2bead5",
+        "name": "The F.B.I.",
+        "poster_path": null,
+        "original_name": "The F.B.I.",
+        "first_air_date": "1965-09-19",
+        "character": ""
+      },
+      {
+        "id": 2233,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52572c1a760ee3776a2e6649",
+        "name": "Blue Heelers",
+        "poster_path": "/pN1qkgtPytok4YOwgXifaIxAScZ.jpg",
+        "original_name": "Blue Heelers",
+        "first_air_date": "1994-01-18",
+        "character": ""
+      },
+      {
+        "id": 2440,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "525738a7760ee3668d00ecd0",
+        "name": "Highway to Heaven",
+        "poster_path": "/fHbY3RMVMcdYXlolHLgGX1C43DW.jpg",
+        "original_name": "Highway to Heaven",
+        "first_air_date": "1984-08-19",
+        "character": ""
+      },
+      {
+        "id": 2473,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52573ab6760ee36aaa004404",
+        "name": "The Avengers",
+        "poster_path": "/kfLQ5So7Y0BlvTS0zY1JITFf25S.jpg",
+        "original_name": "The Avengers",
+        "first_air_date": "1961-01-07",
+        "character": ""
+      },
+      {
+        "id": 3033,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52574b78760ee36aaa13dca8",
+        "name": "Laverne & Shirley",
+        "poster_path": "/qSLrilNKgcY4Ax3phHCZTESk4Fl.jpg",
+        "original_name": "Laverne & Shirley",
+        "first_air_date": "1976-01-27",
+        "character": ""
+      },
+      {
+        "id": 3783,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525756e7760ee36aaa247613",
+        "name": "Room 222",
+        "poster_path": "/mmyThiSkmgpdML1SlYlsT7Yc4Kr.jpg",
+        "original_name": "Room 222",
+        "first_air_date": "1969-09-11",
+        "character": ""
+      },
+      {
+        "id": 141,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52533e1319c29579400817ee",
+        "name": "Cheers",
+        "poster_path": "/gfbD8H9lcU1IwLb4dk3a8G94jgY.jpg",
+        "original_name": "Cheers",
+        "first_air_date": "1982-09-30",
+        "character": ""
+      },
+      {
+        "id": 1026,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525412d519c2957940353f6c",
+        "name": "Amazing Stories",
+        "poster_path": "/i1GouDj20hsDUGjTTFUpCtLdHXG.jpg",
+        "original_name": "Amazing Stories",
+        "first_air_date": "1985-09-29",
+        "character": ""
+      },
+      {
+        "id": 1472,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570643760ee3776a021197",
+        "name": "Kung Fu",
+        "poster_path": "/db9KWN6y2PD6FLZRYUqgYgEALpD.jpg",
+        "original_name": "Kung Fu",
+        "first_air_date": "1972-10-14",
+        "character": ""
+      },
+      {
+        "id": 2384,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52573487760ee3776a38fe2e",
+        "name": "Knight Rider",
+        "poster_path": "/5BtnN85aTVJc48mAiu60B0Iz3uv.jpg",
+        "original_name": "Knight Rider",
+        "first_air_date": "1982-09-26",
+        "character": ""
+      },
+      {
+        "id": 2397,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257357c760ee3776a3a4f67",
+        "name": "Beauty and the Beast",
+        "poster_path": "/mMsISbce4hjb21gllnC9XlcYezO.jpg",
+        "original_name": "Beauty and the Beast",
+        "first_air_date": "1987-09-25",
+        "character": ""
+      },
+      {
+        "id": 4571,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525770b7760ee36aaa480ed8",
+        "name": "Hunter",
+        "poster_path": "/tMsAFh39ZkAhX2pXmSEj4iRCVz7.jpg",
+        "original_name": "Hunter",
+        "first_air_date": "1984-09-18",
+        "character": ""
+      },
+      {
+        "id": 4582,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257725d760ee36aaa4b6aa0",
+        "name": "Ironside",
+        "poster_path": "/Ac5JsHuODtRMrhfm7vGvukkQqje.jpg",
+        "original_name": "Ironside",
+        "first_air_date": "1967-09-14",
+        "character": ""
+      },
+      {
+        "id": 5566,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52578181760ee36aaa5f39bb",
+        "name": "Rush",
+        "poster_path": "/wC1gtVUe7z0DyaNr6PMQAnUQfwh.jpg",
+        "original_name": "Rush",
+        "first_air_date": "2008-09-02",
+        "character": ""
+      },
+      {
+        "id": 9865,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257f86019c29531db2d2a4a",
+        "name": "Switch",
+        "poster_path": "/9dO8JH4m6SGTpOiwtUNsl8ttx7M.jpg",
+        "original_name": "Switch",
+        "first_air_date": "1975-09-09",
+        "character": ""
+      },
+      {
+        "id": 13925,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52582cd6760ee36aaa89a733",
+        "name": "Ellery Queen",
+        "poster_path": "/klttsAtFmBFubjsAs2pFDjPKn61.jpg",
+        "original_name": "Ellery Queen",
+        "first_air_date": "1975-09-11",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Richard Young",
+  "place_of_birth": "\tKissimmee, Florida",
+  "popularity": 1
+}

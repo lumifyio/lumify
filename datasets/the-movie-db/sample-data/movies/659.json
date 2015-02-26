@@ -1,0 +1,328 @@
+{
+  "budget": 0,
+  "vote_average": 7.2,
+  "backdrop_path": "/laJgZELONuol26xQAKakn79CFBw.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 10254,
+        "order": 0,
+        "credit_id": "52fe4265c3a36847f801b4bf",
+        "name": "Mario Adorf",
+        "cast_id": 8,
+        "profile_path": "/j5PybdSQCAeW0l9VKS147jRRhA0.jpg",
+        "character": "Alfred Matzerath"
+      },
+      {
+        "id": 10255,
+        "order": 1,
+        "credit_id": "52fe4265c3a36847f801b4c3",
+        "name": "Angela Winkler",
+        "cast_id": 9,
+        "profile_path": "/4BNuACDSIBeOPrIq88oeaIDMq02.jpg",
+        "character": "Agnes Matzerath"
+      },
+      {
+        "id": 10256,
+        "order": 2,
+        "credit_id": "52fe4265c3a36847f801b4c7",
+        "name": "David Bennent",
+        "cast_id": 10,
+        "profile_path": "/YEoSmX2slSp1XPbV9odP46dIzP.jpg",
+        "character": "Oskar Matzerath"
+      },
+      {
+        "id": 10257,
+        "order": 3,
+        "credit_id": "52fe4265c3a36847f801b4cb",
+        "name": "Katharina Thalbach",
+        "cast_id": 11,
+        "profile_path": "/p9TruCDPZX8Bt9pTAVRWVWtWGzW.jpg",
+        "character": "Maria Matzerath"
+      },
+      {
+        "id": 7107,
+        "order": 4,
+        "credit_id": "52fe4265c3a36847f801b4cf",
+        "name": "Daniel Olbrychski",
+        "cast_id": 12,
+        "profile_path": "/nfqJ8xiVNyBQQhnYRkwJzl3iS7s.jpg",
+        "character": "Jan Bronski"
+      },
+      {
+        "id": 10258,
+        "order": 5,
+        "credit_id": "52fe4265c3a36847f801b4d3",
+        "name": "Tina Engel",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Anna Koljaiczek (jung)"
+      },
+      {
+        "id": 10259,
+        "order": 6,
+        "credit_id": "52fe4265c3a36847f801b4d7",
+        "name": "Berta Drews",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Anna Koljaiczek (alt)"
+      },
+      {
+        "id": 10260,
+        "order": 7,
+        "credit_id": "52fe4265c3a36847f801b4db",
+        "name": "Roland Teubner",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Joseph Koljaiczek"
+      },
+      {
+        "id": 10261,
+        "order": 8,
+        "credit_id": "52fe4265c3a36847f801b4df",
+        "name": "Tadeusz Kunikowski",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Onkel Vinzenz"
+      },
+      {
+        "id": 10262,
+        "order": 9,
+        "credit_id": "52fe4265c3a36847f801b4e3",
+        "name": "Andréa Ferréol",
+        "cast_id": 17,
+        "profile_path": "/wB0ZGxTyFAE0vqXiUoh8qZU1zgl.jpg",
+        "character": "Lina Greff"
+      },
+      {
+        "id": 10263,
+        "order": 10,
+        "credit_id": "52fe4265c3a36847f801b4e7",
+        "name": "Heinz Bennent",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Greff"
+      },
+      {
+        "id": 10264,
+        "order": 11,
+        "credit_id": "52fe4265c3a36847f801b4eb",
+        "name": "Ilse Pagé",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Gretchen Scheffler"
+      },
+      {
+        "id": 10266,
+        "order": 12,
+        "credit_id": "52fe4265c3a36847f801b4ef",
+        "name": "Werner Rehm",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Scheffler"
+      },
+      {
+        "id": 10267,
+        "order": 13,
+        "credit_id": "52fe4265c3a36847f801b4f3",
+        "name": "Käte Jaenicke",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Mutter Truczinski"
+      },
+      {
+        "id": 2311,
+        "order": 14,
+        "credit_id": "52fe4265c3a36847f801b4f7",
+        "name": "Otto Sander",
+        "cast_id": 22,
+        "profile_path": "/6wIfFAG3mryP7vx2zc75Ey67fL.jpg",
+        "character": "Meyn"
+      },
+      {
+        "id": 10268,
+        "order": 15,
+        "credit_id": "52fe4265c3a36847f801b4fb",
+        "name": "Charles Aznavour",
+        "cast_id": 23,
+        "profile_path": "/h4jC5Bv4wpEYT1RZBCbrgwPOYhz.jpg",
+        "character": "Sigismund Markus"
+      },
+      {
+        "id": 10269,
+        "order": 16,
+        "credit_id": "52fe4265c3a36847f801b4ff",
+        "name": "Fritz Hakl",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Bebra"
+      },
+      {
+        "id": 10270,
+        "order": 17,
+        "credit_id": "52fe4265c3a36847f801b503",
+        "name": "Mariella Oliveri",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Roswitha"
+      }
+    ],
+    "crew": [
+      {
+        "id": 10249,
+        "credit_id": "52fe4265c3a36847f801b497",
+        "department": "Directing",
+        "name": "Volker Schlöndorff",
+        "job": "Director",
+        "profile_path": "/5os3QPgtEJANkN9tNyBYcR86gHD.jpg"
+      },
+      {
+        "id": 9747,
+        "credit_id": "52fe4265c3a36847f801b49d",
+        "department": "Writing",
+        "name": "Jean-Claude Carrière",
+        "job": "Screenplay",
+        "profile_path": "/pDSSOw4EPaRcnObHIuV0gdiBxtw.jpg"
+      },
+      {
+        "id": 10251,
+        "credit_id": "52fe4265c3a36847f801b4a3",
+        "department": "Writing",
+        "name": "Günter Grass",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2304,
+        "credit_id": "52fe4265c3a36847f801b4a9",
+        "department": "Production",
+        "name": "Anatole Dauman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2704,
+        "credit_id": "52fe4265c3a36847f801b4af",
+        "department": "Sound",
+        "name": "Maurice Jarre",
+        "job": "Original Music Composer",
+        "profile_path": "/yJDDi7RKlxHjb7g8NZTEhnS4drG.jpg"
+      },
+      {
+        "id": 10253,
+        "credit_id": "52fe4265c3a36847f801b4b5",
+        "department": "Camera",
+        "name": "Igor Luther",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5785,
+        "credit_id": "52fe4265c3a36847f801b4bb",
+        "department": "Editing",
+        "name": "Suzanne Baron",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10249,
+        "credit_id": "52fe4265c3a36847f801b509",
+        "department": "Writing",
+        "name": "Volker Schlöndorff",
+        "job": "Screenplay",
+        "profile_path": "/5os3QPgtEJANkN9tNyBYcR86gHD.jpg"
+      },
+      {
+        "id": 52587,
+        "credit_id": "52fe4265c3a36847f801b50f",
+        "department": "Production",
+        "name": "Franz Seitz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 52587,
+        "credit_id": "52fe4265c3a36847f801b515",
+        "department": "Writing",
+        "name": "Franz Seitz",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 142,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "he",
+      "name": "עִבְרִית"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 659,
+  "production_countries": [
+    {
+      "name": "Serbia and Montenegro",
+      "iso_3166_1": "CS"
+    },
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Poland",
+      "iso_3166_1": "PL"
+    }
+  ],
+  "title": "The Tin Drum",
+  "overview": "Oskar Matzerath, son of a local dealer, is a most unusual boy. Equipped with full intellect right from his birth he decides at his third birthday not to grow up as he sees the crazy world around him at the eve of World War II. So he refuses the society and his tin drum symbolizes his protest against the middle-class mentality of his family and neighborhood, which stand for all passive people in Nazi Germany at that time. However, (almost) nobody listens to him, so the catastrophe goes on...",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0078875",
+  "release_date": "1979-05-03",
+  "original_title": "Die Blechtrommel",
+  "vote_count": 9,
+  "poster_path": "/a8nMoL9LRc90IPZ4E7MmLBYkW8S.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.42303337235586"
+}

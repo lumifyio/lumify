@@ -1,0 +1,292 @@
+{
+  "budget": 22000000,
+  "vote_average": 6.3,
+  "backdrop_path": "/rgyMubnjg883VdJUKKwASijyAFc.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 723,
+        "order": 0,
+        "credit_id": "52fe422dc3a36847f8009f2f",
+        "name": "Patrick Swayze",
+        "cast_id": 2,
+        "profile_path": "/pPVUEZDu6s4IklouPfzLlLIsB3T.jpg",
+        "character": "Sam Wheat"
+      },
+      {
+        "id": 3416,
+        "order": 1,
+        "credit_id": "52fe422dc3a36847f8009f33",
+        "name": "Demi Moore",
+        "cast_id": 3,
+        "profile_path": "/eLNoOYnxvhpV0BMSkNNnyyo5In7.jpg",
+        "character": "Molly Jensen"
+      },
+      {
+        "id": 3417,
+        "order": 3,
+        "credit_id": "52fe422dc3a36847f8009f9f",
+        "name": "Tony Goldwyn",
+        "cast_id": 25,
+        "profile_path": "/cva5VMPST7EdYAYiMO7To277GCZ.jpg",
+        "character": "Carl Bruner"
+      },
+      {
+        "id": 2395,
+        "order": 4,
+        "credit_id": "52fe422dc3a36847f8009fa3",
+        "name": "Whoopi Goldberg",
+        "cast_id": 26,
+        "profile_path": "/n3lF8w4X4rDa4J2LMDIxMEcuUeH.jpg",
+        "character": "Oda Mae Brown"
+      },
+      {
+        "id": 3418,
+        "order": 5,
+        "credit_id": "52fe422dc3a36847f8009f37",
+        "name": "Vincent Schiavelli",
+        "cast_id": 4,
+        "profile_path": "/9VAmZfthJ8pbDsJE8cJxIpnFcQy.jpg",
+        "character": "Subway Ghost"
+      },
+      {
+        "id": 3419,
+        "order": 6,
+        "credit_id": "52fe422dc3a36847f8009f3b",
+        "name": "Vivian Bonnell",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Ortisha"
+      },
+      {
+        "id": 3420,
+        "order": 7,
+        "credit_id": "52fe422dc3a36847f8009f3f",
+        "name": "Armelia McQueen",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Oda Mae's Sister"
+      },
+      {
+        "id": 3422,
+        "order": 8,
+        "credit_id": "52fe422dc3a36847f8009f43",
+        "name": "Gail Boggs",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Oda Mae's Sister"
+      },
+      {
+        "id": 17401,
+        "order": 9,
+        "credit_id": "52fe422dc3a36847f8009f47",
+        "name": "Stephen Root",
+        "cast_id": 8,
+        "profile_path": "/sceCvLiv8xe2jQzrVn39wvosVHG.jpg",
+        "character": "Police Sgt."
+      },
+      {
+        "id": 3424,
+        "order": 9,
+        "credit_id": "52fe422dc3a36847f8009f4b",
+        "name": "Angelina Estrada",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Rosa Santiago"
+      },
+      {
+        "id": 3425,
+        "order": 10,
+        "credit_id": "52fe422dc3a36847f8009f4f",
+        "name": "Augie Blunt",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Orlando"
+      },
+      {
+        "id": 3426,
+        "order": 11,
+        "credit_id": "52fe422dc3a36847f8009f53",
+        "name": "Derek Thompson",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Ortisha's Friend"
+      },
+      {
+        "id": 3432,
+        "order": 12,
+        "credit_id": "52fe422dc3a36847f8009f93",
+        "name": "Rick Aviles",
+        "cast_id": 22,
+        "profile_path": "/p4do7d8TKPbdQ2IkF5vx8uHLh93.jpg",
+        "character": "Willie Lopez"
+      },
+      {
+        "id": 3433,
+        "order": 13,
+        "credit_id": "52fe422dc3a36847f8009f97",
+        "name": "Phil Leeds",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Emergency Room Ghost"
+      },
+      {
+        "id": 3434,
+        "order": 14,
+        "credit_id": "52fe422dc3a36847f8009f9b",
+        "name": "Alma Beltran",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Woman Ghost"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1051,
+        "credit_id": "5333f448c3a3682abb001aea",
+        "department": "Costume & Make-Up",
+        "name": "Ruth Morley",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 3415,
+        "credit_id": "52fe422dc3a36847f8009f2b",
+        "department": "Directing",
+        "name": "Jerry Zucker",
+        "job": "Director",
+        "profile_path": "/41K8iRmKGYozbiRvybjW6tiwjyP.jpg"
+      },
+      {
+        "id": 3427,
+        "credit_id": "52fe422dc3a36847f8009f59",
+        "department": "Production",
+        "name": "Lisa Weinstein",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3428,
+        "credit_id": "52fe422dc3a36847f8009f5f",
+        "department": "Production",
+        "name": "Howard W. Koch",
+        "job": "Producer",
+        "profile_path": "/ocnNi4vGIENHuQFzv2ecoLjP9pB.jpg"
+      },
+      {
+        "id": 2704,
+        "credit_id": "52fe422dc3a36847f8009f65",
+        "department": "Sound",
+        "name": "Maurice Jarre",
+        "job": "Original Music Composer",
+        "profile_path": "/yJDDi7RKlxHjb7g8NZTEhnS4drG.jpg"
+      },
+      {
+        "id": 2723,
+        "credit_id": "52fe422dc3a36847f8009f6b",
+        "department": "Camera",
+        "name": "Adam Greenberg",
+        "job": "Director of Photography",
+        "profile_path": "/te3aqArBCPkza8DeJpDx0Rncen8.jpg"
+      },
+      {
+        "id": 2874,
+        "credit_id": "52fe422dc3a36847f8009f71",
+        "department": "Production",
+        "name": "Janet Hirshenson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3275,
+        "credit_id": "52fe422dc3a36847f8009f77",
+        "department": "Production",
+        "name": "Jane Jenkins",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3429,
+        "credit_id": "52fe422dc3a36847f8009f7d",
+        "department": "Art",
+        "name": "Jane Musky",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3430,
+        "credit_id": "52fe422dc3a36847f8009f83",
+        "department": "Sound",
+        "name": "Clayton Collins",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 154,
+        "credit_id": "52fe422dc3a36847f8009f89",
+        "department": "Editing",
+        "name": "Walter Murch",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3431,
+        "credit_id": "52fe422dc3a36847f8009f8f",
+        "department": "Writing",
+        "name": "Bruce Joel Rubin",
+        "job": "Author",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 127,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 251,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Ghost",
+  "overview": "Gothamites Sam and Molly see their romance shattered when a street thug kills Sam during a mugging. But love endures beyond the grave when a spectral Sam learns that Molly is in danger and he must find a way to warn her before she suffers his fate.",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0099653",
+  "release_date": "1990-07-12",
+  "original_title": "Ghost",
+  "vote_count": 227,
+  "poster_path": "/rtxy3cplRFPUvruZajpcoxOQ7bi.jpg",
+  "tagline": "A love that will last forever.",
+  "revenue": 505000000,
+  "popularity": "1.79722410974964"
+}

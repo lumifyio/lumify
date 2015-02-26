@@ -1,0 +1,272 @@
+{
+  "budget": 3000000,
+  "vote_average": 7.6,
+  "backdrop_path": "/oXaPao83XXVtyQbr1eH8HOqnz7x.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 514,
+        "order": 0,
+        "credit_id": "52fe424cc3a36847f80134fd",
+        "name": "Jack Nicholson",
+        "cast_id": 15,
+        "profile_path": "/z5kVLyn3sxj0wNRlFgVgT6deeRO.jpg",
+        "character": "Randle Patrick McMurphy"
+      },
+      {
+        "id": 7071,
+        "order": 1,
+        "credit_id": "52fe424cc3a36847f8013501",
+        "name": "Louise Fletcher",
+        "cast_id": 16,
+        "profile_path": "/A4Cn7LsuLlOXvOMKv5ez4ThyeZL.jpg",
+        "character": "Nurse Mildred Ratched"
+      },
+      {
+        "id": 518,
+        "order": 2,
+        "credit_id": "52fe424cc3a36847f8013505",
+        "name": "Danny DeVito",
+        "cast_id": 17,
+        "profile_path": "/zKuyzmKzPLG7RJo7lbbHjx6CCZc.jpg",
+        "character": "Martini"
+      },
+      {
+        "id": 7072,
+        "order": 3,
+        "credit_id": "52fe424cc3a36847f8013509",
+        "name": "William Redfield",
+        "cast_id": 18,
+        "profile_path": "/5Tk02lfq65M4GT4lfCCfSais2Qg.jpg",
+        "character": "Harding"
+      },
+      {
+        "id": 7077,
+        "order": 4,
+        "credit_id": "52fe424cc3a36847f801350d",
+        "name": "Scatman Crothers",
+        "cast_id": 19,
+        "profile_path": "/n3REW3TGbjLC8SbaZG7g48pm98n.jpg",
+        "character": "Orderly Turkle"
+      },
+      {
+        "id": 1370,
+        "order": 5,
+        "credit_id": "52fe424cc3a36847f8013511",
+        "name": "Brad Dourif",
+        "cast_id": 20,
+        "profile_path": "/6pqeGxtWEdDjYsnQfUkmzXLlDvs.jpg",
+        "character": "Billy Bibbit"
+      },
+      {
+        "id": 1062,
+        "order": 6,
+        "credit_id": "52fe424cc3a36847f8013515",
+        "name": "Christopher Lloyd",
+        "cast_id": 21,
+        "profile_path": "/iQzG9apaIsHnn7iGrer3YEDp8Zo.jpg",
+        "character": "Taber"
+      },
+      {
+        "id": 68301,
+        "order": 7,
+        "credit_id": "52fe424cc3a36847f8013519",
+        "name": "Will Sampson",
+        "cast_id": 22,
+        "profile_path": "/qcufMVWjaK0jlcDkkUZ6Kawvj2l.jpg",
+        "character": "Chief Bromden"
+      },
+      {
+        "id": 7075,
+        "order": 8,
+        "credit_id": "52fe424cc3a36847f801351d",
+        "name": "Dean R. Brooks",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Dr. John Spivey"
+      },
+      {
+        "id": 7073,
+        "order": 9,
+        "credit_id": "52fe424cc3a36847f8013521",
+        "name": "Michael Berryman",
+        "cast_id": 24,
+        "profile_path": "/vXvztwbkFc0Pz8ty0Jlaomo8P10.jpg",
+        "character": "Ellis"
+      },
+      {
+        "id": 7085,
+        "order": 10,
+        "credit_id": "52fe424cc3a36847f8013525",
+        "name": "Sydney Lassick",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Charlie Cheswick"
+      },
+      {
+        "id": 7079,
+        "order": 11,
+        "credit_id": "52fe424cc3a36847f8013529",
+        "name": "William Duell",
+        "cast_id": 26,
+        "profile_path": "/1X6Qj2BQyy6QniGx0P73t18UxRk.jpg",
+        "character": "Jim Sefelt"
+      },
+      {
+        "id": 3418,
+        "order": 12,
+        "credit_id": "52fe424cc3a36847f801352d",
+        "name": "Vincent Schiavelli",
+        "cast_id": 27,
+        "profile_path": "/9VAmZfthJ8pbDsJE8cJxIpnFcQy.jpg",
+        "character": "Fredrickson"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3974,
+        "credit_id": "52fe424cc3a36847f80134ab",
+        "department": "Directing",
+        "name": "Miloš Forman",
+        "job": "Director",
+        "profile_path": "/nKnsrK9h02F1QlMetkyr9R45VGM.jpg"
+      },
+      {
+        "id": 7064,
+        "credit_id": "52fe424cc3a36847f80134b1",
+        "department": "Writing",
+        "name": "Ken Kesey",
+        "job": "Novel",
+        "profile_path": "/7gqESU3i1aG6dUwAOwmaiBwqWkc.jpg"
+      },
+      {
+        "id": 4181,
+        "credit_id": "52fe424cc3a36847f80134b7",
+        "department": "Writing",
+        "name": "Bo Goldman",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7065,
+        "credit_id": "52fe424cc3a36847f80134bd",
+        "department": "Writing",
+        "name": "Lawrence Hauben",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3392,
+        "credit_id": "52fe424cc3a36847f80134c3",
+        "department": "Production",
+        "name": "Michael Douglas",
+        "job": "Producer",
+        "profile_path": "/nmlitv4g2jXO3sJrnA9g980j2uc.jpg"
+      },
+      {
+        "id": 1310,
+        "credit_id": "52fe424cc3a36847f80134c9",
+        "department": "Production",
+        "name": "Saul Zaentz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7066,
+        "credit_id": "52fe424cc3a36847f80134cf",
+        "department": "Sound",
+        "name": "Jack Nitzsche",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7067,
+        "credit_id": "52fe424cc3a36847f80134d5",
+        "department": "Camera",
+        "name": "Haskell Wexler",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7068,
+        "credit_id": "52fe424cc3a36847f80134db",
+        "department": "Editing",
+        "name": "Sheldon Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3394,
+        "credit_id": "52fe424cc3a36847f80134e1",
+        "department": "Editing",
+        "name": "Lynzee Klingman",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 597,
+        "credit_id": "52fe424cc3a36847f80134e7",
+        "department": "Production",
+        "name": "Jane Feinberg",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 598,
+        "credit_id": "52fe424cc3a36847f80134ed",
+        "department": "Production",
+        "name": "Mike Fenton",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7069,
+        "credit_id": "52fe424cc3a36847f80134f3",
+        "department": "Sound",
+        "name": "Pat Jackson",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7070,
+        "credit_id": "52fe424cc3a36847f80134f9",
+        "department": "Crew",
+        "name": "Alan Gibbs",
+        "job": "Stunts",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 133,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 510,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "One Flew Over the Cuckoo's Nest",
+  "overview": "While serving time for insanity at a state mental hospital, implacable rabble-rouser Randle Patrick McMurphy inspires his fellow patients to rebel against the authoritarian rule of head nurse Mildred Ratched.",
+  "production_companies": [{
+    "id": 286,
+    "name": "Fantasy Films"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0073486",
+  "release_date": "1975-11-18",
+  "original_title": "One Flew Over the Cuckoo's Nest",
+  "vote_count": 619,
+  "poster_path": "/srr59GKJdDXPwnWlew9NoYfOvYV.jpg",
+  "tagline": "If he's crazy, what does that make you?",
+  "revenue": 108981275,
+  "popularity": "1.91173818577693"
+}

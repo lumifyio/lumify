@@ -1,0 +1,13 @@
+{
+  "id": 490,
+  "logo_path": null,
+  "description": null,
+  "name": "New Regency Productions",
+  "parent_company": {
+    "id": 508,
+    "logo_path": "/7PzJdsLGlR7oW4J0J5Xcd0pHGRg.png",
+    "name": "Regency Enterprises"
+  },
+  "homepage": "",
+  "headquarters": " Los Angeles, California"
+}

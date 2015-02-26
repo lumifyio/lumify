@@ -1,0 +1,159 @@
+{
+  "budget": 0,
+  "vote_average": 8.3,
+  "backdrop_path": "/65lyTlGmjsfyd5v3yVuXitxAEfz.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 13904,
+        "order": 0,
+        "credit_id": "52fe428bc3a36847f8026e8b",
+        "name": "Louise Brooks",
+        "cast_id": 7,
+        "profile_path": "/9FaEfGBNEUwSfS6HNYW9C6rZ78s.jpg",
+        "character": "Lulu"
+      },
+      {
+        "id": 13905,
+        "order": 1,
+        "credit_id": "52fe428bc3a36847f8026e8f",
+        "name": "Fritz Kortner",
+        "cast_id": 8,
+        "profile_path": "/vwIqQO9Cj5vtrEJb2u9CNdqMfwJ.jpg",
+        "character": "Dr. Peter Schön"
+      },
+      {
+        "id": 13906,
+        "order": 2,
+        "credit_id": "52fe428bc3a36847f8026e93",
+        "name": "Francis Lederer",
+        "cast_id": 9,
+        "profile_path": "/6iRKyjyMYARe63CwuWj6d14o8j9.jpg",
+        "character": "Alwa Schön"
+      },
+      {
+        "id": 13907,
+        "order": 3,
+        "credit_id": "52fe428bc3a36847f8026e97",
+        "name": "Carl Goetz",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Schigolch"
+      },
+      {
+        "id": 13908,
+        "order": 4,
+        "credit_id": "52fe428bc3a36847f8026e9b",
+        "name": "Krafft-Raschig",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Rodrigo Quast"
+      },
+      {
+        "id": 13909,
+        "order": 5,
+        "credit_id": "52fe428bc3a36847f8026e9f",
+        "name": "Alice Roberts",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Anna Geschwitz"
+      }
+    ],
+    "crew": [
+      {
+        "id": 13899,
+        "credit_id": "52fe428ac3a36847f8026e69",
+        "department": "Directing",
+        "name": "G.W. Pabst",
+        "job": "Director",
+        "profile_path": "/bClbSJ23RmnZuELDzLG2a9WiLjx.jpg"
+      },
+      {
+        "id": 13900,
+        "credit_id": "52fe428ac3a36847f8026e6f",
+        "department": "Writing",
+        "name": "Frank Wedekind",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 13901,
+        "credit_id": "52fe428ac3a36847f8026e75",
+        "department": "Writing",
+        "name": "Ladislaus Vajda",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 13902,
+        "credit_id": "52fe428ac3a36847f8026e7b",
+        "department": "Production",
+        "name": "Seymour Nebenzal",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9837,
+        "credit_id": "52fe428ac3a36847f8026e81",
+        "department": "Camera",
+        "name": "Günther Krampf",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 13903,
+        "credit_id": "52fe428bc3a36847f8026e87",
+        "department": "Art",
+        "name": "Andrej Andrejew",
+        "job": "Art Direction",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 133,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 905,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Pandora's Box",
+  "overview": "The rise and inevitable fall of an amoral but naive young woman whose insouciant eroticism inspires lust and violence in those around her.",
+  "production_companies": [{
+    "id": 4903,
+    "name": "Nero Films"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0018737",
+  "release_date": "1929-01-30",
+  "original_title": "Die Büchse der Pandora",
+  "vote_count": 4,
+  "poster_path": "/vW70vJFKGM8K7qjTCigLKehJRJP.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.251472936655391"
+}

@@ -1,0 +1,293 @@
+{
+  "budget": 0,
+  "vote_average": 7,
+  "backdrop_path": "/oRSocDAAADYnCkI4jiUeRnlCnwG.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 37,
+      "name": "Western"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 14528,
+        "order": 0,
+        "credit_id": "52fe4294c3a36847f8029c3f",
+        "name": "Yul Brynner",
+        "cast_id": 15,
+        "profile_path": "/6UerE2q3iPcr4Y1ZsZJEf1Aom2g.jpg",
+        "character": "Chris Adams"
+      },
+      {
+        "id": 3265,
+        "order": 1,
+        "credit_id": "52fe4294c3a36847f8029c43",
+        "name": "Eli Wallach",
+        "cast_id": 16,
+        "profile_path": "/s79fK5MSt7xumFuX3nO9RS6CkNp.jpg",
+        "character": "Calvera"
+      },
+      {
+        "id": 13565,
+        "order": 2,
+        "credit_id": "52fe4294c3a36847f8029c47",
+        "name": "Steve McQueen",
+        "cast_id": 17,
+        "profile_path": "/7ghOqGqA5OAFD2bvC8s0ZsNS0X9.jpg",
+        "character": "Vin"
+      },
+      {
+        "id": 4960,
+        "order": 3,
+        "credit_id": "52fe4294c3a36847f8029c4b",
+        "name": "Charles Bronson",
+        "cast_id": 18,
+        "profile_path": "/hxZR2w0LXX47VKtxibDyZDsTAkH.jpg",
+        "character": "Bernardo O'Reilly"
+      },
+      {
+        "id": 14060,
+        "order": 4,
+        "credit_id": "52fe4294c3a36847f8029c4f",
+        "name": "Robert Vaughn",
+        "cast_id": 19,
+        "profile_path": "/tqnTA5PsxCvqZRFEyEyXAcEPQx4.jpg",
+        "character": "Lee"
+      },
+      {
+        "id": 14529,
+        "order": 5,
+        "credit_id": "52fe4294c3a36847f8029c53",
+        "name": "Brad Dexter",
+        "cast_id": 20,
+        "profile_path": "/cY9KS4CfudOllMMB26jPpnii89w.jpg",
+        "character": "Harry Luck"
+      },
+      {
+        "id": 5563,
+        "order": 6,
+        "credit_id": "52fe4294c3a36847f8029c57",
+        "name": "James Coburn",
+        "cast_id": 21,
+        "profile_path": "/4VkbAYRB5FRt3ZpEsOQ5TbuvRz9.jpg",
+        "character": "Britt"
+      },
+      {
+        "id": 5789,
+        "order": 7,
+        "credit_id": "52fe4294c3a36847f8029c6f",
+        "name": "Horst Buchholz",
+        "cast_id": 27,
+        "profile_path": "/bNyMxUU2aVaqDfoqRhnIjQJe3jo.jpg",
+        "character": "Chico"
+      },
+      {
+        "id": 14530,
+        "order": 8,
+        "credit_id": "52fe4294c3a36847f8029c5b",
+        "name": "Natividad Vacío",
+        "cast_id": 22,
+        "profile_path": "/aNrydVspldovt5KixcVNNhj0Ad0.jpg",
+        "character": "Tomas"
+      },
+      {
+        "id": 14531,
+        "order": 9,
+        "credit_id": "52fe4294c3a36847f8029c5f",
+        "name": "Rico Alaniz",
+        "cast_id": 23,
+        "profile_path": "/vMfzcr6Ip1FCR32FNVrWoV6LpFT.jpg",
+        "character": "Sotero"
+      },
+      {
+        "id": 14532,
+        "order": 10,
+        "credit_id": "52fe4294c3a36847f8029c63",
+        "name": "Jorge Martínez de Hoyos",
+        "cast_id": 24,
+        "profile_path": "/eATu54ygQ8XCwB6YJHDhhRgFshW.jpg",
+        "character": "Hilario"
+      },
+      {
+        "id": 14533,
+        "order": 11,
+        "credit_id": "52fe4294c3a36847f8029c67",
+        "name": "Vladimir Sokoloff",
+        "cast_id": 25,
+        "profile_path": "/pbgNdX1vgSLIbB2phKiuOQlTGAi.jpg",
+        "character": "Old man"
+      },
+      {
+        "id": 14534,
+        "order": 12,
+        "credit_id": "52fe4294c3a36847f8029c6b",
+        "name": "Rosenda Monteros",
+        "cast_id": 26,
+        "profile_path": "/zQOnJ5UABbl6PsmxwzuharI7ovn.jpg",
+        "character": "Petra"
+      }
+    ],
+    "crew": [
+      {
+        "id": 14520,
+        "credit_id": "52fe4294c3a36847f8029bed",
+        "department": "Directing",
+        "name": "John Sturges",
+        "job": "Director",
+        "profile_path": "/addeAxOXQmqXAZ7FB6ztGQ9daWC.jpg"
+      },
+      {
+        "id": 14521,
+        "credit_id": "52fe4294c3a36847f8029bf3",
+        "department": "Writing",
+        "name": "William Roberts",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 14520,
+        "credit_id": "52fe4294c3a36847f8029bf9",
+        "department": "Production",
+        "name": "John Sturges",
+        "job": "Producer",
+        "profile_path": "/addeAxOXQmqXAZ7FB6ztGQ9daWC.jpg"
+      },
+      {
+        "id": 14522,
+        "credit_id": "52fe4294c3a36847f8029bff",
+        "department": "Production",
+        "name": "Louis Morheim",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14523,
+        "credit_id": "52fe4294c3a36847f8029c05",
+        "department": "Production",
+        "name": "Walter Mirisch",
+        "job": "Executive Producer",
+        "profile_path": "/vo1wXRoFhrD9qtarvvchZkcOKyX.jpg"
+      },
+      {
+        "id": 7182,
+        "credit_id": "52fe4294c3a36847f8029c0b",
+        "department": "Sound",
+        "name": "Elmer Bernstein",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3148,
+        "credit_id": "52fe4294c3a36847f8029c11",
+        "department": "Camera",
+        "name": "Charles Lang",
+        "job": "Director of Photography",
+        "profile_path": "/1k74XckQqxOwdPYvhvhEdZ9jl4l.jpg"
+      },
+      {
+        "id": 3643,
+        "credit_id": "52fe4294c3a36847f8029c17",
+        "department": "Editing",
+        "name": "Ferris Webster",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11970,
+        "credit_id": "52fe4294c3a36847f8029c1d",
+        "department": "Art",
+        "name": "Edward Fitzgerald",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 14524,
+        "credit_id": "52fe4294c3a36847f8029c23",
+        "department": "Art",
+        "name": "Rafael Suárez",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 14056,
+        "credit_id": "52fe4294c3a36847f8029c29",
+        "department": "Costume & Make-Up",
+        "name": "Emile LaVigne",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 14526,
+        "credit_id": "52fe4294c3a36847f8029c2f",
+        "department": "Costume & Make-Up",
+        "name": "Daniel C. Striepeke",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 878,
+        "credit_id": "52fe4294c3a36847f8029c35",
+        "department": "Sound",
+        "name": "Jack Solomon",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 14527,
+        "credit_id": "52fe4294c3a36847f8029c3b",
+        "department": "Sound",
+        "name": "Rafael Ruiz Esparza",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 128,
+  "spoken_languages": [
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 966,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Magnificent Seven",
+  "overview": "The Magnificent Seven is a western film from John Sturges and a remake of the Akira Kurosawa's film The Seven Samurai from 1954.",
+  "production_companies": [{
+    "id": 219,
+    "name": "The Mirisch Corporation"
+  }],
+  "belongs_to_collection": {
+    "id": 110021,
+    "backdrop_path": "/jwevUd9BsWY9QTJZL5bFjWPoyqZ.jpg",
+    "name": "The Magnificent Seven Collection",
+    "poster_path": "/qI64OS0Mqloq3wm1x4TWxXEDnVQ.jpg"
+  },
+  "imdb_id": "tt0054047",
+  "release_date": "1960-10-23",
+  "original_title": "The Magnificent Seven",
+  "vote_count": 77,
+  "poster_path": "/e0jkmQ2iyv4zvcNeczMTmjspCUI.jpg",
+  "tagline": "They were seven - And they fought like seven hundred!",
+  "revenue": 0,
+  "popularity": "0.582883476319076"
+}

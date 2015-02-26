@@ -1,0 +1,310 @@
+{
+  "budget": 2000000,
+  "vote_average": 7.4,
+  "backdrop_path": "/rGQ5S7T4u1VHRx9yZ11ff8sz2TT.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 258,
+        "order": 0,
+        "credit_id": "52fe4211c3a36847f8001741",
+        "name": "Gael García Bernal",
+        "cast_id": 2,
+        "profile_path": "/o4sdHKTBbF8GpooIwp5bvliubyY.jpg",
+        "character": "Octavio"
+      },
+      {
+        "id": 259,
+        "order": 1,
+        "credit_id": "52fe4211c3a36847f8001745",
+        "name": "Vanessa Bauche",
+        "cast_id": 3,
+        "profile_path": "/uO2cH3HN7avXrW5pJw0MqvNvuGd.jpg",
+        "character": "Susana"
+      },
+      {
+        "id": 261,
+        "order": 2,
+        "credit_id": "52fe4211c3a36847f8001749",
+        "name": "Goya Toledo",
+        "cast_id": 4,
+        "profile_path": "/rskTnamfwea5xhtEelpRlqo1tCD.jpg",
+        "character": "Valeria"
+      },
+      {
+        "id": 262,
+        "order": 3,
+        "credit_id": "52fe4211c3a36847f800174d",
+        "name": "Alvaro Guerrero",
+        "cast_id": 5,
+        "profile_path": "/d2k2Z0XgSIkBJxAuedS5yOF9O1U.jpg",
+        "character": "Daniel"
+      },
+      {
+        "id": 263,
+        "order": 4,
+        "credit_id": "52fe4211c3a36847f8001751",
+        "name": "Emilio Echevarría",
+        "cast_id": 6,
+        "profile_path": "/iGgExtFoyuIAmll19gEmorWQAPX.jpg",
+        "character": "El Chivo"
+      },
+      {
+        "id": 264,
+        "order": 5,
+        "credit_id": "52fe4211c3a36847f8001755",
+        "name": "Jorge Salinas",
+        "cast_id": 7,
+        "profile_path": "/yoaFIYfm983R3aZNAlDN9o2HSBW.jpg",
+        "character": "Luis"
+      },
+      {
+        "id": 265,
+        "order": 6,
+        "credit_id": "52fe4211c3a36847f8001759",
+        "name": "Rodrigo Murray",
+        "cast_id": 8,
+        "profile_path": "/qNUDwOV5TiEcKnugCBMofIIhgvV.jpg",
+        "character": "Gustavo"
+      },
+      {
+        "id": 266,
+        "order": 7,
+        "credit_id": "52fe4211c3a36847f800175d",
+        "name": "Humberto Busto",
+        "cast_id": 9,
+        "profile_path": "/u9Y1oxHrkj6J69HDTWPCgtMcIrp.jpg",
+        "character": "Jorge"
+      },
+      {
+        "id": 267,
+        "order": 8,
+        "credit_id": "52fe4211c3a36847f8001761",
+        "name": "Gerardo Campbell",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Mauricio"
+      },
+      {
+        "id": 268,
+        "order": 9,
+        "credit_id": "52fe4211c3a36847f8001765",
+        "name": "Rosa María Bianchi",
+        "cast_id": 11,
+        "profile_path": "/mY8WdeesTuCBLjefIiJzz9wkknv.jpg",
+        "character": "Tía Luisa"
+      },
+      {
+        "id": 269,
+        "order": 10,
+        "credit_id": "52fe4211c3a36847f8001769",
+        "name": "Dunia Saldívar",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Mama Susana"
+      },
+      {
+        "id": 270,
+        "order": 11,
+        "credit_id": "52fe4211c3a36847f800176d",
+        "name": "Adriana Barraza",
+        "cast_id": 13,
+        "profile_path": "/8g2uMVkzZSTSvmeBbCaYLmByVAS.jpg",
+        "character": "Mama Octavio"
+      },
+      {
+        "id": 271,
+        "order": 12,
+        "credit_id": "52fe4211c3a36847f8001771",
+        "name": "José Sefami",
+        "cast_id": 14,
+        "profile_path": "/3HBwhHXeCBOkf4Cx0jO5MEOmaf6.jpg",
+        "character": "Leonardo"
+      },
+      {
+        "id": 272,
+        "order": 13,
+        "credit_id": "52fe4211c3a36847f8001775",
+        "name": "Lourdes Echevarría",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Maru"
+      },
+      {
+        "id": 260,
+        "order": 14,
+        "credit_id": "52fe4211c3a36847f80017a9",
+        "name": "Marco Pérez",
+        "cast_id": 24,
+        "profile_path": "/348xOvXxkEiKXa5PMSWgBBzkHyw.jpg",
+        "character": "Ramiro"
+      }
+    ],
+    "crew": [
+      {
+        "id": 223,
+        "credit_id": "52fe4211c3a36847f800173d",
+        "department": "Directing",
+        "name": "Alejandro González Iñárritu",
+        "job": "Director",
+        "profile_path": "/qh6Bom66huviIJ2HheE29kI7y96.jpg"
+      },
+      {
+        "id": 273,
+        "credit_id": "52fe4211c3a36847f800177b",
+        "department": "Writing",
+        "name": "Guillermo Arriaga",
+        "job": "Author",
+        "profile_path": "/iWD5H4Q1L7zJ2woy9bYNjfibtUA.jpg"
+      },
+      {
+        "id": 275,
+        "credit_id": "52fe4211c3a36847f8001781",
+        "department": "Camera",
+        "name": "Rodrigo Prieto",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 223,
+        "credit_id": "52fe4211c3a36847f8001787",
+        "department": "Production",
+        "name": "Alejandro González Iñárritu",
+        "job": "Producer",
+        "profile_path": "/qh6Bom66huviIJ2HheE29kI7y96.jpg"
+      },
+      {
+        "id": 276,
+        "credit_id": "52fe4211c3a36847f800178d",
+        "department": "Editing",
+        "name": "Luis Carballar",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 277,
+        "credit_id": "52fe4211c3a36847f8001793",
+        "department": "Editing",
+        "name": "Fernando Pérez Unda",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 223,
+        "credit_id": "52fe4211c3a36847f8001799",
+        "department": "Editing",
+        "name": "Alejandro González Iñárritu",
+        "job": "Editor",
+        "profile_path": "/qh6Bom66huviIJ2HheE29kI7y96.jpg"
+      },
+      {
+        "id": 278,
+        "credit_id": "52fe4211c3a36847f800179f",
+        "department": "Sound",
+        "name": "Gustavo Santaolalla",
+        "job": "Original Music Composer",
+        "profile_path": "/twrbjZlczKJDzwN6pYIo42YklsD.jpg"
+      },
+      {
+        "id": 279,
+        "credit_id": "52fe4211c3a36847f80017a5",
+        "department": "Sound",
+        "name": "Antonio Vega",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 273,
+        "credit_id": "52fe4211c3a36847f80017af",
+        "department": "Production",
+        "name": "Guillermo Arriaga",
+        "job": "Producer",
+        "profile_path": "/iWD5H4Q1L7zJ2woy9bYNjfibtUA.jpg"
+      },
+      {
+        "id": 1114886,
+        "credit_id": "52fe4211c3a36847f80017b5",
+        "department": "Production",
+        "name": "Raúl Olvera Ferrer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 989004,
+        "credit_id": "52fe4211c3a36847f80017bb",
+        "department": "Production",
+        "name": "Pelayo Gutiérrez",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1114887,
+        "credit_id": "52fe4211c3a36847f80017c1",
+        "department": "Production",
+        "name": "Mónica Lozano",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1114888,
+        "credit_id": "52fe4211c3a36847f80017c7",
+        "department": "Production",
+        "name": "Francisco González Compeán",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 69871,
+        "credit_id": "52fe4211c3a36847f80017cd",
+        "department": "Production",
+        "name": "Martha Sosa Elizondo",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 154,
+  "spoken_languages": [{
+    "iso_639_1": "es",
+    "name": "Español"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 55,
+  "production_countries": [{
+    "name": "Mexico",
+    "iso_3166_1": "MX"
+  }],
+  "title": "Amores Perros",
+  "overview": "Three interconnected stories about the different strata of life in Mexico City all resolve with a fatal car accident. Octavio is trying to raise enough money to run away with his sister-in-law, and decides to enter his dog Cofi into the world of dogfighting. After a dogfight goes bad, Octavio flees in his car, running a red light and causing the accident. Daniel and Valeria's new-found bliss is prematurely ended when she loses her leg in the accident. El Chivo is a homeless man who cares for stray dogs and is there to witness the collision. Amores Perros is the first film in Iñárritu's \"Death Trilogy\".",
+  "production_companies": [
+    {
+      "id": 5084,
+      "name": "Altavista Films"
+    },
+    {
+      "id": 11230,
+      "name": "Zeta Film"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0245712",
+  "release_date": "2000-03-14",
+  "original_title": "Amores perros",
+  "vote_count": 79,
+  "poster_path": "/8gEXmIzw1tDnBfOaCFPimkNIkmm.jpg",
+  "tagline": "Love. Betrayal. Death.",
+  "revenue": 21000000,
+  "popularity": "1.40997521377536"
+}

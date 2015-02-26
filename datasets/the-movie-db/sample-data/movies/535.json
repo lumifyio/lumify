@@ -1,0 +1,219 @@
+{
+  "budget": 7000000,
+  "vote_average": 5.6,
+  "backdrop_path": "/4hDK7V6YPX1LW91rNs3KS8r9Myf.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3130,
+        "order": 0,
+        "credit_id": "52fe424ec3a36847f801406f",
+        "name": "Jennifer Beals",
+        "cast_id": 2,
+        "profile_path": "/bEkrr1HIONx0aokHs9QHbdCz7zn.jpg",
+        "character": "Alex Owens"
+      },
+      {
+        "id": 8699,
+        "order": 1,
+        "credit_id": "52fe424ec3a36847f80140af",
+        "name": "Michael Nouri",
+        "cast_id": 13,
+        "profile_path": "/lAPEwuE9Cg6xSgcgO2M2pFJ3ul5.jpg",
+        "character": "Nick Hurley"
+      },
+      {
+        "id": 31114,
+        "order": 2,
+        "credit_id": "52fe424ec3a36847f80140b3",
+        "name": "Lilia Skala",
+        "cast_id": 14,
+        "profile_path": "/xTVtzJfWEivDmSAoJvL51a7Ynbj.jpg",
+        "character": "Hanna Long"
+      },
+      {
+        "id": 31115,
+        "order": 3,
+        "credit_id": "52fe424ec3a36847f80140b7",
+        "name": "Kyle T. Heffner",
+        "cast_id": 15,
+        "profile_path": "/9c8G4diZ3Nr8jClTANqMOwmTN9z.jpg",
+        "character": "Richie"
+      },
+      {
+        "id": 31116,
+        "order": 4,
+        "credit_id": "52fe424ec3a36847f80140bb",
+        "name": "Sunny Johnson",
+        "cast_id": 16,
+        "profile_path": "/mKFoSy6SFZzaXKcEy6guoqu9gWU.jpg",
+        "character": "Jeanie Szabo"
+      },
+      {
+        "id": 14738,
+        "order": 5,
+        "credit_id": "52fe424ec3a36847f80140bf",
+        "name": "Malcolm Danare",
+        "cast_id": 17,
+        "profile_path": "/6PQPp4Yim18xuNCBGQLg2cYAstY.jpg",
+        "character": "Cecil"
+      },
+      {
+        "id": 31117,
+        "order": 6,
+        "credit_id": "52fe424ec3a36847f80140c3",
+        "name": "Phil Bruns",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Frank Szabo"
+      },
+      {
+        "id": 31118,
+        "order": 7,
+        "credit_id": "52fe424ec3a36847f80140c7",
+        "name": "Don Brockett",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Pete"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7270,
+        "credit_id": "52fe424ec3a36847f801406b",
+        "department": "Directing",
+        "name": "Adrian Lyne",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 31113,
+        "credit_id": "52fe424ec3a36847f8014075",
+        "department": "Writing",
+        "name": "Thomas Hedley Jr.",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 10492,
+        "credit_id": "52fe424ec3a36847f801407b",
+        "department": "Writing",
+        "name": "Joe Eszterhas",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 771,
+        "credit_id": "52fe424ec3a36847f8014081",
+        "department": "Production",
+        "name": "Don Simpson",
+        "job": "Producer",
+        "profile_path": "/vYpPZLSh4ylzgP5KsEUnjt1UDRh.jpg"
+      },
+      {
+        "id": 770,
+        "credit_id": "52fe424ec3a36847f8014087",
+        "department": "Production",
+        "name": "Jerry Bruckheimer",
+        "job": "Producer",
+        "profile_path": "/lQu9eRzRX264j2LFQwvKC50wb9s.jpg"
+      },
+      {
+        "id": 1154,
+        "credit_id": "52fe424ec3a36847f801408d",
+        "department": "Sound",
+        "name": "Giorgio Moroder",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 9614,
+        "credit_id": "52fe424ec3a36847f8014093",
+        "department": "Camera",
+        "name": "Donald Peterman",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7534,
+        "credit_id": "52fe424ec3a36847f8014099",
+        "department": "Production",
+        "name": "Gretchen Rennell",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1049,
+        "credit_id": "52fe424ec3a36847f801409f",
+        "department": "Art",
+        "name": "Charles Rosen",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8867,
+        "credit_id": "52fe424ec3a36847f80140a5",
+        "department": "Art",
+        "name": "Marvin March",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 605,
+        "credit_id": "52fe424ec3a36847f80140ab",
+        "department": "Costume & Make-Up",
+        "name": "Michael Kaplan",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 95,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 535,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Flashdance",
+  "overview": "The popular 1980\u2019s dance movie that depicts the life of an exotic dancer with a side job as a welder who true desire is to get into ballet school. It\u2019s her dream to be a professional dancer and now is her chance. The film has a great soundtrack with an Oscar winning song.",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0085549",
+  "release_date": "1983-09-02",
+  "original_title": "Flashdance",
+  "vote_count": 37,
+  "poster_path": "/pW8tRnHJbZfobnEX16CjkOg8bAH.jpg",
+  "tagline": "When the dancer becomes the dance.",
+  "revenue": 90463574,
+  "popularity": "0.533432216943559"
+}

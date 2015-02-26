@@ -1,0 +1,250 @@
+{
+  "budget": 4000000,
+  "vote_average": 6.8,
+  "backdrop_path": "/dDTAbwvWJpHlblgjyPnKLQXOiHI.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2963,
+        "order": 0,
+        "credit_id": "52fe4245c3a36847f801117b",
+        "name": "Nicolas Cage",
+        "cast_id": 1,
+        "profile_path": "/zM9xqZgen8gRDN0ygJwkdiAwWWy.jpg",
+        "character": "Ben Sanderson"
+      },
+      {
+        "id": 1951,
+        "order": 1,
+        "credit_id": "52fe4245c3a36847f801117f",
+        "name": "Elisabeth Shue",
+        "cast_id": 2,
+        "profile_path": "/44AaIXkbZFkdhSW1kRdzCbfYk6c.jpg",
+        "character": "Sera"
+      },
+      {
+        "id": 6104,
+        "order": 2,
+        "credit_id": "52fe4245c3a36847f8011183",
+        "name": "Julian Sands",
+        "cast_id": 3,
+        "profile_path": "/hDb4UlbeTvvVK53Cmh7W0Ijo41h.jpg",
+        "character": "Yuri"
+      },
+      {
+        "id": 6105,
+        "order": 3,
+        "credit_id": "52fe4245c3a36847f8011187",
+        "name": "Richard Lewis",
+        "cast_id": 4,
+        "profile_path": "/zc2BlkPtYJAsIAVbZ4zQPEMW1t6.jpg",
+        "character": "Peter"
+      },
+      {
+        "id": 6106,
+        "order": 4,
+        "credit_id": "52fe4245c3a36847f801118b",
+        "name": "Steven Weber",
+        "cast_id": 5,
+        "profile_path": "/ujINzDjLNtELBSUkRHQgExzP4Fb.jpg",
+        "character": "Marc Nussbaum"
+      },
+      {
+        "id": 6107,
+        "order": 5,
+        "credit_id": "52fe4245c3a36847f801118f",
+        "name": "Kim Adams",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Sheila"
+      },
+      {
+        "id": 6108,
+        "order": 6,
+        "credit_id": "52fe4245c3a36847f8011193",
+        "name": "Emily Procter",
+        "cast_id": 7,
+        "profile_path": "/nZJypfLAXUg8Nn1GpBgbYVdqO4Y.jpg",
+        "character": "Debbie"
+      },
+      {
+        "id": 6109,
+        "order": 7,
+        "credit_id": "52fe4245c3a36847f8011197",
+        "name": "Stuart Regen",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Man At Bar"
+      },
+      {
+        "id": 3124,
+        "order": 8,
+        "credit_id": "52fe4245c3a36847f801119b",
+        "name": "Valeria Golino",
+        "cast_id": 9,
+        "profile_path": "/kK13NzfxGQBJ8Th9SiPbu0FFJq7.jpg",
+        "character": "Terri"
+      },
+      {
+        "id": 6110,
+        "order": 9,
+        "credit_id": "52fe4245c3a36847f801119f",
+        "name": "Graham Beckel",
+        "cast_id": 10,
+        "profile_path": "/hv1BySh6NFhR9dz1xtqdKn3gGCF.jpg",
+        "character": "L.A. Bartender"
+      },
+      {
+        "id": 6240,
+        "order": 10,
+        "credit_id": "52fe4245c3a36847f80111eb",
+        "name": "Mariska Hargitay",
+        "cast_id": 23,
+        "profile_path": "/kWXLbs6JCRhGVMxOUbdbobtbYwD.jpg",
+        "character": "Hooker at bar"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6111,
+        "credit_id": "52fe4245c3a36847f80111a5",
+        "department": "Directing",
+        "name": "Mike Figgis",
+        "job": "Director",
+        "profile_path": "/nIaxYZkNX6j70VQyHwzed1QxOXD.jpg"
+      },
+      {
+        "id": 6112,
+        "credit_id": "52fe4245c3a36847f80111ab",
+        "department": "Writing",
+        "name": "John O'Brien",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 6111,
+        "credit_id": "52fe4245c3a36847f80111b1",
+        "department": "Writing",
+        "name": "Mike Figgis",
+        "job": "Screenplay",
+        "profile_path": "/nIaxYZkNX6j70VQyHwzed1QxOXD.jpg"
+      },
+      {
+        "id": 6113,
+        "credit_id": "52fe4245c3a36847f80111b7",
+        "department": "Production",
+        "name": "Lila Cazès",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6114,
+        "credit_id": "52fe4245c3a36847f80111bd",
+        "department": "Production",
+        "name": "Marc S. Fischer",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6109,
+        "credit_id": "52fe4245c3a36847f80111c3",
+        "department": "Production",
+        "name": "Stuart Regen",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6115,
+        "credit_id": "52fe4245c3a36847f80111c9",
+        "department": "Production",
+        "name": "Paige Simpson",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6116,
+        "credit_id": "52fe4245c3a36847f80111cf",
+        "department": "Production",
+        "name": "Annie Stewart",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6111,
+        "credit_id": "52fe4245c3a36847f80111d5",
+        "department": "Sound",
+        "name": "Mike Figgis",
+        "job": "Original Music Composer",
+        "profile_path": "/nIaxYZkNX6j70VQyHwzed1QxOXD.jpg"
+      },
+      {
+        "id": 6117,
+        "credit_id": "52fe4245c3a36847f80111db",
+        "department": "Camera",
+        "name": "Declan Quinn",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6118,
+        "credit_id": "52fe4245c3a36847f80111e1",
+        "department": "Editing",
+        "name": "John Smith",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6119,
+        "credit_id": "52fe4245c3a36847f80111e7",
+        "department": "Production",
+        "name": "Carrie Frazier",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 112,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.mgm.com/title_title.do?title_star=LEAVINGL",
+  "id": 451,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Leaving Las Vegas",
+  "overview": "Ben Sanderson, an alcoholic Hollywood screenwriter who lost everything because of his drinking, arrives in Las Vegas to drink himself to death. There, he meets and forms an uneasy friendship and non-interference pact with prostitute Sera.",
+  "production_companies": [
+    {
+      "id": 15547,
+      "name": "Intial Productions"
+    },
+    {
+      "id": 60,
+      "name": "United Artists"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0113627",
+  "release_date": "1995-10-27",
+  "original_title": "Leaving Las Vegas",
+  "vote_count": 51,
+  "poster_path": "/mr8RrYUOExfYmM3NjO3sNkCfT2W.jpg",
+  "tagline": "I Love You... The Way You Are.",
+  "revenue": 49800000,
+  "popularity": "0.433756087075942"
+}

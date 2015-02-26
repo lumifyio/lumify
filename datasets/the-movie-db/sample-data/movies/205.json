@@ -1,0 +1,378 @@
+{
+  "budget": 17500000,
+  "vote_average": 6.7,
+  "backdrop_path": "/dQCTuhrP8bgsctRYeHSX21ceNX1.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1896,
+        "order": 0,
+        "credit_id": "52fe4226c3a36847f8007f07",
+        "name": "Don Cheadle",
+        "cast_id": 10,
+        "profile_path": "/4PvWfLvABO5n1ZfzK76vol9Bqae.jpg",
+        "character": "Paul Rusesabagina"
+      },
+      {
+        "id": 1733,
+        "order": 1,
+        "credit_id": "52fe4226c3a36847f8007f0b",
+        "name": "Nick Nolte",
+        "cast_id": 11,
+        "profile_path": "/mecF0UBz1RSnf1ggd0ltYoCwqd2.jpg",
+        "character": "Colonel Oliver"
+      },
+      {
+        "id": 2598,
+        "order": 2,
+        "credit_id": "52fe4226c3a36847f8007f0f",
+        "name": "Sophie Okonedo",
+        "cast_id": 12,
+        "profile_path": "/5Yo3KGum1txRLmt6JZwQ5TYSIsg.jpg",
+        "character": "Tatiana Rusesabagina"
+      },
+      {
+        "id": 73421,
+        "order": 3,
+        "credit_id": "52fe4226c3a36847f8007f13",
+        "name": "Joaquin Phoenix",
+        "cast_id": 13,
+        "profile_path": "/3IhxPwyUovZGbsdwhcaU0Kvm37J.jpg",
+        "character": "Jack Daglish"
+      },
+      {
+        "id": 1003,
+        "order": 4,
+        "credit_id": "52fe4226c3a36847f8007f17",
+        "name": "Jean Reno",
+        "cast_id": 14,
+        "profile_path": "/cdsN5efCYGQWlPrj7vFlZRBTR16.jpg",
+        "character": "Sabena Airlines President, Mr. Tillens"
+      },
+      {
+        "id": 2599,
+        "order": 5,
+        "credit_id": "52fe4226c3a36847f8007f1b",
+        "name": "Ofentse Modiselle",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Roger Rusesabagina"
+      },
+      {
+        "id": 2600,
+        "order": 6,
+        "credit_id": "52fe4226c3a36847f8007f1f",
+        "name": "Mathabo Pieterson",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Diane Rusesabagina"
+      },
+      {
+        "id": 2601,
+        "order": 7,
+        "credit_id": "52fe4226c3a36847f8007f23",
+        "name": "Neil McCarthy",
+        "cast_id": 17,
+        "profile_path": "/sNQxZARN2qUtNzL28oyJnmuZWGe.jpg",
+        "character": "Jean Jacques"
+      },
+      {
+        "id": 2602,
+        "order": 8,
+        "credit_id": "52fe4226c3a36847f8007f27",
+        "name": "Desmond Dube",
+        "cast_id": 18,
+        "profile_path": "/tT23u6yoJdVwbvA4RV20WmFMud8.jpg",
+        "character": "Dube"
+      },
+      {
+        "id": 2603,
+        "order": 9,
+        "credit_id": "52fe4226c3a36847f8007f2b",
+        "name": "Hakeem Kae-Kazim",
+        "cast_id": 19,
+        "profile_path": "/4xqMIMeBDBjFAj87VYyza1Ox6SS.jpg",
+        "character": "George Rutaganda"
+      },
+      {
+        "id": 2606,
+        "order": 10,
+        "credit_id": "52fe4226c3a36847f8007f2f",
+        "name": "Tony Kgoroge",
+        "cast_id": 20,
+        "profile_path": "/6SYs40gVJNmzKjz4kFQOwXG5BH6.jpg",
+        "character": "Gregoire"
+      },
+      {
+        "id": 2607,
+        "order": 11,
+        "credit_id": "52fe4226c3a36847f8007f33",
+        "name": "Fana Mokoena",
+        "cast_id": 21,
+        "profile_path": "/skuKjL1Ep1SHrZuNl0lYVfZ9VM0.jpg",
+        "character": "General Bizimungu"
+      },
+      {
+        "id": 2608,
+        "order": 12,
+        "credit_id": "52fe4226c3a36847f8007f37",
+        "name": "Lebo Mashile",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Odette"
+      },
+      {
+        "id": 832,
+        "order": 13,
+        "credit_id": "52fe4226c3a36847f8007f3b",
+        "name": "Antonio David Lyons",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Thomas Mirama"
+      },
+      {
+        "id": 2609,
+        "order": 14,
+        "credit_id": "52fe4226c3a36847f8007f3f",
+        "name": "Leleti Khumalo",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Fedens"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2589,
+        "credit_id": "52fe4226c3a36847f8007ed9",
+        "department": "Directing",
+        "name": "Terry George",
+        "job": "Director",
+        "profile_path": "/bQDk9TM3y1pswHHKLoeb9bV88S9.jpg"
+      },
+      {
+        "id": 2590,
+        "credit_id": "52fe4226c3a36847f8007edf",
+        "department": "Writing",
+        "name": "Keir Pearson",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2589,
+        "credit_id": "52fe4226c3a36847f8007ee5",
+        "department": "Writing",
+        "name": "Terry George",
+        "job": "Author",
+        "profile_path": "/bQDk9TM3y1pswHHKLoeb9bV88S9.jpg"
+      },
+      {
+        "id": 1788,
+        "credit_id": "52fe4226c3a36847f8007eeb",
+        "department": "Production",
+        "name": "Nicholas Meyer",
+        "job": "Producer",
+        "profile_path": "/iDQ5NP10dTa7e0WyY16cELdAid4.jpg"
+      },
+      {
+        "id": 2591,
+        "credit_id": "52fe4226c3a36847f8007ef1",
+        "department": "Production",
+        "name": "Izidore Codron",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2593,
+        "credit_id": "52fe4226c3a36847f8007ef7",
+        "department": "Sound",
+        "name": "Rupert Gregson-Williams",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2596,
+        "credit_id": "52fe4226c3a36847f8007efd",
+        "department": "Camera",
+        "name": "Robert Fraisse",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2597,
+        "credit_id": "52fe4226c3a36847f8007f03",
+        "department": "Editing",
+        "name": "Naomi Geraghty",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2621,
+        "credit_id": "52fe4226c3a36847f8007f45",
+        "department": "Production",
+        "name": "A. Kitman Ho",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2622,
+        "credit_id": "52fe4226c3a36847f8007f4b",
+        "department": "Sound",
+        "name": "Martin Russell",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2623,
+        "credit_id": "52fe4226c3a36847f8007f51",
+        "department": "Production",
+        "name": "Moonyeenn Lee",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2624,
+        "credit_id": "52fe4226c3a36847f8007f57",
+        "department": "Production",
+        "name": "Richard Pagano",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2625,
+        "credit_id": "52fe4226c3a36847f8007f5d",
+        "department": "Art",
+        "name": "Johnny Breedt",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2626,
+        "credit_id": "52fe4226c3a36847f8007f63",
+        "department": "Art",
+        "name": "Tony Burrough",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 20648,
+        "credit_id": "52fe4226c3a36847f8007f69",
+        "department": "Sound",
+        "name": "Andrea Guerra",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2590,
+        "credit_id": "52fe4226c3a36847f8007f6f",
+        "department": "Writing",
+        "name": "Keir Pearson",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2589,
+        "credit_id": "52fe4226c3a36847f8007f75",
+        "department": "Writing",
+        "name": "Terry George",
+        "job": "Screenplay",
+        "profile_path": "/bQDk9TM3y1pswHHKLoeb9bV88S9.jpg"
+      }
+    ]
+  },
+  "runtime": 121,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.metrofilms.com/hotelrwanda/",
+  "id": 205,
+  "production_countries": [
+    {
+      "name": "Canada",
+      "iso_3166_1": "CA"
+    },
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    },
+    {
+      "name": "South Africa",
+      "iso_3166_1": "ZA"
+    }
+  ],
+  "title": "Hotel Rwanda",
+  "overview": "Inspired by true events, this film takes place in Rwanda in the 1990\u2019s when more than a million Tutsis\u2019 were killed in a genocide that went mostly unnoticed by the rest of the world. Hotel owner Paul Rusesabagina houses over a thousand refuges in his hotel in attempt to save their lives.",
+  "production_companies": [
+    {
+      "id": 7495,
+      "name": "Sixth Sense Productions"
+    },
+    {
+      "id": 60,
+      "name": "United Artists"
+    },
+    {
+      "id": 35,
+      "name": "Lions Gate Films"
+    },
+    {
+      "id": 564,
+      "name": "Industrial Development Corporation of South Africa"
+    },
+    {
+      "id": 2760,
+      "name": "Miracle Pictures"
+    },
+    {
+      "id": 19834,
+      "name": "Inside Track Films"
+    },
+    {
+      "id": 11912,
+      "name": "Mikado Film"
+    },
+    {
+      "id": 1205,
+      "name": "Endgame Entertainment"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0395169",
+  "release_date": "2004-12-22",
+  "original_title": "Hotel Rwanda",
+  "vote_count": 136,
+  "poster_path": "/ux6TRpqIOv6h8VJAiDVQBy2LBBH.jpg",
+  "tagline": "When the world closed its eyes, he opened his arms.",
+  "revenue": 38000000,
+  "popularity": "1.05870289891228"
+}

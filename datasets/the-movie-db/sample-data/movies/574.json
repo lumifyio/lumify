@@ -1,0 +1,327 @@
+{
+  "budget": 1200000,
+  "vote_average": 7,
+  "backdrop_path": "/hKmWNqNSleSFkuJRB7KR1hH0Txp.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 10748,
+      "name": "Suspense"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 854,
+        "order": 0,
+        "credit_id": "52fe4254c3a36847f8015c7b",
+        "name": "James Stewart",
+        "cast_id": 4,
+        "profile_path": "/8Obb4uScBA1IvgkX4S90HCT9W1B.jpg",
+        "character": "Dr. Ben McKenna"
+      },
+      {
+        "id": 8237,
+        "order": 1,
+        "credit_id": "52fe4254c3a36847f8015c7f",
+        "name": "Doris Day",
+        "cast_id": 5,
+        "profile_path": "/aG1ciaz25APNBYsslmRwmahQiVi.jpg",
+        "character": "Jo McKenna"
+      },
+      {
+        "id": 8238,
+        "order": 2,
+        "credit_id": "52fe4254c3a36847f8015c83",
+        "name": "Brenda De Banzie",
+        "cast_id": 6,
+        "profile_path": "/5sqEWY8kyuD41Q5c5L3Dy5tOdeM.jpg",
+        "character": "Lucy Drayton"
+      },
+      {
+        "id": 8239,
+        "order": 3,
+        "credit_id": "52fe4254c3a36847f8015c87",
+        "name": "Bernard Miles",
+        "cast_id": 7,
+        "profile_path": "/8jw5CZEGr9sAN8N4UijuR5ZS6ly.jpg",
+        "character": "Edward Drayton"
+      },
+      {
+        "id": 8240,
+        "order": 4,
+        "credit_id": "52fe4254c3a36847f8015c8b",
+        "name": "Alan Mowbray",
+        "cast_id": 8,
+        "profile_path": "/4Wm524TWJgqvY6WHO8MBy1l9GUb.jpg",
+        "character": "Val Parnell"
+      },
+      {
+        "id": 8241,
+        "order": 5,
+        "credit_id": "52fe4254c3a36847f8015c8f",
+        "name": "Hillary Brooke",
+        "cast_id": 9,
+        "profile_path": "/pBAZcxn6WiDucSBUUi4QuMKSiZO.jpg",
+        "character": "Jan Peterson"
+      },
+      {
+        "id": 8242,
+        "order": 6,
+        "credit_id": "52fe4254c3a36847f8015c93",
+        "name": "Christopher Olsen",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Hank McKenna"
+      },
+      {
+        "id": 24814,
+        "order": 7,
+        "credit_id": "52fe4254c3a36847f8015cd3",
+        "name": "Daniel Gélin",
+        "cast_id": 22,
+        "profile_path": "/rE69O86zKIsflSsPHF8DN9PBhnE.jpg",
+        "character": "Louis Bernard"
+      },
+      {
+        "id": 15972,
+        "order": 8,
+        "credit_id": "52fe4254c3a36847f8015cd7",
+        "name": "Reggie Nalder",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Assassin at Albert Hall"
+      },
+      {
+        "id": 1045,
+        "order": 9,
+        "credit_id": "52fe4254c3a36847f8015cdb",
+        "name": "Bernard Herrmann",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Conductor at Albert Hall"
+      },
+      {
+        "id": 19109,
+        "order": 10,
+        "credit_id": "52fe4254c3a36847f8015cdf",
+        "name": "Carolyn Jones",
+        "cast_id": 25,
+        "profile_path": "/2MiUzB4xpwjFQhAq3aF5VNxsNA.jpg",
+        "character": "Cindy Fontaine"
+      },
+      {
+        "id": 236479,
+        "order": 11,
+        "credit_id": "52fe4254c3a36847f8015ce3",
+        "name": "Alix Talton",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Helen Parnell"
+      },
+      {
+        "id": 85935,
+        "order": 12,
+        "credit_id": "52fe4254c3a36847f8015ce7",
+        "name": "Richard Wattis",
+        "cast_id": 27,
+        "profile_path": "/hLD8EPfIER8JwlCWclUEWqjAuz5.jpg",
+        "character": "Assistant Manager"
+      },
+      {
+        "id": 89064,
+        "order": 13,
+        "credit_id": "52fe4254c3a36847f8015ceb",
+        "name": "Ralph Truman",
+        "cast_id": 28,
+        "profile_path": "/71Fi7w0CQKm8RVamcJE8DLORCed.jpg",
+        "character": "Buchanan"
+      },
+      {
+        "id": 975645,
+        "order": 14,
+        "credit_id": "52fe4254c3a36847f8015cef",
+        "name": "Mogens Wieth",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Ambassador"
+      },
+      {
+        "id": 121323,
+        "order": 15,
+        "credit_id": "52fe4254c3a36847f8015cf3",
+        "name": "Bess Flowers",
+        "cast_id": 30,
+        "profile_path": "/akbW8jJl8GSXFpixFaobMOqvNv4.jpg",
+        "character": "Woman in Albert Hall lobby"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2636,
+        "credit_id": "52fe4254c3a36847f8015c6b",
+        "department": "Directing",
+        "name": "Alfred Hitchcock",
+        "job": "Director",
+        "profile_path": "/ezvFh9lBCp9CFNMW6dsTLGhn3Lv.jpg"
+      },
+      {
+        "id": 3599,
+        "credit_id": "52fe4254c3a36847f8015c71",
+        "department": "Writing",
+        "name": "Charles Bennett",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5181,
+        "credit_id": "52fe4254c3a36847f8015c77",
+        "department": "Writing",
+        "name": "John Michael Hayes",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2653,
+        "credit_id": "52fe4254c3a36847f8015c99",
+        "department": "Production",
+        "name": "Herbert Coleman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2636,
+        "credit_id": "52fe4254c3a36847f8015c9f",
+        "department": "Production",
+        "name": "Alfred Hitchcock",
+        "job": "Producer",
+        "profile_path": "/ezvFh9lBCp9CFNMW6dsTLGhn3Lv.jpg"
+      },
+      {
+        "id": 1045,
+        "credit_id": "52fe4254c3a36847f8015ca5",
+        "department": "Sound",
+        "name": "Bernard Herrmann",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2654,
+        "credit_id": "52fe4254c3a36847f8015cab",
+        "department": "Camera",
+        "name": "Robert Burks",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2655,
+        "credit_id": "52fe4254c3a36847f8015cb1",
+        "department": "Editing",
+        "name": "George Tomasini",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 369,
+        "credit_id": "52fe4254c3a36847f8015cb7",
+        "department": "Art",
+        "name": "Henry Bumstead",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5188,
+        "credit_id": "52fe4254c3a36847f8015cbd",
+        "department": "Art",
+        "name": "Hal Pereira",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7687,
+        "credit_id": "52fe4254c3a36847f8015cc3",
+        "department": "Art",
+        "name": "Sam Comer",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 8243,
+        "credit_id": "52fe4254c3a36847f8015cc9",
+        "department": "Art",
+        "name": "Arthur Krams",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 8245,
+        "credit_id": "52fe4254c3a36847f8015ccf",
+        "department": "Crew",
+        "name": "Ted Mapes",
+        "job": "Stunts",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 120,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "ar",
+      "name": "العربية"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 574,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Man Who Knew Too Much",
+  "overview": "A widescreen, Technicolor remake of Hitchcock's own 1934 film of the same title starring James Stewart and Doris Day. A couple vacationing in Morocco with their son accidentally stumble upon an assassination plot. When their son is kidnapped to ensure their silence, they have to take matters into their own hands to save him.",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0049470",
+  "release_date": "1956-06-01",
+  "original_title": "The Man Who Knew Too Much",
+  "vote_count": 21,
+  "poster_path": "/vhUOukoJTWPfVpZOiKwrjdEV4OX.jpg",
+  "tagline": "A little knowledge can be a deadly thing!",
+  "revenue": 0,
+  "popularity": "0.927518382917825"
+}

@@ -1,0 +1,151 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": "",
+  "profile_path": null,
+  "id": 397,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0603916",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 63489,
+        "media_type": "movie",
+        "title": "Oh! Qué mambo",
+        "credit_id": "52fe46adc3a368484e09dcc3",
+        "release_date": "1959-05-13",
+        "original_title": "Oh! Qué mambo",
+        "adult": false,
+        "poster_path": "/j4gTEnJtC8TNXXaMEITLJzAxyIz.jpg",
+        "character": "Miguel Montero"
+      },
+      {
+        "id": 66965,
+        "media_type": "movie",
+        "title": "Come Dance with Me!",
+        "credit_id": "52fe4752c3a368484e0c08fb",
+        "release_date": "1959-12-28",
+        "original_title": "Voulez-vous danser avec moi?",
+        "adult": false,
+        "poster_path": "/9FSC7G9AVZUDLslk1qFvqQwNkuH.jpg",
+        "character": "Florès"
+      },
+      {
+        "id": 57669,
+        "media_type": "movie",
+        "title": "The Female",
+        "credit_id": "52fe493fc3a36847f81908a7",
+        "release_date": "1959-04-27",
+        "original_title": "La femme et le pantin",
+        "adult": false,
+        "poster_path": "/3Yfs1mEtqvJ3xZg5cHDIi4Qr2ny.jpg",
+        "character": "Arbadajian"
+      },
+      {
+        "id": 95294,
+        "media_type": "movie",
+        "title": "Good King Dagobert",
+        "credit_id": "52fe497d9251416c750c9c5b",
+        "release_date": "1963-11-20",
+        "original_title": "Le bon roi Dagobert",
+        "adult": false,
+        "poster_path": "/cG755Y6fHOZYDDqxhF5oZmzMIHw.jpg",
+        "character": "Charibert"
+      },
+      {
+        "id": 140681,
+        "media_type": "movie",
+        "title": "Candide ou l'optimisme au XXe siècle",
+        "credit_id": "52fe4a989251416c750e77e5",
+        "release_date": "1960-12-15",
+        "original_title": "Candide ou l'optimisme au XXe siècle",
+        "adult": false,
+        "poster_path": "/mPzn3AQ6BnLJeFHLARditPECOcQ.jpg",
+        "character": ""
+      },
+      {
+        "id": 144146,
+        "media_type": "movie",
+        "title": "La Môme vert-de-gris",
+        "credit_id": "52fe4b269251416c750f9f27",
+        "release_date": "1953-03-04",
+        "original_title": "La Môme vert-de-gris",
+        "adult": false,
+        "poster_path": "/uhLJqJT2nC0CL4AnC6FNH1AolH5.jpg",
+        "character": "Hoé Madrigal"
+      },
+      {
+        "id": 204,
+        "media_type": "movie",
+        "title": "The Wages of Fear",
+        "credit_id": "52fe4226c3a36847f8007e63",
+        "release_date": "1953-04-22",
+        "original_title": "Le salaire de la peur",
+        "adult": false,
+        "poster_path": "/n1fhjxFvKuDggfCqr3uTKD5L9mW.jpg",
+        "character": "Hernandez"
+      },
+      {
+        "id": 117360,
+        "media_type": "movie",
+        "title": "Hotel Paradiso",
+        "credit_id": "52fe4bb2c3a36847f8210099",
+        "release_date": "1966-03-01",
+        "original_title": "Hotel Paradiso",
+        "adult": false,
+        "poster_path": "/dTZRzIwaY6TMfv7szkouusDoSZb.jpg",
+        "character": "The Turk"
+      },
+      {
+        "id": 202711,
+        "media_type": "movie",
+        "title": "Nathalie, agent secret",
+        "credit_id": "52fe4ccfc3a368484e1c7bdd",
+        "release_date": "1959-05-22",
+        "original_title": "Nathalie, agent secret",
+        "adult": false,
+        "poster_path": "/jSVscTBkOYcWQmZajQ9dKCeCMUR.jpg",
+        "character": "acteur"
+      },
+      {
+        "id": 195709,
+        "media_type": "movie",
+        "title": "Revolt of the Slaves",
+        "credit_id": "52fe4d199251416c9110a8c3",
+        "release_date": "1960-12-30",
+        "original_title": "La rivolta degli schiavi",
+        "adult": false,
+        "poster_path": "/7kSAZi5pHv0zssP4qBw7HWqayn4.jpg",
+        "character": "Massimiano"
+      },
+      {
+        "id": 258215,
+        "media_type": "movie",
+        "title": "Marie des Isles",
+        "credit_id": "5318955492514177b40012be",
+        "release_date": "1960-01-15",
+        "original_title": "Marie des Isles",
+        "adult": false,
+        "poster_path": "/5Vb2sXlUfjLjJacuNwvTzoDbx51.jpg",
+        "character": "Desmarais, the traitor"
+      },
+      {
+        "id": 272407,
+        "media_type": "movie",
+        "title": "Tous peuvent me tuer",
+        "credit_id": "5385c3cb0e0a261450001273",
+        "release_date": "1957-12-06",
+        "original_title": "Tous peuvent me tuer",
+        "adult": false,
+        "poster_path": "/nQtpWJvwbvutUkA4pr8oD7hogdb.jpg",
+        "character": "Luigi Falconi"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Darío Moreno",
+  "place_of_birth": "",
+  "popularity": "1.07742947500003"
+}

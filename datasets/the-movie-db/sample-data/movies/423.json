@@ -1,0 +1,275 @@
+{
+  "budget": 35000000,
+  "vote_average": 7.4,
+  "backdrop_path": "/xUR95VFV1UTyzS1C8Lj06hi2n2M.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3490,
+        "order": 0,
+        "credit_id": "52fe4241c3a36847f80101af",
+        "name": "Adrien Brody",
+        "cast_id": 8,
+        "profile_path": "/zvMslH1C8xmEBpGgDsdzL797Rv.jpg",
+        "character": "Wladyslaw Szpilman"
+      },
+      {
+        "id": 3491,
+        "order": 1,
+        "credit_id": "52fe4241c3a36847f80101b3",
+        "name": "Thomas Kretschmann",
+        "cast_id": 9,
+        "profile_path": "/allahLWNWLQpeY46nUg1d6zSO7T.jpg",
+        "character": "Captain Wilm Hosenfeld"
+      },
+      {
+        "id": 6637,
+        "order": 2,
+        "credit_id": "52fe4241c3a36847f80101b7",
+        "name": "Frank Finlay",
+        "cast_id": 10,
+        "profile_path": "/esHCgg80H7gpUSClYclyHsksHij.jpg",
+        "character": "Father"
+      },
+      {
+        "id": 6638,
+        "order": 3,
+        "credit_id": "52fe4241c3a36847f80101bb",
+        "name": "Maureen Lipman",
+        "cast_id": 11,
+        "profile_path": "/cbZwHAkUZbZGr8HZDhWv1vNMlLC.jpg",
+        "character": "Mother"
+      },
+      {
+        "id": 6639,
+        "order": 4,
+        "credit_id": "52fe4241c3a36847f80101bf",
+        "name": "Emilia Fox",
+        "cast_id": 12,
+        "profile_path": "/xbOxrak2VaQTVX2pNdqRG3NZvK2.jpg",
+        "character": "Dorota"
+      },
+      {
+        "id": 6640,
+        "order": 5,
+        "credit_id": "52fe4241c3a36847f80101c3",
+        "name": "Ed Stoppard",
+        "cast_id": 13,
+        "profile_path": "/rh4sgErzsFSvTIWT7GmhneZmV0Z.jpg",
+        "character": "Henryk"
+      },
+      {
+        "id": 6641,
+        "order": 6,
+        "credit_id": "52fe4241c3a36847f80101c7",
+        "name": "Julia Rayner",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Regina"
+      },
+      {
+        "id": 6642,
+        "order": 7,
+        "credit_id": "52fe4241c3a36847f80101cb",
+        "name": "Jessica Kate Meyer",
+        "cast_id": 15,
+        "profile_path": "/mUBmiVxXuuWqlqShe4TfPOixgZm.jpg",
+        "character": "Halina"
+      },
+      {
+        "id": 6643,
+        "order": 8,
+        "credit_id": "52fe4241c3a36847f80101cf",
+        "name": "Michał Żebrowski",
+        "cast_id": 16,
+        "profile_path": "/ewMQFdAByOfQsgHIB5mEBVyOxxL.jpg",
+        "character": "Jurek"
+      },
+      {
+        "id": 6644,
+        "order": 9,
+        "credit_id": "52fe4241c3a36847f80101d3",
+        "name": "Wanja Mues",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "SS Slapping Father"
+      },
+      {
+        "id": 6645,
+        "order": 10,
+        "credit_id": "52fe4241c3a36847f80101d7",
+        "name": "Richard Ridings",
+        "cast_id": 18,
+        "profile_path": "/zzznosGBL8uEBUwqZHKcKsVZzWe.jpg",
+        "character": "Mr. Lipa"
+      },
+      {
+        "id": 6646,
+        "order": 11,
+        "credit_id": "52fe4241c3a36847f80101db",
+        "name": "Nomi Sharron",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Feather Woman"
+      },
+      {
+        "id": 6647,
+        "order": 12,
+        "credit_id": "52fe4241c3a36847f80101df",
+        "name": "Detlev von Wangenheim",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "SS Officer"
+      },
+      {
+        "id": 24524,
+        "order": 13,
+        "credit_id": "52fe4241c3a36847f80101ef",
+        "name": "Krzysztof Pieczyński",
+        "cast_id": 23,
+        "profile_path": "/9kZ3mwDkaOqjNlF9KPkvAXfDHSJ.jpg",
+        "character": "Marek Gębczyński"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3556,
+        "credit_id": "52fe4241c3a36847f801018d",
+        "department": "Directing",
+        "name": "Roman Polanski",
+        "job": "Director",
+        "profile_path": "/z3vQwbMhec4yFCq4uFawaeE1JjH.jpg"
+      },
+      {
+        "id": 3558,
+        "credit_id": "52fe4241c3a36847f8010193",
+        "department": "Writing",
+        "name": "Ronald Harwood",
+        "job": "Screenplay",
+        "profile_path": "/kFxKyfaXcaWd4E0tOm0B1FLYnBC.jpg"
+      },
+      {
+        "id": 3556,
+        "credit_id": "52fe4241c3a36847f8010199",
+        "department": "Production",
+        "name": "Roman Polanski",
+        "job": "Producer",
+        "profile_path": "/z3vQwbMhec4yFCq4uFawaeE1JjH.jpg"
+      },
+      {
+        "id": 3560,
+        "credit_id": "52fe4241c3a36847f801019f",
+        "department": "Production",
+        "name": "Alain Sarde",
+        "job": "Producer",
+        "profile_path": "/95fgX9tAqahF98DG4FutHpLjbEi.jpg"
+      },
+      {
+        "id": 6635,
+        "credit_id": "52fe4241c3a36847f80101a5",
+        "department": "Writing",
+        "name": "Wladyslaw Szpilman",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 3564,
+        "credit_id": "52fe4241c3a36847f80101ab",
+        "department": "Editing",
+        "name": "Hervé de Luze",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1400,
+        "credit_id": "52fe4241c3a36847f80101e5",
+        "department": "Sound",
+        "name": "Wojciech Kilar",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3561,
+        "credit_id": "52fe4241c3a36847f80101eb",
+        "department": "Camera",
+        "name": "Pawel Edelman",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3559,
+        "credit_id": "52fe4241c3a36847f80101f5",
+        "department": "Production",
+        "name": "Robert Benmussa",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 150,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.thepianistmovie.com/",
+  "id": 423,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "Poland",
+      "iso_3166_1": "PL"
+    }
+  ],
+  "title": "The Pianist",
+  "overview": "The Pianist is a film adapted from the biography of Wladyslaw Szpilman. A Jewish-Polish pianist who during the second world war lived and hid miraculously in Warsaw after having gone through a terrible tragedy. A film from Roman Polanski.",
+  "production_companies": [{
+    "id": 5870,
+    "name": "Studio Canal"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0253474",
+  "release_date": "2002-12-04",
+  "original_title": "The Pianist",
+  "vote_count": 247,
+  "poster_path": "/iunmxWkOi7Vk17Ob3G2HwwjgHsr.jpg",
+  "tagline": "Music was his passion. Survival was his masterpiece.",
+  "revenue": 120072577,
+  "popularity": "1.44510368590314"
+}

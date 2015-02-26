@@ -1,0 +1,340 @@
+{
+  "budget": 839727,
+  "vote_average": 7.4,
+  "backdrop_path": "/xqDfLC7XbiaVN5XxZBWOJCX0hU7.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 40,
+        "order": 0,
+        "credit_id": "52fe420ec3a36847f8000893",
+        "name": "Orson Welles",
+        "cast_id": 5,
+        "profile_path": "/pZz07JqawZP3eKUwpaAZq63vEmF.jpg",
+        "character": "Charles Foster Kane"
+      },
+      {
+        "id": 11030,
+        "order": 1,
+        "credit_id": "52fe420ec3a36847f80008ab",
+        "name": "William Alland",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Jerry Thompson"
+      },
+      {
+        "id": 7664,
+        "order": 2,
+        "credit_id": "52fe420ec3a36847f800088f",
+        "name": "Joseph Cotten",
+        "cast_id": 4,
+        "profile_path": "/bTUTrTnzacCQV4F0rs1xH4QaETf.jpg",
+        "character": "Jedediah Leland"
+      },
+      {
+        "id": 11025,
+        "order": 3,
+        "credit_id": "52fe420ec3a36847f8000897",
+        "name": "Agnes Moorehead",
+        "cast_id": 6,
+        "profile_path": "/5FzeKtI94nExMbdY9GCsLVJUMgf.jpg",
+        "character": "Mutter"
+      },
+      {
+        "id": 11026,
+        "order": 4,
+        "credit_id": "52fe420ec3a36847f800089b",
+        "name": "Ruth Warrick",
+        "cast_id": 7,
+        "profile_path": "/8tqKYYnItf1kxzOuJylxFvh5Psh.jpg",
+        "character": "Emily Norton Kane"
+      },
+      {
+        "id": 11027,
+        "order": 5,
+        "credit_id": "52fe420ec3a36847f800089f",
+        "name": "Everett Sloane",
+        "cast_id": 8,
+        "profile_path": "/6MasRGzVVZ80uDEHvDIr00ClfHk.jpg",
+        "character": "Mr. Bernstein"
+      },
+      {
+        "id": 11028,
+        "order": 6,
+        "credit_id": "52fe420ec3a36847f80008a3",
+        "name": "George Coulouris",
+        "cast_id": 9,
+        "profile_path": "/6lZrP9zhuFyL0uOHYJU09FpUV9.jpg",
+        "character": "Mr. Thatcher"
+      },
+      {
+        "id": 11029,
+        "order": 7,
+        "credit_id": "52fe420ec3a36847f80008a7",
+        "name": "Dorothy Comingore",
+        "cast_id": 10,
+        "profile_path": "/uUPQOYeLIzTucPd4Hn96tCqGSv1.jpg",
+        "character": "Susan Alexander Kane"
+      },
+      {
+        "id": 11031,
+        "order": 8,
+        "credit_id": "52fe420ec3a36847f80008af",
+        "name": "Philip Van Zandt",
+        "cast_id": 12,
+        "profile_path": "/6gvimJ7WbMTMfczOtPyzbWNUCDk.jpg",
+        "character": "Mr. Rawlston"
+      },
+      {
+        "id": 11032,
+        "order": 9,
+        "credit_id": "52fe420ec3a36847f80008b3",
+        "name": "Buddy Swan",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Kane als Kind"
+      },
+      {
+        "id": 11033,
+        "order": 10,
+        "credit_id": "52fe420ec3a36847f80008b7",
+        "name": "Paul Stewart",
+        "cast_id": 14,
+        "profile_path": "/8tKdcrxfykUgevbWTz8kuK7neQZ.jpg",
+        "character": "Raymond"
+      },
+      {
+        "id": 4077,
+        "order": 11,
+        "credit_id": "52fe420ec3a36847f80008eb",
+        "name": "Harry Shannon",
+        "cast_id": 23,
+        "profile_path": "/7Js8vAjzKzM5eXcu6THDzWM7j5P.jpg",
+        "character": "Kane's Father"
+      },
+      {
+        "id": 14518,
+        "order": 12,
+        "credit_id": "52fe420ec3a36847f800090d",
+        "name": "Ray Collins",
+        "cast_id": 29,
+        "profile_path": "/gJe4Jfdzi01MoQ9eRTr9v4FyD76.jpg",
+        "character": "James W. Gettys"
+      },
+      {
+        "id": 14364,
+        "order": 13,
+        "credit_id": "52fe420ec3a36847f8000911",
+        "name": "Erskine Sanford",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Mr. Bernstein"
+      },
+      {
+        "id": 14979,
+        "order": 14,
+        "credit_id": "52fe420ec3a36847f8000915",
+        "name": "Fortunio Bonanova",
+        "cast_id": 31,
+        "profile_path": "/3oTAUQDI95m13EmADN6HI9pws8v.jpg",
+        "character": "Matiste"
+      },
+      {
+        "id": 33743,
+        "order": 15,
+        "credit_id": "52fe420ec3a36847f8000919",
+        "name": "Gus Schilling",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "The Headwaiter"
+      },
+      {
+        "id": 105021,
+        "order": 16,
+        "credit_id": "52fe420ec3a36847f800091d",
+        "name": "Georgia Backus",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Miss Anderson"
+      },
+      {
+        "id": 1198371,
+        "order": 17,
+        "credit_id": "52fe420ec3a36847f8000921",
+        "name": "Sonny Bupp",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Kane III"
+      },
+      {
+        "id": 945285,
+        "order": 18,
+        "credit_id": "52fe420ec3a36847f8000925",
+        "name": "Don Ackerman",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Man at Party in Everglades (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 40,
+        "credit_id": "52fe420ec3a36847f8000885",
+        "department": "Directing",
+        "name": "Orson Welles",
+        "job": "Director",
+        "profile_path": "/pZz07JqawZP3eKUwpaAZq63vEmF.jpg"
+      },
+      {
+        "id": 40,
+        "credit_id": "52fe420ec3a36847f800088b",
+        "department": "Production",
+        "name": "Orson Welles",
+        "job": "Producer",
+        "profile_path": "/pZz07JqawZP3eKUwpaAZq63vEmF.jpg"
+      },
+      {
+        "id": 11034,
+        "credit_id": "52fe420ec3a36847f80008bd",
+        "department": "Production",
+        "name": "Richard Baer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11035,
+        "credit_id": "52fe420ec3a36847f80008c3",
+        "department": "Production",
+        "name": "George Schaefer",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1045,
+        "credit_id": "52fe420ec3a36847f80008c9",
+        "department": "Sound",
+        "name": "Bernard Herrmann",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8504,
+        "credit_id": "52fe420ec3a36847f80008cf",
+        "department": "Camera",
+        "name": "Gregg Toland",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1744,
+        "credit_id": "52fe420ec3a36847f80008d5",
+        "department": "Editing",
+        "name": "Robert Wise",
+        "job": "Editor",
+        "profile_path": "/6EPkRgYsDMQOYmE9s1vZt2O470R.jpg"
+      },
+      {
+        "id": 11036,
+        "credit_id": "52fe420ec3a36847f80008db",
+        "department": "Art",
+        "name": "Van Nest Polglase",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 10153,
+        "credit_id": "52fe420ec3a36847f80008e1",
+        "department": "Costume & Make-Up",
+        "name": "Edward Stevenson",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 3252,
+        "credit_id": "52fe420ec3a36847f80008e7",
+        "department": "Crew",
+        "name": "Vernon L. Walker",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 40,
+        "credit_id": "52fe420ec3a36847f80008f1",
+        "department": "Writing",
+        "name": "Orson Welles",
+        "job": "Screenplay",
+        "profile_path": "/pZz07JqawZP3eKUwpaAZq63vEmF.jpg"
+      },
+      {
+        "id": 30012,
+        "credit_id": "52fe420ec3a36847f80008f7",
+        "department": "Writing",
+        "name": "Herman J. Mankiewicz",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1040011,
+        "credit_id": "52fe420ec3a36847f80008fd",
+        "department": "Writing",
+        "name": "Roger Q. Denny",
+        "job": "Writer",
+        "profile_path": null
+      },
+      {
+        "id": 11783,
+        "credit_id": "52fe420ec3a36847f8000903",
+        "department": "Writing",
+        "name": "John Houseman",
+        "job": "Writer",
+        "profile_path": "/cfG4HXRJRnkJqzlfpjtc9T2L9Ls.jpg"
+      },
+      {
+        "id": 1117970,
+        "credit_id": "52fe420ec3a36847f8000909",
+        "department": "Writing",
+        "name": "Mollie Kent",
+        "job": "Writer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 119,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 15,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Citizen Kane",
+  "overview": "Orson Welles was 26 when he made his first feature film, Citizen Kane. The film became known as one of the greatest of all time and earned him international celebrity. Multimillionaire newspaper tycoon Charles Foster Kane dies alone in his extravagant mansion, Xanadu, speaking a single word: \"Rosebud\". A reporter tracks down the people who worked and lived with Kane, hearing their stories as they attempt to unlock the riddle of his dying breath.",
+  "production_companies": [
+    {
+      "id": 6,
+      "name": "RKO Radio Pictures"
+    },
+    {
+      "id": 11447,
+      "name": "Mercury Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0033467",
+  "release_date": "1941-05-01",
+  "original_title": "Citizen Kane",
+  "vote_count": 190,
+  "poster_path": "/8lt2pYP71fHXu2G3k0iYI3Uryyl.jpg",
+  "tagline": "Everybody's talking about it!",
+  "revenue": 23217674,
+  "popularity": "1.31276207168031"
+}

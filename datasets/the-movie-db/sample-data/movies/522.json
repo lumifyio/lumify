@@ -1,0 +1,387 @@
+{
+  "budget": 18000000,
+  "vote_average": 7.1,
+  "backdrop_path": "/6zSU6K7q4zntC8vgrvpoUM66eQl.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 85,
+        "order": 0,
+        "credit_id": "52fe424cc3a36847f801385f",
+        "name": "Johnny Depp",
+        "cast_id": 5,
+        "profile_path": "/5sc2pu4YWItxCaXSvrFpg64zN9J.jpg",
+        "character": "Ed Wood"
+      },
+      {
+        "id": 2641,
+        "order": 1,
+        "credit_id": "52fe424cc3a36847f8013863",
+        "name": "Martin Landau",
+        "cast_id": 6,
+        "profile_path": "/ylT7pqkcPNsHloe2dJsePFSoIkE.jpg",
+        "character": "Bela Lugosi"
+      },
+      {
+        "id": 520,
+        "order": 2,
+        "credit_id": "52fe424cc3a36847f8013867",
+        "name": "Sarah Jessica Parker",
+        "cast_id": 7,
+        "profile_path": "/u2fVzLtsqtDVUSXCkVpdDdUoy48.jpg",
+        "character": "Dolores Fuller"
+      },
+      {
+        "id": 4687,
+        "order": 3,
+        "credit_id": "52fe424cc3a36847f801386b",
+        "name": "Patricia Arquette",
+        "cast_id": 8,
+        "profile_path": "/oFjHzvNTidwMuRpuG9drblMzIQu.jpg",
+        "character": "Kathy O'Hara"
+      },
+      {
+        "id": 4004,
+        "order": 4,
+        "credit_id": "52fe424cc3a36847f801386f",
+        "name": "Jeffrey Jones",
+        "cast_id": 9,
+        "profile_path": "/tstfddskUkJvtWcRBLZ6dsvffhM.jpg",
+        "character": "Criswell"
+      },
+      {
+        "id": 3173,
+        "order": 5,
+        "credit_id": "52fe424cc3a36847f8013873",
+        "name": "G. D. Spradlin",
+        "cast_id": 10,
+        "profile_path": "/lyk0Fo343PJJ5gItBqGGl7oG112.jpg",
+        "character": "Reverend Lemon"
+      },
+      {
+        "id": 7132,
+        "order": 6,
+        "credit_id": "52fe424cc3a36847f8013877",
+        "name": "Vincent D'Onofrio",
+        "cast_id": 11,
+        "profile_path": "/aJkrWtECvceecCGDbpB3HccedJS.jpg",
+        "character": "Orson Welles"
+      },
+      {
+        "id": 1532,
+        "order": 7,
+        "credit_id": "52fe424cc3a36847f801387b",
+        "name": "Bill Murray",
+        "cast_id": 12,
+        "profile_path": "/eb58HuFIrxS0zUmbmW4d8YXTbje.jpg",
+        "character": "Bunny Breckinridge"
+      },
+      {
+        "id": 5170,
+        "order": 8,
+        "credit_id": "52fe424cc3a36847f801387f",
+        "name": "Mike Starr",
+        "cast_id": 13,
+        "profile_path": "/qzoXxFJlhcos4kAPJmqMpdw0Tin.jpg",
+        "character": "Georgie Weiss"
+      },
+      {
+        "id": 7133,
+        "order": 9,
+        "credit_id": "52fe424cc3a36847f8013883",
+        "name": "Max Casella",
+        "cast_id": 14,
+        "profile_path": "/eYdODjmmMJm1PVCV5MaNp1JTYZI.jpg",
+        "character": "Paul Marco"
+      },
+      {
+        "id": 7134,
+        "order": 10,
+        "credit_id": "52fe424cc3a36847f8013887",
+        "name": "Brent Hinkley",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Conrad Brooks"
+      },
+      {
+        "id": 7136,
+        "order": 11,
+        "credit_id": "52fe424cc3a36847f801388b",
+        "name": "William James Myers",
+        "cast_id": 16,
+        "profile_path": "/1mzDi9g9m3cxMpUxRasnGWNdYGH.jpg",
+        "character": "Tor Johnson"
+      },
+      {
+        "id": 7137,
+        "order": 12,
+        "credit_id": "52fe424cc3a36847f801388f",
+        "name": "Juliet Landau",
+        "cast_id": 17,
+        "profile_path": "/78ohsJtUTo0ZLdSRfiTgYQQQSWI.jpg",
+        "character": "Loretta King"
+      },
+      {
+        "id": 7138,
+        "order": 13,
+        "credit_id": "52fe424cc3a36847f8013893",
+        "name": "Clive Rosengren",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Ed Reynolds"
+      },
+      {
+        "id": 7139,
+        "order": 14,
+        "credit_id": "52fe424cc3a36847f8013897",
+        "name": "Norman Alden",
+        "cast_id": 19,
+        "profile_path": "/8UZtACb7u0JEOKh9IzFTi5FC4NH.jpg",
+        "character": "Cameraman Bill"
+      },
+      {
+        "id": 7140,
+        "order": 15,
+        "credit_id": "52fe424cc3a36847f801389b",
+        "name": "Leonard Termo",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Makeup Man Harry"
+      },
+      {
+        "id": 2141,
+        "order": 16,
+        "credit_id": "52fe424cc3a36847f801389f",
+        "name": "Ned Bellamy",
+        "cast_id": 21,
+        "profile_path": "/aPAsdVFewZK3ldhvrL1ea2VUkUK.jpg",
+        "character": "Dr. Tom Mason"
+      },
+      {
+        "id": 7141,
+        "order": 17,
+        "credit_id": "52fe424cc3a36847f80138a3",
+        "name": "Danny Dayton",
+        "cast_id": 22,
+        "profile_path": "/aZTVkilP01BwP6olgirQNOSegSA.jpg",
+        "character": "Soundman"
+      },
+      {
+        "id": 7142,
+        "order": 18,
+        "credit_id": "52fe424cc3a36847f80138a7",
+        "name": "John Ross",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Camera Assistant"
+      },
+      {
+        "id": 7143,
+        "order": 19,
+        "credit_id": "52fe424cc3a36847f80138ab",
+        "name": "Bill Cusack",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Tony McCoy"
+      },
+      {
+        "id": 4452,
+        "order": 20,
+        "credit_id": "52fe424dc3a36847f80138f7",
+        "name": "Lisa Marie",
+        "cast_id": 37,
+        "profile_path": "/2mfDtN2r02eX2Sb317XGYX7nWsx.jpg",
+        "character": "Vampira"
+      },
+      {
+        "id": 4171,
+        "order": 21,
+        "credit_id": "52fe424dc3a36847f80138fb",
+        "name": "Stanley DeSantis",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Mr. Feldman"
+      }
+    ],
+    "crew": [
+      {
+        "id": 510,
+        "credit_id": "52fe424cc3a36847f8013849",
+        "department": "Directing",
+        "name": "Tim Burton",
+        "job": "Director",
+        "profile_path": "/z64d13PXggAV5Q2oUqcP9q18qtg.jpg"
+      },
+      {
+        "id": 7129,
+        "credit_id": "52fe424cc3a36847f801384f",
+        "department": "Writing",
+        "name": "Rudolph Grey",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 7130,
+        "credit_id": "52fe424cc3a36847f8013855",
+        "department": "Writing",
+        "name": "Scott Alexander",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7131,
+        "credit_id": "52fe424cc3a36847f801385b",
+        "department": "Writing",
+        "name": "Larry Karaszewski",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 510,
+        "credit_id": "52fe424cc3a36847f80138b1",
+        "department": "Production",
+        "name": "Tim Burton",
+        "job": "Producer",
+        "profile_path": "/z64d13PXggAV5Q2oUqcP9q18qtg.jpg"
+      },
+      {
+        "id": 1899,
+        "credit_id": "52fe424cc3a36847f80138b7",
+        "department": "Production",
+        "name": "Denise Di Novi",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7144,
+        "credit_id": "52fe424cc3a36847f80138bd",
+        "department": "Production",
+        "name": "Michael Flynn",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7145,
+        "credit_id": "52fe424cc3a36847f80138c3",
+        "department": "Production",
+        "name": "Michael Lehmann",
+        "job": "Executive Producer",
+        "profile_path": "/rM0KmE5Fr9zAi5gzQv9bc78Q1GX.jpg"
+      },
+      {
+        "id": 117,
+        "credit_id": "52fe424cc3a36847f80138c9",
+        "department": "Sound",
+        "name": "Howard Shore",
+        "job": "Original Music Composer",
+        "profile_path": "/4HbFF5o13GkO0rHi4OVXXMb7U5L.jpg"
+      },
+      {
+        "id": 1919,
+        "credit_id": "52fe424dc3a36847f80138cf",
+        "department": "Camera",
+        "name": "Stefan Czapsky",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 541,
+        "credit_id": "52fe424dc3a36847f80138d5",
+        "department": "Editing",
+        "name": "Chris Lebenzon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 547,
+        "credit_id": "52fe424dc3a36847f80138db",
+        "department": "Production",
+        "name": "Victoria Thomas",
+        "job": "Casting",
+        "profile_path": "/9D6wTqQdoiCe8HCmh2Pc1q1bo7l.jpg"
+      },
+      {
+        "id": 7146,
+        "credit_id": "52fe424dc3a36847f80138e1",
+        "department": "Art",
+        "name": "Tom Duffield",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 7147,
+        "credit_id": "52fe424dc3a36847f80138e7",
+        "department": "Art",
+        "name": "Okowita",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7148,
+        "credit_id": "52fe424dc3a36847f80138ed",
+        "department": "Art",
+        "name": "Cricket Rowland",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 557,
+        "credit_id": "52fe424dc3a36847f80138f3",
+        "department": "Costume & Make-Up",
+        "name": "Colleen Atwood",
+        "job": "Costume Design",
+        "profile_path": "/oD91okMgAqHT9qpcBuLYaOJtIBE.jpg"
+      },
+      {
+        "id": 406204,
+        "credit_id": "52fe424dc3a36847f8013901",
+        "department": "Costume & Make-Up",
+        "name": "Ve Neill",
+        "job": "Makeup Artist",
+        "profile_path": "/yaAwlGtPlQXcMum3eWL2xbas4BV.jpg"
+      }
+    ]
+  },
+  "runtime": 127,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 522,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Ed Wood",
+  "overview": "The mostly true story of the legendary \"worst director of all time\", who, with the help of his strange friends, filmed countless B-movies without ever becoming famous or successful.",
+  "production_companies": [{
+    "id": 9195,
+    "name": "Touchstone Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0109707",
+  "release_date": "1994-09-27",
+  "original_title": "Ed Wood",
+  "vote_count": 58,
+  "poster_path": "/m1bl44iKPLOwXEz5seJDfGAhKxd.jpg",
+  "tagline": "When it came to making bad movies, Ed Wood was the best.",
+  "revenue": 5887457,
+  "popularity": "2.15097744389615"
+}

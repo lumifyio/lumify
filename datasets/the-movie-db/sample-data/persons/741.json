@@ -1,0 +1,272 @@
+{
+  "birthday": "1970-08-23",
+  "adult": false,
+  "biography": "River Phoenix was an up-and-coming movie star when he died suddenly of drug-induced heart failure in 1993 at the age of 23. His brief career was marked by critically-acclaimed performances in films such as Stand By Me (1986), Running On Empty (1988) and Gus Van Sant's My Own Private Idaho (1991, with Keanu Reeves).  River was the eldest of five children whose itinerant parents were members of a radical Christian group called the Children of God (later known as The Family). His family lived in communes in Oregon, Texas, Puerto Rico and Venezuela before settling in Florida.  Pursuing entertainment careers for their children, the parents moved the family to Los Angeles, where River began getting television jobs in the early 1980s. Although his first feature film was 1985's Explorers (with young Ethan Hawke), it was his stand-out performance in the ensemble drama Stand By Me that gained him national recognition. Phoenix was labeled a promising young actor and his career took off. He co-starred with Harrison Ford in both The Mosquito Coast (1986) and Indiana Jones and the Last Crusade (1989), and earned an Oscar nomination for his performance in Running On Empty. His other films include Little Nikita (1988, with Sidney Poitier), Dogfight (1991) and Sneakers (1992, with Robert Redford).\n\nIn 1993, outside Johnny Depp's L.A. nightclub, The Viper Room, Phoenix went into cardiac arrest and died, a result of lethal levels of heroin and cocaine.",
+  "homepage": "",
+  "profile_path": "/qfokbmRwRvmIVsLHScshxLPAB3C.jpg",
+  "id": 741,
+  "also_known_as": ["River Jude Bottom"],
+  "deathday": "1993-10-31",
+  "imdb_id": "nm0000203",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 89,
+        "media_type": "movie",
+        "title": "Indiana Jones and the Last Crusade",
+        "credit_id": "52fe4216c3a36847f8002e35",
+        "release_date": "1989-05-24",
+        "original_title": "Indiana Jones and the Last Crusade",
+        "adult": false,
+        "poster_path": "/4p1N2Qrt8j0H8xMHMHvtRxv9weZ.jpg",
+        "character": "Indiana Jones (young)"
+      },
+      {
+        "id": 235,
+        "media_type": "movie",
+        "title": "Stand by Me",
+        "credit_id": "52fe422ac3a36847f800914b",
+        "release_date": "1986-08-07",
+        "original_title": "Stand by Me",
+        "adult": false,
+        "poster_path": "/98qQLkTKEdWo3UVBzzeaetwNeQD.jpg",
+        "character": "Chris Chambers"
+      },
+      {
+        "id": 468,
+        "media_type": "movie",
+        "title": "My Own Private Idaho",
+        "credit_id": "52fe4247c3a36847f8011cf5",
+        "release_date": "1991-10-18",
+        "original_title": "My Own Private Idaho",
+        "adult": false,
+        "poster_path": "/8Zfb4oYH8cMkmkbZ9geKgg3IlW5.jpg",
+        "character": "Mike Waters"
+      },
+      {
+        "id": 2322,
+        "media_type": "movie",
+        "title": "Sneakers",
+        "credit_id": "52fe434ec3a36847f804a445",
+        "release_date": "1992-09-09",
+        "original_title": "Sneakers",
+        "adult": false,
+        "poster_path": "/rLHd85HqIpkrPOsWymxWy0edDj3.jpg",
+        "character": "Carl Arbegast"
+      },
+      {
+        "id": 3101,
+        "media_type": "movie",
+        "title": "I Love You to Death",
+        "credit_id": "52fe4386c3a36847f805ac95",
+        "release_date": "1990-04-06",
+        "original_title": "I Love You to Death",
+        "adult": false,
+        "poster_path": "/1wTLrZb6X5bRxsv19P9lB7mYpsw.jpg",
+        "character": "Devo Nod"
+      },
+      {
+        "id": 11120,
+        "media_type": "movie",
+        "title": "The Mosquito Coast",
+        "credit_id": "52fe43fc9251416c750251a9",
+        "release_date": "1986-11-26",
+        "original_title": "The Mosquito Coast",
+        "adult": false,
+        "poster_path": "/tXnfBOCTjfTYknXbTB6od8ncUP.jpg",
+        "character": "Charlie Fox"
+      },
+      {
+        "id": 34444,
+        "media_type": "movie",
+        "title": "Even Cowgirls Get the Blues",
+        "credit_id": "52fe45659251416c91030b73",
+        "release_date": "1993-05-13",
+        "original_title": "Even Cowgirls Get the Blues",
+        "adult": false,
+        "poster_path": "/6mULc5tzpt4T4brH4A0xmCSvJ99.jpg",
+        "character": "Pilgrim"
+      },
+      {
+        "id": 27804,
+        "media_type": "movie",
+        "title": "The Thing Called Love",
+        "credit_id": "52fe4567c3a368484e058727",
+        "release_date": "1993-07-16",
+        "original_title": "The Thing Called Love",
+        "adult": false,
+        "poster_path": "/4rMtQCi6eZ4kezrUHdjO885v9p2.jpg",
+        "character": "James Wright"
+      },
+      {
+        "id": 14667,
+        "media_type": "movie",
+        "title": "Dogfight",
+        "credit_id": "52fe460e9251416c7506b8c7",
+        "release_date": "1991-09-13",
+        "original_title": "Dogfight",
+        "adult": false,
+        "poster_path": "/5uXG8lJFGPAmD4rJ0qmyNSXdUnI.jpg",
+        "character": "Eddie Birdlace"
+      },
+      {
+        "id": 266312,
+        "media_type": "movie",
+        "title": "Robert Kennedy and His Times",
+        "credit_id": "53580010c3a3685619002d47",
+        "release_date": "1985-01-27",
+        "original_title": "Robert Kennedy and His Times",
+        "adult": false,
+        "poster_path": "/7aAfnVzOgb6RO0BzyavfUNjnQfW.jpg",
+        "character": "Robert Kennedy Jr."
+      },
+      {
+        "id": 47818,
+        "media_type": "movie",
+        "title": "A Night in the Life of Jimmy Reardon",
+        "credit_id": "52fe4748c3a36847f812cf83",
+        "release_date": "1988-07-21",
+        "original_title": "A Night in the Life of Jimmy Reardon",
+        "adult": false,
+        "poster_path": "/7s7VKXo0uJKkyVavGpx1LkB3nYY.jpg",
+        "character": "Jimmy Reardon"
+      },
+      {
+        "id": 18197,
+        "media_type": "movie",
+        "title": "Running On Empty",
+        "credit_id": "52fe47679251416c750981cb",
+        "release_date": "1988-09-07",
+        "original_title": "Running On Empty",
+        "adult": false,
+        "poster_path": "/fZvB3qcj3r3uxqGgrPfTy8p8EKL.jpg",
+        "character": "Danny Pope / Michael Manfield"
+      },
+      {
+        "id": 143547,
+        "media_type": "movie",
+        "title": "Silent Tongue",
+        "credit_id": "52fe4b0f9251416c750f7059",
+        "release_date": "1993-01-28",
+        "original_title": "Silent Tongue",
+        "adult": false,
+        "poster_path": "/wh75vGJeiXtsOxK4eMjcEeC9wv5.jpg",
+        "character": "Talbot Roe"
+      },
+      {
+        "id": 130443,
+        "media_type": "movie",
+        "title": "Walking the Tracks: The Summer of 'Stand by Me'",
+        "credit_id": "52fe4b5cc3a368484e18543f",
+        "release_date": "2000-08-29",
+        "original_title": "Walking the Tracks: The Summer of 'Stand by Me'",
+        "adult": false,
+        "poster_path": "/5zExVAP7jnuyYH8dsvImsnXvKMk.jpg",
+        "character": "Himself as Chris Chambers (archive footage)"
+      },
+      {
+        "id": 136884,
+        "media_type": "movie",
+        "title": "Dark Blood",
+        "credit_id": "52fe4c20c3a368484e1a88dd",
+        "release_date": "2012-09-28",
+        "original_title": "Dark Blood",
+        "adult": false,
+        "poster_path": "/2XZOYhuGcaLjOQnVT58zbNPkXys.jpg",
+        "character": "Boy"
+      },
+      {
+        "id": 178218,
+        "media_type": "movie",
+        "title": "Flea - Adventures in Spontaneous Jamming and Techniques",
+        "credit_id": "52fe4d91c3a36847f8268145",
+        "release_date": "2000-10-11",
+        "original_title": "Flea - Adventures in Spontaneous Jamming and Techniques",
+        "adult": false,
+        "poster_path": "/dBaMNkwmLSRqo3GnqRl49b1qOQl.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 12505,
+        "media_type": "movie",
+        "title": "Little Nikita",
+        "credit_id": "52fe44f09251416c750462ab",
+        "release_date": "1988-03-17",
+        "original_title": "Little Nikita",
+        "adult": false,
+        "poster_path": "/tWL8kUcdz5MBE7dlm8YbxeNTUsq.jpg",
+        "character": "Jeff Grant"
+      },
+      {
+        "id": 9872,
+        "media_type": "movie",
+        "title": "Explorers",
+        "credit_id": "52fe453bc3a36847f80c356d",
+        "release_date": "1985-07-12",
+        "original_title": "Explorers",
+        "adult": false,
+        "poster_path": "/bvvZKGyD30S4smjRVqikGe8ICFa.jpg",
+        "character": "Wolfgang Müller"
+      },
+      {
+        "id": 5973,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "52578405760ee36aaa616d5e",
+        "name": "Robert Kennedy & His Times",
+        "poster_path": null,
+        "original_name": "Robert Kennedy & His Times",
+        "first_air_date": null,
+        "character": "Robert Kennedy Jr."
+      },
+      {
+        "id": 10065,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257fc0319c29531db3080df",
+        "name": "It's Your Move",
+        "poster_path": "/qjGr57WsEmmf7xeBonm6ArKa4af.jpg",
+        "original_name": "It's Your Move",
+        "first_air_date": "1984-09-26",
+        "character": ""
+      },
+      {
+        "id": 14741,
+        "media_type": "tv",
+        "episode_count": 22,
+        "credit_id": "525834f3760ee36aaa9284f2",
+        "name": "Seven Brides for Seven Brothers",
+        "poster_path": null,
+        "original_name": "Seven Brides for Seven Brothers",
+        "first_air_date": "1982-09-19",
+        "character": "Guthrie McFadden"
+      },
+      {
+        "id": 496,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52537b5c19c295794018e746",
+        "name": "Family Ties",
+        "poster_path": "/7AywTd6uJPHITc2anmRtnfIPVkf.jpg",
+        "original_name": "Family Ties",
+        "first_air_date": "1982-09-22",
+        "character": ""
+      },
+      {
+        "id": 3437,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525750ba760ee36aaa1b39d1",
+        "name": "Hotel",
+        "poster_path": "/pqXkgJoLBteBWn0Ul5cevkqM1yY.jpg",
+        "original_name": "Hotel",
+        "first_air_date": "1983-09-21",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "River Phoenix",
+  "place_of_birth": "Metolius, Oregon USA",
+  "popularity": "1.12068218149953"
+}

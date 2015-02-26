@@ -1,0 +1,41 @@
+{
+  "birthday": "1982-09-18",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 482,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0920435",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 71,
+        "media_type": "movie",
+        "title": "Billy Elliot",
+        "credit_id": "52fe4213c3a36847f800212d",
+        "release_date": "2000-10-13",
+        "original_title": "Billy Elliot",
+        "adult": false,
+        "poster_path": "/x0ySHQPAxQYD0D79BeDY2XhPzXg.jpg",
+        "character": "Michael Caffrey"
+      },
+      {
+        "id": 25935,
+        "media_type": "movie",
+        "title": "The Reckoning",
+        "credit_id": "53bef8490e0a26158f004999",
+        "release_date": "2003-08-06",
+        "original_title": "The Reckoning",
+        "adult": false,
+        "poster_path": "/jAx1HVwv9eqVNnt8l85ZjlWPM9w.jpg",
+        "character": "Springer"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Stuart Wells",
+  "place_of_birth": null,
+  "popularity": "1.00691009574655"
+}

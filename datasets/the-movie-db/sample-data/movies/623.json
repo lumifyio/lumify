@@ -1,0 +1,351 @@
+{
+  "budget": 7500000,
+  "vote_average": 6.5,
+  "backdrop_path": "/jFXh6EHhIJQ9AN9mVludOrykBdt.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8930,
+        "order": 0,
+        "credit_id": "52fe4260c3a36847f8019665",
+        "name": "John Cleese",
+        "cast_id": 22,
+        "profile_path": "/iGFWzoHz4ruCSfeEY54CRdMnFJ8.jpg",
+        "character": "Archie Leach"
+      },
+      {
+        "id": 8944,
+        "order": 1,
+        "credit_id": "52fe4260c3a36847f8019669",
+        "name": "Jamie Lee Curtis",
+        "cast_id": 23,
+        "profile_path": "/o8Gwv0s9UsH2oc4JlML4e9Nx6a3.jpg",
+        "character": "Wanda Gershwitz"
+      },
+      {
+        "id": 8945,
+        "order": 2,
+        "credit_id": "52fe4260c3a36847f801966d",
+        "name": "Kevin Kline",
+        "cast_id": 24,
+        "profile_path": "/u9QXn3fL7zCC2c6HA2vFgH1JxZg.jpg",
+        "character": "Otto"
+      },
+      {
+        "id": 383,
+        "order": 3,
+        "credit_id": "52fe4260c3a36847f8019671",
+        "name": "Michael Palin",
+        "cast_id": 25,
+        "profile_path": "/lOkY51h2pPZq2lig6puWBG3Xxq3.jpg",
+        "character": "Ken Pile"
+      },
+      {
+        "id": 8946,
+        "order": 4,
+        "credit_id": "52fe4260c3a36847f8019675",
+        "name": "Maria Aitken",
+        "cast_id": 26,
+        "profile_path": "/kVnrU7fzrw85I51OJp8yBRDg3oO.jpg",
+        "character": "Wendy"
+      },
+      {
+        "id": 8947,
+        "order": 5,
+        "credit_id": "52fe4260c3a36847f8019679",
+        "name": "Tom Georgeson",
+        "cast_id": 27,
+        "profile_path": "/90IirxcNYdJANlTW1i782SGnCkn.jpg",
+        "character": "Georges Thomason"
+      },
+      {
+        "id": 8948,
+        "order": 6,
+        "credit_id": "52fe4260c3a36847f801967d",
+        "name": "Cynthia Cleese",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Portia"
+      },
+      {
+        "id": 12658,
+        "order": 7,
+        "credit_id": "52fe4260c3a36847f8019681",
+        "name": "Patricia Hayes",
+        "cast_id": 29,
+        "profile_path": "/1G864KAppXhSlwarx9fHoMufjWF.jpg",
+        "character": "Mrs. Coady"
+      },
+      {
+        "id": 10746,
+        "order": 8,
+        "credit_id": "52fe4260c3a36847f8019685",
+        "name": "Geoffrey Palmer",
+        "cast_id": 30,
+        "profile_path": "/6ouSoFGy8Rd9viyHmWHoEJfknFa.jpg",
+        "character": "Judge"
+      },
+      {
+        "id": 1157036,
+        "order": 9,
+        "credit_id": "52fe4260c3a36847f8019689",
+        "name": "Mark Elwes",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Customer in Jeweler's Shop"
+      },
+      {
+        "id": 49968,
+        "order": 10,
+        "credit_id": "52fe4260c3a36847f801968d",
+        "name": "Neville Phillips",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Manager of Jeweler's Shop"
+      },
+      {
+        "id": 27334,
+        "order": 11,
+        "credit_id": "52fe4260c3a36847f8019691",
+        "name": "Peter Jonfield",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Inspector Marvin"
+      },
+      {
+        "id": 158293,
+        "order": 12,
+        "credit_id": "52fe4260c3a36847f8019695",
+        "name": "Jeremy Child",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Mr. Johnson"
+      },
+      {
+        "id": 11275,
+        "order": 13,
+        "credit_id": "52fe4260c3a36847f8019699",
+        "name": "Stephen Fry",
+        "cast_id": 35,
+        "profile_path": "/uaRoTAS2D15vdlpHm122UEUg5ck.jpg",
+        "character": "Hutchison"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8929,
+        "credit_id": "52fe425fc3a36847f80195f5",
+        "department": "Directing",
+        "name": "Charles Crichton",
+        "job": "Director",
+        "profile_path": "/9ahf7Ghdy9x9pXue1PeC1bFMu2y.jpg"
+      },
+      {
+        "id": 8930,
+        "credit_id": "52fe425fc3a36847f80195fb",
+        "department": "Writing",
+        "name": "John Cleese",
+        "job": "Screenplay",
+        "profile_path": "/iGFWzoHz4ruCSfeEY54CRdMnFJ8.jpg"
+      },
+      {
+        "id": 8929,
+        "credit_id": "52fe425fc3a36847f8019601",
+        "department": "Writing",
+        "name": "Charles Crichton",
+        "job": "Screenplay",
+        "profile_path": "/9ahf7Ghdy9x9pXue1PeC1bFMu2y.jpg"
+      },
+      {
+        "id": 8931,
+        "credit_id": "52fe425fc3a36847f8019607",
+        "department": "Production",
+        "name": "Steve Abbott",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8930,
+        "credit_id": "52fe425fc3a36847f801960d",
+        "department": "Production",
+        "name": "John Cleese",
+        "job": "Executive Producer",
+        "profile_path": "/iGFWzoHz4ruCSfeEY54CRdMnFJ8.jpg"
+      },
+      {
+        "id": 8932,
+        "credit_id": "52fe425fc3a36847f8019613",
+        "department": "Production",
+        "name": "John Comfort",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5381,
+        "credit_id": "52fe425fc3a36847f8019619",
+        "department": "Production",
+        "name": "Michael Shamberg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8933,
+        "credit_id": "52fe425fc3a36847f801961f",
+        "department": "Sound",
+        "name": "John Du Prez",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8934,
+        "credit_id": "52fe425fc3a36847f8019625",
+        "department": "Camera",
+        "name": "Alan Hume",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7754,
+        "credit_id": "52fe425fc3a36847f801962b",
+        "department": "Editing",
+        "name": "John Jympson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3311,
+        "credit_id": "52fe425fc3a36847f8019631",
+        "department": "Production",
+        "name": "Priscilla John",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 8936,
+        "credit_id": "52fe425fc3a36847f8019637",
+        "department": "Art",
+        "name": "Roger Murray-Leach",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5331,
+        "credit_id": "52fe425fc3a36847f801963d",
+        "department": "Art",
+        "name": "Stephanie McMillan",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 8938,
+        "credit_id": "52fe425fc3a36847f8019643",
+        "department": "Costume & Make-Up",
+        "name": "Hazel Pethig",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 8939,
+        "credit_id": "52fe425fc3a36847f8019649",
+        "department": "Visual Effects",
+        "name": "Paul Engelen",
+        "job": "Creature Design",
+        "profile_path": null
+      },
+      {
+        "id": 8941,
+        "credit_id": "52fe425fc3a36847f801964f",
+        "department": "Sound",
+        "name": "Jonathan Bates",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6922,
+        "credit_id": "52fe425fc3a36847f8019655",
+        "department": "Visual Effects",
+        "name": "Christa Munro",
+        "job": "Creature Design",
+        "profile_path": null
+      },
+      {
+        "id": 8942,
+        "credit_id": "52fe4260c3a36847f801965b",
+        "department": "Sound",
+        "name": "Colin Wood",
+        "job": "Boom Operator",
+        "profile_path": null
+      },
+      {
+        "id": 8943,
+        "credit_id": "52fe4260c3a36847f8019661",
+        "department": "Visual Effects",
+        "name": "George Gibbs",
+        "job": "Creature Design",
+        "profile_path": null
+      },
+      {
+        "id": 91989,
+        "credit_id": "52fe4260c3a36847f801969f",
+        "department": "Art",
+        "name": "John Wood",
+        "job": "Art Direction",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 108,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 623,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "A Fish Called Wanda",
+  "overview": "A diamond advocate is attempting to steal a collection of diamonds, yet troubles arise when he realizes that he is not the only one after the diamonds.",
+  "production_companies": [
+    {
+      "id": 8411,
+      "name": "Metro-Goldwyn-Mayer (MGM)"
+    },
+    {
+      "id": 11352,
+      "name": "Prominent Features"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0095159",
+  "release_date": "1988-07-15",
+  "original_title": "A Fish Called Wanda",
+  "vote_count": 88,
+  "poster_path": "/9gZZyQ8XStpUJBFU1ceU4xx1crv.jpg",
+  "tagline": "A tale of murder, lust, greed, revenge, and seafood.",
+  "revenue": 62493712,
+  "popularity": "1.18600353173698"
+}

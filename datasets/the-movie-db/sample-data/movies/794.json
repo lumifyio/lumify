@@ -1,0 +1,405 @@
+{
+  "budget": 2800000,
+  "vote_average": 7,
+  "backdrop_path": "/zme4RH7DVdRSGrTk7bNvcGGywAW.jpg",
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8487,
+        "order": 0,
+        "credit_id": "52fe4277c3a36847f8020e9b",
+        "name": "Gregory Peck",
+        "cast_id": 13,
+        "profile_path": "/yUS6VJs7r7WQQyzJz08MbBIqSSM.jpg",
+        "character": "Robert Thorn"
+      },
+      {
+        "id": 855,
+        "order": 1,
+        "credit_id": "52fe4277c3a36847f8020e9f",
+        "name": "Lee Remick",
+        "cast_id": 14,
+        "profile_path": "/nxXQhtEeYJW4S7kN2RQmmoGDGIw.jpg",
+        "character": "Katherine Thorn"
+      },
+      {
+        "id": 2076,
+        "order": 2,
+        "credit_id": "52fe4277c3a36847f8020ea3",
+        "name": "David Warner",
+        "cast_id": 15,
+        "profile_path": "/eogsvYwdu7gwCv8CCZsvUsSJyjG.jpg",
+        "character": "Keith Jennings"
+      },
+      {
+        "id": 8226,
+        "order": 3,
+        "credit_id": "52fe4277c3a36847f8020ea7",
+        "name": "Billie Whitelaw",
+        "cast_id": 16,
+        "profile_path": "/5XSUS3oSuG2CtJQPiEBQd9AAmg4.jpg",
+        "character": "Mrs. Baylock"
+      },
+      {
+        "id": 11839,
+        "order": 4,
+        "credit_id": "52fe4277c3a36847f8020eab",
+        "name": "Harvey Stephens",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Damien"
+      },
+      {
+        "id": 11840,
+        "order": 5,
+        "credit_id": "52fe4277c3a36847f8020eaf",
+        "name": "Patrick Troughton",
+        "cast_id": 18,
+        "profile_path": "/97DI8IZkVYhoafymFrcHNsPHsil.jpg",
+        "character": "Father Brennan"
+      },
+      {
+        "id": 9912,
+        "order": 6,
+        "credit_id": "52fe4277c3a36847f8020eb3",
+        "name": "Martin Benson",
+        "cast_id": 19,
+        "profile_path": "/x4AfPPRujgL6kfH8ObfefC7i9FY.jpg",
+        "character": "Father Spiletto"
+      },
+      {
+        "id": 11841,
+        "order": 7,
+        "credit_id": "52fe4277c3a36847f8020eb7",
+        "name": "Robert Rietti",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Monk"
+      },
+      {
+        "id": 11842,
+        "order": 8,
+        "credit_id": "52fe4277c3a36847f8020ebb",
+        "name": "Tommy Duggan",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Priest"
+      },
+      {
+        "id": 11843,
+        "order": 9,
+        "credit_id": "52fe4277c3a36847f8020ebf",
+        "name": "John Stride",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Psychiatrist"
+      },
+      {
+        "id": 11844,
+        "order": 10,
+        "credit_id": "52fe4277c3a36847f8020ec3",
+        "name": "Holly Palance",
+        "cast_id": 23,
+        "profile_path": "/sL81HKXDG8daUmNFz9skobjBHtV.jpg",
+        "character": "Young Nanny"
+      },
+      {
+        "id": 25643,
+        "order": 11,
+        "credit_id": "52fe4277c3a36847f8020ec7",
+        "name": "Anthony Nicholls",
+        "cast_id": 24,
+        "profile_path": "/xf6jPF6HeYW7qZCW2OAVqermnr7.jpg",
+        "character": "Dr. Becker"
+      },
+      {
+        "id": 156387,
+        "order": 12,
+        "credit_id": "52fe4277c3a36847f8020ecb",
+        "name": "Roy Boyd",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Reporter"
+      },
+      {
+        "id": 2276,
+        "order": 13,
+        "credit_id": "52fe4277c3a36847f8020ecf",
+        "name": "Sheila Raynor",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Mrs. Horton"
+      },
+      {
+        "id": 117410,
+        "order": 14,
+        "credit_id": "52fe4277c3a36847f8020ed3",
+        "name": "Robert MacLeod",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Horton"
+      },
+      {
+        "id": 8664,
+        "order": 15,
+        "credit_id": "52fe4277c3a36847f8020ed7",
+        "name": "Bruce Boa",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Thorn's Aide"
+      },
+      {
+        "id": 662,
+        "order": 16,
+        "credit_id": "52fe4277c3a36847f8020edb",
+        "name": "Don Fellows",
+        "cast_id": 29,
+        "profile_path": "/sQgCr3xz2LVomGMKCvb7rLD9dMX.jpg",
+        "character": "Thorn's Second Aide"
+      },
+      {
+        "id": 201489,
+        "order": 17,
+        "credit_id": "52fe4277c3a36847f8020edf",
+        "name": "Patrick McAlinney",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Photographer"
+      },
+      {
+        "id": 1077927,
+        "order": 18,
+        "credit_id": "52fe4277c3a36847f8020ee3",
+        "name": "Dawn Perllman",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Chambermaid"
+      },
+      {
+        "id": 1077928,
+        "order": 19,
+        "credit_id": "52fe4277c3a36847f8020ee7",
+        "name": "Nancy Mannigham",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Nurse"
+      },
+      {
+        "id": 1077929,
+        "order": 20,
+        "credit_id": "52fe4277c3a36847f8020eeb",
+        "name": "Miki Iveria",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "First Nun"
+      },
+      {
+        "id": 1006770,
+        "order": 21,
+        "credit_id": "52fe4277c3a36847f8020eef",
+        "name": "Betty McDowall",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "American Secretary"
+      },
+      {
+        "id": 14902,
+        "order": 22,
+        "credit_id": "52fe4277c3a36847f8020ef3",
+        "name": "Nicholas Campbell",
+        "cast_id": 35,
+        "profile_path": "/iaHrV64dbBAHek0CmoMGQ2fq5Md.jpg",
+        "character": "Marine"
+      },
+      {
+        "id": 184980,
+        "order": 23,
+        "credit_id": "52fe4277c3a36847f8020ef7",
+        "name": "Burnell Tucker",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Secret Service Man"
+      },
+      {
+        "id": 29872,
+        "order": 24,
+        "credit_id": "52fe4277c3a36847f8020efb",
+        "name": "Ronald Leigh-Hunt",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Gentleman at Rugby Match"
+      },
+      {
+        "id": 589558,
+        "order": 25,
+        "credit_id": "52fe4277c3a36847f8020eff",
+        "name": "Guglielmo Spoletini",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Italian Taxi Driver"
+      },
+      {
+        "id": 583498,
+        "order": 26,
+        "credit_id": "52fe4277c3a36847f8020f03",
+        "name": "Ya'ackov Banai",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Arab"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7187,
+        "credit_id": "52fe4277c3a36847f8020e55",
+        "department": "Directing",
+        "name": "Richard Donner",
+        "job": "Director",
+        "profile_path": "/hsOQU2mFuAfGrvBMDLPgrWemO5T.jpg"
+      },
+      {
+        "id": 11834,
+        "credit_id": "52fe4277c3a36847f8020e5b",
+        "department": "Writing",
+        "name": "David Seltzer",
+        "job": "Screenplay",
+        "profile_path": "/xrpGKYuDVkTJe6bjMDPgGdbEpR6.jpg"
+      },
+      {
+        "id": 7199,
+        "credit_id": "52fe4277c3a36847f8020e61",
+        "department": "Production",
+        "name": "Harvey Bernhard",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4611,
+        "credit_id": "52fe4277c3a36847f8020e67",
+        "department": "Production",
+        "name": "Mace Neufeld",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10337,
+        "credit_id": "52fe4277c3a36847f8020e6d",
+        "department": "Production",
+        "name": "Charles Orme",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1760,
+        "credit_id": "52fe4277c3a36847f8020e73",
+        "department": "Sound",
+        "name": "Jerry Goldsmith",
+        "job": "Original Music Composer",
+        "profile_path": "/uQdaeP2awJgDc0ps9dohHw5quQ2.jpg"
+      },
+      {
+        "id": 7753,
+        "credit_id": "52fe4277c3a36847f8020e79",
+        "department": "Camera",
+        "name": "Gilbert Taylor",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2523,
+        "credit_id": "52fe4277c3a36847f8020e7f",
+        "department": "Editing",
+        "name": "Stuart Baird",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10340,
+        "credit_id": "52fe4277c3a36847f8020e85",
+        "department": "Production",
+        "name": "Maude Spector",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 11836,
+        "credit_id": "52fe4277c3a36847f8020e8b",
+        "department": "Art",
+        "name": "Carmen Dillon",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11837,
+        "credit_id": "52fe4277c3a36847f8020e91",
+        "department": "Costume & Make-Up",
+        "name": "Stuart Freeborn",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 11838,
+        "credit_id": "52fe4277c3a36847f8020e97",
+        "department": "Production",
+        "name": "Claude Hudson",
+        "job": "Production Manager",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 111,
+  "spoken_languages": [
+    {
+      "iso_639_1": "la",
+      "name": "Latin"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 794,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "The Omen",
+  "overview": "Immediately after their miscarriage, the US diplomat Robert Thorn adopts the newborn Damien without the knowledge of his wife. Yet what he doesn\u2019t know is that their new son is the son of the devil. A classic horror film with Gregory Peck from 1976.",
+  "production_companies": [{
+    "id": 25,
+    "name": "20th Century Fox"
+  }],
+  "belongs_to_collection": {
+    "id": 10919,
+    "backdrop_path": null,
+    "name": "The Omen Collection",
+    "poster_path": "/5IqWSXMS2qb9wijTMbCHXK4ahXE.jpg"
+  },
+  "imdb_id": "tt0075005",
+  "release_date": "1976-06-25",
+  "original_title": "The Omen",
+  "vote_count": 62,
+  "poster_path": "/uY14zS4Sm2DdvFXeczFKgLgkQUP.jpg",
+  "tagline": "It is the greatest mystery of all because no human being will ever solve it.",
+  "revenue": 0,
+  "popularity": "0.549487226590288"
+}

@@ -1,0 +1,294 @@
+{
+  "budget": 3000000,
+  "vote_average": 7.9,
+  "backdrop_path": "/r1u2bLVO83dvNDODn2oTNLlzYjG.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3151,
+        "order": 0,
+        "credit_id": "52fe4232c3a36847f800b417",
+        "name": "Jack Lemmon",
+        "cast_id": 1,
+        "profile_path": "/1Y3wQsqRALOL3LZQtKmulmN3qff.jpg",
+        "character": "C.C. Baxter"
+      },
+      {
+        "id": 4090,
+        "order": 1,
+        "credit_id": "52fe4232c3a36847f800b41b",
+        "name": "Shirley MacLaine",
+        "cast_id": 2,
+        "profile_path": "/faG5S4EOVaGHNf1CwZryGcHCE4e.jpg",
+        "character": "Fran Kubelik"
+      },
+      {
+        "id": 4091,
+        "order": 2,
+        "credit_id": "52fe4232c3a36847f800b41f",
+        "name": "Fred MacMurray",
+        "cast_id": 3,
+        "profile_path": "/3TQjxCbV4xaILVSd0biqfKXt50u.jpg",
+        "character": "Jeff D. Sheldrake"
+      },
+      {
+        "id": 4093,
+        "order": 3,
+        "credit_id": "52fe4232c3a36847f800b423",
+        "name": "Ray Walston",
+        "cast_id": 4,
+        "profile_path": "/KzlcoLq3s2I3ogQAdbE1eUcXsb.jpg",
+        "character": "Joe Dobisch"
+      },
+      {
+        "id": 4094,
+        "order": 4,
+        "credit_id": "52fe4232c3a36847f800b427",
+        "name": "Jack Kruschen",
+        "cast_id": 5,
+        "profile_path": "/wV2cXcwJGwtySHjGKnjhSN0usq7.jpg",
+        "character": "Dr. Dreyfuss"
+      },
+      {
+        "id": 4096,
+        "order": 5,
+        "credit_id": "52fe4232c3a36847f800b42b",
+        "name": "Naomi Stevens",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Mrs. Mildred Dreyfuss"
+      },
+      {
+        "id": 4097,
+        "order": 6,
+        "credit_id": "52fe4232c3a36847f800b42f",
+        "name": "Hope Holiday",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Mrs. Margie MacDougall"
+      },
+      {
+        "id": 4098,
+        "order": 7,
+        "credit_id": "52fe4232c3a36847f800b433",
+        "name": "Edie Adams",
+        "cast_id": 8,
+        "profile_path": "/nR9nzWhHMZeRrk5EeJhOVhxILbk.jpg",
+        "character": "Miss Olsen"
+      },
+      {
+        "id": 3161,
+        "order": 8,
+        "credit_id": "52fe4232c3a36847f800b437",
+        "name": "Joan Shawlee",
+        "cast_id": 9,
+        "profile_path": "/1KSTHsyQsyuIAaj4k1BLmdpMaEc.jpg",
+        "character": "Sylvia"
+      },
+      {
+        "id": 4099,
+        "order": 9,
+        "credit_id": "52fe4232c3a36847f800b43b",
+        "name": "Johnny Seven",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Karl Matuschka"
+      },
+      {
+        "id": 571911,
+        "order": 10,
+        "credit_id": "52fe4232c3a36847f800b4a5",
+        "name": "David Lewis",
+        "cast_id": 28,
+        "profile_path": "/hi8Y2vwvTw8FhclgwS1w2mOKvO4.jpg",
+        "character": "Al Kirkeby"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3146,
+        "credit_id": "52fe4232c3a36847f800b441",
+        "department": "Production",
+        "name": "Billy Wilder",
+        "job": "Producer",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3147,
+        "credit_id": "52fe4232c3a36847f800b447",
+        "department": "Production",
+        "name": "I. A. L. Diamond",
+        "job": "Producer",
+        "profile_path": "/lii36e0Ntvq7sL1rA0tVs4FePYT.jpg"
+      },
+      {
+        "id": 3159,
+        "credit_id": "52fe4232c3a36847f800b44d",
+        "department": "Production",
+        "name": "Doane Harrison",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4100,
+        "credit_id": "52fe4232c3a36847f800b453",
+        "department": "Sound",
+        "name": "Adolph Deutsch",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4101,
+        "credit_id": "52fe4232c3a36847f800b459",
+        "department": "Camera",
+        "name": "Joseph LaShelle",
+        "job": "Director of Photography",
+        "profile_path": "/3j8m5eDzhinBJeUscfNZWhJn9ch.jpg"
+      },
+      {
+        "id": 4102,
+        "credit_id": "52fe4232c3a36847f800b45f",
+        "department": "Editing",
+        "name": "Daniel Mandell",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4103,
+        "credit_id": "52fe4232c3a36847f800b465",
+        "department": "Art",
+        "name": "Alexandre Trauner",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 4104,
+        "credit_id": "52fe4232c3a36847f800b46b",
+        "department": "Art",
+        "name": "Edward G. Boyle",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 4105,
+        "credit_id": "52fe4232c3a36847f800b471",
+        "department": "Costume & Make-Up",
+        "name": "Harry Ray",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 4106,
+        "credit_id": "52fe4232c3a36847f800b477",
+        "department": "Production",
+        "name": "Allen K. Wood",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 4107,
+        "credit_id": "52fe4232c3a36847f800b47d",
+        "department": "Crew",
+        "name": "Milt Rice",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 4108,
+        "credit_id": "52fe4232c3a36847f800b483",
+        "department": "Lighting",
+        "name": "Don Stott",
+        "job": "Gaffer",
+        "profile_path": null
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe4232c3a36847f800b489",
+        "department": "Directing",
+        "name": "Billy Wilder",
+        "job": "Director",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe4232c3a36847f800b48f",
+        "department": "Writing",
+        "name": "Billy Wilder",
+        "job": "Author",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3147,
+        "credit_id": "52fe4232c3a36847f800b495",
+        "department": "Writing",
+        "name": "I. A. L. Diamond",
+        "job": "Author",
+        "profile_path": "/lii36e0Ntvq7sL1rA0tVs4FePYT.jpg"
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe4232c3a36847f800b49b",
+        "department": "Writing",
+        "name": "Billy Wilder",
+        "job": "Screenplay",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3147,
+        "credit_id": "52fe4232c3a36847f800b4a1",
+        "department": "Writing",
+        "name": "I. A. L. Diamond",
+        "job": "Screenplay",
+        "profile_path": "/lii36e0Ntvq7sL1rA0tVs4FePYT.jpg"
+      }
+    ]
+  },
+  "runtime": 125,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 284,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Apartment",
+  "overview": "Bud Baxter is a minor clerk in a huge New York insurance company, until he discovers a quick way to climb the corporate ladder. He lends out his apartment to the executives as a place to take their mistresses. Although he often has to deal with the aftermath of their visits, one night he's left with a major problem to solve.",
+  "production_companies": [
+    {
+      "id": 60,
+      "name": "United Artists"
+    },
+    {
+      "id": 11241,
+      "name": "The Mirisch Company"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0053604",
+  "release_date": "1960-06-15",
+  "original_title": "The Apartment",
+  "vote_count": 50,
+  "poster_path": "/8nrQKQjD6z0SJouKHQapXzmjFc6.jpg",
+  "tagline": "Movie-wise, there has never been anything like it - laugh-wise, love-wise, or otherwise-wise",
+  "revenue": 25000000,
+  "popularity": "0.90097724945628"
+}

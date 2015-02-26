@@ -1,0 +1,327 @@
+{
+  "budget": 28000000,
+  "vote_average": 6.6,
+  "backdrop_path": "/uG6AChg2FA3EmRuJDezDqoIpQzB.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3,
+        "order": 0,
+        "credit_id": "52fe4215c3a36847f8002c09",
+        "name": "Harrison Ford",
+        "cast_id": 4,
+        "profile_path": "/7CcoVFTogQgex2kJkXKMe8qHZrC.jpg",
+        "character": "Indiana Jones"
+      },
+      {
+        "id": 689,
+        "order": 1,
+        "credit_id": "52fe4215c3a36847f8002c0d",
+        "name": "Kate Capshaw",
+        "cast_id": 5,
+        "profile_path": "/qhrU9F2xcMd9ZHBQZxth8P6FpLF.jpg",
+        "character": "Wilhelmina \"Willie\" Scott"
+      },
+      {
+        "id": 690,
+        "order": 2,
+        "credit_id": "52fe4215c3a36847f8002c11",
+        "name": "Jonathan Ke Quan",
+        "cast_id": 6,
+        "profile_path": "/1cKtw6cBhWPHtjUBiY3si8odVIE.jpg",
+        "character": "Short Round"
+      },
+      {
+        "id": 691,
+        "order": 3,
+        "credit_id": "52fe4215c3a36847f8002c15",
+        "name": "Amrish Puri",
+        "cast_id": 7,
+        "profile_path": "/9WsIjfAyhYgkT4Nvbffn98NLvio.jpg",
+        "character": "Mola Ram"
+      },
+      {
+        "id": 693,
+        "order": 4,
+        "credit_id": "52fe4215c3a36847f8002c19",
+        "name": "Roshan Seth",
+        "cast_id": 8,
+        "profile_path": "/hC4VtvW0lUmzGy54NLqyUeufnQT.jpg",
+        "character": "Chattar Lal"
+      },
+      {
+        "id": 694,
+        "order": 5,
+        "credit_id": "52fe4215c3a36847f8002c1d",
+        "name": "Philip Stone",
+        "cast_id": 9,
+        "profile_path": "/qtaBPJZC7MpoyWfcyXJ1zdEfYwU.jpg",
+        "character": "Captain Blumburtt"
+      },
+      {
+        "id": 695,
+        "order": 6,
+        "credit_id": "52fe4215c3a36847f8002c21",
+        "name": "Roy Chiao",
+        "cast_id": 10,
+        "profile_path": "/6gBxdImc8eGHeDDEJGFiGrIwx6O.jpg",
+        "character": "Lao Che"
+      },
+      {
+        "id": 696,
+        "order": 7,
+        "credit_id": "52fe4215c3a36847f8002c25",
+        "name": "David Yip",
+        "cast_id": 11,
+        "profile_path": "/s2ApWZ620ZMe8nwvKM2y8TwjenE.jpg",
+        "character": "Wu Han"
+      },
+      {
+        "id": 11397,
+        "order": 8,
+        "credit_id": "52fe4215c3a36847f8002c29",
+        "name": "Ric Young",
+        "cast_id": 12,
+        "profile_path": "/nqhFfFdZ73cEjLjAuLW19f3d7EO.jpg",
+        "character": "Kao Kan"
+      },
+      {
+        "id": 699,
+        "order": 9,
+        "credit_id": "52fe4215c3a36847f8002c2d",
+        "name": "Chua Kah Joo",
+        "cast_id": 13,
+        "profile_path": "/sVJUeMRFGYuCTD3jvrf4hRpteky.jpg",
+        "character": "Chen"
+      },
+      {
+        "id": 701,
+        "order": 10,
+        "credit_id": "52fe4215c3a36847f8002c31",
+        "name": "Rex Ngui",
+        "cast_id": 14,
+        "profile_path": "/y2FC7QT3jcT7YfzZ0ac5eLaDqad.jpg",
+        "character": "Maitre d'"
+      },
+      {
+        "id": 702,
+        "order": 11,
+        "credit_id": "52fe4215c3a36847f8002c35",
+        "name": "Philip Tan",
+        "cast_id": 15,
+        "profile_path": "/dJP4kbCF2f8dg88BROfRukd67H1.jpg",
+        "character": "Chief Henchman"
+      },
+      {
+        "id": 707,
+        "order": 12,
+        "credit_id": "52fe4215c3a36847f8002c39",
+        "name": "Dan Aykroyd",
+        "cast_id": 16,
+        "profile_path": "/h2PT9yZYv5ml5hL9jvCpWBTWgU.jpg",
+        "character": "Earl Weber"
+      }
+    ],
+    "crew": [
+      {
+        "id": 488,
+        "credit_id": "52fe4215c3a36847f8002bf9",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 686,
+        "credit_id": "52fe4215c3a36847f8002bff",
+        "department": "Writing",
+        "name": "Willard Huyck",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 687,
+        "credit_id": "52fe4215c3a36847f8002c05",
+        "department": "Writing",
+        "name": "Gloria Katz",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 711,
+        "credit_id": "52fe4215c3a36847f8002c3f",
+        "department": "Production",
+        "name": "Robert Watts",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1,
+        "credit_id": "52fe4215c3a36847f8002c45",
+        "department": "Production",
+        "name": "George Lucas",
+        "job": "Executive Producer",
+        "profile_path": "/rJ1zvSeZfge0mHtLnzJn4Mkw18S.jpg"
+      },
+      {
+        "id": 664,
+        "credit_id": "52fe4215c3a36847f8002c4b",
+        "department": "Production",
+        "name": "Frank Marshall",
+        "job": "Executive Producer",
+        "profile_path": "/iZrDellT1OWf1syKzBgQHjY2hJe.jpg"
+      },
+      {
+        "id": 491,
+        "credit_id": "52fe4215c3a36847f8002c51",
+        "department": "Sound",
+        "name": "John Williams",
+        "job": "Original Music Composer",
+        "profile_path": "/d7NNRZQAIzLBSaoez550QHLpTk.jpg"
+      },
+      {
+        "id": 666,
+        "credit_id": "52fe4215c3a36847f8002c57",
+        "department": "Camera",
+        "name": "Douglas Slocombe",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 597,
+        "credit_id": "52fe4215c3a36847f8002c5d",
+        "department": "Production",
+        "name": "Jane Feinberg",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 598,
+        "credit_id": "52fe4215c3a36847f8002c63",
+        "department": "Production",
+        "name": "Mike Fenton",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 599,
+        "credit_id": "52fe4215c3a36847f8002c69",
+        "department": "Production",
+        "name": "Marci Liroff",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 668,
+        "credit_id": "52fe4215c3a36847f8002c6f",
+        "department": "Production",
+        "name": "Mary Selway",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 493,
+        "credit_id": "52fe4215c3a36847f8002c75",
+        "department": "Editing",
+        "name": "Michael Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1,
+        "credit_id": "52fe4215c3a36847f8002c7b",
+        "department": "Editing",
+        "name": "George Lucas",
+        "job": "Editor",
+        "profile_path": "/rJ1zvSeZfge0mHtLnzJn4Mkw18S.jpg"
+      },
+      {
+        "id": 715,
+        "credit_id": "52fe4215c3a36847f8002c81",
+        "department": "Art",
+        "name": "Elliot Scott",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 670,
+        "credit_id": "52fe4215c3a36847f8002c87",
+        "department": "Sound",
+        "name": "Ben Burtt",
+        "job": "Sound Designer",
+        "profile_path": "/pYSkspLspSDVLZUQ43pByOebsCX.jpg"
+      },
+      {
+        "id": 489,
+        "credit_id": "52fe4215c3a36847f8002c8d",
+        "department": "Production",
+        "name": "Kathleen Kennedy",
+        "job": "Producer",
+        "profile_path": "/uHEExgTTzJNDX1Gal9CW5n3QdEJ.jpg"
+      },
+      {
+        "id": 664,
+        "credit_id": "52fe4215c3a36847f8002c93",
+        "department": "Crew",
+        "name": "Frank Marshall",
+        "job": "Second Unit",
+        "profile_path": "/iZrDellT1OWf1syKzBgQHjY2hJe.jpg"
+      }
+    ]
+  },
+  "runtime": 118,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "si",
+      "name": ""
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.indianajones.com",
+  "id": 87,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Indiana Jones and the Temple of Doom",
+  "overview": "After arriving in India, Indiana Jones is asked by a desperate village to find a mystical stone. He agrees, and stumbles upon a secret cult plotting a terrible plan in the catacombs of an ancient palace.",
+  "production_companies": [
+    {
+      "id": 4,
+      "name": "Paramount Pictures"
+    },
+    {
+      "id": 1,
+      "name": "Lucasfilm"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 84,
+    "backdrop_path": "/9f8kjuytZPJEPf1bhJgkekaoanr.jpg",
+    "name": "Indiana Jones Collection",
+    "poster_path": "/189ZbLN7HAIholqHFze48RWj7Hi.jpg"
+  },
+  "imdb_id": "tt0087469",
+  "release_date": "1984-05-22",
+  "original_title": "Indiana Jones and the Temple of Doom",
+  "vote_count": 895,
+  "poster_path": "/f2nTRKk2zGdUTE7tLJ5EGGSuKA6.jpg",
+  "tagline": "If adventure has a name... it must be Indiana Jones.",
+  "revenue": 333000000,
+  "popularity": "3.19853399544399"
+}

@@ -1,0 +1,314 @@
+{
+  "budget": 5952000,
+  "vote_average": 7.2,
+  "backdrop_path": "/1bfWlmJFoGj7GssXgfjtQ2W19Ez.jpg",
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4512,
+        "order": 0,
+        "credit_id": "52fe427ec3a36847f802321b",
+        "name": "James Woods",
+        "cast_id": 13,
+        "profile_path": "/fl5Jx1WFvBcg1b9VZRfXTH6LPUE.jpg",
+        "character": "Max Renn"
+      },
+      {
+        "id": 12482,
+        "order": 1,
+        "credit_id": "52fe427ec3a36847f802321f",
+        "name": "Sonja Smits",
+        "cast_id": 14,
+        "profile_path": "/8vLGIGKq8kzoCpSXU6iHEXlgByC.jpg",
+        "character": "Bianca O'Blivion"
+      },
+      {
+        "id": 102,
+        "order": 2,
+        "credit_id": "52fe427ec3a36847f8023223",
+        "name": "Debbie Harry",
+        "cast_id": 15,
+        "profile_path": "/1I0WW7NaSXKeQjrIKLwnzvBq5d8.jpg",
+        "character": "Nicki Brand"
+      },
+      {
+        "id": 12483,
+        "order": 3,
+        "credit_id": "52fe427ec3a36847f8023227",
+        "name": "Peter Dvorsky",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Harlan"
+      },
+      {
+        "id": 12485,
+        "order": 5,
+        "credit_id": "52fe427ec3a36847f802322b",
+        "name": "Jack Creley",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Brian O'Blivion"
+      },
+      {
+        "id": 12486,
+        "order": 6,
+        "credit_id": "52fe427ec3a36847f802322f",
+        "name": "Lynne Gorman",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Masha"
+      },
+      {
+        "id": 12487,
+        "order": 7,
+        "credit_id": "52fe427ec3a36847f8023233",
+        "name": "Julie Khaner",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Bridey"
+      },
+      {
+        "id": 12488,
+        "order": 8,
+        "credit_id": "52fe427ec3a36847f8023237",
+        "name": "Reiner Schwartz",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Moses"
+      },
+      {
+        "id": 12489,
+        "order": 9,
+        "credit_id": "52fe427ec3a36847f802323b",
+        "name": "David Bolt",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Raphael"
+      },
+      {
+        "id": 12490,
+        "order": 10,
+        "credit_id": "52fe427ec3a36847f802323f",
+        "name": "Lally Cadeau",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Rena King"
+      },
+      {
+        "id": 12716,
+        "order": 11,
+        "credit_id": "52fe427ec3a36847f8023243",
+        "name": "Leslie Carlson",
+        "cast_id": 24,
+        "profile_path": "/nnYVdNB7MpXbBdq3xRzkD5fTzmW.jpg",
+        "character": "Barry Convex"
+      }
+    ],
+    "crew": [
+      {
+        "id": 224,
+        "credit_id": "52fe427ec3a36847f80231e1",
+        "department": "Directing",
+        "name": "David Cronenberg",
+        "job": "Director",
+        "profile_path": "/7Ot4rmLcEXrE42GulBpkgPfxS8k.jpg"
+      },
+      {
+        "id": 12476,
+        "credit_id": "52fe427ec3a36847f80231e7",
+        "department": "Production",
+        "name": "Claude Héroux",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12477,
+        "credit_id": "52fe427ec3a36847f80231ed",
+        "department": "Production",
+        "name": "Pierre David",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12479,
+        "credit_id": "52fe427ec3a36847f80231f3",
+        "department": "Production",
+        "name": "Victor Solnicki",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 117,
+        "credit_id": "52fe427ec3a36847f80231f9",
+        "department": "Sound",
+        "name": "Howard Shore",
+        "job": "Original Music Composer",
+        "profile_path": "/4HbFF5o13GkO0rHi4OVXXMb7U5L.jpg"
+      },
+      {
+        "id": 7413,
+        "credit_id": "52fe427ec3a36847f80231ff",
+        "department": "Camera",
+        "name": "Mark Irwin",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 310,
+        "credit_id": "52fe427ec3a36847f8023205",
+        "department": "Editing",
+        "name": "Ronald Sanders",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8315,
+        "credit_id": "52fe427ec3a36847f802320b",
+        "department": "Art",
+        "name": "Carol Spier",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 12480,
+        "credit_id": "52fe427ec3a36847f8023211",
+        "department": "Art",
+        "name": "Angelo Stea",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 12481,
+        "credit_id": "52fe427ec3a36847f8023217",
+        "department": "Costume & Make-Up",
+        "name": "Delphine White",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 224,
+        "credit_id": "52fe427ec3a36847f8023249",
+        "department": "Writing",
+        "name": "David Cronenberg",
+        "job": "Writer",
+        "profile_path": "/7Ot4rmLcEXrE42GulBpkgPfxS8k.jpg"
+      },
+      {
+        "id": 16178,
+        "credit_id": "52fe427ec3a36847f802324f",
+        "department": "Crew",
+        "name": "Rick Baker",
+        "job": "Makeup Effects",
+        "profile_path": "/4sVinbTdY31QSmQUJFjomK2AXd8.jpg"
+      },
+      {
+        "id": 97724,
+        "credit_id": "52fe427ec3a36847f8023255",
+        "department": "Crew",
+        "name": "Steve Johnson",
+        "job": "Makeup Effects",
+        "profile_path": null
+      },
+      {
+        "id": 1286358,
+        "credit_id": "52fe427ec3a36847f802325b",
+        "department": "Crew",
+        "name": "Bill Sturgeon",
+        "job": "Makeup Effects",
+        "profile_path": null
+      },
+      {
+        "id": 563116,
+        "credit_id": "52fe427ec3a36847f8023261",
+        "department": "Costume & Make-Up",
+        "name": "Shonagh Jabour",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 1286359,
+        "credit_id": "52fe427ec3a36847f8023267",
+        "department": "Costume & Make-Up",
+        "name": "Thomas Booth",
+        "job": "Hairstylist",
+        "profile_path": null
+      },
+      {
+        "id": 1286346,
+        "credit_id": "52fe427ec3a36847f802326d",
+        "department": "Costume & Make-Up",
+        "name": "Constant Natale",
+        "job": "Hairstylist",
+        "profile_path": null
+      },
+      {
+        "id": 1286360,
+        "credit_id": "52fe427ec3a36847f8023273",
+        "department": "Crew",
+        "name": "Frank C. Carere",
+        "job": "Special Effects",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 87,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 837,
+  "production_countries": [{
+    "name": "Canada",
+    "iso_3166_1": "CA"
+  }],
+  "title": "Videodrome",
+  "overview": "A sleazy cable-TV programmer begins to see his life and the future of media spin out of control in a very unusual fashion when he acquires a new kind of programming for his station.",
+  "production_companies": [
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    },
+    {
+      "id": 541,
+      "name": "Famous Players Ltd"
+    },
+    {
+      "id": 542,
+      "name": "Guardian Trust Company"
+    },
+    {
+      "id": 543,
+      "name": "Filmplan International II"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0086541",
+  "release_date": "1983-02-04",
+  "original_title": "Videodrome",
+  "vote_count": 35,
+  "poster_path": "/fl09Ai2lKPau49MdLp0pOc5rYlP.jpg",
+  "tagline": "First it controls your mind. Then it destroys your body.",
+  "revenue": 2120439,
+  "popularity": "0.430838306359224"
+}

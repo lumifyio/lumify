@@ -1,0 +1,184 @@
+{
+  "birthday": "1968-12-28",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia. Lior Ashkenazi (born in Ramat Gan, 1969), is an award-winning Israeli screen and stage actor.\n\nDescription above from the Wikipedia article Lior Ashkenazi, licensed under CC-BY-SA, full list of contributors on Wikipedia.    ",
+  "homepage": "",
+  "profile_path": "/nA9qMdH4O2ohvWMGB5GRqXL6GOI.jpg",
+  "id": 164,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0038988",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 29157,
+        "media_type": "movie",
+        "title": "Only Dogs Run Free",
+        "credit_id": "52fe45ccc3a368484e06f74d",
+        "release_date": "2007-10-10",
+        "original_title": "Rak Klavim Ratzim Hofshi",
+        "adult": false,
+        "poster_path": "/qAu0ibp1EL4vObLpgraFiDROUus.jpg",
+        "character": "Uri"
+      },
+      {
+        "id": 18400,
+        "media_type": "movie",
+        "title": "Hello Goodbye",
+        "credit_id": "52fe47789251416c7509a935",
+        "release_date": "2008-11-26",
+        "original_title": "Hello Goodbye",
+        "adult": false,
+        "poster_path": "/n5lQSa1CwVV5JYIVlbEozhaKcUk.jpg",
+        "character": "Yossi"
+      },
+      {
+        "id": 49680,
+        "media_type": "movie",
+        "title": "Late Marriage",
+        "credit_id": "52fe47a0c3a36847f813ff51",
+        "release_date": "2001-01-01",
+        "original_title": "Hatuna Meuheret",
+        "adult": false,
+        "poster_path": "/ye1MglobiBZw38SPucgo0SkhEwL.jpg",
+        "character": "Zaza"
+      },
+      {
+        "id": 71319,
+        "media_type": "movie",
+        "title": "Gift From Above",
+        "credit_id": "52fe482dc3a368484e0ecca9",
+        "release_date": "2003-12-18",
+        "original_title": "Matana MiShamayim",
+        "adult": false,
+        "poster_path": "/3CBjLTg5TcqtJI062qc5HakyAno.jpg",
+        "character": "Ottari"
+      },
+      {
+        "id": 72551,
+        "media_type": "movie",
+        "title": "Footnote",
+        "credit_id": "52fe4872c3a368484e0f89e9",
+        "release_date": "2011-06-02",
+        "original_title": "He'arat Shulayim",
+        "adult": false,
+        "poster_path": "/vu5r1AQjMxliGXDJbaLdHDSHpQI.jpg",
+        "character": "Uriel Shkolnik"
+      },
+      {
+        "id": 74586,
+        "media_type": "movie",
+        "title": "Rabies",
+        "credit_id": "52fe48d4c3a368484e10d0d7",
+        "release_date": "2010-12-12",
+        "original_title": "Kalevet",
+        "adult": false,
+        "poster_path": "/pAklVYYF4fuHsGlLm6H2ASzUMyh.jpg",
+        "character": "Danny"
+      },
+      {
+        "id": 78342,
+        "media_type": "movie",
+        "title": "Eli & Ben",
+        "credit_id": "52fe4999c3a368484e133df3",
+        "release_date": "2008-06-06",
+        "original_title": "Eli & Ben",
+        "adult": false,
+        "poster_path": "/mCrMzurSUbl5Kq3UOvAnAPuQOiZ.jpg",
+        "character": "Ben"
+      },
+      {
+        "id": 78494,
+        "media_type": "movie",
+        "title": "Sima Vaknin A Witch",
+        "credit_id": "52fe49a3c3a368484e135c55",
+        "release_date": "2003-07-17",
+        "original_title": "Sima Vaknin Machshefa",
+        "adult": false,
+        "poster_path": "/iv7M99EsZ0bg04OmSWnrGdaJuCk.jpg",
+        "character": "Dov Vasserman"
+      },
+      {
+        "id": 26,
+        "media_type": "movie",
+        "title": "Walk on Water",
+        "credit_id": "52fe4210c3a36847f80011cd",
+        "release_date": "2004-03-18",
+        "original_title": "LaLehet Al HaMayim",
+        "adult": false,
+        "poster_path": "/2lMVKr9EtBuNvp0nCEFt207bykA.jpg",
+        "character": "Eyal"
+      },
+      {
+        "id": 117629,
+        "media_type": "movie",
+        "title": "Yossi",
+        "credit_id": "52fe4bbac3a36847f8211895",
+        "release_date": "2012-05-16",
+        "original_title": "Yossi",
+        "adult": false,
+        "poster_path": "/nQ2rBnj7FxkyG5v94L0mdnJ8osw.jpg",
+        "character": "Moti"
+      },
+      {
+        "id": 180565,
+        "media_type": "movie",
+        "title": "Salt of the Earth",
+        "credit_id": "52fe4c4b9251416c75116137",
+        "release_date": "2006-07-13",
+        "original_title": "Melah Ha'arets",
+        "adult": false,
+        "poster_path": "/l4gDLLj7fR7z5EjuRqbK5Y661eI.jpg",
+        "character": "Ronen"
+      },
+      {
+        "id": 171540,
+        "media_type": "movie",
+        "title": "Big Bad Wolves",
+        "credit_id": "52fe4d0ec3a36847f824c3ab",
+        "release_date": "2014-01-16",
+        "original_title": "Big Bad Wolves",
+        "adult": false,
+        "poster_path": "/x3bqaKZ8IHXtvLZmBubtgXnc5cs.jpg",
+        "character": "Miki"
+      },
+      {
+        "id": 223932,
+        "media_type": "movie",
+        "title": "Cupcakes",
+        "credit_id": "52fe4e299251416c7514d4df",
+        "release_date": "2013-03-13",
+        "original_title": "Bananot LaEurovision",
+        "adult": false,
+        "poster_path": "/aoIrSvwomRdDMFZf7AxGAaMAPsR.jpg",
+        "character": ""
+      },
+      {
+        "id": 271683,
+        "media_type": "movie",
+        "title": "La Dune",
+        "credit_id": "53803676c3a3681a02001205",
+        "release_date": "2014-08-13",
+        "original_title": "La Dune",
+        "adult": false,
+        "poster_path": "/nnxBMBNMFYRdAXoZROsGRHSTXZK.jpg",
+        "character": "Hanoch"
+      },
+      {
+        "id": 3774,
+        "media_type": "tv",
+        "episode_count": 79,
+        "credit_id": "5257568d19c29531db14244b",
+        "name": "BeTipul",
+        "poster_path": "/m1FzjCz9aSlxuCs7gA1unq9IQfe.jpg",
+        "original_name": "BeTipul",
+        "first_air_date": "2005-08-28",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Lior Ashkenazi",
+  "place_of_birth": "Ramat Gan, Israel",
+  "popularity": "1.85054796347545"
+}

@@ -1,0 +1,301 @@
+{
+  "budget": 125000000,
+  "vote_average": 4.7,
+  "backdrop_path": "/ykVtsa2OQUC87TjiyFZyIlTs7PJ.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1461,
+        "order": 0,
+        "credit_id": "52fe4241c3a36847f800feaf",
+        "name": "George Clooney",
+        "cast_id": 4,
+        "profile_path": "/z4SBfpKDThuQY0FsvDbajcooBdA.jpg",
+        "character": "Batman"
+      },
+      {
+        "id": 3796,
+        "order": 1,
+        "credit_id": "52fe4241c3a36847f800feb3",
+        "name": "Michael Gough",
+        "cast_id": 5,
+        "profile_path": "/lSADK0gjUtcq4B6zKIUwB3SofSP.jpg",
+        "character": "Alfred Pennyworth"
+      },
+      {
+        "id": 3798,
+        "order": 2,
+        "credit_id": "52fe4241c3a36847f800feb7",
+        "name": "Pat Hingle",
+        "cast_id": 6,
+        "profile_path": "/bW8alHCKEK0UOJjoZwjwwH7T0ga.jpg",
+        "character": "Commissioner James Gordon"
+      },
+      {
+        "id": 5590,
+        "order": 3,
+        "credit_id": "52fe4241c3a36847f800febf",
+        "name": "Elle Macpherson",
+        "cast_id": 8,
+        "profile_path": "/tSweboUrdsJo4nIRIJx2PEvkuVZ.jpg",
+        "character": "Julie Madison"
+      },
+      {
+        "id": 5589,
+        "order": 4,
+        "credit_id": "52fe4241c3a36847f800febb",
+        "name": "John Glover",
+        "cast_id": 7,
+        "profile_path": "/oxoOXlY9qJt9kQwxA9PNhnBTgX9.jpg",
+        "character": "Dr. Jason Woodrue"
+      },
+      {
+        "id": 2535,
+        "order": 5,
+        "credit_id": "52fe4241c3a36847f800fec3",
+        "name": "Vivica A. Fox",
+        "cast_id": 9,
+        "profile_path": "/uxTOzgRhk0VkbK1ZiOrQSTYuzAl.jpg",
+        "character": "Ms. B. Haven"
+      },
+      {
+        "id": 1100,
+        "order": 6,
+        "credit_id": "52fe4241c3a36847f800fef1",
+        "name": "Arnold Schwarzenegger",
+        "cast_id": 17,
+        "profile_path": "/dulCsiwzZihFGmjtGA6p0yDWEN1.jpg",
+        "character": "Dr. Victor Fries / Freeze"
+      },
+      {
+        "id": 139,
+        "order": 7,
+        "credit_id": "52fe4241c3a36847f800fef5",
+        "name": "Uma Thurman",
+        "cast_id": 20,
+        "profile_path": "/nuwf9rzGlmKjVUMVi8B9pT1h06F.jpg",
+        "character": "Dr. Pamela Isley / Poison Ivy"
+      },
+      {
+        "id": 5588,
+        "order": 8,
+        "credit_id": "52fe4241c3a36847f800fef9",
+        "name": "Alicia Silverstone",
+        "cast_id": 22,
+        "profile_path": "/o72bbDIVcCam6HK1sYDav7DoYUe.jpg",
+        "character": "Barbara Wilson / Batgirl"
+      },
+      {
+        "id": 5577,
+        "order": 9,
+        "credit_id": "52fe4241c3a36847f800fefd",
+        "name": "Chris O'Donnell",
+        "cast_id": 24,
+        "profile_path": "/pjIwKa4AkgTzDO2Onz9dPn5KZTr.jpg",
+        "character": "Dick Grayson / Robin"
+      },
+      {
+        "id": 66813,
+        "order": 10,
+        "credit_id": "52fe4241c3a36847f800ff01",
+        "name": "Robert Swenson",
+        "cast_id": 25,
+        "profile_path": "/cNuq7a8nCxRw9pNvQVVQoONkNsw.jpg",
+        "character": "Bane"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5572,
+        "credit_id": "52fe4241c3a36847f800fe9f",
+        "department": "Directing",
+        "name": "Joel Schumacher",
+        "job": "Director",
+        "profile_path": "/ijI5sCPqDvT18NRWCeBqw8BJIZx.jpg"
+      },
+      {
+        "id": 3794,
+        "credit_id": "52fe4241c3a36847f800fea5",
+        "department": "Writing",
+        "name": "Bob Kane",
+        "job": "Author",
+        "profile_path": "/uh9ILSkz0iCQ8o1Ljnz6ubYMvOD.jpg"
+      },
+      {
+        "id": 5575,
+        "credit_id": "52fe4241c3a36847f800feab",
+        "department": "Writing",
+        "name": "Akiva Goldsman",
+        "job": "Author",
+        "profile_path": "/smyKiXX4rAfehztrmg3lxgRAuZF.jpg"
+      },
+      {
+        "id": 5580,
+        "credit_id": "52fe4241c3a36847f800fec9",
+        "department": "Production",
+        "name": "Peter Macgregor-Scott",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5581,
+        "credit_id": "52fe4241c3a36847f800fecf",
+        "department": "Sound",
+        "name": "Elliot Goldenthal",
+        "job": "Original Music Composer",
+        "profile_path": "/5xyNIomgXHO5llLS2Mny0HM89ze.jpg"
+      },
+      {
+        "id": 5582,
+        "credit_id": "52fe4241c3a36847f800fed5",
+        "department": "Camera",
+        "name": "Stephen Goldblatt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5583,
+        "credit_id": "52fe4241c3a36847f800fedb",
+        "department": "Editing",
+        "name": "Mark Stevens",
+        "job": "Editor",
+        "profile_path": "/rkES4KrYzVPx96lDFHIrjrDvABH.jpg"
+      },
+      {
+        "id": 5584,
+        "credit_id": "52fe4241c3a36847f800fee1",
+        "department": "Editing",
+        "name": "Dennis Virkler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1262,
+        "credit_id": "52fe4241c3a36847f800fee7",
+        "department": "Production",
+        "name": "Mali Finn",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5585,
+        "credit_id": "52fe4241c3a36847f800feed",
+        "department": "Art",
+        "name": "Barbara Ling",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1115051,
+        "credit_id": "52fe4241c3a36847f800ff07",
+        "department": "Production",
+        "name": "Mitchell E. Dauterive",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 35664,
+        "credit_id": "52fe4241c3a36847f800ff0d",
+        "department": "Production",
+        "name": "William M. Elvin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10951,
+        "credit_id": "52fe4241c3a36847f800ff13",
+        "department": "Production",
+        "name": "Benjamin Melniker",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10949,
+        "credit_id": "52fe4241c3a36847f800ff19",
+        "department": "Production",
+        "name": "Michael Uslan",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 406204,
+        "credit_id": "52fe4241c3a36847f800ff1f",
+        "department": "Costume & Make-Up",
+        "name": "Ve Neill",
+        "job": "Makeup Artist",
+        "profile_path": "/yaAwlGtPlQXcMum3eWL2xbas4BV.jpg"
+      }
+    ]
+  },
+  "runtime": 125,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 415,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Batman & Robin",
+  "overview": "Along with crime-fighting partner Robin and new recruit Batgirl, Batman battles the dual threat of frosty genius Mr. Freeze and homicidal horticulturalist Poison Ivy. Freeze plans to put Gotham City on ice, while Ivy tries to drive a wedge between the dynamic duo.",
+  "production_companies": [
+    {
+      "id": 429,
+      "name": "DC Comics"
+    },
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 1382,
+      "name": "PolyGram Filmed Entertainment"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 120794,
+    "backdrop_path": "/cLnP8V27ZX44QDz4ZsgHTUAg7f6.jpg",
+    "name": "Batman Collection (Original Series)",
+    "poster_path": "/adQxUvQW8HXNsvMG5aj71pHh9T.jpg"
+  },
+  "imdb_id": "tt0118688",
+  "release_date": "1997-06-20",
+  "original_title": "Batman & Robin",
+  "vote_count": 276,
+  "poster_path": "/Aq6infMlOUH5peq3Llf4yGy7ait.jpg",
+  "tagline": "Strength. Courage. Honor. And loyalty.",
+  "revenue": 238207122,
+  "popularity": "2.26681595184867"
+}

@@ -1,0 +1,304 @@
+{
+  "budget": 35000000,
+  "vote_average": 6,
+  "backdrop_path": "/yNzqW70twGvLLe8WaJKC6KKcwJU.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2461,
+        "order": 0,
+        "credit_id": "52fe4291c3a36847f8028d21",
+        "name": "Mel Gibson",
+        "cast_id": 21,
+        "profile_path": "/6VGgL0bBvPIJ9vDOyyGf5nK2zL4.jpg",
+        "character": "Martin Riggs"
+      },
+      {
+        "id": 2047,
+        "order": 1,
+        "credit_id": "52fe4291c3a36847f8028d25",
+        "name": "Danny Glover",
+        "cast_id": 22,
+        "profile_path": "/jSNTEnm0Sxm8FRtoBfJmhmQyozH.jpg",
+        "character": "Roger Murtaugh"
+      },
+      {
+        "id": 4517,
+        "order": 2,
+        "credit_id": "52fe4291c3a36847f8028d29",
+        "name": "Joe Pesci",
+        "cast_id": 23,
+        "profile_path": "/4zidewFE0x8OBlW0RjEKlkhw4lr.jpg",
+        "character": "Leo Getz"
+      },
+      {
+        "id": 14343,
+        "order": 3,
+        "credit_id": "52fe4291c3a36847f8028d2d",
+        "name": "Rene Russo",
+        "cast_id": 24,
+        "profile_path": "/3nIl0yz4EsM1104BQOpHOqsZmVn.jpg",
+        "character": "Lorna Cole"
+      },
+      {
+        "id": 14344,
+        "order": 4,
+        "credit_id": "52fe4291c3a36847f8028d31",
+        "name": "Stuart Wilson",
+        "cast_id": 25,
+        "profile_path": "/dTs1whbpeTan26ygGjnrmlmYKU4.jpg",
+        "character": "Jack Travis"
+      },
+      {
+        "id": 14328,
+        "order": 5,
+        "credit_id": "52fe4291c3a36847f8028d35",
+        "name": "Steve Kahan",
+        "cast_id": 26,
+        "profile_path": "/wWwQXPezxuxbKsFGXkC4AzJSIos.jpg",
+        "character": "Captain Ed Murphy"
+      },
+      {
+        "id": 23967,
+        "order": 6,
+        "credit_id": "52fe4291c3a36847f8028d39",
+        "name": "Mary Ellen Trainor",
+        "cast_id": 27,
+        "profile_path": "/w5QWW4oyQWNX51hMcnaCUTPToYX.jpg",
+        "character": "Stephanie Woods"
+      },
+      {
+        "id": 14313,
+        "order": 7,
+        "credit_id": "52fe4291c3a36847f8028d3d",
+        "name": "Darlene Love",
+        "cast_id": 28,
+        "profile_path": "/zkVADWGjiMI1tXQjgYfBkldTHbh.jpg",
+        "character": "Trish Murtaugh"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7187,
+        "credit_id": "52fe4291c3a36847f8028cab",
+        "department": "Directing",
+        "name": "Richard Donner",
+        "job": "Director",
+        "profile_path": "/hsOQU2mFuAfGrvBMDLPgrWemO5T.jpg"
+      },
+      {
+        "id": 7187,
+        "credit_id": "52fe4291c3a36847f8028cb1",
+        "department": "Production",
+        "name": "Richard Donner",
+        "job": "Producer",
+        "profile_path": "/hsOQU2mFuAfGrvBMDLPgrWemO5T.jpg"
+      },
+      {
+        "id": 737,
+        "credit_id": "52fe4291c3a36847f8028cb7",
+        "department": "Writing",
+        "name": "Jeffrey Boam",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 61,
+        "credit_id": "52fe4291c3a36847f8028cbd",
+        "department": "Writing",
+        "name": "Robert Mark Kamen",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1091,
+        "credit_id": "52fe4291c3a36847f8028cc3",
+        "department": "Production",
+        "name": "Joel Silver",
+        "job": "Producer",
+        "profile_path": "/1LIjLDXGRhwXohHL2jKhyvLv0rZ.jpg"
+      },
+      {
+        "id": 14335,
+        "credit_id": "52fe4291c3a36847f8028cc9",
+        "department": "Production",
+        "name": "Alexander B. Collett",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14336,
+        "credit_id": "52fe4291c3a36847f8028ccf",
+        "department": "Production",
+        "name": "Michael Klastorin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14337,
+        "credit_id": "52fe4291c3a36847f8028cd5",
+        "department": "Production",
+        "name": "Jennie Lew Tugend",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4699,
+        "credit_id": "52fe4291c3a36847f8028cdb",
+        "department": "Production",
+        "name": "Steve Perry",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2585,
+        "credit_id": "52fe4291c3a36847f8028ce1",
+        "department": "Sound",
+        "name": "Eric Clapton",
+        "job": "Original Music Composer",
+        "profile_path": "/5Y9eRWlz7AMR4eofCm6OVSZkc1s.jpg"
+      },
+      {
+        "id": 11370,
+        "credit_id": "52fe4291c3a36847f8028ce7",
+        "department": "Sound",
+        "name": "Elton John",
+        "job": "Original Music Composer",
+        "profile_path": "/iWFTFSGZn7JwEHt7ZKxnMq9ycPy.jpg"
+      },
+      {
+        "id": 7714,
+        "credit_id": "52fe4291c3a36847f8028ced",
+        "department": "Sound",
+        "name": "Michael Kamen",
+        "job": "Original Music Composer",
+        "profile_path": "/y83bqw1VP1PkuvOhG2XROwc9eXG.jpg"
+      },
+      {
+        "id": 14322,
+        "credit_id": "52fe4291c3a36847f8028cf3",
+        "department": "Sound",
+        "name": "David Sanborn",
+        "job": "Original Music Composer",
+        "profile_path": "/ncsTnYaI6p04VAOCyJdcJ1hhcNk.jpg"
+      },
+      {
+        "id": 2209,
+        "credit_id": "52fe4291c3a36847f8028cf9",
+        "department": "Camera",
+        "name": "Jan de Bont",
+        "job": "Director of Photography",
+        "profile_path": "/9kPf2LuyLLwCawSGyPIQCX7ighX.jpg"
+      },
+      {
+        "id": 14339,
+        "credit_id": "52fe4291c3a36847f8028cff",
+        "department": "Editing",
+        "name": "Robert Brown",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 14340,
+        "credit_id": "52fe4291c3a36847f8028d05",
+        "department": "Editing",
+        "name": "Battle Davis",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3806,
+        "credit_id": "52fe4291c3a36847f8028d0b",
+        "department": "Production",
+        "name": "Marion Dougherty",
+        "job": "Casting",
+        "profile_path": "/vHUj1WzotNrj9PTT6wJ1yhhULbD.jpg"
+      },
+      {
+        "id": 10064,
+        "credit_id": "52fe4291c3a36847f8028d11",
+        "department": "Art",
+        "name": "James H. Spencer",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 14341,
+        "credit_id": "52fe4291c3a36847f8028d17",
+        "department": "Art",
+        "name": "Greg Papalia",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 14342,
+        "credit_id": "52fe4291c3a36847f8028d1d",
+        "department": "Art",
+        "name": "Richard C. Goddard",
+        "job": "Set Decoration",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 118,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 943,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Lethal Weapon 3",
+  "overview": "Archetypal buddy cops Riggs and Murtaugh are back for another round of high-stakes action, this time setting their collective sights on bringing down a former Los Angeles police lieutenant turned black market weapons dealer. Lorna Cole joins as the beautiful yet hardnosed internal affairs sergeant who catches Riggs's eye.",
+  "production_companies": [
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 1885,
+      "name": "Silver Pictures"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 945,
+    "backdrop_path": "/7PH31kIhz6BnzoP9cxG7JbkB6fT.jpg",
+    "name": "Lethal Weapon Collection",
+    "poster_path": "/5zg6QLY0tdDLVHLwn28oowG3m8H.jpg"
+  },
+  "imdb_id": "tt0104714",
+  "release_date": "1992-05-14",
+  "original_title": "Lethal Weapon 3",
+  "vote_count": 202,
+  "poster_path": "/4ypm2KfdQuROp0VXbRD4Q6BKilP.jpg",
+  "tagline": "The magic is back again!",
+  "revenue": 321731527,
+  "popularity": "1.36912141560472"
+}

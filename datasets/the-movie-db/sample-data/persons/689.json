@@ -1,0 +1,272 @@
+{
+  "birthday": "1953-11-03",
+  "adult": false,
+  "biography": "\u200bFrom Wikipedia, the free encyclopedia.\n\nKate Capshaw  (born November 3, 1953) is an American actress. She is known for her role as Willie Scott in Indiana Jones and the Temple of Doom. She is married to Steven Spielberg.\n\nDescription above from the Wikipedia article Kate Capshaw, licensed under CC-BY-SA, full list of contributors on Wikipedia",
+  "homepage": "",
+  "profile_path": "/qhrU9F2xcMd9ZHBQZxth8P6FpLF.jpg",
+  "id": 689,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0001009",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 87,
+        "media_type": "movie",
+        "title": "Indiana Jones and the Temple of Doom",
+        "credit_id": "52fe4215c3a36847f8002c0d",
+        "release_date": "1984-05-22",
+        "original_title": "Indiana Jones and the Temple of Doom",
+        "adult": false,
+        "poster_path": "/f2nTRKk2zGdUTE7tLJ5EGGSuKA6.jpg",
+        "character": "Wilhelmina \"Willie\" Scott"
+      },
+      {
+        "id": 4105,
+        "media_type": "movie",
+        "title": "Black Rain",
+        "credit_id": "52fe43adc3a36847f8066fdf",
+        "release_date": "1989-09-22",
+        "original_title": "Black Rain",
+        "adult": false,
+        "poster_path": "/iKRO9Am8rXvPGmkvRgUh4E2EC8J.jpg",
+        "character": "Joyce"
+      },
+      {
+        "id": 11221,
+        "media_type": "movie",
+        "title": "Best Defense",
+        "credit_id": "52fe44139251416c7502814f",
+        "release_date": "1984-07-20",
+        "original_title": "Best Defense",
+        "adult": false,
+        "poster_path": "/3XwNE1SjZVNGJMmar4BS1LJ5zSl.jpg",
+        "character": "Laura Cooper"
+      },
+      {
+        "id": 253523,
+        "media_type": "movie",
+        "title": "Due East",
+        "credit_id": "530a0fa29251415e71000b99",
+        "release_date": "2002-04-11",
+        "original_title": "Due East",
+        "adult": false,
+        "poster_path": null,
+        "character": "Becky Purdue"
+      },
+      {
+        "id": 13766,
+        "media_type": "movie",
+        "title": "SpaceCamp",
+        "credit_id": "52fe45969251416c7505b9a3",
+        "release_date": "1986-06-06",
+        "original_title": "SpaceCamp",
+        "adult": false,
+        "poster_path": "/oxxKg4GSg3bqagH2HaVZv7oreC7.jpg",
+        "character": "Andie Bergstrom"
+      },
+      {
+        "id": 43742,
+        "media_type": "movie",
+        "title": "Love Affair",
+        "credit_id": "52fe465cc3a36847f80fabcf",
+        "release_date": "1994-10-21",
+        "original_title": "Love Affair",
+        "adult": false,
+        "poster_path": "/18m0lGyz2lckW89tvwMw5HBYl2D.jpg",
+        "character": "Lynn Weaver"
+      },
+      {
+        "id": 46948,
+        "media_type": "movie",
+        "title": "Power",
+        "credit_id": "52fe4717c3a36847f8122f57",
+        "release_date": "1986-01-31",
+        "original_title": "Power",
+        "adult": false,
+        "poster_path": "/9DqFhJm9861uBWAXeGUrZShFsFA.jpg",
+        "character": "Sydnet Betterman"
+      },
+      {
+        "id": 75250,
+        "media_type": "movie",
+        "title": "The Locusts",
+        "credit_id": "52fe48f8c3a368484e1140d7",
+        "release_date": "1997-10-03",
+        "original_title": "The Locusts",
+        "adult": false,
+        "poster_path": "/4SM0EwQy2tYb6g3mGpq9I4LY3mm.jpg",
+        "character": "MRS. POTTS"
+      },
+      {
+        "id": 120634,
+        "media_type": "movie",
+        "title": "Next Door",
+        "credit_id": "52fe4a4cc3a368484e14b64b",
+        "release_date": "1994-09-04",
+        "original_title": "Next Door",
+        "adult": false,
+        "poster_path": "/j7I5K6eOYDieeJp53z3ld5AO6Ie.jpg",
+        "character": "Karen Coler"
+      },
+      {
+        "id": 122937,
+        "media_type": "movie",
+        "title": "My Heroes Have Always Been Cowboys",
+        "credit_id": "52fe4a88c3a368484e158eff",
+        "release_date": "1991-03-01",
+        "original_title": "My Heroes Have Always Been Cowboys",
+        "adult": false,
+        "poster_path": "/vXKiFC0Hee4ItyMTGKcocuX1wN3.jpg",
+        "character": "Jolie, H.D.'s Girlfriend"
+      },
+      {
+        "id": 108316,
+        "media_type": "movie",
+        "title": "The Alarmist",
+        "credit_id": "52fe4a96c3a36847f81d6cad",
+        "release_date": "1997-09-07",
+        "original_title": "The Alarmist",
+        "adult": false,
+        "poster_path": "/z4VMB0AdXzPQZPemjUBsNXR4J8D.jpg",
+        "character": "Gale Ancona"
+      },
+      {
+        "id": 128382,
+        "media_type": "movie",
+        "title": "Her Secret Life",
+        "credit_id": "52fe4b1cc3a368484e1781d5",
+        "release_date": "1987-04-12",
+        "original_title": "Her Secret Life",
+        "adult": false,
+        "poster_path": "/61xk65OgzqA7Js48ZZmtXFBBCwK.jpg",
+        "character": "Annie"
+      },
+      {
+        "id": 162892,
+        "media_type": "movie",
+        "title": "A Girl Thing",
+        "credit_id": "52fe4c60c3a36847f822aff7",
+        "release_date": "2001-01-19",
+        "original_title": "A Girl Thing",
+        "adult": false,
+        "poster_path": "/qrzffuUO85APgNcgqjEZJ79RIuj.jpg",
+        "character": "Casey Montgomery"
+      },
+      {
+        "id": 194763,
+        "media_type": "movie",
+        "title": "Duke of Groove",
+        "credit_id": "52fe4cf69251416c91105f8b",
+        "release_date": "1996-05-07",
+        "original_title": "Duke of Groove",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 31342,
+        "media_type": "movie",
+        "title": "The Love Letter",
+        "credit_id": "52fe44759251416c910117bf",
+        "release_date": "1999-01-01",
+        "original_title": "The Love Letter",
+        "adult": false,
+        "poster_path": "/uIziQk3tiBcST8GsPZfJmVDYUID.jpg",
+        "character": "Helen"
+      },
+      {
+        "id": 24099,
+        "media_type": "movie",
+        "title": "Dreamscape",
+        "credit_id": "52fe4482c3a368484e02717d",
+        "release_date": "1984-08-15",
+        "original_title": "Dreamscape",
+        "adult": false,
+        "poster_path": "/1fc4Ckwx2iqO5PrBMw6TbNmJKut.jpg",
+        "character": "Jane DeVries"
+      },
+      {
+        "id": 11861,
+        "media_type": "movie",
+        "title": "How To Make An American Quilt",
+        "credit_id": "52fe44959251416c75039e53",
+        "release_date": "1995-10-06",
+        "original_title": "How To Make An American Quilt",
+        "adult": false,
+        "poster_path": "/kCc4xFmxCUXSqtaCOzGljMjqIZW.jpg",
+        "character": "Sally"
+      },
+      {
+        "id": 32035,
+        "media_type": "movie",
+        "title": "Love at Large",
+        "credit_id": "52fe44b39251416c91019ca3",
+        "release_date": "1990-03-09",
+        "original_title": "Love at Large",
+        "adult": false,
+        "poster_path": "/gLuRftf5G8bMmwBgoLT84GyLdRb.jpg",
+        "character": "Mrs. Ellen McGraw"
+      },
+      {
+        "id": 9061,
+        "media_type": "movie",
+        "title": "Just Cause",
+        "credit_id": "52fe44d7c3a36847f80ad34f",
+        "release_date": "1995-02-17",
+        "original_title": "Just Cause",
+        "adult": false,
+        "poster_path": "/8wYVdgoVezCqnhZgmZQytdORLeu.jpg",
+        "character": "Laurie Armstrong"
+      },
+      {
+        "id": 26939,
+        "media_type": "movie",
+        "title": "The Quick and the Dead",
+        "credit_id": "52fe4522c3a368484e04a73f",
+        "release_date": "1987-02-28",
+        "original_title": "The Quick and the Dead",
+        "adult": false,
+        "poster_path": "/bEb0T6RGO8M3EPJFgRAaWYO1A57.jpg",
+        "character": "Susanna McKaskel"
+      },
+      {
+        "id": 5429,
+        "media_type": "tv",
+        "episode_count": 305,
+        "credit_id": "5257812119c29531db26314c",
+        "name": "The Edge of Night",
+        "poster_path": null,
+        "original_name": "The Edge of Night",
+        "first_air_date": "1956-04-02",
+        "character": "Jinx Avery Mallory #1"
+      },
+      {
+        "id": 4573,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525770fa760ee36aaa48b537",
+        "name": "Late Night with Conan O'Brien",
+        "poster_path": "/v4N5l6JooObhXbjXoFaKbx92wB9.jpg",
+        "original_name": "Late Night with Conan O'Brien",
+        "first_air_date": "1993-09-13",
+        "character": ""
+      },
+      {
+        "id": 26835,
+        "media_type": "tv",
+        "episode_count": 13,
+        "credit_id": "525881af760ee346613af7f6",
+        "name": "Black Tie Affair",
+        "poster_path": null,
+        "original_name": "Black Tie Affair",
+        "first_air_date": "1993-05-29",
+        "character": "Margo Cody"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Kate Capshaw",
+  "place_of_birth": "Fort Worth, Texas, USA",
+  "popularity": "1.08696254563796"
+}

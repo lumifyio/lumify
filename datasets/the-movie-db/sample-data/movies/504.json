@@ -1,0 +1,314 @@
+{
+  "budget": 8000000,
+  "vote_average": 6.7,
+  "backdrop_path": "/pexMctImHaIj8haojBDP5RxhM9X.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6885,
+        "order": 0,
+        "credit_id": "52fe424bc3a36847f8013009",
+        "name": "Charlize Theron",
+        "cast_id": 3,
+        "profile_path": "/tLBXawPG6a1DSdVDYNWHJNHNq3a.jpg",
+        "character": "Aileen"
+      },
+      {
+        "id": 6886,
+        "order": 1,
+        "credit_id": "52fe424bc3a36847f801300d",
+        "name": "Christina Ricci",
+        "cast_id": 4,
+        "profile_path": "/pfEP312pTr0FXAeoqkTs2eha3HR.jpg",
+        "character": "Selby"
+      },
+      {
+        "id": 6905,
+        "order": 2,
+        "credit_id": "52fe424bc3a36847f8013089",
+        "name": "Bruce Dern",
+        "cast_id": 26,
+        "profile_path": "/fYhCiXGBARWUevnWDkeCEpwi4h4.jpg",
+        "character": "Thomas"
+      },
+      {
+        "id": 6906,
+        "order": 3,
+        "credit_id": "52fe424bc3a36847f801308d",
+        "name": "Lee Tergesen",
+        "cast_id": 27,
+        "profile_path": "/eb2fKDGpVLYJGGuC4SUHRpezP8U.jpg",
+        "character": "Vincent Corey"
+      },
+      {
+        "id": 6907,
+        "order": 4,
+        "credit_id": "52fe424bc3a36847f8013091",
+        "name": "Annie Corley",
+        "cast_id": 28,
+        "profile_path": "/ypA6im4I1S5SzzNAJOdRmZq01YX.jpg",
+        "character": "Donna"
+      },
+      {
+        "id": 6908,
+        "order": 5,
+        "credit_id": "52fe424bc3a36847f8013095",
+        "name": "Marc Macaulay",
+        "cast_id": 29,
+        "profile_path": "/eSNgzHn7NUX9iAbG1MLV41lqy14.jpg",
+        "character": "Will/Daddy \"John\""
+      },
+      {
+        "id": 6909,
+        "order": 6,
+        "credit_id": "52fe424bc3a36847f8013099",
+        "name": "Stephan Jones",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Lawyer"
+      },
+      {
+        "id": 6910,
+        "order": 7,
+        "credit_id": "52fe424bc3a36847f801309d",
+        "name": "T. Robert Pigott",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Bartender"
+      },
+      {
+        "id": 95749,
+        "order": 8,
+        "credit_id": "52fe424bc3a36847f80130a7",
+        "name": "Catherine Mangan",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Justy"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6884,
+        "credit_id": "52fe424bc3a36847f8012fff",
+        "department": "Directing",
+        "name": "Patty Jenkins",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 6884,
+        "credit_id": "52fe424bc3a36847f8013005",
+        "department": "Writing",
+        "name": "Patty Jenkins",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6885,
+        "credit_id": "52fe424bc3a36847f8013013",
+        "department": "Production",
+        "name": "Charlize Theron",
+        "job": "Producer",
+        "profile_path": "/tLBXawPG6a1DSdVDYNWHJNHNq3a.jpg"
+      },
+      {
+        "id": 6887,
+        "credit_id": "52fe424bc3a36847f8013019",
+        "department": "Production",
+        "name": "Brad Wyman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6888,
+        "credit_id": "52fe424bc3a36847f801301f",
+        "department": "Production",
+        "name": "Clark Peterson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6889,
+        "credit_id": "52fe424bc3a36847f8013025",
+        "department": "Production",
+        "name": "Donald Kushner",
+        "job": "Producer",
+        "profile_path": "/uYzKylQSQUiVGsUPK47OSuYGUCA.jpg"
+      },
+      {
+        "id": 6891,
+        "credit_id": "52fe424bc3a36847f801302b",
+        "department": "Production",
+        "name": "Andreas Grosch",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6892,
+        "credit_id": "52fe424bc3a36847f8013031",
+        "department": "Production",
+        "name": "Stewart Hall",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6893,
+        "credit_id": "52fe424bc3a36847f8013037",
+        "department": "Production",
+        "name": "Sammy Lee",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6894,
+        "credit_id": "52fe424bc3a36847f801303d",
+        "department": "Production",
+        "name": "Meagan Riley-Grant",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6895,
+        "credit_id": "52fe424bc3a36847f8013043",
+        "department": "Production",
+        "name": "Andreas Schmid",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6896,
+        "credit_id": "52fe424bc3a36847f8013049",
+        "department": "Production",
+        "name": "Brent Morris",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6897,
+        "credit_id": "52fe424bc3a36847f801304f",
+        "department": "Production",
+        "name": "David Alvarado",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6898,
+        "credit_id": "52fe424bc3a36847f8013055",
+        "department": "Sound",
+        "name": "BT",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6899,
+        "credit_id": "52fe424bc3a36847f801305b",
+        "department": "Camera",
+        "name": "Steven Bernstein",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 800,
+        "credit_id": "52fe424bc3a36847f8013061",
+        "department": "Editing",
+        "name": "Arthur Coburn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6900,
+        "credit_id": "52fe424bc3a36847f8013067",
+        "department": "Editing",
+        "name": "Jane Kurson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2045,
+        "credit_id": "52fe424bc3a36847f801306d",
+        "department": "Production",
+        "name": "Ferne Cassel",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6901,
+        "credit_id": "52fe424bc3a36847f8013073",
+        "department": "Art",
+        "name": "Edward T. McAvoy",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6902,
+        "credit_id": "52fe424bc3a36847f8013079",
+        "department": "Art",
+        "name": "Orvis Rigsby",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6903,
+        "credit_id": "52fe424bc3a36847f801307f",
+        "department": "Art",
+        "name": "Shawn R. McFall",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 6904,
+        "credit_id": "52fe424bc3a36847f8013085",
+        "department": "Costume & Make-Up",
+        "name": "Rhona Meyers",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6890,
+        "credit_id": "52fe424bc3a36847f80130a3",
+        "department": "Production",
+        "name": "Mark Damon",
+        "job": "Producer",
+        "profile_path": "/3kjvfjnuJnkvDZ4pXuDOBsQ5cBd.jpg"
+      }
+    ]
+  },
+  "runtime": 110,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.monster-derfilm.de/",
+  "id": 504,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Monster",
+  "overview": "Aileen Wuornos is an emotionally scarred highway hooker who shoots a sadistic trick who rapes her and ultimately becomes America's first female serial killer. The film, based on a true story, centers more on the surrounding circumstances than on the murders.",
+  "production_companies": [{
+    "id": 28,
+    "name": "Newmarket Films"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0340855",
+  "release_date": "2003-11-16",
+  "original_title": "Monster",
+  "vote_count": 51,
+  "poster_path": "/uIVrPwor7fgSm5MRMj8IWs76gpk.jpg",
+  "tagline": "Based on a true story.",
+  "revenue": 60378584,
+  "popularity": 0.6234419756831
+}

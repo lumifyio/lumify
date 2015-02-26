@@ -1,0 +1,390 @@
+{
+  "budget": 60000000,
+  "vote_average": 6.8,
+  "backdrop_path": "/gjPxD8X6eE2o6lRn5sKaBiXy6cv.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 31,
+        "order": 0,
+        "credit_id": "52fe4259c3a36847f801762f",
+        "name": "Tom Hanks",
+        "cast_id": 4,
+        "profile_path": "/xxPMucou2wRDxLrud8i2D4dsywh.jpg",
+        "character": "Viktor Navorski"
+      },
+      {
+        "id": 1922,
+        "order": 1,
+        "credit_id": "52fe4259c3a36847f8017633",
+        "name": "Catherine Zeta-Jones",
+        "cast_id": 5,
+        "profile_path": "/3qDN8It9ulUqpOqkxJgW0WnWFho.jpg",
+        "character": "Amelia Warren"
+      },
+      {
+        "id": 2283,
+        "order": 2,
+        "credit_id": "52fe4259c3a36847f8017637",
+        "name": "Stanley Tucci",
+        "cast_id": 6,
+        "profile_path": "/omGlTJF2IW5r3L3c5y0qkCt3hFr.jpg",
+        "character": "Frank Dixon"
+      },
+      {
+        "id": 8687,
+        "order": 3,
+        "credit_id": "52fe4259c3a36847f801763b",
+        "name": "Chi McBride",
+        "cast_id": 7,
+        "profile_path": "/tOziRGI7cCAVduyIHXFaqfId47L.jpg",
+        "character": "Mulroy"
+      },
+      {
+        "id": 8688,
+        "order": 4,
+        "credit_id": "52fe4259c3a36847f801763f",
+        "name": "Diego Luna",
+        "cast_id": 8,
+        "profile_path": "/9f1y0pLqohP8U3eEVCa4di1tESb.jpg",
+        "character": "Enrique Cruz"
+      },
+      {
+        "id": 8689,
+        "order": 5,
+        "credit_id": "52fe4259c3a36847f8017643",
+        "name": "Barry Shabaka Henley",
+        "cast_id": 9,
+        "profile_path": "/1gZrPYLjAmHLYvSoQ9EWRddaCGD.jpg",
+        "character": "Thurman"
+      },
+      {
+        "id": 8690,
+        "order": 6,
+        "credit_id": "52fe4259c3a36847f8017647",
+        "name": "Kumar Pallana",
+        "cast_id": 10,
+        "profile_path": "/emTPxZIt9j8d4FcKMSpX3eDq0tO.jpg",
+        "character": "Gupta Rajan"
+      },
+      {
+        "id": 8691,
+        "order": 7,
+        "credit_id": "52fe4259c3a36847f801764b",
+        "name": "Zoe Saldana",
+        "cast_id": 11,
+        "profile_path": "/ofNrWiA2KDdqiNxFTLp51HcXUlp.jpg",
+        "character": "Torres"
+      },
+      {
+        "id": 8692,
+        "order": 8,
+        "credit_id": "52fe4259c3a36847f801764f",
+        "name": "Eddie Jones",
+        "cast_id": 12,
+        "profile_path": "/g8ZDq6LFNWc12w24oo0r0FfeiIg.jpg",
+        "character": "Salchak"
+      },
+      {
+        "id": 8693,
+        "order": 9,
+        "credit_id": "52fe4259c3a36847f8017653",
+        "name": "Jude Ciccolella",
+        "cast_id": 13,
+        "profile_path": "/tvbzcUBckUZRYehsZZF6b3ioz8D.jpg",
+        "character": "Karl Iverson"
+      },
+      {
+        "id": 8694,
+        "order": 10,
+        "credit_id": "52fe4259c3a36847f8017657",
+        "name": "Corey Reynolds",
+        "cast_id": 14,
+        "profile_path": "/faEdK8pyxXUuFsNGBTr26ybZd5l.jpg",
+        "character": "Waylin"
+      },
+      {
+        "id": 8695,
+        "order": 11,
+        "credit_id": "52fe4259c3a36847f801765b",
+        "name": "Guillermo Díaz",
+        "cast_id": 15,
+        "profile_path": "/kLcqh7IdKK7NbZYD945XTYZtsn0.jpg",
+        "character": "Bobby Alima"
+      },
+      {
+        "id": 8696,
+        "order": 12,
+        "credit_id": "52fe4259c3a36847f801765f",
+        "name": "Rini Bell",
+        "cast_id": 16,
+        "profile_path": "/esSI9X2EoKEMDyp6ntjIkJDVYqk.jpg",
+        "character": "Nadia"
+      },
+      {
+        "id": 8697,
+        "order": 13,
+        "credit_id": "52fe4259c3a36847f8017663",
+        "name": "Stephen Mendel",
+        "cast_id": 17,
+        "profile_path": "/dPdVvIMpclp64Q7DWbQHcUVCfLB.jpg",
+        "character": "Steward First Class"
+      },
+      {
+        "id": 8698,
+        "order": 14,
+        "credit_id": "52fe4259c3a36847f8017667",
+        "name": "Valeri Nikolayev",
+        "cast_id": 18,
+        "profile_path": "/tGqjecLgqTQk96mhLMYEnkgA0eI.jpg",
+        "character": "Milodragovich"
+      },
+      {
+        "id": 8699,
+        "order": 15,
+        "credit_id": "52fe4259c3a36847f801766b",
+        "name": "Michael Nouri",
+        "cast_id": 19,
+        "profile_path": "/2TBx3EA4zKAQHWGRHwjHXuAfgbb.jpg",
+        "character": "Max"
+      },
+      {
+        "id": 8700,
+        "order": 16,
+        "credit_id": "52fe4259c3a36847f801766f",
+        "name": "Sasha Spielberg",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Lucy"
+      }
+    ],
+    "crew": [
+      {
+        "id": 488,
+        "credit_id": "52fe4259c3a36847f801761f",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 8686,
+        "credit_id": "52fe4259c3a36847f8017625",
+        "department": "Writing",
+        "name": "Sacha Gervasi",
+        "job": "Screenplay",
+        "profile_path": "/fkSeU5DSG9BIzHfIy3HKpKPw4me.jpg"
+      },
+      {
+        "id": 2689,
+        "credit_id": "52fe4259c3a36847f801762b",
+        "department": "Writing",
+        "name": "Jeff Nathanson",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 8701,
+        "credit_id": "52fe4259c3a36847f8017675",
+        "department": "Production",
+        "name": "Laurie MacDonald",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2212,
+        "credit_id": "52fe4259c3a36847f801767b",
+        "department": "Production",
+        "name": "Walter F. Parkes",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4259c3a36847f8017681",
+        "department": "Production",
+        "name": "Steven Spielberg",
+        "job": "Producer",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 8702,
+        "credit_id": "52fe4259c3a36847f8017687",
+        "department": "Production",
+        "name": "Jason Hoffs",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8685,
+        "credit_id": "52fe4259c3a36847f801768d",
+        "department": "Production",
+        "name": "Andrew Niccol",
+        "job": "Executive Producer",
+        "profile_path": "/ufWm8st5GYkWjTFEATiNKidtwy0.jpg"
+      },
+      {
+        "id": 8703,
+        "credit_id": "52fe4259c3a36847f8017693",
+        "department": "Production",
+        "name": "Patricia Whitcher",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 491,
+        "credit_id": "52fe4259c3a36847f8017699",
+        "department": "Sound",
+        "name": "John Williams",
+        "job": "Original Music Composer",
+        "profile_path": "/d7NNRZQAIzLBSaoez550QHLpTk.jpg"
+      },
+      {
+        "id": 492,
+        "credit_id": "52fe4259c3a36847f801769f",
+        "department": "Camera",
+        "name": "Janusz Kaminski",
+        "job": "Director of Photography",
+        "profile_path": "/5LNGARjEfMDOcEP6fMNtJypAGYx.jpg"
+      },
+      {
+        "id": 493,
+        "credit_id": "52fe4259c3a36847f80176a5",
+        "department": "Editing",
+        "name": "Michael Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 495,
+        "credit_id": "52fe4259c3a36847f80176ab",
+        "department": "Production",
+        "name": "Debra Zane",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1303,
+        "credit_id": "52fe4259c3a36847f80176b1",
+        "department": "Art",
+        "name": "Alex McDowell",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8704,
+        "credit_id": "52fe4259c3a36847f80176b7",
+        "department": "Art",
+        "name": "Isabelle Guay",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8705,
+        "credit_id": "52fe4259c3a36847f80176bd",
+        "department": "Art",
+        "name": "Brad Ricker",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8706,
+        "credit_id": "52fe4259c3a36847f80176c3",
+        "department": "Art",
+        "name": "Anne Kuljian",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 8707,
+        "credit_id": "52fe4259c3a36847f80176c9",
+        "department": "Costume & Make-Up",
+        "name": "Christine Wada",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 7418,
+        "credit_id": "52fe4259c3a36847f80176cf",
+        "department": "Costume & Make-Up",
+        "name": "Mary Zophres",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 8708,
+        "credit_id": "52fe4259c3a36847f80176d5",
+        "department": "Sound",
+        "name": "Richard C. Franklin",
+        "job": "Supervising Sound Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 128,
+  "spoken_languages": [
+    {
+      "iso_639_1": "bg",
+      "name": "български език"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.theterminal-themovie.com/",
+  "id": 594,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Terminal",
+  "overview": "Viktor Navorski is a man without a country; his plane took off just as a coup d'etat exploded in his homeland, leaving it in shambles, and now he's stranded at Kennedy Airport, where he's holding a passport that nobody recognizes. While quarantined in the transit lounge until authorities can figure out what to do with him, Viktor simply goes on living -- and courts romance with a beautiful flight attendant.",
+  "production_companies": [
+    {
+      "id": 27,
+      "name": "DreamWorks SKG"
+    },
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    },
+    {
+      "id": 11084,
+      "name": "Parkes/MacDonald Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0362227",
+  "release_date": "2004-06-17",
+  "original_title": "The Terminal",
+  "vote_count": 387,
+  "poster_path": "/f4Dup6awDfDqAHKgWqNJ2HFw1qN.jpg",
+  "tagline": "Life is waiting.",
+  "revenue": 218686156,
+  "popularity": "3.06331534450974"
+}

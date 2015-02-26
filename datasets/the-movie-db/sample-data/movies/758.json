@@ -1,0 +1,227 @@
+{
+  "budget": 0,
+  "vote_average": 6.5,
+  "backdrop_path": "/r8DWLKzeVnS4rOIXQoTVAUNTIys.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11127,
+        "order": 0,
+        "credit_id": "52fe4272c3a36847f801f435",
+        "name": "Margaret Rutherford",
+        "cast_id": 11,
+        "profile_path": "/mB0mupPkd27Kb1EgIwAXnY7LpBo.jpg",
+        "character": "Miss Jane Marple"
+      },
+      {
+        "id": 30706,
+        "order": 1,
+        "credit_id": "52fe4272c3a36847f801f439",
+        "name": "Lionel Jeffries",
+        "cast_id": 12,
+        "profile_path": "/z9S89Tq1cG9jPFTujD44b8fumVH.jpg",
+        "character": "Cap. Rhumstone"
+      },
+      {
+        "id": 11132,
+        "order": 2,
+        "credit_id": "52fe4272c3a36847f801f43d",
+        "name": "Bud Tingwell",
+        "cast_id": 13,
+        "profile_path": "/9V0rHXIVZH52NKzNQrasg5WfOkN.jpg",
+        "character": "Inspektor Craddock"
+      },
+      {
+        "id": 47391,
+        "order": 3,
+        "credit_id": "52fe4272c3a36847f801f441",
+        "name": "William Mervyn",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Breeze-Connington"
+      },
+      {
+        "id": 47396,
+        "order": 4,
+        "credit_id": "52fe4272c3a36847f801f451",
+        "name": "Henry Oscar",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Lord Rudkin"
+      },
+      {
+        "id": 47392,
+        "order": 5,
+        "credit_id": "52fe4272c3a36847f801f445",
+        "name": "Joan Benham",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Alice Fanbraid"
+      },
+      {
+        "id": 47394,
+        "order": 6,
+        "credit_id": "52fe4272c3a36847f801f449",
+        "name": "Nicholas Parsons",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Dr. Crump"
+      },
+      {
+        "id": 47395,
+        "order": 7,
+        "credit_id": "52fe4272c3a36847f801f44d",
+        "name": "Miles Malleson",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Bishop"
+      },
+      {
+        "id": 11136,
+        "order": 8,
+        "credit_id": "52fe4272c3a36847f801f455",
+        "name": "Stringer Davis",
+        "cast_id": 19,
+        "profile_path": "/eGXithz0kr2b82jTfL2PLqWktSX.jpg",
+        "character": "Mr. Stringer"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11118,
+        "credit_id": "52fe4272c3a36847f801f3fb",
+        "department": "Directing",
+        "name": "George Pollock",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11120,
+        "credit_id": "52fe4272c3a36847f801f401",
+        "department": "Writing",
+        "name": "David Pursall",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 11121,
+        "credit_id": "52fe4272c3a36847f801f407",
+        "department": "Writing",
+        "name": "Jack Seddon",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 47562,
+        "credit_id": "52fe4272c3a36847f801f40d",
+        "department": "Writing",
+        "name": "Agatha Christie",
+        "job": "Novel",
+        "profile_path": "/ooNYIs0rkznn7x5aBAjJGd3fJZz.jpg"
+      },
+      {
+        "id": 47390,
+        "credit_id": "52fe4272c3a36847f801f413",
+        "department": "Production",
+        "name": "Ben Arbeid",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 33030,
+        "credit_id": "52fe4272c3a36847f801f419",
+        "department": "Production",
+        "name": "Lawrence P. Bachmann",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7752,
+        "credit_id": "52fe4272c3a36847f801f41f",
+        "department": "Sound",
+        "name": "Ron Goodwin",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 30932,
+        "credit_id": "52fe4272c3a36847f801f425",
+        "department": "Camera",
+        "name": "Desmond Dickinson",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11124,
+        "credit_id": "52fe4272c3a36847f801f42b",
+        "department": "Editing",
+        "name": "Ernest Walter",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6791,
+        "credit_id": "52fe4272c3a36847f801f431",
+        "department": "Production",
+        "name": "Irene Howard",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 93,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 758,
+  "production_countries": [{
+    "name": "United Kingdom",
+    "iso_3166_1": "GB"
+  }],
+  "title": "Murder Ahoy",
+  "overview": "During a annually board of trusties meeting one of the trustees dies. Miss Marple thinks he\u2019s been poisoned after finding a chemical on him. She sets off to investigate at the ship where he had just come from. The fourth and final film from the Miss Marple series starring Margaret Rutherford as the quirky amateur detective.",
+  "production_companies": [{
+    "id": 21,
+    "name": "Metro-Goldwyn-Mayer"
+  }],
+  "belongs_to_collection": {
+    "id": 749,
+    "backdrop_path": "/goWrlud1kkdWizn8xdP6FgsgPb0.jpg",
+    "name": "Miss Marple (Margeret Rutherford) Collection",
+    "poster_path": "/g5ZHGeWNY5zUcojk0Xxk1KNxqAl.jpg"
+  },
+  "imdb_id": "tt0058382",
+  "release_date": "1964-06-01",
+  "original_title": "Murder Ahoy",
+  "vote_count": 2,
+  "poster_path": "/vIstf21C53K0MnhBc2GWGROXwlH.jpg",
+  "tagline": "New mischief amidst the mizzen-masts!",
+  "revenue": 0,
+  "popularity": "0.168128720510945"
+}

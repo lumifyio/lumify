@@ -1,0 +1,367 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/i192762WhCkgTyrFxn21I7ZrBVj.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5847,
+        "order": 0,
+        "credit_id": "52fe4243c3a36847f8010901",
+        "name": "David Kross",
+        "cast_id": 4,
+        "profile_path": "/50BcSbOZtfCktGMEepExob45O2h.jpg",
+        "character": "Michael Polischka"
+      },
+      {
+        "id": 1864,
+        "order": 1,
+        "credit_id": "52fe4243c3a36847f8010905",
+        "name": "Jenny Elvers-Elbertzhagen",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Miriam Polischka"
+      },
+      {
+        "id": 5848,
+        "order": 2,
+        "credit_id": "52fe4243c3a36847f8010909",
+        "name": "Erhan Emre",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Hamal"
+      },
+      {
+        "id": 5849,
+        "order": 3,
+        "credit_id": "52fe4243c3a36847f801090d",
+        "name": "Oktay Özdemir",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Erol"
+      },
+      {
+        "id": 5850,
+        "order": 4,
+        "credit_id": "52fe4243c3a36847f8010911",
+        "name": "Kida Khodr Ramadan",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Barut"
+      },
+      {
+        "id": 5851,
+        "order": 5,
+        "credit_id": "52fe4243c3a36847f8010915",
+        "name": "Arnel Taci",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Crille"
+      },
+      {
+        "id": 5852,
+        "order": 6,
+        "credit_id": "52fe4243c3a36847f8010919",
+        "name": "Kai Michael Müller",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Matze"
+      },
+      {
+        "id": 5853,
+        "order": 7,
+        "credit_id": "52fe4243c3a36847f801091d",
+        "name": "Hans Löw",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Kommissar Gerber"
+      },
+      {
+        "id": 5854,
+        "order": 8,
+        "credit_id": "52fe4243c3a36847f8010921",
+        "name": "Jan Henrik Stahlberg",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Dr. Peters"
+      },
+      {
+        "id": 5855,
+        "order": 9,
+        "credit_id": "52fe4243c3a36847f8010925",
+        "name": "Sinan Akdeniz",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Erols Gang Mitglied#1"
+      },
+      {
+        "id": 5856,
+        "order": 10,
+        "credit_id": "52fe4243c3a36847f8010929",
+        "name": "Ali-Kemal Akyaz",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Erols Gang Mitglied#2"
+      },
+      {
+        "id": 5857,
+        "order": 11,
+        "credit_id": "52fe4243c3a36847f801092d",
+        "name": "Peter Bucksch",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Lehrer Radke"
+      },
+      {
+        "id": 5858,
+        "order": 12,
+        "credit_id": "52fe4243c3a36847f8010931",
+        "name": "Hassan Chahrour",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Erols Gang Mitglied#3"
+      },
+      {
+        "id": 5859,
+        "order": 13,
+        "credit_id": "52fe4243c3a36847f8010935",
+        "name": "Roland Florstedt",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Captain Nemo"
+      },
+      {
+        "id": 5860,
+        "order": 14,
+        "credit_id": "52fe4243c3a36847f8010939",
+        "name": "Stephan Grossmann",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Hotte"
+      },
+      {
+        "id": 5861,
+        "order": 15,
+        "credit_id": "52fe4243c3a36847f801093d",
+        "name": "Rebecca Hessing",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Erols Freundin"
+      },
+      {
+        "id": 5862,
+        "order": 16,
+        "credit_id": "52fe4243c3a36847f8010941",
+        "name": "Bernhard Howe",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Vater Mangold"
+      },
+      {
+        "id": 5863,
+        "order": 17,
+        "credit_id": "52fe4243c3a36847f8010945",
+        "name": "Franziska Jünger",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Simone"
+      },
+      {
+        "id": 47048,
+        "order": 18,
+        "credit_id": "52fe4243c3a36847f8010991",
+        "name": "Eva Löbau",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Elke"
+      },
+      {
+        "id": 48480,
+        "order": 19,
+        "credit_id": "52fe4243c3a36847f8010995",
+        "name": "Stefan Konarske",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Dirk"
+      },
+      {
+        "id": 48481,
+        "order": 20,
+        "credit_id": "52fe4243c3a36847f8010999",
+        "name": "Fabian Krüger",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Rainer"
+      },
+      {
+        "id": 40526,
+        "order": 21,
+        "credit_id": "52fe4243c3a36847f801099d",
+        "name": "Georg Friedrich",
+        "cast_id": 37,
+        "profile_path": "/u8VmDeOR3w16SumKYSL2kkhKAbA.jpg",
+        "character": "Holger Hagenbeck"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5844,
+        "credit_id": "52fe4243c3a36847f80108f1",
+        "department": "Directing",
+        "name": "Detlev Buck",
+        "job": "Director",
+        "profile_path": "/1GTTB1jNHhG0E5pQWOR9aCM9r0j.jpg"
+      },
+      {
+        "id": 5845,
+        "credit_id": "52fe4243c3a36847f80108f7",
+        "department": "Writing",
+        "name": "Zoran Drvenkar",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5846,
+        "credit_id": "52fe4243c3a36847f80108fd",
+        "department": "Writing",
+        "name": "Gregor Tressnow",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5864,
+        "credit_id": "52fe4243c3a36847f801094b",
+        "department": "Production",
+        "name": "Claus Boje",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5865,
+        "credit_id": "52fe4243c3a36847f8010951",
+        "department": "Camera",
+        "name": "Kolja Brandt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5866,
+        "credit_id": "52fe4243c3a36847f8010957",
+        "department": "Production",
+        "name": "Astrid Rosenfeld",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5867,
+        "credit_id": "52fe4243c3a36847f801095d",
+        "department": "Art",
+        "name": "Udo Kramer",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5868,
+        "credit_id": "52fe4243c3a36847f8010963",
+        "department": "Art",
+        "name": "Daniel Ringwald",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5869,
+        "credit_id": "52fe4243c3a36847f8010969",
+        "department": "Costume & Make-Up",
+        "name": "Jale Kustaloglu",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5870,
+        "credit_id": "52fe4243c3a36847f801096f",
+        "department": "Production",
+        "name": "Anne Baeker",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5871,
+        "credit_id": "52fe4243c3a36847f8010975",
+        "department": "Production",
+        "name": "Kristina Jansen",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6076,
+        "credit_id": "52fe4243c3a36847f801097b",
+        "department": "Editing",
+        "name": "Dirk Grau",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6077,
+        "credit_id": "52fe4243c3a36847f8010981",
+        "department": "Sound",
+        "name": "Bert Wrede",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6078,
+        "credit_id": "52fe4243c3a36847f8010987",
+        "department": "Sound",
+        "name": "Martin Steyer",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 5200,
+        "credit_id": "52fe4243c3a36847f801098d",
+        "department": "Sound",
+        "name": "Florian Niederleithinger",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 99,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "http://www.knallhart-derfilm.de",
+  "id": 434,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Knallhart",
+  "overview": "From the youth directed novel of the same name by Greogor Tressnow comes a film by Detlev Buck that is a realistic portrait of life in the section of Berlin called Neukölln. It\u2019s about power and weakness, delinquents and victims, and the difficulties a 15-year-old faces in a poor and criminal environment.",
+  "production_companies": [{
+    "id": 230,
+    "name": "Boje Buck Produktion"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0475317",
+  "release_date": "2006-03-09",
+  "original_title": "Knallhart",
+  "vote_count": 0,
+  "poster_path": "/aQpXLhmXQW69OaXsX6uv9F3zsuR.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.27899878448336"
+}

@@ -1,0 +1,293 @@
+{
+  "budget": 18000000,
+  "vote_average": 6.9,
+  "backdrop_path": "/cN8V7Hc40SthRI60J2myfqhHCBQ.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1100,
+        "order": 0,
+        "credit_id": "52fe4218c3a36847f8003b53",
+        "name": "Arnold Schwarzenegger",
+        "cast_id": 13,
+        "profile_path": "/dulCsiwzZihFGmjtGA6p0yDWEN1.jpg",
+        "character": "Major Alan 'Dutch' Schaeffer"
+      },
+      {
+        "id": 1101,
+        "order": 1,
+        "credit_id": "52fe4218c3a36847f8003b57",
+        "name": "Carl Weathers",
+        "cast_id": 14,
+        "profile_path": "/5oiSUbvNt3ergjkumjQYUNnzgyP.jpg",
+        "character": "Major George Dillon"
+      },
+      {
+        "id": 1102,
+        "order": 2,
+        "credit_id": "52fe4218c3a36847f8003b5b",
+        "name": "Elpidia Carrillo",
+        "cast_id": 15,
+        "profile_path": "/7sXdZ8uFmI2wYQPogTfkGcDPCkp.jpg",
+        "character": "Anna"
+      },
+      {
+        "id": 1103,
+        "order": 3,
+        "credit_id": "52fe4218c3a36847f8003b5f",
+        "name": "Bill Duke",
+        "cast_id": 16,
+        "profile_path": "/46uPgJKKjAhPak4G7526ZFHiRvA.jpg",
+        "character": "Sergeant 'Mac' Eliot"
+      },
+      {
+        "id": 1104,
+        "order": 4,
+        "credit_id": "52fe4218c3a36847f8003b63",
+        "name": "Jesse Ventura",
+        "cast_id": 17,
+        "profile_path": "/5zclOa451e2QOCqFiEy9xO4j2uS.jpg",
+        "character": "Blain"
+      },
+      {
+        "id": 1105,
+        "order": 5,
+        "credit_id": "52fe4218c3a36847f8003b67",
+        "name": "Sonny Landham",
+        "cast_id": 18,
+        "profile_path": "/dmOpsfsz56FtcrQMfyiivmoEXXP.jpg",
+        "character": "Billy"
+      },
+      {
+        "id": 1106,
+        "order": 6,
+        "credit_id": "52fe4218c3a36847f8003b6b",
+        "name": "Richard Chaves",
+        "cast_id": 19,
+        "profile_path": "/eihc4OlJu3y2d19DyoNSD3EVYE5.jpg",
+        "character": "Poncho Ramirez"
+      },
+      {
+        "id": 1107,
+        "order": 7,
+        "credit_id": "52fe4218c3a36847f8003b6f",
+        "name": "R. G. Armstrong",
+        "cast_id": 20,
+        "profile_path": "/lRGoPhebBnPFzZQvcmnUokjGL7L.jpg",
+        "character": "General Phillips"
+      },
+      {
+        "id": 1108,
+        "order": 8,
+        "credit_id": "52fe4218c3a36847f8003b73",
+        "name": "Shane Black",
+        "cast_id": 21,
+        "profile_path": "/9slEH8S7APuw3PifJNSYJ04ceJA.jpg",
+        "character": "Hawkins"
+      },
+      {
+        "id": 1109,
+        "order": 9,
+        "credit_id": "52fe4218c3a36847f8003b77",
+        "name": "Kevin Peter Hall",
+        "cast_id": 22,
+        "profile_path": "/lxlubrzo3np1mU0ML7G12zuy654.jpg",
+        "character": "The Predator"
+      },
+      {
+        "id": 1109,
+        "order": 10,
+        "credit_id": "52fe4218c3a36847f8003b7b",
+        "name": "Kevin Peter Hall",
+        "cast_id": 23,
+        "profile_path": "/lxlubrzo3np1mU0ML7G12zuy654.jpg",
+        "character": "Helicopter Pilot"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7719,
+        "credit_id": "5362264ec3a368394700131c",
+        "department": "Costume & Make-Up",
+        "name": "Marilyn Vance",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 1090,
+        "credit_id": "52fe4218c3a36847f8003b0d",
+        "department": "Directing",
+        "name": "John McTiernan",
+        "job": "Director",
+        "profile_path": "/tknmquMIO2oAVUZ0vVX78ALHyaT.jpg"
+      },
+      {
+        "id": 1091,
+        "credit_id": "52fe4218c3a36847f8003b13",
+        "department": "Production",
+        "name": "Joel Silver",
+        "job": "Producer",
+        "profile_path": "/1LIjLDXGRhwXohHL2jKhyvLv0rZ.jpg"
+      },
+      {
+        "id": 1092,
+        "credit_id": "52fe4218c3a36847f8003b19",
+        "department": "Production",
+        "name": "Jim Thomas",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1093,
+        "credit_id": "52fe4218c3a36847f8003b1f",
+        "department": "Production",
+        "name": "Lawrence Gordon",
+        "job": "Producer",
+        "profile_path": "/hcjzZT71C7bKzhkgL6TAcEjsmkS.jpg"
+      },
+      {
+        "id": 1092,
+        "credit_id": "52fe4218c3a36847f8003b25",
+        "department": "Writing",
+        "name": "Jim Thomas",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1094,
+        "credit_id": "52fe4218c3a36847f8003b2b",
+        "department": "Writing",
+        "name": "John Thomas",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1095,
+        "credit_id": "52fe4218c3a36847f8003b31",
+        "department": "Camera",
+        "name": "Donald McAlpine",
+        "job": "Director of Photography",
+        "profile_path": "/fKCV0jG6PECfYyhsPGevvt7KtsM.jpg"
+      },
+      {
+        "id": 37,
+        "credit_id": "52fe4218c3a36847f8003b37",
+        "department": "Sound",
+        "name": "Alan Silvestri",
+        "job": "Original Music Composer",
+        "profile_path": "/k1xBoqCl5qRwWQfFTC1kOtNgEEA.jpg"
+      },
+      {
+        "id": 1096,
+        "credit_id": "52fe4218c3a36847f8003b3d",
+        "department": "Art",
+        "name": "John Vallone",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1097,
+        "credit_id": "52fe4218c3a36847f8003b43",
+        "department": "Production",
+        "name": "Jackie Burch",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1098,
+        "credit_id": "52fe4218c3a36847f8003b49",
+        "department": "Editing",
+        "name": "Mark Helfrich",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1099,
+        "credit_id": "52fe4218c3a36847f8003b4f",
+        "department": "Editing",
+        "name": "John F. Link",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 107,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 106,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Predator",
+  "overview": "Dutch and his group of commandos are hired by the CIA to rescue downed airmen from guerillas in a Central American jungle. The mission goes well but as they return they find that something is hunting them. Nearly invisible, it blends in with the forest, taking trophies from the bodies of its victims as it goes along. Occasionally seeing through its eyes, the audience sees it is an intelligent alien hunter, hunting them for sport, killing them off one at a time.",
+  "production_companies": [
+    {
+      "id": 25,
+      "name": "20th Century Fox"
+    },
+    {
+      "id": 5263,
+      "name": "Amercent Films"
+    },
+    {
+      "id": 21451,
+      "name": "American Entertainment Partners II L.P."
+    },
+    {
+      "id": 1302,
+      "name": "Davis Entertainment"
+    },
+    {
+      "id": 840,
+      "name": "Lawrence Gordon Productions"
+    },
+    {
+      "id": 1885,
+      "name": "Silver Pictures"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 399,
+    "backdrop_path": "/e8ycFoI8vGoZSOY7KmxFzZA1dkE.jpg",
+    "name": "Predator Collection",
+    "poster_path": "/dzDhrRXYkRdas7JvRtwwhc4MJGo.jpg"
+  },
+  "imdb_id": "tt0093773",
+  "release_date": "1987-06-11",
+  "original_title": "Predator",
+  "vote_count": 461,
+  "poster_path": "/sa8OiwfkGLeQ3HDXf8BwXUx6pZV.jpg",
+  "tagline": "If it bleeds, we can kill it...",
+  "revenue": 98235548,
+  "popularity": "3.49902343791338"
+}

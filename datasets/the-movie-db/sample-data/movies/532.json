@@ -1,0 +1,68 @@
+{
+  "budget": 0,
+  "vote_average": 7.5,
+  "backdrop_path": "/qBFSlBSjHiwYRRA3sKYUO5G4kDL.jpg",
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [{
+      "id": 7317,
+      "order": 0,
+      "credit_id": "52fe424ec3a36847f8013e63",
+      "name": "Peter Sallis",
+      "cast_id": 2,
+      "profile_path": "/qKLcaCbQyhj5kCfN7aJYknefNAj.jpg",
+      "character": "Wallace"
+    }],
+    "crew": [{
+      "id": 7314,
+      "credit_id": "52fe424ec3a36847f8013e5f",
+      "department": "Directing",
+      "name": "Nick Park",
+      "job": "Director",
+      "profile_path": "/wWqFv6e3FnX3Gw1IRYvbmZbPmB8.jpg"
+    }]
+  },
+  "runtime": 30,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 532,
+  "production_countries": [{
+    "name": "United Kingdom",
+    "iso_3166_1": "GB"
+  }],
+  "title": "Wallace and Gromit: A Close Shave",
+  "overview": "Wallace falls in love with wool-shop owner Wendolene, not suspecting that she (or rather, her dog) is at the head of a fiendish sheep-rustling plot. Gromit is set up and jailed, but his new-found sheepish friend is determine to give Wallace a helping hand in finding out the real truth.",
+  "production_companies": [],
+  "belongs_to_collection": {
+    "id": 529,
+    "backdrop_path": "/huyrvVKEKa9czUY89fnvaAVAtkX.jpg",
+    "name": "Wallace & Gromit Collection",
+    "poster_path": "/993pCCMO9g9RQUtNDxQgE1B330H.jpg"
+  },
+  "imdb_id": "tt0112691",
+  "release_date": "1995-12-24",
+  "original_title": "Wallace and Gromit: A Close Shave",
+  "vote_count": 36,
+  "poster_path": "/aLhRY6psan74kcGB0GOqQXl3Yo2.jpg",
+  "tagline": "The cheese lover and his sidekick investigate the wildest, woolliest sheep rustling yarn ever made of clay.",
+  "revenue": 0,
+  "popularity": "0.622784919396159"
+}

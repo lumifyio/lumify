@@ -1,0 +1,304 @@
+{
+  "budget": 18000000,
+  "vote_average": 7.7,
+  "backdrop_path": "/bSvHcr3nJffQ0WvAPSx4OqSWdL5.jpg",
+  "genres": [{
+    "id": 14,
+    "name": "Fantasy"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 12688,
+        "order": 0,
+        "credit_id": "52fe4281c3a36847f802431b",
+        "name": "Peter MacNicol",
+        "cast_id": 16,
+        "profile_path": "/CaeFYFqpB4jHIX2nTVsMnJ7cK6.jpg",
+        "character": "Galen"
+      },
+      {
+        "id": 2275,
+        "order": 1,
+        "credit_id": "52fe4281c3a36847f802431f",
+        "name": "Caitlin Clarke",
+        "cast_id": 17,
+        "profile_path": "/ole1dOc4o7Ts8OpmTFgItn33On4.jpg",
+        "character": "Valerian"
+      },
+      {
+        "id": 12689,
+        "order": 2,
+        "credit_id": "52fe4281c3a36847f8024323",
+        "name": "Ralph Richardson",
+        "cast_id": 18,
+        "profile_path": "/8S6qfDifOU0zbRXsZmxxVJ6i22.jpg",
+        "character": "Ulrich"
+      },
+      {
+        "id": 12690,
+        "order": 3,
+        "credit_id": "52fe4281c3a36847f8024327",
+        "name": "John Hallam",
+        "cast_id": 19,
+        "profile_path": "/pJTpp7OBqiVg0Ms9CDVO22qp7Gy.jpg",
+        "character": "Tyrian"
+      },
+      {
+        "id": 12691,
+        "order": 4,
+        "credit_id": "52fe4281c3a36847f802432b",
+        "name": "Peter Eyre",
+        "cast_id": 20,
+        "profile_path": "/18DH3l3BZXER2nA7oGWjSAZATeA.jpg",
+        "character": "Casiodorus Rex"
+      },
+      {
+        "id": 12692,
+        "order": 5,
+        "credit_id": "52fe4281c3a36847f802432f",
+        "name": "Albert Salmi",
+        "cast_id": 21,
+        "profile_path": "/z7dpRaZTt3ETMx48cvMBgcQAN97.jpg",
+        "character": "Greil"
+      },
+      {
+        "id": 12693,
+        "order": 6,
+        "credit_id": "52fe4281c3a36847f8024333",
+        "name": "Sydney Bromley",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Hodge"
+      },
+      {
+        "id": 12694,
+        "order": 7,
+        "credit_id": "52fe4281c3a36847f8024337",
+        "name": "Chloe Salaman",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Princess Elspeth"
+      },
+      {
+        "id": 202466,
+        "order": 8,
+        "credit_id": "52fe4281c3a36847f8024341",
+        "name": "Emrys James",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Valerian's Father"
+      },
+      {
+        "id": 591881,
+        "order": 9,
+        "credit_id": "52fe4281c3a36847f8024345",
+        "name": "Roger Kemp",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Horsrik"
+      },
+      {
+        "id": 27762,
+        "order": 10,
+        "credit_id": "52fe4281c3a36847f8024349",
+        "name": "Ian McDiarmid",
+        "cast_id": 27,
+        "profile_path": "/yQYNxIjSVYp2Hli7IHOq182NoIJ.jpg",
+        "character": "Brother Jacopus"
+      },
+      {
+        "id": 94807,
+        "order": 11,
+        "credit_id": "52fe4281c3a36847f802434d",
+        "name": "Ken Shorter",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Henchman"
+      },
+      {
+        "id": 140260,
+        "order": 12,
+        "credit_id": "52fe4281c3a36847f8024351",
+        "name": "Jason White",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Henchman"
+      },
+      {
+        "id": 1074685,
+        "order": 13,
+        "credit_id": "52fe4281c3a36847f8024355",
+        "name": "Yolande Palfrey",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Victim"
+      },
+      {
+        "id": 993534,
+        "order": 14,
+        "credit_id": "52fe4281c3a36847f8024359",
+        "name": "Douglas Cooper",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Urlander"
+      }
+    ],
+    "crew": [
+      {
+        "id": 12677,
+        "credit_id": "52fe4281c3a36847f80242c9",
+        "department": "Directing",
+        "name": "Matthew Robbins",
+        "job": "Director",
+        "profile_path": "/oK61i61u3G5zZO5EtXmepY9IxGy.jpg"
+      },
+      {
+        "id": 12678,
+        "credit_id": "52fe4281c3a36847f80242cf",
+        "department": "Writing",
+        "name": "Hal Barwood",
+        "job": "Screenplay",
+        "profile_path": "/nT2nqgyHMlO1AlHTwGpaUP11yR9.jpg"
+      },
+      {
+        "id": 12677,
+        "credit_id": "52fe4281c3a36847f80242d5",
+        "department": "Writing",
+        "name": "Matthew Robbins",
+        "job": "Screenplay",
+        "profile_path": "/oK61i61u3G5zZO5EtXmepY9IxGy.jpg"
+      },
+      {
+        "id": 3428,
+        "credit_id": "52fe4281c3a36847f80242db",
+        "department": "Production",
+        "name": "Howard W. Koch",
+        "job": "Executive Producer",
+        "profile_path": "/ocnNi4vGIENHuQFzv2ecoLjP9pB.jpg"
+      },
+      {
+        "id": 12681,
+        "credit_id": "52fe4281c3a36847f80242e1",
+        "department": "Production",
+        "name": "Eric Rattray",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10536,
+        "credit_id": "52fe4281c3a36847f80242e7",
+        "department": "Sound",
+        "name": "Alex North",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5055,
+        "credit_id": "52fe4281c3a36847f80242ed",
+        "department": "Camera",
+        "name": "Derek Vanlint",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12685,
+        "credit_id": "52fe4281c3a36847f80242f3",
+        "department": "Editing",
+        "name": "Tony Lawson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12686,
+        "credit_id": "52fe4281c3a36847f80242f9",
+        "department": "Production",
+        "name": "Deborah Brown",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 10496,
+        "credit_id": "52fe4281c3a36847f80242ff",
+        "department": "Production",
+        "name": "Debbie McWilliams",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 715,
+        "credit_id": "52fe4281c3a36847f8024305",
+        "department": "Art",
+        "name": "Elliot Scott",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 12687,
+        "credit_id": "52fe4281c3a36847f802430b",
+        "department": "Art",
+        "name": "Alan Cassie",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5060,
+        "credit_id": "52fe4281c3a36847f8024311",
+        "department": "Art",
+        "name": "Ian Whittaker",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9955,
+        "credit_id": "52fe4281c3a36847f8024317",
+        "department": "Costume & Make-Up",
+        "name": "Anthony Mendleson",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 12678,
+        "credit_id": "52fe4281c3a36847f802433d",
+        "department": "Production",
+        "name": "Hal Barwood",
+        "job": "Producer",
+        "profile_path": "/nT2nqgyHMlO1AlHTwGpaUP11yR9.jpg"
+      }
+    ]
+  },
+  "runtime": 108,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 848,
+  "production_countries": [{
+    "name": "United Kingdom",
+    "iso_3166_1": "GB"
+  }],
+  "title": "Dragonslayer",
+  "overview": "The sorcerer and his apprentice Galen are on a mission to kill an evil dragon in order to save the King\u2019s daughter from being sacrificed in accordance to a pact that the King himself made with the dragon to protect his kingdom. A fantasy film from Disney Studios that exhausted all possible visual effects of the time.",
+  "production_companies": [
+    {
+      "id": 4,
+      "name": "Paramount Pictures"
+    },
+    {
+      "id": 3166,
+      "name": "Walt Disney Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0082288",
+  "release_date": "1981-06-26",
+  "original_title": "Dragonslayer",
+  "vote_count": 9,
+  "poster_path": "/tceaiNtwktGKzw4AIrZ2Hz6iK9u.jpg",
+  "tagline": "In the Dark Ages, Magic was a weapon. Love was a mystery. Adventure was everywhere... And Dragons were real.",
+  "revenue": 6000000,
+  "popularity": "0.341950134751321"
+}

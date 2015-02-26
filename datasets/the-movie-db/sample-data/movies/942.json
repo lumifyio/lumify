@@ -1,0 +1,384 @@
+{
+  "budget": 25000000,
+  "vote_average": 6.1,
+  "backdrop_path": "/qFjBcVkKYlsdeLgVOCWlHOpMNXn.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2461,
+        "order": 0,
+        "credit_id": "52fe4291c3a36847f8028c21",
+        "name": "Mel Gibson",
+        "cast_id": 18,
+        "profile_path": "/6VGgL0bBvPIJ9vDOyyGf5nK2zL4.jpg",
+        "character": "Martin Riggs"
+      },
+      {
+        "id": 2047,
+        "order": 1,
+        "credit_id": "52fe4291c3a36847f8028c25",
+        "name": "Danny Glover",
+        "cast_id": 19,
+        "profile_path": "/jSNTEnm0Sxm8FRtoBfJmhmQyozH.jpg",
+        "character": "Sergeant Roger Murtaugh"
+      },
+      {
+        "id": 4517,
+        "order": 2,
+        "credit_id": "52fe4291c3a36847f8028c29",
+        "name": "Joe Pesci",
+        "cast_id": 20,
+        "profile_path": "/4zidewFE0x8OBlW0RjEKlkhw4lr.jpg",
+        "character": "Leo Getz"
+      },
+      {
+        "id": 14324,
+        "order": 3,
+        "credit_id": "52fe4291c3a36847f8028c2d",
+        "name": "Joss Ackland",
+        "cast_id": 21,
+        "profile_path": "/b1Ijg1F0RX8ZQG8jJ03VTjWpd8b.jpg",
+        "character": "Arjen Rudd"
+      },
+      {
+        "id": 14325,
+        "order": 4,
+        "credit_id": "52fe4291c3a36847f8028c31",
+        "name": "Derrick O'Connor",
+        "cast_id": 22,
+        "profile_path": "/5V0v5o7vIORgUXxbMCqy5aXLf5f.jpg",
+        "character": "Pieter 'Adolph' Vorstedt"
+      },
+      {
+        "id": 14326,
+        "order": 5,
+        "credit_id": "52fe4291c3a36847f8028c35",
+        "name": "Patsy Kensit",
+        "cast_id": 23,
+        "profile_path": "/oCLY2IIAO64vnaGNS8n42rHGjFK.jpg",
+        "character": "Rika van den Haas"
+      },
+      {
+        "id": 14313,
+        "order": 6,
+        "credit_id": "52fe4291c3a36847f8028c39",
+        "name": "Darlene Love",
+        "cast_id": 24,
+        "profile_path": "/zkVADWGjiMI1tXQjgYfBkldTHbh.jpg",
+        "character": "Trish Murtaugh"
+      },
+      {
+        "id": 14328,
+        "order": 7,
+        "credit_id": "52fe4291c3a36847f8028c3d",
+        "name": "Steve Kahan",
+        "cast_id": 25,
+        "profile_path": "/wWwQXPezxuxbKsFGXkC4AzJSIos.jpg",
+        "character": "Captain Ed Murphy"
+      },
+      {
+        "id": 6576,
+        "order": 8,
+        "credit_id": "52fe4291c3a36847f8028c41",
+        "name": "Mark Rolston",
+        "cast_id": 26,
+        "profile_path": "/bsh3cqDNwVvux4NdaY1Bj4S7mNS.jpg",
+        "character": "Hans"
+      },
+      {
+        "id": 3981,
+        "order": 9,
+        "credit_id": "52fe4291c3a36847f8028c45",
+        "name": "Jenette Goldstein",
+        "cast_id": 27,
+        "profile_path": "/wCcO7cqHJVtnfRlvAJvo7jKd6Bq.jpg",
+        "character": "Officer Meagan Shapiro"
+      },
+      {
+        "id": 14329,
+        "order": 10,
+        "credit_id": "52fe4291c3a36847f8028c49",
+        "name": "Dean Norris",
+        "cast_id": 28,
+        "profile_path": "/exWOa1FKgYLq9tnSxXPO3pJLVgK.jpg",
+        "character": "Tim Cavanaugh"
+      },
+      {
+        "id": 14330,
+        "order": 11,
+        "credit_id": "52fe4291c3a36847f8028c4d",
+        "name": "Juney Smith",
+        "cast_id": 29,
+        "profile_path": "/ajDBZhChcwETIyCuCbbH3u39l4D.jpg",
+        "character": "Tom Wyler"
+      },
+      {
+        "id": 14331,
+        "order": 12,
+        "credit_id": "52fe4291c3a36847f8028c51",
+        "name": "Nestor Serrano",
+        "cast_id": 30,
+        "profile_path": "/dZ44mFqSLqVqBmh4XqFRqqfa70N.jpg",
+        "character": "Eddie Estaban"
+      },
+      {
+        "id": 14332,
+        "order": 13,
+        "credit_id": "52fe4291c3a36847f8028c55",
+        "name": "Philip Suriano",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Joseph Ragucci"
+      },
+      {
+        "id": 14333,
+        "order": 14,
+        "credit_id": "52fe4291c3a36847f8028c59",
+        "name": "Grand L. Bush",
+        "cast_id": 32,
+        "profile_path": "/gAh3iIR7Pbpjx6o5qtAa9GTKKKe.jpg",
+        "character": "Jerry Collins"
+      },
+      {
+        "id": 14334,
+        "order": 15,
+        "credit_id": "52fe4291c3a36847f8028c5d",
+        "name": "Allan Dean Moore",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "George"
+      },
+      {
+        "id": 10489,
+        "order": 16,
+        "credit_id": "52fe4291c3a36847f8028c61",
+        "name": "Jack McGee",
+        "cast_id": 34,
+        "profile_path": "/jSl2RKRaJvtRoS3T5HSw4xeNdwy.jpg",
+        "character": "Mickey McGee, the Carpenter"
+      },
+      {
+        "id": 23967,
+        "order": 17,
+        "credit_id": "52fe4291c3a36847f8028c6b",
+        "name": "Mary Ellen Trainor",
+        "cast_id": 36,
+        "profile_path": "/w5QWW4oyQWNX51hMcnaCUTPToYX.jpg",
+        "character": "Police Psychiatrist"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7187,
+        "credit_id": "52fe4291c3a36847f8028bbd",
+        "department": "Directing",
+        "name": "Richard Donner",
+        "job": "Director",
+        "profile_path": "/hsOQU2mFuAfGrvBMDLPgrWemO5T.jpg"
+      },
+      {
+        "id": 1108,
+        "credit_id": "52fe4291c3a36847f8028bc3",
+        "department": "Writing",
+        "name": "Shane Black",
+        "job": "Screenplay",
+        "profile_path": "/9slEH8S7APuw3PifJNSYJ04ceJA.jpg"
+      },
+      {
+        "id": 737,
+        "credit_id": "52fe4291c3a36847f8028bc9",
+        "department": "Writing",
+        "name": "Jeffrey Boam",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7187,
+        "credit_id": "52fe4291c3a36847f8028bcf",
+        "department": "Production",
+        "name": "Richard Donner",
+        "job": "Producer",
+        "profile_path": "/hsOQU2mFuAfGrvBMDLPgrWemO5T.jpg"
+      },
+      {
+        "id": 1091,
+        "credit_id": "52fe4291c3a36847f8028bd5",
+        "department": "Production",
+        "name": "Joel Silver",
+        "job": "Producer",
+        "profile_path": "/1LIjLDXGRhwXohHL2jKhyvLv0rZ.jpg"
+      },
+      {
+        "id": 10810,
+        "credit_id": "52fe4291c3a36847f8028bdb",
+        "department": "Production",
+        "name": "Peter Frankfurt",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4699,
+        "credit_id": "52fe4291c3a36847f8028be1",
+        "department": "Production",
+        "name": "Steve Perry",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2585,
+        "credit_id": "52fe4291c3a36847f8028be7",
+        "department": "Sound",
+        "name": "Eric Clapton",
+        "job": "Original Music Composer",
+        "profile_path": "/5Y9eRWlz7AMR4eofCm6OVSZkc1s.jpg"
+      },
+      {
+        "id": 7714,
+        "credit_id": "52fe4291c3a36847f8028bed",
+        "department": "Sound",
+        "name": "Michael Kamen",
+        "job": "Original Music Composer",
+        "profile_path": "/y83bqw1VP1PkuvOhG2XROwc9eXG.jpg"
+      },
+      {
+        "id": 14322,
+        "credit_id": "52fe4291c3a36847f8028bf3",
+        "department": "Sound",
+        "name": "David Sanborn",
+        "job": "Original Music Composer",
+        "profile_path": "/ncsTnYaI6p04VAOCyJdcJ1hhcNk.jpg"
+      },
+      {
+        "id": 5582,
+        "credit_id": "52fe4291c3a36847f8028bf9",
+        "department": "Camera",
+        "name": "Stephen Goldblatt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2523,
+        "credit_id": "52fe4291c3a36847f8028bff",
+        "department": "Editing",
+        "name": "Stuart Baird",
+        "job": "Editor",
+        "profile_path": "/k7nLNZ0MYsPrKq5T3ZV7m9zwEGY.jpg"
+      },
+      {
+        "id": 3806,
+        "credit_id": "52fe4291c3a36847f8028c05",
+        "department": "Production",
+        "name": "Marion Dougherty",
+        "job": "Casting",
+        "profile_path": "/vHUj1WzotNrj9PTT6wJ1yhhULbD.jpg"
+      },
+      {
+        "id": 11658,
+        "credit_id": "52fe4291c3a36847f8028c0b",
+        "department": "Production",
+        "name": "Gail Levin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 13304,
+        "credit_id": "52fe4291c3a36847f8028c11",
+        "department": "Art",
+        "name": "J. Michael Riva",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 14323,
+        "credit_id": "52fe4291c3a36847f8028c17",
+        "department": "Art",
+        "name": "Richard Berger",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8867,
+        "credit_id": "52fe4291c3a36847f8028c1d",
+        "department": "Art",
+        "name": "Marvin March",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 14337,
+        "credit_id": "52fe4291c3a36847f8028c67",
+        "department": "Production",
+        "name": "Jennie Lew Tugend",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 114,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "af",
+      "name": "Afrikaans"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 942,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Lethal Weapon 2",
+  "overview": "In the opening chase, Martin Riggs and Roger Murtaugh stumble across a trunk full of Krugerrands. They follow the trail to a South African diplomat who's using his immunity to conceal a smuggling operation. When he plants a bomb under Murtaugh's toilet, the action explodes!",
+  "production_companies": [
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 1885,
+      "name": "Silver Pictures"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 945,
+    "backdrop_path": "/7PH31kIhz6BnzoP9cxG7JbkB6fT.jpg",
+    "name": "Lethal Weapon Collection",
+    "poster_path": "/5zg6QLY0tdDLVHLwn28oowG3m8H.jpg"
+  },
+  "imdb_id": "tt0097733",
+  "release_date": "1989-07-06",
+  "original_title": "Lethal Weapon 2",
+  "vote_count": 238,
+  "poster_path": "/qEYSpENiOoltib1vtFXifGbdNbU.jpg",
+  "tagline": "The magic is back!",
+  "revenue": 227853986,
+  "popularity": "1.22702603426675"
+}

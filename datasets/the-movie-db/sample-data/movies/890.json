@@ -1,0 +1,299 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/se6qT2dJNGyzOZpxeUPgKHHprC2.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 14631,
+        "order": 0,
+        "credit_id": "52fe4288c3a36847f80264ef",
+        "name": "André Eisermann",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Elias"
+      },
+      {
+        "id": 14632,
+        "order": 1,
+        "credit_id": "52fe4288c3a36847f80264f3",
+        "name": "Dana Vávrová",
+        "cast_id": 22,
+        "profile_path": "/tpAR19LzoIG8UAPowcTmfoVP9kq.jpg",
+        "character": "Elsbeth"
+      },
+      {
+        "id": 14633,
+        "order": 2,
+        "credit_id": "52fe4288c3a36847f80264f7",
+        "name": "Ben Becker",
+        "cast_id": 23,
+        "profile_path": "/qmJjjvIpNJQs0Gvd4RPPQod2ymv.jpg",
+        "character": "Peter"
+      },
+      {
+        "id": 4936,
+        "order": 3,
+        "credit_id": "52fe4288c3a36847f80264fb",
+        "name": "Jochen Nickel",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Köhler Michel"
+      },
+      {
+        "id": 14634,
+        "order": 4,
+        "credit_id": "52fe4288c3a36847f80264ff",
+        "name": "Jürgen Schornagel",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Kurat Benzer"
+      },
+      {
+        "id": 14635,
+        "order": 5,
+        "credit_id": "52fe4288c3a36847f8026503",
+        "name": "Paulus Manker",
+        "cast_id": 26,
+        "profile_path": "/tlXbv7GDxSMud1uJxNceFVg87Av.jpg",
+        "character": "Oskar"
+      },
+      {
+        "id": 14636,
+        "order": 6,
+        "credit_id": "52fe4288c3a36847f8026507",
+        "name": "Michaela Rosen",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Seffin"
+      },
+      {
+        "id": 11260,
+        "order": 7,
+        "credit_id": "52fe4288c3a36847f802650b",
+        "name": "Peter Franke",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Seff"
+      },
+      {
+        "id": 14637,
+        "order": 8,
+        "credit_id": "52fe4288c3a36847f802650f",
+        "name": "Detlef Bothe",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Lukas"
+      },
+      {
+        "id": 8802,
+        "order": 9,
+        "credit_id": "52fe4288c3a36847f8026513",
+        "name": "Michael Mendl",
+        "cast_id": 30,
+        "profile_path": "/yXOUGxx2rGfuiDBpuemtSQAUUJ2.jpg",
+        "character": "Nulf"
+      },
+      {
+        "id": 10627,
+        "order": 10,
+        "credit_id": "52fe4288c3a36847f8026517",
+        "name": "Eva Mattes",
+        "cast_id": 31,
+        "profile_path": "/zZYceFXbFCFvdWRYVhCFArTHvEQ.jpg",
+        "character": "Nulfin"
+      },
+      {
+        "id": 14638,
+        "order": 11,
+        "credit_id": "52fe4288c3a36847f802651b",
+        "name": "Angelika Bartsch",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Burga"
+      }
+    ],
+    "crew": [
+      {
+        "id": 14614,
+        "credit_id": "52fe4288c3a36847f8026485",
+        "department": "Directing",
+        "name": "Joseph Vilsmaier",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 14616,
+        "credit_id": "52fe4288c3a36847f802648b",
+        "department": "Production",
+        "name": "Danny Krausz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14614,
+        "credit_id": "52fe4288c3a36847f8026491",
+        "department": "Production",
+        "name": "Joseph Vilsmaier",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14617,
+        "credit_id": "52fe4288c3a36847f8026497",
+        "department": "Sound",
+        "name": "Winfried Grabe",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 14619,
+        "credit_id": "52fe4288c3a36847f802649d",
+        "department": "Sound",
+        "name": "Hubert von Goisern",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 14614,
+        "credit_id": "52fe4288c3a36847f80264a3",
+        "department": "Camera",
+        "name": "Joseph Vilsmaier",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1851,
+        "credit_id": "52fe4288c3a36847f80264a9",
+        "department": "Editing",
+        "name": "Alexander Berner",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3771,
+        "credit_id": "52fe4288c3a36847f80264af",
+        "department": "Art",
+        "name": "Rolf Zehetbauer",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 14620,
+        "credit_id": "52fe4288c3a36847f80264b5",
+        "department": "Art",
+        "name": "Tommy Vögel",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 14621,
+        "credit_id": "52fe4288c3a36847f80264bb",
+        "department": "Costume & Make-Up",
+        "name": "Ute Hofinger",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14622,
+        "credit_id": "52fe4288c3a36847f80264c1",
+        "department": "Costume & Make-Up",
+        "name": "Heiner Niehues",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 14623,
+        "credit_id": "52fe4288c3a36847f80264c7",
+        "department": "Sound",
+        "name": "Michael Kranz",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 14625,
+        "credit_id": "52fe4288c3a36847f80264d3",
+        "department": "Crew",
+        "name": "Heinz Ludwig",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 14627,
+        "credit_id": "52fe4288c3a36847f80264d9",
+        "department": "Crew",
+        "name": "Roland Künzel",
+        "job": "Stunt Coordinator",
+        "profile_path": null
+      },
+      {
+        "id": 14630,
+        "credit_id": "52fe4288c3a36847f80264df",
+        "department": "Crew",
+        "name": "Mac Steinmeier",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 124017,
+        "credit_id": "52fe4288c3a36847f8026521",
+        "department": "Writing",
+        "name": "Robert Schneider",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 36596,
+        "credit_id": "52fe4288c3a36847f8026527",
+        "department": "Sound",
+        "name": "Enjott Schneider",
+        "job": "Original Music Composer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 127,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 890,
+  "production_countries": [
+    {
+      "name": "Austria",
+      "iso_3166_1": "AT"
+    },
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    }
+  ],
+  "title": "Brother of Sleep",
+  "overview": "Schlafes Bruder tells the story a few exceptionally talented individuals who grew up in a remote mountain town in the Alps. The film, based on an internationally successful novel by Robert Schneider of the same name, depicts the slow withering of their unique skills.",
+  "production_companies": [
+    {
+      "id": 608,
+      "name": "Dor Film Produktionsgesellschaft GmbH"
+    },
+    {
+      "id": 610,
+      "name": "Kuchenreuther Filmproduktion GmbH"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0114354",
+  "release_date": "1995-09-08",
+  "original_title": "Schlafes Bruder",
+  "vote_count": 0,
+  "poster_path": "/oVFPEiXCjHEyR3TYJWSNBQk0Huj.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.214633742366039"
+}

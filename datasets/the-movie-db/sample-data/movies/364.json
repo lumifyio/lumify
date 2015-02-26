@@ -1,0 +1,276 @@
+{
+  "budget": 80000000,
+  "vote_average": 6.3,
+  "backdrop_path": "/wNIE5dpkiHU2csDRptMutFjAGiV.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2232,
+        "order": 0,
+        "credit_id": "52fe423cc3a36847f800e57d",
+        "name": "Michael Keaton",
+        "cast_id": 22,
+        "profile_path": "/jSG7yQxSsGzz1TbDjq0811W5LK4.jpg",
+        "character": "Batman/Bruce Wayne"
+      },
+      {
+        "id": 518,
+        "order": 1,
+        "credit_id": "52fe423cc3a36847f800e529",
+        "name": "Danny DeVito",
+        "cast_id": 5,
+        "profile_path": "/zKuyzmKzPLG7RJo7lbbHjx6CCZc.jpg",
+        "character": "Penguin/Oswald Cobblepot"
+      },
+      {
+        "id": 1160,
+        "order": 2,
+        "credit_id": "52fe423cc3a36847f800e52d",
+        "name": "Michelle Pfeiffer",
+        "cast_id": 6,
+        "profile_path": "/nhfGgJMRJvAxIEm1JJM7DOYutwy.jpg",
+        "character": "Catwoman/Selina Kyle"
+      },
+      {
+        "id": 4690,
+        "order": 3,
+        "credit_id": "52fe423cc3a36847f800e531",
+        "name": "Christopher Walken",
+        "cast_id": 7,
+        "profile_path": "/t0gzpYe6FOWH1yKeRBOIpTKgFsB.jpg",
+        "character": "Max Shreck"
+      },
+      {
+        "id": 3796,
+        "order": 4,
+        "credit_id": "52fe423cc3a36847f800e535",
+        "name": "Michael Gough",
+        "cast_id": 8,
+        "profile_path": "/lSADK0gjUtcq4B6zKIUwB3SofSP.jpg",
+        "character": "Alfred"
+      },
+      {
+        "id": 3798,
+        "order": 5,
+        "credit_id": "52fe423cc3a36847f800e539",
+        "name": "Pat Hingle",
+        "cast_id": 9,
+        "profile_path": "/bW8alHCKEK0UOJjoZwjwwH7T0ga.jpg",
+        "character": "Commissioner James Gordon"
+      },
+      {
+        "id": 5129,
+        "order": 6,
+        "credit_id": "52fe423cc3a36847f800e53d",
+        "name": "Paul Reubens",
+        "cast_id": 10,
+        "profile_path": "/3g77Qz12qjCpVGfBP2kOPx4rRai.jpg",
+        "character": "Mr. Cobblepot/ Penguin's Father"
+      },
+      {
+        "id": 4776,
+        "order": 7,
+        "credit_id": "52fe423cc3a36847f800e541",
+        "name": "Michael Murphy",
+        "cast_id": 11,
+        "profile_path": "/ebbKhFgIHugUywSL5udMFNfRxvQ.jpg",
+        "character": "Mayor"
+      },
+      {
+        "id": 5131,
+        "order": 8,
+        "credit_id": "52fe423cc3a36847f800e549",
+        "name": "Diane Salinger",
+        "cast_id": 13,
+        "profile_path": "/kJkPiBp9tSBxlX4h1OZ1I82Q5Vi.jpg",
+        "character": "Mrs. Cobblepot/Penguin's Mother"
+      },
+      {
+        "id": 5130,
+        "order": 9,
+        "credit_id": "52fe423cc3a36847f800e545",
+        "name": "Cristi Conaway",
+        "cast_id": 12,
+        "profile_path": "/5bbfOgGXmNf2MHQn0f6q7aY12bx.jpg",
+        "character": "Ice Princess"
+      }
+    ],
+    "crew": [
+      {
+        "id": 510,
+        "credit_id": "52fe423cc3a36847f800e513",
+        "department": "Directing",
+        "name": "Tim Burton",
+        "job": "Director",
+        "profile_path": "/z64d13PXggAV5Q2oUqcP9q18qtg.jpg"
+      },
+      {
+        "id": 3794,
+        "credit_id": "52fe423cc3a36847f800e519",
+        "department": "Writing",
+        "name": "Bob Kane",
+        "job": "Author",
+        "profile_path": "/uh9ILSkz0iCQ8o1Ljnz6ubYMvOD.jpg"
+      },
+      {
+        "id": 5128,
+        "credit_id": "52fe423cc3a36847f800e51f",
+        "department": "Writing",
+        "name": "Daniel Waters",
+        "job": "Author",
+        "profile_path": "/cn6wLtCJ1e6GiYQ1cMmOC4BJmhK.jpg"
+      },
+      {
+        "id": 3795,
+        "credit_id": "52fe423cc3a36847f800e525",
+        "department": "Writing",
+        "name": "Sam Hamm",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 510,
+        "credit_id": "52fe423cc3a36847f800e54f",
+        "department": "Production",
+        "name": "Tim Burton",
+        "job": "Producer",
+        "profile_path": "/z64d13PXggAV5Q2oUqcP9q18qtg.jpg"
+      },
+      {
+        "id": 1899,
+        "credit_id": "52fe423cc3a36847f800e555",
+        "department": "Production",
+        "name": "Denise Di Novi",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 531,
+        "credit_id": "52fe423cc3a36847f800e55b",
+        "department": "Sound",
+        "name": "Danny Elfman",
+        "job": "Original Music Composer",
+        "profile_path": "/nBx84zlelMMlbVvkBQHyfF7eCov.jpg"
+      },
+      {
+        "id": 1919,
+        "credit_id": "52fe423cc3a36847f800e561",
+        "department": "Camera",
+        "name": "Stefan Czapsky",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5132,
+        "credit_id": "52fe423cc3a36847f800e567",
+        "department": "Editing",
+        "name": "Bob Badami",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 541,
+        "credit_id": "52fe423cc3a36847f800e56d",
+        "department": "Editing",
+        "name": "Chris Lebenzon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3806,
+        "credit_id": "52fe423cc3a36847f800e573",
+        "department": "Production",
+        "name": "Marion Dougherty",
+        "job": "Casting",
+        "profile_path": "/vHUj1WzotNrj9PTT6wJ1yhhULbD.jpg"
+      },
+      {
+        "id": 5133,
+        "credit_id": "52fe423cc3a36847f800e579",
+        "department": "Art",
+        "name": "Bo Welch",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 406204,
+        "credit_id": "52fe423cc3a36847f800e583",
+        "department": "Costume & Make-Up",
+        "name": "Ve Neill",
+        "job": "Makeup Artist",
+        "profile_path": "/yaAwlGtPlQXcMum3eWL2xbas4BV.jpg"
+      }
+    ]
+  },
+  "runtime": 126,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 364,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Batman Returns",
+  "overview": "Having defeated the Joker, Batman now faces the Penguin - a warped and deformed individual who is intent on being accepted into Gotham society. Crooked businessman Max Schreck is coerced into helping him become Mayor of Gotham and they both attempt to expose Batman in a different light. Selina Kyle, Max's secretary, is thrown from the top of a building and is transformed into Catwoman - a mysterious figure who has the same personality disorder as Batman. Batman must attempt to clear his name, all the time deciding just what must be done with the Catwoman.",
+  "production_companies": [
+    {
+      "id": 429,
+      "name": "DC Comics"
+    },
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 1382,
+      "name": "PolyGram Filmed Entertainment"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 120794,
+    "backdrop_path": "/cLnP8V27ZX44QDz4ZsgHTUAg7f6.jpg",
+    "name": "Batman Collection (Original Series)",
+    "poster_path": "/adQxUvQW8HXNsvMG5aj71pHh9T.jpg"
+  },
+  "imdb_id": "tt0103776",
+  "release_date": "1992-06-19",
+  "original_title": "Batman Returns",
+  "vote_count": 318,
+  "poster_path": "/oqN5Obonal3rCNGB1ppLb5seXBd.jpg",
+  "tagline": "The Bat, the Cat, the Penguin.",
+  "revenue": 280000000,
+  "popularity": "1.85815280675612"
+}

@@ -1,0 +1,140 @@
+{
+  "birthday": "",
+  "adult": false,
+  "biography": "",
+  "homepage": "",
+  "profile_path": "/iGgExtFoyuIAmll19gEmorWQAPX.jpg",
+  "id": 263,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0248408",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 10733,
+        "media_type": "movie",
+        "title": "The Alamo",
+        "credit_id": "52fe43ab9251416c75019865",
+        "release_date": "2004-04-09",
+        "original_title": "The Alamo",
+        "adult": false,
+        "poster_path": "/6BjQL97zeRnpJShJV5DQT9e9SE4.jpg",
+        "character": "Antonio Lopez de Santa Ana"
+      },
+      {
+        "id": 25072,
+        "media_type": "movie",
+        "title": "Malos hábitos",
+        "credit_id": "52fe44b7c3a368484e032d7b",
+        "release_date": "2007-10-12",
+        "original_title": "Malos hábitos",
+        "adult": false,
+        "poster_path": "/v05iBTT4O7cvMlyfW6mQFrrYaOu.jpg",
+        "character": "Ramón - padre de Matilde"
+      },
+      {
+        "id": 36669,
+        "media_type": "movie",
+        "title": "Die Another Day",
+        "credit_id": "52fe45ff9251416c91045aa9",
+        "release_date": "2002-11-17",
+        "original_title": "Die Another Day",
+        "adult": false,
+        "poster_path": "/irNk0nXr6dccYPwlQwtmDlJbrAv.jpg",
+        "character": "Raoul"
+      },
+      {
+        "id": 151708,
+        "media_type": "movie",
+        "title": "Colosio: El Asesinato",
+        "credit_id": "52fe4b099251416c910cdd5d",
+        "release_date": "2012-06-08",
+        "original_title": "Colosio: El Asesinato",
+        "adult": false,
+        "poster_path": "/vgzh9vV8Ry6e7txJhWdt73L9uLp.jpg",
+        "character": "Don Fernando"
+      },
+      {
+        "id": 114286,
+        "media_type": "movie",
+        "title": "Memories of my Melancholy Whores",
+        "credit_id": "52fe4b48c3a36847f81fc1e3",
+        "release_date": "2011-10-13",
+        "original_title": "Memoria de Mis Putas Tristes",
+        "adult": false,
+        "poster_path": "/8s0PXatqYEydLfoliVPt8E4bGqN.jpg",
+        "character": "El Sabio"
+      },
+      {
+        "id": 55,
+        "media_type": "movie",
+        "title": "Amores Perros",
+        "credit_id": "52fe4211c3a36847f8001751",
+        "release_date": "2000-03-14",
+        "original_title": "Amores perros",
+        "adult": false,
+        "poster_path": "/8gEXmIzw1tDnBfOaCFPimkNIkmm.jpg",
+        "character": "El Chivo"
+      },
+      {
+        "id": 205759,
+        "media_type": "movie",
+        "title": "Bathroom Intimacy",
+        "credit_id": "52fe4d0fc3a368484e1d4c95",
+        "release_date": "1989-07-06",
+        "original_title": "Intimidades en un cuarto de baño",
+        "adult": false,
+        "poster_path": "/9fSqc704Jf6OvhbVXnxirVXhPXq.jpg",
+        "character": "Juan"
+      },
+      {
+        "id": 265503,
+        "media_type": "movie",
+        "title": "The Dead Sea",
+        "credit_id": "535222bdc3a3681d98002311",
+        "release_date": "2013-11-29",
+        "original_title": "El mar muerto",
+        "adult": false,
+        "poster_path": "/gWYn1jsAeaAhKgC0oVOWDHs6G5c.jpg",
+        "character": ""
+      },
+      {
+        "id": 267818,
+        "media_type": "movie",
+        "title": "Natural Philosophy of Love",
+        "credit_id": "5363646b0e0a261e16001ebc",
+        "release_date": "2013-11-15",
+        "original_title": "Filosofía natural del amor",
+        "adult": false,
+        "poster_path": "/8o3Ire79eiKwo9QYZDLZDzvff6b.jpg",
+        "character": ""
+      },
+      {
+        "id": 276652,
+        "media_type": "movie",
+        "title": "Vivir mata",
+        "credit_id": "539bc3150e0a267a44000fef",
+        "release_date": null,
+        "original_title": "Vivir mata",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 13926,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "52582cd9760ee36aaa89ac8d",
+        "name": "S.O.S.: Sexo y otros Secretos",
+        "poster_path": null,
+        "original_name": "S.O.S.: Sexo y otros Secretos",
+        "first_air_date": null,
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Emilio Echevarría",
+  "place_of_birth": "Mexico",
+  "popularity": "1.98650265397653"
+}

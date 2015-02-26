@@ -1,0 +1,332 @@
+{
+  "budget": 9000000,
+  "vote_average": 7.5,
+  "backdrop_path": "/kptmPB0rwfLqf1yQPCWewCoyiiq.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1241,
+        "order": 0,
+        "credit_id": "52fe4233c3a36847f800b965",
+        "name": "John Turturro",
+        "cast_id": 13,
+        "profile_path": "/yyvj3z2IC9AG1sv6kuk5d7oQFJs.jpg",
+        "character": "Barton Fink"
+      },
+      {
+        "id": 1230,
+        "order": 1,
+        "credit_id": "52fe4233c3a36847f800b969",
+        "name": "John Goodman",
+        "cast_id": 14,
+        "profile_path": "/mLJC7sRO3JnGkySJlwCJblvhBHm.jpg",
+        "character": "Charlie Meadows"
+      },
+      {
+        "id": 351,
+        "order": 2,
+        "credit_id": "52fe4233c3a36847f800b96d",
+        "name": "Judy Davis",
+        "cast_id": 15,
+        "profile_path": "/xQMA72T6yz6ebJXv1pCuZC1fDJo.jpg",
+        "character": "Audrey Taylor"
+      },
+      {
+        "id": 4250,
+        "order": 3,
+        "credit_id": "52fe4233c3a36847f800b971",
+        "name": "Michael Lerner",
+        "cast_id": 16,
+        "profile_path": "/nJaZ9MIhfz4KEwZka5Iu1SUC9CI.jpg",
+        "character": "Jack Lipnick"
+      },
+      {
+        "id": 4251,
+        "order": 4,
+        "credit_id": "52fe4233c3a36847f800b975",
+        "name": "John Mahoney",
+        "cast_id": 17,
+        "profile_path": "/jK2uDKxfysuYjNAgUxbwyhd4fKD.jpg",
+        "character": "W.P. Mayhew"
+      },
+      {
+        "id": 4253,
+        "order": 5,
+        "credit_id": "52fe4233c3a36847f800b979",
+        "name": "Jon Polito",
+        "cast_id": 18,
+        "profile_path": "/Uin6vfef4tEIqNYcyfnbn6aHb3.jpg",
+        "character": "Lou Breeze"
+      },
+      {
+        "id": 884,
+        "order": 6,
+        "credit_id": "52fe4233c3a36847f800b97d",
+        "name": "Steve Buscemi",
+        "cast_id": 19,
+        "profile_path": "/7sDzFRScCv85usSwPG01BTac7UY.jpg",
+        "character": "Chet"
+      },
+      {
+        "id": 4254,
+        "order": 7,
+        "credit_id": "52fe4233c3a36847f800b981",
+        "name": "David Warrilow",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Garland Stanford"
+      },
+      {
+        "id": 4255,
+        "order": 8,
+        "credit_id": "52fe4233c3a36847f800b985",
+        "name": "Richard Portnow",
+        "cast_id": 21,
+        "profile_path": "/dTHXuSFIZI6FkGxtB24dSRBdmSJ.jpg",
+        "character": "Detective Mastrionotti"
+      },
+      {
+        "id": 4256,
+        "order": 9,
+        "credit_id": "52fe4233c3a36847f800b989",
+        "name": "Christopher Murney",
+        "cast_id": 22,
+        "profile_path": "/vY73eTjQcvArvLzsxousmIgk1CP.jpg",
+        "character": "Detective Deutsch"
+      },
+      {
+        "id": 4257,
+        "order": 10,
+        "credit_id": "52fe4233c3a36847f800b98d",
+        "name": "I.M. Hobson",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Derek"
+      },
+      {
+        "id": 4510,
+        "order": 11,
+        "credit_id": "52fe4233c3a36847f800b991",
+        "name": "Harry Bugin",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Pete"
+      },
+      {
+        "id": 157607,
+        "order": 12,
+        "credit_id": "52fe4233c3a36847f800b9c5",
+        "name": "Lance Davis",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Richard St. Claire"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1223,
+        "credit_id": "52fe4233c3a36847f800b92b",
+        "department": "Directing",
+        "name": "Joel Coen",
+        "job": "Director",
+        "profile_path": "/wUUNwsgOGtelsU8yJI64s8r7XiY.jpg"
+      },
+      {
+        "id": 1224,
+        "credit_id": "52fe4233c3a36847f800b931",
+        "department": "Directing",
+        "name": "Ethan Coen",
+        "job": "Director",
+        "profile_path": "/knZuxatmyGpb1M8vWoprAmhv4WQ.jpg"
+      },
+      {
+        "id": 1224,
+        "credit_id": "52fe4233c3a36847f800b937",
+        "department": "Production",
+        "name": "Ethan Coen",
+        "job": "Producer",
+        "profile_path": "/knZuxatmyGpb1M8vWoprAmhv4WQ.jpg"
+      },
+      {
+        "id": 1225,
+        "credit_id": "52fe4233c3a36847f800b93d",
+        "department": "Sound",
+        "name": "Carter Burwell",
+        "job": "Original Music Composer",
+        "profile_path": "/am1CQyFSFTsNpMFtFv1oFhaWsJm.jpg"
+      },
+      {
+        "id": 151,
+        "credit_id": "52fe4233c3a36847f800b943",
+        "department": "Camera",
+        "name": "Roger Deakins",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1224,
+        "credit_id": "52fe4233c3a36847f800b949",
+        "department": "Editing",
+        "name": "Ethan Coen",
+        "job": "Editor",
+        "profile_path": "/knZuxatmyGpb1M8vWoprAmhv4WQ.jpg"
+      },
+      {
+        "id": 1223,
+        "credit_id": "52fe4233c3a36847f800b94f",
+        "department": "Editing",
+        "name": "Joel Coen",
+        "job": "Editor",
+        "profile_path": "/wUUNwsgOGtelsU8yJI64s8r7XiY.jpg"
+      },
+      {
+        "id": 4248,
+        "credit_id": "52fe4233c3a36847f800b955",
+        "department": "Art",
+        "name": "Dennis Gassner",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4249,
+        "credit_id": "52fe4233c3a36847f800b95b",
+        "department": "Production",
+        "name": "Donna Isaacson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1227,
+        "credit_id": "52fe4233c3a36847f800b961",
+        "department": "Production",
+        "name": "John S. Lyons",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1223,
+        "credit_id": "52fe4233c3a36847f800b997",
+        "department": "Writing",
+        "name": "Joel Coen",
+        "job": "Screenplay",
+        "profile_path": "/wUUNwsgOGtelsU8yJI64s8r7XiY.jpg"
+      },
+      {
+        "id": 1224,
+        "credit_id": "52fe4233c3a36847f800b99d",
+        "department": "Writing",
+        "name": "Ethan Coen",
+        "job": "Screenplay",
+        "profile_path": "/knZuxatmyGpb1M8vWoprAmhv4WQ.jpg"
+      },
+      {
+        "id": 1223,
+        "credit_id": "52fe4233c3a36847f800b9a3",
+        "department": "Production",
+        "name": "Joel Coen",
+        "job": "Producer",
+        "profile_path": "/wUUNwsgOGtelsU8yJI64s8r7XiY.jpg"
+      },
+      {
+        "id": 20169,
+        "credit_id": "52fe4233c3a36847f800b9a9",
+        "department": "Production",
+        "name": "Graham Place",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 933403,
+        "credit_id": "52fe4233c3a36847f800b9af",
+        "department": "Production",
+        "name": "Ben Barenholtz",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1054025,
+        "credit_id": "52fe4233c3a36847f800b9b5",
+        "department": "Production",
+        "name": "Bill Durkin",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1054051,
+        "credit_id": "52fe4233c3a36847f800b9bb",
+        "department": "Production",
+        "name": "Jim Pedas",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1054052,
+        "credit_id": "52fe4233c3a36847f800b9c1",
+        "department": "Production",
+        "name": "Ted Pedas",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 116,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 290,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Barton Fink",
+  "overview": "A renowned New York playwright is enticed to California to write for the movies and discovers the hellish truth of Hollywood.",
+  "production_companies": [
+    {
+      "id": 11273,
+      "name": "Circle Films"
+    },
+    {
+      "id": 10163,
+      "name": "Working Title Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0101410",
+  "release_date": "1991-08-01",
+  "original_title": "Barton Fink",
+  "vote_count": 41,
+  "poster_path": "/4mAbOuH634AGilhWJJSSNNLp5bk.jpg",
+  "tagline": "There's only one thing stranger than what's going on inside his head. What's going on outside.",
+  "revenue": 6153939,
+  "popularity": "0.827401391256955"
+}

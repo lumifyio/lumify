@@ -1,0 +1,257 @@
+{
+  "budget": 0,
+  "vote_average": 7.5,
+  "backdrop_path": "/12JTjD3HJoaZmpih8jqTUGCbS2Q.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4347,
+        "order": 0,
+        "credit_id": "52fe424fc3a36847f8014359",
+        "name": "Frank Sinatra",
+        "cast_id": 2,
+        "profile_path": "/vn9qWseEb2LspaS0LBDntH0L4Qw.jpg",
+        "character": "Frankie Machine"
+      },
+      {
+        "id": 5729,
+        "order": 1,
+        "credit_id": "52fe424fc3a36847f801435d",
+        "name": "Kim Novak",
+        "cast_id": 3,
+        "profile_path": "/dn2kQpgdMXPNprR2OYHCMCCFNns.jpg",
+        "character": "Molly"
+      },
+      {
+        "id": 7331,
+        "order": 2,
+        "credit_id": "52fe424fc3a36847f8014361",
+        "name": "Eleanor Parker",
+        "cast_id": 4,
+        "profile_path": "/pmauDYeIjoaGtZCy1PdY7lwXZ96.jpg",
+        "character": "Zosch Machine"
+      },
+      {
+        "id": 7332,
+        "order": 3,
+        "credit_id": "52fe424fc3a36847f8014365",
+        "name": "Arnold Stang",
+        "cast_id": 5,
+        "profile_path": "/ex3ZhUACFHnKSuiiSSmjbzZXCZ0.jpg",
+        "character": "Sparrow"
+      },
+      {
+        "id": 7333,
+        "order": 4,
+        "credit_id": "52fe424fc3a36847f8014369",
+        "name": "Darren McGavin",
+        "cast_id": 6,
+        "profile_path": "/nYAK52I4AU8ggQiwZkgyeW9Ou1e.jpg",
+        "character": "Louie"
+      },
+      {
+        "id": 7347,
+        "order": 5,
+        "credit_id": "52fe424fc3a36847f80143d3",
+        "name": "Robert Strauss",
+        "cast_id": 26,
+        "profile_path": "/4fqnmvafx9qmn3R45iwKpAtei2k.jpg",
+        "character": "Schwiefka"
+      }
+    ],
+    "crew": [
+      {
+        "id": 834,
+        "credit_id": "52fe424fc3a36847f8014355",
+        "department": "Directing",
+        "name": "Otto Preminger",
+        "job": "Director",
+        "profile_path": "/alStMSBOhJbl3ZXIdSCfhrman3c.jpg"
+      },
+      {
+        "id": 834,
+        "credit_id": "52fe424fc3a36847f801436f",
+        "department": "Production",
+        "name": "Otto Preminger",
+        "job": "Producer",
+        "profile_path": "/alStMSBOhJbl3ZXIdSCfhrman3c.jpg"
+      },
+      {
+        "id": 7334,
+        "credit_id": "52fe424fc3a36847f8014375",
+        "department": "Writing",
+        "name": "Nelson Algren",
+        "job": "Author",
+        "profile_path": "/54CAxTYoXzwq3gaYghmywqtGqvx.jpg"
+      },
+      {
+        "id": 7335,
+        "credit_id": "52fe424fc3a36847f801437b",
+        "department": "Writing",
+        "name": "Walter Newman",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7336,
+        "credit_id": "52fe424fc3a36847f8014381",
+        "department": "Writing",
+        "name": "Lewis Meltzer",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4341,
+        "credit_id": "52fe424fc3a36847f8014387",
+        "department": "Writing",
+        "name": "Ben Hecht",
+        "job": "Screenplay",
+        "profile_path": "/is5faYjaFObagG3b8xgwocMkUcX.jpg"
+      },
+      {
+        "id": 7182,
+        "credit_id": "52fe424fc3a36847f801438d",
+        "department": "Sound",
+        "name": "Elmer Bernstein",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 870,
+        "credit_id": "52fe424fc3a36847f8014393",
+        "department": "Camera",
+        "name": "Sam Leavitt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 871,
+        "credit_id": "52fe424fc3a36847f8014399",
+        "department": "Editing",
+        "name": "Louis R. Loeffler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7337,
+        "credit_id": "52fe424fc3a36847f801439f",
+        "department": "Art",
+        "name": "Joseph C. Wright",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 7338,
+        "credit_id": "52fe424fc3a36847f80143a5",
+        "department": "Art",
+        "name": "Darrell Silvera",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7339,
+        "credit_id": "52fe424fc3a36847f80143ab",
+        "department": "Costume & Make-Up",
+        "name": "Mary Ann Nyberg",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 7340,
+        "credit_id": "52fe424fc3a36847f80143b1",
+        "department": "Production",
+        "name": "Jack McEdward",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 878,
+        "credit_id": "52fe424fc3a36847f80143b7",
+        "department": "Sound",
+        "name": "Jack Solomon",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 7341,
+        "credit_id": "52fe424fc3a36847f80143bd",
+        "department": "Sound",
+        "name": "Leon Birnbaum",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 7344,
+        "credit_id": "52fe424fc3a36847f80143c3",
+        "department": "Actors",
+        "name": "Martha Crawford",
+        "job": "Stunt Double",
+        "profile_path": null
+      },
+      {
+        "id": 7345,
+        "credit_id": "52fe424fc3a36847f80143c9",
+        "department": "Crew",
+        "name": "Helen Thurston",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 7346,
+        "credit_id": "52fe424fc3a36847f80143cf",
+        "department": "Camera",
+        "name": "Albert Myers",
+        "job": "Camera Operator",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 119,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 541,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Man with the Golden Arm",
+  "overview": "Frankie is a heroin addict and sits in prison. He wants a different life but the rehabilitation isn\u2019t as easy as he had thought. Director Otto Preminger films one of the first social studies of an addict in this 1955 film.",
+  "production_companies": [{
+    "id": 298,
+    "name": "Carlyle Production"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0048347",
+  "release_date": "1955-12-14",
+  "original_title": "The Man with the Golden Arm",
+  "vote_count": 3,
+  "poster_path": "/dKg04NTBeCSgt9aearF3Jqrf6Fj.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.651569074101595"
+}

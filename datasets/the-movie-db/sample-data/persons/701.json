@@ -1,0 +1,28 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/y2FC7QT3jcT7YfzZ0ac5eLaDqad.jpg",
+  "id": 701,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0628970",
+  "combined_credits": {
+    "cast": [{
+      "id": 87,
+      "media_type": "movie",
+      "title": "Indiana Jones and the Temple of Doom",
+      "credit_id": "52fe4215c3a36847f8002c31",
+      "release_date": "1984-05-22",
+      "original_title": "Indiana Jones and the Temple of Doom",
+      "adult": false,
+      "poster_path": "/f2nTRKk2zGdUTE7tLJ5EGGSuKA6.jpg",
+      "character": "Maitre d'"
+    }],
+    "crew": []
+  },
+  "name": "Rex Ngui",
+  "place_of_birth": null,
+  "popularity": "1.07678012790703"
+}

@@ -1,0 +1,28 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/7JFQueMbXqGIz16wKBlok7WfNNz.jpg",
+  "id": 535,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0270383",
+  "combined_credits": {
+    "cast": [{
+      "id": 77,
+      "media_type": "movie",
+      "title": "Memento",
+      "credit_id": "52fe4214c3a36847f80024eb",
+      "release_date": "2001-03-16",
+      "original_title": "Memento",
+      "adult": false,
+      "poster_path": "/fQMSaP88cf1nz4qwuNEEFtazuDM.jpg",
+      "character": "Waiter"
+    }],
+    "crew": []
+  },
+  "name": "Russ Fega",
+  "place_of_birth": null,
+  "popularity": "1.86032750076117"
+}

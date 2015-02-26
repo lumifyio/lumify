@@ -1,0 +1,295 @@
+{
+  "budget": 0,
+  "vote_average": 8.2,
+  "backdrop_path": "/e9sgi4ZkcJ2VfYaWDThjbzuFG3q.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1181,
+        "order": 0,
+        "credit_id": "52fe4219c3a36847f8003f03",
+        "name": "Peter Gantzler",
+        "cast_id": 6,
+        "profile_path": "/dihaRrk8vZQ518brzJXSxSmy2rN.jpg",
+        "character": "Jørgen Mortensen"
+      },
+      {
+        "id": 1182,
+        "order": 1,
+        "credit_id": "52fe4219c3a36847f8003f07",
+        "name": "Sara Indrio Jensen",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Giulia"
+      },
+      {
+        "id": 1183,
+        "order": 2,
+        "credit_id": "52fe4219c3a36847f8003f0b",
+        "name": "Ann Eleonora Jørgensen",
+        "cast_id": 8,
+        "profile_path": "/95Ed01N6F03FOCkem9xpQkEWVrX.jpg",
+        "character": "Karen"
+      },
+      {
+        "id": 1184,
+        "order": 3,
+        "credit_id": "52fe4219c3a36847f8003f0f",
+        "name": "Anders W. Berthelsen",
+        "cast_id": 9,
+        "profile_path": "/y5mBIJnXTavpdHm1zEmHnhcNHaN.jpg",
+        "character": "Andreas"
+      },
+      {
+        "id": 1185,
+        "order": 4,
+        "credit_id": "52fe4219c3a36847f8003f13",
+        "name": "Anette Støvelbæk",
+        "cast_id": 10,
+        "profile_path": "/58fXjIqAp8h1eN5lzVDTjelCZx2.jpg",
+        "character": "Olympia"
+      },
+      {
+        "id": 1186,
+        "order": 5,
+        "credit_id": "52fe4219c3a36847f8003f17",
+        "name": "Lars Kaalund",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Hal-Finn"
+      },
+      {
+        "id": 3880,
+        "order": 6,
+        "credit_id": "52fe4219c3a36847f8003f1b",
+        "name": "Karen-Lise Mynster",
+        "cast_id": 12,
+        "profile_path": "/l4NzDIJZj1b1kISKFsFGDVuZnIH.jpg",
+        "character": "Real Estate Dealer"
+      },
+      {
+        "id": 3881,
+        "order": 7,
+        "credit_id": "52fe4219c3a36847f8003f1f",
+        "name": "Rikke Wölck",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Nurse"
+      },
+      {
+        "id": 3882,
+        "order": 8,
+        "credit_id": "52fe4219c3a36847f8003f23",
+        "name": "Bent Mejding",
+        "cast_id": 14,
+        "profile_path": "/nakLQ4HOatrWeiCfyRdUaoUw3pT.jpg",
+        "character": "Reverend Wredmann"
+      },
+      {
+        "id": 3883,
+        "order": 9,
+        "credit_id": "52fe4219c3a36847f8003f27",
+        "name": "Elsebeth Steentoft",
+        "cast_id": 15,
+        "profile_path": "/2sTnow7Su5H7EMx50XZT75TgC3y.jpg",
+        "character": "Woman in Church"
+      },
+      {
+        "id": 3884,
+        "order": 10,
+        "credit_id": "52fe4219c3a36847f8003f2b",
+        "name": "Lene Tiemroth",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Karen's Mother"
+      },
+      {
+        "id": 3885,
+        "order": 11,
+        "credit_id": "52fe4219c3a36847f8003f2f",
+        "name": "Claus Gerving",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Klaus Graversen"
+      },
+      {
+        "id": 2244,
+        "order": 12,
+        "credit_id": "52fe4219c3a36847f8003f33",
+        "name": "Jesper Christensen",
+        "cast_id": 18,
+        "profile_path": "/fnE1D2BtNex0bUZE4DdxAsju0YR.jpg",
+        "character": "Olympia's Father"
+      },
+      {
+        "id": 3887,
+        "order": 13,
+        "credit_id": "52fe4219c3a36847f8003f49",
+        "name": "Carlo Barsotti",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Marcello"
+      },
+      {
+        "id": 3888,
+        "order": 14,
+        "credit_id": "52fe4219c3a36847f8003f4d",
+        "name": "Alex Nyborg Madsen",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Church Singer#1 / Sportsman#1"
+      },
+      {
+        "id": 3889,
+        "order": 15,
+        "credit_id": "52fe4219c3a36847f8003f51",
+        "name": "Steen Svare",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Church Singer#2 / Sportsman#2"
+      },
+      {
+        "id": 3890,
+        "order": 16,
+        "credit_id": "52fe4219c3a36847f8003f55",
+        "name": "Susanne Oldenburg",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Lady"
+      },
+      {
+        "id": 3891,
+        "order": 17,
+        "credit_id": "52fe4219c3a36847f8003f59",
+        "name": "Martin Brygmann",
+        "cast_id": 26,
+        "profile_path": "/d90HTcdZXnSFCIZTaVHN414Iyzd.jpg",
+        "character": "Evening School Teacher"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1176,
+        "credit_id": "52fe4219c3a36847f8003ee7",
+        "department": "Directing",
+        "name": "Lone Scherfig",
+        "job": "Director",
+        "profile_path": "/6cSqCrZ2YMsbc4P44wRaC2UbBZc.jpg"
+      },
+      {
+        "id": 1176,
+        "credit_id": "52fe4219c3a36847f8003eed",
+        "department": "Writing",
+        "name": "Lone Scherfig",
+        "job": "Author",
+        "profile_path": "/6cSqCrZ2YMsbc4P44wRaC2UbBZc.jpg"
+      },
+      {
+        "id": 1177,
+        "credit_id": "52fe4219c3a36847f8003ef3",
+        "department": "Production",
+        "name": "Ib Tardini",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1178,
+        "credit_id": "52fe4219c3a36847f8003ef9",
+        "department": "Camera",
+        "name": "Jørgen Johansson",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1179,
+        "credit_id": "52fe4219c3a36847f8003eff",
+        "department": "Editing",
+        "name": "Gerd Tjur",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3886,
+        "credit_id": "52fe4219c3a36847f8003f39",
+        "department": "Sound",
+        "name": "Rune Palving",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1174,
+        "credit_id": "52fe4219c3a36847f8003f3f",
+        "department": "Production",
+        "name": "Peter Aalbæk Jensen",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1014,
+        "credit_id": "52fe4219c3a36847f8003f45",
+        "department": "Production",
+        "name": "Karen Bentzon",
+        "job": "Line Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 112,
+  "spoken_languages": [{
+    "iso_639_1": "da",
+    "name": "Dansk"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 112,
+  "production_countries": [
+    {
+      "name": "Denmark",
+      "iso_3166_1": "DK"
+    },
+    {
+      "name": "Sweden",
+      "iso_3166_1": "SE"
+    }
+  ],
+  "title": "Italian for Beginners",
+  "overview": "This fifth Danish Dogme film is about six vulnerable individuals whose lives are interwoven. In a city suburb, a young minister arrives to take up duties at a local church. He is persuaded by his assistant to join an Italian night school class, and he soon becomes the centre of a group of people to whom fate has dealt quite serious blows. Gradually each one in the group manages to overcome his/her predicament and find a happy solution. This Dogma production was shown at the Berlinale in 2001 where it surprisingly won a silver medal.",
+  "production_companies": [
+    {
+      "id": 118,
+      "name": "Det Danske Filminstitut"
+    },
+    {
+      "id": 119,
+      "name": "Danmarks Radio (DR)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0243862",
+  "release_date": "2000-12-07",
+  "original_title": "Italiensk for begyndere",
+  "vote_count": 3,
+  "poster_path": "/ilmNPqVlqmWvtEA7PhUi8yz7uiV.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.262131645314769"
+}

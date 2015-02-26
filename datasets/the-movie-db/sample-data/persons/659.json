@@ -1,0 +1,118 @@
+{
+  "birthday": "1940-04-03",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/uqHI2PLeGFxdjlw0qIk1D17NjWb.jpg",
+  "id": 659,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0434759",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 85,
+        "media_type": "movie",
+        "title": "Raiders of the Lost Ark",
+        "credit_id": "52fe4215c3a36847f8002a1d",
+        "release_date": "1981-06-12",
+        "original_title": "Raiders of the Lost Ark",
+        "adult": false,
+        "poster_path": "/44sKJOGP3fTm4QXBcIuqu0RkdP7.jpg",
+        "character": "Colonel Dietrich"
+      },
+      {
+        "id": 4706,
+        "media_type": "movie",
+        "title": "The Lady Vanishes",
+        "credit_id": "52fe43d5c3a36847f8072d85",
+        "release_date": "1979-04-30",
+        "original_title": "The Lady Vanishes",
+        "adult": false,
+        "poster_path": "/zvULYd6Kcbj0kM6Gi48gzKqByRV.jpg",
+        "character": "Helmut"
+      },
+      {
+        "id": 28201,
+        "media_type": "movie",
+        "title": "The Girl in the Café",
+        "credit_id": "52fe4581c3a368484e05f35b",
+        "release_date": "2005-06-25",
+        "original_title": "The Girl in the Café",
+        "adult": false,
+        "poster_path": "/oTn3pLWQFkYP4TMdHF5VJygftgZ.jpg",
+        "character": "Herr Gerhardt"
+      },
+      {
+        "id": 36571,
+        "media_type": "movie",
+        "title": "The Dirty Dozen: Next Mission",
+        "credit_id": "52fe45f39251416c910441bb",
+        "release_date": "1985-02-04",
+        "original_title": "The Dirty Dozen: Next Mission",
+        "adult": false,
+        "poster_path": "/nRXvAvNbvud270P8PxSgQEcpG1H.jpg",
+        "character": "Gen. Sepp Dietrich"
+      },
+      {
+        "id": 36572,
+        "media_type": "movie",
+        "title": "The Dirty Dozen: The Deadly Mission",
+        "credit_id": "52fe45f49251416c9104422f",
+        "release_date": "1987-03-01",
+        "original_title": "The Dirty Dozen: The Deadly Mission",
+        "adult": false,
+        "poster_path": "/sl0gHqf9nZKgE6iMp9gGZmykK3b.jpg",
+        "character": "Col. Krieger"
+      },
+      {
+        "id": 19664,
+        "media_type": "movie",
+        "title": "The Sea Wolves",
+        "credit_id": "52fe47e99251416c750a98a1",
+        "release_date": "1981-06-05",
+        "original_title": "The Sea Wolves",
+        "adult": false,
+        "poster_path": "/cH7wJ9aM4iPrRgNIgXxRjMfl5wr.jpg",
+        "character": "Trompeta"
+      },
+      {
+        "id": 58574,
+        "media_type": "movie",
+        "title": "Sherlock Holmes: A Game of Shadows",
+        "credit_id": "52fe4969c3a36847f8198c85",
+        "release_date": "2011-12-16",
+        "original_title": "Sherlock Holmes: A Game of Shadows",
+        "adult": false,
+        "poster_path": "/7OFqsVuS6DlVM10GUD72vCGpQm9.jpg",
+        "character": "Doctor Hoffmanstahl"
+      },
+      {
+        "id": 11765,
+        "media_type": "movie",
+        "title": "The Riddle of the Sands",
+        "credit_id": "52fe44809251416c75037175",
+        "release_date": "1979-10-02",
+        "original_title": "The Riddle of the Sands",
+        "adult": false,
+        "poster_path": "/zebXw2a8xYHqpMeiC9Qa2ZXuova.jpg",
+        "character": "Kaiser Wilhelm II"
+      },
+      {
+        "id": 25388,
+        "media_type": "movie",
+        "title": "March or Die",
+        "credit_id": "52fe44c5c3a368484e035f19",
+        "release_date": "1977-09-08",
+        "original_title": "March or Die",
+        "adult": false,
+        "poster_path": "/vhcWIzFNQo43zc2Rn8PVFBK5TWz.jpg",
+        "character": "First German"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Wolf Kahler",
+  "place_of_birth": null,
+  "popularity": "1.98650755618979"
+}

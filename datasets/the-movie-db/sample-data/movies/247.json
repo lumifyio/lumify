@@ -1,0 +1,271 @@
+{
+  "budget": 320000,
+  "vote_average": 7.9,
+  "backdrop_path": "/qgT4P311tEsIRmJee5iLkBZN2cr.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3088,
+        "order": 0,
+        "credit_id": "52fe422cc3a36847f8009c9b",
+        "name": "Sterling Hayden",
+        "cast_id": 5,
+        "profile_path": "/aE85Dzwaf5rTbjLnMgOtpw47BSY.jpg",
+        "character": "Johnny Clay"
+      },
+      {
+        "id": 3336,
+        "order": 1,
+        "credit_id": "52fe422cc3a36847f8009c9f",
+        "name": "Coleen Gray",
+        "cast_id": 6,
+        "profile_path": "/oQhVm1YUKaAAAT9TcBJ8RtrUuZS.jpg",
+        "character": "Fay"
+      },
+      {
+        "id": 3337,
+        "order": 2,
+        "credit_id": "52fe422cc3a36847f8009ca3",
+        "name": "Vince Edwards",
+        "cast_id": 7,
+        "profile_path": "/n0OQUPMQOdURLak6ywgqxMFSTtz.jpg",
+        "character": "Val Cannon"
+      },
+      {
+        "id": 3338,
+        "order": 3,
+        "credit_id": "52fe422cc3a36847f8009ca7",
+        "name": "Jay C. Flippen",
+        "cast_id": 8,
+        "profile_path": "/gioapO1wsvHUH9cLmlxsWK6HaSx.jpg",
+        "character": "Marvin Unger"
+      },
+      {
+        "id": 3339,
+        "order": 4,
+        "credit_id": "52fe422cc3a36847f8009cab",
+        "name": "Elisha Cook, Jr.",
+        "cast_id": 9,
+        "profile_path": "/ntXqHlpeaXTM7WqIsGDlYtlG7hk.jpg",
+        "character": "George Peatty"
+      },
+      {
+        "id": 3340,
+        "order": 5,
+        "credit_id": "52fe422cc3a36847f8009caf",
+        "name": "Marie Windsor",
+        "cast_id": 10,
+        "profile_path": "/jcWVmbRAoFoTJfTG0hCMBKtc7AD.jpg",
+        "character": "Sherry Peatty"
+      },
+      {
+        "id": 2097,
+        "order": 6,
+        "credit_id": "52fe422cc3a36847f8009cb3",
+        "name": "Ted de Corsia",
+        "cast_id": 11,
+        "profile_path": "/63mhu9Qa62Viwy9tAdOFL9Spsf.jpg",
+        "character": "Randy Kennan"
+      },
+      {
+        "id": 3341,
+        "order": 7,
+        "credit_id": "52fe422cc3a36847f8009cb7",
+        "name": "Joe Sawyer",
+        "cast_id": 12,
+        "profile_path": "/7waP4U3fOYpqUr8jJd4qAvgWWqK.jpg",
+        "character": "Mike O'Reilly"
+      },
+      {
+        "id": 3342,
+        "order": 8,
+        "credit_id": "52fe422cc3a36847f8009cbb",
+        "name": "James Edwards",
+        "cast_id": 13,
+        "profile_path": "/57hJbLy1mYXMcwYl3n13Tdpv0TW.jpg",
+        "character": "Track Parking Attendant"
+      },
+      {
+        "id": 2758,
+        "order": 9,
+        "credit_id": "52fe422cc3a36847f8009cbf",
+        "name": "Timothy Carey",
+        "cast_id": 14,
+        "profile_path": "/6wTL7aAjJflARVwR9giIIQSJhLs.jpg",
+        "character": "Nikki Arcane"
+      },
+      {
+        "id": 592,
+        "order": 10,
+        "credit_id": "52fe422dc3a36847f8009cc3",
+        "name": "Joe Turkel",
+        "cast_id": 15,
+        "profile_path": "/8d16GA57SnVXP3WGB0fbkFCKily.jpg",
+        "character": "Tiny"
+      },
+      {
+        "id": 3343,
+        "order": 11,
+        "credit_id": "52fe422dc3a36847f8009cc7",
+        "name": "Jay Adler",
+        "cast_id": 16,
+        "profile_path": "/vBwdEXvk96OLlIiykTst6cgIl5y.jpg",
+        "character": "Leo the Loanshark"
+      },
+      {
+        "id": 3344,
+        "order": 12,
+        "credit_id": "52fe422dc3a36847f8009ccb",
+        "name": "Kola Kwariani",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Maurice Oboukhoff"
+      },
+      {
+        "id": 3345,
+        "order": 13,
+        "credit_id": "52fe422dc3a36847f8009ccf",
+        "name": "Tito Vuolo",
+        "cast_id": 18,
+        "profile_path": "/9LI0wjSWG2ZEYyhMWaWuidapuaW.jpg",
+        "character": "Joe Piano - motel manager"
+      },
+      {
+        "id": 3346,
+        "order": 14,
+        "credit_id": "52fe422dc3a36847f8009cd3",
+        "name": "Dorothy Adams",
+        "cast_id": 19,
+        "profile_path": "/ngmlwSCVDHkWy5kDAnwmwql49Kb.jpg",
+        "character": "Mrs. Ruthie O'Reilly"
+      },
+      {
+        "id": 3347,
+        "order": 15,
+        "credit_id": "52fe422dc3a36847f8009cd7",
+        "name": "James Griffith",
+        "cast_id": 20,
+        "profile_path": "/AcltehHWFxLWgIZfuhxfAJnIJYX.jpg",
+        "character": "Mr. Grimes"
+      },
+      {
+        "id": 3348,
+        "order": 16,
+        "credit_id": "52fe422dc3a36847f8009cdb",
+        "name": "Art Gilmore",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Narrator (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 240,
+        "credit_id": "52fe422cc3a36847f8009c85",
+        "department": "Directing",
+        "name": "Stanley Kubrick",
+        "job": "Director",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 3334,
+        "credit_id": "52fe422cc3a36847f8009c8b",
+        "department": "Writing",
+        "name": "Lionel White",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe422cc3a36847f8009c91",
+        "department": "Writing",
+        "name": "Stanley Kubrick",
+        "job": "Screenplay",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 3335,
+        "credit_id": "52fe422cc3a36847f8009c97",
+        "department": "Writing",
+        "name": "Jim Thompson",
+        "job": "Dialogue",
+        "profile_path": "/qPx9lEJkSrnP6n0Zvk8FWkqLMS5.jpg"
+      },
+      {
+        "id": 3349,
+        "credit_id": "52fe422dc3a36847f8009ce1",
+        "department": "Production",
+        "name": "James B. Harris",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3350,
+        "credit_id": "52fe422dc3a36847f8009ce7",
+        "department": "Sound",
+        "name": "Gerald Fried",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3351,
+        "credit_id": "52fe422dc3a36847f8009ced",
+        "department": "Camera",
+        "name": "Lucien Ballard",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3352,
+        "credit_id": "52fe422dc3a36847f8009cf3",
+        "department": "Editing",
+        "name": "Betty Steinberg",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 85,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 247,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Killing",
+  "overview": "The Killing was Stanley Kubrick\u2019s first film with a professional cast and the first time he achieved public recognition as the unconventional director he\u2019s now known for. The story is of ex-prisoners who plan to set up a racetrack so they can live a life without monetary worries. One of the more exceptional films of the 1950\u2019s.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0049406",
+  "release_date": "1956-05-20",
+  "original_title": "The Killing",
+  "vote_count": 23,
+  "poster_path": "/eUfj1NXxd7yIiCrqAOUm1MYL2CQ.jpg",
+  "tagline": "...Like No Other Picture Since \"Scarface\" and \"Little Caesar\"!",
+  "revenue": 0,
+  "popularity": "0.556701146399565"
+}

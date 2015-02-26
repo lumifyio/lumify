@@ -1,0 +1,226 @@
+{
+  "budget": 350000,
+  "vote_average": 6.9,
+  "backdrop_path": "/iaJaLxyYwxn8hpxoguASp9pZL3E.jpg",
+  "genres": [{
+    "id": 27,
+    "name": "Horror"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11357,
+        "order": 0,
+        "credit_id": "52fe4273c3a36847f801f82b",
+        "name": "Bruce Campbell",
+        "cast_id": 16,
+        "profile_path": "/ox3Mf0pXGEiWfRO2TYcua0EHUQN.jpg",
+        "character": "Ashley 'Ash' J. Williams"
+      },
+      {
+        "id": 11462,
+        "order": 1,
+        "credit_id": "52fe4273c3a36847f801f7f9",
+        "name": "Ellen Sandweiss",
+        "cast_id": 6,
+        "profile_path": "/w5WnK8DoFYZTORnicQdP0abQOE.jpg",
+        "character": "Cheryl"
+      },
+      {
+        "id": 11463,
+        "order": 2,
+        "credit_id": "52fe4273c3a36847f801f7fd",
+        "name": "Richard DeManincor",
+        "cast_id": 7,
+        "profile_path": "/14XLkR6RsMNeB0QViIe5T2tbDYl.jpg",
+        "character": "Scott"
+      },
+      {
+        "id": 11464,
+        "order": 3,
+        "credit_id": "52fe4273c3a36847f801f801",
+        "name": "Betsy Baker",
+        "cast_id": 8,
+        "profile_path": "/dKnuMuT5H01UGoVJXeB3HhnvIT5.jpg",
+        "character": "Linda"
+      },
+      {
+        "id": 11465,
+        "order": 4,
+        "credit_id": "52fe4273c3a36847f801f805",
+        "name": "Theresa Tilly",
+        "cast_id": 9,
+        "profile_path": "/397OcfzGVZZmdguXA3lS7GVheV4.jpg",
+        "character": "Shelly"
+      },
+      {
+        "id": 7623,
+        "order": 5,
+        "credit_id": "52fe4273c3a36847f801f809",
+        "name": "Sam Raimi",
+        "cast_id": 10,
+        "profile_path": "/aW5hP0GJ3LpxEuaP3p398KVSubB.jpg",
+        "character": "Hitchhiking Fisherman"
+      },
+      {
+        "id": 1116941,
+        "order": 6,
+        "credit_id": "52fe4273c3a36847f801f835",
+        "name": "Philip A. Gillis",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Fake Shemp"
+      },
+      {
+        "id": 1116942,
+        "order": 7,
+        "credit_id": "52fe4273c3a36847f801f839",
+        "name": "Dorothy Tapert",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Fake Shemp"
+      },
+      {
+        "id": 1116943,
+        "order": 8,
+        "credit_id": "52fe4273c3a36847f801f83d",
+        "name": "Cheryl Guttridge",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Fake Shemp"
+      },
+      {
+        "id": 1116944,
+        "order": 9,
+        "credit_id": "52fe4273c3a36847f801f841",
+        "name": "Barbara Carey",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Fake Shemp"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7623,
+        "credit_id": "52fe4273c3a36847f801f7dd",
+        "department": "Directing",
+        "name": "Sam Raimi",
+        "job": "Director",
+        "profile_path": "/aW5hP0GJ3LpxEuaP3p398KVSubB.jpg"
+      },
+      {
+        "id": 7623,
+        "credit_id": "52fe4273c3a36847f801f7e3",
+        "department": "Writing",
+        "name": "Sam Raimi",
+        "job": "Screenplay",
+        "profile_path": "/aW5hP0GJ3LpxEuaP3p398KVSubB.jpg"
+      },
+      {
+        "id": 11357,
+        "credit_id": "52fe4273c3a36847f801f7e9",
+        "department": "Production",
+        "name": "Bruce Campbell",
+        "job": "Executive Producer",
+        "profile_path": "/ox3Mf0pXGEiWfRO2TYcua0EHUQN.jpg"
+      },
+      {
+        "id": 7623,
+        "credit_id": "52fe4273c3a36847f801f7ef",
+        "department": "Production",
+        "name": "Sam Raimi",
+        "job": "Executive Producer",
+        "profile_path": "/aW5hP0GJ3LpxEuaP3p398KVSubB.jpg"
+      },
+      {
+        "id": 11359,
+        "credit_id": "52fe4273c3a36847f801f7f5",
+        "department": "Production",
+        "name": "Robert Tapert",
+        "job": "Executive Producer",
+        "profile_path": "/vFKPuVMuMykvXJTd5zT3RfG46CX.jpg"
+      },
+      {
+        "id": 11467,
+        "credit_id": "52fe4273c3a36847f801f80f",
+        "department": "Production",
+        "name": "Gary Holt",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11468,
+        "credit_id": "52fe4273c3a36847f801f815",
+        "department": "Sound",
+        "name": "Joseph LoDuca",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11469,
+        "credit_id": "52fe4273c3a36847f801f81b",
+        "department": "Camera",
+        "name": "Tim Philo",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11470,
+        "credit_id": "52fe4273c3a36847f801f821",
+        "department": "Editing",
+        "name": "Edna Ruth Paul",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11471,
+        "credit_id": "52fe4273c3a36847f801f827",
+        "department": "Costume & Make-Up",
+        "name": "Tom Sullivan",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 11359,
+        "credit_id": "52fe4273c3a36847f801f831",
+        "department": "Production",
+        "name": "Robert Tapert",
+        "job": "Producer",
+        "profile_path": "/vFKPuVMuMykvXJTd5zT3RfG46CX.jpg"
+      }
+    ]
+  },
+  "runtime": 85,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 764,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Evil Dead",
+  "overview": "When a group of college students finds a mysterious book and recording in the old wilderness cabin they've rented for the weekend, they unwittingly unleash a demonic force from the surrounding forest.",
+  "production_companies": [{
+    "id": 467,
+    "name": "Renaissance Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 1960,
+    "backdrop_path": "/jrLLRe7pctP1aFDRuD9mt59YGHX.jpg",
+    "name": "Evil Dead Collection",
+    "poster_path": "/eWFADubShlTEUiNsPcN6BMOKakr.jpg"
+  },
+  "imdb_id": "tt0083907",
+  "release_date": "1981-10-15",
+  "original_title": "The Evil Dead",
+  "vote_count": 133,
+  "poster_path": "/uWFtOv75PZYpMZXy8lesy6ufkn6.jpg",
+  "tagline": "Can they be stopped?",
+  "revenue": 29400000,
+  "popularity": "2.05687109127831"
+}

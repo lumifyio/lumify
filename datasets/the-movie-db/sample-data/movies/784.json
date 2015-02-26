@@ -1,0 +1,174 @@
+{
+  "budget": 0,
+  "vote_average": 8,
+  "backdrop_path": "/5qXpL8WuE0cokdPHJXcMjwQWEIr.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11682,
+        "order": 0,
+        "credit_id": "52fe4276c3a36847f80206bd",
+        "name": "Andrei Chalimon",
+        "cast_id": 1,
+        "profile_path": "/iU5SN23LLDBxaZzdY7Ki4PTJvNl.jpg",
+        "character": "Kolya"
+      },
+      {
+        "id": 11683,
+        "order": 1,
+        "credit_id": "52fe4276c3a36847f80206c1",
+        "name": "Zdeněk Svěrák",
+        "cast_id": 2,
+        "profile_path": "/mUdFAkmRolkB5SlMD4X8CGWXyFZ.jpg",
+        "character": "František Louka"
+      },
+      {
+        "id": 11684,
+        "order": 2,
+        "credit_id": "52fe4276c3a36847f80206c5",
+        "name": "Libuše Šafránková",
+        "cast_id": 3,
+        "profile_path": "/hrVF3uFNNrJXu2kCfGp0Q99kWkd.jpg",
+        "character": "Klára"
+      },
+      {
+        "id": 11685,
+        "order": 3,
+        "credit_id": "52fe4276c3a36847f80206c9",
+        "name": "Ondřej Vetchý",
+        "cast_id": 4,
+        "profile_path": "/wEAU6YwOMaaxRBSZ1vtU3nDKnMU.jpg",
+        "character": "Mr. Brož"
+      },
+      {
+        "id": 11686,
+        "order": 4,
+        "credit_id": "52fe4276c3a36847f80206cd",
+        "name": "Stella Zázvorková",
+        "cast_id": 5,
+        "profile_path": "/tgh3AKUPmv5J8DnUg7ZUmyln8KV.jpg",
+        "character": "Louka's Mother"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11687,
+        "credit_id": "52fe4276c3a36847f80206d3",
+        "department": "Production",
+        "name": "Eric Abraham",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11688,
+        "credit_id": "52fe4276c3a36847f80206d9",
+        "department": "Directing",
+        "name": "Jan Svěrák",
+        "job": "Director",
+        "profile_path": "/mo8g4c3LpGFTTZDof5v2Qd9awwe.jpg"
+      },
+      {
+        "id": 11690,
+        "credit_id": "52fe4276c3a36847f80206df",
+        "department": "Sound",
+        "name": "Ondřej Soukup",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11691,
+        "credit_id": "52fe4276c3a36847f80206e5",
+        "department": "Sound",
+        "name": "Bedřich Smetana",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11692,
+        "credit_id": "52fe4276c3a36847f80206eb",
+        "department": "Camera",
+        "name": "Vladimír Smutný",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11683,
+        "credit_id": "52fe4276c3a36847f80206f1",
+        "department": "Writing",
+        "name": "Zdeněk Svěrák",
+        "job": "Screenplay",
+        "profile_path": "/mUdFAkmRolkB5SlMD4X8CGWXyFZ.jpg"
+      },
+      {
+        "id": 1037321,
+        "credit_id": "52fe4276c3a36847f80206f7",
+        "department": "Editing",
+        "name": "Alois Fišárek",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [
+    {
+      "iso_639_1": "cs",
+      "name": "Český"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    },
+    {
+      "iso_639_1": "sk",
+      "name": "Slovenčina"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 784,
+  "production_countries": [{
+    "name": "Czech Republic",
+    "iso_3166_1": "CZ"
+  }],
+  "title": "Kolya",
+  "overview": "The Czech Republic Director Jan Sverák tells in this Oscar winning film the story of the disillusioned Prague man named Cellisten Louka, who after a fictitious marriage with a Russian emigrant must suddenly take responsibility for her son. However it\u2019s not long before the communication barrier is broken between the two new family members.",
+  "production_companies": [
+    {
+      "id": 486,
+      "name": "Portobello Pictures"
+    },
+    {
+      "id": 487,
+      "name": "Czech Television"
+    },
+    {
+      "id": 488,
+      "name": "Lucerna Film"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0116790",
+  "release_date": "1996-05-15",
+  "original_title": "Kolja",
+  "vote_count": 2,
+  "poster_path": "/6vpmvksX3uyK3t8QZd5sPxnAIit.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.392039476546799"
+}

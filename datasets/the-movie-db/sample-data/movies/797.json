@@ -1,0 +1,196 @@
+{
+  "budget": 0,
+  "vote_average": 8.2,
+  "backdrop_path": "/Aa6FlC0W2sljzujYtwrSTry2oVS.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6657,
+        "order": 0,
+        "credit_id": "52fe4278c3a36847f80210df",
+        "name": "Bibi Andersson",
+        "cast_id": 13,
+        "profile_path": "/wIC6RwWanSpubtdjCbB6IGQN4AP.jpg",
+        "character": "Alma"
+      },
+      {
+        "id": 11916,
+        "order": 1,
+        "credit_id": "52fe4278c3a36847f80210e3",
+        "name": "Liv Ullmann",
+        "cast_id": 14,
+        "profile_path": "/8fJYPEx6RCt2QjjnMkUyREYSJCp.jpg",
+        "character": "Elisabeth Vogler"
+      },
+      {
+        "id": 11917,
+        "order": 2,
+        "credit_id": "52fe4278c3a36847f80210e7",
+        "name": "Margaretha Krook",
+        "cast_id": 15,
+        "profile_path": "/zMXDQ8h0avVOT1bbrsGIaIx9CGf.jpg",
+        "character": "Arzt"
+      },
+      {
+        "id": 6649,
+        "order": 3,
+        "credit_id": "52fe4278c3a36847f80210eb",
+        "name": "Gunnar Björnstrand",
+        "cast_id": 16,
+        "profile_path": "/AiGcTLr6uQXjtKxh2CMOOIfXEW1.jpg",
+        "character": "Herr Vogler"
+      },
+      {
+        "id": 11918,
+        "order": 4,
+        "credit_id": "52fe4278c3a36847f80210ef",
+        "name": "Jörgen Lindström",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Elisabet's Son (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6648,
+        "credit_id": "52fe4278c3a36847f8021099",
+        "department": "Directing",
+        "name": "Ingmar Bergman",
+        "job": "Director",
+        "profile_path": "/rHYYP3N2ivz6WTuTHsLX58Gab7G.jpg"
+      },
+      {
+        "id": 6648,
+        "credit_id": "52fe4278c3a36847f802109f",
+        "department": "Writing",
+        "name": "Ingmar Bergman",
+        "job": "Screenplay",
+        "profile_path": "/rHYYP3N2ivz6WTuTHsLX58Gab7G.jpg"
+      },
+      {
+        "id": 6648,
+        "credit_id": "52fe4278c3a36847f80210a5",
+        "department": "Production",
+        "name": "Ingmar Bergman",
+        "job": "Producer",
+        "profile_path": "/rHYYP3N2ivz6WTuTHsLX58Gab7G.jpg"
+      },
+      {
+        "id": 11904,
+        "credit_id": "52fe4278c3a36847f80210ab",
+        "department": "Sound",
+        "name": "Lars Johan Werle",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11905,
+        "credit_id": "52fe4278c3a36847f80210b1",
+        "department": "Camera",
+        "name": "Sven Nykvist",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11906,
+        "credit_id": "52fe4278c3a36847f80210b7",
+        "department": "Editing",
+        "name": "Ulla Ryghe",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11907,
+        "credit_id": "52fe4278c3a36847f80210bd",
+        "department": "Art",
+        "name": "Bibi Lindström",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 11908,
+        "credit_id": "52fe4278c3a36847f80210c3",
+        "department": "Costume & Make-Up",
+        "name": "Mago",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 11909,
+        "credit_id": "52fe4278c3a36847f80210c9",
+        "department": "Production",
+        "name": "Lars-Owe Carlberg",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 11910,
+        "credit_id": "52fe4278c3a36847f80210cf",
+        "department": "Sound",
+        "name": "Lennart Engholm",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 11912,
+        "credit_id": "52fe4278c3a36847f80210d5",
+        "department": "Sound",
+        "name": "Per-Olof Pettersson",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 11914,
+        "credit_id": "52fe4278c3a36847f80210db",
+        "department": "Sound",
+        "name": "Olle Jacobsson",
+        "job": "Sound mixer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 85,
+  "spoken_languages": [
+    {
+      "iso_639_1": "sv",
+      "name": "svenska"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 797,
+  "production_countries": [{
+    "name": "Sweden",
+    "iso_3166_1": "SE"
+  }],
+  "title": "Persona",
+  "overview": "A young nurse, Alma, is put in charge of Elisabeth Vogler: an actress who is seemingly healthy in all respects, but will not talk. As they spend time together, Alma speaks to Elisabeth constantly, never receiving any answer. Alma eventually confesses her secrets to a seemingly sympathetic Elisabeth and finds that her own personality is being submerged into Elisabeth's persona.",
+  "production_companies": [{
+    "id": 17551,
+    "name": "Svensk Filmindustri (SF)"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0060827",
+  "release_date": "1966-10-18",
+  "original_title": "Persona",
+  "vote_count": 26,
+  "poster_path": "/cjAnlvCrp9ZY7atASUsxRrhve7o.jpg",
+  "tagline": "One of the ten greatest films of all time.",
+  "revenue": 0,
+  "popularity": "0.700719441523879"
+}

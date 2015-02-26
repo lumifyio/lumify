@@ -1,0 +1,338 @@
+{
+  "budget": 6000000,
+  "vote_average": 7.5,
+  "backdrop_path": "/h5ILYBMAYAlZbMypIImmSr2NGqZ.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 258,
+        "order": 0,
+        "credit_id": "52fe4234c3a36847f800bfe9",
+        "name": "Gael García Bernal",
+        "cast_id": 1,
+        "profile_path": "/o4sdHKTBbF8GpooIwp5bvliubyY.jpg",
+        "character": "Stéphane"
+      },
+      {
+        "id": 4273,
+        "order": 1,
+        "credit_id": "52fe4234c3a36847f800bfed",
+        "name": "Charlotte Gainsbourg",
+        "cast_id": 2,
+        "profile_path": "/5kimvfsmC2Xln2TaMH3NDSL51lA.jpg",
+        "character": "Stéphanie"
+      },
+      {
+        "id": 4274,
+        "order": 2,
+        "credit_id": "52fe4234c3a36847f800bff1",
+        "name": "Miou-Miou",
+        "cast_id": 3,
+        "profile_path": "/745PQbQKNVwGrwtGvSOlg4lk5Bx.jpg",
+        "character": "Christine Miroux"
+      },
+      {
+        "id": 4275,
+        "order": 3,
+        "credit_id": "52fe4234c3a36847f800bff5",
+        "name": "Alain Chabat",
+        "cast_id": 4,
+        "profile_path": "/pGyaSifYbwsHgqimHMDB7YvMeQi.jpg",
+        "character": "Guy"
+      },
+      {
+        "id": 4286,
+        "order": 4,
+        "credit_id": "52fe4234c3a36847f800c041",
+        "name": "Emma de Caunes",
+        "cast_id": 17,
+        "profile_path": "/xKHtjT3A8Y5tpmxDs7PddlMP6M1.jpg",
+        "character": "Zoé"
+      },
+      {
+        "id": 4287,
+        "order": 5,
+        "credit_id": "52fe4234c3a36847f800c045",
+        "name": "Aurélia Petit",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Martine"
+      },
+      {
+        "id": 4288,
+        "order": 6,
+        "credit_id": "52fe4234c3a36847f800c049",
+        "name": "Sacha Bourdo",
+        "cast_id": 19,
+        "profile_path": "/atkezsosmJoUhIODou4cDdYLw0U.jpg",
+        "character": "Serge"
+      },
+      {
+        "id": 4289,
+        "order": 7,
+        "credit_id": "52fe4234c3a36847f800c04d",
+        "name": "Pierre Vaneck",
+        "cast_id": 20,
+        "profile_path": "/ssRQynR6SHmDFtTNHey5FEB15vL.jpg",
+        "character": "Mr. Pouchet"
+      },
+      {
+        "id": 4290,
+        "order": 8,
+        "credit_id": "52fe4234c3a36847f800c051",
+        "name": "Stéphane Metzger",
+        "cast_id": 21,
+        "profile_path": "/lrQthI3W6FkNQ4W4dFiD5QykHM6.jpg",
+        "character": "Sylvain"
+      },
+      {
+        "id": 4291,
+        "order": 9,
+        "credit_id": "52fe4234c3a36847f800c055",
+        "name": "Alain de Moyencourt",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Gérard"
+      },
+      {
+        "id": 4292,
+        "order": 10,
+        "credit_id": "52fe4234c3a36847f800c059",
+        "name": "Inigo Lezzi",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "M. Persinnet"
+      },
+      {
+        "id": 4293,
+        "order": 11,
+        "credit_id": "52fe4234c3a36847f800c05d",
+        "name": "Yvette Petit",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Ivana"
+      },
+      {
+        "id": 4278,
+        "order": 12,
+        "credit_id": "52fe4234c3a36847f800c061",
+        "name": "Jean-Michel Bernard",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Policier qui joue au piano"
+      },
+      {
+        "id": 4294,
+        "order": 13,
+        "credit_id": "52fe4234c3a36847f800c065",
+        "name": "Bertrand Delpierre",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Présentateur JT"
+      },
+      {
+        "id": 4295,
+        "order": 14,
+        "credit_id": "52fe4234c3a36847f800c069",
+        "name": "Eric Mariotto",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Policier"
+      }
+    ],
+    "crew": [
+      {
+        "id": 201,
+        "credit_id": "52fe4234c3a36847f800bffb",
+        "department": "Directing",
+        "name": "Michel Gondry",
+        "job": "Director",
+        "profile_path": "/a0uLwuRoAiELs02gJhNX14WqzV9.jpg"
+      },
+      {
+        "id": 201,
+        "credit_id": "52fe4234c3a36847f800c001",
+        "department": "Writing",
+        "name": "Michel Gondry",
+        "job": "Author",
+        "profile_path": "/a0uLwuRoAiELs02gJhNX14WqzV9.jpg"
+      },
+      {
+        "id": 4276,
+        "credit_id": "52fe4234c3a36847f800c007",
+        "department": "Production",
+        "name": "Georges Bermann",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4277,
+        "credit_id": "52fe4234c3a36847f800c00d",
+        "department": "Production",
+        "name": "Frédéric Junqua",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4278,
+        "credit_id": "52fe4234c3a36847f800c013",
+        "department": "Sound",
+        "name": "Jean-Michel Bernard",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4279,
+        "credit_id": "52fe4234c3a36847f800c019",
+        "department": "Camera",
+        "name": "Jean-Louis Bompoint",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4280,
+        "credit_id": "52fe4234c3a36847f800c01f",
+        "department": "Editing",
+        "name": "Juliette Welfling",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4281,
+        "credit_id": "52fe4234c3a36847f800c025",
+        "department": "Production",
+        "name": "Julie Navarro",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4282,
+        "credit_id": "52fe4234c3a36847f800c02b",
+        "department": "Art",
+        "name": "Ann Chakraverty",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4283,
+        "credit_id": "52fe4234c3a36847f800c031",
+        "department": "Art",
+        "name": "Pierre Pell",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4284,
+        "credit_id": "52fe4234c3a36847f800c037",
+        "department": "Art",
+        "name": "Stéphane Rosenbaum",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4285,
+        "credit_id": "52fe4234c3a36847f800c03d",
+        "department": "Costume & Make-Up",
+        "name": "Florence Fontaine",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 4292,
+        "credit_id": "52fe4234c3a36847f800c06f",
+        "department": "Production",
+        "name": "Inigo Lezzi",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1125145,
+        "credit_id": "52fe4234c3a36847f800c075",
+        "department": "Production",
+        "name": "Nathalie Guillaume",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.lasciencedesreves-lefilm.com/accueil.htm",
+  "id": 300,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "The Science of Sleep",
+  "overview": "A man entranced by his dreams and imagination is lovestruck with a French woman and feels he can show her his world.",
+  "production_companies": [
+    {
+      "id": 11911,
+      "name": "Partizan Films"
+    },
+    {
+      "id": 9,
+      "name": "Gaumont"
+    },
+    {
+      "id": 591,
+      "name": "France 3 Cinéma"
+    },
+    {
+      "id": 5358,
+      "name": "Canal+"
+    },
+    {
+      "id": 6586,
+      "name": "TPS Star"
+    },
+    {
+      "id": 11912,
+      "name": "Mikado Film"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0354899",
+  "release_date": "2006-02-11",
+  "original_title": "La science des rêves",
+  "vote_count": 34,
+  "poster_path": "/8juTRqn5o43mnlVacp1IzZSd11N.jpg",
+  "tagline": "Close your eyes. Open your heart.",
+  "revenue": 9524340,
+  "popularity": "0.498569433897878"
+}

@@ -1,0 +1,256 @@
+{
+  "budget": 0,
+  "vote_average": 5,
+  "backdrop_path": "/h2GYejjZXYKi2D7qNhyzoW4joaO.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6293,
+        "order": 0,
+        "credit_id": "52fe4246c3a36847f8011ac5",
+        "name": "Delphine Zentout",
+        "cast_id": 1,
+        "profile_path": null,
+        "character": "Lili"
+      },
+      {
+        "id": 6302,
+        "order": 1,
+        "credit_id": "52fe4246c3a36847f8011ae1",
+        "name": "Olivier Parnière",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Bertrand"
+      },
+      {
+        "id": 1653,
+        "order": 2,
+        "credit_id": "52fe4246c3a36847f8011ae5",
+        "name": "Jean-Pierre Léaud",
+        "cast_id": 8,
+        "profile_path": "/8t7gc9AAHGBipgz2mKZyhWLB8zL.jpg",
+        "character": "Boris Golovine"
+      },
+      {
+        "id": 6303,
+        "order": 3,
+        "credit_id": "52fe4246c3a36847f8011ae9",
+        "name": "Berta Domínguez D.",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Anne-Marie"
+      },
+      {
+        "id": 6304,
+        "order": 4,
+        "credit_id": "52fe4246c3a36847f8011aed",
+        "name": "Jean-François Stévenin",
+        "cast_id": 10,
+        "profile_path": "/82NUI5wvm0viU6U9PzGyRNLlnk5.jpg",
+        "character": "Le père"
+      },
+      {
+        "id": 6305,
+        "order": 5,
+        "credit_id": "52fe4246c3a36847f8011af1",
+        "name": "Diane Bellego",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Georgia"
+      },
+      {
+        "id": 6306,
+        "order": 6,
+        "credit_id": "52fe4246c3a36847f8011af5",
+        "name": "Adrienne Bonnet",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "La mère"
+      },
+      {
+        "id": 6307,
+        "order": 7,
+        "credit_id": "52fe4246c3a36847f8011af9",
+        "name": "Stéphane Moquet",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Ca-Pe"
+      },
+      {
+        "id": 6308,
+        "order": 8,
+        "credit_id": "52fe4246c3a36847f8011afd",
+        "name": "Cécile Henry",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Maetitia"
+      },
+      {
+        "id": 6309,
+        "order": 9,
+        "credit_id": "52fe4246c3a36847f8011b01",
+        "name": "Michel Scotto di Carlo",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Stéphane"
+      },
+      {
+        "id": 6311,
+        "order": 10,
+        "credit_id": "52fe4246c3a36847f8011b05",
+        "name": "Anny Chasson",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Mme Weber"
+      },
+      {
+        "id": 6312,
+        "order": 11,
+        "credit_id": "52fe4246c3a36847f8011b09",
+        "name": "Jean-Claude Binoc",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "M. Weber"
+      },
+      {
+        "id": 150792,
+        "order": 12,
+        "credit_id": "52fe4247c3a36847f8011b31",
+        "name": "Etienne Chicot",
+        "cast_id": 24,
+        "profile_path": "/pYbudifKWa0sYY5QkQc5YKLHfMf.jpg",
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 6295,
+        "credit_id": "52fe4246c3a36847f8011acb",
+        "department": "Directing",
+        "name": "Catherine Breillat",
+        "job": "Director",
+        "profile_path": "/ybY36iRTLHOn4GTnjlZLCwNhWqD.jpg"
+      },
+      {
+        "id": 6295,
+        "credit_id": "52fe4246c3a36847f8011ad1",
+        "department": "Writing",
+        "name": "Catherine Breillat",
+        "job": "Screenplay",
+        "profile_path": "/ybY36iRTLHOn4GTnjlZLCwNhWqD.jpg"
+      },
+      {
+        "id": 6295,
+        "credit_id": "52fe4246c3a36847f8011ad7",
+        "department": "Writing",
+        "name": "Catherine Breillat",
+        "job": "Author",
+        "profile_path": "/ybY36iRTLHOn4GTnjlZLCwNhWqD.jpg"
+      },
+      {
+        "id": 6299,
+        "credit_id": "52fe4246c3a36847f8011add",
+        "department": "Writing",
+        "name": "Roger Salloch",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6313,
+        "credit_id": "52fe4246c3a36847f8011b0f",
+        "department": "Production",
+        "name": "Emmanuel Schlumberger",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6314,
+        "credit_id": "52fe4246c3a36847f8011b15",
+        "department": "Production",
+        "name": "Valérie Seydoux",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6315,
+        "credit_id": "52fe4247c3a36847f8011b1b",
+        "department": "Sound",
+        "name": "Maxime Schmitt",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6316,
+        "credit_id": "52fe4247c3a36847f8011b21",
+        "department": "Camera",
+        "name": "Laurent Dailland",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6318,
+        "credit_id": "52fe4247c3a36847f8011b27",
+        "department": "Editing",
+        "name": "Yann Dedet",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6319,
+        "credit_id": "52fe4247c3a36847f8011b2d",
+        "department": "Art",
+        "name": "Olivier Paultre",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 88,
+  "spoken_languages": [{
+    "iso_639_1": "fr",
+    "name": "Français"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 465,
+  "production_countries": [{
+    "name": "France",
+    "iso_3166_1": "FR"
+  }],
+  "title": "Junior Size 36",
+  "overview": "The French film in 1988 was considered provocative. The story is about a 14 year old girl who\u2019s sexual curiosities lead to date an older man. Female sexuality and puberty are themes in this film.",
+  "production_companies": [
+    {
+      "id": 243,
+      "name": "CB Films"
+    },
+    {
+      "id": 244,
+      "name": "French Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0094596",
+  "release_date": "1988-03-03",
+  "original_title": "36 Fillette",
+  "vote_count": 1,
+  "poster_path": "/9nOr9of8cIOT90Rmm15HG6cjvsF.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.454943791125862"
+}

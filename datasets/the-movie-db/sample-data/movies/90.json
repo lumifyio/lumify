@@ -1,0 +1,319 @@
+{
+  "budget": 15000000,
+  "vote_average": 6.4,
+  "backdrop_path": "/38aEFo3chy25jobknuIX0WTF0Xl.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 776,
+        "order": 0,
+        "credit_id": "52fe4216c3a36847f8002f03",
+        "name": "Eddie Murphy",
+        "cast_id": 6,
+        "profile_path": "/WlmlpM6YeQwgEmOX0n4bVZ08dc.jpg",
+        "character": "Det. Axel Foley"
+      },
+      {
+        "id": 777,
+        "order": 1,
+        "credit_id": "52fe4216c3a36847f8002f07",
+        "name": "Judge Reinhold",
+        "cast_id": 7,
+        "profile_path": "/oN7TsF0yFJhsoKe9KzxXEOhheci.jpg",
+        "character": "Det. William 'Billy' Rosewood"
+      },
+      {
+        "id": 778,
+        "order": 2,
+        "credit_id": "52fe4216c3a36847f8002f0b",
+        "name": "John Ashton",
+        "cast_id": 8,
+        "profile_path": "/omfIdOt1F8LDkb7AMZTtLDiyJ3O.jpg",
+        "character": "Det. Sgt. John Taggart"
+      },
+      {
+        "id": 779,
+        "order": 3,
+        "credit_id": "52fe4216c3a36847f8002f0f",
+        "name": "Lisa Eilbacher",
+        "cast_id": 9,
+        "profile_path": "/kyiePU42bPqcGCRJfta1Ev2m7if.jpg",
+        "character": "Jeannette 'Jenny' Summers"
+      },
+      {
+        "id": 780,
+        "order": 4,
+        "credit_id": "52fe4216c3a36847f8002f13",
+        "name": "Ronny Cox",
+        "cast_id": 10,
+        "profile_path": "/da980JmsVnK9w9MLZsF240Q8t9k.jpg",
+        "character": "Lt. Andrew Bogomil"
+      },
+      {
+        "id": 781,
+        "order": 5,
+        "credit_id": "52fe4216c3a36847f8002f17",
+        "name": "Paul Reiser",
+        "cast_id": 11,
+        "profile_path": "/fr53dQQrDGfETgbliCktwKqteRU.jpg",
+        "character": "Jeffrey"
+      },
+      {
+        "id": 782,
+        "order": 6,
+        "credit_id": "52fe4216c3a36847f8002f1b",
+        "name": "Steven Berkoff",
+        "cast_id": 12,
+        "profile_path": "/jiYMK9prj46Qe4gmbKtBDE6YlSr.jpg",
+        "character": "Victor Maitland"
+      },
+      {
+        "id": 783,
+        "order": 7,
+        "credit_id": "52fe4216c3a36847f8002f1f",
+        "name": "Jonathan Banks",
+        "cast_id": 13,
+        "profile_path": "/9rKC7rEBnUoDi3lY4hTH3DmFF6U.jpg",
+        "character": "Zack, Maitland's Thug"
+      },
+      {
+        "id": 4689,
+        "order": 8,
+        "credit_id": "52fe4216c3a36847f8002f23",
+        "name": "Bronson Pinchot",
+        "cast_id": 14,
+        "profile_path": "/hGaFZsohQbRIskmkLtNbwJNgLPN.jpg",
+        "character": "Serge"
+      },
+      {
+        "id": 785,
+        "order": 9,
+        "credit_id": "52fe4216c3a36847f8002f27",
+        "name": "James Russo",
+        "cast_id": 15,
+        "profile_path": "/tV4X0uEuqu6XYml3yEs9rsG9EzW.jpg",
+        "character": "Mikey Tandino"
+      },
+      {
+        "id": 786,
+        "order": 10,
+        "credit_id": "52fe4216c3a36847f8002f2b",
+        "name": "Stephen Elliott",
+        "cast_id": 16,
+        "profile_path": "/pKD6zR7MJW6gHc9ewxaSJeNBrQi.jpg",
+        "character": "Police Chief Hubbard"
+      },
+      {
+        "id": 787,
+        "order": 11,
+        "credit_id": "52fe4216c3a36847f8002f2f",
+        "name": "Gilbert R. Hill",
+        "cast_id": 17,
+        "profile_path": "/9kgwJTs4hT9oJuRiC4zj4zxwn68.jpg",
+        "character": "Insp. Douglas Todd"
+      },
+      {
+        "id": 788,
+        "order": 12,
+        "credit_id": "52fe4216c3a36847f8002f33",
+        "name": "Art Kimbro",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Det. Foster"
+      },
+      {
+        "id": 789,
+        "order": 13,
+        "credit_id": "52fe4216c3a36847f8002f37",
+        "name": "Joel Bailey",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Det. McCabe"
+      },
+      {
+        "id": 790,
+        "order": 14,
+        "credit_id": "52fe4216c3a36847f8002f3b",
+        "name": "Michael Champion",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Casey"
+      }
+    ],
+    "crew": [
+      {
+        "id": 769,
+        "credit_id": "52fe4216c3a36847f8002ee7",
+        "department": "Directing",
+        "name": "Martin Brest",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 770,
+        "credit_id": "52fe4216c3a36847f8002eed",
+        "department": "Production",
+        "name": "Jerry Bruckheimer",
+        "job": "Producer",
+        "profile_path": "/p2rd1kgq7GiCx2nQqfXib9PneOu.jpg"
+      },
+      {
+        "id": 771,
+        "credit_id": "52fe4216c3a36847f8002ef3",
+        "department": "Production",
+        "name": "Don Simpson",
+        "job": "Producer",
+        "profile_path": "/vYpPZLSh4ylzgP5KsEUnjt1UDRh.jpg"
+      },
+      {
+        "id": 772,
+        "credit_id": "52fe4216c3a36847f8002ef9",
+        "department": "Writing",
+        "name": "Danilo Bach",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 774,
+        "credit_id": "52fe4216c3a36847f8002eff",
+        "department": "Writing",
+        "name": "Daniel Petrie, Jr.",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 792,
+        "credit_id": "52fe4216c3a36847f8002f41",
+        "department": "Camera",
+        "name": "Bruce Surtees",
+        "job": "Director of Photography",
+        "profile_path": "/dJsO0sdSi2tM4ZTKVdZrvufiAuO.jpg"
+      },
+      {
+        "id": 794,
+        "credit_id": "52fe4216c3a36847f8002f47",
+        "department": "Camera",
+        "name": "Angelo P. Graham",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 795,
+        "credit_id": "52fe4216c3a36847f8002f4d",
+        "department": "Camera",
+        "name": "James J. Murakami",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 796,
+        "credit_id": "52fe4216c3a36847f8002f53",
+        "department": "Camera",
+        "name": "John M. Dwyer",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 797,
+        "credit_id": "52fe4216c3a36847f8002f59",
+        "department": "Camera",
+        "name": "Jeff Haley",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 798,
+        "credit_id": "52fe4216c3a36847f8002f5f",
+        "department": "Camera",
+        "name": "Tom Bronson",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 799,
+        "credit_id": "52fe4216c3a36847f8002f65",
+        "department": "Sound",
+        "name": "Harold Faltermeyer",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 800,
+        "credit_id": "52fe4216c3a36847f8002f6b",
+        "department": "Editing",
+        "name": "Arthur Coburn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 772,
+        "credit_id": "52fe4216c3a36847f8002f71",
+        "department": "Writing",
+        "name": "Danilo Bach",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 774,
+        "credit_id": "52fe4216c3a36847f8002f77",
+        "department": "Writing",
+        "name": "Daniel Petrie, Jr.",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 90,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Beverly Hills Cop",
+  "overview": "Tough-talking Detroit cop Axel Foley heads to the rarified world of Beverly Hills in his beat-up Chevy Nova to investigate a friend's murder. But soon, he realizes he's stumbled onto something much more complicated. Bungling rookie detective Billy Rosewood joins the fish-out-of-water Axel and shows him the West Los Angeles ropes.",
+  "production_companies": [
+    {
+      "id": 4,
+      "name": "Paramount Pictures"
+    },
+    {
+      "id": 30,
+      "name": "Eddie Murphy Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 85861,
+    "backdrop_path": "/lhZQuT76B9YcxZIudXZMhhWCKcl.jpg",
+    "name": "Beverly Hills Cop Collection",
+    "poster_path": "/ty7zsl0xkVDUlibYkFUjRAYUkvE.jpg"
+  },
+  "imdb_id": "tt0086960",
+  "release_date": "1984-11-30",
+  "original_title": "Beverly Hills Cop",
+  "vote_count": 230,
+  "poster_path": "/s7n0rS2Ff85SuSpqYG3ndkmdQf4.jpg",
+  "tagline": "The Heat Is On!",
+  "revenue": 316360478,
+  "popularity": "1.15900349465661"
+}

@@ -1,0 +1,239 @@
+{
+  "birthday": "1973-07-14",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.  María del Pilar Peña Sánchez, (Candela Peña) (born 14 July 1973 in Gavà, Barcelona, Catalonia, Spain) is a Spanish actress.  She was the only child of a couple who had a bar in Barcelona. When she was four years old she started to learn dance in the city and after finishing high-school she went to Seville to begin theatre classes there and eventually in Madrid. Encouraged by Pedro Almodóvar, she published the novel Pérez Príncipe, María Dolores in 2001.\n\nShe won the Premio Goya in 2003 (for the movie Te doy mis ojos) after being nominated several times previously.  Description above from the Wikipedia article Candela Peña, licensed under CC-BY-SA, full list of contributors on Wikipedia.     ",
+  "homepage": "",
+  "profile_path": "/vXsuroxcILYbOoI4fufchaSrsIP.jpg",
+  "id": 958,
+  "also_known_as": ["Candela Pena"],
+  "deathday": "",
+  "imdb_id": "nm0679150",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 2538,
+        "media_type": "movie",
+        "title": "Hi, Are You Alone?",
+        "credit_id": "52fe435dc3a36847f804eae1",
+        "release_date": "1995-10-28",
+        "original_title": "Hola, ¿estás sola?",
+        "adult": false,
+        "poster_path": "/c68qlPMhdqrhrLqRGRS5yjItFK0.jpg",
+        "character": "Trini"
+      },
+      {
+        "id": 26488,
+        "media_type": "movie",
+        "title": "Torremolinos 73",
+        "credit_id": "52fe4506c3a368484e0440dd",
+        "release_date": "2003-04-26",
+        "original_title": "Torremolinos 73",
+        "adult": false,
+        "poster_path": "/78YjbrlihyXtNn4DjbbxPyetPJe.jpg",
+        "character": "Carmen"
+      },
+      {
+        "id": 34883,
+        "media_type": "movie",
+        "title": "My Prison Yard",
+        "credit_id": "52fe45839251416c91034ff1",
+        "release_date": "2008-12-26",
+        "original_title": "El Patio de Mi Cárcel",
+        "adult": false,
+        "poster_path": "/dt6RIRpVvG4FBn9Oi7Jm4dVQXfh.jpg",
+        "character": "Mar"
+      },
+      {
+        "id": 62364,
+        "media_type": "movie",
+        "title": "Mouth to Mouth",
+        "credit_id": "52fe467ac3a368484e092fa9",
+        "release_date": "1995-11-10",
+        "original_title": "Boca a boca",
+        "adult": false,
+        "poster_path": "/eOwQxoHcR1UGlwiqvUaaiC8F9DZ.jpg",
+        "character": "Tanya"
+      },
+      {
+        "id": 75688,
+        "media_type": "movie",
+        "title": "Sin vergüenza",
+        "credit_id": "52fe490cc3a368484e1180c7",
+        "release_date": "2001-06-29",
+        "original_title": "Sin vergüenza",
+        "adult": false,
+        "poster_path": "/yUASk1DCLHcZeQbXkykJO7FhJpt.jpg",
+        "character": "Cecilia"
+      },
+      {
+        "id": 96220,
+        "media_type": "movie",
+        "title": "The Island Inside",
+        "credit_id": "52fe49a89251416c750cf0e7",
+        "release_date": "2010-04-09",
+        "original_title": "La isla interior",
+        "adult": false,
+        "poster_path": "/eh3zqPZdVEUKS8oGl2y0JUpry32.jpg",
+        "character": "Coral"
+      },
+      {
+        "id": 102680,
+        "media_type": "movie",
+        "title": "Sleepless in Madrid",
+        "credit_id": "52fe4a0ec3a36847f81b63af",
+        "release_date": "1998-02-13",
+        "original_title": "Insomnio",
+        "adult": false,
+        "poster_path": "/mbM7z7ayhK09rSXhqlrMc5c8k51.jpg",
+        "character": "Alba"
+      },
+      {
+        "id": 102905,
+        "media_type": "movie",
+        "title": "Novios",
+        "credit_id": "52fe4a13c3a36847f81b7983",
+        "release_date": "1999-09-17",
+        "original_title": "Novios",
+        "adult": false,
+        "poster_path": "/nqWt8HfAUeA3ALZj1xijmZdIK6L.jpg",
+        "character": "Cristal"
+      },
+      {
+        "id": 98607,
+        "media_type": "movie",
+        "title": "What Makes Women Laugh?",
+        "credit_id": "52fe4a1c9251416c750de1d5",
+        "release_date": "1997-02-25",
+        "original_title": "¿De qué se ríen las mujeres?",
+        "adult": false,
+        "poster_path": "/3o5KxSSyhq86ZwBk6EvLxo9h9VO.jpg",
+        "character": "Graci"
+      },
+      {
+        "id": 99214,
+        "media_type": "movie",
+        "title": "Rated R",
+        "credit_id": "52fe4a2a9251416c750dff55",
+        "release_date": "2008-10-24",
+        "original_title": "Los años desnudos",
+        "adult": false,
+        "poster_path": "/rdJCsJ2AUcCwWgKUbIBhCCmYNtr.jpg",
+        "character": "Sandra Valle"
+      },
+      {
+        "id": 123747,
+        "media_type": "movie",
+        "title": "Salad Days",
+        "credit_id": "52fe4a9cc3a368484e15d5d9",
+        "release_date": "2002-06-04",
+        "original_title": "Desaliñada",
+        "adult": false,
+        "poster_path": null,
+        "character": "María Francisca"
+      },
+      {
+        "id": 114218,
+        "media_type": "movie",
+        "title": "Días contados",
+        "credit_id": "52fe4b47c3a36847f81fbdeb",
+        "release_date": "1994-01-01",
+        "original_title": "Días contados",
+        "adult": false,
+        "poster_path": "/xznzFk360TvVWZ3vEvVQEHRBUJQ.jpg",
+        "character": "Vanesa"
+      },
+      {
+        "id": 145594,
+        "media_type": "movie",
+        "title": "Descongélate!",
+        "credit_id": "52fe4b5e9251416c75100b61",
+        "release_date": "2003-09-12",
+        "original_title": "Descongélate!",
+        "adult": false,
+        "poster_path": "/mdzlBQYuaXHYhUaUHswvcWmb9xw.jpg",
+        "character": "Iris"
+      },
+      {
+        "id": 131907,
+        "media_type": "movie",
+        "title": "God is on air",
+        "credit_id": "52fe4b81c3a368484e18c5a1",
+        "release_date": "2002-01-01",
+        "original_title": "No somos nadie",
+        "adult": false,
+        "poster_path": "/fbT2FJE8hNuz6rc2c3fQwGIw15W.jpg",
+        "character": "Espe"
+      },
+      {
+        "id": 1127,
+        "media_type": "movie",
+        "title": "Princesses",
+        "credit_id": "52fe42e8c3a36847f802c0e1",
+        "release_date": "2005-09-02",
+        "original_title": "Princesas",
+        "adult": false,
+        "poster_path": "/lNwX98uxw2zciuXqNqkNDzYBWkO.jpg",
+        "character": "Caye"
+      },
+      {
+        "id": 1418,
+        "media_type": "movie",
+        "title": "Take my eyes",
+        "credit_id": "52fe42f5c3a36847f802fca3",
+        "release_date": "2003-10-08",
+        "original_title": "Te doy mis ojos",
+        "adult": false,
+        "poster_path": "/bGZrvpZeOk5TlmcLJnmNCPDEnmo.jpg",
+        "character": "Ana"
+      },
+      {
+        "id": 99,
+        "media_type": "movie",
+        "title": "All About My Mother",
+        "credit_id": "52fe4217c3a36847f800350b",
+        "release_date": "1999-04-19",
+        "original_title": "Todo sobre mi madre",
+        "adult": false,
+        "poster_path": "/jopVQl2gYGPeSfEfDX9ZktlG0In.jpg",
+        "character": "Nina"
+      },
+      {
+        "id": 163718,
+        "media_type": "movie",
+        "title": "Yesterday Never Ends",
+        "credit_id": "52fe4c6cc3a36847f822d6b7",
+        "release_date": "2013-04-26",
+        "original_title": "Ayer no termina nunca",
+        "adult": false,
+        "poster_path": "/pZFBRRoIQgS7CBtffgcFwZE6j6U.jpg",
+        "character": ""
+      },
+      {
+        "id": 139808,
+        "media_type": "movie",
+        "title": "A Gun in Each Hand",
+        "credit_id": "52fe4c6ec3a368484e1b7e4b",
+        "release_date": "2012-11-17",
+        "original_title": "Una pistola en cada mano",
+        "adult": false,
+        "poster_path": "/xb46MjvsYW5n5bcW0Bf82m2SEkF.jpg",
+        "character": "Mamen"
+      },
+      {
+        "id": 283699,
+        "media_type": "movie",
+        "title": "Le dernier coup de marteau",
+        "credit_id": "53d2661cc3a368776700bd96",
+        "release_date": "2014-08-30",
+        "original_title": "Le dernier coup de marteau",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Candela Peña",
+  "place_of_birth": "Gavà, Barcelona, Catalonia, Spain",
+  "popularity": "1.02295000164655"
+}

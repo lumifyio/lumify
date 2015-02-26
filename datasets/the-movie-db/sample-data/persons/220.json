@@ -1,0 +1,28 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 220,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm1287000",
+  "combined_credits": {
+    "cast": [{
+      "id": 38,
+      "media_type": "movie",
+      "title": "Eternal Sunshine of the Spotless Mind",
+      "credit_id": "52fe4211c3a36847f80016ab",
+      "release_date": "2004-03-19",
+      "original_title": "Eternal Sunshine of the Spotless Mind",
+      "adult": false,
+      "poster_path": "/gutwXkVChJkpIrclokNESybj0GC.jpg",
+      "character": "Young Clementine"
+    }],
+    "crew": []
+  },
+  "name": "Lola Daehler",
+  "place_of_birth": null,
+  "popularity": "0.999999999999718"
+}

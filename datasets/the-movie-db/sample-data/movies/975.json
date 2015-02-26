@@ -1,0 +1,346 @@
+{
+  "budget": 0,
+  "vote_average": 7.8,
+  "backdrop_path": "/vpO69a9trEg365tIe3KGaDw8tew.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2090,
+        "order": 0,
+        "credit_id": "52fe4295c3a36847f8029f15",
+        "name": "Kirk Douglas",
+        "cast_id": 18,
+        "profile_path": "/vIZgu07gJtS2j460jgBlI1IvkAO.jpg",
+        "character": "Col. Dax"
+      },
+      {
+        "id": 14562,
+        "order": 1,
+        "credit_id": "52fe4295c3a36847f8029f19",
+        "name": "Ralph Meeker",
+        "cast_id": 19,
+        "profile_path": "/qJ6ELh0jYHaCB0lITnAOo7owylz.jpg",
+        "character": "Cpl. Philippe Paris"
+      },
+      {
+        "id": 14563,
+        "order": 2,
+        "credit_id": "52fe4295c3a36847f8029f1d",
+        "name": "Adolphe Menjou",
+        "cast_id": 20,
+        "profile_path": "/jAZRVhDGvEfRfJgGQCGk1GXMp1C.jpg",
+        "character": "Gen. George Broulard"
+      },
+      {
+        "id": 14564,
+        "order": 3,
+        "credit_id": "52fe4295c3a36847f8029f21",
+        "name": "George Macready",
+        "cast_id": 21,
+        "profile_path": "/t1xXYLfj7KSn2YQ3cKJ4V5ZYoQV.jpg",
+        "character": "Gen. Paul Mireau"
+      },
+      {
+        "id": 14565,
+        "order": 4,
+        "credit_id": "52fe4295c3a36847f8029f25",
+        "name": "Wayne Morris",
+        "cast_id": 22,
+        "profile_path": "/hVs9Lzc9dApQtPgQuyRsV5smRDA.jpg",
+        "character": "Lt. Roget/Singing man"
+      },
+      {
+        "id": 12312,
+        "order": 5,
+        "credit_id": "52fe4295c3a36847f8029f29",
+        "name": "Richard Anderson",
+        "cast_id": 23,
+        "profile_path": "/lHI1T7yJfCv3cfD7SpAkH0OWDNx.jpg",
+        "character": "Maj. Saint-Auban"
+      },
+      {
+        "id": 592,
+        "order": 6,
+        "credit_id": "52fe4295c3a36847f8029f2d",
+        "name": "Joe Turkel",
+        "cast_id": 24,
+        "profile_path": "/8d16GA57SnVXP3WGB0fbkFCKily.jpg",
+        "character": "Pvt. Pierre Arnaud"
+      },
+      {
+        "id": 2758,
+        "order": 7,
+        "credit_id": "52fe4295c3a36847f8029f31",
+        "name": "Timothy Carey",
+        "cast_id": 25,
+        "profile_path": "/ymLUcHBDoZxnJ6sx7855vr5iHaU.jpg",
+        "character": "Pvt. Maurice Ferol"
+      },
+      {
+        "id": 1019259,
+        "order": 8,
+        "credit_id": "52fe4295c3a36847f8029f35",
+        "name": "Christiane Kubrick",
+        "cast_id": 26,
+        "profile_path": "/ZDMzhuyTaYW8es3GDTfTY9WAkE.jpg",
+        "character": "German Singer"
+      },
+      {
+        "id": 117671,
+        "order": 9,
+        "credit_id": "52fe4295c3a36847f8029f39",
+        "name": "Jerry Hausner",
+        "cast_id": 27,
+        "profile_path": "/4BUSa5Li7wfqAH38OZLArm090M4.jpg",
+        "character": "Proprietor of Cafe"
+      },
+      {
+        "id": 3476,
+        "order": 10,
+        "credit_id": "52fe4295c3a36847f8029f3d",
+        "name": "Peter Capell",
+        "cast_id": 28,
+        "profile_path": "/kwAOpbL1SeDxvQXkKLDkm8ZeTY0.jpg",
+        "character": "Narrator of Opening Sequence"
+      },
+      {
+        "id": 14579,
+        "order": 11,
+        "credit_id": "52fe4295c3a36847f8029f41",
+        "name": "Emile Meyer",
+        "cast_id": 29,
+        "profile_path": "/3uZJOF28nCj0WKXAJEVt7yCl2Tj.jpg",
+        "character": "Father Dupree"
+      },
+      {
+        "id": 31503,
+        "order": 12,
+        "credit_id": "52fe4295c3a36847f8029f45",
+        "name": "Bert Freed",
+        "cast_id": 30,
+        "profile_path": "/ijYWrQ4e2LLYp5ADO19iTG7TtOx.jpg",
+        "character": "Sgt. Boulanger"
+      },
+      {
+        "id": 94031,
+        "order": 13,
+        "credit_id": "52fe4295c3a36847f8029f49",
+        "name": "Kem Dibbs",
+        "cast_id": 31,
+        "profile_path": "/yaC4y47x2L2ZryUB2AjncadMBvv.jpg",
+        "character": "Pvt. Lejeune"
+      },
+      {
+        "id": 1077968,
+        "order": 14,
+        "credit_id": "52fe4295c3a36847f8029f4d",
+        "name": "Fred Bell",
+        "cast_id": 32,
+        "profile_path": "/AvQq9HsoP9ZDNkVd0Frz1DL9YHK.jpg",
+        "character": "Shell-Shocked Soldier"
+      },
+      {
+        "id": 1077970,
+        "order": 15,
+        "credit_id": "52fe4295c3a36847f8029f51",
+        "name": "John Stein",
+        "cast_id": 33,
+        "profile_path": "/xnA1i1PRcbeZeskDdLVZJ318hNc.jpg",
+        "character": "Capt. Rousseau"
+      },
+      {
+        "id": 1077971,
+        "order": 16,
+        "credit_id": "52fe4295c3a36847f8029f55",
+        "name": "Harold Benedict",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Capt. Nichols"
+      }
+    ],
+    "crew": [
+      {
+        "id": 240,
+        "credit_id": "52fe4295c3a36847f8029eb7",
+        "department": "Directing",
+        "name": "Stanley Kubrick",
+        "job": "Director",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 14554,
+        "credit_id": "52fe4295c3a36847f8029ebd",
+        "department": "Writing",
+        "name": "Humphrey Cobb",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe4295c3a36847f8029ec3",
+        "department": "Writing",
+        "name": "Stanley Kubrick",
+        "job": "Screenplay",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe4295c3a36847f8029ec9",
+        "department": "Production",
+        "name": "Stanley Kubrick",
+        "job": "Producer",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 10769,
+        "credit_id": "52fe4295c3a36847f8029ecf",
+        "department": "Writing",
+        "name": "Calder Willingham",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3335,
+        "credit_id": "52fe4295c3a36847f8029ed5",
+        "department": "Writing",
+        "name": "Jim Thompson",
+        "job": "Screenplay",
+        "profile_path": "/qPx9lEJkSrnP6n0Zvk8FWkqLMS5.jpg"
+      },
+      {
+        "id": 2090,
+        "credit_id": "52fe4295c3a36847f8029edb",
+        "department": "Production",
+        "name": "Kirk Douglas",
+        "job": "Producer",
+        "profile_path": "/vIZgu07gJtS2j460jgBlI1IvkAO.jpg"
+      },
+      {
+        "id": 3349,
+        "credit_id": "52fe4295c3a36847f8029ee1",
+        "department": "Production",
+        "name": "James B. Harris",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3350,
+        "credit_id": "52fe4295c3a36847f8029ee7",
+        "department": "Sound",
+        "name": "Gerald Fried",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 14555,
+        "credit_id": "52fe4295c3a36847f8029eed",
+        "department": "Camera",
+        "name": "Georg Krause",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14556,
+        "credit_id": "52fe4295c3a36847f8029ef3",
+        "department": "Editing",
+        "name": "Eva Kroll",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 14557,
+        "credit_id": "52fe4295c3a36847f8029ef9",
+        "department": "Art",
+        "name": "Ludwig Reiber",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11926,
+        "credit_id": "52fe4295c3a36847f8029eff",
+        "department": "Costume & Make-Up",
+        "name": "Ilse Dubois",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14559,
+        "credit_id": "52fe4295c3a36847f8029f05",
+        "department": "Costume & Make-Up",
+        "name": "Arthur Schramm",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 14560,
+        "credit_id": "52fe4295c3a36847f8029f0b",
+        "department": "Sound",
+        "name": "Martin Müller",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 14561,
+        "credit_id": "52fe4295c3a36847f8029f11",
+        "department": "Crew",
+        "name": "Erwin Lange",
+        "job": "Special Effects",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 88,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "la",
+      "name": "Latin"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 975,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Paths of Glory",
+  "overview": "This powerful, fact-based absurdity-of-war film stars Kirk Douglas as a commanding officer who defends three scapegoats on trial for a failed offensive that occurred within the French Army in 1916.",
+  "production_companies": [
+    {
+      "id": 611,
+      "name": "Bryna Productions"
+    },
+    {
+      "id": 21,
+      "name": "Metro-Goldwyn-Mayer"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0050825",
+  "release_date": "1957-09-18",
+  "original_title": "Paths of Glory",
+  "vote_count": 69,
+  "poster_path": "/im8j7xPpkp6n5133rnvqmx6qf7.jpg",
+  "tagline": "Never has the screen thrust so deeply into the guts of war!",
+  "revenue": 0,
+  "popularity": "1.08376387810967"
+}

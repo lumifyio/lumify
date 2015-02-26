@@ -1,0 +1,107 @@
+{
+  "birthday": "1982-11-20",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nMargo Stilley (born November 20, 1982) is an American actress and former model.\n\nDescription above from the Wikipedia article Margo Stilley, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "http://www.margo-stilley.com/",
+  "profile_path": "/lcU3CC1rrVPWaNmJ0i9vAhMwsbu.jpg",
+  "id": 177,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm1626256",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 27,
+        "media_type": "movie",
+        "title": "9 Songs",
+        "credit_id": null,
+        "release_date": "2004-07-16",
+        "original_title": "9 Songs",
+        "adult": false,
+        "poster_path": "/bvGyYmmnQG5NPP7m2nuLhaiC8LH.jpg",
+        "character": "Lisa"
+      },
+      {
+        "id": 21343,
+        "media_type": "movie",
+        "title": "Reverb",
+        "credit_id": null,
+        "release_date": "2007-02-10",
+        "original_title": "Reverb",
+        "adult": false,
+        "poster_path": "/AsLfrKFjOtfRXjmM6CMh354rJEZ.jpg",
+        "character": "Nicky"
+      },
+      {
+        "id": 63578,
+        "media_type": "movie",
+        "title": "The Trip",
+        "credit_id": null,
+        "release_date": "2010-09-01",
+        "original_title": "The Trip",
+        "adult": false,
+        "poster_path": "/mqwEdHUDL5Sj0nIi6wtpr8dfy6p.jpg",
+        "character": "Mischa"
+      },
+      {
+        "id": 13092,
+        "media_type": "movie",
+        "title": "How to Lose Friends & Alienate People",
+        "credit_id": null,
+        "release_date": "2008-10-02",
+        "original_title": "How to Lose Friends & Alienate People",
+        "adult": false,
+        "poster_path": "/gIqp469K4w7158Zg0VqNdfo3qDk.jpg",
+        "character": "Ingrid"
+      },
+      {
+        "id": 13462,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52582800760ee36aaa82fe91",
+        "name": "Mayo",
+        "poster_path": null,
+        "original_name": "Mayo",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 34440,
+        "media_type": "tv",
+        "episode_count": 27,
+        "credit_id": "5258d89b760ee34661719b09",
+        "name": "The Trip",
+        "poster_path": "/1rydYeEwHt6wAEOMXhqyLP4xKZN.jpg",
+        "original_name": "The Trip",
+        "first_air_date": "2010-11-01",
+        "character": "Mischa"
+      },
+      {
+        "id": 114,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52533a9d19c2957940068f08",
+        "name": "Nathan Barley",
+        "poster_path": "/9oj1od4zG6hywcECgls2Z2cThn.jpg",
+        "original_name": "Nathan Barley",
+        "first_air_date": "2005-02-11",
+        "character": ""
+      },
+      {
+        "id": 6127,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525784cb19c29531db28319b",
+        "name": "Agatha Christie's Marple",
+        "poster_path": "/7VBU2FfIImjD1VIGORebNG75oXM.jpg",
+        "original_name": "Agatha Christie's Marple",
+        "first_air_date": "2004-12-12",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Margo Stilley",
+  "place_of_birth": "Bear Creek, North Carolina, USA ",
+  "popularity": "1.53583882586182"
+}

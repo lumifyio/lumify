@@ -1,0 +1,405 @@
+{
+  "budget": 300000,
+  "vote_average": 7.1,
+  "backdrop_path": "/5ywMAA3sHJK709SIyLEC1LqVb8n.jpg",
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 9221,
+        "order": 0,
+        "credit_id": "52fe4292c3a36847f8029083",
+        "name": "Donald Pleasence",
+        "cast_id": 14,
+        "profile_path": "/fr9lf679ZsHbDZsbcpKZfbFO1Pu.jpg",
+        "character": "Dr. Sam Loomis"
+      },
+      {
+        "id": 8944,
+        "order": 1,
+        "credit_id": "52fe4292c3a36847f8029087",
+        "name": "Jamie Lee Curtis",
+        "cast_id": 15,
+        "profile_path": "/o8Gwv0s9UsH2oc4JlML4e9Nx6a3.jpg",
+        "character": "Laurie Strode"
+      },
+      {
+        "id": 11787,
+        "order": 2,
+        "credit_id": "52fe4292c3a36847f802908b",
+        "name": "Nancy Kyes",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Annie Brackett"
+      },
+      {
+        "id": 15500,
+        "order": 3,
+        "credit_id": "52fe4292c3a36847f802908f",
+        "name": "P.J. Soles",
+        "cast_id": 17,
+        "profile_path": "/kCOSx1NAkCT8kiG3l0OP28rRSmL.jpg",
+        "character": "Lynda van der Klok"
+      },
+      {
+        "id": 11786,
+        "order": 4,
+        "credit_id": "52fe4292c3a36847f8029093",
+        "name": "Charles Cyphers",
+        "cast_id": 18,
+        "profile_path": "/pglMfoHMVEcziDlnl33DrZjRSM3.jpg",
+        "character": "Sheriff Leigh Brackett"
+      },
+      {
+        "id": 15503,
+        "order": 5,
+        "credit_id": "52fe4292c3a36847f8029097",
+        "name": "Kyle Richards",
+        "cast_id": 19,
+        "profile_path": "/qzs2HvobQtr8UGgHeQ85JYTrIm4.jpg",
+        "character": "Lindsey Wallace"
+      },
+      {
+        "id": 15505,
+        "order": 6,
+        "credit_id": "52fe4292c3a36847f802909b",
+        "name": "Brian Andrews",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Tommy Doyle"
+      },
+      {
+        "id": 15506,
+        "order": 7,
+        "credit_id": "52fe4292c3a36847f802909f",
+        "name": "John Michael Graham",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Bob Simms"
+      },
+      {
+        "id": 15508,
+        "order": 8,
+        "credit_id": "52fe4292c3a36847f80290a3",
+        "name": "Nancy Stephens",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Marion Chambers"
+      },
+      {
+        "id": 13392,
+        "order": 9,
+        "credit_id": "52fe4292c3a36847f80290a7",
+        "name": "Arthur Malet",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Graveyard Keeper"
+      },
+      {
+        "id": 15510,
+        "order": 10,
+        "credit_id": "52fe4292c3a36847f80290ab",
+        "name": "Mickey Yablans",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Richie"
+      },
+      {
+        "id": 15511,
+        "order": 11,
+        "credit_id": "52fe4292c3a36847f80290af",
+        "name": "Brent Le Page",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Lonnie Elamb"
+      },
+      {
+        "id": 15513,
+        "order": 12,
+        "credit_id": "52fe4292c3a36847f80290b3",
+        "name": "Adam Hollander",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Keith"
+      },
+      {
+        "id": 15515,
+        "order": 13,
+        "credit_id": "52fe4292c3a36847f80290b7",
+        "name": "Robert Phalen",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Dr. Terence Wynn"
+      },
+      {
+        "id": 15516,
+        "order": 14,
+        "credit_id": "52fe4292c3a36847f80290bb",
+        "name": "Tony Moran",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Michael Myers"
+      },
+      {
+        "id": 15517,
+        "order": 15,
+        "credit_id": "52fe4292c3a36847f80290bf",
+        "name": "Will Sandin",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Michael Myers (age 6)"
+      },
+      {
+        "id": 15518,
+        "order": 16,
+        "credit_id": "52fe4292c3a36847f80290c3",
+        "name": "Sandy Johnson",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Judith Margaret Myers"
+      },
+      {
+        "id": 15519,
+        "order": 17,
+        "credit_id": "52fe4292c3a36847f80290c7",
+        "name": "David Kyle",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Judith's Boyfriend"
+      },
+      {
+        "id": 1205471,
+        "order": 18,
+        "credit_id": "52fe4292c3a36847f80290d7",
+        "name": "Peter Griffith",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Morgan Strode"
+      },
+      {
+        "id": 14692,
+        "order": 19,
+        "credit_id": "52fe4292c3a36847f80290db",
+        "name": "Nick Castle",
+        "cast_id": 35,
+        "profile_path": "/ecUHW93fTzJLCEZcpfvfjgNMi1o.jpg",
+        "character": "The Shape"
+      },
+      {
+        "id": 11772,
+        "order": 20,
+        "credit_id": "52fe4292c3a36847f80290df",
+        "name": "Barry Bernardi",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Dead Mechanic (uncredited)"
+      },
+      {
+        "id": 11770,
+        "order": 21,
+        "credit_id": "52fe4292c3a36847f80290e3",
+        "name": "John Carpenter",
+        "cast_id": 37,
+        "profile_path": "/5Xv3IyZaXJ2qw4ZgRmuIcdtU8xU.jpg",
+        "character": "Paul, Annie's Boyfriend (voice) (uncredited)"
+      },
+      {
+        "id": 152289,
+        "order": 22,
+        "credit_id": "52fe4292c3a36847f80290e7",
+        "name": "George O'Hanlon Jr.",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Mr. Peter Myers (uncredited)"
+      },
+      {
+        "id": 1205472,
+        "order": 23,
+        "credit_id": "52fe4292c3a36847f80290eb",
+        "name": "Darla Rae",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Student (uncredited)"
+      },
+      {
+        "id": 1205473,
+        "order": 24,
+        "credit_id": "52fe4292c3a36847f80290ef",
+        "name": "Gwen Van Dam",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Sanitarium Nurse (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11770,
+        "credit_id": "52fe4291c3a36847f8029037",
+        "department": "Directing",
+        "name": "John Carpenter",
+        "job": "Director",
+        "profile_path": "/5Xv3IyZaXJ2qw4ZgRmuIcdtU8xU.jpg"
+      },
+      {
+        "id": 2161,
+        "credit_id": "52fe4291c3a36847f802903d",
+        "department": "Writing",
+        "name": "Debra Hill",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2161,
+        "credit_id": "52fe4291c3a36847f8029043",
+        "department": "Production",
+        "name": "Debra Hill",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1060,
+        "credit_id": "52fe4291c3a36847f8029049",
+        "department": "Camera",
+        "name": "Dean Cundey",
+        "job": "Director of Photography",
+        "profile_path": "/xunb0FZLZLhca2F5OJcKzV1mjR0.jpg"
+      },
+      {
+        "id": 11776,
+        "credit_id": "52fe4291c3a36847f802904f",
+        "department": "Editing",
+        "name": "Charles Bornstein",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11777,
+        "credit_id": "52fe4291c3a36847f8029055",
+        "department": "Editing",
+        "name": "Tommy Lee Wallace",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11777,
+        "credit_id": "52fe4291c3a36847f802905b",
+        "department": "Art",
+        "name": "Tommy Lee Wallace",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 11779,
+        "credit_id": "52fe4292c3a36847f8029061",
+        "department": "Art",
+        "name": "Craig Stearns",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 15487,
+        "credit_id": "52fe4292c3a36847f8029067",
+        "department": "Costume & Make-Up",
+        "name": "Erica Ulland",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 15489,
+        "credit_id": "52fe4292c3a36847f802906d",
+        "department": "Production",
+        "name": "Don Behrns",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 15492,
+        "credit_id": "52fe4292c3a36847f8029073",
+        "department": "Sound",
+        "name": "William L. Stevenson",
+        "job": "Supervising Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 15494,
+        "credit_id": "52fe4292c3a36847f8029079",
+        "department": "Crew",
+        "name": "Conrad Rothmann",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 15496,
+        "credit_id": "52fe4292c3a36847f802907f",
+        "department": "Crew",
+        "name": "James Winburn",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 11770,
+        "credit_id": "52fe4292c3a36847f80290cd",
+        "department": "Sound",
+        "name": "John Carpenter",
+        "job": "Original Music Composer",
+        "profile_path": "/5Xv3IyZaXJ2qw4ZgRmuIcdtU8xU.jpg"
+      },
+      {
+        "id": 11770,
+        "credit_id": "52fe4292c3a36847f80290d3",
+        "department": "Writing",
+        "name": "John Carpenter",
+        "job": "Screenplay",
+        "profile_path": "/5Xv3IyZaXJ2qw4ZgRmuIcdtU8xU.jpg"
+      }
+    ]
+  },
+  "runtime": 91,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.halloweenmovies.com/filmarchive/h1plot.htm",
+  "id": 948,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Halloween",
+  "overview": "A psychotic murderer institutionalized since childhood for the murder of his sister, escapes and stalks a bookish teenage girl and her friends while his doctor chases him through the streets.",
+  "production_companies": [
+    {
+      "id": 14323,
+      "name": "Compass International Pictures"
+    },
+    {
+      "id": 22814,
+      "name": "Falcon International Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 91361,
+    "backdrop_path": "/mmxf1sOe2T1sma0tH0TgTdcit1p.jpg",
+    "name": "Halloween Collection",
+    "poster_path": "/7BAoBjLCdS5dQQDqRDBbllNpyqR.jpg"
+  },
+  "imdb_id": "tt0077651",
+  "release_date": "1978-10-25",
+  "original_title": "Halloween",
+  "vote_count": 188,
+  "poster_path": "/vjoOFOTBJcJvA1weJejlZ92LZD4.jpg",
+  "tagline": "The Night HE Came Home!",
+  "revenue": 47000000,
+  "popularity": "0.924302797452224"
+}

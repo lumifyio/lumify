@@ -1,0 +1,236 @@
+{
+  "budget": 2280000,
+  "vote_average": 6.6,
+  "backdrop_path": "/oqLvX8Liu5Lbc7JJywQJziU0FHh.jpg",
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 233471,
+        "order": 0,
+        "credit_id": "52fe4272c3a36847f801f32d",
+        "name": "Leopold Stokowski",
+        "cast_id": 13,
+        "profile_path": "/8flosda3lVaAyJF9rvhZDA0xTbf.jpg",
+        "character": "Himself - Conductor of The Philadelphia Orchestra"
+      },
+      {
+        "id": 565402,
+        "order": 1,
+        "credit_id": "52fe4272c3a36847f801f331",
+        "name": "Deems Taylor",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Narrator - Narrative Introductions"
+      },
+      {
+        "id": 2106,
+        "order": 2,
+        "credit_id": "52fe4272c3a36847f801f33b",
+        "name": "Walt Disney",
+        "cast_id": 16,
+        "profile_path": "/ku2lp8t3sazCDSWZdDrka3K4KLm.jpg",
+        "character": "Mickey Mouse (segment 'The Sorcerer's Apprentice') (voice)"
+      },
+      {
+        "id": 137461,
+        "order": 3,
+        "credit_id": "52fe4272c3a36847f801f33f",
+        "name": "James MacDonald",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Percussionist"
+      },
+      {
+        "id": 1098082,
+        "order": 4,
+        "credit_id": "52fe4272c3a36847f801f343",
+        "name": "Julietta Novis",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Soloist (segment 'Ave Maria') (singing voice)"
+      },
+      {
+        "id": 2107,
+        "order": 5,
+        "credit_id": "52fe4272c3a36847f801f347",
+        "name": "Paul J. Smith",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Violinist"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2106,
+        "credit_id": "52fe4272c3a36847f801f2e7",
+        "department": "Production",
+        "name": "Walt Disney",
+        "job": "Producer",
+        "profile_path": "/ku2lp8t3sazCDSWZdDrka3K4KLm.jpg"
+      },
+      {
+        "id": 11426,
+        "credit_id": "52fe4272c3a36847f801f2ed",
+        "department": "Production",
+        "name": "Ben Sharpsteen",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5691,
+        "credit_id": "52fe4272c3a36847f801f2f3",
+        "department": "Directing",
+        "name": "Samuel Armstrong",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 5690,
+        "credit_id": "52fe4272c3a36847f801f2f9",
+        "department": "Directing",
+        "name": "James Algar",
+        "job": "Director",
+        "profile_path": "/3dSa9LsutXEjnsEuZfuIWznQkkC.jpg"
+      },
+      {
+        "id": 11427,
+        "credit_id": "52fe4272c3a36847f801f2ff",
+        "department": "Directing",
+        "name": "Bill Roberts",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11428,
+        "credit_id": "52fe4272c3a36847f801f305",
+        "department": "Directing",
+        "name": "Paul Satterfield",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11429,
+        "credit_id": "52fe4272c3a36847f801f30b",
+        "department": "Directing",
+        "name": "Hamilton Luske",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11430,
+        "credit_id": "52fe4272c3a36847f801f311",
+        "department": "Directing",
+        "name": "Jim Handley",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11431,
+        "credit_id": "52fe4272c3a36847f801f317",
+        "department": "Directing",
+        "name": "Ford Beebe",
+        "job": "Director",
+        "profile_path": "/hYyHEnluu3sg9mCm5ZSl3oR8Jor.jpg"
+      },
+      {
+        "id": 11432,
+        "credit_id": "52fe4272c3a36847f801f31d",
+        "department": "Directing",
+        "name": "T. Hee",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11433,
+        "credit_id": "52fe4272c3a36847f801f323",
+        "department": "Directing",
+        "name": "Norman Ferguson",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11434,
+        "credit_id": "52fe4272c3a36847f801f329",
+        "department": "Directing",
+        "name": "Wilfred Jackson",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11426,
+        "credit_id": "52fe4272c3a36847f801f337",
+        "department": "Directing",
+        "name": "Ben Sharpsteen",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 69133,
+        "credit_id": "52fe4272c3a36847f801f34d",
+        "department": "Writing",
+        "name": "Joe Grant",
+        "job": "Writer",
+        "profile_path": null
+      },
+      {
+        "id": 69134,
+        "credit_id": "52fe4272c3a36847f801f353",
+        "department": "Writing",
+        "name": "Dick Huemer",
+        "job": "Writer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 124,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 756,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Fantasia",
+  "overview": "Fantasia is the adventurous 1940 experiment from Disney. The film sets Disney animated characters to classical music as Mickey Mouse uses his magic wand to set broomsticks dancing in one of the more famous elaborate scenes. The film was groundbreaking in its usage of animation and music and is still considered a masterpiece decades later.",
+  "production_companies": [{
+    "id": 5888,
+    "name": "Walt Disney"
+  }],
+  "belongs_to_collection": {
+    "id": 55427,
+    "backdrop_path": "/7YanwpylLB3yzhwzf11W1tYpcQF.jpg",
+    "name": "Fantasia Collection",
+    "poster_path": "/ldzKpOvGVl8NWQPdAYJEZpAvPIo.jpg"
+  },
+  "imdb_id": "tt0032455",
+  "release_date": "1940-11-13",
+  "original_title": "Fantasia",
+  "vote_count": 158,
+  "poster_path": "/9YXyiRszikyoakc4oNaHbjjybmT.jpg",
+  "tagline": "Hear the pictures! See the music!",
+  "revenue": 76000000,
+  "popularity": "1.34099772774282"
+}

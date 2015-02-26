@@ -1,0 +1,306 @@
+{
+  "budget": 670000,
+  "vote_average": 7.4,
+  "backdrop_path": "/ioWJlu7UK979vHeOwItAJsA1OSf.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3242,
+        "order": 0,
+        "credit_id": "52fe422cc3a36847f8009a2f",
+        "name": "Fay Wray",
+        "cast_id": 5,
+        "profile_path": "/gJw6frPudzn0I0XaRKB8nCA0ahP.jpg",
+        "character": "Ann Darrow"
+      },
+      {
+        "id": 3243,
+        "order": 1,
+        "credit_id": "52fe422cc3a36847f8009a33",
+        "name": "Robert Armstrong",
+        "cast_id": 6,
+        "profile_path": "/aCVVQrACinfyBlkYYJefXhaxGtH.jpg",
+        "character": "Carl Denham"
+      },
+      {
+        "id": 3244,
+        "order": 2,
+        "credit_id": "52fe422cc3a36847f8009a37",
+        "name": "Bruce Cabot",
+        "cast_id": 7,
+        "profile_path": "/tPGeXs9vzGrP6myIxw4quP3PJl3.jpg",
+        "character": "John 'Jack' Driscoll"
+      },
+      {
+        "id": 3247,
+        "order": 3,
+        "credit_id": "52fe422cc3a36847f8009a3b",
+        "name": "Noble Johnson",
+        "cast_id": 8,
+        "profile_path": "/bpdMVeFybhoBdWLiQogAFUbuDJK.jpg",
+        "character": "Skull Island nation leader"
+      },
+      {
+        "id": 3261,
+        "order": 4,
+        "credit_id": "52fe422cc3a36847f8009a93",
+        "name": "Steve Clemente",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Witch King"
+      },
+      {
+        "id": 3262,
+        "order": 5,
+        "credit_id": "52fe422cc3a36847f8009a97",
+        "name": "James Flavin",
+        "cast_id": 25,
+        "profile_path": "/m1fsxikppCMDeqq5wyssdpCG79W.jpg",
+        "character": "Briggs"
+      },
+      {
+        "id": 3246,
+        "order": 6,
+        "credit_id": "52fe422cc3a36847f8009aad",
+        "name": "Sam Hardy",
+        "cast_id": 30,
+        "profile_path": "/fVA3zC8uJndvvK7K03uSciJI934.jpg",
+        "character": "Charles Weston"
+      },
+      {
+        "id": 1128885,
+        "order": 7,
+        "credit_id": "52fe422cc3a36847f8009ab1",
+        "name": "Victor Wong",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Charlie - Ship's Cook"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3238,
+        "credit_id": "52fe422cc3a36847f8009a19",
+        "department": "Directing",
+        "name": "Merian C. Cooper",
+        "job": "Director",
+        "profile_path": "/cTAvZsPWnHUn5CIQC0dNxBsLDvf.jpg"
+      },
+      {
+        "id": 3239,
+        "credit_id": "52fe422cc3a36847f8009a1f",
+        "department": "Directing",
+        "name": "Ernest B. Schoedsack",
+        "job": "Director",
+        "profile_path": "/7gY2HcWj4LmalTxepMI6PYwOnN3.jpg"
+      },
+      {
+        "id": 3240,
+        "credit_id": "52fe422cc3a36847f8009a25",
+        "department": "Writing",
+        "name": "James Ashmore Creelman",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3241,
+        "credit_id": "52fe422cc3a36847f8009a2b",
+        "department": "Writing",
+        "name": "Ruth Rose",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3248,
+        "credit_id": "52fe422cc3a36847f8009a41",
+        "department": "Production",
+        "name": "David O. Selznick",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3238,
+        "credit_id": "52fe422cc3a36847f8009a47",
+        "department": "Production",
+        "name": "Merian C. Cooper",
+        "job": "Producer",
+        "profile_path": "/cTAvZsPWnHUn5CIQC0dNxBsLDvf.jpg"
+      },
+      {
+        "id": 3239,
+        "credit_id": "52fe422cc3a36847f8009a4d",
+        "department": "Production",
+        "name": "Ernest B. Schoedsack",
+        "job": "Producer",
+        "profile_path": "/7gY2HcWj4LmalTxepMI6PYwOnN3.jpg"
+      },
+      {
+        "id": 3249,
+        "credit_id": "52fe422cc3a36847f8009a53",
+        "department": "Sound",
+        "name": "Max Steiner",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3250,
+        "credit_id": "52fe422cc3a36847f8009a59",
+        "department": "Camera",
+        "name": "Edward Linden",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3251,
+        "credit_id": "52fe422cc3a36847f8009a5f",
+        "department": "Camera",
+        "name": "J.O. Taylor",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3252,
+        "credit_id": "52fe422cc3a36847f8009a65",
+        "department": "Camera",
+        "name": "Vernon L. Walker",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3253,
+        "credit_id": "52fe422cc3a36847f8009a6b",
+        "department": "Camera",
+        "name": "Kenneth Peach",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3254,
+        "credit_id": "52fe422cc3a36847f8009a71",
+        "department": "Editing",
+        "name": "Ted Cheesman",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3255,
+        "credit_id": "52fe422cc3a36847f8009a77",
+        "department": "Art",
+        "name": "Carroll Clark",
+        "job": "Settings",
+        "profile_path": null
+      },
+      {
+        "id": 3257,
+        "credit_id": "52fe422cc3a36847f8009a7d",
+        "department": "Sound",
+        "name": "Eddie Harman",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3258,
+        "credit_id": "52fe422cc3a36847f8009a83",
+        "department": "Sound",
+        "name": "Murray Spivack",
+        "job": "Sound Effects Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3259,
+        "credit_id": "52fe422cc3a36847f8009a89",
+        "department": "Lighting",
+        "name": "George Marquenie",
+        "job": "Best Boy Electric",
+        "profile_path": null
+      },
+      {
+        "id": 3239,
+        "credit_id": "52fe422cc3a36847f8009a8f",
+        "department": "Camera",
+        "name": "Ernest B. Schoedsack",
+        "job": "Camera Operator",
+        "profile_path": "/7gY2HcWj4LmalTxepMI6PYwOnN3.jpg"
+      },
+      {
+        "id": 3484,
+        "credit_id": "52fe422cc3a36847f8009a9d",
+        "department": "Visual Effects",
+        "name": "Willis H. O'Brien",
+        "job": "Chief Technician / Stop-Motion Expert",
+        "profile_path": null
+      },
+      {
+        "id": 3487,
+        "credit_id": "52fe422cc3a36847f8009aa3",
+        "department": "Production",
+        "name": "Walter Daniels",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3488,
+        "credit_id": "52fe422cc3a36847f8009aa9",
+        "department": "Art",
+        "name": "Alfred Herman",
+        "job": "Settings",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 244,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "King Kong",
+  "overview": "An adventure film about a film crew in search of a monster on a remote island. The crew finds King Kong and decides to take him back to New York as a money making spectacle. The film is a masterpiece of Stop-Motion in filmmaking history and inspired a line of King Kong films.",
+  "production_companies": [{
+    "id": 6,
+    "name": "RKO Radio Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 135495,
+    "backdrop_path": null,
+    "name": "King Kong Collection (1933 series)",
+    "poster_path": null
+  },
+  "imdb_id": "tt0024216",
+  "release_date": "1933-03-02",
+  "original_title": "King Kong",
+  "vote_count": 26,
+  "poster_path": "/b1FzD0WxnfhkIbjxwFOKJHUuEsH.jpg",
+  "tagline": "A Monster of Creation's Dawn Breaks Loose in Our World Today!",
+  "revenue": 10000000,
+  "popularity": "0.505266887466149"
+}

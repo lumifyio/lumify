@@ -1,0 +1,337 @@
+{
+  "budget": 6500000,
+  "vote_average": 8,
+  "backdrop_path": "/3bMDwodcQPJj1FzY3EdrnWSj1iW.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 15531,
+        "order": 0,
+        "credit_id": "52fe428ec3a36847f8027d9f",
+        "name": "Ossie Davis",
+        "cast_id": 18,
+        "profile_path": "/3NU3mq5ZiiX0D41DTB5fNsjFlDB.jpg",
+        "character": "Da Mayor"
+      },
+      {
+        "id": 1004,
+        "order": 1,
+        "credit_id": "52fe428ec3a36847f8027da3",
+        "name": "Danny Aiello",
+        "cast_id": 19,
+        "profile_path": "/phVXIwrAemjCrfvTsQFyIiiPBwH.jpg",
+        "character": "Sal"
+      },
+      {
+        "id": 4808,
+        "order": 2,
+        "credit_id": "52fe428ec3a36847f8027da7",
+        "name": "Giancarlo Esposito",
+        "cast_id": 20,
+        "profile_path": "/d39hOi5lTfqekjFK4JKKPeuGNdW.jpg",
+        "character": "Buggin Out"
+      },
+      {
+        "id": 6396,
+        "order": 3,
+        "credit_id": "52fe428ec3a36847f8027dab",
+        "name": "Richard Edson",
+        "cast_id": 21,
+        "profile_path": "/7YegwxrBppretnwGEEMxEI453Ef.jpg",
+        "character": "Vito"
+      },
+      {
+        "id": 5281,
+        "order": 4,
+        "credit_id": "52fe428ec3a36847f8027daf",
+        "name": "Spike Lee",
+        "cast_id": 22,
+        "profile_path": "/BRq4UHdeI6QUd17vcD9Hnxf0ch.jpg",
+        "character": "Mookie"
+      },
+      {
+        "id": 15532,
+        "order": 5,
+        "credit_id": "52fe428ec3a36847f8027db3",
+        "name": "Ruby Dee",
+        "cast_id": 23,
+        "profile_path": "/lHrRlmavoICJ6myOYFsTO7ZjyLo.jpg",
+        "character": "Mother Sister"
+      },
+      {
+        "id": 5502,
+        "order": 6,
+        "credit_id": "52fe428ec3a36847f8027db7",
+        "name": "Bill Nunn",
+        "cast_id": 24,
+        "profile_path": "/cT4sK7SCranK3yeelYTHMlTaq3a.jpg",
+        "character": "Radio Raheem"
+      },
+      {
+        "id": 15534,
+        "order": 7,
+        "credit_id": "52fe428ec3a36847f8027dbb",
+        "name": "Paul Benjamin",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "ML"
+      },
+      {
+        "id": 4810,
+        "order": 8,
+        "credit_id": "52fe428ec3a36847f8027dbf",
+        "name": "Rosie Perez",
+        "cast_id": 26,
+        "profile_path": "/zz7D8Wnxw91bddp481fYxYKMeuO.jpg",
+        "character": "Tina"
+      },
+      {
+        "id": 15535,
+        "order": 9,
+        "credit_id": "52fe428ec3a36847f8027dc3",
+        "name": "Robin Harris",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Sweet Dick Willie"
+      },
+      {
+        "id": 13936,
+        "order": 10,
+        "credit_id": "52fe428ec3a36847f8027dc7",
+        "name": "Frankie Faison",
+        "cast_id": 28,
+        "profile_path": "/hQ3eh75xtCdxEZCeGaw1q67w593.jpg",
+        "character": "Coconut Sid"
+      },
+      {
+        "id": 15536,
+        "order": 11,
+        "credit_id": "52fe428ec3a36847f8027dcb",
+        "name": "Steve White",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Ahmad"
+      },
+      {
+        "id": 15537,
+        "order": 12,
+        "credit_id": "52fe428ec3a36847f8027dcf",
+        "name": "Leonard L. Thomas",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Punchy"
+      },
+      {
+        "id": 2231,
+        "order": 13,
+        "credit_id": "52fe428ec3a36847f8027dd3",
+        "name": "Samuel L. Jackson",
+        "cast_id": 31,
+        "profile_path": "/dlW6prW9HwYDsIRXNoFYtyHpSny.jpg",
+        "character": "Mister Señor Love Daddy"
+      },
+      {
+        "id": 1241,
+        "order": 14,
+        "credit_id": "52fe428ec3a36847f8027dd7",
+        "name": "John Turturro",
+        "cast_id": 32,
+        "profile_path": "/yyvj3z2IC9AG1sv6kuk5d7oQFJs.jpg",
+        "character": "Pino"
+      },
+      {
+        "id": 78029,
+        "order": 15,
+        "credit_id": "52fe428ec3a36847f8027ddb",
+        "name": "Martin Lawrence",
+        "cast_id": 33,
+        "profile_path": "/oTGIx6JLKgT9Faj75352mequGXR.jpg",
+        "character": "Cee"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5281,
+        "credit_id": "52fe428ec3a36847f8027d3b",
+        "department": "Directing",
+        "name": "Spike Lee",
+        "job": "Director",
+        "profile_path": "/BRq4UHdeI6QUd17vcD9Hnxf0ch.jpg"
+      },
+      {
+        "id": 5281,
+        "credit_id": "52fe428ec3a36847f8027d41",
+        "department": "Writing",
+        "name": "Spike Lee",
+        "job": "Screenplay",
+        "profile_path": "/BRq4UHdeI6QUd17vcD9Hnxf0ch.jpg"
+      },
+      {
+        "id": 5281,
+        "credit_id": "52fe428ec3a36847f8027d47",
+        "department": "Production",
+        "name": "Spike Lee",
+        "job": "Producer",
+        "profile_path": "/BRq4UHdeI6QUd17vcD9Hnxf0ch.jpg"
+      },
+      {
+        "id": 15520,
+        "credit_id": "52fe428ec3a36847f8027d4d",
+        "department": "Sound",
+        "name": "Bill Lee",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 15521,
+        "credit_id": "52fe428ec3a36847f8027d53",
+        "department": "Camera",
+        "name": "Ernest R. Dickerson",
+        "job": "Director of Photography",
+        "profile_path": "/2WSGP4pQ2ICukCnbvFNeHRcMEIM.jpg"
+      },
+      {
+        "id": 5289,
+        "credit_id": "52fe428ec3a36847f8027d59",
+        "department": "Editing",
+        "name": "Barry Alexander Brown",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 15522,
+        "credit_id": "52fe428ec3a36847f8027d5f",
+        "department": "Production",
+        "name": "Robi Reed",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 548,
+        "credit_id": "52fe428ec3a36847f8027d65",
+        "department": "Art",
+        "name": "Wynn Thomas",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 15523,
+        "credit_id": "52fe428ec3a36847f8027d6b",
+        "department": "Art",
+        "name": "Steve Rosse",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 15524,
+        "credit_id": "52fe428ec3a36847f8027d71",
+        "department": "Costume & Make-Up",
+        "name": "Ruth E. Carter",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 15525,
+        "credit_id": "52fe428ec3a36847f8027d77",
+        "department": "Costume & Make-Up",
+        "name": "Matiki Anoff",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 15526,
+        "credit_id": "52fe428ec3a36847f8027d7d",
+        "department": "Costume & Make-Up",
+        "name": "Larry M. Cherry",
+        "job": "Hairstylist",
+        "profile_path": null
+      },
+      {
+        "id": 9619,
+        "credit_id": "52fe428ec3a36847f8027d83",
+        "department": "Sound",
+        "name": "Skip Lievsay",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 15527,
+        "credit_id": "52fe428ec3a36847f8027d89",
+        "department": "Sound",
+        "name": "Tony Martinez",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 15528,
+        "credit_id": "52fe428ec3a36847f8027d8f",
+        "department": "Crew",
+        "name": "Steven Kirshoff",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 15529,
+        "credit_id": "52fe428ec3a36847f8027d95",
+        "department": "Crew",
+        "name": "Eddie Smith",
+        "job": "Stunt Coordinator",
+        "profile_path": null
+      },
+      {
+        "id": 15530,
+        "credit_id": "52fe428ec3a36847f8027d9b",
+        "department": "Crew",
+        "name": "Andy Duppin",
+        "job": "Stunts",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 120,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 925,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Do the Right Thing",
+  "overview": "On the hottest day of the year on a street in the Bedford-Stuyvesant section of Brooklyn, everyone's hate and bigotry smolders and builds until it explodes into violence.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0097216",
+  "release_date": "1989-06-30",
+  "original_title": "Do the Right Thing",
+  "vote_count": 25,
+  "poster_path": "/sCZOuwjGwEEC30Be8VHPIUAnEvT.jpg",
+  "tagline": "It's the hottest day of the summer. You can do nothing, you can do something, or you can...",
+  "revenue": 37295445,
+  "popularity": "0.953791381570606"
+}

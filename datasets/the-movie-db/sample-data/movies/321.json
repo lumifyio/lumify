@@ -1,0 +1,290 @@
+{
+  "budget": 4361898,
+  "vote_average": 6.2,
+  "backdrop_path": "/eoly1tp6IcUXyjjdBNuinnzFlwd.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 7002,
+        "order": 0,
+        "credit_id": "52fe4237c3a36847f800cfc9",
+        "name": "Luke Kirby",
+        "cast_id": 13,
+        "profile_path": "/5xsQq3jKGgqXQtyWfSHZ6Box94L.jpg",
+        "character": "Angelo Barberini"
+      },
+      {
+        "id": 7003,
+        "order": 1,
+        "credit_id": "52fe4237c3a36847f800cfcd",
+        "name": "Ginette Reno",
+        "cast_id": 14,
+        "profile_path": "/fsBEH81e3wve2rKs3BijtOyKdNR.jpg",
+        "character": "Maria Barberini"
+      },
+      {
+        "id": 7004,
+        "order": 2,
+        "credit_id": "52fe4237c3a36847f800cfd1",
+        "name": "Paul Sorvino",
+        "cast_id": 15,
+        "profile_path": "/d0wnkVR1VuNuF1yd4gwoxxFkP4w.jpg",
+        "character": "Gino Barberini"
+      },
+      {
+        "id": 7005,
+        "order": 3,
+        "credit_id": "52fe4237c3a36847f800cfd5",
+        "name": "Mary Walsh",
+        "cast_id": 16,
+        "profile_path": "/uewQS3hWbxP0vtJhFKGt1lBBboH.jpg",
+        "character": "Lina Paventi"
+      },
+      {
+        "id": 7006,
+        "order": 4,
+        "credit_id": "52fe4237c3a36847f800cfd9",
+        "name": "Peter Miller",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Nino Paventi"
+      },
+      {
+        "id": 7007,
+        "order": 5,
+        "credit_id": "52fe4237c3a36847f800cfdd",
+        "name": "Claudia Ferri",
+        "cast_id": 18,
+        "profile_path": "/rkwWZ3LuSPN7wmsztQA2zD7Y2Tv.jpg",
+        "character": "Anna Barberini"
+      },
+      {
+        "id": 7008,
+        "order": 6,
+        "credit_id": "52fe4237c3a36847f800cfe1",
+        "name": "Sophie Lorain",
+        "cast_id": 19,
+        "profile_path": "/bQLPln3ct0LWybfOjtuCTne63lJ.jpg",
+        "character": "Pina Lunetti"
+      },
+      {
+        "id": 7009,
+        "order": 7,
+        "credit_id": "52fe4237c3a36847f800cfe5",
+        "name": "Tim Post",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Peter"
+      },
+      {
+        "id": 7010,
+        "order": 8,
+        "credit_id": "52fe4237c3a36847f800cfe9",
+        "name": "Tara Nicodemo",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Yolanda/Woman in Airplane/Jolene"
+      },
+      {
+        "id": 7011,
+        "order": 9,
+        "credit_id": "52fe4237c3a36847f800cfed",
+        "name": "Pierrette Robitaille",
+        "cast_id": 22,
+        "profile_path": "/opox4anxfsh2VutqTaSdcRDnnRg.jpg",
+        "character": "Rosetta"
+      },
+      {
+        "id": 7012,
+        "order": 10,
+        "credit_id": "52fe4237c3a36847f800cff1",
+        "name": "Dino Tavarone",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Giorgio"
+      },
+      {
+        "id": 7013,
+        "order": 11,
+        "credit_id": "52fe4237c3a36847f800cff5",
+        "name": "Mark Camacho",
+        "cast_id": 24,
+        "profile_path": "/ymV1DWAij7Clov6iWIo7F2HRaNh.jpg",
+        "character": "Johnny Christofaro"
+      },
+      {
+        "id": 7014,
+        "order": 12,
+        "credit_id": "52fe4237c3a36847f800cff9",
+        "name": "Michel Perron",
+        "cast_id": 25,
+        "profile_path": "/qHx0U6EattCgT6m46f9RXwRlTya.jpg",
+        "character": "Father Carmignani"
+      },
+      {
+        "id": 7015,
+        "order": 13,
+        "credit_id": "52fe4237c3a36847f800cffd",
+        "name": "Lou Vani",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Marco"
+      },
+      {
+        "id": 7016,
+        "order": 14,
+        "credit_id": "52fe4237c3a36847f800d001",
+        "name": "Diane Lavallée",
+        "cast_id": 27,
+        "profile_path": "/x30zRxldXHnUZno7p4GaO6BvS6i.jpg",
+        "character": "Mélanie"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6980,
+        "credit_id": "52fe4237c3a36847f800cf83",
+        "department": "Directing",
+        "name": "Émile Gaudreault",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 6983,
+        "credit_id": "52fe4237c3a36847f800cf89",
+        "department": "Writing",
+        "name": "Steve Galluccio",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6980,
+        "credit_id": "52fe4237c3a36847f800cf8f",
+        "department": "Writing",
+        "name": "Émile Gaudreault",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6986,
+        "credit_id": "52fe4237c3a36847f800cf95",
+        "department": "Production",
+        "name": "Daniel Louis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6987,
+        "credit_id": "52fe4237c3a36847f800cf9b",
+        "department": "Production",
+        "name": "Denise Robert",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6989,
+        "credit_id": "52fe4237c3a36847f800cfa1",
+        "department": "Sound",
+        "name": "Adam Broughton",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6991,
+        "credit_id": "52fe4237c3a36847f800cfa7",
+        "department": "Sound",
+        "name": "FM Le Sieur",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6992,
+        "credit_id": "52fe4237c3a36847f800cfad",
+        "department": "Camera",
+        "name": "Serge Ladouceur",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6995,
+        "credit_id": "52fe4237c3a36847f800cfb3",
+        "department": "Editing",
+        "name": "Richard Comeau",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6997,
+        "credit_id": "52fe4237c3a36847f800cfb9",
+        "department": "Production",
+        "name": "Lucie Robitaille",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7000,
+        "credit_id": "52fe4237c3a36847f800cfbf",
+        "department": "Crew",
+        "name": "Guillaume Murray",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 7001,
+        "credit_id": "52fe4237c3a36847f800cfc5",
+        "department": "Crew",
+        "name": "Martin Williams",
+        "job": "Stunts",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 92,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://mamboitaliano.ca/",
+  "id": 321,
+  "production_countries": [{
+    "name": "Canada",
+    "iso_3166_1": "CA"
+  }],
+  "title": "Mambo Italiano",
+  "overview": "A sweet comic film about an Italian man who comes out of the closet and the affect it has on his life and his crazy family. A family movie about the stereotypes of homosexuals and Italians \u2013 called by critics \"the gay\" My Big Fat Greek Wedding.",
+  "production_companies": [{
+    "id": 4096,
+    "name": "icon"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0330602",
+  "release_date": "2003-06-06",
+  "original_title": "Mambo Italiano",
+  "vote_count": 5,
+  "poster_path": "/szNHpPmrQkynnpZJtFjkemfEjDk.jpg",
+  "tagline": "Things change. Family doesn't.",
+  "revenue": 3031801,
+  "popularity": "0.383676759007349"
+}

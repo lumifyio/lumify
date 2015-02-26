@@ -1,0 +1,65 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 813,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0881252",
+  "combined_credits": {
+    "cast": [{
+      "id": 45537,
+      "media_type": "movie",
+      "title": "La vie est à nous",
+      "credit_id": "52fe46c7c3a36847f8111b69",
+      "release_date": "1937-12-04",
+      "original_title": "La vie est à nous",
+      "adult": false,
+      "poster_path": "/ksyf4EVK2qCZrtfdKH47DQ6H9d.jpg",
+      "character": "Le secrétaire de Marcel Cachin"
+    }],
+    "crew": [
+      {
+        "id": 91,
+        "media_type": "movie",
+        "title": "Land Without Bread",
+        "credit_id": "52fe4216c3a36847f8002f97",
+        "department": "Writing",
+        "release_date": "1933-12-01",
+        "original_title": "Las Hurdes",
+        "job": "Author",
+        "adult": false,
+        "poster_path": "/a54opgenzytizPPCka7GZlhkUiW.jpg"
+      },
+      {
+        "id": 45537,
+        "media_type": "movie",
+        "title": "La vie est à nous",
+        "credit_id": "52fe46c7c3a36847f8111b49",
+        "department": "Directing",
+        "release_date": "1937-12-04",
+        "original_title": "La vie est à nous",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/ksyf4EVK2qCZrtfdKH47DQ6H9d.jpg"
+      },
+      {
+        "id": 43328,
+        "media_type": "movie",
+        "title": "Wuthering Heights",
+        "credit_id": "52fe463ec3a36847f80f430f",
+        "department": "Writing",
+        "release_date": "1954-01-01",
+        "original_title": "Abismos de pasión",
+        "job": "Story",
+        "adult": false,
+        "poster_path": "/nQTMeE2Kn51cPWYElRQF8WVWC0D.jpg"
+      }
+    ]
+  },
+  "name": "Pierre Unik",
+  "place_of_birth": null,
+  "popularity": "1.00000515202525"
+}

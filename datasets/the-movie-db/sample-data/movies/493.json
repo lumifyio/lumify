@@ -1,0 +1,214 @@
+{
+  "budget": 1978000,
+  "vote_average": 5,
+  "backdrop_path": "/eovFRO9enCGIWgev9X3A3qS532c.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6487,
+        "order": 0,
+        "credit_id": "52fe4249c3a36847f80129eb",
+        "name": "Richard Roundtree",
+        "cast_id": 3,
+        "profile_path": "/3OyAx3Vrv1mQLOvl7YHaIaFwDuW.jpg",
+        "character": "John Shaft"
+      },
+      {
+        "id": 6561,
+        "order": 1,
+        "credit_id": "52fe4249c3a36847f80129ef",
+        "name": "Moses Gunn",
+        "cast_id": 4,
+        "profile_path": "/lpFU9TYL9X2uz2RE9zKWL59CkNF.jpg",
+        "character": "Bumpy Jonas"
+      },
+      {
+        "id": 6768,
+        "order": 2,
+        "credit_id": "52fe4249c3a36847f80129f3",
+        "name": "Drew Bundini Brown",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Willy"
+      },
+      {
+        "id": 6769,
+        "order": 3,
+        "credit_id": "52fe4249c3a36847f80129f7",
+        "name": "Joseph Mascolo",
+        "cast_id": 6,
+        "profile_path": "/14hthTYc8VraHYhIDCdZH4XnD1r.jpg",
+        "character": "Gus Mascola"
+      },
+      {
+        "id": 6770,
+        "order": 4,
+        "credit_id": "52fe4249c3a36847f80129fb",
+        "name": "Kathy Imrie",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Rita"
+      },
+      {
+        "id": 6771,
+        "order": 5,
+        "credit_id": "52fe4249c3a36847f80129ff",
+        "name": "Wally Taylor",
+        "cast_id": 8,
+        "profile_path": "/nqUN3VZYRiuLRFflvdl50z7Qbsc.jpg",
+        "character": "Johnny Kelly"
+      },
+      {
+        "id": 6772,
+        "order": 6,
+        "credit_id": "52fe4249c3a36847f8012a03",
+        "name": "Julius Harris",
+        "cast_id": 9,
+        "profile_path": "/vhyuxFmam4SQSjTOLPStOVYMgbb.jpg",
+        "character": "Capt. Bollin"
+      },
+      {
+        "id": 6773,
+        "order": 7,
+        "credit_id": "52fe4249c3a36847f8012a07",
+        "name": "Rosalind Miles",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Arna Asby"
+      },
+      {
+        "id": 6774,
+        "order": 8,
+        "credit_id": "52fe4249c3a36847f8012a0b",
+        "name": "Joe Santos",
+        "cast_id": 11,
+        "profile_path": "/7D7ddztwCyW1D0DIxNR0JDAWu0d.jpg",
+        "character": "Pascal"
+      },
+      {
+        "id": 6775,
+        "order": 9,
+        "credit_id": "52fe4249c3a36847f8012a0f",
+        "name": "Angelo Nazzo",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Al"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6558,
+        "credit_id": "52fe4249c3a36847f80129e1",
+        "department": "Directing",
+        "name": "Gordon Parks",
+        "job": "Director",
+        "profile_path": "/odKljjRjP7It2oTTVA61RFkERnf.jpg"
+      },
+      {
+        "id": 6483,
+        "credit_id": "52fe4249c3a36847f80129e7",
+        "department": "Writing",
+        "name": "Ernest Tidyman",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 6776,
+        "credit_id": "52fe4249c3a36847f8012a15",
+        "department": "Production",
+        "name": "Roger Lewis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6483,
+        "credit_id": "52fe4249c3a36847f8012a1b",
+        "department": "Production",
+        "name": "Ernest Tidyman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6558,
+        "credit_id": "52fe4249c3a36847f8012a21",
+        "department": "Sound",
+        "name": "Gordon Parks",
+        "job": "Original Music Composer",
+        "profile_path": "/odKljjRjP7It2oTTVA61RFkERnf.jpg"
+      },
+      {
+        "id": 6570,
+        "credit_id": "52fe4249c3a36847f8012a27",
+        "department": "Camera",
+        "name": "Urs Furrer",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6572,
+        "credit_id": "52fe4249c3a36847f8012a2d",
+        "department": "Production",
+        "name": "Judith Lamb",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 104,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 493,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Shaft's Big Score!",
+  "overview": "John Shaft is back as the lady-loved black detective cop on the search for the murderer of a client.",
+  "production_companies": [
+    {
+      "id": 8411,
+      "name": "Metro-Goldwyn-Mayer (MGM)"
+    },
+    {
+      "id": 12145,
+      "name": "Shaft Productions Ltd."
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 495,
+    "backdrop_path": "/muZrPdBs937VAx03Giw66x1XGus.jpg",
+    "name": "Shaft Collection",
+    "poster_path": "/8ljhkrxlVzNFzKLwRpsgAtwk7oJ.jpg"
+  },
+  "imdb_id": "tt0069257",
+  "release_date": "1972-06-08",
+  "original_title": "Shaft's Big Score!",
+  "vote_count": 1,
+  "poster_path": "/jioGhMgP8d7eu1G7YT7xeyLOJuc.jpg",
+  "tagline": "Last time he was nice. This time he's ice!",
+  "revenue": 10000000,
+  "popularity": "0.186263625325563"
+}

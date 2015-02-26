@@ -1,0 +1,261 @@
+{
+  "budget": 0,
+  "vote_average": 7.7,
+  "backdrop_path": "/zcbnS1dMfehU0lxkdUODqHoChh4.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2638,
+        "order": 0,
+        "credit_id": "52fe4296c3a36847f802a2fd",
+        "name": "Cary Grant",
+        "cast_id": 14,
+        "profile_path": "/jOHO67Xqoh4wZYUI4pZVG6korjc.jpg",
+        "character": "C. K. Dexter Haven"
+      },
+      {
+        "id": 6598,
+        "order": 1,
+        "credit_id": "52fe4296c3a36847f802a301",
+        "name": "Katharine Hepburn",
+        "cast_id": 15,
+        "profile_path": "/ieGNYekIGc5R16cYmIzzyo59Lfz.jpg",
+        "character": "Tracy Lord"
+      },
+      {
+        "id": 854,
+        "order": 2,
+        "credit_id": "52fe4296c3a36847f802a305",
+        "name": "James Stewart",
+        "cast_id": 16,
+        "profile_path": "/8Obb4uScBA1IvgkX4S90HCT9W1B.jpg",
+        "character": "Macaulay Connor"
+      },
+      {
+        "id": 14683,
+        "order": 3,
+        "credit_id": "52fe4296c3a36847f802a309",
+        "name": "Ruth Hussey",
+        "cast_id": 17,
+        "profile_path": "/ms3vsuqzSVfH9106A0OorpCk5oA.jpg",
+        "character": "Elizabeth \"Liz\" Imbrie"
+      },
+      {
+        "id": 14685,
+        "order": 4,
+        "credit_id": "52fe4296c3a36847f802a30d",
+        "name": "Roland Young",
+        "cast_id": 18,
+        "profile_path": "/cyptVAtLuiHPaYJrgq4HCamJCiB.jpg",
+        "character": "Uncle Willie"
+      },
+      {
+        "id": 10924,
+        "order": 5,
+        "credit_id": "52fe4296c3a36847f802a311",
+        "name": "Henry Daniell",
+        "cast_id": 19,
+        "profile_path": "/ciLKakcCO4oQhdHTgzSkSBiwoCj.jpg",
+        "character": "Sidney Kidd"
+      },
+      {
+        "id": 14686,
+        "order": 6,
+        "credit_id": "52fe4296c3a36847f802a315",
+        "name": "Mary Nash",
+        "cast_id": 20,
+        "profile_path": "/zHVfbtALtm8Gmb0vIwcI07sstCC.jpg",
+        "character": "Margaret Lord"
+      },
+      {
+        "id": 14688,
+        "order": 7,
+        "credit_id": "52fe4296c3a36847f802a319",
+        "name": "John Halliday",
+        "cast_id": 21,
+        "profile_path": "/hGyCXvUXp96Mp43gmEosGgQjG3q.jpg",
+        "character": "Seth Lord"
+      },
+      {
+        "id": 14689,
+        "order": 8,
+        "credit_id": "52fe4296c3a36847f802a31d",
+        "name": "Virginia Weidler",
+        "cast_id": 22,
+        "profile_path": "/t8TslbcOLkPwPTRLt54gp2w4QyG.jpg",
+        "character": "Dinah Lord"
+      },
+      {
+        "id": 14690,
+        "order": 9,
+        "credit_id": "52fe4296c3a36847f802a321",
+        "name": "Rex Evans",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Thomas"
+      },
+      {
+        "id": 14691,
+        "order": 10,
+        "credit_id": "52fe4296c3a36847f802a325",
+        "name": "Lionel Pape",
+        "cast_id": 24,
+        "profile_path": "/z03xm98ewU9Qu0FO0R1fGjudYnc.jpg",
+        "character": "Edward"
+      },
+      {
+        "id": 102687,
+        "order": 11,
+        "credit_id": "52fe4296c3a36847f802a329",
+        "name": "John Howard",
+        "cast_id": 25,
+        "profile_path": "/x4Emx0J4qTGayfVmIjK88IdO8vo.jpg",
+        "character": "George Kittredge"
+      }
+    ],
+    "crew": [
+      {
+        "id": 14674,
+        "credit_id": "52fe4295c3a36847f802a2b7",
+        "department": "Directing",
+        "name": "George Cukor",
+        "job": "Director",
+        "profile_path": "/t2RWv3nzCoqKWYiCGCjwiIHW4Sj.jpg"
+      },
+      {
+        "id": 14675,
+        "credit_id": "52fe4295c3a36847f802a2bd",
+        "department": "Writing",
+        "name": "Philip Barry",
+        "job": "Theatre Play",
+        "profile_path": null
+      },
+      {
+        "id": 14676,
+        "credit_id": "52fe4295c3a36847f802a2c3",
+        "department": "Writing",
+        "name": "Donald Ogden Stewart",
+        "job": "Screenplay",
+        "profile_path": "/eS4tJHSN4fm81yXXiUXnvoRnmGu.jpg"
+      },
+      {
+        "id": 14677,
+        "credit_id": "52fe4295c3a36847f802a2c9",
+        "department": "Writing",
+        "name": "Waldo Salt",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 10601,
+        "credit_id": "52fe4295c3a36847f802a2cf",
+        "department": "Production",
+        "name": "Joseph L. Mankiewicz",
+        "job": "Producer",
+        "profile_path": "/divQhkbPAdDC2TyscVoHsMYOLzf.jpg"
+      },
+      {
+        "id": 8619,
+        "credit_id": "52fe4295c3a36847f802a2d5",
+        "department": "Sound",
+        "name": "Franz Waxman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 14678,
+        "credit_id": "52fe4295c3a36847f802a2db",
+        "department": "Camera",
+        "name": "Joseph Ruttenberg",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14679,
+        "credit_id": "52fe4295c3a36847f802a2e1",
+        "department": "Editing",
+        "name": "Frank Sullivan",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 9062,
+        "credit_id": "52fe4295c3a36847f802a2e7",
+        "department": "Art",
+        "name": "Cedric Gibbons",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9063,
+        "credit_id": "52fe4295c3a36847f802a2ed",
+        "department": "Art",
+        "name": "Edwin B. Willis",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 14681,
+        "credit_id": "52fe4295c3a36847f802a2f3",
+        "department": "Costume & Make-Up",
+        "name": "Sydney Guilaroff",
+        "job": "Hairstylist",
+        "profile_path": null
+      },
+      {
+        "id": 13986,
+        "credit_id": "52fe4296c3a36847f802a2f9",
+        "department": "Costume & Make-Up",
+        "name": "Jack Dawn",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 9064,
+        "credit_id": "52fe4296c3a36847f802a32f",
+        "department": "Costume & Make-Up",
+        "name": "Adrian",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 112,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 981,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Philadelphia Story",
+  "overview": "Philadelphia heiress Tracy Lord throws out her playboy husband C.K. Dexter Haven shortly after their marriage. Two years later, Tracy is about to marry respectable George Kittredge whilst Dexter has been working for \"Spy\" magazine. Dexter arrives at the Lord's mansion the day before the wedding with journalist Mike Connor and photographer Liz Imbrie, determined to spoil things.",
+  "production_companies": [{
+    "id": 8411,
+    "name": "Metro-Goldwyn-Mayer (MGM)"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0032904",
+  "release_date": "1940-12-01",
+  "original_title": "The Philadelphia Story",
+  "vote_count": 24,
+  "poster_path": "/jCrOAxoBr8HQuZVJAg7ScWb6Z5v.jpg",
+  "tagline": "Broadway's howling year-run comedy hit of the snooty society beauty who slipped and fell - IN LOVE!",
+  "revenue": 0,
+  "popularity": "0.57901813692634"
+}

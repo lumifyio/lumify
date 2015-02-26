@@ -1,0 +1,262 @@
+{
+  "budget": 0,
+  "vote_average": 7.2,
+  "backdrop_path": "/vnbbrSg1LXGWfhrFbFmZ8zlaf7b.jpg",
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 12190,
+        "order": 0,
+        "credit_id": "52fe427cc3a36847f80225df",
+        "name": "Yoshikatsu Fujiki",
+        "cast_id": 12,
+        "profile_path": "/8vAgOn0VlxKyW8XAB3iSIugjOcc.jpg",
+        "character": "Kazuki Fuse (Voice)"
+      },
+      {
+        "id": 12191,
+        "order": 1,
+        "credit_id": "52fe427cc3a36847f80225e3",
+        "name": "Sumi Mutou",
+        "cast_id": 13,
+        "profile_path": "/zb3PWDd7FuH27gs7YMTVSq8Xzqz.jpg",
+        "character": "Kei Amemiya (Voice)"
+      },
+      {
+        "id": 12192,
+        "order": 2,
+        "credit_id": "52fe427cc3a36847f80225e7",
+        "name": "Hiroyuki Kinosha",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Atsushi Henmi (Voice)"
+      },
+      {
+        "id": 12193,
+        "order": 3,
+        "credit_id": "52fe427cc3a36847f80225eb",
+        "name": "Eri Sendai",
+        "cast_id": 15,
+        "profile_path": "/5fMQaPhkMeD4O1ZPnnYqURj3xYj.jpg",
+        "character": "Nanami Agawa (Voice)"
+      },
+      {
+        "id": 12194,
+        "order": 4,
+        "credit_id": "52fe427cc3a36847f80225ef",
+        "name": "Kenji Nakagawa",
+        "cast_id": 16,
+        "profile_path": "/lz4wPtTgvCXxILxp1w4ifkIR7wl.jpg",
+        "character": "Isao Aniya (Voice)"
+      },
+      {
+        "id": 12195,
+        "order": 5,
+        "credit_id": "52fe427cc3a36847f80225f3",
+        "name": "Kousei Hirota",
+        "cast_id": 17,
+        "profile_path": "/3wDH1bl5FquRKQB2ETKmlp5DjAw.jpg",
+        "character": "Bunmei Muroto (Voice)"
+      },
+      {
+        "id": 12196,
+        "order": 6,
+        "credit_id": "52fe427cc3a36847f80225f7",
+        "name": "Ryuichi Horibe",
+        "cast_id": 18,
+        "profile_path": "/kSYHlTxw9ByqxoXKZqFZpVcINnm.jpg",
+        "character": "Shiroh Tatsumi (Voice)"
+      },
+      {
+        "id": 12197,
+        "order": 7,
+        "credit_id": "52fe427cc3a36847f80225fb",
+        "name": "Yukihiro Yoshida",
+        "cast_id": 19,
+        "profile_path": "/bI04EInP27y9HQWlbsvwTbfGk8O.jpg",
+        "character": "Hajime Handa (Voice)"
+      },
+      {
+        "id": 12200,
+        "order": 8,
+        "credit_id": "52fe427cc3a36847f80225ff",
+        "name": "Yoshisada Sakaguchi",
+        "cast_id": 20,
+        "profile_path": "/meHC5YIwKp0iFmurUDIRvYecyBz.jpg",
+        "character": "Hachiroh Tohbe (Voice)"
+      },
+      {
+        "id": 12199,
+        "order": 9,
+        "credit_id": "52fe427cc3a36847f8022603",
+        "name": "Tamio Ôki",
+        "cast_id": 21,
+        "profile_path": "/yRoaWUblTlU98adYjFUNXr9THzv.jpg",
+        "character": "Self-Police Member (Voice)"
+      },
+      {
+        "id": 12200,
+        "order": 10,
+        "credit_id": "52fe427cc3a36847f8022607",
+        "name": "Yoshisada Sakaguchi",
+        "cast_id": 22,
+        "profile_path": "/meHC5YIwKp0iFmurUDIRvYecyBz.jpg",
+        "character": "Narrator (Voice)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 12178,
+        "credit_id": "52fe427cc3a36847f802259f",
+        "department": "Directing",
+        "name": "Hiroyuki Okiura",
+        "job": "Director",
+        "profile_path": "/exOalqNU4u88JvB7LAKYuzDIY5k.jpg"
+      },
+      {
+        "id": 12180,
+        "credit_id": "52fe427cc3a36847f80225a5",
+        "department": "Writing",
+        "name": "Mamoru Oshii",
+        "job": "Screenplay",
+        "profile_path": "/2MXFEwxLu7gT9vvi5Otx4LQgsvZ.jpg"
+      },
+      {
+        "id": 12181,
+        "credit_id": "52fe427cc3a36847f80225ab",
+        "department": "Production",
+        "name": "Hidekazu Terakawa",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12182,
+        "credit_id": "52fe427cc3a36847f80225b1",
+        "department": "Production",
+        "name": "Tsutomu Sugita",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12183,
+        "credit_id": "52fe427cc3a36847f80225b7",
+        "department": "Production",
+        "name": "Mitsuhisa Ishikawa",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12184,
+        "credit_id": "52fe427cc3a36847f80225bd",
+        "department": "Production",
+        "name": "Shigeru Watanabe",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12185,
+        "credit_id": "52fe427cc3a36847f80225c3",
+        "department": "Sound",
+        "name": "Hajime Mizoguchi",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 12186,
+        "credit_id": "52fe427cc3a36847f80225c9",
+        "department": "Camera",
+        "name": "Hisao Shirai",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12187,
+        "credit_id": "52fe427cc3a36847f80225cf",
+        "department": "Editing",
+        "name": "Shuichi Kakesu",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12188,
+        "credit_id": "52fe427cc3a36847f80225d5",
+        "department": "Art",
+        "name": "Hiromasa Ogura",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 12189,
+        "credit_id": "52fe427cc3a36847f80225db",
+        "department": "Crew",
+        "name": "Riku Murakami",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 12178,
+        "credit_id": "52fe427cc3a36847f802260d",
+        "department": "Writing",
+        "name": "Hiroyuki Okiura",
+        "job": "Storyboard",
+        "profile_path": "/exOalqNU4u88JvB7LAKYuzDIY5k.jpg"
+      },
+      {
+        "id": 12180,
+        "credit_id": "52fe427cc3a36847f8022613",
+        "department": "Writing",
+        "name": "Mamoru Oshii",
+        "job": "Novel",
+        "profile_path": "/2MXFEwxLu7gT9vvi5Otx4LQgsvZ.jpg"
+      }
+    ]
+  },
+  "runtime": 102,
+  "spoken_languages": [{
+    "iso_639_1": "ja",
+    "name": "日本語"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 823,
+  "production_countries": [{
+    "name": "Japan",
+    "iso_3166_1": "JP"
+  }],
+  "title": "Jin-Roh: The Wolf Brigade",
+  "overview": "Jin Roh is a Japanese anime political thriller from 1999 based on a Manga from Mamoru Oshii. The film is set in the 1950\u2019s depicting a Japanese dystopia city in a fight against terrorists.",
+  "production_companies": [
+    {
+      "id": 12657,
+      "name": "Production I.G."
+    },
+    {
+      "id": 528,
+      "name": "Bandai Visual Company"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0193253",
+  "release_date": "2000-06-03",
+  "original_title": "Jin-Rô",
+  "vote_count": 13,
+  "poster_path": "/qxLds5SEWklVSph7apgzWWM0f8U.jpg",
+  "tagline": "Jin-Roh The Wolf Brigade",
+  "revenue": 0,
+  "popularity": "0.856124848667597"
+}

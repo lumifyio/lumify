@@ -1,0 +1,63 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": "Gerry Robert Byrne is a production manager and actor.  He is best known as a production manager for the hit feature films Eternal Sunshine of the Spotless Mind (2004), Man on the Moon (1999), Brokeback Mountain (2005), The People vs. Larry Flynt (1996).",
+  "homepage": "",
+  "profile_path": null,
+  "id": 213,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0004423",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 38,
+        "media_type": "movie",
+        "title": "Eternal Sunshine of the Spotless Mind",
+        "credit_id": "52fe4211c3a36847f800169b",
+        "release_date": "2004-03-19",
+        "original_title": "Eternal Sunshine of the Spotless Mind",
+        "adult": false,
+        "poster_path": "/gutwXkVChJkpIrclokNESybj0GC.jpg",
+        "character": "Train Conducter"
+      },
+      {
+        "id": 11593,
+        "media_type": "movie",
+        "title": "Nobody's Fool",
+        "credit_id": "52fe44629251416c75032e5d",
+        "release_date": "1994-12-23",
+        "original_title": "Nobody's Fool",
+        "adult": false,
+        "poster_path": "/mkRfhm4b3JNQ9jWSfT1O8aL402f.jpg",
+        "character": "Charlie"
+      },
+      {
+        "id": 33602,
+        "media_type": "movie",
+        "title": "Temple Grandin",
+        "credit_id": "52fe45279251416c91029525",
+        "release_date": "2010-02-06",
+        "original_title": "Temple Grandin",
+        "adult": false,
+        "poster_path": "/4eQgiHYqerBUcwNJgCQ8C0wIjju.jpg",
+        "character": "John Richmond"
+      }
+    ],
+    "crew": [{
+      "id": 3131,
+      "media_type": "movie",
+      "title": "Gangs of New York",
+      "credit_id": "52fe4389c3a36847f805bc87",
+      "department": "Production",
+      "release_date": "2002-12-19",
+      "original_title": "Gangs of New York",
+      "job": "Producer",
+      "adult": false,
+      "poster_path": "/ytKo2tLvKUd9Kbs0poXSQh6ft7d.jpg"
+    }]
+  },
+  "name": "Gerry Robert Byrne",
+  "place_of_birth": "",
+  "popularity": "1.00000000000822"
+}

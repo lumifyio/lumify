@@ -1,0 +1,332 @@
+{
+  "budget": 1800000,
+  "vote_average": 7.6,
+  "backdrop_path": "/8Sh5rRcOrBy4AIm3keZ50dOIn4D.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 12446,
+        "order": 0,
+        "credit_id": "52fe4290c3a36847f80287ad",
+        "name": "Peter Sellers",
+        "cast_id": 13,
+        "profile_path": "/2uJvjoiTjvJfbd81S2AhRtdf2aU.jpg",
+        "character": "Captain Mandrake/Präsident Muffley/Doktor Seltsam"
+      },
+      {
+        "id": 862,
+        "order": 1,
+        "credit_id": "52fe4290c3a36847f80287b1",
+        "name": "George C. Scott",
+        "cast_id": 14,
+        "profile_path": "/mWXDFKbEgb7ID845I1LNeaeoXT4.jpg",
+        "character": "General \"Buck\" Turgidson"
+      },
+      {
+        "id": 3088,
+        "order": 2,
+        "credit_id": "52fe4290c3a36847f80287b5",
+        "name": "Sterling Hayden",
+        "cast_id": 15,
+        "profile_path": "/aE85Dzwaf5rTbjLnMgOtpw47BSY.jpg",
+        "character": "Brigade General Jack D. Ripper"
+      },
+      {
+        "id": 4966,
+        "order": 3,
+        "credit_id": "52fe4290c3a36847f80287bd",
+        "name": "Keenan Wynn",
+        "cast_id": 17,
+        "profile_path": "/6DcmPzaBXRrlgi75r2RK6yVWEMM.jpg",
+        "character": "Colonel Bat Guano"
+      },
+      {
+        "id": 14253,
+        "order": 4,
+        "credit_id": "52fe4290c3a36847f80287b9",
+        "name": "Slim Pickens",
+        "cast_id": 16,
+        "profile_path": "/xO2rvqSBgZRJKjkVrFy1xeygxLF.jpg",
+        "character": "Major \"King\" Kong"
+      },
+      {
+        "id": 6600,
+        "order": 5,
+        "credit_id": "52fe4290c3a36847f80287c1",
+        "name": "Peter Bull",
+        "cast_id": 18,
+        "profile_path": "/iIh6WkuefTUVrEybz1CXdz86puI.jpg",
+        "character": "Botschafter De Sadesky"
+      },
+      {
+        "id": 15152,
+        "order": 6,
+        "credit_id": "52fe4290c3a36847f80287d3",
+        "name": "James Earl Jones",
+        "cast_id": 23,
+        "profile_path": "/pxC7jiRTHArPldgkqSneXRsrRJ9.jpg",
+        "character": "Lt. Lothar Zogg"
+      },
+      {
+        "id": 126354,
+        "order": 7,
+        "credit_id": "52fe4290c3a36847f80287c9",
+        "name": "Tracy Reed",
+        "cast_id": 21,
+        "profile_path": "/mLKogjlAaCAiV4NosrXeHbi35qJ.jpg",
+        "character": "Miss Scott"
+      },
+      {
+        "id": 12485,
+        "order": 8,
+        "credit_id": "52fe4290c3a36847f80287c5",
+        "name": "Jack Creley",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Mr. Staines"
+      },
+      {
+        "id": 1332529,
+        "order": 9,
+        "credit_id": "53a570800e0a26143c0010fc",
+        "name": "Frank Berry",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Lt. Dietrich"
+      },
+      {
+        "id": 1236452,
+        "order": 10,
+        "credit_id": "53a570ae0e0a2614450010ce",
+        "name": "Robert O'Neill",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Adm. Randolph"
+      },
+      {
+        "id": 948173,
+        "order": 11,
+        "credit_id": "53e0a47a0e0a265a860068bf",
+        "name": "Glenn Beck",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Lt. Kivel"
+      },
+      {
+        "id": 1332531,
+        "order": 12,
+        "credit_id": "53a571170e0a26143c00110b",
+        "name": "Roy Stephens",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Frank"
+      },
+      {
+        "id": 10657,
+        "order": 13,
+        "credit_id": "53a571330e0a2614420011a7",
+        "name": "Shane Rimmer",
+        "cast_id": 28,
+        "profile_path": "/ctrIOcWLjOB5rocS0vVHEjbS1Sx.jpg",
+        "character": "Capt. 'Ace' Owens"
+      },
+      {
+        "id": 186212,
+        "order": 14,
+        "credit_id": "53a571490e0a2614320010de",
+        "name": "Hal Galili",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Burpelson AFB Defense Team Member"
+      },
+      {
+        "id": 185044,
+        "order": 15,
+        "credit_id": "53a5715b0e0a2614390010db",
+        "name": "Paul Tamarin",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Lt. Goldberg"
+      },
+      {
+        "id": 1332532,
+        "order": 16,
+        "credit_id": "53a571750e0a26143600107f",
+        "name": "Laurence Herder",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Burpelson AFB Defense Team Member"
+      },
+      {
+        "id": 117301,
+        "order": 17,
+        "credit_id": "53e0a40e0e0a265a83006a66",
+        "name": "Gordon Tanner",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Gen. Faceman"
+      },
+      {
+        "id": 184980,
+        "order": 18,
+        "credit_id": "53a572130e0a261436001097",
+        "name": "Burnell Tucker",
+        "cast_id": 34,
+        "profile_path": "/kRMCT2aPlZO5Cl5404mRyHEQBt6.jpg",
+        "character": "Mandrake' aide (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 240,
+        "credit_id": "52fe4290c3a36847f802876d",
+        "department": "Directing",
+        "name": "Stanley Kubrick",
+        "job": "Director",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe4290c3a36847f8028773",
+        "department": "Writing",
+        "name": "Stanley Kubrick",
+        "job": "Screenplay",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 8950,
+        "credit_id": "52fe4290c3a36847f8028779",
+        "department": "Writing",
+        "name": "Terry Southern",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 14250,
+        "credit_id": "52fe4290c3a36847f802877f",
+        "department": "Writing",
+        "name": "Peter George",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe4290c3a36847f8028785",
+        "department": "Production",
+        "name": "Stanley Kubrick",
+        "job": "Producer",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 257,
+        "credit_id": "52fe4290c3a36847f802878b",
+        "department": "Production",
+        "name": "Victor Lyndon",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14251,
+        "credit_id": "52fe4290c3a36847f8028791",
+        "department": "Production",
+        "name": "Leon Minoff",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14252,
+        "credit_id": "52fe4290c3a36847f8028797",
+        "department": "Sound",
+        "name": "Laurie Johnson",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7753,
+        "credit_id": "52fe4290c3a36847f802879d",
+        "department": "Camera",
+        "name": "Gilbert Taylor",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12009,
+        "credit_id": "52fe4290c3a36847f80287a3",
+        "department": "Editing",
+        "name": "Anthony Harvey",
+        "job": "Editor",
+        "profile_path": "/xFb61Oxx98u6xrSpbN0KZFrysWO.jpg"
+      },
+      {
+        "id": 9869,
+        "credit_id": "52fe4290c3a36847f80287a9",
+        "department": "Art",
+        "name": "Ken Adam",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 14250,
+        "credit_id": "52fe4290c3a36847f80287cf",
+        "department": "Writing",
+        "name": "Peter George",
+        "job": "Novel",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 95,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 935,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+  "overview": "An insane general starts a process to nuclear holocaust that a war room of politicians and generals frantically try to stop. A classic black and white war satire from director Stanley Kubrick starring Peter Sellers.",
+  "production_companies": [
+    {
+      "id": 441,
+      "name": "Columbia Pictures Corporation"
+    },
+    {
+      "id": 88,
+      "name": "Hawk Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0057012",
+  "release_date": "1964-01-29",
+  "original_title": "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+  "vote_count": 282,
+  "poster_path": "/tviJ68Wj4glQk3CPMvdvExYHxX.jpg",
+  "tagline": "The hot-line suspense comedy",
+  "revenue": 9164370,
+  "popularity": "1.59537940403632"
+}

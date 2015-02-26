@@ -1,0 +1,184 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nAli Suliman (born 1977) is an Israeli Palestinian actor from Nazareth.\n\nDescription above from the Wikipedia article Ali Suliman, licensed under CC-BY-SA, full list of contributors on Wikipedia",
+  "homepage": "",
+  "profile_path": "/orQk2ePFL6er4TrdhD0jZ9my3E3.jpg",
+  "id": 762,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm1846124",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 4349,
+        "media_type": "movie",
+        "title": "The Kingdom",
+        "credit_id": "52fe43bbc3a36847f806b751",
+        "release_date": "2007-10-11",
+        "original_title": "The Kingdom",
+        "adult": false,
+        "poster_path": "/83eJJlHscLsi9DHsqsyk1hIXL83.jpg",
+        "character": "Sergeant Haytham"
+      },
+      {
+        "id": 7860,
+        "media_type": "movie",
+        "title": "Lemon Tree",
+        "credit_id": "52fe4487c3a36847f809b23f",
+        "release_date": "2008-02-08",
+        "original_title": "Lemon Tree",
+        "adult": false,
+        "poster_path": "/ttFnkO5MY2jk3FVQKPsqDbz36mC.jpg",
+        "character": "Ziad Daud"
+      },
+      {
+        "id": 12113,
+        "media_type": "movie",
+        "title": "Body of Lies",
+        "credit_id": "52fe44b79251416c7503e95b",
+        "release_date": "2008-10-10",
+        "original_title": "Body of Lies",
+        "adult": false,
+        "poster_path": "/ngQAEKZVpT0SD9i98ApEgsQKC52.jpg",
+        "character": "Omar Sadiki"
+      },
+      {
+        "id": 44898,
+        "media_type": "movie",
+        "title": "The Time That Remains",
+        "credit_id": "52fe46a2c3a36847f8109b73",
+        "release_date": "2009-08-12",
+        "original_title": "The Time That Remains",
+        "adult": false,
+        "poster_path": "/ncINxlOnHtt9xG3bW4TJay1oVVX.jpg",
+        "character": "Eliza's Boyfriend"
+      },
+      {
+        "id": 74300,
+        "media_type": "movie",
+        "title": "Pomegranates and Myrrh",
+        "credit_id": "52fe48c4c3a368484e109d21",
+        "release_date": "2009-02-01",
+        "original_title": "Al-mor wa al rumman",
+        "adult": false,
+        "poster_path": "/eNnTOOYubHbaHlwrfk5XQVSMRdf.jpg",
+        "character": "Kais"
+      },
+      {
+        "id": 121791,
+        "media_type": "movie",
+        "title": "The Attack",
+        "credit_id": "52fe4a6dc3a368484e152949",
+        "release_date": "2012-09-01",
+        "original_title": "L'Attentat",
+        "adult": false,
+        "poster_path": "/yj3AbaYG5a9HKzhScTAN7cJkveR.jpg",
+        "character": "Amin Jaafari"
+      },
+      {
+        "id": 122232,
+        "media_type": "movie",
+        "title": "Cruel Summer",
+        "credit_id": "52fe4a79c3a368484e15563f",
+        "release_date": "2012-05-08",
+        "original_title": "Cruel Summer",
+        "adult": false,
+        "poster_path": "/kYJ2uije7D0lkwFRD08KMcICbFs.jpg",
+        "character": "King"
+      },
+      {
+        "id": 129430,
+        "media_type": "movie",
+        "title": "Inheritance",
+        "credit_id": "52fe4b3cc3a368484e17eaf7",
+        "release_date": "2012-09-05",
+        "original_title": "Héritage",
+        "adult": false,
+        "poster_path": "/pIdxxYKx5DncVaCJXAqVSIdrLTE.jpg",
+        "character": "Marwan"
+      },
+      {
+        "id": 67,
+        "media_type": "movie",
+        "title": "Paradise Now",
+        "credit_id": "52fe4213c3a36847f8001dbd",
+        "release_date": "2005-09-07",
+        "original_title": "Paradise Now",
+        "adult": false,
+        "poster_path": "/ztEEni4ISi8Mv279pFbTg9F9xPX.jpg",
+        "character": "Khaled"
+      },
+      {
+        "id": 193756,
+        "media_type": "movie",
+        "title": "Lone Survivor",
+        "credit_id": "52fe4cd89251416c91101fdf",
+        "release_date": "2013-12-24",
+        "original_title": "Lone Survivor",
+        "adult": false,
+        "poster_path": "/c7Sqof18FgkoNcA0r5BFUcPLER1.jpg",
+        "character": "Gulab"
+      },
+      {
+        "id": 214015,
+        "media_type": "movie",
+        "title": "Do Not Forget Me Istanbul",
+        "credit_id": "52fe4dd0c3a368484e1ff66b",
+        "release_date": "2012-04-16",
+        "original_title": "Unutma Beni Istanbul",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 217026,
+        "media_type": "movie",
+        "title": "The Promise",
+        "credit_id": "52fe4e25c3a368484e210df1",
+        "release_date": "2011-02-06",
+        "original_title": "The Promise",
+        "adult": false,
+        "poster_path": "/cebnEDcVcEw5uF0SE8EdBog1vCV.jpg",
+        "character": "Abu-Hassan Mohammed"
+      },
+      {
+        "id": 248908,
+        "media_type": "movie",
+        "title": "Mars at Sunrise",
+        "credit_id": "52fe4f3ac3a36847f82c6ced",
+        "release_date": "2014-02-08",
+        "original_title": "Mars at Sunrise",
+        "adult": false,
+        "poster_path": "/tHK8iHhrygChfWZVnAd1RL8Ar76.jpg",
+        "character": ""
+      },
+      {
+        "id": 248252,
+        "media_type": "movie",
+        "title": "Under the Same Sun",
+        "credit_id": "530f812f925141734a0010ab",
+        "release_date": null,
+        "original_title": "Under the Same Sun",
+        "adult": false,
+        "poster_path": "/8hQFvfNj2wS9f18zPwLqvtzXm9u.jpg",
+        "character": "Nizar"
+      },
+      {
+        "id": 261375,
+        "media_type": "movie",
+        "title": "Flying Home",
+        "credit_id": "533325539251410b41003ed0",
+        "release_date": "2014-04-02",
+        "original_title": "Flying Home",
+        "adult": false,
+        "poster_path": "/d1xLyqJZeqwX06wxbmaTns7S0lb.jpg",
+        "character": "Sheikh"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Ali Suliman",
+  "place_of_birth": "Nazareth, Israel",
+  "popularity": "1.91289239390274"
+}

@@ -1,0 +1,129 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/9GSKZj7Hfg4Wee00etJwd18Zakb.jpg",
+  "id": 926,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0712954",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 18587,
+        "media_type": "movie",
+        "title": "10 to Midnight",
+        "credit_id": "52fe47889251416c7509cd83",
+        "release_date": "1983-03-11",
+        "original_title": "10 to Midnight",
+        "adult": false,
+        "poster_path": "/bJiLyz6g8vsFgJ5oAdMWlQAWY4T.jpg",
+        "character": "Ola"
+      },
+      {
+        "id": 69928,
+        "media_type": "movie",
+        "title": "The Man Who Loved Women",
+        "credit_id": "52fe47e2c3a368484e0dec07",
+        "release_date": "1983-12-18",
+        "original_title": "The Man Who Loved Women",
+        "adult": false,
+        "poster_path": "/h6LM4t2BdfBfSx4YiZO677vC2et.jpg",
+        "character": ""
+      },
+      {
+        "id": 92060,
+        "media_type": "movie",
+        "title": "Michael Jackson's Thriller",
+        "credit_id": "52fe48f09251416c750b8239",
+        "release_date": "1983-12-02",
+        "original_title": "Michael Jackson's Thriller",
+        "adult": false,
+        "poster_path": "/puLSRxaG8MweynoRt8wZS8ZXZRM.jpg",
+        "character": "Michael's Girlfriend"
+      },
+      {
+        "id": 150,
+        "media_type": "movie",
+        "title": "48 Hrs.",
+        "credit_id": "52fe421fc3a36847f8005a05",
+        "release_date": "1982-12-09",
+        "original_title": "48 Hrs.",
+        "adult": false,
+        "poster_path": "/rrraPWKiY8T6SEzODxZamqUSv6f.jpg",
+        "character": "Vroman's Dancer"
+      },
+      {
+        "id": 96,
+        "media_type": "movie",
+        "title": "Beverly Hills Cop II",
+        "credit_id": "52fe4217c3a36847f80032d1",
+        "release_date": "1987-05-18",
+        "original_title": "Beverly Hills Cop II",
+        "adult": false,
+        "poster_path": "/2y1z1baxKT0coTTRlnkI6McnR9f.jpg",
+        "character": "Playboy Playmate"
+      },
+      {
+        "id": 118106,
+        "media_type": "movie",
+        "title": "Making Michael Jackson's Thriller",
+        "credit_id": "52fe4bcbc3a36847f82142d3",
+        "release_date": "1983-12-15",
+        "original_title": "Making Michael Jackson's Thriller",
+        "adult": false,
+        "poster_path": "/oIBl6Tusk2GuSSNyiHd9nstbKFk.jpg",
+        "character": "Herself"
+      },
+      {
+        "id": 66474,
+        "media_type": "movie",
+        "title": "The Night Stalker",
+        "credit_id": "53879057c3a3681aea003305",
+        "release_date": "1987-03-31",
+        "original_title": "The Night Stalker",
+        "adult": false,
+        "poster_path": "/tnGlRCV4wSLVl7iTlqoprJml9w3.jpg",
+        "character": ""
+      },
+      {
+        "id": 141,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52533e2e19c2957940082f13",
+        "name": "Cheers",
+        "poster_path": "/gfbD8H9lcU1IwLb4dk3a8G94jgY.jpg",
+        "original_name": "Cheers",
+        "first_air_date": "1982-09-30",
+        "character": ""
+      },
+      {
+        "id": 12751,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5258232f760ee36aaa7d4093",
+        "name": "Automan",
+        "poster_path": "/kFD2gMD1mgPFG7nMSmtc9GOW33d.jpg",
+        "original_name": "Automan",
+        "first_air_date": "1983-12-15",
+        "character": ""
+      },
+      {
+        "id": 16016,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52583c24760ee36aaa9a6d3b",
+        "name": "Where Are They Now?",
+        "poster_path": null,
+        "original_name": "Where Are They Now?",
+        "first_air_date": "1999-06-07",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Ola Ray",
+  "place_of_birth": null,
+  "popularity": "1.12171184086962"
+}

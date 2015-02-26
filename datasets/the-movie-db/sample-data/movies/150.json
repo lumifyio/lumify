@@ -1,0 +1,677 @@
+{
+  "budget": 1000000,
+  "vote_average": 6,
+  "backdrop_path": "/tK2ElPDTp0pM8w5BZbuaEHbzaHs.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1733,
+        "order": 0,
+        "credit_id": "52fe421fc3a36847f800592b",
+        "name": "Nick Nolte",
+        "cast_id": 15,
+        "profile_path": "/mecF0UBz1RSnf1ggd0ltYoCwqd2.jpg",
+        "character": "Jack Cates"
+      },
+      {
+        "id": 776,
+        "order": 1,
+        "credit_id": "52fe421fc3a36847f800592f",
+        "name": "Eddie Murphy",
+        "cast_id": 16,
+        "profile_path": "/WlmlpM6YeQwgEmOX0n4bVZ08dc.jpg",
+        "character": "Reggie Hammond"
+      },
+      {
+        "id": 1734,
+        "order": 2,
+        "credit_id": "52fe421fc3a36847f8005933",
+        "name": "Annette O'Toole",
+        "cast_id": 17,
+        "profile_path": "/hFmg2LVQD0w0A9uDNu5na9pQamV.jpg",
+        "character": "Elaine"
+      },
+      {
+        "id": 1735,
+        "order": 3,
+        "credit_id": "52fe421fc3a36847f8005937",
+        "name": "Frank McRae",
+        "cast_id": 18,
+        "profile_path": "/xIjG8ef8Y2JU1KiDjcB5vJExXk.jpg",
+        "character": "Haden"
+      },
+      {
+        "id": 1736,
+        "order": 4,
+        "credit_id": "52fe421fc3a36847f800593b",
+        "name": "James Remar",
+        "cast_id": 19,
+        "profile_path": "/AeSuQlBclvWqztlpkf9nIhvvhsc.jpg",
+        "character": "Albert Ganz"
+      },
+      {
+        "id": 1737,
+        "order": 5,
+        "credit_id": "52fe421fc3a36847f800593f",
+        "name": "David Patrick Kelly",
+        "cast_id": 20,
+        "profile_path": "/ujvmeyBvEJ7gkvww0OYDBlbxOTT.jpg",
+        "character": "Luther"
+      },
+      {
+        "id": 1105,
+        "order": 6,
+        "credit_id": "52fe421fc3a36847f8005943",
+        "name": "Sonny Landham",
+        "cast_id": 21,
+        "profile_path": "/dmOpsfsz56FtcrQMfyiivmoEXXP.jpg",
+        "character": "Billy Bear"
+      },
+      {
+        "id": 591,
+        "order": 7,
+        "credit_id": "52fe421fc3a36847f8005947",
+        "name": "Brion James",
+        "cast_id": 22,
+        "profile_path": "/uBLLDajj01JIR06Peh1G3YGvZ61.jpg",
+        "character": "Ben Kehoe"
+      },
+      {
+        "id": 1738,
+        "order": 8,
+        "credit_id": "52fe421fc3a36847f800594b",
+        "name": "Kerry Sherman",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Rosalie, Hostage Girl"
+      },
+      {
+        "id": 783,
+        "order": 9,
+        "credit_id": "52fe421fc3a36847f800594f",
+        "name": "Jonathan Banks",
+        "cast_id": 24,
+        "profile_path": "/9rKC7rEBnUoDi3lY4hTH3DmFF6U.jpg",
+        "character": "Algren"
+      },
+      {
+        "id": 1739,
+        "order": 10,
+        "credit_id": "52fe421fc3a36847f8005953",
+        "name": "James Keane",
+        "cast_id": 25,
+        "profile_path": "/1e2zknHnG1Yp92D3hRQUbXHay9c.jpg",
+        "character": "Vanzant"
+      },
+      {
+        "id": 1740,
+        "order": 11,
+        "credit_id": "52fe421fc3a36847f8005957",
+        "name": "Tara King",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Frizzy, Hotel Desk Clerk"
+      },
+      {
+        "id": 1741,
+        "order": 12,
+        "credit_id": "52fe421fc3a36847f800595b",
+        "name": "Greta Blackburn",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Lisa, Blonde Hooker"
+      },
+      {
+        "id": 1742,
+        "order": 13,
+        "credit_id": "52fe421fc3a36847f800595f",
+        "name": "Margot Rose",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Casey"
+      },
+      {
+        "id": 1743,
+        "order": 14,
+        "credit_id": "52fe421fc3a36847f8005963",
+        "name": "Denise Crosby",
+        "cast_id": 29,
+        "profile_path": "/6vJh3H3dTvgnZ1YoHE1qYM1AbRC.jpg",
+        "character": "Sally"
+      },
+      {
+        "id": 154141,
+        "order": 15,
+        "credit_id": "52fe421fc3a36847f800596d",
+        "name": "Olivia Brown",
+        "cast_id": 31,
+        "profile_path": "/9Boq2QunWZy9wC6mU4dN1EZHcGs.jpg",
+        "character": "Candy (as Olivia M. Brown)"
+      },
+      {
+        "id": 21484,
+        "order": 16,
+        "credit_id": "52fe421fc3a36847f8005971",
+        "name": "Todd Allen",
+        "cast_id": 32,
+        "profile_path": "/vHGltCZ9ue4xjG6dKfpiNJ47g2g.jpg",
+        "character": "Young Cop"
+      },
+      {
+        "id": 169003,
+        "order": 17,
+        "credit_id": "52fe421fc3a36847f8005975",
+        "name": "Bill Dearth",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Thin Cop"
+      },
+      {
+        "id": 42006,
+        "order": 18,
+        "credit_id": "52fe421fc3a36847f8005979",
+        "name": "Ned Dowd",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Big Cop"
+      },
+      {
+        "id": 10380,
+        "order": 19,
+        "credit_id": "52fe421fc3a36847f800597d",
+        "name": "Jim Haynie",
+        "cast_id": 35,
+        "profile_path": "/aFXy2ef18bE6gqibhDoZ7EAsq8n.jpg",
+        "character": "Old Cop"
+      },
+      {
+        "id": 14320,
+        "order": 20,
+        "credit_id": "52fe421fc3a36847f8005981",
+        "name": "Jack Thibeau",
+        "cast_id": 36,
+        "profile_path": "/ugO5Vb7ZXUz5VMpM9dZghJSt6ui.jpg",
+        "character": "Detective"
+      },
+      {
+        "id": 164696,
+        "order": 21,
+        "credit_id": "52fe421fc3a36847f8005985",
+        "name": "Jon St. Elwood",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Plainclothes Man"
+      },
+      {
+        "id": 158904,
+        "order": 22,
+        "credit_id": "52fe421fc3a36847f8005989",
+        "name": "Clare Nono",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Ruth"
+      },
+      {
+        "id": 53931,
+        "order": 23,
+        "credit_id": "52fe421fc3a36847f800598d",
+        "name": "Sandy Martin",
+        "cast_id": 39,
+        "profile_path": "/WfdT2V1DxUvoBlgUzeCVq340IH.jpg",
+        "character": "Policewoman"
+      },
+      {
+        "id": 156522,
+        "order": 24,
+        "credit_id": "52fe421fc3a36847f8005991",
+        "name": "Matt Landers",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Bob"
+      },
+      {
+        "id": 6916,
+        "order": 25,
+        "credit_id": "52fe421fc3a36847f8005995",
+        "name": "Peter Jason",
+        "cast_id": 41,
+        "profile_path": "/aiitfS96xAaJsjLVyliKX2LWtup.jpg",
+        "character": "Cowboy Bartender"
+      },
+      {
+        "id": 97976,
+        "order": 26,
+        "credit_id": "52fe421fc3a36847f8005999",
+        "name": "Bill Cross",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "First Cop"
+      },
+      {
+        "id": 15824,
+        "order": 27,
+        "credit_id": "52fe421fc3a36847f800599d",
+        "name": "Chris Mulkey",
+        "cast_id": 43,
+        "profile_path": "/ibXN9Ho0nCF4jbGHeQYRHI8AMjH.jpg",
+        "character": "Second Cop"
+      },
+      {
+        "id": 1132251,
+        "order": 28,
+        "credit_id": "52fe421fc3a36847f80059a1",
+        "name": "Marcelino Sanchez",
+        "cast_id": 44,
+        "profile_path": null,
+        "character": "Parking Lot Attendant (as James Marcelino)"
+      },
+      {
+        "id": 949734,
+        "order": 29,
+        "credit_id": "52fe421fc3a36847f80059a5",
+        "name": "Bennie Dobbins",
+        "cast_id": 45,
+        "profile_path": null,
+        "character": "Road Gang Guard"
+      },
+      {
+        "id": 16474,
+        "order": 30,
+        "credit_id": "52fe421fc3a36847f80059a9",
+        "name": "Walter Scott",
+        "cast_id": 46,
+        "profile_path": "/l8uXZW6xypNY7e4wd7a0HqzP6iA.jpg",
+        "character": "Road Gang Guard"
+      },
+      {
+        "id": 1289388,
+        "order": 31,
+        "credit_id": "52fe421fc3a36847f80059ad",
+        "name": "W. T. Zacha",
+        "cast_id": 47,
+        "profile_path": null,
+        "character": "Road Gang Guard"
+      },
+      {
+        "id": 1289389,
+        "order": 32,
+        "credit_id": "52fe421fc3a36847f80059b1",
+        "name": "Begoña Plaza",
+        "cast_id": 48,
+        "profile_path": null,
+        "character": "Indian Hooker"
+      },
+      {
+        "id": 2277,
+        "order": 33,
+        "credit_id": "52fe421fc3a36847f80059b5",
+        "name": "Loyd Catlett",
+        "cast_id": 49,
+        "profile_path": null,
+        "character": "Prison Guard"
+      },
+      {
+        "id": 1289390,
+        "order": 34,
+        "credit_id": "52fe421fc3a36847f80059b9",
+        "name": "B. G. Fisher",
+        "cast_id": 50,
+        "profile_path": null,
+        "character": "Prison Guard"
+      },
+      {
+        "id": 136236,
+        "order": 35,
+        "credit_id": "52fe421fc3a36847f80059bd",
+        "name": "Reid Cruickshanks",
+        "cast_id": 51,
+        "profile_path": null,
+        "character": "Prison Guard"
+      },
+      {
+        "id": 49832,
+        "order": 36,
+        "credit_id": "52fe421fc3a36847f80059c1",
+        "name": "R. D. Call",
+        "cast_id": 52,
+        "profile_path": "/txa2FUem2tQGPH5HQR6WceIX9B7.jpg",
+        "character": "Duty Sergeant"
+      },
+      {
+        "id": 101762,
+        "order": 37,
+        "credit_id": "52fe421fc3a36847f80059c5",
+        "name": "Brenda Venus",
+        "cast_id": 53,
+        "profile_path": null,
+        "character": "Hooker"
+      },
+      {
+        "id": 92587,
+        "order": 38,
+        "credit_id": "52fe421fc3a36847f80059c9",
+        "name": "Gloria Gifford",
+        "cast_id": 54,
+        "profile_path": null,
+        "character": "Hooker (as Gloria E. Gifford)"
+      },
+      {
+        "id": 91241,
+        "order": 39,
+        "credit_id": "52fe421fc3a36847f80059cd",
+        "name": "Nick Dimitri",
+        "cast_id": 55,
+        "profile_path": null,
+        "character": "Torchy's Patron"
+      },
+      {
+        "id": 85869,
+        "order": 40,
+        "credit_id": "52fe421fc3a36847f80059d1",
+        "name": "John Dennis Johnston",
+        "cast_id": 56,
+        "profile_path": "/c0EIs8wCQehz0bRvao7Qxfot1h3.jpg",
+        "character": "Torchy's Patron"
+      },
+      {
+        "id": 999700,
+        "order": 41,
+        "credit_id": "52fe421fc3a36847f80059d5",
+        "name": "Rock A. Walker",
+        "cast_id": 57,
+        "profile_path": null,
+        "character": "Torchy's Patron"
+      },
+      {
+        "id": 1289391,
+        "order": 42,
+        "credit_id": "52fe421fc3a36847f80059d9",
+        "name": "Dave Moordigian",
+        "cast_id": 58,
+        "profile_path": null,
+        "character": "Gas Station Attendant"
+      },
+      {
+        "id": 555973,
+        "order": 43,
+        "credit_id": "52fe421fc3a36847f80059dd",
+        "name": "J. Wesley Huston",
+        "cast_id": 59,
+        "profile_path": null,
+        "character": "Security Guard"
+      },
+      {
+        "id": 174662,
+        "order": 44,
+        "credit_id": "52fe421fc3a36847f80059e1",
+        "name": "Gary Pettinger",
+        "cast_id": 60,
+        "profile_path": null,
+        "character": "Cop with Gun"
+      },
+      {
+        "id": 1289392,
+        "order": 45,
+        "credit_id": "52fe421fc3a36847f80059e5",
+        "name": "Marquerita Wallace",
+        "cast_id": 61,
+        "profile_path": null,
+        "character": "Bar Girl"
+      },
+      {
+        "id": 106703,
+        "order": 46,
+        "credit_id": "52fe421fc3a36847f80059e9",
+        "name": "Angela Robinson",
+        "cast_id": 62,
+        "profile_path": null,
+        "character": "Bar Girl"
+      },
+      {
+        "id": 193300,
+        "order": 47,
+        "credit_id": "52fe421fc3a36847f80059ed",
+        "name": "Jack Lightsy",
+        "cast_id": 63,
+        "profile_path": null,
+        "character": "Bartender"
+      },
+      {
+        "id": 1118713,
+        "order": 48,
+        "credit_id": "52fe421fc3a36847f80059f1",
+        "name": "John Hauk",
+        "cast_id": 64,
+        "profile_path": null,
+        "character": "Henry Wong"
+      },
+      {
+        "id": 1289393,
+        "order": 49,
+        "credit_id": "52fe421fc3a36847f80059f5",
+        "name": "Bob Yanez",
+        "cast_id": 65,
+        "profile_path": null,
+        "character": "Interrogator"
+      },
+      {
+        "id": 214291,
+        "order": 50,
+        "credit_id": "52fe421fc3a36847f80059f9",
+        "name": "Clint Smith",
+        "cast_id": 66,
+        "profile_path": null,
+        "character": "Leroy"
+      },
+      {
+        "id": 85870,
+        "order": 51,
+        "credit_id": "52fe421fc3a36847f80059fd",
+        "name": "Luis Contreras",
+        "cast_id": 67,
+        "profile_path": "/1OZ6UwzgLEFWvHJXyOvZTYuYisq.jpg",
+        "character": "Gang Member"
+      },
+      {
+        "id": 1289394,
+        "order": 52,
+        "credit_id": "52fe421fc3a36847f8005a01",
+        "name": "Suzanne M. Regard",
+        "cast_id": 68,
+        "profile_path": null,
+        "character": "Cowgirl Dancer"
+      },
+      {
+        "id": 926,
+        "order": 53,
+        "credit_id": "52fe421fc3a36847f8005a05",
+        "name": "Ola Ray",
+        "cast_id": 69,
+        "profile_path": "/9GSKZj7Hfg4Wee00etJwd18Zakb.jpg",
+        "character": "Vroman's Dancer"
+      },
+      {
+        "id": 1289395,
+        "order": 54,
+        "credit_id": "52fe421fc3a36847f8005a09",
+        "name": "Bjaye Turner",
+        "cast_id": 70,
+        "profile_path": null,
+        "character": "Vroman's Dancer"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1723,
+        "credit_id": "52fe421ec3a36847f80058d9",
+        "department": "Directing",
+        "name": "Walter Hill",
+        "job": "Director",
+        "profile_path": "/wpNPqW1oPi2GMYEgykHYBTDdGmJ.jpg"
+      },
+      {
+        "id": 1091,
+        "credit_id": "52fe421ec3a36847f80058df",
+        "department": "Production",
+        "name": "Joel Silver",
+        "job": "Producer",
+        "profile_path": "/1LIjLDXGRhwXohHL2jKhyvLv0rZ.jpg"
+      },
+      {
+        "id": 1093,
+        "credit_id": "52fe421ec3a36847f80058e5",
+        "department": "Production",
+        "name": "Lawrence Gordon",
+        "job": "Producer",
+        "profile_path": "/hcjzZT71C7bKzhkgL6TAcEjsmkS.jpg"
+      },
+      {
+        "id": 1724,
+        "credit_id": "52fe421ec3a36847f80058eb",
+        "department": "Writing",
+        "name": "Roger Spottiswoode",
+        "job": "Author",
+        "profile_path": "/hH8tIBh0RI7VwI4jQgphtB0qABR.jpg"
+      },
+      {
+        "id": 1723,
+        "credit_id": "52fe421fc3a36847f80058f1",
+        "department": "Writing",
+        "name": "Walter Hill",
+        "job": "Author",
+        "profile_path": "/wpNPqW1oPi2GMYEgykHYBTDdGmJ.jpg"
+      },
+      {
+        "id": 1725,
+        "credit_id": "52fe421fc3a36847f80058f7",
+        "department": "Writing",
+        "name": "Larry Gross",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1726,
+        "credit_id": "52fe421fc3a36847f80058fd",
+        "department": "Writing",
+        "name": "Steven E. de Souza",
+        "job": "Author",
+        "profile_path": "/vdNUgaeJEZy67vhwTeJnftfBRzB.jpg"
+      },
+      {
+        "id": 1728,
+        "credit_id": "52fe421fc3a36847f8005903",
+        "department": "Camera",
+        "name": "Ric Waite",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1729,
+        "credit_id": "52fe421fc3a36847f8005909",
+        "department": "Sound",
+        "name": "James Horner",
+        "job": "Original Music Composer",
+        "profile_path": "/iEiRtIdTjlwxrh1dF27RFbLl9LD.jpg"
+      },
+      {
+        "id": 1096,
+        "credit_id": "52fe421fc3a36847f800590f",
+        "department": "Art",
+        "name": "John Vallone",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1730,
+        "credit_id": "52fe421fc3a36847f8005915",
+        "department": "Production",
+        "name": "Judith Holstra",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1731,
+        "credit_id": "52fe421fc3a36847f800591b",
+        "department": "Editing",
+        "name": "Freeman A. Davies",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1732,
+        "credit_id": "52fe421fc3a36847f8005921",
+        "department": "Editing",
+        "name": "Mark Warner",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 909,
+        "credit_id": "52fe421fc3a36847f8005927",
+        "department": "Editing",
+        "name": "Billy Weber",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7671,
+        "credit_id": "52fe421fc3a36847f8005969",
+        "department": "Writing",
+        "name": "Jeb Stuart",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 96,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 150,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "48 Hrs.",
+  "overview": "A hard-nosed cop reluctantly teams up with a wise-cracking criminal temporarily paroled to him, in order to track down a killer.",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 93295,
+    "backdrop_path": "/dEoWt93RHoXWb0bKyetX0l25SaM.jpg",
+    "name": "48 Hrs. Collection",
+    "poster_path": "/8Dlcb8aDch6sUcWBc8zSSfNbPgG.jpg"
+  },
+  "imdb_id": "tt0083511",
+  "release_date": "1982-12-09",
+  "original_title": "48 Hrs.",
+  "vote_count": 48,
+  "poster_path": "/rrraPWKiY8T6SEzODxZamqUSv6f.jpg",
+  "tagline": "One Cop. One Con. No Mercy.",
+  "revenue": 78868508,
+  "popularity": "0.810116923133036"
+}

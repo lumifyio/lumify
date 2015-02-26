@@ -1,0 +1,229 @@
+{
+  "budget": 0,
+  "vote_average": 6.3,
+  "backdrop_path": "/8iIsglLJamgGLkfcpt5Xk6q0J8d.jpg",
+  "genres": [{
+    "id": 35,
+    "name": "Comedy"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 13954,
+        "order": 0,
+        "credit_id": "52fe428bc3a36847f8027239",
+        "name": "W.C. Fields",
+        "cast_id": 13,
+        "profile_path": "/hPUjAJE8HAzMJhH1oc2p3mdDAVj.jpg",
+        "character": "Egbert Sousé"
+      },
+      {
+        "id": 13962,
+        "order": 1,
+        "credit_id": "52fe428bc3a36847f802723d",
+        "name": "Cora Witherspoon",
+        "cast_id": 14,
+        "profile_path": "/mJJIEGwsF1mtoez0zA54WQg9b93.jpg",
+        "character": "Agatha Sousé"
+      },
+      {
+        "id": 13963,
+        "order": 2,
+        "credit_id": "52fe428bc3a36847f8027241",
+        "name": "Una Merkel",
+        "cast_id": 15,
+        "profile_path": "/x1iiUZasvaAnQTuYbIx27lXysLr.jpg",
+        "character": "Myrtle Sousé"
+      },
+      {
+        "id": 13964,
+        "order": 3,
+        "credit_id": "52fe428bc3a36847f8027245",
+        "name": "Evelyn Del Rio",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Elsie Mae Adele Brunch Sousé"
+      },
+      {
+        "id": 13965,
+        "order": 4,
+        "credit_id": "52fe428bc3a36847f8027249",
+        "name": "Jessie Ralph",
+        "cast_id": 17,
+        "profile_path": "/oD7MuFfALRCDQYK2B3iDDleNf2H.jpg",
+        "character": "Mrs. Hermisillo Brunch"
+      },
+      {
+        "id": 13966,
+        "order": 5,
+        "credit_id": "52fe428bc3a36847f802724d",
+        "name": "Franklin Pangborn",
+        "cast_id": 18,
+        "profile_path": "/lVePP6Rv9qxqayS22DrtzUF1fP8.jpg",
+        "character": "J. Pinkerton Snoopington"
+      },
+      {
+        "id": 13967,
+        "order": 6,
+        "credit_id": "52fe428bc3a36847f8027251",
+        "name": "Shemp Howard",
+        "cast_id": 19,
+        "profile_path": "/eRPtRh781uNDStqKLlx3yodfws3.jpg",
+        "character": "Joe Guelpe, Bartender"
+      },
+      {
+        "id": 13968,
+        "order": 7,
+        "credit_id": "52fe428bc3a36847f8027255",
+        "name": "Grady Sutton",
+        "cast_id": 20,
+        "profile_path": "/aY0jYEXW2bHw2qzeIYu2zZk0JPP.jpg",
+        "character": "Og Oggilby"
+      },
+      {
+        "id": 13969,
+        "order": 8,
+        "credit_id": "52fe428bc3a36847f8027259",
+        "name": "Russell Hicks",
+        "cast_id": 21,
+        "profile_path": "/u2OYvcNTFBL0DUNQeXjHbLWfWW7.jpg",
+        "character": "J. Frothingham Waterbury"
+      },
+      {
+        "id": 13970,
+        "order": 9,
+        "credit_id": "52fe428cc3a36847f802725d",
+        "name": "Dick Purcell",
+        "cast_id": 22,
+        "profile_path": "/cG9D9FRldekquATNnsJ19Yho3xf.jpg",
+        "character": "Mackley Q. Greene"
+      }
+    ],
+    "crew": [
+      {
+        "id": 13953,
+        "credit_id": "52fe428bc3a36847f80271f3",
+        "department": "Directing",
+        "name": "Edward F. Cline",
+        "job": "Director",
+        "profile_path": "/lkAs1ydjzF9SjDIXDFOx5VvCxjl.jpg"
+      },
+      {
+        "id": 13954,
+        "credit_id": "52fe428bc3a36847f80271f9",
+        "department": "Writing",
+        "name": "W.C. Fields",
+        "job": "Screenplay",
+        "profile_path": "/hPUjAJE8HAzMJhH1oc2p3mdDAVj.jpg"
+      },
+      {
+        "id": 13955,
+        "credit_id": "52fe428bc3a36847f80271ff",
+        "department": "Production",
+        "name": "Jack J. Gross",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13956,
+        "credit_id": "52fe428bc3a36847f8027205",
+        "department": "Production",
+        "name": "Cliff Work",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13957,
+        "credit_id": "52fe428bc3a36847f802720b",
+        "department": "Sound",
+        "name": "Charles Previn",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 10602,
+        "credit_id": "52fe428bc3a36847f8027211",
+        "department": "Camera",
+        "name": "Milton R. Krasner",
+        "job": "Director of Photography",
+        "profile_path": "/mcCWfNEjNZc7tLd4QXN6epluwfG.jpg"
+      },
+      {
+        "id": 7649,
+        "credit_id": "52fe428bc3a36847f8027217",
+        "department": "Editing",
+        "name": "Arthur Hilton",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13958,
+        "credit_id": "52fe428bc3a36847f802721d",
+        "department": "Art",
+        "name": "Jack Otterson",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 12347,
+        "credit_id": "52fe428bc3a36847f8027223",
+        "department": "Art",
+        "name": "Richard H. Riedel",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 12348,
+        "credit_id": "52fe428bc3a36847f8027229",
+        "department": "Art",
+        "name": "Russell A. Gausman",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 13959,
+        "credit_id": "52fe428bc3a36847f802722f",
+        "department": "Costume & Make-Up",
+        "name": "Vera West",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 13960,
+        "credit_id": "52fe428bc3a36847f8027235",
+        "department": "Sound",
+        "name": "Bernard B. Brown",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 72,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 911,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Bank Dick",
+  "overview": "The Bank Dick is a comedy from 1940 starring W.C. Fields (who also wrote the story). The film is one of the greatest works from an American comedian.",
+  "production_companies": [{
+    "id": 13,
+    "name": "Universal Studios"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0032234",
+  "release_date": "1940-11-29",
+  "original_title": "The Bank Dick",
+  "vote_count": 3,
+  "poster_path": "/4K9k4dbYiLmxjFG132ZCwc9uHjC.jpg",
+  "tagline": "Was His Face Red . . . And His Nose, Too ! when the bandits took the money . . . and the SAFE !",
+  "revenue": 0,
+  "popularity": "0.17969608612522"
+}

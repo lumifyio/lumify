@@ -1,0 +1,237 @@
+{
+  "budget": 10000,
+  "vote_average": 7.6,
+  "backdrop_path": "/iCvB5O1edEV4y1WtNFloUkFzwrq.jpg",
+  "genres": [
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6718,
+        "order": 0,
+        "credit_id": "52fe4296c3a36847f802a5e1",
+        "name": "Jack Nance",
+        "cast_id": 13,
+        "profile_path": "/pb7sWzIyGdySpokyr80L7Iqzmx0.jpg",
+        "character": "Henry Spencer"
+      },
+      {
+        "id": 14794,
+        "order": 1,
+        "credit_id": "52fe4296c3a36847f802a5e5",
+        "name": "Charlotte Stewart",
+        "cast_id": 14,
+        "profile_path": "/4IUF48jRMcBR0ZjVc9ghDoo5c4x.jpg",
+        "character": "Mary X"
+      },
+      {
+        "id": 14795,
+        "order": 2,
+        "credit_id": "52fe4296c3a36847f802a5e9",
+        "name": "Allen Joseph",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Mr. X"
+      },
+      {
+        "id": 14796,
+        "order": 3,
+        "credit_id": "52fe4296c3a36847f802a5ed",
+        "name": "Jeanne Bates",
+        "cast_id": 16,
+        "profile_path": "/lHrwjoC9K970j1uet252Ti3LBaD.jpg",
+        "character": "Mrs. X"
+      },
+      {
+        "id": 14797,
+        "order": 4,
+        "credit_id": "52fe4296c3a36847f802a5f1",
+        "name": "Judith Roberts",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Beautiful Girl Across the Hall"
+      },
+      {
+        "id": 14798,
+        "order": 5,
+        "credit_id": "52fe4296c3a36847f802a5f5",
+        "name": "Laurel Near",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Lady in the Radiator"
+      },
+      {
+        "id": 14799,
+        "order": 6,
+        "credit_id": "52fe4296c3a36847f802a5f9",
+        "name": "T. Max Graham",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "The Boss"
+      },
+      {
+        "id": 14800,
+        "order": 7,
+        "credit_id": "52fe4296c3a36847f802a5fd",
+        "name": "Jennifer Chambers Lynch",
+        "cast_id": 20,
+        "profile_path": "/hrZxoo4d1xInj2zIHAyPGb3hY5K.jpg",
+        "character": "Little Girl"
+      },
+      {
+        "id": 14801,
+        "order": 8,
+        "credit_id": "52fe4296c3a36847f802a601",
+        "name": "Hal Landon Jr.",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Pencil Machine Operator"
+      },
+      {
+        "id": 14802,
+        "order": 9,
+        "credit_id": "52fe4296c3a36847f802a605",
+        "name": "Jean Lange",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Grandmother"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5a1",
+        "department": "Directing",
+        "name": "David Lynch",
+        "job": "Director",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5a7",
+        "department": "Writing",
+        "name": "David Lynch",
+        "job": "Screenplay",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5ad",
+        "department": "Production",
+        "name": "David Lynch",
+        "job": "Producer",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5b3",
+        "department": "Sound",
+        "name": "David Lynch",
+        "job": "Original Music Composer",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5b9",
+        "department": "Editing",
+        "name": "David Lynch",
+        "job": "Editor",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5bf",
+        "department": "Art",
+        "name": "David Lynch",
+        "job": "Production Design",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5c5",
+        "department": "Art",
+        "name": "David Lynch",
+        "job": "Art Direction",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5cb",
+        "department": "Sound",
+        "name": "David Lynch",
+        "job": "Sound Director",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 5602,
+        "credit_id": "52fe4296c3a36847f802a5d1",
+        "department": "Crew",
+        "name": "David Lynch",
+        "job": "Special Effects",
+        "profile_path": "/AdfItgtfNOjYmX1tCoM4G17EkRn.jpg"
+      },
+      {
+        "id": 14793,
+        "credit_id": "52fe4296c3a36847f802a5d7",
+        "department": "Camera",
+        "name": "Herbert Cardwell",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4434,
+        "credit_id": "52fe4296c3a36847f802a5dd",
+        "department": "Camera",
+        "name": "Frederick Elmes",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 89,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 985,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Eraserhead",
+  "overview": "Henry Spencer tries to survive his industrial environment, his angry girlfriend, and the unbearable screams of his newly born mutant child.",
+  "production_companies": [
+    {
+      "id": 17877,
+      "name": "Libra Films"
+    },
+    {
+      "id": 12226,
+      "name": "American Film Institute (AFI)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0074486",
+  "release_date": "1977-09-28",
+  "original_title": "Eraserhead",
+  "vote_count": 47,
+  "poster_path": "/hZyHaheGPYzGH9QuxNusKRDmdu4.jpg",
+  "tagline": "Where your nightmares end...",
+  "revenue": 7000000,
+  "popularity": "0.769033438727257"
+}

@@ -1,0 +1,195 @@
+{
+  "birthday": "1967-02-26",
+  "adult": false,
+  "biography": "",
+  "homepage": "",
+  "profile_path": null,
+  "id": 685,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0472192",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 10422,
+        "media_type": "movie",
+        "title": "Abgeschminkt!",
+        "credit_id": "52fe436c9251416c7500fc71",
+        "release_date": "1993-07-01",
+        "original_title": "Abgeschminkt!",
+        "adult": false,
+        "poster_path": "/sBLxgfq3gyUJ4afyEUx6AnjgQSe.jpg",
+        "character": "Maischa"
+      },
+      {
+        "id": 13921,
+        "media_type": "movie",
+        "title": "Special Escort",
+        "credit_id": "52fe45b59251416c7505faff",
+        "release_date": "2007-10-03",
+        "original_title": "Stellungswechsel",
+        "adult": false,
+        "poster_path": "/67aKnctBtjf8PVTzYROLwDqktdm.jpg",
+        "character": "Birte"
+      },
+      {
+        "id": 60303,
+        "media_type": "movie",
+        "title": "The Secret of Loch Ness II",
+        "credit_id": "52fe461fc3a368484e07feff",
+        "release_date": "2010-09-27",
+        "original_title": "Das zweite Wunder von Loch Ness",
+        "adult": false,
+        "poster_path": "/1BHopwpOOTgVPLN0RGyTk7G8PES.jpg",
+        "character": "Emma"
+      },
+      {
+        "id": 90188,
+        "media_type": "movie",
+        "title": "The Sad Life Of Gloria S.",
+        "credit_id": "52fe48a19251416c750ae255",
+        "release_date": "2011-12-01",
+        "original_title": "Das traurige Leben der Gloria S.",
+        "adult": false,
+        "poster_path": "/dN7Cmr2tgO6CcXyRM8IsgryaED.jpg",
+        "character": "Charlotte Weiß"
+      },
+      {
+        "id": 270,
+        "media_type": "movie",
+        "title": "Wir sagen Du! Schatz.",
+        "credit_id": "52fe4230c3a36847f800ab0d",
+        "release_date": "2007-11-01",
+        "original_title": "Wir sagen Du! Schatz.",
+        "adult": false,
+        "poster_path": "/9HpZNAs23BHJ37KFy2V65SgWVbh.jpg",
+        "character": "Sofia"
+      },
+      {
+        "id": 1263,
+        "media_type": "movie",
+        "title": "Die Aufschneider",
+        "credit_id": "52fe42ebc3a36847f802cddf",
+        "release_date": "2007-02-08",
+        "original_title": "Die Aufschneider",
+        "adult": false,
+        "poster_path": "/oRr1mrVMqlnoiMyUj42VlFCRiJ4.jpg",
+        "character": "Dr. Christiane Tietz"
+      },
+      {
+        "id": 86,
+        "media_type": "movie",
+        "title": "The Elementary Particles",
+        "credit_id": "52fe4215c3a36847f8002b31",
+        "release_date": "2006-02-10",
+        "original_title": "Elementarteilchen",
+        "adult": false,
+        "poster_path": "/6IgQZl06sNRSBZE1Te74ENb6mhx.jpg",
+        "character": "Katja"
+      },
+      {
+        "id": 135162,
+        "media_type": "movie",
+        "title": "Mann kann, Frau erst recht",
+        "credit_id": "52fe4befc3a368484e19f1ff",
+        "release_date": "2012-12-28",
+        "original_title": "Mann kann, Frau erst recht",
+        "adult": false,
+        "poster_path": "/AdYJpOwOyAMWcODWKLVXBaYKeOz.jpg",
+        "character": "Dagmar"
+      },
+      {
+        "id": 231193,
+        "media_type": "movie",
+        "title": "Nie mehr zweite Liga",
+        "credit_id": "52fe4de8c3a36847f8273f9d",
+        "release_date": "2000-03-21",
+        "original_title": "Nie mehr zweite Liga",
+        "adult": false,
+        "poster_path": "/pygK9d3XgqnH1qYr5L6AMBh6P1e.jpg",
+        "character": "Moni"
+      },
+      {
+        "id": 233639,
+        "media_type": "movie",
+        "title": "Ostwind",
+        "credit_id": "52fe4e20c3a36847f827f5bd",
+        "release_date": "2013-03-22",
+        "original_title": "Ostwind",
+        "adult": false,
+        "poster_path": "/wzYRkzIHOgHOWhcCe8n4KgAQCyR.jpg",
+        "character": "Mikas Mother"
+      },
+      {
+        "id": 224839,
+        "media_type": "movie",
+        "title": "Schlafsack für zwei",
+        "credit_id": "52fe4e489251416c75151577",
+        "release_date": "2005-05-31",
+        "original_title": "Schlafsack für zwei",
+        "adult": false,
+        "poster_path": null,
+        "character": "Michaela Seidel"
+      },
+      {
+        "id": 264846,
+        "media_type": "movie",
+        "title": "Die Friendensmission \u2013 10 Stunden Angst",
+        "credit_id": "534d981ac3a36867a700041c",
+        "release_date": "1997-05-02",
+        "original_title": "Die Friendensmission \u2013 10 Stunden Angst",
+        "adult": false,
+        "poster_path": null,
+        "character": "Bundeswehrärztin Stangl"
+      },
+      {
+        "id": 269378,
+        "media_type": "movie",
+        "title": "Unforgiven",
+        "credit_id": "536fbfbcc3a368124100ecc3",
+        "release_date": "2003-02-11",
+        "original_title": "Der Fußfesselmörder",
+        "adult": false,
+        "poster_path": null,
+        "character": "Simone Wenning"
+      },
+      {
+        "id": 276709,
+        "media_type": "movie",
+        "title": "40+ sucht neue Liebe",
+        "credit_id": "539ef6bcc3a36827c7000036",
+        "release_date": "2009-01-01",
+        "original_title": "40+ sucht neue Liebe",
+        "adult": false,
+        "poster_path": "/2XXUnmlm4tqXt1C7b8dRQdfoYaf.jpg",
+        "character": "Sarah Simon"
+      },
+      {
+        "id": 45337,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "536170310e0a2649a600043f",
+        "name": "Schimanski",
+        "poster_path": null,
+        "original_name": "Schimanski",
+        "first_air_date": "1997-11-09",
+        "character": "Claudia Pollack"
+      },
+      {
+        "id": 3034,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5383798cc3a36805a1008ba2",
+        "name": "Scene of the Crime",
+        "poster_path": "/aFWiM04UmCEnd53GNL1uFy2Qfll.jpg",
+        "original_name": "Tatort",
+        "first_air_date": "1970-11-29",
+        "character": "Rons Mutter"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Nina Kronjäger",
+  "place_of_birth": "Marburg an der Lahn",
+  "popularity": "1.07650000003792"
+}

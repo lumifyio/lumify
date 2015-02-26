@@ -1,0 +1,282 @@
+{
+  "budget": 0,
+  "vote_average": 7.3,
+  "backdrop_path": "/5p9hvunueczdj24r64aqPs0gWCj.jpg",
+  "genres": [{
+    "id": 35,
+    "name": "Comedy"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11187,
+        "order": 0,
+        "credit_id": "52fe4272c3a36847f801f609",
+        "name": "Louis de Funès",
+        "cast_id": 14,
+        "profile_path": "/bT8NZYM28Qdyb2fc48vFfMaPgTo.jpg",
+        "character": "Charles Duchemin"
+      },
+      {
+        "id": 11214,
+        "order": 1,
+        "credit_id": "52fe4272c3a36847f801f60d",
+        "name": "Coluche",
+        "cast_id": 15,
+        "profile_path": "/ujWms33e2GFBQGqfh9UNhqCPzBM.jpg",
+        "character": "Gérard Duchemin"
+      },
+      {
+        "id": 11217,
+        "order": 2,
+        "credit_id": "52fe4272c3a36847f801f619",
+        "name": "Claude Gensac",
+        "cast_id": 18,
+        "profile_path": "/6S0SsDfPpXn7HtTxhB3Iq5WZe6A.jpg",
+        "character": "Marguerite #1"
+      },
+      {
+        "id": 11215,
+        "order": 3,
+        "credit_id": "52fe4272c3a36847f801f611",
+        "name": "Ann Zacharias",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Marguerite #2"
+      },
+      {
+        "id": 11216,
+        "order": 4,
+        "credit_id": "52fe4272c3a36847f801f615",
+        "name": "Julien Guiomar",
+        "cast_id": 17,
+        "profile_path": "/zbgWU6iMHhn8aApkwgmpvjG3vRT.jpg",
+        "character": "Jacques Tricatel"
+      },
+      {
+        "id": 11219,
+        "order": 5,
+        "credit_id": "52fe4272c3a36847f801f61d",
+        "name": "Georges Chamarat",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Le doyen des académiciens"
+      },
+      {
+        "id": 11220,
+        "order": 6,
+        "credit_id": "52fe4272c3a36847f801f621",
+        "name": "Fernand Guiot",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Dubreuil"
+      },
+      {
+        "id": 11221,
+        "order": 7,
+        "credit_id": "52fe4272c3a36847f801f625",
+        "name": "Raymond Bussières",
+        "cast_id": 21,
+        "profile_path": "/15N1kLrcbBJgc0G4UBZoTukU3yg.jpg",
+        "character": "Henri - le chauffeur de Duchemin"
+      },
+      {
+        "id": 11223,
+        "order": 8,
+        "credit_id": "52fe4272c3a36847f801f629",
+        "name": "Vittorio Caprioli",
+        "cast_id": 22,
+        "profile_path": "/rk3y1tWI5wMl6MAJvhMvNh3yoJN.jpg",
+        "character": "Vittorio"
+      },
+      {
+        "id": 39953,
+        "order": 9,
+        "credit_id": "536f7be70e0a2647db012395",
+        "name": "Jean Martin",
+        "cast_id": 23,
+        "profile_path": "/3sB4L0gSQvcTSONksUQI4qiqGyT.jpg",
+        "character": "Le médecin"
+      },
+      {
+        "id": 31820,
+        "order": 10,
+        "credit_id": "536f7c290e0a2647ce01203a",
+        "name": "Gérard Boucaron",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Ficelle"
+      },
+      {
+        "id": 115472,
+        "order": 11,
+        "credit_id": "536f7c4e0e0a2647c401291b",
+        "name": "Antoine Marin",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Un collaborateur de Duchemin"
+      },
+      {
+        "id": 25048,
+        "order": 12,
+        "credit_id": "536f7c760e0a2647d8012645",
+        "name": "Yves Afonso",
+        "cast_id": 26,
+        "profile_path": "/jHQ9wteH65GnjpUZlqnkYezwdhH.jpg",
+        "character": "Le faux plombier"
+      },
+      {
+        "id": 1180148,
+        "order": 13,
+        "credit_id": "536f7cb30e0a2647ce012045",
+        "name": "Philippe Bouvard",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Philippe Bouvard - l'animateur du débat"
+      },
+      {
+        "id": 4121,
+        "order": 14,
+        "credit_id": "536f7cfbc3a368124a00e7a9",
+        "name": "Marcel Dalio",
+        "cast_id": 28,
+        "profile_path": "/1lrGhscbhXoqVHOAI8Iv1hNQMAd.jpg",
+        "character": "Le tailleur de Duchemin"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11201,
+        "credit_id": "52fe4272c3a36847f801f5bd",
+        "department": "Directing",
+        "name": "Claude Zidi",
+        "job": "Director",
+        "profile_path": "/m02uCmAOUM6fjTzZMtyZkG5GKLX.jpg"
+      },
+      {
+        "id": 11201,
+        "credit_id": "52fe4272c3a36847f801f5c3",
+        "department": "Writing",
+        "name": "Claude Zidi",
+        "job": "Screenplay",
+        "profile_path": "/m02uCmAOUM6fjTzZMtyZkG5GKLX.jpg"
+      },
+      {
+        "id": 11202,
+        "credit_id": "52fe4272c3a36847f801f5c9",
+        "department": "Writing",
+        "name": "Michel Fabre",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 11203,
+        "credit_id": "52fe4272c3a36847f801f5cf",
+        "department": "Production",
+        "name": "Christian Fechner",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11204,
+        "credit_id": "52fe4272c3a36847f801f5d5",
+        "department": "Production",
+        "name": "Pierre Grunstein",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1965,
+        "credit_id": "52fe4272c3a36847f801f5db",
+        "department": "Sound",
+        "name": "Vladimir Cosma",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11205,
+        "credit_id": "52fe4272c3a36847f801f5e1",
+        "department": "Camera",
+        "name": "Wladimir Ivanov",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 10469,
+        "credit_id": "52fe4272c3a36847f801f5e7",
+        "department": "Camera",
+        "name": "Claude Renoir",
+        "job": "Director of Photography",
+        "profile_path": "/41xD6gvddFwSUvVBGO5mvU6AOaU.jpg"
+      },
+      {
+        "id": 11206,
+        "credit_id": "52fe4272c3a36847f801f5ed",
+        "department": "Editing",
+        "name": "Monique Isnardon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11208,
+        "credit_id": "52fe4272c3a36847f801f5f3",
+        "department": "Editing",
+        "name": "Robert Isnardon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11210,
+        "credit_id": "52fe4272c3a36847f801f5f9",
+        "department": "Art",
+        "name": "Claude Suné",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 11211,
+        "credit_id": "52fe4272c3a36847f801f5ff",
+        "department": "Art",
+        "name": "Michel de Broin",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 10474,
+        "credit_id": "52fe4272c3a36847f801f605",
+        "department": "Costume & Make-Up",
+        "name": "Jacques Fonteray",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 104,
+  "spoken_languages": [{
+    "iso_639_1": "fr",
+    "name": "Français"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 761,
+  "production_countries": [{
+    "name": "France",
+    "iso_3166_1": "FR"
+  }],
+  "title": "The Wing and the Thigh",
+  "overview": "Charles Duchemin, a well-known gourmet and publisher of a famous restaurant guide, is waging a war against fast food entrepreneur Tri- catel to save the French art of cooking. After having agreed to appear on a talk show to show his skills in naming food and wine by taste, he is confronted with two disasters: his son wants to become a clown rather than a restaurant tester and he, the famous Charles Duchemin, has lost his taste!",
+  "production_companies": [{
+    "id": 461,
+    "name": "Les Films Christian Fechner"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0074103",
+  "release_date": "1976-10-27",
+  "original_title": "L'Aile ou la Cuisse",
+  "vote_count": 8,
+  "poster_path": "/tLiNclC5vu9gy7VUqVBXbrreqiZ.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.462678739194071"
+}

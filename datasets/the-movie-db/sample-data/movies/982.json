@@ -1,0 +1,302 @@
+{
+  "budget": 80000000,
+  "vote_average": 7.5,
+  "backdrop_path": "/b2Mc40eCIb9Z55X7lbHGT2TsI9m.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4347,
+        "order": 0,
+        "credit_id": "52fe4296c3a36847f802a3c3",
+        "name": "Frank Sinatra",
+        "cast_id": 15,
+        "profile_path": "/vn9qWseEb2LspaS0LBDntH0L4Qw.jpg",
+        "character": "Capt./Maj. Bennett Marco"
+      },
+      {
+        "id": 7302,
+        "order": 1,
+        "credit_id": "52fe4296c3a36847f802a3c7",
+        "name": "Janet Leigh",
+        "cast_id": 16,
+        "profile_path": "/3FWYSCJUOuYVDPG9UoMjtqNMdyb.jpg",
+        "character": "Eugenie Rose Chaney"
+      },
+      {
+        "id": 14729,
+        "order": 2,
+        "credit_id": "52fe4296c3a36847f802a3cb",
+        "name": "Laurence Harvey",
+        "cast_id": 17,
+        "profile_path": "/kDaXXLTiCnXW57GPeC7EbZcezVB.jpg",
+        "character": "Raymond Shaw"
+      },
+      {
+        "id": 14730,
+        "order": 3,
+        "credit_id": "52fe4296c3a36847f802a3cf",
+        "name": "Angela Lansbury",
+        "cast_id": 18,
+        "profile_path": "/tpQ9piWJmdEnd9usxaPsmWkagYK.jpg",
+        "character": "Mrs. Iselin"
+      },
+      {
+        "id": 14731,
+        "order": 4,
+        "credit_id": "52fe4296c3a36847f802a3d3",
+        "name": "Henry Silva",
+        "cast_id": 19,
+        "profile_path": "/wSDmsMhQ95utBggMaHOCALMM9CC.jpg",
+        "character": "Chunjin"
+      },
+      {
+        "id": 14732,
+        "order": 5,
+        "credit_id": "52fe4296c3a36847f802a3d7",
+        "name": "James Gregory",
+        "cast_id": 20,
+        "profile_path": "/zs5Tw77PnBkQoD5CNRWYEcqaE9E.jpg",
+        "character": "Sen. John Yerkes Iselin"
+      },
+      {
+        "id": 14733,
+        "order": 6,
+        "credit_id": "52fe4296c3a36847f802a3db",
+        "name": "Leslie Parrish",
+        "cast_id": 21,
+        "profile_path": "/fxNplF0HUZWvPDECFD5z60j36mF.jpg",
+        "character": "Jocelyn Jordan"
+      },
+      {
+        "id": 1943,
+        "order": 7,
+        "credit_id": "52fe4296c3a36847f802a3df",
+        "name": "John McGiver",
+        "cast_id": 22,
+        "profile_path": "/q0YirNjJBOVcXMd7b68FLenMTNb.jpg",
+        "character": "Sen. Thomas Jordan"
+      },
+      {
+        "id": 14734,
+        "order": 8,
+        "credit_id": "52fe4296c3a36847f802a3e3",
+        "name": "Khigh Dhiegh",
+        "cast_id": 23,
+        "profile_path": "/mUon7SegV4Glu0xVKiqg9kFnOPs.jpg",
+        "character": "Dr. Yen Lo"
+      },
+      {
+        "id": 3342,
+        "order": 9,
+        "credit_id": "52fe4296c3a36847f802a3e7",
+        "name": "James Edwards",
+        "cast_id": 24,
+        "profile_path": "/57hJbLy1mYXMcwYl3n13Tdpv0TW.jpg",
+        "character": "Cpl. Allen Melvin"
+      },
+      {
+        "id": 14735,
+        "order": 10,
+        "credit_id": "52fe4296c3a36847f802a3eb",
+        "name": "Douglas Henderson",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Col. Milt"
+      },
+      {
+        "id": 14736,
+        "order": 11,
+        "credit_id": "52fe4296c3a36847f802a3ef",
+        "name": "Albert Paulsen",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Zilkov"
+      },
+      {
+        "id": 89834,
+        "order": 12,
+        "credit_id": "52fe4296c3a36847f802a3f3",
+        "name": "Barry Kelley",
+        "cast_id": 27,
+        "profile_path": "/q1t3gNvtx0A4pGHEGUJATuMIrwZ.jpg",
+        "character": "Secretary of Defense"
+      },
+      {
+        "id": 34497,
+        "order": 13,
+        "credit_id": "52fe4296c3a36847f802a3f7",
+        "name": "Lloyd Corrigan",
+        "cast_id": 28,
+        "profile_path": "/ztIbJK8dFpAJ3WavYHCrvyTT2wP.jpg",
+        "character": "Holborn Gaines"
+      },
+      {
+        "id": 387961,
+        "order": 14,
+        "credit_id": "52fe4296c3a36847f802a3fb",
+        "name": "Madame Spivy",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Female Berezovo"
+      }
+    ],
+    "crew": [
+      {
+        "id": 13776,
+        "credit_id": "52fe4296c3a36847f802a371",
+        "department": "Directing",
+        "name": "John Frankenheimer",
+        "job": "Director",
+        "profile_path": "/2RvRtSTRoRgkNJOOJoxJpTp6Gak.jpg"
+      },
+      {
+        "id": 14724,
+        "credit_id": "52fe4296c3a36847f802a377",
+        "department": "Writing",
+        "name": "Richard Condon",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 1931,
+        "credit_id": "52fe4296c3a36847f802a37d",
+        "department": "Writing",
+        "name": "George Axelrod",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1931,
+        "credit_id": "52fe4296c3a36847f802a383",
+        "department": "Production",
+        "name": "George Axelrod",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13776,
+        "credit_id": "52fe4296c3a36847f802a389",
+        "department": "Production",
+        "name": "John Frankenheimer",
+        "job": "Producer",
+        "profile_path": "/2RvRtSTRoRgkNJOOJoxJpTp6Gak.jpg"
+      },
+      {
+        "id": 3428,
+        "credit_id": "52fe4296c3a36847f802a38f",
+        "department": "Production",
+        "name": "Howard W. Koch",
+        "job": "Executive Producer",
+        "profile_path": "/ocnNi4vGIENHuQFzv2ecoLjP9pB.jpg"
+      },
+      {
+        "id": 14725,
+        "credit_id": "52fe4296c3a36847f802a395",
+        "department": "Sound",
+        "name": "David Amram",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 14726,
+        "credit_id": "52fe4296c3a36847f802a39b",
+        "department": "Camera",
+        "name": "Lionel Lindon",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3643,
+        "credit_id": "52fe4296c3a36847f802a3a1",
+        "department": "Editing",
+        "name": "Ferris Webster",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12017,
+        "credit_id": "52fe4296c3a36847f802a3a7",
+        "department": "Art",
+        "name": "Richard Sylbert",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8883,
+        "credit_id": "52fe4296c3a36847f802a3ad",
+        "department": "Art",
+        "name": "Philip M. Jefferies",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8339,
+        "credit_id": "52fe4296c3a36847f802a3b3",
+        "department": "Art",
+        "name": "George R. Nelson",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 14727,
+        "credit_id": "52fe4296c3a36847f802a3b9",
+        "department": "Costume & Make-Up",
+        "name": "Moss Mabry",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14728,
+        "credit_id": "52fe4296c3a36847f802a3bf",
+        "department": "Crew",
+        "name": "A. Paul Pollard",
+        "job": "Special Effects",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 126,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 982,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Manchurian Candidate",
+  "overview": "The Manchurian Candidate is a political thriller from American director John Frankenheimer. An American soldier is brainwashed into being a killer for the communist Russians during the Korean War.",
+  "production_companies": [{
+    "id": 623,
+    "name": "MC Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0056218",
+  "release_date": "1962-10-24",
+  "original_title": "The Manchurian Candidate",
+  "vote_count": 10,
+  "poster_path": "/1a6krdQr17aaA0Q3yS5LNVtxYvf.jpg",
+  "tagline": "When you've seen it all, you'll swear there's never been anything like it!",
+  "revenue": 96105910,
+  "popularity": "0.559861440895435"
+}

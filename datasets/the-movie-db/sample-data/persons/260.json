@@ -1,0 +1,129 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/348xOvXxkEiKXa5PMSWgBBzkHyw.jpg",
+  "id": 260,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0702270",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 55,
+        "media_type": "movie",
+        "title": "Amores Perros",
+        "credit_id": "52fe4211c3a36847f80017a9",
+        "release_date": "2000-03-14",
+        "original_title": "Amores perros",
+        "adult": false,
+        "poster_path": "/8gEXmIzw1tDnBfOaCFPimkNIkmm.jpg",
+        "character": "Ramiro"
+      },
+      {
+        "id": 4170,
+        "media_type": "movie",
+        "title": "Trade",
+        "credit_id": "52fe43b0c3a36847f8067d65",
+        "release_date": "2007-01-23",
+        "original_title": "Trade",
+        "adult": false,
+        "poster_path": "/kkdN54cMkPEIoa9xDdmpT2Hg0pl.jpg",
+        "character": "Manuelo"
+      },
+      {
+        "id": 264382,
+        "media_type": "movie",
+        "title": "Aerosol",
+        "credit_id": "5349de88c3a3682dfe0008a2",
+        "release_date": null,
+        "original_title": "Aerosol",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 264401,
+        "media_type": "movie",
+        "title": "Gloria",
+        "credit_id": "5349f7efc3a3682de4000b38",
+        "release_date": "2014-09-05",
+        "original_title": "Gloria",
+        "adult": false,
+        "poster_path": "/jAuSMTVykt2wRGWopsvuOw0NTIc.jpg",
+        "character": "Sergio Andrade"
+      },
+      {
+        "id": 265314,
+        "media_type": "movie",
+        "title": "Mexico's Most Wanted",
+        "credit_id": "53507f98c3a3681da500054c",
+        "release_date": "2013-11-15",
+        "original_title": "El charro misterioso, Enemigo Público # 1 de México",
+        "adult": false,
+        "poster_path": "/pSbqZFef3nHfkeYWiwKlP7DXBlf.jpg",
+        "character": ""
+      },
+      {
+        "id": 121062,
+        "media_type": "movie",
+        "title": "You Owe Me One",
+        "credit_id": "52fe4a59c3a368484e14e41b",
+        "release_date": "2002-04-07",
+        "original_title": "Me la debes",
+        "adult": false,
+        "poster_path": null,
+        "character": "Chivito"
+      },
+      {
+        "id": 151708,
+        "media_type": "movie",
+        "title": "Colosio: El Asesinato",
+        "credit_id": "52fe4b099251416c910cdd71",
+        "release_date": "2012-06-08",
+        "original_title": "Colosio: El Asesinato",
+        "adult": false,
+        "poster_path": "/vgzh9vV8Ry6e7txJhWdt73L9uLp.jpg",
+        "character": "El Seco"
+      },
+      {
+        "id": 113195,
+        "media_type": "movie",
+        "title": "La garganta del diablo",
+        "credit_id": "52fe4b2ec3a36847f81f6af1",
+        "release_date": "2008-01-01",
+        "original_title": "La garganta del diablo",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 131676,
+        "media_type": "movie",
+        "title": "The Compass Is Carried by the Dead Man",
+        "credit_id": "52fe4b7cc3a368484e18b39d",
+        "release_date": "2011-10-22",
+        "original_title": "La brújula la lleva el muerto",
+        "adult": false,
+        "poster_path": "/dQquIPoKcDJtv0WFx7tiHOuiDRd.jpg",
+        "character": ""
+      },
+      {
+        "id": 26773,
+        "media_type": "movie",
+        "title": "Backyard",
+        "credit_id": "52fe4518c3a368484e04825d",
+        "release_date": "2009-10-15",
+        "original_title": "El Traspatio",
+        "adult": false,
+        "poster_path": "/btjdzHyUwdjgpMjYiC74ZbkW2Zl.jpg",
+        "character": "Fierro"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Marco Pérez",
+  "place_of_birth": null,
+  "popularity": "1.00005802712425"
+}

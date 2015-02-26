@@ -1,0 +1,401 @@
+{
+  "budget": 50000000,
+  "vote_average": 6,
+  "backdrop_path": "/fYs97Y4IuZKiHbBPwU97mpgqRHs.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 16170,
+        "order": 0,
+        "credit_id": "52fe428ec3a36847f80280ab",
+        "name": "Zach Galligan",
+        "cast_id": 17,
+        "profile_path": "/u06Txf30YaDkr0qENUbSp4DGab3.jpg",
+        "character": "Billy Peltzer"
+      },
+      {
+        "id": 16171,
+        "order": 1,
+        "credit_id": "52fe428ec3a36847f80280af",
+        "name": "Phoebe Cates",
+        "cast_id": 18,
+        "profile_path": "/5PxWIvoufedYN7dfDohBXcrUx2C.jpg",
+        "character": "Kate Beringer"
+      },
+      {
+        "id": 5589,
+        "order": 2,
+        "credit_id": "52fe428ec3a36847f80280b3",
+        "name": "John Glover",
+        "cast_id": 19,
+        "profile_path": "/oxoOXlY9qJt9kQwxA9PNhnBTgX9.jpg",
+        "character": "Daniel Clamp"
+      },
+      {
+        "id": 10360,
+        "order": 3,
+        "credit_id": "52fe428ec3a36847f80280b7",
+        "name": "Robert Prosky",
+        "cast_id": 20,
+        "profile_path": "/6sQjktv9OamespABAmXtdJhFMH3.jpg",
+        "character": "Grandpa Fred"
+      },
+      {
+        "id": 16180,
+        "order": 4,
+        "credit_id": "52fe428ec3a36847f80280bb",
+        "name": "Robert Picardo",
+        "cast_id": 21,
+        "profile_path": "/5L0WCl3TzjeWdP8TqXfQ1n9uaOn.jpg",
+        "character": "Forster"
+      },
+      {
+        "id": 113,
+        "order": 5,
+        "credit_id": "52fe428ec3a36847f80280bf",
+        "name": "Christopher Lee",
+        "cast_id": 22,
+        "profile_path": "/7YwjaHLmuy1isK6oh3TnBDd6Oml.jpg",
+        "character": "Doctor Catheter"
+      },
+      {
+        "id": 16181,
+        "order": 6,
+        "credit_id": "52fe428ec3a36847f80280c3",
+        "name": "Haviland Morris",
+        "cast_id": 23,
+        "profile_path": "/5l7ScDPRR85dGy6wOF0ACfiJlMy.jpg",
+        "character": "Marla Bloodstone"
+      },
+      {
+        "id": 16182,
+        "order": 7,
+        "credit_id": "52fe428ec3a36847f80280c7",
+        "name": "Jackie Joseph",
+        "cast_id": 24,
+        "profile_path": "/guS1QH6qXxMs2aW6zD7YWy7RJSm.jpg",
+        "character": "Sheila Futterman"
+      },
+      {
+        "id": 16183,
+        "order": 8,
+        "credit_id": "52fe428ec3a36847f80280cb",
+        "name": "Gedde Watanabe",
+        "cast_id": 25,
+        "profile_path": "/nyTEOm2sEMJONOp3oWFKUZuJNTv.jpg",
+        "character": "Mr. Katsuji"
+      },
+      {
+        "id": 16103,
+        "order": 9,
+        "credit_id": "52fe428ec3a36847f80280cf",
+        "name": "Keye Luke",
+        "cast_id": 26,
+        "profile_path": "/1mnlwICoRFyz6nmER2MGtXgocWk.jpg",
+        "character": "Mr. Wing"
+      },
+      {
+        "id": 7210,
+        "order": 10,
+        "credit_id": "52fe428ec3a36847f80280d3",
+        "name": "Kathleen Freeman",
+        "cast_id": 27,
+        "profile_path": "/qqupkOdnSowZ5L3eHu6an7fndjP.jpg",
+        "character": "Microwave Marge"
+      },
+      {
+        "id": 16184,
+        "order": 11,
+        "credit_id": "52fe428ec3a36847f80280d7",
+        "name": "Don Stanton",
+        "cast_id": 28,
+        "profile_path": "/ppY3C3RfsPg7hcBaFopk1fvXDjL.jpg",
+        "character": "Martin"
+      },
+      {
+        "id": 16185,
+        "order": 12,
+        "credit_id": "52fe428ec3a36847f80280db",
+        "name": "Dan Stanton",
+        "cast_id": 29,
+        "profile_path": "/ppY3C3RfsPg7hcBaFopk1fvXDjL.jpg",
+        "character": "Lewis"
+      },
+      {
+        "id": 16186,
+        "order": 13,
+        "credit_id": "52fe428ec3a36847f80280df",
+        "name": "Shawn Nelson",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Wally"
+      },
+      {
+        "id": 102441,
+        "order": 14,
+        "credit_id": "52fe428ec3a36847f80280e9",
+        "name": "Dick Miller",
+        "cast_id": 32,
+        "profile_path": "/m4Yx1MaNn3H95HLTBCMNHOfUVv8.jpg",
+        "character": "Murray Futterman"
+      },
+      {
+        "id": 101377,
+        "order": 15,
+        "credit_id": "52fe428ec3a36847f80280ed",
+        "name": "Paul Bartel",
+        "cast_id": 33,
+        "profile_path": "/7Kj1Y9V8lfnFXHkjf30H8d3ylQA.jpg",
+        "character": "Theatre Manager"
+      },
+      {
+        "id": 41230,
+        "order": 16,
+        "credit_id": "52fe428ec3a36847f80280f1",
+        "name": "John Astin",
+        "cast_id": 34,
+        "profile_path": "/thWruW63AhnJUiQu4hcqi600dNH.jpg",
+        "character": "Janitor"
+      },
+      {
+        "id": 19439,
+        "order": 17,
+        "credit_id": "52fe428ec3a36847f80280f5",
+        "name": "Henry Gibson",
+        "cast_id": 35,
+        "profile_path": "/lLzzFLkPa3jKmu1sfJRxdm7zkmM.jpg",
+        "character": "Employee fired for Smoking"
+      },
+      {
+        "id": 109255,
+        "order": 18,
+        "credit_id": "52fe428fc3a36847f80280f9",
+        "name": "Leonard Maltin",
+        "cast_id": 36,
+        "profile_path": "/oiYdHwKoqDqyDKzq9VFx7ynzfYs.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 16620,
+        "order": 19,
+        "credit_id": "52fe428fc3a36847f80280fd",
+        "name": "Hulk Hogan",
+        "cast_id": 37,
+        "profile_path": "/jDWQ3FLbbPSIHPgfOdmuUaWWnON.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 40206,
+        "order": 20,
+        "credit_id": "52fe428fc3a36847f8028101",
+        "name": "Tony Randall",
+        "cast_id": 38,
+        "profile_path": "/nf4YiBn7rqvdZG0sWqUT2R3cc64.jpg",
+        "character": "Brain Gremlin (voice)"
+      },
+      {
+        "id": 77920,
+        "order": 21,
+        "credit_id": "52fe428fc3a36847f8028105",
+        "name": "Howie Mandel",
+        "cast_id": 39,
+        "profile_path": "/vGiiLVMetVkQIRhirMDqcfOqJoz.jpg",
+        "character": "Gizmo (voice)"
+      },
+      {
+        "id": 15831,
+        "order": 22,
+        "credit_id": "53d14089c3a368776d00a477",
+        "name": "Frank Welker",
+        "cast_id": 40,
+        "profile_path": "/a3QPvpgqKMGViS2M9mGcRy7xDZ.jpg",
+        "character": "Mohawk (voice)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 10965,
+        "credit_id": "52fe428ec3a36847f802804d",
+        "department": "Writing",
+        "name": "Chris Columbus",
+        "job": "Screenplay",
+        "profile_path": "/2fHN78oumrJRM84UydgfVzj0YEl.jpg"
+      },
+      {
+        "id": 16154,
+        "credit_id": "52fe428ec3a36847f8028053",
+        "department": "Production",
+        "name": "Michael Finnell",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe428ec3a36847f8028059",
+        "department": "Production",
+        "name": "Steven Spielberg",
+        "job": "Executive Producer",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 1760,
+        "credit_id": "52fe428ec3a36847f802805f",
+        "department": "Sound",
+        "name": "Jerry Goldsmith",
+        "job": "Original Music Composer",
+        "profile_path": "/uQdaeP2awJgDc0ps9dohHw5quQ2.jpg"
+      },
+      {
+        "id": 16156,
+        "credit_id": "52fe428ec3a36847f8028065",
+        "department": "Camera",
+        "name": "John Hora",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 13584,
+        "credit_id": "52fe428ec3a36847f802806b",
+        "department": "Editing",
+        "name": "Kent Beyda",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 16175,
+        "credit_id": "52fe428ec3a36847f8028071",
+        "department": "Production",
+        "name": "Glenn Daniels",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3806,
+        "credit_id": "52fe428ec3a36847f8028077",
+        "department": "Production",
+        "name": "Marion Dougherty",
+        "job": "Casting",
+        "profile_path": "/vHUj1WzotNrj9PTT6wJ1yhhULbD.jpg"
+      },
+      {
+        "id": 10064,
+        "credit_id": "52fe428ec3a36847f802807d",
+        "department": "Art",
+        "name": "James H. Spencer",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3988,
+        "credit_id": "52fe428ec3a36847f8028083",
+        "department": "Art",
+        "name": "Joseph P. Lucky",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 16176,
+        "credit_id": "52fe428ec3a36847f8028089",
+        "department": "Art",
+        "name": "John H. Anderson",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 13589,
+        "credit_id": "52fe428ec3a36847f802808f",
+        "department": "Costume & Make-Up",
+        "name": "Rosanna Norton",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 16177,
+        "credit_id": "52fe428ec3a36847f8028095",
+        "department": "Sound",
+        "name": "Ron Bartlett",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 16178,
+        "credit_id": "52fe428ec3a36847f802809b",
+        "department": "Crew",
+        "name": "Rick Baker",
+        "job": "Special Effects",
+        "profile_path": "/4sVinbTdY31QSmQUJFjomK2AXd8.jpg"
+      },
+      {
+        "id": 16179,
+        "credit_id": "52fe428ec3a36847f80280a1",
+        "department": "Visual Effects",
+        "name": "Dennis Michelson",
+        "job": "Visual Effects Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 16163,
+        "credit_id": "52fe428ec3a36847f80280a7",
+        "department": "Crew",
+        "name": "Mike H. McGaughy",
+        "job": "Stunt Coordinator",
+        "profile_path": null
+      },
+      {
+        "id": 4600,
+        "credit_id": "52fe428ec3a36847f80280e5",
+        "department": "Directing",
+        "name": "Joe Dante",
+        "job": "Director",
+        "profile_path": "/6tXq6DyArD72Nus1PBdxuksIgXo.jpg"
+      }
+    ]
+  },
+  "runtime": 106,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 928,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Gremlins 2: The New Batch",
+  "overview": "Young sweethearts Billy and Kate move to the Big Apple, land jobs in a high-tech office park and soon reunite with the friendly and lovable Gizmo. But a series of accidents creates a whole new generation of Gremlins. The situation worsens when the devilish green creatures invade a top-secret laboratory and develop genetically altered powers, making them even harder to destroy!",
+  "production_companies": [{
+    "id": 56,
+    "name": "Amblin Entertainment"
+  }],
+  "belongs_to_collection": {
+    "id": 89151,
+    "backdrop_path": "/2Oz7EyiM9nNeP7appRFkMZNeYRo.jpg",
+    "name": "The Gremlins Collection",
+    "poster_path": "/mcrb8SdAOrJpSMbWWS3Hv304FCG.jpg"
+  },
+  "imdb_id": "tt0099700",
+  "release_date": "1990-06-15",
+  "original_title": "Gremlins 2: The New Batch",
+  "vote_count": 82,
+  "poster_path": "/b5EWZRugg7eWP4HGGriCLerrjp.jpg",
+  "tagline": "Here they grow again.",
+  "revenue": 41482207,
+  "popularity": "1.08748986245308"
+}

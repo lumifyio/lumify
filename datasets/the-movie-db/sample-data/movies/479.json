@@ -1,0 +1,305 @@
+{
+  "budget": 46000000,
+  "vote_average": 4.9,
+  "backdrop_path": "/2p9NtyrnFZtGRyCGN5SBk1eARNK.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2231,
+        "order": 0,
+        "credit_id": "52fe4248c3a36847f801217b",
+        "name": "Samuel L. Jackson",
+        "cast_id": 6,
+        "profile_path": "/dlW6prW9HwYDsIRXNoFYtyHpSny.jpg",
+        "character": "John Shaft"
+      },
+      {
+        "id": 2954,
+        "order": 1,
+        "credit_id": "52fe4248c3a36847f801217f",
+        "name": "Jeffrey Wright",
+        "cast_id": 8,
+        "profile_path": "/wBh9rwK3aRr1hCrSRLxxPHKzGeU.jpg",
+        "character": "Peoples Hernandez"
+      },
+      {
+        "id": 3894,
+        "order": 2,
+        "credit_id": "52fe4248c3a36847f8012183",
+        "name": "Christian Bale",
+        "cast_id": 9,
+        "profile_path": "/pPXnqoGD91znz4FwQ6aKuxi6Pcy.jpg",
+        "character": "Walter Wade, Jr."
+      },
+      {
+        "id": 6485,
+        "order": 3,
+        "credit_id": "52fe4248c3a36847f8012187",
+        "name": "Busta Rhymes",
+        "cast_id": 10,
+        "profile_path": "/1NqDmMk2jnrLjJUfb68gtMnSyF8.jpg",
+        "character": "Rasaan"
+      },
+      {
+        "id": 6486,
+        "order": 4,
+        "credit_id": "52fe4248c3a36847f801218b",
+        "name": "Dan Hedaya",
+        "cast_id": 11,
+        "profile_path": "/nnPucf3vQT9RasJYrBhZQF1KPoJ.jpg",
+        "character": "Jack Roselli"
+      },
+      {
+        "id": 3051,
+        "order": 5,
+        "credit_id": "52fe4248c3a36847f801218f",
+        "name": "Toni Collette",
+        "cast_id": 12,
+        "profile_path": "/t9JGwWaTj3bahyHKUv7KMrcwoiz.jpg",
+        "character": "Diane Palmieri"
+      },
+      {
+        "id": 6487,
+        "order": 6,
+        "credit_id": "52fe4248c3a36847f8012193",
+        "name": "Richard Roundtree",
+        "cast_id": 13,
+        "profile_path": "/3OyAx3Vrv1mQLOvl7YHaIaFwDuW.jpg",
+        "character": "(Uncle) John Shaft"
+      },
+      {
+        "id": 3798,
+        "order": 7,
+        "credit_id": "52fe4248c3a36847f80121cd",
+        "name": "Pat Hingle",
+        "cast_id": 23,
+        "profile_path": "/bW8alHCKEK0UOJjoZwjwwH7T0ga.jpg",
+        "character": "Judge Dennis Bradford"
+      },
+      {
+        "id": 6541,
+        "order": 8,
+        "credit_id": "52fe4248c3a36847f80121d1",
+        "name": "Philip Bosco",
+        "cast_id": 24,
+        "profile_path": "/8B8EQk868fQF8fGZ1w33XDV5Z1S.jpg",
+        "character": "Walter Wade Senior"
+      },
+      {
+        "id": 27011,
+        "order": 9,
+        "credit_id": "52fe4248c3a36847f80121db",
+        "name": "Vanessa Williams",
+        "cast_id": 26,
+        "profile_path": "/t5tyW5nSk5ikeU8cWPdg4ImsMuq.jpg",
+        "character": "Carmen Vasquez"
+      },
+      {
+        "id": 6906,
+        "order": 10,
+        "credit_id": "5323fe7e92514115440001c1",
+        "name": "Lee Tergesen",
+        "cast_id": 28,
+        "profile_path": "/eb2fKDGpVLYJGGuC4SUHRpezP8U.jpg",
+        "character": "Luger"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6482,
+        "credit_id": "52fe4248c3a36847f801215f",
+        "department": "Directing",
+        "name": "John Singleton",
+        "job": "Director",
+        "profile_path": "/xmVaXjAAywPh7HIrYjLVsjfKPrV.jpg"
+      },
+      {
+        "id": 6483,
+        "credit_id": "52fe4248c3a36847f8012165",
+        "department": "Writing",
+        "name": "Ernest Tidyman",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 6482,
+        "credit_id": "52fe4248c3a36847f801216b",
+        "department": "Writing",
+        "name": "John Singleton",
+        "job": "Author",
+        "profile_path": "/xmVaXjAAywPh7HIrYjLVsjfKPrV.jpg"
+      },
+      {
+        "id": 6039,
+        "credit_id": "52fe4248c3a36847f8012171",
+        "department": "Writing",
+        "name": "Shane Salerno",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2989,
+        "credit_id": "52fe4248c3a36847f8012177",
+        "department": "Writing",
+        "name": "Richard Price",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 6488,
+        "credit_id": "52fe4248c3a36847f8012199",
+        "department": "Production",
+        "name": "Mark Roybal",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2997,
+        "credit_id": "52fe4248c3a36847f801219f",
+        "department": "Production",
+        "name": "Scott Rudin",
+        "job": "Producer",
+        "profile_path": "/zQTrqlpRUInnS6DE3hrAQwM1QDF.jpg"
+      },
+      {
+        "id": 6482,
+        "credit_id": "52fe4248c3a36847f80121a5",
+        "department": "Production",
+        "name": "John Singleton",
+        "job": "Producer",
+        "profile_path": "/xmVaXjAAywPh7HIrYjLVsjfKPrV.jpg"
+      },
+      {
+        "id": 6489,
+        "credit_id": "52fe4248c3a36847f80121ab",
+        "department": "Sound",
+        "name": "David Arnold",
+        "job": "Original Music Composer",
+        "profile_path": "/quJ5BYpkU79sCwn7NHFCvzBSwwX.jpg"
+      },
+      {
+        "id": 6490,
+        "credit_id": "52fe4248c3a36847f80121b1",
+        "department": "Camera",
+        "name": "Donald E. Thorin",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6491,
+        "credit_id": "52fe4248c3a36847f80121b7",
+        "department": "Editing",
+        "name": "John Bloom",
+        "job": "Editor",
+        "profile_path": "/spEEPB8yWINH9zCDjC1nodPTGmM.jpg"
+      },
+      {
+        "id": 6492,
+        "credit_id": "52fe4248c3a36847f80121bd",
+        "department": "Editing",
+        "name": "Antonia Van Drimmelen",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6493,
+        "credit_id": "52fe4248c3a36847f80121c3",
+        "department": "Production",
+        "name": "Ilene Starger",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6494,
+        "credit_id": "52fe4248c3a36847f80121c9",
+        "department": "Art",
+        "name": "Patrizia von Brandenstein",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6542,
+        "credit_id": "52fe4248c3a36847f80121d7",
+        "department": "Sound",
+        "name": "Isaac Hayes",
+        "job": "Original Music Composer",
+        "profile_path": "/4igh7emwzt4xBLw1r05gCUHxwzD.jpg"
+      },
+      {
+        "id": 73834,
+        "credit_id": "52fe4248c3a36847f80121e1",
+        "department": "Production",
+        "name": "Paul Hall",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 99,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 479,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Shaft",
+  "overview": "New York police detective John Shaft arrests Walter Wade Jr. for a racially motivated slaying. But the only eyewitness disappears, and Wade jumps bail for Switzerland. Two years later Wade returns to face trial, confident his money and influence will get him acquitted -- especially since he's paid a drug kingpin to kill the witness.",
+  "production_companies": [{
+    "id": 258,
+    "name": "Scott Rudin Productions"
+  }],
+  "belongs_to_collection": {
+    "id": 495,
+    "backdrop_path": "/muZrPdBs937VAx03Giw66x1XGus.jpg",
+    "name": "Shaft Collection",
+    "poster_path": "/8ljhkrxlVzNFzKLwRpsgAtwk7oJ.jpg"
+  },
+  "imdb_id": "tt0162650",
+  "release_date": "2000-06-15",
+  "original_title": "Shaft",
+  "vote_count": 49,
+  "poster_path": "/bqlpFp96uWu2VDpsm4MVvLXdumh.jpg",
+  "tagline": "Still the man, any questions?",
+  "revenue": 107196498,
+  "popularity": "0.748061713461808"
+}

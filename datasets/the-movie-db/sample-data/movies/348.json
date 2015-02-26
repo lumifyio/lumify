@@ -1,0 +1,354 @@
+{
+  "budget": 11000000,
+  "vote_average": 7.1,
+  "backdrop_path": "/mDhq855QfsWyKX6pp01afZlQ2Jt.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 10205,
+        "order": 0,
+        "credit_id": "52fe423bc3a36847f800e125",
+        "name": "Sigourney Weaver",
+        "cast_id": 4,
+        "profile_path": "/gxBIAr3CnBjkNRoPovVJCvEGqP0.jpg",
+        "character": "Ripley"
+      },
+      {
+        "id": 4139,
+        "order": 1,
+        "credit_id": "52fe423bc3a36847f800e121",
+        "name": "Tom Skerritt",
+        "cast_id": 3,
+        "profile_path": "/fceYkRIZkLKIbpIxPg0jVUIci50.jpg",
+        "character": "Dallas"
+      },
+      {
+        "id": 5047,
+        "order": 2,
+        "credit_id": "52fe423bc3a36847f800e129",
+        "name": "Veronica Cartwright",
+        "cast_id": 5,
+        "profile_path": "/9TorYWWIO0Q5nXYOmAzvJUnL7Rf.jpg",
+        "character": "Lambert"
+      },
+      {
+        "id": 5048,
+        "order": 3,
+        "credit_id": "52fe423bc3a36847f800e12d",
+        "name": "Harry Dean Stanton",
+        "cast_id": 6,
+        "profile_path": "/nDSav6v9Z8dSJSXoooT2g0LjbCd.jpg",
+        "character": "Brett"
+      },
+      {
+        "id": 5049,
+        "order": 4,
+        "credit_id": "52fe423bc3a36847f800e131",
+        "name": "John Hurt",
+        "cast_id": 7,
+        "profile_path": "/rpuH2YRLpxJjMxHq4T1QdOSVtlN.jpg",
+        "character": "Kane"
+      },
+      {
+        "id": 65,
+        "order": 5,
+        "credit_id": "52fe423bc3a36847f800e135",
+        "name": "Ian Holm",
+        "cast_id": 8,
+        "profile_path": "/uq6Wx7PaLgaw969avH7tLHnSb0Q.jpg",
+        "character": "Ash"
+      },
+      {
+        "id": 5050,
+        "order": 6,
+        "credit_id": "52fe423bc3a36847f800e139",
+        "name": "Yaphet Kotto",
+        "cast_id": 9,
+        "profile_path": "/eesKCL1EONaxxCDTTC3teuMyhrd.jpg",
+        "character": "Parker"
+      },
+      {
+        "id": 5051,
+        "order": 7,
+        "credit_id": "52fe423bc3a36847f800e13d",
+        "name": "Bolaji Badejo",
+        "cast_id": 10,
+        "profile_path": "/83NFKY9rgC5Pnx5hRJtHj0KkpnT.jpg",
+        "character": "Alien"
+      },
+      {
+        "id": 5052,
+        "order": 8,
+        "credit_id": "52fe423bc3a36847f800e141",
+        "name": "Helen Horton",
+        "cast_id": 11,
+        "profile_path": "/90ruMVGVYNS6dUYj6zCa7XIw8eG.jpg",
+        "character": "Mother (voice)"
+      },
+      {
+        "id": 1077325,
+        "order": 9,
+        "credit_id": "52fe423bc3a36847f800e1b1",
+        "name": "Eddie Powell",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Alien"
+      }
+    ],
+    "crew": [
+      {
+        "id": 578,
+        "credit_id": "52fe423bc3a36847f800e117",
+        "department": "Directing",
+        "name": "Ridley Scott",
+        "job": "Director",
+        "profile_path": "/bG5Oa1H6Fevil5QzzpzYF21NIQq.jpg"
+      },
+      {
+        "id": 5045,
+        "credit_id": "52fe423bc3a36847f800e11d",
+        "department": "Writing",
+        "name": "Dan O'Bannon",
+        "job": "Screenplay",
+        "profile_path": "/slLZWXZ1lmdF763166ATRRI200n.jpg"
+      },
+      {
+        "id": 5053,
+        "credit_id": "52fe423bc3a36847f800e147",
+        "department": "Production",
+        "name": "Gordon Carroll",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 915,
+        "credit_id": "52fe423bc3a36847f800e14d",
+        "department": "Production",
+        "name": "David Giler",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1723,
+        "credit_id": "52fe423bc3a36847f800e153",
+        "department": "Production",
+        "name": "Walter Hill",
+        "job": "Producer",
+        "profile_path": "/wpNPqW1oPi2GMYEgykHYBTDdGmJ.jpg"
+      },
+      {
+        "id": 5054,
+        "credit_id": "52fe423bc3a36847f800e159",
+        "department": "Production",
+        "name": "Ivor Powell",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5046,
+        "credit_id": "52fe423bc3a36847f800e15f",
+        "department": "Production",
+        "name": "Ronald Shusett",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1760,
+        "credit_id": "52fe423bc3a36847f800e165",
+        "department": "Sound",
+        "name": "Jerry Goldsmith",
+        "job": "Original Music Composer",
+        "profile_path": "/uQdaeP2awJgDc0ps9dohHw5quQ2.jpg"
+      },
+      {
+        "id": 5055,
+        "credit_id": "52fe423bc3a36847f800e16b",
+        "department": "Camera",
+        "name": "Derek Vanlint",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5056,
+        "credit_id": "52fe423bc3a36847f800e171",
+        "department": "Editing",
+        "name": "Terry Rawlings",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5057,
+        "credit_id": "52fe423bc3a36847f800e177",
+        "department": "Editing",
+        "name": "Peter Weatherley",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4616,
+        "credit_id": "52fe423bc3a36847f800e17d",
+        "department": "Art",
+        "name": "Michael Seymour",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5058,
+        "credit_id": "52fe423bc3a36847f800e183",
+        "department": "Art",
+        "name": "Roger Christian",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5058,
+        "credit_id": "52fe423bc3a36847f800e189",
+        "department": "Art",
+        "name": "Roger Christian",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5059,
+        "credit_id": "52fe423bc3a36847f800e18f",
+        "department": "Art",
+        "name": "Leslie Dilley",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5060,
+        "credit_id": "52fe423bc3a36847f800e195",
+        "department": "Art",
+        "name": "Ian Whittaker",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 5061,
+        "credit_id": "52fe423bc3a36847f800e19b",
+        "department": "Costume & Make-Up",
+        "name": "John Mollo",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5062,
+        "credit_id": "52fe423bc3a36847f800e1a1",
+        "department": "Sound",
+        "name": "Robert Hathaway",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 9136,
+        "credit_id": "52fe423bc3a36847f800e1a7",
+        "department": "Art",
+        "name": "H.R. Giger",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 9402,
+        "credit_id": "52fe423bc3a36847f800e1ad",
+        "department": "Crew",
+        "name": "Brian Johnson",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 23349,
+        "credit_id": "52fe423bc3a36847f800e1b7",
+        "department": "Production",
+        "name": "Mary Goldberg",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 668,
+        "credit_id": "52fe423bc3a36847f800e1bd",
+        "department": "Production",
+        "name": "Mary Selway",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5046,
+        "credit_id": "52fe423bc3a36847f800e1c3",
+        "department": "Writing",
+        "name": "Ronald Shusett",
+        "job": "Writer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 117,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 348,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Alien",
+  "overview": "During its return to the earth, commercial spaceship Nostromo intercepts a distress signal from a distant planet. When a three-member team of the crew discovers a chamber containing thousands of eggs on the planet, a creature inside one of the eggs attacks an explorer. The entire crew is unaware of the impending nightmare set to descend upon them when the alien parasite planted inside its unfortunate host is birthed.",
+  "production_companies": [
+    {
+      "id": 19747,
+      "name": "Brandywine Productions"
+    },
+    {
+      "id": 11865,
+      "name": "Twentieth Century-Fox Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 8091,
+    "backdrop_path": "/52Lhwd7srnktMFDYkfhtMoZdabT.jpg",
+    "name": "Alien Collection",
+    "poster_path": "/iVzIeC3PbG9BtDAudpwSNdKAgh6.jpg"
+  },
+  "imdb_id": "tt0078748",
+  "release_date": "1979-05-25",
+  "original_title": "Alien",
+  "vote_count": 1385,
+  "poster_path": "/uU9R1byS3USozpzWJ5oz7YAkXyk.jpg",
+  "tagline": "In space no one can hear you scream.",
+  "revenue": 104931801,
+  "popularity": "3.26818869115332"
+}

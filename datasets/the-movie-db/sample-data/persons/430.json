@@ -1,0 +1,41 @@
+{
+  "birthday": "1994-09-14",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nHailey Anne Nelson (born September 14, 1994) is an American teen actress.\n\nDescription above from the Wikipedia article Hailey Anne Nelson, licensed under CC-BY-SA, full list of contributors on Wikipedia.\u200b",
+  "homepage": "",
+  "profile_path": "/g3P0V4D6g4wYlhTxakTaAQC7DW2.jpg",
+  "id": 430,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm1371564",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 69,
+        "media_type": "movie",
+        "title": "Walk the Line",
+        "credit_id": "52fe4213c3a36847f8001f97",
+        "release_date": "2005-11-18",
+        "original_title": "Walk the Line",
+        "adult": false,
+        "poster_path": "/nUsaYt9Wk4fVP8jp1ncfQe7Io7t.jpg",
+        "character": "Rosanne Cash"
+      },
+      {
+        "id": 239100,
+        "media_type": "movie",
+        "title": "A Fix",
+        "credit_id": "52fe4e8cc3a36847f8297b81",
+        "release_date": "2008-12-30",
+        "original_title": "A Fix",
+        "adult": false,
+        "poster_path": "/mJVqlUfy5GCFNlVfSO57QnQyJ5F.jpg",
+        "character": "Bess"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Hailey Anne Nelson",
+  "place_of_birth": "West Hills, California, U.S",
+  "popularity": "1.07652140526249"
+}

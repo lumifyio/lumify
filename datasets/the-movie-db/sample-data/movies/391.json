@@ -1,0 +1,279 @@
+{
+  "budget": 200000,
+  "vote_average": 7.1,
+  "backdrop_path": "/mndYimxcima4Z5YxH8XngTEGi5L.jpg",
+  "genres": [{
+    "id": 37,
+    "name": "Western"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 190,
+        "order": 0,
+        "credit_id": "52fe423dc3a36847f800ed7d",
+        "name": "Clint Eastwood",
+        "cast_id": 1,
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg",
+        "character": "Joe"
+      },
+      {
+        "id": 16309,
+        "order": 1,
+        "credit_id": "52fe423dc3a36847f800ed81",
+        "name": "Marianne Koch",
+        "cast_id": 2,
+        "profile_path": "/USyLdeJCC7ReuqyYhwadSG3u0K.jpg",
+        "character": "Marisol"
+      },
+      {
+        "id": 16310,
+        "order": 2,
+        "credit_id": "52fe423dc3a36847f800ed85",
+        "name": "Wolfgang Lukschy",
+        "cast_id": 3,
+        "profile_path": "/dfZC5NXMyn0g1EzekMXSgzwsMty.jpg",
+        "character": "John Baxter"
+      },
+      {
+        "id": 16311,
+        "order": 3,
+        "credit_id": "52fe423dc3a36847f800ed89",
+        "name": "José Calvo",
+        "cast_id": 4,
+        "profile_path": "/1rGrdQDUjmZe6n9gJhSF8kLMVLQ.jpg",
+        "character": "Silvanito"
+      },
+      {
+        "id": 14276,
+        "order": 4,
+        "credit_id": "52fe423dc3a36847f800ed8d",
+        "name": "Gian Maria Volonté",
+        "cast_id": 5,
+        "profile_path": "/fnluody7boW6FHuhXoUmO141BeU.jpg",
+        "character": "Ramón Rojo"
+      },
+      {
+        "id": 16312,
+        "order": 5,
+        "credit_id": "52fe423dc3a36847f800ed91",
+        "name": "Sieghardt Rupp",
+        "cast_id": 6,
+        "profile_path": "/s5Fvf4FQPuG2uColLbGoY3FOW7f.jpg",
+        "character": "Esteban Rojo"
+      },
+      {
+        "id": 16313,
+        "order": 6,
+        "credit_id": "52fe423dc3a36847f800ed95",
+        "name": "Antonio Prieto",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Don Miguel Rojo"
+      },
+      {
+        "id": 16314,
+        "order": 7,
+        "credit_id": "52fe423dc3a36847f800ed99",
+        "name": "Margarita Lozano",
+        "cast_id": 8,
+        "profile_path": "/d4RgbbQMfRJ2K3bOF8B2mpGoYMl.jpg",
+        "character": "Consuelo Baxter"
+      },
+      {
+        "id": 16316,
+        "order": 9,
+        "credit_id": "52fe423dc3a36847f800ed9d",
+        "name": "Daniel Martín",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Julián"
+      },
+      {
+        "id": 16317,
+        "order": 10,
+        "credit_id": "52fe423dc3a36847f800eda1",
+        "name": "Bruno Carotenuto",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Antonio Baxter"
+      },
+      {
+        "id": 4661,
+        "order": 11,
+        "credit_id": "52fe423dc3a36847f800eda5",
+        "name": "Benito Stefanelli",
+        "cast_id": 12,
+        "profile_path": "/5c5ek7iXeJMdx1bEM2mw195zmPD.jpg",
+        "character": "Rubio"
+      },
+      {
+        "id": 16318,
+        "order": 12,
+        "credit_id": "52fe423dc3a36847f800eda9",
+        "name": "Mario Brega",
+        "cast_id": 13,
+        "profile_path": "/k07gKWh5tQZurRKaw7K6ph7k9ae.jpg",
+        "character": "Chico"
+      },
+      {
+        "id": 14279,
+        "order": 13,
+        "credit_id": "52fe423dc3a36847f800edef",
+        "name": "Joseph Egger",
+        "cast_id": 25,
+        "profile_path": "/hmHgePVKgnvurDkzTLsLrXLaJcU.jpg",
+        "character": "Piripero, der Sargtischler"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4385,
+        "credit_id": "52fe423dc3a36847f800edaf",
+        "department": "Directing",
+        "name": "Sergio Leone",
+        "job": "Director",
+        "profile_path": "/cRfaWgAxgNsDkaT6WLpgbrtEAJj.jpg"
+      },
+      {
+        "id": 16319,
+        "credit_id": "52fe423dc3a36847f800edb5",
+        "department": "Writing",
+        "name": "Víctor Andrés Catena",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 16320,
+        "credit_id": "52fe423dc3a36847f800edbb",
+        "department": "Writing",
+        "name": "Jaime Comas Gil",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4385,
+        "credit_id": "52fe423dc3a36847f800edc1",
+        "department": "Writing",
+        "name": "Sergio Leone",
+        "job": "Screenplay",
+        "profile_path": "/cRfaWgAxgNsDkaT6WLpgbrtEAJj.jpg"
+      },
+      {
+        "id": 16321,
+        "credit_id": "52fe423dc3a36847f800edc7",
+        "department": "Production",
+        "name": "Arrigo Colombo",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 16322,
+        "credit_id": "52fe423dc3a36847f800edcd",
+        "department": "Production",
+        "name": "Giorgio Papi",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1259,
+        "credit_id": "52fe423dc3a36847f800edd3",
+        "department": "Sound",
+        "name": "Ennio Morricone",
+        "job": "Original Music Composer",
+        "profile_path": "/dAd3r8QCcmLamoP8Tf8PVIHaGnp.jpg"
+      },
+      {
+        "id": 16324,
+        "credit_id": "52fe423dc3a36847f800edd9",
+        "department": "Camera",
+        "name": "Federico G. Larraya",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 16325,
+        "credit_id": "52fe423dc3a36847f800eddf",
+        "department": "Editing",
+        "name": "Roberto Cinquini",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 16326,
+        "credit_id": "52fe423dc3a36847f800ede5",
+        "department": "Editing",
+        "name": "Alfonso Santacana",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 14268,
+        "credit_id": "52fe423dc3a36847f800edeb",
+        "department": "Camera",
+        "name": "Massimo Dallamano",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 99,
+  "spoken_languages": [
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 391,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "Spain",
+      "iso_3166_1": "ES"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "A Fistful of Dollars",
+  "overview": "A Fistful of Dollars (Italian: Per un pugno di dollari) is a 1964 Italian spaghetti western film directed by Sergio Leone and starring Clint Eastwood, alongside Gian Maria Volonté, Marianne Koch, Wolfgang Lukschy, Sieghardt Rupp, José Calvo, Antonio Prieto, and Joseph Egger. Released in Italy in 1964 and then in the United States in 1967, it initiated the popularity of the Spaghetti Western film genre. It was followed by For a Few Dollars More (1965) and The Good, the Bad and the Ugly (1966), also starring Eastwood. Collectively, the films are commonly known as the \"Dollars Trilogy,\" or \"The Man With No Name Trilogy.\" The film is an unofficial remake of the Akira Kurosawa film Yojimbo (1961), resulting in a successful lawsuit by Toho. In the United States, the United Artists publicity campaign referred to Eastwood's character in all three films as the \"Man with No Name.\"",
+  "production_companies": [
+    {
+      "id": 5755,
+      "name": "Constantin Film Produktion"
+    },
+    {
+      "id": 10481,
+      "name": "Jolly Film"
+    },
+    {
+      "id": 19498,
+      "name": "Ocean Films"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 48317,
+    "backdrop_path": "/a4Lqp3QdEWF6zh740VpBg6yvTZA.jpg",
+    "name": "The Man With No Name Collection",
+    "poster_path": "/lzUZptOL6iQqulMvhB2jfT5GepD.jpg"
+  },
+  "imdb_id": "tt0058461",
+  "release_date": "1964-09-12",
+  "original_title": "Per un pugno di dollari",
+  "vote_count": 154,
+  "poster_path": "/iZXvokgyvV98E8UkwTvADrVCIsE.jpg",
+  "tagline": "In his own way he is perhaps, the most dangerous man who ever lived!",
+  "revenue": 14000000,
+  "popularity": "1.91808467244111"
+}

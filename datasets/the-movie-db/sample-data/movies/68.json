@@ -1,0 +1,335 @@
+{
+  "budget": 15000000,
+  "vote_average": 7.3,
+  "backdrop_path": "/bYgN55xPNQWUy9xzKwA9pVbGxeE.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 378,
+        "order": 0,
+        "credit_id": "52fe4213c3a36847f8001e8f",
+        "name": "Jonathan Pryce",
+        "cast_id": 7,
+        "profile_path": "/dAgcoPcDtlhIUTrksPtsWdlfBX.jpg",
+        "character": "Sam Lowry"
+      },
+      {
+        "id": 380,
+        "order": 1,
+        "credit_id": "52fe4213c3a36847f8001e93",
+        "name": "Robert De Niro",
+        "cast_id": 8,
+        "profile_path": "/8Bgdfv1oN9Mw0YuMHP6fw8KzDkc.jpg",
+        "character": "Archibald 'Harry' Tuttle"
+      },
+      {
+        "id": 381,
+        "order": 2,
+        "credit_id": "52fe4213c3a36847f8001e97",
+        "name": "Katherine Helmond",
+        "cast_id": 9,
+        "profile_path": "/m7o1IEKIabcTWz5Qr4yUEoCNHDE.jpg",
+        "character": "Mrs. Ida Lowry"
+      },
+      {
+        "id": 65,
+        "order": 3,
+        "credit_id": "52fe4213c3a36847f8001e9b",
+        "name": "Ian Holm",
+        "cast_id": 10,
+        "profile_path": "/uq6Wx7PaLgaw969avH7tLHnSb0Q.jpg",
+        "character": "Mr. M. Kurtzmann"
+      },
+      {
+        "id": 382,
+        "order": 4,
+        "credit_id": "52fe4213c3a36847f8001e9f",
+        "name": "Bob Hoskins",
+        "cast_id": 11,
+        "profile_path": "/mIgAC6q5HcHHxZUIiCOvE6mHLGs.jpg",
+        "character": "Spoor"
+      },
+      {
+        "id": 383,
+        "order": 5,
+        "credit_id": "52fe4213c3a36847f8001ea3",
+        "name": "Michael Palin",
+        "cast_id": 12,
+        "profile_path": "/lOkY51h2pPZq2lig6puWBG3Xxq3.jpg",
+        "character": "Jack Lint"
+      },
+      {
+        "id": 385,
+        "order": 6,
+        "credit_id": "52fe4213c3a36847f8001ea7",
+        "name": "Ian Richardson",
+        "cast_id": 13,
+        "profile_path": "/pQYgIwPfdJAJViPJcc80n9BKSP4.jpg",
+        "character": "Mr. Warrenn"
+      },
+      {
+        "id": 386,
+        "order": 7,
+        "credit_id": "52fe4213c3a36847f8001eab",
+        "name": "Peter Vaughan",
+        "cast_id": 14,
+        "profile_path": "/z9ZplbTA1ojYhgZ8kJUKKhsJ7Gs.jpg",
+        "character": "Mr. Helpmann"
+      },
+      {
+        "id": 387,
+        "order": 8,
+        "credit_id": "52fe4213c3a36847f8001eaf",
+        "name": "Kim Greist",
+        "cast_id": 15,
+        "profile_path": "/1qLn5aQeL02ysauDs1hJhL0ozfs.jpg",
+        "character": "Jill Layton"
+      },
+      {
+        "id": 388,
+        "order": 9,
+        "credit_id": "52fe4213c3a36847f8001eb3",
+        "name": "Jim Broadbent",
+        "cast_id": 16,
+        "profile_path": "/xWR0M9yaqcc6neBAg8tMgqGXwS3.jpg",
+        "character": "Dr. Jaffe"
+      },
+      {
+        "id": 280,
+        "order": 10,
+        "credit_id": "52fe4213c3a36847f8001eb7",
+        "name": "Terry Gilliam",
+        "cast_id": 17,
+        "profile_path": "/cFno5isSPvfPEkSdVoEzOs0pJCh.jpg",
+        "character": "Smoking Man (uncredited)"
+      },
+      {
+        "id": 97167,
+        "order": 11,
+        "credit_id": "52fe4213c3a36847f8001ee5",
+        "name": "Barbara Hicks",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Mrs. Alma Terrain"
+      },
+      {
+        "id": 374,
+        "order": 12,
+        "credit_id": "52fe4213c3a36847f8001ee9",
+        "name": "Charles McKeown",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Harvey Lime"
+      },
+      {
+        "id": 14325,
+        "order": 13,
+        "credit_id": "52fe4213c3a36847f8001eed",
+        "name": "Derrick O'Connor",
+        "cast_id": 29,
+        "profile_path": "/5V0v5o7vIORgUXxbMCqy5aXLf5f.jpg",
+        "character": "Dowser"
+      },
+      {
+        "id": 177594,
+        "order": 14,
+        "credit_id": "52fe4213c3a36847f8001ef1",
+        "name": "Kathryn Pogson",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Shirley"
+      },
+      {
+        "id": 22171,
+        "order": 15,
+        "credit_id": "52fe4213c3a36847f8001ef5",
+        "name": "Bryan Pringle",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Spiro"
+      }
+    ],
+    "crew": [
+      {
+        "id": 23769,
+        "credit_id": "53a7fa310e0a261432005815",
+        "department": "Art",
+        "name": "John Beard",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8646,
+        "credit_id": "53a7fa550e0a261449005816",
+        "department": "Art",
+        "name": "Keith Pain",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6347,
+        "credit_id": "53a7fa7e0e0a26144900581b",
+        "department": "Production",
+        "name": "Margery Simkin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 280,
+        "credit_id": "52fe4213c3a36847f8001e6d",
+        "department": "Directing",
+        "name": "Terry Gilliam",
+        "job": "Director",
+        "profile_path": "/cFno5isSPvfPEkSdVoEzOs0pJCh.jpg"
+      },
+      {
+        "id": 280,
+        "credit_id": "52fe4213c3a36847f8001e73",
+        "department": "Writing",
+        "name": "Terry Gilliam",
+        "job": "Screenplay",
+        "profile_path": "/cFno5isSPvfPEkSdVoEzOs0pJCh.jpg"
+      },
+      {
+        "id": 372,
+        "credit_id": "52fe4213c3a36847f8001e79",
+        "department": "Writing",
+        "name": "Tom Stoppard",
+        "job": "Screenplay",
+        "profile_path": "/x0yktHN4YN5kY6SkoGVkKxmZkhV.jpg"
+      },
+      {
+        "id": 374,
+        "credit_id": "52fe4213c3a36847f8001e7f",
+        "department": "Writing",
+        "name": "Charles McKeown",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 376,
+        "credit_id": "52fe4213c3a36847f8001e85",
+        "department": "Production",
+        "name": "Arnon Milchan",
+        "job": "Producer",
+        "profile_path": "/5crR5twLRcIdvRR06dB1O0EQ8x0.jpg"
+      },
+      {
+        "id": 377,
+        "credit_id": "52fe4213c3a36847f8001e8b",
+        "department": "Production",
+        "name": "Patrick Cassavetti",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 293,
+        "credit_id": "52fe4213c3a36847f8001ebd",
+        "department": "Camera",
+        "name": "Roger Pratt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 390,
+        "credit_id": "52fe4213c3a36847f8001ec3",
+        "department": "Production",
+        "name": "Irene Lamb",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 391,
+        "credit_id": "52fe4213c3a36847f8001ec9",
+        "department": "Art",
+        "name": "Norman Garwood",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 393,
+        "credit_id": "52fe4213c3a36847f8001ecf",
+        "department": "Sound",
+        "name": "Rodney Glenn",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 394,
+        "credit_id": "52fe4213c3a36847f8001ed5",
+        "department": "Sound",
+        "name": "Bob Doyle",
+        "job": "Production Sound Mixer",
+        "profile_path": null
+      },
+      {
+        "id": 10718,
+        "credit_id": "52fe4213c3a36847f8001edb",
+        "department": "Editing",
+        "name": "Julian Doyle",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7714,
+        "credit_id": "52fe4213c3a36847f8001ee1",
+        "department": "Sound",
+        "name": "Michael Kamen",
+        "job": "Original Music Composer",
+        "profile_path": "/y83bqw1VP1PkuvOhG2XROwc9eXG.jpg"
+      },
+      {
+        "id": 11386,
+        "credit_id": "52fe4213c3a36847f8001efb",
+        "department": "Costume & Make-Up",
+        "name": "James Acheson",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 132,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 68,
+  "production_countries": [{
+    "name": "United Kingdom",
+    "iso_3166_1": "GB"
+  }],
+  "title": "Brazil",
+  "overview": "Brazil is a Terry Gilliam dystopic black comedy film that reflects the melancholy, dreamlike quality of a famous Brazilian song that\u2019s been translated into English. The film parodies the mostly dysfunctional bureaucratic world we live in and takes us to a post-apocalyptic world in the future yet with our present day attitudes in mind.",
+  "production_companies": [
+    {
+      "id": 10214,
+      "name": "Embassy International Pictures"
+    },
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0088846",
+  "release_date": "1985-12-18",
+  "original_title": "Brazil",
+  "vote_count": 133,
+  "poster_path": "/fbaxxLP6PztGwLrHO0lBDquof0d.jpg",
+  "tagline": "It's only a state of mind.",
+  "revenue": 0,
+  "popularity": 1.1173518288978
+}

@@ -1,0 +1,228 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia\n\nAidan Devine is a Canadian film actor. He was born in England and immigrated with his family to Canada at the age of 15. He studied at Dawson College's Dome Theatre in Montreal, Quebec and began his acting career in Montreal. He would later relocate to Toronto. His 1993 breakout role came in Denys Arcand's, Love and Human Remains. Since then he has worked steadily in Canadian and American television and cinema capturing two Gemini Awards; a best actor award in 1997 for his performance as Ted Lindsay in Net Worth and in 1998, a best supporting actor Gemini for his performance as airframe engineer, Jim Chamberlin in The Arrow. He has been nominated three other times.\n\nDescription above from the Wikipedia article Aidan Devine, licensed under CC-BY-SA, full list of contributors on Wikipedia.\n\u200b",
+  "homepage": null,
+  "profile_path": "/8RyUP2FYu4xuEkpJZFFlf2204Si.jpg",
+  "id": 237,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0222593",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 10529,
+        "media_type": "movie",
+        "title": "Outlander",
+        "credit_id": "52fe43819251416c7501301f",
+        "release_date": "2008-04-24",
+        "original_title": "Outlander",
+        "adult": false,
+        "poster_path": "/fiAcCsAxmzYXVWdKHG7OqoS4Auq.jpg",
+        "character": "Einar"
+      },
+      {
+        "id": 12103,
+        "media_type": "movie",
+        "title": "Don't Say a Word",
+        "credit_id": "52fe44b59251416c7503e40b",
+        "release_date": "2001-09-08",
+        "original_title": "Don't Say a Word",
+        "adult": false,
+        "poster_path": "/mGzwDtIEueaoyzBiGlfiAZACUC5.jpg",
+        "character": "Leon Edward Croft"
+      },
+      {
+        "id": 28737,
+        "media_type": "movie",
+        "title": "Iron Eagle IV",
+        "credit_id": "52fe45aec3a368484e068d63",
+        "release_date": "1995-01-01",
+        "original_title": "Iron Eagle IV",
+        "adult": false,
+        "poster_path": "/8Nb3avhmn3o6P3p7pPAX40oP0Mt.jpg",
+        "character": "Cpl. Fincher"
+      },
+      {
+        "id": 61050,
+        "media_type": "movie",
+        "title": "Our Fathers",
+        "credit_id": "52fe4644c3a368484e08726d",
+        "release_date": "2005-05-21",
+        "original_title": "Our Fathers",
+        "adult": false,
+        "poster_path": "/Akr6rRj2uUnOhi2CDCgS3IvKF6v.jpg",
+        "character": "Bernie McDaid"
+      },
+      {
+        "id": 15730,
+        "media_type": "movie",
+        "title": "Love & Human Remains",
+        "credit_id": "52fe46779251416c7507938b",
+        "release_date": "1993-06-23",
+        "original_title": "Liebe und andere Grausamkeiten",
+        "adult": false,
+        "poster_path": "/Aq5RgnkiDUkXyp4HWckPOBxaUcJ.jpg",
+        "character": "Sal (as Aidan Devin)"
+      },
+      {
+        "id": 17100,
+        "media_type": "movie",
+        "title": "Trucks",
+        "credit_id": "52fe47059251416c7508b4ed",
+        "release_date": "1997-01-01",
+        "original_title": "Trucks",
+        "adult": false,
+        "poster_path": "/rwmbOBr5K9UStsrUhQToPF8Vly0.jpg",
+        "character": "Trucker Bob"
+      },
+      {
+        "id": 18045,
+        "media_type": "movie",
+        "title": "The Dark Hours",
+        "credit_id": "52fe475c9251416c7509691d",
+        "release_date": "2005-03-11",
+        "original_title": "The Dark Hours",
+        "adult": false,
+        "poster_path": "/chMXoppNLuO1hjfdBnB3wQjeePt.jpg",
+        "character": "Harlan Pyne"
+      },
+      {
+        "id": 49058,
+        "media_type": "movie",
+        "title": "Striking Poses",
+        "credit_id": "52fe4784c3a36847f813a0d9",
+        "release_date": "1999-04-27",
+        "original_title": "Striking Poses",
+        "adult": false,
+        "poster_path": "/r4eFkVt7Tsme9Un7dToIQsnqu7r.jpg",
+        "character": ""
+      },
+      {
+        "id": 19665,
+        "media_type": "movie",
+        "title": "The Arrow",
+        "credit_id": "52fe47e99251416c750a9903",
+        "release_date": "1997-01-12",
+        "original_title": "The Arrow",
+        "adult": false,
+        "poster_path": "/kBYszh5wMjgoJ3gOWfRrVNXYZ6K.jpg",
+        "character": "Jim Chamberlin"
+      },
+      {
+        "id": 71769,
+        "media_type": "movie",
+        "title": "Ice Bound - A Woman's Survival at the South Pole",
+        "credit_id": "52fe4847c3a368484e0f0def",
+        "release_date": "2003-05-20",
+        "original_title": "Ice Bound - A Woman's Survival at the South Pole",
+        "adult": false,
+        "poster_path": "/xkA0TFD0iJzYBW6NzLNL4qWPWf5.jpg",
+        "character": ""
+      },
+      {
+        "id": 76933,
+        "media_type": "movie",
+        "title": "John A.: Birth of a Country",
+        "credit_id": "52fe4953c3a368484e125bef",
+        "release_date": "2011-09-19",
+        "original_title": "John A.: Birth of a Country",
+        "adult": false,
+        "poster_path": "/gMSu3eZtJNXIGDZpZ87ZZxlPdQ6.jpg",
+        "character": "John Sandfield Macdonald"
+      },
+      {
+        "id": 120859,
+        "media_type": "movie",
+        "title": "Reunion",
+        "credit_id": "52fe4a53c3a368484e14cd21",
+        "release_date": "2001-08-23",
+        "original_title": "Reunion",
+        "adult": false,
+        "poster_path": null,
+        "character": "Jack Cosgrave"
+      },
+      {
+        "id": 112422,
+        "media_type": "movie",
+        "title": "Net Worth",
+        "credit_id": "52fe4b18c3a36847f81f1fc9",
+        "release_date": "1995-01-01",
+        "original_title": "Net Worth",
+        "adult": false,
+        "poster_path": "/xrMPWUsL2oDV4DQURqFKhqKYIGo.jpg",
+        "character": "Ted Lindsay"
+      },
+      {
+        "id": 59,
+        "media_type": "movie",
+        "title": "A History of Violence",
+        "credit_id": "52fe4212c3a36847f800195f",
+        "release_date": "2005-09-23",
+        "original_title": "A History of Violence",
+        "adult": false,
+        "poster_path": "/qhAoUIDin2d9oNZJqLW6XqPY7XQ.jpg",
+        "character": "Charlie Roarke"
+      },
+      {
+        "id": 202188,
+        "media_type": "movie",
+        "title": "Prairie Giant - The Tommy Douglas Story",
+        "credit_id": "52fe4cbfc3a368484e1c508b",
+        "release_date": "2006-03-12",
+        "original_title": "Prairie Giant - The Tommy Douglas Story",
+        "adult": false,
+        "poster_path": "/raofpcRgYfWD5DV4WY7XFMNJbSQ.jpg",
+        "character": "MJ Coldwell"
+      },
+      {
+        "id": 225441,
+        "media_type": "movie",
+        "title": "A Touch of Murder",
+        "credit_id": "52fe4e5e9251416c751541cd",
+        "release_date": "1990-01-01",
+        "original_title": "A Touch of Murder",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 225472,
+        "media_type": "movie",
+        "title": "Dinner at Fred's",
+        "credit_id": "52fe4e5f9251416c751544e1",
+        "release_date": "1999-01-01",
+        "original_title": "Dinner at Fred's",
+        "adult": false,
+        "poster_path": null,
+        "character": "Officer Mike"
+      },
+      {
+        "id": 262840,
+        "media_type": "movie",
+        "title": "WolfCop",
+        "credit_id": "533d8130c3a36878ed003478",
+        "release_date": "2014-06-06",
+        "original_title": "WolfCop",
+        "adult": false,
+        "poster_path": "/h4xBWnrbdtMZOsGySQiGWYqhqr4.jpg",
+        "character": "Chief"
+      },
+      {
+        "id": 260349,
+        "media_type": "movie",
+        "title": "Against Their Will: Women in Prison",
+        "credit_id": "53dcf5b7c3a3684331001342",
+        "release_date": "1994-10-29",
+        "original_title": "Against Their Will: Women in Prison",
+        "adult": false,
+        "poster_path": "/tKNWobjhpPhO68KdosASUICrwID.jpg",
+        "character": "Jerry"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Aidan Devine",
+  "place_of_birth": null,
+  "popularity": "1.00000000000001"
+}

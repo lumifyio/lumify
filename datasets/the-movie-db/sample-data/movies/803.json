@@ -1,0 +1,176 @@
+{
+  "budget": 0,
+  "vote_average": 8.1,
+  "backdrop_path": "/baaVCFfUfi3lx9Zhf6W4UyozjTW.jpg",
+  "genres": [
+    {
+      "id": 99,
+      "name": "Documentary"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11989,
+        "order": 0,
+        "credit_id": "52fe4278c3a36847f802146d",
+        "name": "Michel Bouquet",
+        "cast_id": 9,
+        "profile_path": "/u6u8mKzr2z1FXnOK1tq0QD0hit7.jpg",
+        "character": "Erzähler"
+      },
+      {
+        "id": 11990,
+        "order": 1,
+        "credit_id": "52fe4278c3a36847f8021471",
+        "name": "Reinhard Heydrich",
+        "cast_id": 10,
+        "profile_path": "/g0l0Un5EZi1BxIvcCPOVZATAthW.jpg",
+        "character": "himself"
+      },
+      {
+        "id": 11991,
+        "order": 2,
+        "credit_id": "52fe4278c3a36847f8021475",
+        "name": "Heinrich Himmler",
+        "cast_id": 11,
+        "profile_path": "/zR35V0k2JwzcMBLlejmnoAxtqmo.jpg",
+        "character": "himself"
+      },
+      {
+        "id": 10279,
+        "order": 3,
+        "credit_id": "52fe4278c3a36847f8021479",
+        "name": "Adolf Hitler",
+        "cast_id": 12,
+        "profile_path": "/sfheZ8kYMxGVnAUsDVXBsbnUSJf.jpg",
+        "character": "himself"
+      },
+      {
+        "id": 11992,
+        "order": 4,
+        "credit_id": "52fe4278c3a36847f802147d",
+        "name": "Julius Streicher",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "himself"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11983,
+        "credit_id": "52fe4278c3a36847f8021445",
+        "department": "Directing",
+        "name": "Alain Resnais",
+        "job": "Director",
+        "profile_path": "/c05chkdJ94JvZKzXPfwNLXv3bYp.jpg"
+      },
+      {
+        "id": 11984,
+        "credit_id": "52fe4278c3a36847f802144b",
+        "department": "Writing",
+        "name": "Jean Cayrol",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 11985,
+        "credit_id": "52fe4278c3a36847f8021451",
+        "department": "Production",
+        "name": "Philippe Lifchitz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2304,
+        "credit_id": "52fe4278c3a36847f8021457",
+        "department": "Production",
+        "name": "Anatole Dauman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11986,
+        "credit_id": "52fe4278c3a36847f802145d",
+        "department": "Production",
+        "name": "Samy Halfon",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11988,
+        "credit_id": "52fe4278c3a36847f8021463",
+        "department": "Camera",
+        "name": "Ghislain Cloquet",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 9752,
+        "credit_id": "52fe4278c3a36847f8021469",
+        "department": "Camera",
+        "name": "Sacha Vierny",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11632,
+        "credit_id": "52fe4278c3a36847f8021483",
+        "department": "Sound",
+        "name": "Hanns Eisler",
+        "job": "Original Music Composer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 32,
+  "spoken_languages": [{
+    "iso_639_1": "fr",
+    "name": "Français"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 803,
+  "production_countries": [{
+    "name": "France",
+    "iso_3166_1": "FR"
+  }],
+  "title": "Night and Fog",
+  "overview": "The documentary film from French director Resnais set ten years after the Second World War depicts the problems of Auschwitz with shocking images from the concentration camps.",
+  "production_companies": [
+    {
+      "id": 512,
+      "name": "Cocinor"
+    },
+    {
+      "id": 513,
+      "name": "Cosmo-Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0048434",
+  "release_date": "1955-12-15",
+  "original_title": "Nuit et Brouillard",
+  "vote_count": 5,
+  "poster_path": "/xJc21xCemQirc1rHOJ8QLpUj1jA.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.302348354230664"
+}

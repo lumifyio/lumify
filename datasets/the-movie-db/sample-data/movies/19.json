@@ -1,0 +1,287 @@
+{
+  "budget": 92620000,
+  "vote_average": 7.7,
+  "backdrop_path": "/gmH0N0bdlYGN1EUr8U2cMQYyg78.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 75,
+        "order": 0,
+        "credit_id": "52fe420fc3a36847f8000c87",
+        "name": "Brigitte Helm",
+        "cast_id": 10,
+        "profile_path": "/gHCAWZxoYMUMfT1yQFG0WqdmAnU.jpg",
+        "character": "Maria"
+      },
+      {
+        "id": 73,
+        "order": 1,
+        "credit_id": "52fe420fc3a36847f8000cdb",
+        "name": "Alfred Abel",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Johann 'Joh' Fredersen"
+      },
+      {
+        "id": 74,
+        "order": 2,
+        "credit_id": "52fe420fc3a36847f8000c83",
+        "name": "Gustav Fröhlich",
+        "cast_id": 9,
+        "profile_path": "/z8fMRjarFtxAeLsI9rurs3v1R9D.jpg",
+        "character": "Freder Fredersen"
+      },
+      {
+        "id": 77,
+        "order": 3,
+        "credit_id": "52fe420fc3a36847f8000c8b",
+        "name": "Rudolf Klein-Rogge",
+        "cast_id": 11,
+        "profile_path": "/dz2NKTrM06vyg4iQN9vHQ3a7bDR.jpg",
+        "character": "C.A. Rotwang, the inventor"
+      },
+      {
+        "id": 78,
+        "order": 4,
+        "credit_id": "52fe420fc3a36847f8000c8f",
+        "name": "Fritz Rasp",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Der Schmale"
+      },
+      {
+        "id": 79,
+        "order": 5,
+        "credit_id": "52fe420fc3a36847f8000c93",
+        "name": "Theodor Loos",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Josaphat - Joseph"
+      },
+      {
+        "id": 80,
+        "order": 6,
+        "credit_id": "52fe420fc3a36847f8000c97",
+        "name": "Erwin Biswanger",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "No. 11811"
+      },
+      {
+        "id": 81,
+        "order": 7,
+        "credit_id": "52fe420fc3a36847f8000c9b",
+        "name": "Heinrich George",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Grot"
+      },
+      {
+        "id": 82,
+        "order": 8,
+        "credit_id": "52fe420fc3a36847f8000c9f",
+        "name": "Olaf Storm",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Jan"
+      },
+      {
+        "id": 83,
+        "order": 9,
+        "credit_id": "52fe420fc3a36847f8000ca3",
+        "name": "Hanns Leo Reich",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Marinus"
+      },
+      {
+        "id": 2350,
+        "order": 10,
+        "credit_id": "52fe420fc3a36847f8000cad",
+        "name": "Helene Weigel",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Arbeiterfrau"
+      },
+      {
+        "id": 20535,
+        "order": 11,
+        "credit_id": "52fe420fc3a36847f8000cb9",
+        "name": "Fritz Alberti",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Kreativer Mensch"
+      },
+      {
+        "id": 20533,
+        "order": 12,
+        "credit_id": "52fe420fc3a36847f8000cb1",
+        "name": "Heinrich Gotho",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Zeremonienmeister"
+      },
+      {
+        "id": 20534,
+        "order": 13,
+        "credit_id": "52fe420fc3a36847f8000cb5",
+        "name": "Margarete Lanner",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Frau im Wagen"
+      }
+    ],
+    "crew": [
+      {
+        "id": 67,
+        "credit_id": "52fe420fc3a36847f8000c55",
+        "department": "Production",
+        "name": "Erich Pommer",
+        "job": "Producer",
+        "profile_path": "/oClAs4W1TRc2jtYCU4CdtXlEhPZ.jpg"
+      },
+      {
+        "id": 68,
+        "credit_id": "52fe420fc3a36847f8000c5b",
+        "department": "Writing",
+        "name": "Fritz Lang",
+        "job": "Author",
+        "profile_path": "/iq0KqfkJzEGGHx9MupllyJoCush.jpg"
+      },
+      {
+        "id": 68,
+        "credit_id": "52fe420fc3a36847f8000c61",
+        "department": "Directing",
+        "name": "Fritz Lang",
+        "job": "Director",
+        "profile_path": "/iq0KqfkJzEGGHx9MupllyJoCush.jpg"
+      },
+      {
+        "id": 69,
+        "credit_id": "52fe420fc3a36847f8000c67",
+        "department": "Sound",
+        "name": "Gottfried Huppertz",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 68,
+        "credit_id": "52fe420fc3a36847f8000c6d",
+        "department": "Editing",
+        "name": "Fritz Lang",
+        "job": "Editor",
+        "profile_path": "/iq0KqfkJzEGGHx9MupllyJoCush.jpg"
+      },
+      {
+        "id": 70,
+        "credit_id": "52fe420fc3a36847f8000c73",
+        "department": "Camera",
+        "name": "Karl Freund",
+        "job": "Director of Photography",
+        "profile_path": "/42rm6xS8hreYl7Sbsu6VOuz7vBJ.jpg"
+      },
+      {
+        "id": 71,
+        "credit_id": "52fe420fc3a36847f8000c79",
+        "department": "Camera",
+        "name": "Günther Rittau",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2798,
+        "credit_id": "52fe420fc3a36847f8000c7f",
+        "department": "Camera",
+        "name": "Walter Ruttmann",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 157,
+        "credit_id": "52fe420fc3a36847f8000ca9",
+        "department": "Writing",
+        "name": "Thea von Harbou",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 20536,
+        "credit_id": "52fe420fc3a36847f8000cbf",
+        "department": "Costume & Make-Up",
+        "name": "Aenne Willkomm",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5030,
+        "credit_id": "52fe420fc3a36847f8000cc5",
+        "department": "Art",
+        "name": "Edgar G. Ulmer",
+        "job": "Set Designer",
+        "profile_path": "/nC7Yhewvszl6QMmbTQOqFvGGsv3.jpg"
+      },
+      {
+        "id": 12320,
+        "credit_id": "52fe420fc3a36847f8000ccb",
+        "department": "Art",
+        "name": "Karl Vollbrecht",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 12369,
+        "credit_id": "52fe420fc3a36847f8000cd1",
+        "department": "Art",
+        "name": "Erich Kettelhut",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 13887,
+        "credit_id": "52fe420fc3a36847f8000cd7",
+        "department": "Art",
+        "name": "Otto Hunte",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 153,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 19,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Metropolis",
+  "overview": "In a futuristic city sharply divided between the working class and the city planners, the son of the city's mastermind falls in love with a working class prophet who predicts the coming of a savior to mediate their differences.",
+  "production_companies": [{
+    "id": 811,
+    "name": "Universum Film"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0017136",
+  "release_date": "1927-01-10",
+  "original_title": "Metropolis",
+  "vote_count": 137,
+  "poster_path": "/hnj1AptUFmYYZNjrbIHgNjgt3ZX.jpg",
+  "tagline": "There can be no understanding between the hands and the brain unless the heart acts as mediator.",
+  "revenue": 650422,
+  "popularity": "0.884368696819213"
+}

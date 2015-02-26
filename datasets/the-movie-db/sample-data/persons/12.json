@@ -1,0 +1,239 @@
+{
+  "birthday": "1994-05-04",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nAlexander Jerome Gould (born May 4, 1994) is an American television actor and voice artist. He is best known for his role as Shane Botwin on the Showtime TV series Weeds and for having provided the voice of Nemo in Pixar's Finding Nemo.\n\nDescription above from the Wikipedia article Alexander Gould, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/evb64XHfArM54GZC6bAmjTSBXlG.jpg",
+  "id": 12,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm1071252",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 12,
+        "media_type": "movie",
+        "title": "Finding Nemo",
+        "credit_id": "52fe420ec3a36847f8000675",
+        "release_date": "2003-05-30",
+        "original_title": "Finding Nemo",
+        "adult": false,
+        "poster_path": "/zjqInUwldOBa0q07fOyohYCWxWX.jpg",
+        "character": "Nemo"
+      },
+      {
+        "id": 13205,
+        "media_type": "movie",
+        "title": "Bambi II",
+        "credit_id": "52fe454e9251416c75052107",
+        "release_date": "2006-02-07",
+        "original_title": "Bambi II",
+        "adult": false,
+        "poster_path": "/A8FGnpdrheRDECNJJ6yKcLDMD5G.jpg",
+        "character": "Bambi (voice)"
+      },
+      {
+        "id": 9975,
+        "media_type": "movie",
+        "title": "Curious George",
+        "credit_id": "52fe4555c3a36847f80c8543",
+        "release_date": "2006-02-10",
+        "original_title": "Curious George",
+        "adult": false,
+        "poster_path": "/1WyGePG0GVjAG0FEPX2s9xrP4w9.jpg",
+        "character": "Kid"
+      },
+      {
+        "id": 132936,
+        "media_type": "movie",
+        "title": "Wheelmen",
+        "credit_id": "52fe4ba1c3a368484e19222f",
+        "release_date": "2005-06-03",
+        "original_title": "Wheelmen",
+        "adult": false,
+        "poster_path": "/mhOaaSGXWrFASaGpYZQPlAcWjyb.jpg",
+        "character": "Arthur"
+      },
+      {
+        "id": 166076,
+        "media_type": "movie",
+        "title": "Superman: Unbound",
+        "credit_id": "52fe4c96c3a36847f823571b",
+        "release_date": "2013-05-06",
+        "original_title": "Superman: Unbound",
+        "adult": false,
+        "poster_path": "/sbGj8yQeUlIDZdffsuFv4Cy9snk.jpg",
+        "character": "Jimmy Olsen (voice)"
+      },
+      {
+        "id": 24115,
+        "media_type": "movie",
+        "title": "How to Eat Fried Worms",
+        "credit_id": "52fe4483c3a368484e0274a7",
+        "release_date": "2006-01-01",
+        "original_title": "How to Eat Fried Worms",
+        "adult": false,
+        "poster_path": "/wY0kWXmjLUL63gC6I0BJR9scNvu.jpg",
+        "character": "Twitch"
+      },
+      {
+        "id": 1480,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "525706e0760ee3776a029801",
+        "name": "Ally McBeal",
+        "poster_path": "/sSH1DZJEto8TV7VyZPJeeshgSh5.jpg",
+        "original_name": "Ally McBeal",
+        "first_air_date": "1997-09-08",
+        "character": ""
+      },
+      {
+        "id": 1622,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52572c2c19c295731c048543",
+        "name": "Supernatural",
+        "poster_path": "/hmeqcWBjysHhpqQ1leXnF4g7BkA.jpg",
+        "original_name": "Supernatural",
+        "first_air_date": "2005-09-13",
+        "character": ""
+      },
+      {
+        "id": 2382,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257346e760ee3776a38d5f0",
+        "name": "Freaks and Geeks",
+        "poster_path": "/kKIEvGnCeIX1hTp63yWXQUkSKEA.jpg",
+        "original_name": "Freaks and Geeks",
+        "first_air_date": "1999-09-25",
+        "character": ""
+      },
+      {
+        "id": 4306,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525762f5760ee36aaa32d71d",
+        "name": "Oliver Beene",
+        "poster_path": "/z15H64b777ifqoB8kRWirLVpfKJ.jpg",
+        "original_name": "Oliver Beene",
+        "first_air_date": "2003-03-09",
+        "character": ""
+      },
+      {
+        "id": 4550,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52576fbd760ee36aaa4645ce",
+        "name": "7th Heaven",
+        "poster_path": "/xeIsbcqDxnXVV8ixXrNycp6PRNv.jpg",
+        "original_name": "7th Heaven",
+        "first_air_date": "1996-08-26",
+        "character": ""
+      },
+      {
+        "id": 5639,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525781e919c29531db26de02",
+        "name": "Pushing Daisies",
+        "poster_path": "/8dPSIIVEuizYA352aGgiekCFVK0.jpg",
+        "original_name": "Pushing Daisies",
+        "first_air_date": "2007-10-03",
+        "character": ""
+      },
+      {
+        "id": 186,
+        "media_type": "tv",
+        "episode_count": 26,
+        "credit_id": "5253449b19c29579400b9139",
+        "name": "Weeds",
+        "poster_path": "/gYAzlmnNokqlM6TKWdf5ERnyrEX.jpg",
+        "original_name": "Weeds",
+        "first_air_date": "2005-08-07",
+        "character": "Shane Botwin"
+      },
+      {
+        "id": 707,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52538fd819c29579402829d1",
+        "name": "Boomtown",
+        "poster_path": "/pDVVfOCWOamNm3YMcOph19QtUbf.jpg",
+        "original_name": "Boomtown",
+        "first_air_date": "2002-09-29",
+        "character": ""
+      },
+      {
+        "id": 2004,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52571ec319c295711410c52c",
+        "name": "Malcolm in the Middle",
+        "poster_path": "/ozNO2Q5OK3mIItc8HZoXAvfAobb.jpg",
+        "original_name": "Malcolm in the Middle",
+        "first_air_date": "2000-01-09",
+        "character": ""
+      },
+      {
+        "id": 2734,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257438b760ee36aaa0d780d",
+        "name": "Law & Order: Special Victims Unit",
+        "poster_path": "/tsxiLPFlpNlJaMFlKIFqffGkiJt.jpg",
+        "original_name": "Law & Order: Special Victims Unit",
+        "first_air_date": "1999-09-20",
+        "character": ""
+      },
+      {
+        "id": 3200,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52574e0b760ee36aaa1757eb",
+        "name": "Even Stevens",
+        "poster_path": "/eaZ0Hn3SUKS2Ws3b6ABwH6FwDF6.jpg",
+        "original_name": "Even Stevens",
+        "first_air_date": "2000-06-17",
+        "character": ""
+      },
+      {
+        "id": 4057,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52575b3019c29531db183c57",
+        "name": "Criminal Minds",
+        "poster_path": "/2MPg8BZIvuKsWf1yVYskEMtfzns.jpg",
+        "original_name": "Criminal Minds",
+        "first_air_date": "2005-09-22",
+        "character": ""
+      },
+      {
+        "id": 9877,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257f8af19c29531db2d87ee",
+        "name": "Family Law",
+        "poster_path": null,
+        "original_name": "Family Law",
+        "first_air_date": "1999-09-20",
+        "character": ""
+      },
+      {
+        "id": 23936,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52587524760ee3466128d6d4",
+        "name": "The Wonderful World of Disney",
+        "poster_path": null,
+        "original_name": "The Wonderful World of Disney",
+        "first_air_date": "1997-09-28",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Alexander Gould",
+  "place_of_birth": "Los Angeles, California, USA",
+  "popularity": "1.29848730060194"
+}

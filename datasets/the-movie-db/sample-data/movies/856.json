@@ -1,0 +1,352 @@
+{
+  "budget": 70000000,
+  "vote_average": 6.6,
+  "backdrop_path": "/9podqGmd36AJHO13HQIQHQZRTJC.jpg",
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 382,
+        "order": 0,
+        "credit_id": "52fe4283c3a36847f8024a07",
+        "name": "Bob Hoskins",
+        "cast_id": 17,
+        "profile_path": "/mIgAC6q5HcHHxZUIiCOvE6mHLGs.jpg",
+        "character": "Eddie Valiant"
+      },
+      {
+        "id": 1062,
+        "order": 1,
+        "credit_id": "52fe4283c3a36847f8024a0b",
+        "name": "Christopher Lloyd",
+        "cast_id": 18,
+        "profile_path": "/iQzG9apaIsHnn7iGrer3YEDp8Zo.jpg",
+        "character": "Judge Doom"
+      },
+      {
+        "id": 593,
+        "order": 2,
+        "credit_id": "52fe4283c3a36847f8024a0f",
+        "name": "Joanna Cassidy",
+        "cast_id": 19,
+        "profile_path": "/7eu2JjP9Vza9ImytxVLonPhKUX3.jpg",
+        "character": "Dolores"
+      },
+      {
+        "id": 12826,
+        "order": 3,
+        "credit_id": "52fe4283c3a36847f8024a13",
+        "name": "Charles Fleischer",
+        "cast_id": 20,
+        "profile_path": "/vlF5j4y3lEKO6wXJ1R98ixUmebx.jpg",
+        "character": "Roger Rabbit/Benny The Cab/Greasy/Psycho"
+      },
+      {
+        "id": 12827,
+        "order": 4,
+        "credit_id": "52fe4283c3a36847f8024a17",
+        "name": "Stubby Kaye",
+        "cast_id": 21,
+        "profile_path": "/rr8PedX37Yg62H9K7j0Ylc1Ir3o.jpg",
+        "character": "Marvin Acme"
+      },
+      {
+        "id": 12828,
+        "order": 5,
+        "credit_id": "52fe4283c3a36847f8024a1b",
+        "name": "Alan Tilvern",
+        "cast_id": 22,
+        "profile_path": "/8PQ6c0GCbuJ5T6dCjfX72gUtbTG.jpg",
+        "character": "R.K. Maroon"
+      },
+      {
+        "id": 12829,
+        "order": 6,
+        "credit_id": "52fe4283c3a36847f8024a1f",
+        "name": "Richard LeParmentier",
+        "cast_id": 23,
+        "profile_path": "/u0xNmE4QAS5EUbn7tG44EfYUkib.jpg",
+        "character": "Lt. Santino"
+      },
+      {
+        "id": 12830,
+        "order": 7,
+        "credit_id": "52fe4283c3a36847f8024a23",
+        "name": "Lou Hirsch",
+        "cast_id": 24,
+        "profile_path": "/phyABoneL7MRCxj5UlivxCUhoCu.jpg",
+        "character": "Baby Herman"
+      },
+      {
+        "id": 12831,
+        "order": 8,
+        "credit_id": "52fe4283c3a36847f8024a27",
+        "name": "Betsy Brantley",
+        "cast_id": 25,
+        "profile_path": "/sAJuozmEy1eoD84yeHPdCu50c3p.jpg",
+        "character": "Jessica's Performance Model"
+      },
+      {
+        "id": 33923,
+        "order": 9,
+        "credit_id": "52fe4283c3a36847f8024a2b",
+        "name": "Mel Blanc",
+        "cast_id": 26,
+        "profile_path": "/v7E4ABdhvaF1W604vIUD5Xj1jnb.jpg",
+        "character": "Bugs Bunny/Daffy Duck/Tweety Bird"
+      },
+      {
+        "id": 58530,
+        "order": 10,
+        "credit_id": "52fe4283c3a36847f8024a2f",
+        "name": "Mae Questel",
+        "cast_id": 27,
+        "profile_path": "/wsUsW4fo8u82fbYQlXVaql6fgbk.jpg",
+        "character": "Betty Boop"
+      },
+      {
+        "id": 4347,
+        "order": 11,
+        "credit_id": "52fe4283c3a36847f8024a33",
+        "name": "Frank Sinatra",
+        "cast_id": 28,
+        "profile_path": "/ApNMKr7Eq9KYlYYMF3WyEkwXUbW.jpg",
+        "character": "Singer"
+      },
+      {
+        "id": 116100,
+        "order": 12,
+        "credit_id": "52fe4283c3a36847f8024a37",
+        "name": "Richard Williams",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Droopy"
+      },
+      {
+        "id": 78076,
+        "order": 13,
+        "credit_id": "52fe4283c3a36847f8024a3b",
+        "name": "Wayne Allwine",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Mickey Mouse"
+      },
+      {
+        "id": 1120856,
+        "order": 14,
+        "credit_id": "52fe4283c3a36847f8024a3f",
+        "name": "Frank Weller",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Dumbo"
+      }
+    ],
+    "crew": [
+      {
+        "id": 24,
+        "credit_id": "52fe4282c3a36847f80249a9",
+        "department": "Directing",
+        "name": "Robert Zemeckis",
+        "job": "Director",
+        "profile_path": "/jJpbvGw4xTC8lWMqNYpLVCMMVV.jpg"
+      },
+      {
+        "id": 12821,
+        "credit_id": "52fe4282c3a36847f80249af",
+        "department": "Writing",
+        "name": "Gary K. Wolf",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 12100,
+        "credit_id": "52fe4282c3a36847f80249b5",
+        "department": "Writing",
+        "name": "Jeffrey Price",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 12101,
+        "credit_id": "52fe4282c3a36847f80249bb",
+        "department": "Writing",
+        "name": "Peter S. Seaman",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 12824,
+        "credit_id": "52fe4282c3a36847f80249c1",
+        "department": "Production",
+        "name": "Don Hahn",
+        "job": "Producer",
+        "profile_path": "/poU3K0vT6ngYxPa0qrZjZrKS6Ql.jpg"
+      },
+      {
+        "id": 489,
+        "credit_id": "52fe4282c3a36847f80249c7",
+        "department": "Production",
+        "name": "Kathleen Kennedy",
+        "job": "Executive Producer",
+        "profile_path": "/uHEExgTTzJNDX1Gal9CW5n3QdEJ.jpg"
+      },
+      {
+        "id": 664,
+        "credit_id": "52fe4282c3a36847f80249cd",
+        "department": "Production",
+        "name": "Frank Marshall",
+        "job": "Producer",
+        "profile_path": "/iZrDellT1OWf1syKzBgQHjY2hJe.jpg"
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4282c3a36847f80249d3",
+        "department": "Production",
+        "name": "Steven Spielberg",
+        "job": "Executive Producer",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 30,
+        "credit_id": "52fe4282c3a36847f80249d9",
+        "department": "Production",
+        "name": "Steve Starkey",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 711,
+        "credit_id": "52fe4282c3a36847f80249df",
+        "department": "Production",
+        "name": "Robert Watts",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 37,
+        "credit_id": "52fe4282c3a36847f80249e5",
+        "department": "Sound",
+        "name": "Alan Silvestri",
+        "job": "Original Music Composer",
+        "profile_path": "/k1xBoqCl5qRwWQfFTC1kOtNgEEA.jpg"
+      },
+      {
+        "id": 1060,
+        "credit_id": "52fe4282c3a36847f80249eb",
+        "department": "Camera",
+        "name": "Dean Cundey",
+        "job": "Director of Photography",
+        "profile_path": "/xunb0FZLZLhca2F5OJcKzV1mjR0.jpg"
+      },
+      {
+        "id": 38,
+        "credit_id": "52fe4282c3a36847f80249f1",
+        "department": "Editing",
+        "name": "Arthur Schmidt",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12825,
+        "credit_id": "52fe4282c3a36847f80249f7",
+        "department": "Art",
+        "name": "Roger Cain",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 715,
+        "credit_id": "52fe4282c3a36847f80249fd",
+        "department": "Art",
+        "name": "Elliot Scott",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 498,
+        "credit_id": "52fe4283c3a36847f8024a03",
+        "department": "Costume & Make-Up",
+        "name": "Joanna Johnston",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 1143354,
+        "credit_id": "52fe4283c3a36847f8024a49",
+        "department": "Directing",
+        "name": "Frank Tudisco",
+        "job": "Script Supervisor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 104,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 856,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Who Framed Roger Rabbit",
+  "overview": "It's 1947 Hollywood, and Eddie Valiant (Bob Hoskins), a down-on-his-luck detective, is hired to find proof that Marvin Acme, gag factory mogul and owner of Toontown, is playing hanky-panky with femme fatale Jessica Rabbit, wife of Maroon Cartoon superstar Roger Rabbit. When Acme is found murdered, all fingers point to Roger, and the sinister, power-hungry Judge Doom (Christopher Lloyd) is on a mission to bring Roger to justice. Roger begs the Toon-hating Valiant to find the real evildoer and the plot thickens as Eddie uncovers scandal after scandal and realizes the very existence of Toontown is at stake!",
+  "production_companies": [
+    {
+      "id": 9195,
+      "name": "Touchstone Pictures"
+    },
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    },
+    {
+      "id": 554,
+      "name": "Silver Screen Partners III"
+    },
+    {
+      "id": 10217,
+      "name": "Walt Disney Feature Animation"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0096438",
+  "release_date": "1988-06-21",
+  "original_title": "Who Framed Roger Rabbit",
+  "vote_count": 263,
+  "poster_path": "/hSycHavBDjY9Qk3h5B4oXWTEqp1.jpg",
+  "tagline": "It's the story of a man, a woman, and a rabbit in a triangle of trouble.",
+  "revenue": 329803958,
+  "popularity": "2.47133409874668"
+}

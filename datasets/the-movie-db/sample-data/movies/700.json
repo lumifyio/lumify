@@ -1,0 +1,528 @@
+{
+  "budget": 27500000,
+  "vote_average": 6.1,
+  "backdrop_path": "/nOp4RM4AYlW8Ux0XHBTqXbPlSgY.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 10222,
+        "order": 0,
+        "credit_id": "52fe426cc3a36847f801d913",
+        "name": "Roger Moore",
+        "cast_id": 1,
+        "profile_path": "/6nGnOdejsqi8WF2UgvRGcxd3zm6.jpg",
+        "character": "James Bond"
+      },
+      {
+        "id": 10342,
+        "order": 1,
+        "credit_id": "52fe426cc3a36847f801d917",
+        "name": "Maud Adams",
+        "cast_id": 2,
+        "profile_path": "/6wR7lRo2VuV2B7QhFgAxTmuzzyt.jpg",
+        "character": "Octopussy"
+      },
+      {
+        "id": 10508,
+        "order": 2,
+        "credit_id": "52fe426cc3a36847f801d91b",
+        "name": "Louis Jourdan",
+        "cast_id": 3,
+        "profile_path": "/c6rMOqOYoMhjpFffJ6cwCoDS4Nm.jpg",
+        "character": "Kamal Khan"
+      },
+      {
+        "id": 10509,
+        "order": 3,
+        "credit_id": "52fe426cc3a36847f801d91f",
+        "name": "Kristina Wayborn",
+        "cast_id": 4,
+        "profile_path": "/4WEv5qQwLI5SB1mzpeyPrCWaNy8.jpg",
+        "character": "Magda"
+      },
+      {
+        "id": 10510,
+        "order": 4,
+        "credit_id": "52fe426cc3a36847f801d923",
+        "name": "Kabir Bedi",
+        "cast_id": 5,
+        "profile_path": "/ltCp34kkvNTHuosjH184incMdU1.jpg",
+        "character": "Gobinda"
+      },
+      {
+        "id": 782,
+        "order": 5,
+        "credit_id": "52fe426cc3a36847f801d927",
+        "name": "Steven Berkoff",
+        "cast_id": 6,
+        "profile_path": "/jiYMK9prj46Qe4gmbKtBDE6YlSr.jpg",
+        "character": "General Orlov"
+      },
+      {
+        "id": 10511,
+        "order": 6,
+        "credit_id": "52fe426cc3a36847f801d92b",
+        "name": "David Meyer",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Twin One"
+      },
+      {
+        "id": 10512,
+        "order": 7,
+        "credit_id": "52fe426cc3a36847f801d92f",
+        "name": "Tony Meyer",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Twin Two"
+      },
+      {
+        "id": 9906,
+        "order": 8,
+        "credit_id": "52fe426cc3a36847f801d933",
+        "name": "Desmond Llewelyn",
+        "cast_id": 9,
+        "profile_path": "/kJxILFKzFPSVVkpVsCOW7BWFVfy.jpg",
+        "character": "Q"
+      },
+      {
+        "id": 10513,
+        "order": 9,
+        "credit_id": "52fe426cc3a36847f801d937",
+        "name": "Robert Brown",
+        "cast_id": 10,
+        "profile_path": "/8L1cp6Py2YCC5LdmWbJcyry4swZ.jpg",
+        "character": "M"
+      },
+      {
+        "id": 9878,
+        "order": 10,
+        "credit_id": "52fe426cc3a36847f801d93b",
+        "name": "Lois Maxwell",
+        "cast_id": 11,
+        "profile_path": "/2eV2cTD3CvSDTjsongCELGKOb0z.jpg",
+        "character": "Miss Moneypenny"
+      },
+      {
+        "id": 10514,
+        "order": 11,
+        "credit_id": "52fe426cc3a36847f801d93f",
+        "name": "Michaela Clavell",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Penelope Smallbone"
+      },
+      {
+        "id": 6610,
+        "order": 12,
+        "credit_id": "52fe426cc3a36847f801d943",
+        "name": "Walter Gotell",
+        "cast_id": 13,
+        "profile_path": "/mZ24RTuEPPCzmbgwV7lcNuVvZ5f.jpg",
+        "character": "General Anatol Gogol"
+      },
+      {
+        "id": 14759,
+        "order": 14,
+        "credit_id": "52fe426cc3a36847f801d9ab",
+        "name": "Albert Moses",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Sadruddin"
+      },
+      {
+        "id": 10462,
+        "order": 15,
+        "credit_id": "52fe426cc3a36847f801d9af",
+        "name": "Geoffrey Keen",
+        "cast_id": 35,
+        "profile_path": "/1yfyO0eZFyMgDVUxzqcaGAHzPEZ.jpg",
+        "character": "Minister of Defence"
+      },
+      {
+        "id": 89065,
+        "order": 16,
+        "credit_id": "52fe426cc3a36847f801d9b3",
+        "name": "Douglas Wilmer",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Jim Fanning"
+      },
+      {
+        "id": 199077,
+        "order": 17,
+        "credit_id": "52fe426cc3a36847f801d9b7",
+        "name": "Andy Bradford",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "009"
+      },
+      {
+        "id": 189281,
+        "order": 18,
+        "credit_id": "52fe426cc3a36847f801d9bb",
+        "name": "Philip Voss",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Auctioneer"
+      },
+      {
+        "id": 8664,
+        "order": 19,
+        "credit_id": "52fe426cc3a36847f801d9bf",
+        "name": "Bruce Boa",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "U.S. General"
+      },
+      {
+        "id": 12829,
+        "order": 20,
+        "credit_id": "52fe426cc3a36847f801d9c3",
+        "name": "Richard LeParmentier",
+        "cast_id": 40,
+        "profile_path": "/u0xNmE4QAS5EUbn7tG44EfYUkib.jpg",
+        "character": "U.S. Aide (as Richard Parmentier)"
+      },
+      {
+        "id": 47139,
+        "order": 21,
+        "credit_id": "52fe426cc3a36847f801d9c7",
+        "name": "Paul Hardwick",
+        "cast_id": 41,
+        "profile_path": null,
+        "character": "Soviet Chairman"
+      },
+      {
+        "id": 1064072,
+        "order": 22,
+        "credit_id": "52fe426cc3a36847f801d9cb",
+        "name": "Suzanne Jerome",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "Gwendoline"
+      },
+      {
+        "id": 1064073,
+        "order": 23,
+        "credit_id": "52fe426cc3a36847f801d9cf",
+        "name": "Cherry Gillespie",
+        "cast_id": 43,
+        "profile_path": null,
+        "character": "Midge"
+      },
+      {
+        "id": 17484,
+        "order": 24,
+        "credit_id": "52fe426cc3a36847f801d9d3",
+        "name": "Dermot Crowley",
+        "cast_id": 44,
+        "profile_path": null,
+        "character": "Kamp"
+      },
+      {
+        "id": 190439,
+        "order": 25,
+        "credit_id": "52fe426cc3a36847f801d9d7",
+        "name": "Peter Porteous",
+        "cast_id": 45,
+        "profile_path": null,
+        "character": "Lenkin"
+      },
+      {
+        "id": 1064074,
+        "order": 26,
+        "credit_id": "52fe426cc3a36847f801d9db",
+        "name": "Eva Reuber-Staier",
+        "cast_id": 46,
+        "profile_path": null,
+        "character": "Rublevitch (as Eva Rueber-Staier)"
+      },
+      {
+        "id": 33185,
+        "order": 27,
+        "credit_id": "52fe426cc3a36847f801d9df",
+        "name": "Jeremy Bulloch",
+        "cast_id": 47,
+        "profile_path": "/yRnHoDmmWKdoLdiscCFfRpzzqMa.jpg",
+        "character": "Smithers (as Jeremy Bullock)"
+      },
+      {
+        "id": 1064075,
+        "order": 28,
+        "credit_id": "52fe426cc3a36847f801d9e3",
+        "name": "Tina Hudson",
+        "cast_id": 48,
+        "profile_path": null,
+        "character": "Bianca"
+      },
+      {
+        "id": 1064076,
+        "order": 29,
+        "credit_id": "52fe426cc3a36847f801d9e7",
+        "name": "William Derrick",
+        "cast_id": 49,
+        "profile_path": null,
+        "character": "Thug with Yo-yo"
+      },
+      {
+        "id": 954853,
+        "order": 30,
+        "credit_id": "52fe426cc3a36847f801d9eb",
+        "name": "Stuart Saunders",
+        "cast_id": 50,
+        "profile_path": null,
+        "character": "Major Clive"
+      },
+      {
+        "id": 100787,
+        "order": 31,
+        "credit_id": "52fe426cc3a36847f801d9ef",
+        "name": "Patrick Barr",
+        "cast_id": 51,
+        "profile_path": "/pYCWzNSvm7EGagBCe3qHJ1L6Oul.jpg",
+        "character": "British Ambassador"
+      },
+      {
+        "id": 1233481,
+        "order": 32,
+        "credit_id": "532a2bf8c3a3681fdd0006b0",
+        "name": "Vijay Amritraj",
+        "cast_id": 55,
+        "profile_path": null,
+        "character": "Vijay"
+      }
+    ],
+    "crew": [
+      {
+        "id": 10179,
+        "credit_id": "52fe426cc3a36847f801d949",
+        "department": "Directing",
+        "name": "John Glen",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 10515,
+        "credit_id": "52fe426cc3a36847f801d94f",
+        "department": "Writing",
+        "name": "George MacDonald Fraser",
+        "job": "Screenstory",
+        "profile_path": null
+      },
+      {
+        "id": 9858,
+        "credit_id": "52fe426cc3a36847f801d955",
+        "department": "Writing",
+        "name": "Richard Maibaum",
+        "job": "Screenstory",
+        "profile_path": null
+      },
+      {
+        "id": 10515,
+        "credit_id": "52fe426cc3a36847f801d95b",
+        "department": "Writing",
+        "name": "George MacDonald Fraser",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 9858,
+        "credit_id": "52fe426cc3a36847f801d961",
+        "department": "Writing",
+        "name": "Richard Maibaum",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 9861,
+        "credit_id": "52fe426cc3a36847f801d967",
+        "department": "Production",
+        "name": "Albert R. Broccoli",
+        "job": "Producer",
+        "profile_path": "/bgYayDE2fRsgF3ytSzbWvdkDejJ.jpg"
+      },
+      {
+        "id": 10493,
+        "credit_id": "52fe426cc3a36847f801d96d",
+        "department": "Production",
+        "name": "Tom Pevsner",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2289,
+        "credit_id": "52fe426cc3a36847f801d973",
+        "department": "Sound",
+        "name": "John Barry",
+        "job": "Original Music Composer",
+        "profile_path": "/hcKxefFH5M6euZfJ8h0WJnEYMHa.jpg"
+      },
+      {
+        "id": 8934,
+        "credit_id": "52fe426cc3a36847f801d979",
+        "department": "Camera",
+        "name": "Alan Hume",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 10612,
+        "credit_id": "52fe426cc3a36847f801d97f",
+        "department": "Editing",
+        "name": "Peter Davies",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10613,
+        "credit_id": "52fe426cc3a36847f801d985",
+        "department": "Editing",
+        "name": "Henry Richardson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10496,
+        "credit_id": "52fe426cc3a36847f801d98b",
+        "department": "Production",
+        "name": "Debbie McWilliams",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 8524,
+        "credit_id": "52fe426cc3a36847f801d991",
+        "department": "Art",
+        "name": "Peter Lamont",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 10497,
+        "credit_id": "52fe426cc3a36847f801d997",
+        "department": "Art",
+        "name": "John Fenner",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 10614,
+        "credit_id": "52fe426cc3a36847f801d99d",
+        "department": "Art",
+        "name": "Jack Stephens",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 10198,
+        "credit_id": "52fe426cc3a36847f801d9a3",
+        "department": "Costume & Make-Up",
+        "name": "Emma Porteus",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 69678,
+        "credit_id": "52fe426cc3a36847f801d9f5",
+        "department": "Writing",
+        "name": "Michael G. Wilson",
+        "job": "Screenplay",
+        "profile_path": "/j9E7oKJMgprlrwkUkk2JXdY5tnJ.jpg"
+      },
+      {
+        "id": 69678,
+        "credit_id": "52fe426cc3a36847f801d9fb",
+        "department": "Writing",
+        "name": "Michael G. Wilson",
+        "job": "Screenstory",
+        "profile_path": "/j9E7oKJMgprlrwkUkk2JXdY5tnJ.jpg"
+      },
+      {
+        "id": 69678,
+        "credit_id": "52fe426cc3a36847f801da01",
+        "department": "Production",
+        "name": "Michael G. Wilson",
+        "job": "Executive Producer",
+        "profile_path": "/j9E7oKJMgprlrwkUkk2JXdY5tnJ.jpg"
+      }
+    ]
+  },
+  "runtime": 131,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.mgm.com/view/movie/1394/Octopussy/",
+  "id": 700,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Octopussy",
+  "overview": "James Bond is sent to investigate after a fellow \u201c00\u201d agent is found dead with a priceless Farberge egg. James bond follows the mystery and uncovers a smuggling scandal and a Russian General who wants to provoke a new World War.",
+  "production_companies": [
+    {
+      "id": 21,
+      "name": "Metro-Goldwyn-Mayer"
+    },
+    {
+      "id": 7576,
+      "name": "Eon Productions"
+    },
+    {
+      "id": 60,
+      "name": "United Artists"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 645,
+    "backdrop_path": "/v57QgSTbbiN33sshS1AS0QDcPC2.jpg",
+    "name": "James Bond Collection",
+    "poster_path": "/ckNgEItskTZHeTySYfGvageRFSq.jpg"
+  },
+  "imdb_id": "tt0086034",
+  "release_date": "1983-06-05",
+  "original_title": "Octopussy",
+  "vote_count": 103,
+  "poster_path": "/vyMJidOSK5SUCxXt9Crj7Rs5w9C.jpg",
+  "tagline": "Nobody does him better.",
+  "revenue": 255393619,
+  "popularity": "1.43002235920336"
+}

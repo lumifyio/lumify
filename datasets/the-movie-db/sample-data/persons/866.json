@@ -1,0 +1,85 @@
+{
+  "birthday": "1892-05-30",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/hUfteo0f4VaeWdnDHAqPx5ftgwe.jpg",
+  "id": 866,
+  "also_known_as": [],
+  "deathday": "1964-10-19",
+  "imdb_id": "nm0114612",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 41253,
+        "media_type": "movie",
+        "title": "Damn Yankees",
+        "credit_id": "52fe45bfc3a36847f80d81db",
+        "release_date": "1958-07-23",
+        "original_title": "Damn Yankees",
+        "adult": false,
+        "poster_path": "/80huHQX3TwiToKx0vTfo0pHMd8D.jpg",
+        "character": "Benny Van Buren"
+      },
+      {
+        "id": 17185,
+        "media_type": "movie",
+        "title": "Advise & Consent",
+        "credit_id": "52fe470e9251416c7508c5a3",
+        "release_date": "1962-06-06",
+        "original_title": "Advise & Consent",
+        "adult": false,
+        "poster_path": "/8PXVNgUeQtRetIaQeKkS6C8UyIE.jpg",
+        "character": "Mike, the Night Watchman"
+      },
+      {
+        "id": 93,
+        "media_type": "movie",
+        "title": "Anatomy of a Murder",
+        "credit_id": "52fe4216c3a36847f800307f",
+        "release_date": "1959-07-01",
+        "original_title": "Anatomy of a Murder",
+        "adult": false,
+        "poster_path": "/7mQblEoXnRS1psj3WERIKHKkXQY.jpg",
+        "character": "George Lemon"
+      },
+      {
+        "id": 3010,
+        "media_type": "movie",
+        "title": "The Cardinal",
+        "credit_id": "53d7251e0e0a26033a000c62",
+        "release_date": "1963-12-12",
+        "original_title": "The Cardinal",
+        "adult": false,
+        "poster_path": "/eO9LxHiLDa4HINQtyk9GhT4ujxI.jpg",
+        "character": "Dr. Heller"
+      },
+      {
+        "id": 250,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5253486e19c29579400e03bb",
+        "name": "The Dick Powell Show",
+        "poster_path": null,
+        "original_name": "The Dick Powell Show",
+        "first_air_date": "1961-09-26",
+        "character": ""
+      },
+      {
+        "id": 24608,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52587871760ee346612d3cf0",
+        "name": "Vacation Playhouse",
+        "poster_path": null,
+        "original_name": "Vacation Playhouse",
+        "first_air_date": "1963-07-22",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Russ Brown",
+  "place_of_birth": null,
+  "popularity": "1.01012500000118"
+}

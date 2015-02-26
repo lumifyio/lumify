@@ -1,0 +1,122 @@
+{
+  "budget": 0,
+  "vote_average": 8,
+  "backdrop_path": "/kK4qDzX0XJu0Hth7XB6dOhMBoPz.jpg",
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 20661,
+        "order": 0,
+        "credit_id": "52fe4211c3a36847f80013c7",
+        "name": "Tsutomu Isobe",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Heinz"
+      },
+      {
+        "id": 20662,
+        "order": 1,
+        "credit_id": "52fe4211c3a36847f80013cb",
+        "name": "Ami Hasegawa",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Emily"
+      },
+      {
+        "id": 20663,
+        "order": 2,
+        "credit_id": "52fe4211c3a36847f80013cf",
+        "name": "Gara Takashima",
+        "cast_id": 7,
+        "profile_path": "/e213zxdMibZEjPEot0zDpO1FU7K.jpg",
+        "character": "Eva"
+      },
+      {
+        "id": 20664,
+        "order": 3,
+        "credit_id": "52fe4211c3a36847f80013d3",
+        "name": "Koichi Yamadera",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Miguel"
+      }
+    ],
+    "crew": [
+      {
+        "id": 183,
+        "credit_id": "52fe4211c3a36847f80013b7",
+        "department": "Directing",
+        "name": "Kôji Morimoto",
+        "job": "Director",
+        "profile_path": "/xRs1ulNnfLs5kkZcINkd73NgwnE.jpg"
+      },
+      {
+        "id": 186,
+        "credit_id": "52fe4211c3a36847f80013bd",
+        "department": "Sound",
+        "name": "Yôko Kanno",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 185,
+        "credit_id": "52fe4211c3a36847f80013c3",
+        "department": "Writing",
+        "name": "Katsuhiro Ōtomo",
+        "job": "Author",
+        "profile_path": "/d3TPHQkTqAe3NeZZ280TqBa2x43.jpg"
+      },
+      {
+        "id": 40333,
+        "credit_id": "52fe4211c3a36847f80013d9",
+        "department": "Writing",
+        "name": "Satoshi Kon",
+        "job": "Author",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 44,
+  "spoken_languages": [{
+    "iso_639_1": "ja",
+    "name": "日本語"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 30,
+  "production_countries": [{
+    "name": "Japan",
+    "iso_3166_1": "JP"
+  }],
+  "title": "Magnetic Rose",
+  "overview": "Koji Morimato\u2019s animated science fiction short story about how the boarder between reality and illusion on a space station become blurry.",
+  "production_companies": [{
+    "id": 11671,
+    "name": "Studio 4°C"
+  }],
+  "belongs_to_collection": {
+    "id": 139450,
+    "backdrop_path": null,
+    "name": "Memories Collection",
+    "poster_path": null
+  },
+  "imdb_id": "tt1530535",
+  "release_date": "1995-12-23",
+  "original_title": "Kanojo No Omoide",
+  "vote_count": 2,
+  "poster_path": "/1xdmuE5txar8OuZbVkfcuiIl1Vu.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.224564233236967"
+}

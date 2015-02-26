@@ -1,0 +1,349 @@
+{
+  "budget": 0,
+  "vote_average": 7.5,
+  "backdrop_path": "/yonY3WQiyOcA4tIQ2q8kwikDc2z.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 10055,
+        "order": 0,
+        "credit_id": "52fe4267c3a36847f801bb41",
+        "name": "Fernanda Montenegro",
+        "cast_id": 29,
+        "profile_path": "/5PVjcLl5obfzGXrCp7PtHVAlcjp.jpg",
+        "character": "Dora"
+      },
+      {
+        "id": 10057,
+        "order": 1,
+        "credit_id": "52fe4267c3a36847f801bb45",
+        "name": "Marília Pêra",
+        "cast_id": 30,
+        "profile_path": "/rgnB4b1cJ8rkE6CczOlF3EDJx7W.jpg",
+        "character": "Irene"
+      },
+      {
+        "id": 10059,
+        "order": 2,
+        "credit_id": "52fe4267c3a36847f801bb49",
+        "name": "Vinícius de Oliveira",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Josué"
+      },
+      {
+        "id": 10060,
+        "order": 3,
+        "credit_id": "52fe4267c3a36847f801bb4d",
+        "name": "Soia Lira",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Ana"
+      },
+      {
+        "id": 10061,
+        "order": 4,
+        "credit_id": "52fe4267c3a36847f801bb51",
+        "name": "Othon Bastos",
+        "cast_id": 33,
+        "profile_path": "/zVlcQtMT8kcxDaMBp4YgB2XCUNj.jpg",
+        "character": "Cesar"
+      },
+      {
+        "id": 10062,
+        "order": 5,
+        "credit_id": "52fe4267c3a36847f801bb55",
+        "name": "Otávio Augusto",
+        "cast_id": 34,
+        "profile_path": "/omsaQs9iVtw5dKua70cHTvX7NTN.jpg",
+        "character": "Pedrão"
+      },
+      {
+        "id": 10063,
+        "order": 6,
+        "credit_id": "52fe4267c3a36847f801bb59",
+        "name": "Stela Freitas",
+        "cast_id": 35,
+        "profile_path": "/rod4jPV6tPv41xeZE7RFQPHLgJ3.jpg",
+        "character": "Yolanda"
+      },
+      {
+        "id": 8600,
+        "order": 7,
+        "credit_id": "52fe4267c3a36847f801bb5d",
+        "name": "Matheus Nachtergaele",
+        "cast_id": 36,
+        "profile_path": "/lJMLW3NAJbV7AzHDz178HKSiuN5.jpg",
+        "character": "Isaías"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8574,
+        "credit_id": "52fe4266c3a36847f801ba9b",
+        "department": "Directing",
+        "name": "Walter Salles",
+        "job": "Director",
+        "profile_path": "/sqIg1ziNhNbxmAbwKY9BJ6iMUzP.jpg"
+      },
+      {
+        "id": 10030,
+        "credit_id": "52fe4266c3a36847f801baa1",
+        "department": "Writing",
+        "name": "Marcos Bernstein",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 10031,
+        "credit_id": "52fe4266c3a36847f801baa7",
+        "department": "Writing",
+        "name": "Joao Emanuel Carneiro",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 8574,
+        "credit_id": "52fe4266c3a36847f801baad",
+        "department": "Writing",
+        "name": "Walter Salles",
+        "job": "Screenplay",
+        "profile_path": "/sqIg1ziNhNbxmAbwKY9BJ6iMUzP.jpg"
+      },
+      {
+        "id": 10032,
+        "credit_id": "52fe4266c3a36847f801bab3",
+        "department": "Production",
+        "name": "Arthur Cohn",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8564,
+        "credit_id": "52fe4266c3a36847f801bab9",
+        "department": "Production",
+        "name": "Elisa Tolomelli",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8571,
+        "credit_id": "52fe4266c3a36847f801babf",
+        "department": "Production",
+        "name": "Donald Ranvaud",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10033,
+        "credit_id": "52fe4266c3a36847f801bac5",
+        "department": "Production",
+        "name": "Thomas Garvin",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10034,
+        "credit_id": "52fe4266c3a36847f801bacb",
+        "department": "Production",
+        "name": "Jack Gajos",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10035,
+        "credit_id": "52fe4266c3a36847f801bad1",
+        "department": "Production",
+        "name": "Paulo Carlos De Brito",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10036,
+        "credit_id": "52fe4266c3a36847f801bad7",
+        "department": "Production",
+        "name": "Afonso Coaracy",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10037,
+        "credit_id": "52fe4266c3a36847f801badd",
+        "department": "Production",
+        "name": "Lillian Birnbaum",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10038,
+        "credit_id": "52fe4266c3a36847f801bae3",
+        "department": "Camera",
+        "name": "Walter Carvalho",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 10039,
+        "credit_id": "52fe4266c3a36847f801bae9",
+        "department": "Sound",
+        "name": "Jaques Morelenbaum",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8576,
+        "credit_id": "52fe4266c3a36847f801baef",
+        "department": "Sound",
+        "name": "Antonio Pinto",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 10040,
+        "credit_id": "52fe4266c3a36847f801baf5",
+        "department": "Editing",
+        "name": "Felipe Lacerda",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10041,
+        "credit_id": "52fe4266c3a36847f801bafb",
+        "department": "Editing",
+        "name": "Isabelle Rathery",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10042,
+        "credit_id": "52fe4266c3a36847f801bb01",
+        "department": "Production",
+        "name": "Sérgio Machado",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 10043,
+        "credit_id": "52fe4266c3a36847f801bb07",
+        "department": "Art",
+        "name": "Cassio Amarante",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 10044,
+        "credit_id": "52fe4266c3a36847f801bb0d",
+        "department": "Art",
+        "name": "Carla Caffé",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 10045,
+        "credit_id": "52fe4266c3a36847f801bb13",
+        "department": "Costume & Make-Up",
+        "name": "Cristina Camargo",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 10046,
+        "credit_id": "52fe4266c3a36847f801bb19",
+        "department": "Costume & Make-Up",
+        "name": "Antoine Garabedian",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 10048,
+        "credit_id": "52fe4267c3a36847f801bb1f",
+        "department": "Art",
+        "name": "Mônica Costa",
+        "job": "Set Designer",
+        "profile_path": null
+      },
+      {
+        "id": 10049,
+        "credit_id": "52fe4267c3a36847f801bb25",
+        "department": "Art",
+        "name": "Marcelo Larrea",
+        "job": "Set Designer",
+        "profile_path": null
+      },
+      {
+        "id": 10050,
+        "credit_id": "52fe4267c3a36847f801bb2b",
+        "department": "Sound",
+        "name": "Jean-Claude Brisson",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 10052,
+        "credit_id": "52fe4267c3a36847f801bb31",
+        "department": "Sound",
+        "name": "François Groult",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 10053,
+        "credit_id": "52fe4267c3a36847f801bb37",
+        "department": "Sound",
+        "name": "Mark A. Van Der Willigen",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 10054,
+        "credit_id": "52fe4267c3a36847f801bb3d",
+        "department": "Sound",
+        "name": "Bruno Tarrière",
+        "job": "Sound mixer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 113,
+  "spoken_languages": [{
+    "iso_639_1": "pt",
+    "name": "Português"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 666,
+  "production_countries": [{
+    "name": "Brazil",
+    "iso_3166_1": "BR"
+  }],
+  "title": "Central Station",
+  "overview": "Central do Brasil is a Brazilian film from Walter Salles about the relationship between an old and bitter woman and a young orphan boy.",
+  "production_companies": [
+    {
+      "id": 393,
+      "name": "MACT Productions"
+    },
+    {
+      "id": 394,
+      "name": "Videofilms"
+    },
+    {
+      "id": 395,
+      "name": "Riofilm"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0140888",
+  "release_date": "1998-01-16",
+  "original_title": "Central do Brasil",
+  "vote_count": 13,
+  "poster_path": "/x5bWINuTZxSCAYM5AechsLSlI3e.jpg",
+  "tagline": "",
+  "revenue": 5596708,
+  "popularity": "0.329090293144283"
+}

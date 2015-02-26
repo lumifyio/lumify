@@ -1,0 +1,402 @@
+{
+  "budget": 12000000,
+  "vote_average": 7.1,
+  "backdrop_path": "/z7tLZ3c17Ch6qGIhUuiXBGGwHv0.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2090,
+        "order": 0,
+        "credit_id": "52fe4294c3a36847f8029d3f",
+        "name": "Kirk Douglas",
+        "cast_id": 21,
+        "profile_path": "/vIZgu07gJtS2j460jgBlI1IvkAO.jpg",
+        "character": "Spartacus"
+      },
+      {
+        "id": 3359,
+        "order": 1,
+        "credit_id": "52fe4294c3a36847f8029d43",
+        "name": "Laurence Olivier",
+        "cast_id": 22,
+        "profile_path": "/n8jDSq91O95HSbtCJLRsM367kKx.jpg",
+        "character": "Marcus Licinius Crassus"
+      },
+      {
+        "id": 14500,
+        "order": 2,
+        "credit_id": "52fe4294c3a36847f8029d47",
+        "name": "Jean Simmons",
+        "cast_id": 23,
+        "profile_path": "/lVE40Hx4s2VI2nPxkNaF0hBjPw9.jpg",
+        "character": "Varinia"
+      },
+      {
+        "id": 10921,
+        "order": 3,
+        "credit_id": "52fe4294c3a36847f8029d4b",
+        "name": "Charles Laughton",
+        "cast_id": 24,
+        "profile_path": "/ssg5AqfnTbtdQVRbmoYECrjRSR0.jpg",
+        "character": "Sempronius Gracchus"
+      },
+      {
+        "id": 14501,
+        "order": 4,
+        "credit_id": "52fe4294c3a36847f8029d4f",
+        "name": "Peter Ustinov",
+        "cast_id": 25,
+        "profile_path": "/8Lv4g3ZPVSM1ckKk15OnryX8sL7.jpg",
+        "character": "Lentulus Batiatus"
+      },
+      {
+        "id": 7304,
+        "order": 5,
+        "credit_id": "52fe4294c3a36847f8029d53",
+        "name": "John Gavin",
+        "cast_id": 26,
+        "profile_path": "/sOYggS68lUhOpuXKbtz0oXOHV6x.jpg",
+        "character": "Julius Caesar"
+      },
+      {
+        "id": 13026,
+        "order": 6,
+        "credit_id": "52fe4294c3a36847f8029d57",
+        "name": "Nina Foch",
+        "cast_id": 27,
+        "profile_path": "/jd5qWtnZdEvfwuo57CpJVzazYc0.jpg",
+        "character": "Helena Glabrus"
+      },
+      {
+        "id": 14502,
+        "order": 7,
+        "credit_id": "52fe4294c3a36847f8029d5b",
+        "name": "John Ireland",
+        "cast_id": 28,
+        "profile_path": "/87deUnSyOPNaoiQiBHjScqhu8CZ.jpg",
+        "character": "Crixus"
+      },
+      {
+        "id": 14503,
+        "order": 8,
+        "credit_id": "52fe4294c3a36847f8029d5f",
+        "name": "Herbert Lom",
+        "cast_id": 29,
+        "profile_path": "/uPQNrZvgfAJNUAAYjmDubMmKEZ5.jpg",
+        "character": "Tigranes Levantus"
+      },
+      {
+        "id": 14504,
+        "order": 9,
+        "credit_id": "52fe4294c3a36847f8029d63",
+        "name": "John Dall",
+        "cast_id": 30,
+        "profile_path": "/AjgD9lfLq8SzQkiSqoXop5Afh9D.jpg",
+        "character": "Marcus Publius Glabrus"
+      },
+      {
+        "id": 4963,
+        "order": 10,
+        "credit_id": "52fe4294c3a36847f8029d67",
+        "name": "Woody Strode",
+        "cast_id": 31,
+        "profile_path": "/hL6mQBnCxBxhUeG5rjx9SfO7AXM.jpg",
+        "character": "Draba"
+      },
+      {
+        "id": 14505,
+        "order": 11,
+        "credit_id": "52fe4294c3a36847f8029d6b",
+        "name": "Harold J. Stone",
+        "cast_id": 32,
+        "profile_path": "/8htER9KtcZ6Ssm73Sq6Nd2QSYVT.jpg",
+        "character": "David"
+      },
+      {
+        "id": 8233,
+        "order": 12,
+        "credit_id": "52fe4294c3a36847f8029d6f",
+        "name": "Charles McGraw",
+        "cast_id": 33,
+        "profile_path": "/m6jBxQ3ZnePMBtCEy3eTu168kg3.jpg",
+        "character": "Marcellus"
+      },
+      {
+        "id": 14506,
+        "order": 13,
+        "credit_id": "52fe4294c3a36847f8029d73",
+        "name": "Joanna Barnes",
+        "cast_id": 34,
+        "profile_path": "/aXZhfXgvQe4IQ1p1TebcUMAK1ux.jpg",
+        "character": "Claudia Marius"
+      },
+      {
+        "id": 7074,
+        "order": 14,
+        "credit_id": "52fe4294c3a36847f8029d77",
+        "name": "Peter Brocco",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Ramon"
+      },
+      {
+        "id": 14507,
+        "order": 15,
+        "credit_id": "52fe4294c3a36847f8029d7b",
+        "name": "Paul Lambert",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Gannicus"
+      },
+      {
+        "id": 2096,
+        "order": 16,
+        "credit_id": "52fe4294c3a36847f8029d7f",
+        "name": "Robert J. Wilke",
+        "cast_id": 37,
+        "profile_path": "/3VL03wavl7fUGuVtayjft9eYAua.jpg",
+        "character": "Guard captain"
+      },
+      {
+        "id": 2757,
+        "order": 17,
+        "credit_id": "52fe4294c3a36847f8029d83",
+        "name": "Nick Dennis",
+        "cast_id": 38,
+        "profile_path": "/1iSpJEBq8lIWTBKCvgig08KkPmO.jpg",
+        "character": "Dionysius"
+      },
+      {
+        "id": 14508,
+        "order": 18,
+        "credit_id": "52fe4294c3a36847f8029d87",
+        "name": "John Hoyt",
+        "cast_id": 39,
+        "profile_path": "/ng0y8zpPNuAao58GGAbLdwrj8Fp.jpg",
+        "character": "Caius"
+      },
+      {
+        "id": 14509,
+        "order": 19,
+        "credit_id": "52fe4294c3a36847f8029d8b",
+        "name": "Frederick Worlock",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Laelius"
+      },
+      {
+        "id": 3150,
+        "order": 20,
+        "credit_id": "52fe4294c3a36847f8029d8f",
+        "name": "Tony Curtis",
+        "cast_id": 41,
+        "profile_path": "/y2y6QFlLkbDzNbAaKKa8mSH3Lde.jpg",
+        "character": "Antoninus"
+      }
+    ],
+    "crew": [
+      {
+        "id": 240,
+        "credit_id": "52fe4294c3a36847f8029cc9",
+        "department": "Directing",
+        "name": "Stanley Kubrick",
+        "job": "Director",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 14489,
+        "credit_id": "52fe4294c3a36847f8029ccf",
+        "department": "Writing",
+        "name": "Howard Fast",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 11993,
+        "credit_id": "52fe4294c3a36847f8029cd5",
+        "department": "Writing",
+        "name": "Dalton Trumbo",
+        "job": "Screenplay",
+        "profile_path": "/5WyVBp7kUn0rydQzNNoxsnatcpi.jpg"
+      },
+      {
+        "id": 5728,
+        "credit_id": "52fe4294c3a36847f8029cdb",
+        "department": "Production",
+        "name": "James C. Katz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14490,
+        "credit_id": "52fe4294c3a36847f8029ce1",
+        "department": "Production",
+        "name": "Edward Lewis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2090,
+        "credit_id": "52fe4294c3a36847f8029ce7",
+        "department": "Production",
+        "name": "Kirk Douglas",
+        "job": "Executive Producer",
+        "profile_path": "/vIZgu07gJtS2j460jgBlI1IvkAO.jpg"
+      },
+      {
+        "id": 10536,
+        "credit_id": "52fe4294c3a36847f8029ced",
+        "department": "Sound",
+        "name": "Alex North",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 13809,
+        "credit_id": "52fe4294c3a36847f8029cf3",
+        "department": "Camera",
+        "name": "Russell Metty",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14491,
+        "credit_id": "52fe4294c3a36847f8029cf9",
+        "department": "Editing",
+        "name": "Robert Lawrence",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12346,
+        "credit_id": "52fe4294c3a36847f8029cff",
+        "department": "Art",
+        "name": "Alexander Golitzen",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 14492,
+        "credit_id": "52fe4294c3a36847f8029d05",
+        "department": "Art",
+        "name": "Eric Orbom",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 12348,
+        "credit_id": "52fe4294c3a36847f8029d0b",
+        "department": "Art",
+        "name": "Russell A. Gausman",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 12349,
+        "credit_id": "52fe4294c3a36847f8029d11",
+        "department": "Art",
+        "name": "Julia Heron",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 14493,
+        "credit_id": "52fe4294c3a36847f8029d17",
+        "department": "Costume & Make-Up",
+        "name": "Bill Thomas",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14494,
+        "credit_id": "52fe4294c3a36847f8029d1d",
+        "department": "Costume & Make-Up",
+        "name": "Valles",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14495,
+        "credit_id": "52fe4294c3a36847f8029d23",
+        "department": "Costume & Make-Up",
+        "name": "Larry Germain",
+        "job": "Hairstylist",
+        "profile_path": null
+      },
+      {
+        "id": 14498,
+        "credit_id": "52fe4294c3a36847f8029d29",
+        "department": "Costume & Make-Up",
+        "name": "Bud Westmore",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 14499,
+        "credit_id": "52fe4294c3a36847f8029d2f",
+        "department": "Sound",
+        "name": "Ronald Pierce",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3258,
+        "credit_id": "52fe4294c3a36847f8029d35",
+        "department": "Sound",
+        "name": "Murray Spivack",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 7310,
+        "credit_id": "52fe4294c3a36847f8029d3b",
+        "department": "Sound",
+        "name": "Waldon O. Watson",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 184,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 967,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Spartacus",
+  "overview": "Spartacus is a 1960 American historical drama film directed by Stanley Kubrick and based on the novel of the same name by Howard Fast about the historical life of Spartacus and the Third Servile War. The film stars Kirk Douglas as the rebellious slave Spartacus who leads a violent revolt against the decadent Roman empire. The film was awarded four Oscars and stands today as one of the greatest classics of the Sword and Sandal genre.",
+  "production_companies": [{
+    "id": 611,
+    "name": "Bryna Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0054331",
+  "release_date": "1960-10-06",
+  "original_title": "Spartacus",
+  "vote_count": 49,
+  "poster_path": "/7t2EPfUtou6kl64sj6QSBd0qr6o.jpg",
+  "tagline": "More titanic than any story ever told!",
+  "revenue": 60000000,
+  "popularity": "0.758745980373778"
+}

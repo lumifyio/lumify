@@ -1,0 +1,255 @@
+{
+  "budget": 0,
+  "vote_average": 7.8,
+  "backdrop_path": "/7pKgFg7LU7TAjyxucMKGwkSPz6i.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3397,
+        "order": 0,
+        "credit_id": "52fe422dc3a36847f8009e99",
+        "name": "Dejan Čukić",
+        "cast_id": 3,
+        "profile_path": "/o0xbag2h3J0ncy3IrFJgx9xwrHH.jpg",
+        "character": "Arvid"
+      },
+      {
+        "id": 3398,
+        "order": 1,
+        "credit_id": "52fe422dc3a36847f8009e9d",
+        "name": "Kim Bodnia",
+        "cast_id": 4,
+        "profile_path": "/7vWoI9Hj3TyGBHpoHJbj85DEu09.jpg",
+        "character": "Harald"
+      },
+      {
+        "id": 3399,
+        "order": 2,
+        "credit_id": "52fe422dc3a36847f8009ea1",
+        "name": "Brian Patterson",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Vuk"
+      },
+      {
+        "id": 1018,
+        "order": 4,
+        "credit_id": "52fe422dc3a36847f8009ea5",
+        "name": "Nikolaj Lie Kaas",
+        "cast_id": 7,
+        "profile_path": "/xO4yWra3xoK0rdzDN4OC8Jwh0FH.jpg",
+        "character": "Martin"
+      },
+      {
+        "id": 3401,
+        "order": 5,
+        "credit_id": "52fe422dc3a36847f8009ea9",
+        "name": "Tomas Villum Jensen",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Peter"
+      },
+      {
+        "id": 3402,
+        "order": 6,
+        "credit_id": "52fe422dc3a36847f8009ead",
+        "name": "Line Kruse",
+        "cast_id": 9,
+        "profile_path": "/s91vmqggpgAwU9edGLeOkPFLEcy.jpg",
+        "character": "Astrid"
+      },
+      {
+        "id": 1181,
+        "order": 7,
+        "credit_id": "52fe422dc3a36847f8009eb1",
+        "name": "Peter Gantzler",
+        "cast_id": 10,
+        "profile_path": "/dihaRrk8vZQ518brzJXSxSmy2rN.jpg",
+        "character": "Franz"
+      },
+      {
+        "id": 3407,
+        "order": 8,
+        "credit_id": "52fe422dc3a36847f8009ed3",
+        "name": "Søren Sætter-Lassen",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Henning"
+      },
+      {
+        "id": 3408,
+        "order": 9,
+        "credit_id": "52fe422dc3a36847f8009ed7",
+        "name": "Lester Wiese",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Richard"
+      },
+      {
+        "id": 2244,
+        "order": 10,
+        "credit_id": "52fe422dc3a36847f8009edb",
+        "name": "Jesper Christensen",
+        "cast_id": 18,
+        "profile_path": "/fnE1D2BtNex0bUZE4DdxAsju0YR.jpg",
+        "character": "Bartender"
+      },
+      {
+        "id": 3409,
+        "order": 11,
+        "credit_id": "52fe422dc3a36847f8009edf",
+        "name": "Lasse Lunderskov",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Jørgen"
+      },
+      {
+        "id": 3410,
+        "order": 12,
+        "credit_id": "52fe422dc3a36847f8009ee3",
+        "name": "Preben Harris",
+        "cast_id": 20,
+        "profile_path": "/fsSwHpOnraXaBXS1KNQV7QRavZJ.jpg",
+        "character": "Erling"
+      },
+      {
+        "id": 3411,
+        "order": 13,
+        "credit_id": "52fe422dc3a36847f8009ee7",
+        "name": "Slavko Labovic",
+        "cast_id": 21,
+        "profile_path": "/tCefuNUdhLtEUVsk5YLBIIagdL9.jpg",
+        "character": "Ratko"
+      },
+      {
+        "id": 3412,
+        "order": 14,
+        "credit_id": "52fe422dc3a36847f8009eeb",
+        "name": "Martin Spang Olsen",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Preben"
+      },
+      {
+        "id": 4460,
+        "order": 15,
+        "credit_id": "52fe422dc3a36847f8009eef",
+        "name": "Trine Dyrholm",
+        "cast_id": 23,
+        "profile_path": "/ue2dx6F4g7uOR5nZJh8YEFlccJd.jpg",
+        "character": "Hanne"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3395,
+        "credit_id": "52fe422dc3a36847f8009e8f",
+        "department": "Directing",
+        "name": "Lasse Spang Olsen",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 1012,
+        "credit_id": "52fe422dc3a36847f8009e95",
+        "department": "Writing",
+        "name": "Anders Thomas Jensen",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1175,
+        "credit_id": "52fe422dc3a36847f8009eb7",
+        "department": "Camera",
+        "name": "Morten Søborg",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3403,
+        "credit_id": "52fe422dc3a36847f8009ebd",
+        "department": "Sound",
+        "name": "George Keller",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3395,
+        "credit_id": "52fe422dc3a36847f8009ec3",
+        "department": "Editing",
+        "name": "Lasse Spang Olsen",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3405,
+        "credit_id": "52fe422dc3a36847f8009ec9",
+        "department": "Sound",
+        "name": "Benni Christiansen",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3396,
+        "credit_id": "52fe422dc3a36847f8009ecf",
+        "department": "Production",
+        "name": "Steen Herdel",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 91,
+  "spoken_languages": [
+    {
+      "iso_639_1": "sv",
+      "name": "svenska"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 250,
+  "production_countries": [{
+    "name": "Denmark",
+    "iso_3166_1": "DK"
+  }],
+  "title": "In China They Eat Dogs",
+  "overview": "An intent fast paced Danish dark comedy film about two separately motivated brothers who with their slightly psychopathic tendencies end up in a touchy situation. One brother gets in serious trouble after a bank robbery and begs the other brother for help.",
+  "production_companies": [{
+    "id": 165,
+    "name": "Steen Herdel Filmproduktion"
+  }],
+  "belongs_to_collection": {
+    "id": 95891,
+    "backdrop_path": "/jeH6MaDD1CnZ8TLupBAi0DYWn2F.jpg",
+    "name": "In China They Eat Dogs Collection",
+    "poster_path": "/mKoEp6nHlQhtfchWQajVzZOTuZJ.jpg"
+  },
+  "imdb_id": "tt0180748",
+  "release_date": "1999-09-10",
+  "original_title": "I Kina Spiser De Hunde",
+  "vote_count": 21,
+  "poster_path": "/z5iiUe3j5n86jLM8H6CiDlPRNZL.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.352389791812617"
+}

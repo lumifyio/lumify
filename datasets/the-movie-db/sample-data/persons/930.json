@@ -1,0 +1,138 @@
+{
+  "birthday": "1932-06-10",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 930,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0527322",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 106599,
+        "media_type": "movie",
+        "title": "Imaginary Witness: Hollywood and the Holocaust",
+        "credit_id": "52fe4a6cc3a36847f81cd025",
+        "release_date": "2004-01-01",
+        "original_title": "Imaginary Witness: Hollywood and the Holocaust",
+        "adult": false,
+        "poster_path": "/pTU6ZTOf0MXlfs0ycOVgh7Q9SDS.jpg",
+        "character": ""
+      },
+      {
+        "id": 27023,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5258832c760ee346613ff79b",
+        "name": "The Academy Awards",
+        "poster_path": "/xxWK636MvogUp4Y5pX3ri69yMcy.jpg",
+        "original_name": "The Academy Awards",
+        "first_air_date": "1929-05-16",
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 424,
+        "media_type": "movie",
+        "title": "Schindler's List",
+        "credit_id": "52fe4241c3a36847f8010265",
+        "department": "Production",
+        "release_date": "1993-11-29",
+        "original_title": "Schindler's List",
+        "job": "Producer",
+        "adult": false,
+        "poster_path": "/yPisjyLweCl1tbgwgtzBCNCBle.jpg"
+      },
+      {
+        "id": 855,
+        "media_type": "movie",
+        "title": "Black Hawk Down",
+        "credit_id": "52fe4282c3a36847f8024883",
+        "department": "Production",
+        "release_date": "2001-12-28",
+        "original_title": "Black Hawk Down",
+        "job": "Executive Producer",
+        "adult": false,
+        "poster_path": "/yUzQ4r3q1Dy0bUAkMvUIwf0rPpR.jpg"
+      },
+      {
+        "id": 1495,
+        "media_type": "movie",
+        "title": "Kingdom of Heaven",
+        "credit_id": "52fe42fac3a36847f8031329",
+        "department": "Production",
+        "release_date": "2005-05-05",
+        "original_title": "Kingdom of Heaven",
+        "job": "Executive Producer",
+        "adult": false,
+        "poster_path": "/d9GYuT9aMoDi4MPTKYe4M2PwUm4.jpg"
+      },
+      {
+        "id": 2125,
+        "media_type": "movie",
+        "title": "Wedlock",
+        "credit_id": "52fe4338c3a36847f804385b",
+        "department": "Production",
+        "release_date": "1991-09-05",
+        "original_title": "Wedlock",
+        "job": "Producer",
+        "adult": false,
+        "poster_path": "/4lMvEV0fUuqPxlzHLU9gl9GLrpB.jpg"
+      },
+      {
+        "id": 4982,
+        "media_type": "movie",
+        "title": "American Gangster",
+        "credit_id": "52fe43ebc3a36847f80783af",
+        "department": "Production",
+        "release_date": "2007-11-02",
+        "original_title": "American Gangster",
+        "job": "Executive Producer",
+        "adult": false,
+        "poster_path": "/uDSP5H5akJ85xMGSHRtaqHGBRLD.jpg"
+      },
+      {
+        "id": 6623,
+        "media_type": "movie",
+        "title": "The Peacemaker",
+        "credit_id": "52fe445fc3a36847f80920e9",
+        "department": "Production",
+        "release_date": "1997-09-26",
+        "original_title": "The Peacemaker",
+        "job": "Producer",
+        "adult": false,
+        "poster_path": "/1yemGzqs99QAWuwm6lR5wMH0Xn0.jpg"
+      },
+      {
+        "id": 98,
+        "media_type": "movie",
+        "title": "Gladiator",
+        "credit_id": "52fe4217c3a36847f8003419",
+        "department": "Production",
+        "release_date": "2000-05-01",
+        "original_title": "Gladiator",
+        "job": "Producer",
+        "adult": false,
+        "poster_path": "/6WBIzCgmDCYrqh64yDREGeDk9d3.jpg"
+      },
+      {
+        "id": 9740,
+        "media_type": "movie",
+        "title": "Hannibal",
+        "credit_id": "52fe4525c3a36847f80bef59",
+        "department": "Production",
+        "release_date": "2001-02-08",
+        "original_title": "Hannibal",
+        "job": "Executive Producer",
+        "adult": false,
+        "poster_path": "/wmuxJ9Kscg0SuGlfg2ARmGgHvOF.jpg"
+      }
+    ]
+  },
+  "name": "Branko Lustig",
+  "place_of_birth": null,
+  "popularity": "2.93250663537412"
+}

@@ -1,0 +1,276 @@
+{
+  "budget": 6500000,
+  "vote_average": 7.4,
+  "backdrop_path": "/oJ6l7ZIlN6NZKYkhNvKb5cF3onw.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2975,
+        "order": 0,
+        "credit_id": "52fe4264c3a36847f801aeb5",
+        "name": "Laurence Fishburne",
+        "cast_id": 14,
+        "profile_path": "/mh0lZ1XsT84FayMNiT6Erh91mVu.jpg",
+        "character": "Jason 'Furious' Styles"
+      },
+      {
+        "id": 9777,
+        "order": 1,
+        "credit_id": "52fe4264c3a36847f801aeb9",
+        "name": "Cuba Gooding Jr.",
+        "cast_id": 15,
+        "profile_path": "/yu8Q3ImFu3RJne585jjgeQO2Boo.jpg",
+        "character": "Tré Styles"
+      },
+      {
+        "id": 9778,
+        "order": 2,
+        "credit_id": "52fe4264c3a36847f801aebd",
+        "name": "Ice Cube",
+        "cast_id": 16,
+        "profile_path": "/iG0Nvnql8NpnySQOLQAIOyRl4tR.jpg",
+        "character": "Darin 'Doughboy' Baker"
+      },
+      {
+        "id": 9779,
+        "order": 3,
+        "credit_id": "52fe4264c3a36847f801aec1",
+        "name": "Morris Chestnut",
+        "cast_id": 17,
+        "profile_path": "/8uXIo48u1hyuUUVnCpXXniBfw6c.jpg",
+        "character": "Ricky Baker"
+      },
+      {
+        "id": 9780,
+        "order": 4,
+        "credit_id": "52fe4264c3a36847f801aec5",
+        "name": "Angela Bassett",
+        "cast_id": 18,
+        "profile_path": "/3CZcwcM89MM8F3cG7956Q7TncKJ.jpg",
+        "character": "Reva Devereaux"
+      },
+      {
+        "id": 9781,
+        "order": 5,
+        "credit_id": "52fe4264c3a36847f801aec9",
+        "name": "Nia Long",
+        "cast_id": 19,
+        "profile_path": "/kNjmtKOVykmOOa1q0OFj6zZIAF4.jpg",
+        "character": "Brandi"
+      },
+      {
+        "id": 9782,
+        "order": 6,
+        "credit_id": "52fe4264c3a36847f801aecd",
+        "name": "Tyra Ferrell",
+        "cast_id": 20,
+        "profile_path": "/ehrlTSktNfShujcY3SaZyJYg2On.jpg",
+        "character": "Brenda Baker"
+      },
+      {
+        "id": 9783,
+        "order": 7,
+        "credit_id": "52fe4264c3a36847f801aed1",
+        "name": "Lexie Bigham",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Mad Dog"
+      },
+      {
+        "id": 9784,
+        "order": 8,
+        "credit_id": "52fe4264c3a36847f801aed5",
+        "name": "Desi Arnez Hines II",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Young Tré Styles"
+      },
+      {
+        "id": 9785,
+        "order": 9,
+        "credit_id": "52fe4264c3a36847f801aed9",
+        "name": "John Cothran, Jr.",
+        "cast_id": 23,
+        "profile_path": "/bbm2ihEzSwu98YCEZSaYOfiGhEH.jpg",
+        "character": "Lewis Crump, USC Recruiter"
+      },
+      {
+        "id": 9786,
+        "order": 10,
+        "credit_id": "52fe4264c3a36847f801aedd",
+        "name": "Jessie Lawrence Ferguson",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Officer Coffey"
+      },
+      {
+        "id": 9787,
+        "order": 11,
+        "credit_id": "52fe4264c3a36847f801aee1",
+        "name": "Tammy Hanson",
+        "cast_id": 25,
+        "profile_path": "/rJFaKESLUUIw0updULLhb1X23FQ.jpg",
+        "character": "Rosa"
+      },
+      {
+        "id": 9788,
+        "order": 12,
+        "credit_id": "52fe4264c3a36847f801aee5",
+        "name": "Regina King",
+        "cast_id": 26,
+        "profile_path": "/yyLLugMaQyHOMuaOenOsgMkiB8f.jpg",
+        "character": "Shalika"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6482,
+        "credit_id": "52fe4264c3a36847f801ae69",
+        "department": "Directing",
+        "name": "John Singleton",
+        "job": "Director",
+        "profile_path": "/xmVaXjAAywPh7HIrYjLVsjfKPrV.jpg"
+      },
+      {
+        "id": 6482,
+        "credit_id": "52fe4264c3a36847f801ae6f",
+        "department": "Writing",
+        "name": "John Singleton",
+        "job": "Screenplay",
+        "profile_path": "/xmVaXjAAywPh7HIrYjLVsjfKPrV.jpg"
+      },
+      {
+        "id": 9249,
+        "credit_id": "52fe4264c3a36847f801ae75",
+        "department": "Production",
+        "name": "Steve Nicolaides",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9769,
+        "credit_id": "52fe4264c3a36847f801ae7b",
+        "department": "Sound",
+        "name": "Stanley Clarke",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 9770,
+        "credit_id": "52fe4264c3a36847f801ae81",
+        "department": "Sound",
+        "name": "Roger Troutman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 9771,
+        "credit_id": "52fe4264c3a36847f801ae87",
+        "department": "Camera",
+        "name": "Charles Mills",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 9772,
+        "credit_id": "52fe4264c3a36847f801ae8d",
+        "department": "Editing",
+        "name": "Bruce Cannon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5776,
+        "credit_id": "52fe4264c3a36847f801ae93",
+        "department": "Production",
+        "name": "Jaki Brown",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 9773,
+        "credit_id": "52fe4264c3a36847f801ae99",
+        "department": "Art",
+        "name": "Bruce Bellamy",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9774,
+        "credit_id": "52fe4264c3a36847f801ae9f",
+        "department": "Art",
+        "name": "Kathryn Peters",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9775,
+        "credit_id": "52fe4264c3a36847f801aea5",
+        "department": "Costume & Make-Up",
+        "name": "Marietta Carter-Narcisse",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 9249,
+        "credit_id": "52fe4264c3a36847f801aeab",
+        "department": "Production",
+        "name": "Steve Nicolaides",
+        "job": "Unit Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 9776,
+        "credit_id": "52fe4264c3a36847f801aeb1",
+        "department": "Crew",
+        "name": "Chantal Feghali",
+        "job": "Post Production Supervisor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 102,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 650,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Boyz n the Hood",
+  "overview": "Boyz n the Hood is the popular and successful film and social criticism from John Singleton about the conditions in South Central Los Angeles where teenagers are involved in gun fights and drug dealing on a daily basis.",
+  "production_companies": [{
+    "id": 441,
+    "name": "Columbia Pictures Corporation"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0101507",
+  "release_date": "1991-07-12",
+  "original_title": "Boyz n the Hood",
+  "vote_count": 35,
+  "poster_path": "/9qQdpidN33pTEaxAP5gaTmCPGFq.jpg",
+  "tagline": "Once upon a time in South Central L.A... It ain't no fairy tale.",
+  "revenue": 57504069,
+  "popularity": "0.763201539189401"
+}

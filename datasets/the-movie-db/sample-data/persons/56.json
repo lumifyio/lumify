@@ -1,0 +1,74 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/detvecq2YxaCYeG6EhHCMdprQbK.jpg",
+  "id": 56,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm1552136",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 17,
+        "media_type": "movie",
+        "title": "The Dark",
+        "credit_id": "52fe420fc3a36847f8000aa3",
+        "release_date": "2006-04-11",
+        "original_title": "The Dark",
+        "adult": false,
+        "poster_path": "/spMYhC9Fom3QHiirsaf8nRS6Edd.jpg",
+        "character": "Sarah"
+      },
+      {
+        "id": 65086,
+        "media_type": "movie",
+        "title": "The Woman in Black",
+        "credit_id": "52fe46fcc3a368484e0aedf3",
+        "release_date": "2012-02-01",
+        "original_title": "The Woman in Black",
+        "adult": false,
+        "poster_path": "/j1Uek5DyMH9jgrUCGfwLgWBDRjp.jpg",
+        "character": "Stella Kipps"
+      },
+      {
+        "id": 121597,
+        "media_type": "movie",
+        "title": "Comedown",
+        "credit_id": "535cbca2c3a3682273000133",
+        "release_date": "2012-08-23",
+        "original_title": "Comedown",
+        "adult": false,
+        "poster_path": "/uIWfoNVc86IM0ljX6Rs1IBOjKnr.jpg",
+        "character": "Jemma"
+      },
+      {
+        "id": 177609,
+        "media_type": "movie",
+        "title": "The Reckoning",
+        "credit_id": "535cbcc4c3a3683084003b63",
+        "release_date": "2011-04-17",
+        "original_title": "The Reckoning",
+        "adult": false,
+        "poster_path": "/yNnCTDzHsTjHQZ1AYGs3vtyXUUY.jpg",
+        "character": "Amanda Wilson"
+      },
+      {
+        "id": 23049,
+        "media_type": "movie",
+        "title": "My Life in Ruins",
+        "credit_id": "52fe445cc3a368484e01e999",
+        "release_date": "2009-02-06",
+        "original_title": "My Life in Ruins",
+        "adult": false,
+        "poster_path": "/eW4KnUXUyKnNw1150AICDkOfSTD.jpg",
+        "character": "Caitlin"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Sophie Stuckey",
+  "place_of_birth": null,
+  "popularity": "1.08878515125496"
+}

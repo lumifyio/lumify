@@ -1,0 +1,63 @@
+{
+  "birthday": "1963-11-04",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.  Rosario Flores (born November 4, 1963) is a two-time Latin Grammy Award-winning Spanish gypsy singer and actress.\n\nShe was born in Madrid, Spain as the daughter of Antonio González ('El Pescaílla') and Lola Flores. She is the sister of actress Lolita Flores and singer-songwriter Antonio Flores. She has a daughter with her ex boyfriend Carlos Orellana. Her second son, Pedro Antonio, was born January 21, 2006, the same day as his grandmother Lola Flores. Rosario and Pedro Lazaga, her partner and father of her second son, met while filming Pedro Almodóvar's film Hable con ella in 2001.\n\nDescription above from the Wikipedia article Rosario Flores, licensed under CC-BY-SA, full list of contributors on Wikipedia.     ",
+  "homepage": "",
+  "profile_path": "/sfeG3adF69JQA4SgzL43jSytwW.jpg",
+  "id": 398,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0282936",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 64,
+        "media_type": "movie",
+        "title": "Talk to Her",
+        "credit_id": "52fe4212c3a36847f8001bad",
+        "release_date": "2002-03-14",
+        "original_title": "Hable con ella",
+        "adult": false,
+        "poster_path": "/bi4k5ejbLsiWieHJZitt4UCUNSm.jpg",
+        "character": "Lydia"
+      },
+      {
+        "id": 150611,
+        "media_type": "movie",
+        "title": "Proceso a Mariana Pineda",
+        "credit_id": "52fe4ae79251416c910c9831",
+        "release_date": null,
+        "original_title": "Proceso a Mariana Pineda",
+        "adult": false,
+        "poster_path": "/tcLeGPcaa9hkiCeO8Vzufkxbcwg.jpg",
+        "character": "Juanita (5 episodes, 1984)"
+      },
+      {
+        "id": 115903,
+        "media_type": "movie",
+        "title": "Colegas",
+        "credit_id": "52fe4b7fc3a36847f8206717",
+        "release_date": "1982-10-25",
+        "original_title": "Colegas",
+        "adult": false,
+        "poster_path": "/ySqGt6gl9tNn6V7qQ1qjcwfbHVl.jpg",
+        "character": "Rosario"
+      },
+      {
+        "id": 189318,
+        "media_type": "movie",
+        "title": "Winter diary",
+        "credit_id": "52fe4d569251416c75137dc5",
+        "release_date": "1988-09-29",
+        "original_title": "Diario de invierno",
+        "adult": false,
+        "poster_path": "/hSHWXQ8uRrDfTIpUtufIqsvPxz9.jpg",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Rosario Flores",
+  "place_of_birth": "Madrid, Spain",
+  "popularity": "2.02714787700819"
+}

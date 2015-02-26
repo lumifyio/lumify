@@ -1,0 +1,74 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/dJP4kbCF2f8dg88BROfRukd67H1.jpg",
+  "id": 702,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0848883",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 9618,
+        "media_type": "movie",
+        "title": "Tango & Cash",
+        "credit_id": "52fe4512c3a36847f80bab7d",
+        "release_date": "1989-12-22",
+        "original_title": "Tango & Cash",
+        "adult": false,
+        "poster_path": "/iR2lVzGXYsJpksqUswsnZ7LPTfx.jpg",
+        "character": "Chinese Gunman"
+      },
+      {
+        "id": 13154,
+        "media_type": "movie",
+        "title": "Showdown in Little Tokyo",
+        "credit_id": "52fe45469251416c75050e65",
+        "release_date": "1991-08-23",
+        "original_title": "Showdown in Little Tokyo",
+        "adult": false,
+        "poster_path": "/5hsSpTbIcoEdf4UfcYn9ZbbqqTd.jpg",
+        "character": "Tanaka"
+      },
+      {
+        "id": 65497,
+        "media_type": "movie",
+        "title": "Martial Law",
+        "credit_id": "52fe470dc3a368484e0b25cb",
+        "release_date": "1991-05-16",
+        "original_title": "Martial Law",
+        "adult": false,
+        "poster_path": "/y2fohddjbQOtHSbg9oRyPtQKYS4.jpg",
+        "character": "Wu Han"
+      },
+      {
+        "id": 87,
+        "media_type": "movie",
+        "title": "Indiana Jones and the Temple of Doom",
+        "credit_id": "52fe4215c3a36847f8002c35",
+        "release_date": "1984-05-22",
+        "original_title": "Indiana Jones and the Temple of Doom",
+        "adult": false,
+        "poster_path": "/f2nTRKk2zGdUTE7tLJ5EGGSuKA6.jpg",
+        "character": "Chief Henchman"
+      },
+      {
+        "id": 275477,
+        "media_type": "movie",
+        "title": "China Cry: A True Story",
+        "credit_id": "53b586bac3a3685eb1001092",
+        "release_date": "1990-11-02",
+        "original_title": "China Cry: A True Story",
+        "adult": false,
+        "poster_path": "/dgj3ttZuD6jJGAuuHaI5YRcailB.jpg",
+        "character": "Colonel Cheng"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Philip Tan",
+  "place_of_birth": null,
+  "popularity": 1.0765
+}

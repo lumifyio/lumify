@@ -1,0 +1,41 @@
+{
+  "birthday": "1995-04-17",
+  "adult": false,
+  "biography": null,
+  "homepage": "",
+  "profile_path": "/dMcbqtmt6hPbGr6wiHpuaFziJmP.jpg",
+  "id": 217,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm1445789",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 38,
+        "media_type": "movie",
+        "title": "Eternal Sunshine of the Spotless Mind",
+        "credit_id": "52fe4211c3a36847f80016a7",
+        "release_date": "2004-03-19",
+        "original_title": "Eternal Sunshine of the Spotless Mind",
+        "adult": false,
+        "poster_path": "/gutwXkVChJkpIrclokNESybj0GC.jpg",
+        "character": "Young Bully"
+      },
+      {
+        "id": 1509,
+        "media_type": "tv",
+        "episode_count": 75,
+        "credit_id": "525709ff760ee3776a054a1e",
+        "name": "Hope & Faith",
+        "poster_path": "/kiLldQGHS1Pa2SSgFiFLZ6XOYCV.jpg",
+        "original_name": "Hope & Faith",
+        "first_air_date": "2003-09-26",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Paul Litowsky",
+  "place_of_birth": "",
+  "popularity": "1.00006534459955"
+}

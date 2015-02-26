@@ -1,0 +1,293 @@
+{
+  "budget": 0,
+  "vote_average": 9.1,
+  "backdrop_path": "/4MaP6BMApS8g4w2k7GT6nsiYAgg.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4420,
+        "order": 0,
+        "credit_id": "52fe4235c3a36847f800c3f1",
+        "name": "Aldo Fabrizi",
+        "cast_id": 13,
+        "profile_path": "/klWr6bFEp7hjNGziDMTCIFez3Jh.jpg",
+        "character": "Don Pietro Pellegrini"
+      },
+      {
+        "id": 4421,
+        "order": 1,
+        "credit_id": "52fe4235c3a36847f800c3f5",
+        "name": "Anna Magnani",
+        "cast_id": 14,
+        "profile_path": "/ouUMbgwl1TaoXx67bwDCWt2gq2d.jpg",
+        "character": "Pina"
+      },
+      {
+        "id": 4425,
+        "order": 2,
+        "credit_id": "52fe4235c3a36847f800c401",
+        "name": "Francesco Grandjacquet",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Francesco"
+      },
+      {
+        "id": 4422,
+        "order": 3,
+        "credit_id": "52fe4235c3a36847f800c3f9",
+        "name": "Marcello Pagliero",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Luigi Ferrari, alias Giorgio Manfredi"
+      },
+      {
+        "id": 4424,
+        "order": 4,
+        "credit_id": "52fe4235c3a36847f800c3fd",
+        "name": "Harry Feist",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Il maggiore Fritz Bergmann"
+      },
+      {
+        "id": 4426,
+        "order": 5,
+        "credit_id": "52fe4235c3a36847f800c405",
+        "name": "Maria Michi",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Marina Mari"
+      },
+      {
+        "id": 4423,
+        "order": 7,
+        "credit_id": "52fe4235c3a36847f800c409",
+        "name": "Vito Annichiarico",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Marcello, figlio di Pina"
+      },
+      {
+        "id": 5001,
+        "order": 8,
+        "credit_id": "52fe4235c3a36847f800c413",
+        "name": "Ákos Tolnay",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Il desertore austriaco"
+      },
+      {
+        "id": 5002,
+        "order": 9,
+        "credit_id": "52fe4235c3a36847f800c417",
+        "name": "Joop van Hulzen",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Il capitano Hartmann"
+      },
+      {
+        "id": 5003,
+        "order": 10,
+        "credit_id": "52fe4235c3a36847f800c41b",
+        "name": "Carla Rovere",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Lauretta, sorella di Pina"
+      },
+      {
+        "id": 18337,
+        "order": 11,
+        "credit_id": "52fe4235c3a36847f800c41f",
+        "name": "Giovanna Galletti",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Ingrid"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4410,
+        "credit_id": "52fe4235c3a36847f800c3c3",
+        "department": "Directing",
+        "name": "Roberto Rossellini",
+        "job": "Director",
+        "profile_path": "/d0XQ1cfU4ZmfMJsLNIGe5QNbVm9.jpg"
+      },
+      {
+        "id": 4411,
+        "credit_id": "52fe4235c3a36847f800c3c9",
+        "department": "Production",
+        "name": "Giuseppe Amato",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4412,
+        "credit_id": "52fe4235c3a36847f800c3cf",
+        "department": "Production",
+        "name": "Ferruccio De Martino",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4410,
+        "credit_id": "52fe4235c3a36847f800c3d5",
+        "department": "Production",
+        "name": "Roberto Rossellini",
+        "job": "Producer",
+        "profile_path": "/d0XQ1cfU4ZmfMJsLNIGe5QNbVm9.jpg"
+      },
+      {
+        "id": 4416,
+        "credit_id": "52fe4235c3a36847f800c3db",
+        "department": "Sound",
+        "name": "Renzo Rossellini",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4417,
+        "credit_id": "52fe4235c3a36847f800c3e1",
+        "department": "Camera",
+        "name": "Ubaldo Arata",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4418,
+        "credit_id": "52fe4235c3a36847f800c3e7",
+        "department": "Editing",
+        "name": "Eraldo Da Roma",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4419,
+        "credit_id": "52fe4235c3a36847f800c3ed",
+        "department": "Art",
+        "name": "Rosario Megna",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4428,
+        "credit_id": "52fe4235c3a36847f800c40f",
+        "department": "Sound",
+        "name": "Raffaele Del Monte",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 22472,
+        "credit_id": "52fe4235c3a36847f800c425",
+        "department": "Editing",
+        "name": "Jolanda Benvenuti",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4414,
+        "credit_id": "52fe4235c3a36847f800c42b",
+        "department": "Crew",
+        "name": "Alberto Consiglio",
+        "job": "Additional Writing",
+        "profile_path": null
+      },
+      {
+        "id": 4410,
+        "credit_id": "52fe4235c3a36847f800c431",
+        "department": "Crew",
+        "name": "Roberto Rossellini",
+        "job": "Additional Writing",
+        "profile_path": "/d0XQ1cfU4ZmfMJsLNIGe5QNbVm9.jpg"
+      },
+      {
+        "id": 4413,
+        "credit_id": "52fe4235c3a36847f800c437",
+        "department": "Writing",
+        "name": "Sergio Amidei",
+        "job": "Story",
+        "profile_path": null
+      },
+      {
+        "id": 4413,
+        "credit_id": "52fe4235c3a36847f800c43d",
+        "department": "Writing",
+        "name": "Sergio Amidei",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4415,
+        "credit_id": "52fe4235c3a36847f800c443",
+        "department": "Writing",
+        "name": "Federico Fellini",
+        "job": "Screenplay",
+        "profile_path": "/z90Xi07Ywtkyp5GTL2ahFZiY0Ru.jpg"
+      },
+      {
+        "id": 4410,
+        "credit_id": "52fe4235c3a36847f800c449",
+        "department": "Writing",
+        "name": "Roberto Rossellini",
+        "job": "Screenplay",
+        "profile_path": "/d0XQ1cfU4ZmfMJsLNIGe5QNbVm9.jpg"
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 307,
+  "production_countries": [{
+    "name": "Italy",
+    "iso_3166_1": "IT"
+  }],
+  "title": "Rome, Open City",
+  "overview": "Open City is a landmark in film history. Filmed in secrecy during the Nazi occupation of Italy, the film shows a realistic portrayal of the underground resistance in Italy in 1945. The film has strong impacting imagery with it\u2019s mix of fiction and reality that strengthened Italian Neo-realism and the film industry.",
+  "production_companies": [
+    {
+      "id": 153,
+      "name": "Minerva Film SpA"
+    },
+    {
+      "id": 193,
+      "name": "Excelsa Films"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 256729,
+    "backdrop_path": null,
+    "name": "War Trilogy",
+    "poster_path": "/zQh90nJedtEhCTb2z5hRq927iVB.jpg"
+  },
+  "imdb_id": "tt0038890",
+  "release_date": "1945-09-27",
+  "original_title": "Roma, Città Aperta",
+  "vote_count": 6,
+  "poster_path": "/gKI4rq7mt15VkYGJnKnHxEYdhYb.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.279997313949059"
+}

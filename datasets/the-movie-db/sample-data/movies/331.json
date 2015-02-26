@@ -1,0 +1,361 @@
+{
+  "budget": 93000000,
+  "vote_average": 5.7,
+  "backdrop_path": "/ts2N9e5NUn17fTuGT1aGJeRYmfu.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4783,
+        "order": 0,
+        "credit_id": "52fe4238c3a36847f800d44f",
+        "name": "Sam Neill",
+        "cast_id": 1,
+        "profile_path": "/mrbhjPg0SNCJu6Auj4WMheMg5EC.jpg",
+        "character": "Dr. Alan Grant"
+      },
+      {
+        "id": 3905,
+        "order": 1,
+        "credit_id": "52fe4238c3a36847f800d453",
+        "name": "William H. Macy",
+        "cast_id": 2,
+        "profile_path": "/rpUv9mDece5LQuWI7iBNQaAesFg.jpg",
+        "character": "Paul Kirby"
+      },
+      {
+        "id": 4939,
+        "order": 2,
+        "credit_id": "52fe4238c3a36847f800d457",
+        "name": "Téa Leoni",
+        "cast_id": 3,
+        "profile_path": "/zykKYAJtSFSmyWTAzE5gBeDeNn0.jpg",
+        "character": "Amanda Kirby"
+      },
+      {
+        "id": 4940,
+        "order": 3,
+        "credit_id": "52fe4238c3a36847f800d45b",
+        "name": "Trevor Morgan",
+        "cast_id": 4,
+        "profile_path": "/b0rS91S5G2KqxvTb47t7MMGnUab.jpg",
+        "character": "Erik Kirby"
+      },
+      {
+        "id": 4941,
+        "order": 4,
+        "credit_id": "52fe4238c3a36847f800d45f",
+        "name": "Alessandro Nivola",
+        "cast_id": 5,
+        "profile_path": "/lLlaotVNM6dhjXj7GWVLSedugct.jpg",
+        "character": "Billy Brennan"
+      },
+      {
+        "id": 2169,
+        "order": 5,
+        "credit_id": "52fe4238c3a36847f800d463",
+        "name": "Michael Jeter",
+        "cast_id": 6,
+        "profile_path": "/oJTjyq7RGOd1m49RvDpw12bQcvT.jpg",
+        "character": "Mr. Udesky"
+      },
+      {
+        "id": 4942,
+        "order": 6,
+        "credit_id": "52fe4238c3a36847f800d467",
+        "name": "John Diehl",
+        "cast_id": 7,
+        "profile_path": "/hDUvgqpIv753skoeRGjVw6gYp7A.jpg",
+        "character": "Cooper"
+      },
+      {
+        "id": 4943,
+        "order": 7,
+        "credit_id": "52fe4238c3a36847f800d46b",
+        "name": "Bruce A. Young",
+        "cast_id": 8,
+        "profile_path": "/ty2NwUAAwnn356eTAu7RuSsQlhT.jpg",
+        "character": "M.B. Nash"
+      },
+      {
+        "id": 4784,
+        "order": 8,
+        "credit_id": "52fe4238c3a36847f800d46f",
+        "name": "Laura Dern",
+        "cast_id": 9,
+        "profile_path": "/6UdGooksu7F4qfXkdvsQkhFVuhK.jpg",
+        "character": "Dr. Ellie Sattler"
+      },
+      {
+        "id": 4944,
+        "order": 9,
+        "credit_id": "52fe4238c3a36847f800d473",
+        "name": "Taylor Nichols",
+        "cast_id": 10,
+        "profile_path": "/yls98pv22GPdHpUF8U4uZJydyef.jpg",
+        "character": "Mark Degler"
+      },
+      {
+        "id": 88949,
+        "order": 10,
+        "credit_id": "52fe4238c3a36847f800d4ad",
+        "name": "Mark Harelik",
+        "cast_id": 24,
+        "profile_path": "/iiWjqkiQc9StJjC0KTSjg5AZFSa.jpg",
+        "character": "Ben Hildebrand"
+      },
+      {
+        "id": 17413,
+        "order": 11,
+        "credit_id": "52fe4238c3a36847f800d4b1",
+        "name": "Julio Oscar Mechoso",
+        "cast_id": 25,
+        "profile_path": "/gilHqoYdYoYMcVIK81QiqOeJcc6.jpg",
+        "character": "Enrique Cardoso"
+      },
+      {
+        "id": 1076559,
+        "order": 12,
+        "credit_id": "52fe4238c3a36847f800d4b5",
+        "name": "Blake Michael Bryan",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Charlie"
+      },
+      {
+        "id": 1223986,
+        "order": 13,
+        "credit_id": "52fe4238c3a36847f800d4d5",
+        "name": "Sarah Danielle Madison",
+        "cast_id": 33,
+        "profile_path": "/jiQvZnh1ydxa3tSBSN194b6FxFa.jpg",
+        "character": "Cheryl Logan"
+      },
+      {
+        "id": 105646,
+        "order": 14,
+        "credit_id": "52fe4238c3a36847f800d4b9",
+        "name": "Linda Park",
+        "cast_id": 28,
+        "profile_path": "/9UhEiVqCElSXs24hJxpODI8WOTP.jpg",
+        "character": "Hannah"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4945,
+        "credit_id": "52fe4238c3a36847f800d479",
+        "department": "Directing",
+        "name": "Joe Johnston",
+        "job": "Director",
+        "profile_path": "/dBLdJJo551G2WH0TPv6ze0FC1ei.jpg"
+      },
+      {
+        "id": 511,
+        "credit_id": "52fe4238c3a36847f800d47f",
+        "department": "Production",
+        "name": "Larry J. Franco",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 489,
+        "credit_id": "52fe4238c3a36847f800d485",
+        "department": "Production",
+        "name": "Kathleen Kennedy",
+        "job": "Producer",
+        "profile_path": "/uHEExgTTzJNDX1Gal9CW5n3QdEJ.jpg"
+      },
+      {
+        "id": 4949,
+        "credit_id": "52fe4238c3a36847f800d48b",
+        "department": "Sound",
+        "name": "Don Davis",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 491,
+        "credit_id": "52fe4238c3a36847f800d491",
+        "department": "Sound",
+        "name": "John Williams",
+        "job": "Original Music Composer",
+        "profile_path": "/d7NNRZQAIzLBSaoez550QHLpTk.jpg"
+      },
+      {
+        "id": 4950,
+        "credit_id": "52fe4238c3a36847f800d497",
+        "department": "Camera",
+        "name": "Shelly Johnson",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4951,
+        "credit_id": "52fe4238c3a36847f800d49d",
+        "department": "Editing",
+        "name": "Robert Dalva",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4952,
+        "credit_id": "52fe4238c3a36847f800d4a3",
+        "department": "Production",
+        "name": "Nancy Foy",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4953,
+        "credit_id": "52fe4238c3a36847f800d4a9",
+        "department": "Art",
+        "name": "Ed Verreaux",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4782,
+        "credit_id": "52fe4238c3a36847f800d4bf",
+        "department": "Writing",
+        "name": "Michael Crichton",
+        "job": "Characters",
+        "profile_path": "/hWEu802x48GlW0vx9Lx1XZO8mTX.jpg"
+      },
+      {
+        "id": 4946,
+        "credit_id": "52fe4238c3a36847f800d4c5",
+        "department": "Writing",
+        "name": "Peter Buchman",
+        "job": "Writer",
+        "profile_path": null
+      },
+      {
+        "id": 13235,
+        "credit_id": "52fe4238c3a36847f800d4cb",
+        "department": "Writing",
+        "name": "Alexander Payne",
+        "job": "Writer",
+        "profile_path": "/i9i7sV3XOGGBp0vKmE2estQBiT2.jpg"
+      },
+      {
+        "id": 4948,
+        "credit_id": "52fe4238c3a36847f800d4d1",
+        "department": "Writing",
+        "name": "Jim Taylor",
+        "job": "Writer",
+        "profile_path": null
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4238c3a36847f800d4db",
+        "department": "Production",
+        "name": "Steven Spielberg",
+        "job": "Executive Producer",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 1290740,
+        "credit_id": "52fe4238c3a36847f800d4e1",
+        "department": "Production",
+        "name": "Wendy Washbrook",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 497,
+        "credit_id": "52fe4238c3a36847f800d4e7",
+        "department": "Art",
+        "name": "Doug J. Meerdink",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 14341,
+        "credit_id": "52fe4238c3a36847f800d4ed",
+        "department": "Crew",
+        "name": "Greg Papalia",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 41898,
+        "credit_id": "52fe4238c3a36847f800d4f3",
+        "department": "Art",
+        "name": "Kate J. Sullivan",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 11376,
+        "credit_id": "52fe4238c3a36847f800d4f9",
+        "department": "Costume & Make-Up",
+        "name": "Betsy Cox",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 92,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 331,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Jurassic Park III",
+  "overview": "In need of funds for research, Dr. Alan Grant accepts a large sum of money to accompany Paul and Amanda Kirby on an aerial tour of the infamous Isla Sorna. It isn't long before all hell breaks loose and the stranded wayfarers must fight for survival as a host of new -- and even more deadly -- dinosaurs try to make snacks of them.",
+  "production_companies": [
+    {
+      "id": 13,
+      "name": "Universal Studios"
+    },
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 328,
+    "backdrop_path": "/pJjIH9QN0OkHFV9eue6XfRVnPkr.jpg",
+    "name": "Jurassic Park Collection",
+    "poster_path": "/aQR4VLVxfrTZedr5fml385PFRzI.jpg"
+  },
+  "imdb_id": "tt0163025",
+  "release_date": "2001-07-15",
+  "original_title": "Jurassic Park III",
+  "vote_count": 659,
+  "poster_path": "/2Cntu42uyBVJsadHnIUfGlxJaYL.jpg",
+  "tagline": "This time, it's not just a walk in the park!",
+  "revenue": 368780809,
+  "popularity": "6.24257201108161"
+}

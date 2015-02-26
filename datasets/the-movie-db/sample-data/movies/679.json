@@ -1,0 +1,421 @@
+{
+  "budget": 18500000,
+  "vote_average": 7.3,
+  "backdrop_path": "/tgXaHtpmxj4SkMxBTi1Desl6Mc6.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 10205,
+        "order": 0,
+        "credit_id": "52fe4269c3a36847f801c9bf",
+        "name": "Sigourney Weaver",
+        "cast_id": 21,
+        "profile_path": "/gxBIAr3CnBjkNRoPovVJCvEGqP0.jpg",
+        "character": "Lieutenant Ellen Ripley"
+      },
+      {
+        "id": 10206,
+        "order": 1,
+        "credit_id": "52fe4269c3a36847f801c9c3",
+        "name": "Carrie Henn",
+        "cast_id": 22,
+        "profile_path": "/6MrxgxZoiUDA8k0GUwLuBcXN03B.jpg",
+        "character": "Rebecca \"Newt\" Jorden"
+      },
+      {
+        "id": 2712,
+        "order": 2,
+        "credit_id": "52fe4269c3a36847f801c9c7",
+        "name": "Michael Biehn",
+        "cast_id": 23,
+        "profile_path": "/uZvJIfVirbv32OK4nba5bMZ6t9G.jpg",
+        "character": "Corporal Dwayne Hicks"
+      },
+      {
+        "id": 2714,
+        "order": 3,
+        "credit_id": "52fe4269c3a36847f801c9cb",
+        "name": "Lance Henriksen",
+        "cast_id": 24,
+        "profile_path": "/5XY7XCtoqEAXeNHmLQU1CLPQa52.jpg",
+        "character": "L. Bishop"
+      },
+      {
+        "id": 781,
+        "order": 4,
+        "credit_id": "52fe4269c3a36847f801c9cf",
+        "name": "Paul Reiser",
+        "cast_id": 25,
+        "profile_path": "/fr53dQQrDGfETgbliCktwKqteRU.jpg",
+        "character": "Carter J. Burke"
+      },
+      {
+        "id": 2053,
+        "order": 5,
+        "credit_id": "52fe4269c3a36847f801c9d3",
+        "name": "Bill Paxton",
+        "cast_id": 26,
+        "profile_path": "/w3ysyErGWrXoj0NymSKt6RX4wc6.jpg",
+        "character": "Private W. Hudson"
+      },
+      {
+        "id": 10207,
+        "order": 6,
+        "credit_id": "52fe4269c3a36847f801c9d7",
+        "name": "William Hope",
+        "cast_id": 27,
+        "profile_path": "/46N4dSYShHnRTcbqD7Fzfjnmvvq.jpg",
+        "character": "Lieutenant S. Gorman"
+      },
+      {
+        "id": 3981,
+        "order": 7,
+        "credit_id": "52fe4269c3a36847f801c9db",
+        "name": "Jenette Goldstein",
+        "cast_id": 28,
+        "profile_path": "/wCcO7cqHJVtnfRlvAJvo7jKd6Bq.jpg",
+        "character": "Private J. Vasquez"
+      },
+      {
+        "id": 10208,
+        "order": 8,
+        "credit_id": "52fe4269c3a36847f801c9df",
+        "name": "Al Matthews",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Sergeant A. Apone"
+      },
+      {
+        "id": 6576,
+        "order": 9,
+        "credit_id": "52fe4269c3a36847f801c9e3",
+        "name": "Mark Rolston",
+        "cast_id": 30,
+        "profile_path": "/bsh3cqDNwVvux4NdaY1Bj4S7mNS.jpg",
+        "character": "Private M. Drake"
+      },
+      {
+        "id": 10209,
+        "order": 10,
+        "credit_id": "52fe4269c3a36847f801c9e7",
+        "name": "Colette Hiller",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Corporal C. Ferro"
+      },
+      {
+        "id": 10210,
+        "order": 11,
+        "credit_id": "52fe4269c3a36847f801c9eb",
+        "name": "Daniel Kash",
+        "cast_id": 32,
+        "profile_path": "/b6lvtpkTRHHcv4YMW3FnGRtyXJ4.jpg",
+        "character": "Private D. Spunkmeyer"
+      },
+      {
+        "id": 10211,
+        "order": 12,
+        "credit_id": "52fe4269c3a36847f801c9ef",
+        "name": "Cynthia Dale Scott",
+        "cast_id": 33,
+        "profile_path": "/cBrZS9bmSrRclBVHG6QeSuUj1Q9.jpg",
+        "character": "Corporal C. Dietrich"
+      },
+      {
+        "id": 10212,
+        "order": 13,
+        "credit_id": "52fe4269c3a36847f801c9f3",
+        "name": "Ricco Ross",
+        "cast_id": 34,
+        "profile_path": "/ep1gfuShCdZghxBGBtNWhWTxWpp.jpg",
+        "character": "Private R. Frost"
+      },
+      {
+        "id": 10213,
+        "order": 14,
+        "credit_id": "52fe4269c3a36847f801c9f7",
+        "name": "Tip Tipping",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Private T. Crowe"
+      }
+    ],
+    "crew": [
+      {
+        "id": 29061,
+        "credit_id": "53957df00e0a266dbf00626c",
+        "department": "Costume & Make-Up",
+        "name": "Tiny Nicholls",
+        "job": "Costume Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 597,
+        "credit_id": "53957e170e0a266db70063f8",
+        "department": "Production",
+        "name": "Jane Feinberg",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 598,
+        "credit_id": "53957e290e0a266dbf006271",
+        "department": "Production",
+        "name": "Mike Fenton",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 668,
+        "credit_id": "53957e390e0a266dbb006555",
+        "department": "Production",
+        "name": "Mary Selway",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 752,
+        "credit_id": "53957e4b0e0a266dbf006274",
+        "department": "Production",
+        "name": "Judy Taylor",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2710,
+        "credit_id": "52fe4269c3a36847f801c94f",
+        "department": "Directing",
+        "name": "James Cameron",
+        "job": "Director",
+        "profile_path": "/6Zk8h1XsPGKUM8M8cKUHAnmnc8O.jpg"
+      },
+      {
+        "id": 869,
+        "credit_id": "52fe4269c3a36847f801c955",
+        "department": "Production",
+        "name": "Gale Anne Hurd",
+        "job": "Producer",
+        "profile_path": "/oRWGpXdIm2lu870aaKpgO3wy19n.jpg"
+      },
+      {
+        "id": 1729,
+        "credit_id": "52fe4269c3a36847f801c95b",
+        "department": "Sound",
+        "name": "James Horner",
+        "job": "Original Music Composer",
+        "profile_path": "/iEiRtIdTjlwxrh1dF27RFbLl9LD.jpg"
+      },
+      {
+        "id": 7783,
+        "credit_id": "52fe4269c3a36847f801c961",
+        "department": "Camera",
+        "name": "Adrian Biddle",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 244,
+        "credit_id": "52fe4269c3a36847f801c967",
+        "department": "Editing",
+        "name": "Ray Lovejoy",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8524,
+        "credit_id": "52fe4269c3a36847f801c96d",
+        "department": "Art",
+        "name": "Peter Lamont",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 7204,
+        "credit_id": "52fe4269c3a36847f801c973",
+        "department": "Art",
+        "name": "Ken Court",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 10183,
+        "credit_id": "52fe4269c3a36847f801c979",
+        "department": "Art",
+        "name": "Bert Davey",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 10197,
+        "credit_id": "52fe4269c3a36847f801c97f",
+        "department": "Art",
+        "name": "Fred Hole",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8380,
+        "credit_id": "52fe4269c3a36847f801c985",
+        "department": "Art",
+        "name": "Michael Lamont",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 945,
+        "credit_id": "52fe4269c3a36847f801c98b",
+        "department": "Art",
+        "name": "Crispian Sallis",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 10198,
+        "credit_id": "52fe4269c3a36847f801c991",
+        "department": "Costume & Make-Up",
+        "name": "Emma Porteus",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 10199,
+        "credit_id": "52fe4269c3a36847f801c997",
+        "department": "Costume & Make-Up",
+        "name": "Peter Robb-King",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 10200,
+        "credit_id": "53957d340e0a266db70063c9",
+        "department": "Crew",
+        "name": "Terry Ackland-Snow",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 296,
+        "credit_id": "52fe4269c3a36847f801c9a3",
+        "department": "Sound",
+        "name": "Robin Clarke",
+        "job": "Music Editor",
+        "profile_path": "/1xIlhDba0tnSX7bvXcOHeVj5NI7.jpg"
+      },
+      {
+        "id": 10201,
+        "credit_id": "52fe4269c3a36847f801c9a9",
+        "department": "Sound",
+        "name": "Michael Clifford",
+        "job": "Music Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10202,
+        "credit_id": "52fe4269c3a36847f801c9af",
+        "department": "Crew",
+        "name": "Norman Baillie",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 10203,
+        "credit_id": "52fe4269c3a36847f801c9b5",
+        "department": "Crew",
+        "name": "Paul Weston",
+        "job": "Stunt Coordinator",
+        "profile_path": null
+      },
+      {
+        "id": 10204,
+        "credit_id": "52fe4269c3a36847f801c9bb",
+        "department": "Crew",
+        "name": "Elanor Bertram",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 2710,
+        "credit_id": "52fe4269c3a36847f801c9fd",
+        "department": "Writing",
+        "name": "James Cameron",
+        "job": "Screenplay",
+        "profile_path": "/6Zk8h1XsPGKUM8M8cKUHAnmnc8O.jpg"
+      },
+      {
+        "id": 9402,
+        "credit_id": "52fe4269c3a36847f801ca03",
+        "department": "Crew",
+        "name": "Brian Johnson",
+        "job": "Special Effects",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 137,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 679,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Aliens",
+  "overview": "When Ripley's lifepod is found by a salvage crew over 50 years later, she finds that terra-formers are on the very planet they found the alien species. When the company sends a family of colonists out to investigate her story... all contact is lost with the planet and colonists. They enlist Ripley and the colonial marines to return and search for answers.",
+  "production_companies": [
+    {
+      "id": 306,
+      "name": "Twentieth Century Fox Film Corporation"
+    },
+    {
+      "id": 19747,
+      "name": "Brandywine Productions"
+    },
+    {
+      "id": 396,
+      "name": "SLM Production Group"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 8091,
+    "backdrop_path": "/52Lhwd7srnktMFDYkfhtMoZdabT.jpg",
+    "name": "Alien Collection",
+    "poster_path": "/iVzIeC3PbG9BtDAudpwSNdKAgh6.jpg"
+  },
+  "imdb_id": "tt0090605",
+  "release_date": "1986-07-18",
+  "original_title": "Aliens",
+  "vote_count": 978,
+  "poster_path": "/4dw4JX6uqGPO5v5bJYusaGNSON2.jpg",
+  "tagline": "This Time It's War",
+  "revenue": 131060248,
+  "popularity": "2.73537714438095"
+}

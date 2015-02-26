@@ -1,0 +1,349 @@
+{
+  "budget": 0,
+  "vote_average": 7.8,
+  "backdrop_path": "/kDvt3C0Xs3Y9rnYqxkxY1ZcQ3Ua.jpg",
+  "genres": [{
+    "id": 80,
+    "name": "Crime"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 12745,
+        "order": 0,
+        "credit_id": "52fe4282c3a36847f80245e1",
+        "name": "Heinz Rühmann",
+        "cast_id": 12,
+        "profile_path": "/z40v3xiLAwIKMBUYYh41aXuWmAR.jpg",
+        "character": "Oberleutnant Matthäi"
+      },
+      {
+        "id": 12746,
+        "order": 1,
+        "credit_id": "52fe4282c3a36847f80245e5",
+        "name": "Sigfrit Steiner",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Det. Feller"
+      },
+      {
+        "id": 12747,
+        "order": 2,
+        "credit_id": "52fe4282c3a36847f80245e9",
+        "name": "Siegfried Lowitz",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Lt. Heinzi"
+      },
+      {
+        "id": 12748,
+        "order": 3,
+        "credit_id": "52fe4282c3a36847f80245ed",
+        "name": "Michel Simon",
+        "cast_id": 15,
+        "profile_path": "/xsrKyP90F9Ov1A49ObnPGZv0cBe.jpg",
+        "character": "Jacquier"
+      },
+      {
+        "id": 5039,
+        "order": 4,
+        "credit_id": "52fe4282c3a36847f80245f1",
+        "name": "Heinrich Gretler",
+        "cast_id": 16,
+        "profile_path": "/qKsRhwqTxi9Arb5mcHAlvHT6idg.jpg",
+        "character": "Polizeikommandant"
+      },
+      {
+        "id": 9908,
+        "order": 5,
+        "credit_id": "52fe4282c3a36847f80245f5",
+        "name": "Gert Fröbe",
+        "cast_id": 17,
+        "profile_path": "/gQdxocFdVk7GS7580oyyNZiO5tT.jpg",
+        "character": "Schrott"
+      },
+      {
+        "id": 10259,
+        "order": 6,
+        "credit_id": "52fe4282c3a36847f80245f9",
+        "name": "Berta Drews",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Frau Schrott"
+      },
+      {
+        "id": 12749,
+        "order": 7,
+        "credit_id": "52fe4282c3a36847f80245fd",
+        "name": "Ewald Balser",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Prof. Manz"
+      },
+      {
+        "id": 12750,
+        "order": 8,
+        "credit_id": "52fe4282c3a36847f8024601",
+        "name": "María Rosa Salgado",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Frau Heller"
+      },
+      {
+        "id": 12751,
+        "order": 9,
+        "credit_id": "52fe4282c3a36847f8024605",
+        "name": "Anita von Ow",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Annemarie Heller"
+      },
+      {
+        "id": 12752,
+        "order": 10,
+        "credit_id": "52fe4282c3a36847f8024609",
+        "name": "Barbara Haller",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Ursula Fehlmann"
+      },
+      {
+        "id": 12753,
+        "order": 11,
+        "credit_id": "52fe4282c3a36847f802460d",
+        "name": "Emil Hegetschweiler",
+        "cast_id": 23,
+        "profile_path": "/5aCRQ8LRTMTXpn6jYegmCFN62tP.jpg",
+        "character": "Gemeindepräsident"
+      },
+      {
+        "id": 36345,
+        "order": 12,
+        "credit_id": "52fe4282c3a36847f8024629",
+        "name": "Rene Magron",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "o.A,"
+      },
+      {
+        "id": 46761,
+        "order": 13,
+        "credit_id": "52fe4282c3a36847f802462d",
+        "name": "Max Werner Lenz",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "o.A."
+      },
+      {
+        "id": 46762,
+        "order": 14,
+        "credit_id": "52fe4282c3a36847f8024631",
+        "name": "Hans Gaugler",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Herr Moser"
+      },
+      {
+        "id": 46763,
+        "order": 15,
+        "credit_id": "52fe4282c3a36847f8024635",
+        "name": "Ettore Cella",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Tankstellenbesitzer"
+      },
+      {
+        "id": 46764,
+        "order": 16,
+        "credit_id": "52fe4282c3a36847f8024639",
+        "name": "Margrit Winter",
+        "cast_id": 32,
+        "profile_path": "/AkE6QFblKn0kU1JpTgh9tr7sUwT.jpg",
+        "character": "Frau Moser"
+      },
+      {
+        "id": 46765,
+        "order": 17,
+        "credit_id": "52fe4282c3a36847f802463d",
+        "name": "Traute Carlsen",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "o.A."
+      },
+      {
+        "id": 46766,
+        "order": 18,
+        "credit_id": "52fe4282c3a36847f8024641",
+        "name": "Anneliese Betschart",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Lehrerin"
+      },
+      {
+        "id": 30722,
+        "order": 19,
+        "credit_id": "52fe4282c3a36847f8024645",
+        "name": "Max Haufler",
+        "cast_id": 35,
+        "profile_path": "/AmWnhdaunSjIsrIao3doDMMyTm2.jpg",
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 12733,
+        "credit_id": "52fe4282c3a36847f80245a7",
+        "department": "Directing",
+        "name": "Ladislao Vajda",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 12735,
+        "credit_id": "52fe4282c3a36847f80245ad",
+        "department": "Writing",
+        "name": "Hans Jacoby",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 12736,
+        "credit_id": "52fe4282c3a36847f80245b3",
+        "department": "Production",
+        "name": "Lazar Wechsler",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12737,
+        "credit_id": "52fe4282c3a36847f80245b9",
+        "department": "Production",
+        "name": "Artur Brauner",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12738,
+        "credit_id": "52fe4282c3a36847f80245bf",
+        "department": "Sound",
+        "name": "Bruno Canfora",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 12739,
+        "credit_id": "52fe4282c3a36847f80245c5",
+        "department": "Camera",
+        "name": "Ernst Bollinger",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12740,
+        "credit_id": "52fe4282c3a36847f80245cb",
+        "department": "Camera",
+        "name": "Heinrich Gärtner",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12741,
+        "credit_id": "52fe4282c3a36847f80245d1",
+        "department": "Editing",
+        "name": "Hermann Haller",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12743,
+        "credit_id": "52fe4282c3a36847f80245d7",
+        "department": "Art",
+        "name": "Max Röthlisberger",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 12744,
+        "credit_id": "52fe4282c3a36847f80245dd",
+        "department": "Sound",
+        "name": "Kurt Hugentobler",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 12733,
+        "credit_id": "52fe4282c3a36847f8024613",
+        "department": "Writing",
+        "name": "Ladislao Vajda",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 46758,
+        "credit_id": "52fe4282c3a36847f8024619",
+        "department": "Costume & Make-Up",
+        "name": "Robert Gamma",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 46759,
+        "credit_id": "52fe4282c3a36847f802461f",
+        "department": "Costume & Make-Up",
+        "name": "Josef Coesfeld",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 46760,
+        "credit_id": "52fe4282c3a36847f8024625",
+        "department": "Costume & Make-Up",
+        "name": "Hans Hügi",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 1028290,
+        "credit_id": "52fe4282c3a36847f802464b",
+        "department": "Editing",
+        "name": "Julio Peña",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 95,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 852,
+  "production_countries": [
+    {
+      "name": "Switzerland",
+      "iso_3166_1": "CH"
+    },
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    }
+  ],
+  "title": "It Happened in Broad Daylight",
+  "overview": "Es geschah am hellichten Tag is a German black and white film depicting the dramatic story of the search for a children murderer.",
+  "production_companies": [{
+    "id": 21,
+    "name": "Metro-Goldwyn-Mayer"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0051588",
+  "release_date": "1958-06-09",
+  "original_title": "Es geschah am hellichten Tag",
+  "vote_count": 2,
+  "poster_path": "/j3irNMlfysHmAF6VtMmJdta9oEg.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.38310474219614"
+}

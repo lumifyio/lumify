@@ -1,0 +1,52 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/wZijOHyaFIVKJY9yfyIsusamFbv.jpg",
+  "id": 622,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0559444",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 128,
+        "media_type": "movie",
+        "title": "Princess Mononoke",
+        "credit_id": "52fe421bc3a36847f800499d",
+        "release_date": "1997-07-12",
+        "original_title": "もののけ姫",
+        "adult": false,
+        "poster_path": "/gzlJkVfWV5VEG5xK25cvFGJgkDz.jpg",
+        "character": "Ashitaka"
+      },
+      {
+        "id": 81,
+        "media_type": "movie",
+        "title": "Nausicaä of the Valley of the Wind",
+        "credit_id": "52fe4215c3a36847f8002843",
+        "release_date": "1984-03-11",
+        "original_title": "風の谷のナウシカ",
+        "adult": false,
+        "poster_path": "/y2rl0OkMfZHpBaQYPfSJmLMOxwp.jpg",
+        "character": "Asbel (Voice)"
+      },
+      {
+        "id": 6316,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "525785bd760ee36aaa6314e3",
+        "name": "Kamen Rider Amazon",
+        "poster_path": null,
+        "original_name": "Kamen Rider Amazon",
+        "first_air_date": null,
+        "character": "Masahiko Okamura"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Yōji Matsuda",
+  "place_of_birth": null,
+  "popularity": "1.00028049627352"
+}

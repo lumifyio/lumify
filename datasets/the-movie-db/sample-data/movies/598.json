@@ -1,0 +1,405 @@
+{
+  "budget": 3300000,
+  "vote_average": 7.7,
+  "backdrop_path": "/k4BAPrE5WkNLvpsPsiMfu8W4Zyi.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8595,
+        "order": 0,
+        "credit_id": "52fe425ac3a36847f8017b45",
+        "name": "Alexandre Rodrigues",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Buscapé"
+      },
+      {
+        "id": 8596,
+        "order": 1,
+        "credit_id": "52fe425ac3a36847f8017b49",
+        "name": "Leandro Firmino",
+        "cast_id": 35,
+        "profile_path": "/48NdifM6zrKXN1fuxakDBbLzkMS.jpg",
+        "character": "Zé Pequeno"
+      },
+      {
+        "id": 8597,
+        "order": 2,
+        "credit_id": "52fe425ac3a36847f8017b4d",
+        "name": "Phellipe Haagensen",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Bené"
+      },
+      {
+        "id": 8598,
+        "order": 3,
+        "credit_id": "52fe425ac3a36847f8017b51",
+        "name": "Douglas Silva",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Dadinho"
+      },
+      {
+        "id": 8599,
+        "order": 4,
+        "credit_id": "52fe425ac3a36847f8017b55",
+        "name": "Jonathan Haagensen",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Cabeleira"
+      },
+      {
+        "id": 8600,
+        "order": 5,
+        "credit_id": "52fe425ac3a36847f8017b59",
+        "name": "Matheus Nachtergaele",
+        "cast_id": 39,
+        "profile_path": "/lJMLW3NAJbV7AzHDz178HKSiuN5.jpg",
+        "character": "Sandro Cenoura"
+      },
+      {
+        "id": 5659,
+        "order": 6,
+        "credit_id": "52fe425ac3a36847f8017b5d",
+        "name": "Seu Jorge",
+        "cast_id": 40,
+        "profile_path": "/ggUYDS85gpTLAXaDzznLw2mpTfS.jpg",
+        "character": "Mané Galinha"
+      },
+      {
+        "id": 8601,
+        "order": 7,
+        "credit_id": "52fe425ac3a36847f8017b61",
+        "name": "Jefechander Suplino",
+        "cast_id": 41,
+        "profile_path": null,
+        "character": "Alicate"
+      },
+      {
+        "id": 8602,
+        "order": 8,
+        "credit_id": "52fe425ac3a36847f8017b65",
+        "name": "Alice Braga",
+        "cast_id": 42,
+        "profile_path": "/yv2ZeHfZnB9j8V3pHNEgaud7Kql.jpg",
+        "character": "Angélica"
+      },
+      {
+        "id": 8603,
+        "order": 9,
+        "credit_id": "52fe425ac3a36847f8017b69",
+        "name": "Roberta Rodrigues",
+        "cast_id": 43,
+        "profile_path": null,
+        "character": "Berenice"
+      },
+      {
+        "id": 8604,
+        "order": 10,
+        "credit_id": "52fe425ac3a36847f8017b6d",
+        "name": "Luis Otávio",
+        "cast_id": 44,
+        "profile_path": null,
+        "character": "Buscapé Criança"
+      },
+      {
+        "id": 8605,
+        "order": 11,
+        "credit_id": "52fe425ac3a36847f8017b71",
+        "name": "Darlan Cunha",
+        "cast_id": 45,
+        "profile_path": "/u8OcJOmu15xErdpn3BMV8I8ajhS.jpg",
+        "character": "Filé-com-Fritas"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8557,
+        "credit_id": "52fe425ac3a36847f8017a9f",
+        "department": "Directing",
+        "name": "Fernando Meirelles",
+        "job": "Director",
+        "profile_path": "/j77Z3f2m0e211ocFhPJu5ZiO12R.jpg"
+      },
+      {
+        "id": 8560,
+        "credit_id": "52fe425ac3a36847f8017aa5",
+        "department": "Writing",
+        "name": "Paulo Lins",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 8561,
+        "credit_id": "52fe425ac3a36847f8017aab",
+        "department": "Writing",
+        "name": "Bráulio Mantovani",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 8562,
+        "credit_id": "52fe425ac3a36847f8017ab1",
+        "department": "Production",
+        "name": "Andrea Barata Ribeiro",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8563,
+        "credit_id": "52fe425ac3a36847f8017ab7",
+        "department": "Production",
+        "name": "Mauricio Andrade Ramos",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8564,
+        "credit_id": "52fe425ac3a36847f8017abd",
+        "department": "Production",
+        "name": "Elisa Tolomelli",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8565,
+        "credit_id": "52fe425ac3a36847f8017ac3",
+        "department": "Production",
+        "name": "Bel Berlinck",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8566,
+        "credit_id": "52fe425ac3a36847f8017ac9",
+        "department": "Production",
+        "name": "Marc Beauchamps",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8568,
+        "credit_id": "52fe425ac3a36847f8017acf",
+        "department": "Production",
+        "name": "Daniel Filho",
+        "job": "Producer",
+        "profile_path": "/p9BeqTMpqDFczK4rcnAst3bWt61.jpg"
+      },
+      {
+        "id": 8569,
+        "credit_id": "52fe425ac3a36847f8017ad5",
+        "department": "Production",
+        "name": "Hank Levine",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8570,
+        "credit_id": "52fe425ac3a36847f8017adb",
+        "department": "Production",
+        "name": "Vincent Maraval",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8571,
+        "credit_id": "52fe425ac3a36847f8017ae1",
+        "department": "Production",
+        "name": "Donald Ranvaud",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8572,
+        "credit_id": "52fe425ac3a36847f8017ae7",
+        "department": "Production",
+        "name": "Juliette Renaud",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8574,
+        "credit_id": "52fe425ac3a36847f8017aed",
+        "department": "Production",
+        "name": "Walter Salles",
+        "job": "Producer",
+        "profile_path": "/znA7a1Mgzkhe40vBFfppcUc8p29.jpg"
+      },
+      {
+        "id": 8575,
+        "credit_id": "52fe425ac3a36847f8017af3",
+        "department": "Sound",
+        "name": "Ed Cortês",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8576,
+        "credit_id": "52fe425ac3a36847f8017af9",
+        "department": "Sound",
+        "name": "Antonio Pinto",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8577,
+        "credit_id": "52fe425ac3a36847f8017aff",
+        "department": "Camera",
+        "name": "César Charlone",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 8578,
+        "credit_id": "52fe425ac3a36847f8017b05",
+        "department": "Editing",
+        "name": "Daniel Rezende",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8579,
+        "credit_id": "52fe425ac3a36847f8017b0b",
+        "department": "Art",
+        "name": "Tulé Peak",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8581,
+        "credit_id": "52fe425ac3a36847f8017b11",
+        "department": "Costume & Make-Up",
+        "name": "Bia Salgado",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 8583,
+        "credit_id": "52fe425ac3a36847f8017b1d",
+        "department": "Costume & Make-Up",
+        "name": "Inês Salgado",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 8584,
+        "credit_id": "52fe425ac3a36847f8017b23",
+        "department": "Costume & Make-Up",
+        "name": "Anna Van Steen",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 8587,
+        "credit_id": "52fe425ac3a36847f8017b2f",
+        "department": "Production",
+        "name": "René Bittencourt",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 8588,
+        "credit_id": "52fe425ac3a36847f8017b35",
+        "department": "Production",
+        "name": "Claudine Franco",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 8593,
+        "credit_id": "52fe425ac3a36847f8017b3b",
+        "department": "Visual Effects",
+        "name": "Renato Batata",
+        "job": "Visual Effects Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 8594,
+        "credit_id": "52fe425ac3a36847f8017b41",
+        "department": "Visual Effects",
+        "name": "Francisco Bispo",
+        "job": "Creature Design",
+        "profile_path": null
+      },
+      {
+        "id": 8560,
+        "credit_id": "52fe425ac3a36847f8017b77",
+        "department": "Writing",
+        "name": "Paulo Lins",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 130,
+  "spoken_languages": [{
+    "iso_639_1": "pt",
+    "name": "Português"
+  }],
+  "adult": false,
+  "homepage": "http://cidadededeus.globo.com/",
+  "id": 598,
+  "production_countries": [
+    {
+      "name": "Brazil",
+      "iso_3166_1": "BR"
+    },
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    }
+  ],
+  "title": "City of God",
+  "overview": "City of God depicts the raw violence in the ghettos of Rio de Janeiro. In the 1970\u2019s that kids are carrying guns and joining gangs when they should be playing hide-and-seek.",
+  "production_companies": [
+    {
+      "id": 345,
+      "name": "O2 Filmes"
+    },
+    {
+      "id": 346,
+      "name": "VideoFilmes"
+    },
+    {
+      "id": 10954,
+      "name": "Globo filmes"
+    },
+    {
+      "id": 11444,
+      "name": "Lumiere"
+    },
+    {
+      "id": 856,
+      "name": "Wild Bunch"
+    },
+    {
+      "id": 11445,
+      "name": "Hank Levine Film"
+    },
+    {
+      "id": 11446,
+      "name": "Lereby Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0317248",
+  "release_date": "2002-08-30",
+  "original_title": "Cidade de Deus",
+  "vote_count": 415,
+  "poster_path": "/gCqnQaq8T4CfioP9uETLx9iMJF4.jpg",
+  "tagline": "If you run you're dead...if you stay, you're dead again. Period.",
+  "revenue": 27387381,
+  "popularity": "1.75714378680908"
+}

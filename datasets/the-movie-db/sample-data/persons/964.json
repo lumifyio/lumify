@@ -1,0 +1,173 @@
+{
+  "birthday": "1977-02-19",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/gMsqCdNbLliRudq6olLZEccmO5t.jpg",
+  "id": 964,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0044376",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 15941,
+        "media_type": "movie",
+        "title": "The Borgia",
+        "credit_id": "52fe468e9251416c7507bfd7",
+        "release_date": "2006-10-06",
+        "original_title": "Los Borgia",
+        "adult": false,
+        "poster_path": "/mCO243MBb9A01pXVZh84kBsh9RH.jpg",
+        "character": "Jofré Borgia"
+      },
+      {
+        "id": 89289,
+        "media_type": "movie",
+        "title": "Arroz y tartana",
+        "credit_id": "52fe4a139251416c910c2649",
+        "release_date": "2003-11-20",
+        "original_title": "Arroz y tartana",
+        "adult": false,
+        "poster_path": "/rxfiOhzqriWU0SVwal3lGzJKm0T.jpg",
+        "character": "Juanito"
+      },
+      {
+        "id": 89482,
+        "media_type": "movie",
+        "title": "Guerreros",
+        "credit_id": "52fe4a1b9251416c910c37bb",
+        "release_date": "2003-04-05",
+        "original_title": "Guerreros",
+        "adult": false,
+        "poster_path": "/4OwkG0XETdDXdATcipTyUxhNKdK.jpg",
+        "character": "Solda Vidal"
+      },
+      {
+        "id": 120135,
+        "media_type": "movie",
+        "title": "A + Amas",
+        "credit_id": "52fe4a3fc3a368484e148c0f",
+        "release_date": "2004-05-28",
+        "original_title": "A + Amas",
+        "adult": false,
+        "poster_path": "/19MqFfDkXpbeH69GnJPGOjklEcg.jpg",
+        "character": "Ace"
+      },
+      {
+        "id": 115529,
+        "media_type": "movie",
+        "title": "Atómica",
+        "credit_id": "52fe4b70c3a36847f8203bd3",
+        "release_date": "1998-01-09",
+        "original_title": "Atómica",
+        "adult": false,
+        "poster_path": "/34QFYT0Bq4QWfYgVIjrd8iT9zG9.jpg",
+        "character": "Ricardo"
+      },
+      {
+        "id": 115675,
+        "media_type": "movie",
+        "title": "Kisses for everyone",
+        "credit_id": "52fe4b76c3a36847f8204b19",
+        "release_date": "2000-12-01",
+        "original_title": "Kisses for everyone",
+        "adult": false,
+        "poster_path": "/cjlfK0Ka8RmfANzdZ9ieGWSX3lo.jpg",
+        "character": ""
+      },
+      {
+        "id": 99,
+        "media_type": "movie",
+        "title": "All About My Mother",
+        "credit_id": "52fe4217c3a36847f800351b",
+        "release_date": "1999-04-19",
+        "original_title": "Todo sobre mi madre",
+        "adult": false,
+        "poster_path": "/jopVQl2gYGPeSfEfDX9ZktlG0In.jpg",
+        "character": "Esteban"
+      },
+      {
+        "id": 162173,
+        "media_type": "movie",
+        "title": "No me pidas que te bese porque te besaré",
+        "credit_id": "52fe4c56c3a36847f82290c1",
+        "release_date": "2008-10-03",
+        "original_title": "No me pidas que te bese porque te besaré",
+        "adult": false,
+        "poster_path": "/bHbW5WxM4Zc7QuFi7hwGT31qJHW.jpg",
+        "character": "Albert"
+      },
+      {
+        "id": 166278,
+        "media_type": "movie",
+        "title": "Santiago de sangre",
+        "credit_id": "52fe4c9ac3a36847f8236335",
+        "release_date": "2008-10-10",
+        "original_title": "Santiago de sangre",
+        "adult": false,
+        "poster_path": "/fBFqB7H0OpbjphkKMA2cCnLylJ.jpg",
+        "character": "Gabriel"
+      },
+      {
+        "id": 185855,
+        "media_type": "movie",
+        "title": "El año del diluvio",
+        "credit_id": "52fe4ced9251416c7512a1b1",
+        "release_date": "2004-04-28",
+        "original_title": "El año del diluvio",
+        "adult": false,
+        "poster_path": "/h671AAE85niDvuiKwoqJPOuvAH1.jpg",
+        "character": ""
+      },
+      {
+        "id": 186714,
+        "media_type": "movie",
+        "title": "Como un relámpago",
+        "credit_id": "52fe4d049251416c7512d2f1",
+        "release_date": "1996-11-04",
+        "original_title": "Como un relámpago",
+        "adult": false,
+        "poster_path": "/uzcL5NlxafTVkNCHBg3GwSJi6C1.jpg",
+        "character": ""
+      },
+      {
+        "id": 189468,
+        "media_type": "movie",
+        "title": "Skizo",
+        "credit_id": "52fe4d5a9251416c75138679",
+        "release_date": "2006-09-08",
+        "original_title": "Skizo",
+        "adult": false,
+        "poster_path": "/kqYJkCRawG0sYuyQM5XtG6tHNhi.jpg",
+        "character": ""
+      },
+      {
+        "id": 251555,
+        "media_type": "movie",
+        "title": "Pancho, el perro millonario",
+        "credit_id": "52fe4e1c9251416c91126d39",
+        "release_date": "2014-06-06",
+        "original_title": "Pancho, el perro millonario",
+        "adult": false,
+        "poster_path": "/yi7U5Iu3i7Qc7t2sxdc8Rui2Y6v.jpg",
+        "character": ""
+      },
+      {
+        "id": 12288,
+        "media_type": "tv",
+        "episode_count": 165,
+        "credit_id": "52581ec9760ee36aaa783c3b",
+        "name": "Hospital Central",
+        "poster_path": "/y330caRegGVXnpJB4sJCzfzPGGG.jpg",
+        "original_name": "Hospital Central",
+        "first_air_date": "2000-04-30",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Eloy Azorin",
+  "place_of_birth": null,
+  "popularity": "1.02296506781876"
+}

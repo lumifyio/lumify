@@ -1,0 +1,129 @@
+{
+  "birthday": "1974-03-07",
+  "adult": false,
+  "biography": "\u200bFrom Wikipedia, the free encyclopedia.  \n\nLarry Bagby (born March 7, 1974) is an American actor and a musician.\nBagby was born Lawrence Bagby III in Marysville, California. His father was a member of a dance band. Bagby's most notable roles include:\nFrank Ellis, Young and the Restless, 2008\nAdam Pendon, Believe The Movie, 2007\nMarshall Grant (upright bass player), Walk the Line, 2005\nPvt. Shirley \"Hickey\" Kendrick, Saints and Soldiers, 2003\nLarry Blaisdell, Buffy the Vampire Slayer, 1997-1999\n\tBagby has also had featured appearances on television shows including CSI: Crime Scene Investigation, Cold Case, Malcolm in the Middle and JAG. As a child, he acted in Airborne and Hocus Pocus.\n\nDescription above from the Wikipedia article Larry Bagby, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/zBXOdQkskwkYCK34RnVKTVaI8DR.jpg",
+  "id": 426,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0046541",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 69,
+        "media_type": "movie",
+        "title": "Walk the Line",
+        "credit_id": "52fe4213c3a36847f8001f83",
+        "release_date": "2005-11-18",
+        "original_title": "Walk the Line",
+        "adult": false,
+        "poster_path": "/nUsaYt9Wk4fVP8jp1ncfQe7Io7t.jpg",
+        "character": "Marshall Grant"
+      },
+      {
+        "id": 10105,
+        "media_type": "movie",
+        "title": "Saints and Soldiers",
+        "credit_id": "52fe43279251416c75005981",
+        "release_date": "2003-09-11",
+        "original_title": "Saints and Soldiers",
+        "adult": false,
+        "poster_path": "/kkKrbrealArJJZgzKheEg93BCeE.jpg",
+        "character": "Private Shirl Kendrick"
+      },
+      {
+        "id": 10439,
+        "media_type": "movie",
+        "title": "Hocus Pocus",
+        "credit_id": "52fe43719251416c750108e9",
+        "release_date": "1993-07-16",
+        "original_title": "Hocus Pocus",
+        "adult": false,
+        "poster_path": "/r9l2uodz4MP56BqIcyxWxApAGAi.jpg",
+        "character": "Ernie / 'Ice'"
+      },
+      {
+        "id": 16640,
+        "media_type": "movie",
+        "title": "Pirates of the Great Salt Lake",
+        "credit_id": "52fe46e29251416c75086b1b",
+        "release_date": "2006-01-01",
+        "original_title": "Pirates of the Great Salt Lake",
+        "adult": false,
+        "poster_path": "/kGNUYdfNDPsSYcXdnJYFiEAHV68.jpg",
+        "character": ""
+      },
+      {
+        "id": 59883,
+        "media_type": "movie",
+        "title": "Age of the Dragons",
+        "credit_id": "52fe499ec3a36847f81a3ea9",
+        "release_date": "2011-05-13",
+        "original_title": "Age of the Dragons",
+        "adult": false,
+        "poster_path": "/wwjnzjPHOEcBBlcmhpb3qVVBpO4.jpg",
+        "character": "Flask"
+      },
+      {
+        "id": 153578,
+        "media_type": "movie",
+        "title": "Nephi & Laban",
+        "credit_id": "52fe4b469251416c910d54c1",
+        "release_date": "2003-01-01",
+        "original_title": "I Will Go and Do",
+        "adult": false,
+        "poster_path": "/aK7xXqawH8mBFQJgO11OwBvLRdP.jpg",
+        "character": "Laman"
+      },
+      {
+        "id": 148428,
+        "media_type": "movie",
+        "title": "Believe",
+        "credit_id": "52fe4bca9251416c7510e111",
+        "release_date": "2007-04-20",
+        "original_title": "Believe",
+        "adult": false,
+        "poster_path": "/f54FfeqNRu96lZDpkFDRBqvjGcP.jpg",
+        "character": "Adam Pendon"
+      },
+      {
+        "id": 173924,
+        "media_type": "movie",
+        "title": "The Trip",
+        "credit_id": "52fe4d3fc3a36847f8256a51",
+        "release_date": "2005-11-01",
+        "original_title": "The Trip",
+        "adult": false,
+        "poster_path": "/aZDvuywJg7pUaXfQ90dX1L2YnBm.jpg",
+        "character": "Carl"
+      },
+      {
+        "id": 31451,
+        "media_type": "movie",
+        "title": "Forever Strong",
+        "credit_id": "52fe447e9251416c91012b83",
+        "release_date": "2008-09-26",
+        "original_title": "Forever Strong",
+        "adult": false,
+        "poster_path": "/6UMwStGL0qHXe3xurnZkzc1k76i.jpg",
+        "character": "Coach Cal"
+      },
+      {
+        "id": 95,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52599e3a19c295731c08da8f",
+        "name": "Buffy the Vampire Slayer",
+        "poster_path": "/plRYSuq4fkPojnkaWUXBbHAZi1i.jpg",
+        "original_name": "Buffy the Vampire Slayer",
+        "first_air_date": "1997-03-10",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Larry Bagby",
+  "place_of_birth": "Marysville, California, USA",
+  "popularity": "1.01350225938388"
+}

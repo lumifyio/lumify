@@ -1,0 +1,393 @@
+{
+  "budget": 105000000,
+  "vote_average": 6.4,
+  "backdrop_path": "/cYWI1lnHEvoVKDdlrRt2b5et3Bj.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 27763,
+        "order": 0,
+        "credit_id": "52fe4253c3a36847f80155a5",
+        "name": "Casper Van Dien",
+        "cast_id": 21,
+        "profile_path": "/lGDwBXIyJYhNZfOiuGdHWdWQ2Z2.jpg",
+        "character": "Johnny Rico"
+      },
+      {
+        "id": 2133,
+        "order": 1,
+        "credit_id": "52fe4253c3a36847f80155a9",
+        "name": "Dina Meyer",
+        "cast_id": 22,
+        "profile_path": "/qldNOMIWUpwgnQawlCznBwDoTbE.jpg",
+        "character": "Dizzy Flores"
+      },
+      {
+        "id": 9205,
+        "order": 2,
+        "credit_id": "52fe4253c3a36847f80155ad",
+        "name": "Denise Richards",
+        "cast_id": 23,
+        "profile_path": "/r273Tmck64anm3uuccE8zfJD8da.jpg",
+        "character": "Carmen Ibanez"
+      },
+      {
+        "id": 28410,
+        "order": 3,
+        "credit_id": "52fe4253c3a36847f80155b1",
+        "name": "Jake Busey",
+        "cast_id": 24,
+        "profile_path": "/mGbWKlwTTyr62h6IwL66otOQV15.jpg",
+        "character": "Private Ace Levy"
+      },
+      {
+        "id": 41686,
+        "order": 4,
+        "credit_id": "52fe4253c3a36847f80155b5",
+        "name": "Neil Patrick Harris",
+        "cast_id": 25,
+        "profile_path": "/v5sCdjk0zxwSdFT4kmlVwu6M3Hb.jpg",
+        "character": "Colonel Carl Jenkins"
+      },
+      {
+        "id": 6574,
+        "order": 5,
+        "credit_id": "52fe4253c3a36847f80155b9",
+        "name": "Clancy Brown",
+        "cast_id": 26,
+        "profile_path": "/pwiG1ljLoqfcmFH2zFp5NP2ML4B.jpg",
+        "character": "Career Sergeant Zim"
+      },
+      {
+        "id": 11086,
+        "order": 6,
+        "credit_id": "52fe4253c3a36847f80155bd",
+        "name": "Michael Ironside",
+        "cast_id": 27,
+        "profile_path": "/i3HkCGEnQGJeD0U8WDumO4VH5fU.jpg",
+        "character": "Lieutenant Jean Rasczak"
+      },
+      {
+        "id": 41687,
+        "order": 7,
+        "credit_id": "52fe4253c3a36847f80155c1",
+        "name": "Patrick Muldoon",
+        "cast_id": 28,
+        "profile_path": "/a3IJFEfD1mkkDmEbpHDbfImup2r.jpg",
+        "character": "Zander Barcalow"
+      },
+      {
+        "id": 41688,
+        "order": 8,
+        "credit_id": "52fe4253c3a36847f80155c5",
+        "name": "Seth Gilliam",
+        "cast_id": 29,
+        "profile_path": "/iKRsz3KXzpiYTbIq7KLDHAG9c4G.jpg",
+        "character": "Private Sugar Watkins"
+      },
+      {
+        "id": 41689,
+        "order": 9,
+        "credit_id": "52fe4253c3a36847f80155c9",
+        "name": "Rue McClanahan",
+        "cast_id": 30,
+        "profile_path": "/xXrLCC3JQiWqizYYfPypX0j3xqm.jpg",
+        "character": "Biology Teacher"
+      },
+      {
+        "id": 41690,
+        "order": 10,
+        "credit_id": "52fe4253c3a36847f80155cd",
+        "name": "Blake Lindsley",
+        "cast_id": 31,
+        "profile_path": "/xIuToExe5clLaf2cO75iXROEOeQ.jpg",
+        "character": "Katrina McIntire"
+      },
+      {
+        "id": 9258,
+        "order": 11,
+        "credit_id": "52fe4253c3a36847f80155d1",
+        "name": "Steven Ford",
+        "cast_id": 32,
+        "profile_path": "/op02vw0CIXsSKDjYNib0f1PBJ5T.jpg",
+        "character": "Lieutenant Willy"
+      },
+      {
+        "id": 41691,
+        "order": 12,
+        "credit_id": "52fe4253c3a36847f80155d5",
+        "name": "Ungela Brockman",
+        "cast_id": 33,
+        "profile_path": "/q66RPSSUYmtgbLNvkdKdeqAbOwc.jpg",
+        "character": "Corporal Birdie"
+      },
+      {
+        "id": 5945,
+        "order": 13,
+        "credit_id": "52fe4253c3a36847f80155d9",
+        "name": "Bruce Gray",
+        "cast_id": 34,
+        "profile_path": "/kHqBkMHbdcKhEkg0vSNGdIW0iE8.jpg",
+        "character": "Sky Marshal Dienes"
+      },
+      {
+        "id": 23970,
+        "order": 14,
+        "credit_id": "52fe4253c3a36847f80155dd",
+        "name": "Denise Dowse",
+        "cast_id": 35,
+        "profile_path": "/tZyRCcBphvpg4AjIWD33j4hVBKy.jpg",
+        "character": "Sky Marshal Tehat Meru"
+      },
+      {
+        "id": 20189,
+        "order": 15,
+        "credit_id": "52fe4253c3a36847f80155e1",
+        "name": "Amy Smart",
+        "cast_id": 36,
+        "profile_path": "/gDIto4RCKHOSKfC0rSn8nxmThpN.jpg",
+        "character": "Cadet Lumbreiser"
+      },
+      {
+        "id": 153940,
+        "order": 16,
+        "credit_id": "52fe4253c3a36847f80155e5",
+        "name": "Tami-Adrian George",
+        "cast_id": 37,
+        "profile_path": "/qR7qZTZOo9czpb1lrOirKOS6M9V.jpg",
+        "character": "Djana'D"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1319825,
+        "credit_id": "5374c628c3a3681528002abb",
+        "department": "Costume & Make-Up",
+        "name": "Nick Scarano",
+        "job": "Costume Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 10491,
+        "credit_id": "52fe4253c3a36847f801552f",
+        "department": "Directing",
+        "name": "Paul Verhoeven",
+        "job": "Director",
+        "profile_path": "/mlIV2V9OYcnmudqv1iZw7QrdSSh.jpg"
+      },
+      {
+        "id": 7721,
+        "credit_id": "52fe4253c3a36847f8015535",
+        "department": "Writing",
+        "name": "Robert A. Heinlein",
+        "job": "Author",
+        "profile_path": "/do3wtkyC1RWB2dPol2H2wp4EXuY.jpg"
+      },
+      {
+        "id": 7722,
+        "credit_id": "52fe4253c3a36847f801553b",
+        "department": "Writing",
+        "name": "Edward Neumeier",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7723,
+        "credit_id": "52fe4253c3a36847f8015541",
+        "department": "Production",
+        "name": "Jon Davison",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7724,
+        "credit_id": "52fe4253c3a36847f8015547",
+        "department": "Production",
+        "name": "Frances Doel",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7725,
+        "credit_id": "52fe4253c3a36847f801554d",
+        "department": "Production",
+        "name": "Stacy Lumbrezer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7726,
+        "credit_id": "52fe4253c3a36847f8015553",
+        "department": "Production",
+        "name": "Alan Marshall",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7722,
+        "credit_id": "52fe4253c3a36847f8015559",
+        "department": "Production",
+        "name": "Edward Neumeier",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7727,
+        "credit_id": "52fe4253c3a36847f801555f",
+        "department": "Production",
+        "name": "Phil Tippett",
+        "job": "Producer",
+        "profile_path": "/2uQ0B7fN5cDQk17J1X3pxDSf9y.jpg"
+      },
+      {
+        "id": 7728,
+        "credit_id": "52fe4253c3a36847f8015565",
+        "department": "Sound",
+        "name": "Basil Poledouris",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 898,
+        "credit_id": "52fe4253c3a36847f801556b",
+        "department": "Editing",
+        "name": "Mark Goldblatt",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7730,
+        "credit_id": "52fe4253c3a36847f8015571",
+        "department": "Editing",
+        "name": "Caroline Ross",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7731,
+        "credit_id": "52fe4253c3a36847f8015577",
+        "department": "Production",
+        "name": "Elaine J. Huzzar",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3686,
+        "credit_id": "52fe4253c3a36847f801557d",
+        "department": "Production",
+        "name": "Johanna Ray",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7732,
+        "credit_id": "52fe4253c3a36847f8015583",
+        "department": "Art",
+        "name": "Allan Cameron",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 7733,
+        "credit_id": "52fe4253c3a36847f8015589",
+        "department": "Art",
+        "name": "Bruce Robert Hill",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7734,
+        "credit_id": "52fe4253c3a36847f801558f",
+        "department": "Art",
+        "name": "Steven Wolff",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6880,
+        "credit_id": "52fe4253c3a36847f8015595",
+        "department": "Art",
+        "name": "Robert Gould",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7735,
+        "credit_id": "52fe4253c3a36847f801559b",
+        "department": "Costume & Make-Up",
+        "name": "Ellen Mirojnick",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5241,
+        "credit_id": "52fe4253c3a36847f80155a1",
+        "department": "Camera",
+        "name": "Jost Vacano",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 129,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 563,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Starship Troopers",
+  "overview": "Set in the future, the story follows a young soldier named Johnny Rico and his exploits in the Mobile Infantry. Rico's military career progresses from recruit to non-commissioned officer and finally to officer against the backdrop of an interstellar war between mankind and an arachnoid species known as \"the Bugs\".",
+  "production_companies": [
+    {
+      "id": 9195,
+      "name": "Touchstone Pictures"
+    },
+    {
+      "id": 559,
+      "name": "TriStar Pictures"
+    },
+    {
+      "id": 23434,
+      "name": "Big Bug Pictures"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 10522,
+    "backdrop_path": "/hwZXCuY6GVw50o17nDGbSR8WMFJ.jpg",
+    "name": "Starship Troopers Collection",
+    "poster_path": "/yLkv8GDTtsPHqTu4vcgNJDs5OJv.jpg"
+  },
+  "imdb_id": "tt0120201",
+  "release_date": "1997-11-06",
+  "original_title": "Starship Troopers",
+  "vote_count": 323,
+  "poster_path": "/zeCD9WkhABFJmPq3SlTozXJGEtr.jpg",
+  "tagline": "The only good bug is a dead bug.",
+  "revenue": 121214377,
+  "popularity": "1.80836577719499"
+}

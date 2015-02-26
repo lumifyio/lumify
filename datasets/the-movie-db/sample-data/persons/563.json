@@ -1,0 +1,137 @@
+{
+  "birthday": "1955-04-20",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 563,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0233827",
+  "combined_credits": {
+    "cast": [{
+      "id": 114255,
+      "media_type": "movie",
+      "title": "Tunnel Vision",
+      "credit_id": "535bd9450e0a264fdb00192f",
+      "release_date": "1976-03-12",
+      "original_title": "Tunnel Vision",
+      "adult": false,
+      "poster_path": "/xYMyenIracfdflfZWgavikhtnDt.jpg",
+      "character": "Archbishop"
+    }],
+    "crew": [
+      {
+        "id": 77016,
+        "media_type": "movie",
+        "title": "End of Watch",
+        "credit_id": "52fe4957c3a368484e1269e9",
+        "department": "Editing",
+        "release_date": "2012-09-21",
+        "original_title": "End of Watch",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/suqikqv0DjOsW8e0hst4YWDTmAX.jpg"
+      },
+      {
+        "id": 320,
+        "media_type": "movie",
+        "title": "Insomnia",
+        "credit_id": "53642ff3c3a36812200000ca",
+        "department": "Editing",
+        "release_date": "2002-05-24",
+        "original_title": "Insomnia",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/wOs4wvwYiL4y7Amle9OlANnC48v.jpg"
+      },
+      {
+        "id": 1495,
+        "media_type": "movie",
+        "title": "Kingdom of Heaven",
+        "credit_id": "52fe42fac3a36847f80312f9",
+        "department": "Editing",
+        "release_date": "2005-05-05",
+        "original_title": "Kingdom of Heaven",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/d9GYuT9aMoDi4MPTKYe4M2PwUm4.jpg"
+      },
+      {
+        "id": 4338,
+        "media_type": "movie",
+        "title": "I Woke Up Early The Day I Died",
+        "credit_id": "52fe43bbc3a36847f806b369",
+        "department": "Editing",
+        "release_date": "1998-09-13",
+        "original_title": "I Woke Up Early The Day I Died",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/4L8RlXb77CbalHrd55GggeTrliY.jpg"
+      },
+      {
+        "id": 6972,
+        "media_type": "movie",
+        "title": "Australia",
+        "credit_id": "52fe446dc3a36847f80954ab",
+        "department": "Editing",
+        "release_date": "2008-11-18",
+        "original_title": "Australia",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/rjyseZNRuMiomWbQZt6BQMwyyE2.jpg"
+      },
+      {
+        "id": 9726,
+        "media_type": "movie",
+        "title": "A Good Year",
+        "credit_id": "52fe4523c3a36847f80be75d",
+        "department": "Editing",
+        "release_date": "2006-11-10",
+        "original_title": "A Good Year",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/xxVoHo9Z9CZzRdkzj1IxrWYTQWT.jpg"
+      },
+      {
+        "id": 60994,
+        "media_type": "movie",
+        "title": "Guinevere",
+        "credit_id": "52fe4640c3a368484e08673b",
+        "department": "Editing",
+        "release_date": "1999-09-24",
+        "original_title": "Guinevere",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/28GNDsSimlWvsOgyajiEWEaCOBp.jpg"
+      },
+      {
+        "id": 43939,
+        "media_type": "movie",
+        "title": "I'm Still Here",
+        "credit_id": "52fe466cc3a36847f80fe43b",
+        "department": "Editing",
+        "release_date": "2010-09-10",
+        "original_title": "I'm Still Here",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/sx7LCoyyNyc0txcsT3bGNZ4xL8T.jpg"
+      },
+      {
+        "id": 77,
+        "media_type": "movie",
+        "title": "Memento",
+        "credit_id": "52fe4214c3a36847f8002545",
+        "department": "Editing",
+        "release_date": "2000-09-05",
+        "original_title": "Memento",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/fQMSaP88cf1nz4qwuNEEFtazuDM.jpg"
+      }
+    ]
+  },
+  "name": "Dody Dorn",
+  "place_of_birth": null,
+  "popularity": "1.00010934982566"
+}

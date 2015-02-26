@@ -1,0 +1,412 @@
+{
+  "budget": 33000000,
+  "vote_average": 5.8,
+  "backdrop_path": "/5O2FnVv3KScTcvFqam7OfFlSJS3.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 12073,
+        "order": 0,
+        "credit_id": "52fe427bc3a36847f8022039",
+        "name": "Mike Myers",
+        "cast_id": 25,
+        "profile_path": "/sa8MMxXZrHgQ85hTAP11WS4N3ik.jpg",
+        "character": "Austin Powers / Dr. Evil / Fat Bastard"
+      },
+      {
+        "id": 69122,
+        "order": 1,
+        "credit_id": "52fe427bc3a36847f802203d",
+        "name": "Heather Graham",
+        "cast_id": 28,
+        "profile_path": "/ssXVGIrzff7ZmT9jD6CMm1mcost.jpg",
+        "character": "Felicity Shagwell"
+      },
+      {
+        "id": 13919,
+        "order": 2,
+        "credit_id": "52fe427bc3a36847f8022041",
+        "name": "Michael York",
+        "cast_id": 29,
+        "profile_path": "/xrgHhenCH3c2qKE7dYgOy9WZtZt.jpg",
+        "character": "Basil Exposition"
+      },
+      {
+        "id": 9208,
+        "order": 3,
+        "credit_id": "52fe427bc3a36847f8022045",
+        "name": "Robert Wagner",
+        "cast_id": 31,
+        "profile_path": "/zqinlcZhltaCUI9hMvrzPMxSUzK.jpg",
+        "character": "Number Two"
+      },
+      {
+        "id": 2879,
+        "order": 4,
+        "credit_id": "52fe427bc3a36847f8022049",
+        "name": "Rob Lowe",
+        "cast_id": 33,
+        "profile_path": "/okONnij88o4Nv2j5uHEhuQnoiCL.jpg",
+        "character": "Young Number Two"
+      },
+      {
+        "id": 13922,
+        "order": 5,
+        "credit_id": "52fe427bc3a36847f802204d",
+        "name": "Seth Green",
+        "cast_id": 34,
+        "profile_path": "/7ksgEtZZIhSkJmt7zMyVDOQfdxu.jpg",
+        "character": "Scott Evil"
+      },
+      {
+        "id": 13924,
+        "order": 6,
+        "credit_id": "52fe427bc3a36847f8022051",
+        "name": "Mindy Sterling",
+        "cast_id": 36,
+        "profile_path": "/iAkd07rU00T99oRS7sBhPhMULz4.jpg",
+        "character": "Frau Farbissina"
+      },
+      {
+        "id": 10987,
+        "order": 7,
+        "credit_id": "52fe427bc3a36847f8022055",
+        "name": "Verne Troyer",
+        "cast_id": 37,
+        "profile_path": "/AjCmNZ2cA6OXbLZ6ZXfxEveI7LF.jpg",
+        "character": "Mini-Me"
+      },
+      {
+        "id": 13918,
+        "order": 8,
+        "credit_id": "52fe427bc3a36847f8022059",
+        "name": "Elizabeth Hurley",
+        "cast_id": 38,
+        "profile_path": "/lV6kPZyQtLPuegir5kVG9w6z1UQ.jpg",
+        "character": "Vanessa Kensington"
+      },
+      {
+        "id": 14226,
+        "order": 9,
+        "credit_id": "52fe427bc3a36847f802205d",
+        "name": "Gia Carides",
+        "cast_id": 39,
+        "profile_path": "/hd4wkz74R00PDkMhCMuH2qqH2Yt.jpg",
+        "character": "Robin Spitz Swallows"
+      },
+      {
+        "id": 93035,
+        "order": 10,
+        "credit_id": "52fe427bc3a36847f8022073",
+        "name": "Oliver Muirhead",
+        "cast_id": 43,
+        "profile_path": "/vyWab6wD6r3yP56FA87hwInmdPZ.jpg",
+        "character": "British Colonel"
+      },
+      {
+        "id": 17348,
+        "order": 11,
+        "credit_id": "52fe427bc3a36847f8022077",
+        "name": "Muse Watson",
+        "cast_id": 44,
+        "profile_path": "/f7SZHWqYqAndyA7BAcVBonkP3jQ.jpg",
+        "character": "Klansman"
+      },
+      {
+        "id": 65167,
+        "order": 12,
+        "credit_id": "52fe427bc3a36847f802207b",
+        "name": "Scott Cooper",
+        "cast_id": 45,
+        "profile_path": "/kmlJ2OLQmFLbdwCxUuofPgvYjjP.jpg",
+        "character": "Klansman's Son - Bobby"
+      },
+      {
+        "id": 25711,
+        "order": 13,
+        "credit_id": "52fe427bc3a36847f802207f",
+        "name": "Kevin Cooney",
+        "cast_id": 46,
+        "profile_path": "/3z2Rte6xznb5Bth6mar42waHc59.jpg",
+        "character": "NORAD Colonel"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6737,
+        "credit_id": "52fe427ac3a36847f8021fb1",
+        "department": "Directing",
+        "name": "Jay Roach",
+        "job": "Director",
+        "profile_path": "/oRUzROYVL3inqtWeAp5wT6It33X.jpg"
+      },
+      {
+        "id": 12073,
+        "credit_id": "52fe427ac3a36847f8021fb7",
+        "department": "Writing",
+        "name": "Mike Myers",
+        "job": "Screenplay",
+        "profile_path": "/sa8MMxXZrHgQ85hTAP11WS4N3ik.jpg"
+      },
+      {
+        "id": 14172,
+        "credit_id": "52fe427ac3a36847f8021fbd",
+        "department": "Writing",
+        "name": "Michael McCullers",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1227,
+        "credit_id": "52fe427ac3a36847f8021fc3",
+        "department": "Production",
+        "name": "John S. Lyons",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2445,
+        "credit_id": "52fe427ac3a36847f8021fc9",
+        "department": "Production",
+        "name": "Eric McLeod",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3416,
+        "credit_id": "52fe427ac3a36847f8021fcf",
+        "department": "Production",
+        "name": "Demi Moore",
+        "job": "Producer",
+        "profile_path": "/eLNoOYnxvhpV0BMSkNNnyyo5In7.jpg"
+      },
+      {
+        "id": 12073,
+        "credit_id": "52fe427ac3a36847f8021fd5",
+        "department": "Production",
+        "name": "Mike Myers",
+        "job": "Producer",
+        "profile_path": "/sa8MMxXZrHgQ85hTAP11WS4N3ik.jpg"
+      },
+      {
+        "id": 550,
+        "credit_id": "52fe427ac3a36847f8021fdb",
+        "department": "Production",
+        "name": "Jennifer Todd",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 551,
+        "credit_id": "52fe427bc3a36847f8021fe1",
+        "department": "Production",
+        "name": "Suzanne Todd",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9204,
+        "credit_id": "52fe427bc3a36847f8021fe7",
+        "department": "Sound",
+        "name": "George S. Clinton",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6050,
+        "credit_id": "52fe427bc3a36847f8021fed",
+        "department": "Camera",
+        "name": "Ueli Steiger",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14189,
+        "credit_id": "52fe427bc3a36847f8021ff3",
+        "department": "Editing",
+        "name": "Debra Neil-Fisher",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10395,
+        "credit_id": "52fe427bc3a36847f8021ff9",
+        "department": "Editing",
+        "name": "Jon Poll",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 546,
+        "credit_id": "52fe427bc3a36847f8021fff",
+        "department": "Production",
+        "name": "Jeanne McCarthy",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 10396,
+        "credit_id": "52fe427bc3a36847f8022005",
+        "department": "Art",
+        "name": "Rusty Smith",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 9648,
+        "credit_id": "52fe427bc3a36847f802200b",
+        "department": "Art",
+        "name": "Alec Hammond",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9042,
+        "credit_id": "52fe427bc3a36847f8022011",
+        "department": "Art",
+        "name": "Sara Andrews",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 14192,
+        "credit_id": "52fe427bc3a36847f8022017",
+        "department": "Costume & Make-Up",
+        "name": "Michèle Burke",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 9417,
+        "credit_id": "52fe427bc3a36847f802201d",
+        "department": "Sound",
+        "name": "Javier Bennassar",
+        "job": "Sound Effects Editor",
+        "profile_path": null
+      },
+      {
+        "id": 9427,
+        "credit_id": "52fe427bc3a36847f8022023",
+        "department": "Sound",
+        "name": "Frederick Howard",
+        "job": "Supervising Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 14193,
+        "credit_id": "52fe427bc3a36847f8022029",
+        "department": "Crew",
+        "name": "Keith Marbory",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 14194,
+        "credit_id": "52fe427bc3a36847f802202f",
+        "department": "Visual Effects",
+        "name": "David D. Johnson",
+        "job": "Visual Effects Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 14197,
+        "credit_id": "52fe427bc3a36847f8022035",
+        "department": "Crew",
+        "name": "Clay Boss",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 14042,
+        "credit_id": "52fe427bc3a36847f8022063",
+        "department": "Costume & Make-Up",
+        "name": "Deena Appel",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14377,
+        "credit_id": "52fe427bc3a36847f8022069",
+        "department": "Production",
+        "name": "Juel Bestrop",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 14049,
+        "credit_id": "52fe427bc3a36847f802206f",
+        "department": "Crew",
+        "name": "Bud Davis",
+        "job": "Stunt Coordinator",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 95,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 817,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Austin Powers: The Spy Who Shagged Me",
+  "overview": "When diabolical genius Dr. Evil travels back in time to steal superspy Austin Powers's \"mojo,\" Austin must return to the swingin' '60s himself -- with the help of American agent Felicity Shagwell -- to stop the dastardly plan. Once there, Austin faces off against Dr. Evil's army of minions and saves the world in his own unbelievably groovy way.",
+  "production_companies": [
+    {
+      "id": 12,
+      "name": "New Line Cinema"
+    },
+    {
+      "id": 595,
+      "name": "Eric's Boy"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 1006,
+    "backdrop_path": "/3QJMI8nqQcwU5JBPy26m8TUXtTN.jpg",
+    "name": "Austin Powers Collection",
+    "poster_path": "/9fg3fFqjr2ofmgjyWKfKgv6ZLu0.jpg"
+  },
+  "imdb_id": "tt0145660",
+  "release_date": "1999-06-08",
+  "original_title": "Austin Powers: The Spy Who Shagged Me",
+  "vote_count": 188,
+  "poster_path": "/yhg0l1Ddd2thQOSUUQx9jBrGI12.jpg",
+  "tagline": "I'm back, baby!",
+  "revenue": 310940086,
+  "popularity": "1.59671037499844"
+}

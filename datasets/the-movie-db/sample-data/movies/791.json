@@ -1,0 +1,337 @@
+{
+  "budget": 18000000,
+  "vote_average": 4.9,
+  "backdrop_path": "/r9UetZlMpkr0DvEHNdk7hVclEA0.jpg",
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11824,
+        "order": 0,
+        "credit_id": "52fe4277c3a36847f8020c51",
+        "name": "Tom Welling",
+        "cast_id": 19,
+        "profile_path": "/45hE6LdT31IyMKLtu8JPopByMEH.jpg",
+        "character": "Nick Castle"
+      },
+      {
+        "id": 11825,
+        "order": 1,
+        "credit_id": "52fe4277c3a36847f8020c55",
+        "name": "Maggie Grace",
+        "cast_id": 20,
+        "profile_path": "/hW4CEZjGEqSRnhGHI7GTgseOy3e.jpg",
+        "character": "Elizabeth Williams"
+      },
+      {
+        "id": 11826,
+        "order": 2,
+        "credit_id": "52fe4277c3a36847f8020c59",
+        "name": "Selma Blair",
+        "cast_id": 21,
+        "profile_path": "/xltCuuG4xjACQ6vQm55iuR5LFJC.jpg",
+        "character": "Stevie Wayne"
+      },
+      {
+        "id": 11827,
+        "order": 3,
+        "credit_id": "52fe4277c3a36847f8020c5d",
+        "name": "DeRay Davis",
+        "cast_id": 22,
+        "profile_path": "/n8alI78oMlcJ3gEhF2Ws4MOUCtc.jpg",
+        "character": "Spooner"
+      },
+      {
+        "id": 6074,
+        "order": 4,
+        "credit_id": "52fe4277c3a36847f8020c61",
+        "name": "Kenneth Welsh",
+        "cast_id": 23,
+        "profile_path": "/q44fb9FLrA9ZWzP8xGv6PcX24V6.jpg",
+        "character": "Tom Malone"
+      },
+      {
+        "id": 11828,
+        "order": 5,
+        "credit_id": "52fe4277c3a36847f8020c65",
+        "name": "Adrian Hough",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Father Robert Malone"
+      },
+      {
+        "id": 11829,
+        "order": 6,
+        "credit_id": "52fe4277c3a36847f8020c69",
+        "name": "Sara Botsford",
+        "cast_id": 25,
+        "profile_path": "/av2UA92s1yfBoDqotDyhLu7Fj0U.jpg",
+        "character": "Kathy Williams"
+      },
+      {
+        "id": 11830,
+        "order": 7,
+        "credit_id": "52fe4277c3a36847f8020c6d",
+        "name": "Cole Heppell",
+        "cast_id": 26,
+        "profile_path": "/eaYBjHbpZ16j16pLhXBDnAgNVJq.jpg",
+        "character": "Andy Wayne"
+      },
+      {
+        "id": 11831,
+        "order": 8,
+        "credit_id": "52fe4277c3a36847f8020c71",
+        "name": "Mary Black",
+        "cast_id": 27,
+        "profile_path": "/q7gftvbA1cgwldgcEabf1wXBAkj.jpg",
+        "character": "Aunt Connie"
+      },
+      {
+        "id": 11832,
+        "order": 9,
+        "credit_id": "52fe4277c3a36847f8020c75",
+        "name": "Jonathon Young",
+        "cast_id": 28,
+        "profile_path": "/6sO42m3qDKy0xCBlwo6A3Czpoil.jpg",
+        "character": "Dan The Weatherman"
+      },
+      {
+        "id": 11833,
+        "order": 10,
+        "credit_id": "52fe4277c3a36847f8020c79",
+        "name": "R. Nelson Brown",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Machen"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11808,
+        "credit_id": "52fe4277c3a36847f8020be7",
+        "department": "Writing",
+        "name": "Cooper Layne",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 11809,
+        "credit_id": "52fe4277c3a36847f8020bed",
+        "department": "Directing",
+        "name": "Rupert Wainwright",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 11811,
+        "credit_id": "52fe4277c3a36847f8020bf3",
+        "department": "Production",
+        "name": "Randi Chernov",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11812,
+        "credit_id": "52fe4277c3a36847f8020bf9",
+        "department": "Production",
+        "name": "Derek Dauchy",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11813,
+        "credit_id": "52fe4277c3a36847f8020bff",
+        "department": "Production",
+        "name": "David Foster",
+        "job": "Producer",
+        "profile_path": "/v8EVgOAAklN3spLrQmVNLEfxfWM.jpg"
+      },
+      {
+        "id": 11814,
+        "credit_id": "52fe4277c3a36847f8020c05",
+        "department": "Production",
+        "name": "Todd Garner",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2161,
+        "credit_id": "52fe4277c3a36847f8020c0b",
+        "department": "Production",
+        "name": "Debra Hill",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11815,
+        "credit_id": "52fe4277c3a36847f8020c11",
+        "department": "Production",
+        "name": "Dan Kolsrud",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11816,
+        "credit_id": "52fe4277c3a36847f8020c17",
+        "department": "Production",
+        "name": "Shane Riches",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5912,
+        "credit_id": "52fe4277c3a36847f8020c1d",
+        "department": "Sound",
+        "name": "Graeme Revell",
+        "job": "Original Music Composer",
+        "profile_path": "/g2Nhv2OCV8ygLYxkeDbhlqnrv7Z.jpg"
+      },
+      {
+        "id": 11817,
+        "credit_id": "52fe4277c3a36847f8020c23",
+        "department": "Camera",
+        "name": "Nathan Hope",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5584,
+        "credit_id": "52fe4277c3a36847f8020c29",
+        "department": "Editing",
+        "name": "Dennis Virkler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2031,
+        "credit_id": "52fe4277c3a36847f8020c2f",
+        "department": "Production",
+        "name": "Amanda Mackey Johnson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2532,
+        "credit_id": "52fe4277c3a36847f8020c35",
+        "department": "Production",
+        "name": "Cathy Sandrich",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 11819,
+        "credit_id": "52fe4277c3a36847f8020c3b",
+        "department": "Art",
+        "name": "Graeme Murray",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 11821,
+        "credit_id": "52fe4277c3a36847f8020c41",
+        "department": "Art",
+        "name": "Catherine Schroer",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11822,
+        "credit_id": "52fe4277c3a36847f8020c47",
+        "department": "Art",
+        "name": "Rose Marie McSherry",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 11823,
+        "credit_id": "52fe4277c3a36847f8020c4d",
+        "department": "Costume & Make-Up",
+        "name": "Monique Prudhomme",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 11818,
+        "credit_id": "52fe4277c3a36847f8020c7f",
+        "department": "Art",
+        "name": "Michael Diner",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11770,
+        "credit_id": "52fe4277c3a36847f8020c85",
+        "department": "Writing",
+        "name": "John Carpenter",
+        "job": "Screenplay",
+        "profile_path": "/5Xv3IyZaXJ2qw4ZgRmuIcdtU8xU.jpg"
+      },
+      {
+        "id": 2161,
+        "credit_id": "52fe4277c3a36847f8020c8b",
+        "department": "Writing",
+        "name": "Debra Hill",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.sonypictures.com/homevideo/thefog/index.html",
+  "id": 791,
+  "production_countries": [{
+    "name": "Canada",
+    "iso_3166_1": "CA"
+  }],
+  "title": "The Fog",
+  "overview": "Trapped within an eerie mist, the residents of Antonio Bay have become the unwitting victims of a horrifying vengeance. One hundred years ago, a ship carrying lepers was purposely lured onto the rocky coastline and sunk, drowning all aboard. Now they're back, long-dead mariners who've waited a century for their revenge.",
+  "production_companies": [
+    {
+      "id": 497,
+      "name": "Revolution Studios"
+    },
+    {
+      "id": 498,
+      "name": "Debra Hill Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 264435,
+    "backdrop_path": "/9C84BbJ1SAVXFYeSSvdXAg6iqz9.jpg",
+    "name": "The Fog Collection",
+    "poster_path": "/z2gYmtLqvuXrFSe7FZtpZGxhIVB.jpg"
+  },
+  "imdb_id": "tt0432291",
+  "release_date": "2005-10-14",
+  "original_title": "The Fog",
+  "vote_count": 21,
+  "poster_path": "/wvtRxF9Rd3MjYgmyrx9njQ8tynf.jpg",
+  "tagline": "Their PAST Has Come Back To HAUNT THEM",
+  "revenue": 46201432,
+  "popularity": "0.506752292351983"
+}

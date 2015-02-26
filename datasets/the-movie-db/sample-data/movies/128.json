@@ -1,0 +1,388 @@
+{
+  "budget": 26500000,
+  "vote_average": 7.9,
+  "backdrop_path": "/dB2rATwfCbsPGfRLIoluBnKdVHb.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 622,
+        "order": 0,
+        "credit_id": "52fe421bc3a36847f800499d",
+        "name": "Yōji Matsuda",
+        "cast_id": 3,
+        "profile_path": "/wZijOHyaFIVKJY9yfyIsusamFbv.jpg",
+        "character": "Ashitaka"
+      },
+      {
+        "id": 20330,
+        "order": 1,
+        "credit_id": "52fe421bc3a36847f80049a1",
+        "name": "Yuriko Ishida",
+        "cast_id": 4,
+        "profile_path": "/w2EcOwlQ9q8cfW9RQBA2RkAFtHr.jpg",
+        "character": "San"
+      },
+      {
+        "id": 20331,
+        "order": 2,
+        "credit_id": "52fe421bc3a36847f80049a5",
+        "name": "Yūko Tanaka",
+        "cast_id": 5,
+        "profile_path": "/k32uD3NkzeJHPaALp0amspIqVzc.jpg",
+        "character": "Eboshi-gozen"
+      },
+      {
+        "id": 20332,
+        "order": 3,
+        "credit_id": "52fe421bc3a36847f80049a9",
+        "name": "Kaoru Kobayashi",
+        "cast_id": 6,
+        "profile_path": "/ao6ahEACiVZuQAQ2ysL7DSbRwfS.jpg",
+        "character": "Jiko-bô"
+      },
+      {
+        "id": 20333,
+        "order": 4,
+        "credit_id": "52fe421bc3a36847f80049ad",
+        "name": "Masahiko Nishimura",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Kouroku"
+      },
+      {
+        "id": 20334,
+        "order": 5,
+        "credit_id": "52fe421bc3a36847f80049b1",
+        "name": "Tsunehiko Kamijô",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Gonza"
+      },
+      {
+        "id": 613,
+        "order": 6,
+        "credit_id": "52fe421bc3a36847f80049b5",
+        "name": "Sumi Shimamoto",
+        "cast_id": 9,
+        "profile_path": "/cB1JXMD6Eyb1ONKfsj32Lai4AfV.jpg",
+        "character": "Toki"
+      },
+      {
+        "id": 20335,
+        "order": 7,
+        "credit_id": "52fe421bc3a36847f80049b9",
+        "name": "Tetsu Watanabe",
+        "cast_id": 10,
+        "profile_path": "/6dlabJPfVvTARfd7ZWEdncfJ3SI.jpg",
+        "character": "Yama-inu"
+      },
+      {
+        "id": 20336,
+        "order": 8,
+        "credit_id": "52fe421bc3a36847f80049bd",
+        "name": "Mitsuru Satô",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Tatari-gami"
+      },
+      {
+        "id": 20337,
+        "order": 9,
+        "credit_id": "52fe421bc3a36847f80049c1",
+        "name": "Akira Nagoya",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Usi-kai"
+      },
+      {
+        "id": 20338,
+        "order": 10,
+        "credit_id": "52fe421bc3a36847f80049c5",
+        "name": "Akihiro Miwa",
+        "cast_id": 13,
+        "profile_path": "/xQaxWhOqAZmRecv6ZratXzJVZzs.jpg",
+        "character": "Moro-no-kimi"
+      },
+      {
+        "id": 20339,
+        "order": 11,
+        "credit_id": "52fe421bc3a36847f80049c9",
+        "name": "Mitsuko Mori",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Hii-sama"
+      },
+      {
+        "id": 20340,
+        "order": 12,
+        "credit_id": "52fe421bc3a36847f80049cd",
+        "name": "Hisaya Morishige",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Okkoto-nusi"
+      },
+      {
+        "id": 20329,
+        "order": 13,
+        "credit_id": "52fe421bc3a36847f8004999",
+        "name": "Takako Fuji",
+        "cast_id": 2,
+        "profile_path": "/nLSke54TL1eIF9LfdNsJzfwmOWv.jpg",
+        "character": "Woman in Iron Town"
+      },
+      {
+        "id": 8289,
+        "order": 14,
+        "credit_id": "52fe421bc3a36847f80049f5",
+        "name": "Billy Crudup",
+        "cast_id": 22,
+        "profile_path": "/zcG2lJNoXw6IAV3fvGumviqfZfe.jpg",
+        "character": "Ashitaka (English Version)"
+      },
+      {
+        "id": 879,
+        "order": 15,
+        "credit_id": "52fe421bc3a36847f80049f9",
+        "name": "Billy Bob Thornton",
+        "cast_id": 23,
+        "profile_path": "/sgCqytliDMD19d0VP45YgUmMCqH.jpg",
+        "character": "Jigo (English Version)"
+      },
+      {
+        "id": 6613,
+        "order": 16,
+        "credit_id": "52fe421bc3a36847f80049fd",
+        "name": "Minnie Driver",
+        "cast_id": 24,
+        "profile_path": "/piEeCRzNV1Nve7DM63c8gqu0izy.jpg",
+        "character": "Lady Eboshi (English Version)"
+      },
+      {
+        "id": 31531,
+        "order": 17,
+        "credit_id": "52fe421bc3a36847f8004a01",
+        "name": "John Di Maggio",
+        "cast_id": 25,
+        "profile_path": "/tVCwtiAHQo7EjVdtbj7FqYqsSyc.jpg",
+        "character": "Gonza (English Version)"
+      },
+      {
+        "id": 6194,
+        "order": 18,
+        "credit_id": "52fe421bc3a36847f8004a05",
+        "name": "Claire Danes",
+        "cast_id": 26,
+        "profile_path": "/lz16Z3yR8JFwt9nCJP2JJE2o3zq.jpg",
+        "character": "San (English Version)"
+      },
+      {
+        "id": 56348,
+        "order": 19,
+        "credit_id": "52fe421bc3a36847f8004a09",
+        "name": "John Demita",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Kohroku (English Version)"
+      },
+      {
+        "id": 9575,
+        "order": 20,
+        "credit_id": "52fe421bc3a36847f8004a0d",
+        "name": "Jada Pinkett Smith",
+        "cast_id": 28,
+        "profile_path": "/9F9om3LeN7xM1yPcUn9e2qSpkDh.jpg",
+        "character": "Toki (English Version)"
+      },
+      {
+        "id": 12214,
+        "order": 21,
+        "credit_id": "52fe421bc3a36847f8004a11",
+        "name": "Gillian Anderson",
+        "cast_id": 29,
+        "profile_path": "/66aPz0ypvGPV4TuWowumI1gFqMs.jpg",
+        "character": "Moro (English Version)"
+      },
+      {
+        "id": 65827,
+        "order": 22,
+        "credit_id": "52fe421bc3a36847f8004a15",
+        "name": "Keith David",
+        "cast_id": 30,
+        "profile_path": "/nwAC9TgwRkj0Ritq93O8GeublyL.jpg",
+        "character": "Okkoto (English Version)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 608,
+        "credit_id": "52fe421bc3a36847f8004995",
+        "department": "Directing",
+        "name": "Hayao Miyazaki",
+        "job": "Director",
+        "profile_path": "/6aaAvZbGdhkyAXBIneyqqN60aa1.jpg"
+      },
+      {
+        "id": 608,
+        "credit_id": "52fe421bc3a36847f80049d3",
+        "department": "Writing",
+        "name": "Hayao Miyazaki",
+        "job": "Screenplay",
+        "profile_path": "/6aaAvZbGdhkyAXBIneyqqN60aa1.jpg"
+      },
+      {
+        "id": 1417,
+        "credit_id": "52fe421bc3a36847f80049d9",
+        "department": "Production",
+        "name": "Toshio Suzuki",
+        "job": "Producer",
+        "profile_path": "/k5YYt3VYjCEGRP4eCPx9bCLNtE4.jpg"
+      },
+      {
+        "id": 636,
+        "credit_id": "52fe421bc3a36847f80049df",
+        "department": "Sound",
+        "name": "Joe Hisaishi",
+        "job": "Original Music Composer",
+        "profile_path": "/cmYyWvG0rupbPTsTaCDkCooOFGT.jpg"
+      },
+      {
+        "id": 19596,
+        "credit_id": "52fe421bc3a36847f80049e5",
+        "department": "Camera",
+        "name": "Atsushi Okui",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 608,
+        "credit_id": "52fe421bc3a36847f80049eb",
+        "department": "Editing",
+        "name": "Hayao Miyazaki",
+        "job": "Editor",
+        "profile_path": "/6aaAvZbGdhkyAXBIneyqqN60aa1.jpg"
+      },
+      {
+        "id": 1697,
+        "credit_id": "52fe421bc3a36847f80049f1",
+        "department": "Editing",
+        "name": "Takeshi Seyama",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1132621,
+        "credit_id": "52fe421bc3a36847f8004a1b",
+        "department": "Production",
+        "name": "Yutaka Narita",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 78360,
+        "credit_id": "52fe421bc3a36847f8004a21",
+        "department": "Production",
+        "name": "Seiichiro Ujiie",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 115943,
+        "credit_id": "52fe421bc3a36847f8004a27",
+        "department": "Production",
+        "name": "Seiji Okuda",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1057917,
+        "credit_id": "52fe421bc3a36847f8004a2d",
+        "department": "Production",
+        "name": "Yasuyoshi Tokuma",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 986214,
+        "credit_id": "52fe421bc3a36847f8004a33",
+        "department": "Art",
+        "name": "Satoshi Kuroda",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 547985,
+        "credit_id": "52fe421bc3a36847f8004a39",
+        "department": "Art",
+        "name": "Kazuo Oga",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 19598,
+        "credit_id": "52fe421bc3a36847f8004a3f",
+        "department": "Art",
+        "name": "Yôji Takeshige",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 78378,
+        "credit_id": "52fe421bc3a36847f8004a45",
+        "department": "Art",
+        "name": "Naoya Tanaka",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 1009730,
+        "credit_id": "52fe421bc3a36847f8004a4b",
+        "department": "Art",
+        "name": "Nizou Yamamoto",
+        "job": "Art Direction",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 134,
+  "spoken_languages": [{
+    "iso_639_1": "ja",
+    "name": "日本語"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 128,
+  "production_countries": [{
+    "name": "Japan",
+    "iso_3166_1": "JP"
+  }],
+  "title": "Princess Mononoke",
+  "overview": "Ashitaka, a prince of the disappearing Ainu tribe, is cursed by a demonized boar god and must journey to the west to find a cure. Along the way, he encounters San, a young human woman fighting to protect the forest, and Lady Eboshi, who is trying to destroy it. Ashitaka must find a way to bring balance to this conflict.",
+  "production_companies": [{
+    "id": 10342,
+    "name": "Studio Ghibli"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0119698",
+  "release_date": "1997-07-12",
+  "original_title": "もののけ姫",
+  "vote_count": 462,
+  "poster_path": "/gzlJkVfWV5VEG5xK25cvFGJgkDz.jpg",
+  "tagline": "The Fate Of The World Rests On The Courage Of One Warrior.",
+  "revenue": 159375308,
+  "popularity": "2.46481893484121"
+}

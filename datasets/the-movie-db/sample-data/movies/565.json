@@ -1,0 +1,301 @@
+{
+  "budget": 45000000,
+  "vote_average": 6.1,
+  "backdrop_path": "/gRQucG6XnNgSQn863V5ho50J3hx.jpg",
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 10748,
+      "name": "Suspense"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3489,
+        "order": 0,
+        "credit_id": "52fe4253c3a36847f801577f",
+        "name": "Naomi Watts",
+        "cast_id": 10,
+        "profile_path": "/6GIHYUKqhUvQrQn1L0S2u9Cbo00.jpg",
+        "character": "Rachel Keller"
+      },
+      {
+        "id": 26291,
+        "order": 1,
+        "credit_id": "52fe4253c3a36847f8015783",
+        "name": "Martin Henderson",
+        "cast_id": 11,
+        "profile_path": "/tWuEwdM7TnM9KenYbRKLSFbo3zx.jpg",
+        "character": "Noah Clay"
+      },
+      {
+        "id": 26292,
+        "order": 2,
+        "credit_id": "52fe4253c3a36847f8015787",
+        "name": "David Dorfman",
+        "cast_id": 12,
+        "profile_path": "/hfdEh049JW6uxjJqp9zqaNX4hFC.jpg",
+        "character": "Aidan Keller"
+      },
+      {
+        "id": 1248,
+        "order": 3,
+        "credit_id": "52fe4253c3a36847f801578b",
+        "name": "Brian Cox",
+        "cast_id": 13,
+        "profile_path": "/m15C58NWii5WCIg57Llr7hejnfy.jpg",
+        "character": "Richard Morgan"
+      },
+      {
+        "id": 2525,
+        "order": 4,
+        "credit_id": "52fe4253c3a36847f801578f",
+        "name": "Shannon Cochran",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Anna Morgan"
+      },
+      {
+        "id": 1580,
+        "order": 5,
+        "credit_id": "52fe4253c3a36847f8015793",
+        "name": "Daveigh Chase",
+        "cast_id": 15,
+        "profile_path": "/xiJf7nTOvVVWIyWG9fyoauU6Ff3.jpg",
+        "character": "Samara Morgan"
+      },
+      {
+        "id": 26293,
+        "order": 6,
+        "credit_id": "52fe4253c3a36847f8015797",
+        "name": "Rachael Bella",
+        "cast_id": 16,
+        "profile_path": "/huoBCMuoxr3Ha31Ch53csvK5iN2.jpg",
+        "character": "Rebecca Kotler"
+      },
+      {
+        "id": 13724,
+        "order": 7,
+        "credit_id": "52fe4253c3a36847f801579b",
+        "name": "Jane Alexander",
+        "cast_id": 17,
+        "profile_path": "/2pP8uZPdLTARHCMjGphUo4iH0je.jpg",
+        "character": "Dr. Grasnik"
+      },
+      {
+        "id": 26294,
+        "order": 8,
+        "credit_id": "52fe4253c3a36847f801579f",
+        "name": "Lindsay Frost",
+        "cast_id": 18,
+        "profile_path": "/2TOoIVvS74g05wgj9MzgzLMtJOU.jpg",
+        "character": "Ruth Embry"
+      },
+      {
+        "id": 20354,
+        "order": 9,
+        "credit_id": "52fe4253c3a36847f80157a3",
+        "name": "Amber Tamblyn",
+        "cast_id": 19,
+        "profile_path": "/4nwsbtFzoxzN2YF2HOW4P4vdit2.jpg",
+        "character": "Katie Embry"
+      },
+      {
+        "id": 26295,
+        "order": 10,
+        "credit_id": "52fe4253c3a36847f80157a7",
+        "name": "Sandra Thigpen",
+        "cast_id": 20,
+        "profile_path": "/r5l8zPs2qq93J4L0u8ohUnhjM9L.jpg",
+        "character": "Teacher"
+      },
+      {
+        "id": 3205,
+        "order": 11,
+        "credit_id": "52fe4253c3a36847f80157ab",
+        "name": "Richard Lineback",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Innkeeper"
+      },
+      {
+        "id": 10131,
+        "order": 12,
+        "credit_id": "52fe4253c3a36847f80157af",
+        "name": "Sara Rue",
+        "cast_id": 22,
+        "profile_path": "/1OlEg9M8oSsGivjyFJJFyCkKqkk.jpg",
+        "character": "Babysitter"
+      },
+      {
+        "id": 11702,
+        "order": 13,
+        "credit_id": "52fe4253c3a36847f80157b3",
+        "name": "Adam Brody",
+        "cast_id": 23,
+        "profile_path": "/AvUsfTBgu1zUG3LY9PUlQAJzzpO.jpg",
+        "character": "Male Teen #1"
+      },
+      {
+        "id": 15318,
+        "order": 14,
+        "credit_id": "53b9567cc3a3685eb400557f",
+        "name": "Keith Campbell",
+        "cast_id": 26,
+        "profile_path": "/1PQSshXQ2AgifwYbykqXEyQYmDg.jpg",
+        "character": "Ship's Mate"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8222,
+        "credit_id": "5368e23d0e0a2647d4007dd8",
+        "department": "Costume & Make-Up",
+        "name": "Julie Weiss",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 13588,
+        "credit_id": "5368e27d0e0a2647db007f5c",
+        "department": "Art",
+        "name": "Rosemary Brandenburg",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 1704,
+        "credit_id": "52fe4253c3a36847f801574b",
+        "department": "Directing",
+        "name": "Gore Verbinski",
+        "job": "Director",
+        "profile_path": "/bV0rGSPrK4AUvODjB3zMAwDdeIf.jpg"
+      },
+      {
+        "id": 15244,
+        "credit_id": "52fe4253c3a36847f8015751",
+        "department": "Writing",
+        "name": "Ehren Kruger",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 8701,
+        "credit_id": "52fe4253c3a36847f8015757",
+        "department": "Production",
+        "name": "Laurie MacDonald",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2212,
+        "credit_id": "52fe4253c3a36847f801575d",
+        "department": "Production",
+        "name": "Walter F. Parkes",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 947,
+        "credit_id": "52fe4253c3a36847f8015763",
+        "department": "Sound",
+        "name": "Hans Zimmer",
+        "job": "Original Music Composer",
+        "profile_path": "/wugKWf9vuqZYuHCk5Wwec6355TM.jpg"
+      },
+      {
+        "id": 11699,
+        "credit_id": "52fe4253c3a36847f8015769",
+        "department": "Camera",
+        "name": "Bojan Bazelli",
+        "job": "Director of Photography",
+        "profile_path": "/2UcvIkDpDeKLUwickH8zZuBCFY4.jpg"
+      },
+      {
+        "id": 1722,
+        "credit_id": "52fe4253c3a36847f801576f",
+        "department": "Editing",
+        "name": "Craig Wood",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2215,
+        "credit_id": "52fe4253c3a36847f8015775",
+        "department": "Production",
+        "name": "Denise Chamian",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7146,
+        "credit_id": "52fe4253c3a36847f801577b",
+        "department": "Art",
+        "name": "Tom Duffield",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 115,
+  "spoken_languages": [
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 565,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Ring",
+  "overview": "It sounded like just another urban legend: A videotape filled with nightmarish images, leading to a phone call foretelling the viewer's death in exactly seven days. As a newspaper reporter, Rachel Keller was naturally skeptical of the story, until four teenagers all met with mysterious deaths exactly one week after watching just such a tape. Allowing her investigative curiosity to get the better of her, Rachel tracks down the video... and watches it. Now she has just seven days to unravel the mystery of the Ring.",
+  "production_companies": [
+    {
+      "id": 27,
+      "name": "DreamWorks SKG"
+    },
+    {
+      "id": 384,
+      "name": "MacDonald/Parkes Productions"
+    },
+    {
+      "id": 6363,
+      "name": "BenderSpink"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 14563,
+    "backdrop_path": null,
+    "name": "The Ring Collection",
+    "poster_path": "/xk4Yrpz00gxitMLCLCUVOjvmkOq.jpg"
+  },
+  "imdb_id": "tt0298130",
+  "release_date": "2002-10-18",
+  "original_title": "The Ring",
+  "vote_count": 187,
+  "poster_path": "/zMVpi0ohdlZw6st07SAbHYu7b9W.jpg",
+  "tagline": "Before you die, you see.",
+  "revenue": 249348933,
+  "popularity": "1.62634565650028"
+}

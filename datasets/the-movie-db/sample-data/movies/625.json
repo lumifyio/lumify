@@ -1,0 +1,282 @@
+{
+  "budget": 0,
+  "vote_average": 7.3,
+  "backdrop_path": "/nxwC5dVVHYSgKgApdRLWTBq04w2.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8975,
+        "order": 0,
+        "credit_id": "52fe4260c3a36847f80197e5",
+        "name": "Sam Waterston",
+        "cast_id": 16,
+        "profile_path": "/oAmu89fJ7jgc3tCuk4Xrf6R6POh.jpg",
+        "character": "Sydney Schanberg"
+      },
+      {
+        "id": 8976,
+        "order": 1,
+        "credit_id": "52fe4260c3a36847f80197e9",
+        "name": "Haing S. Ngor",
+        "cast_id": 17,
+        "profile_path": "/dwvHUD5Q85IgxvDSEFXUlTtQq61.jpg",
+        "character": "Dith Pran"
+      },
+      {
+        "id": 6949,
+        "order": 2,
+        "credit_id": "52fe4260c3a36847f80197ed",
+        "name": "John Malkovich",
+        "cast_id": 18,
+        "profile_path": "/tCtiWZbKKRgHhLxFCIPfveYAsdc.jpg",
+        "character": "Alan 'Al' Rockoff, Photographer"
+      },
+      {
+        "id": 6104,
+        "order": 3,
+        "credit_id": "52fe4260c3a36847f80197f1",
+        "name": "Julian Sands",
+        "cast_id": 19,
+        "profile_path": "/hDb4UlbeTvvVK53Cmh7W0Ijo41h.jpg",
+        "character": "Jon Swain"
+      },
+      {
+        "id": 8977,
+        "order": 4,
+        "credit_id": "52fe4260c3a36847f80197f5",
+        "name": "Craig T. Nelson",
+        "cast_id": 20,
+        "profile_path": "/mhKSd2uLhNX7TahlNhwJgDYMRwN.jpg",
+        "character": "Major Reeves, Military Attache"
+      },
+      {
+        "id": 8978,
+        "order": 5,
+        "credit_id": "52fe4260c3a36847f80197f9",
+        "name": "Spalding Gray",
+        "cast_id": 21,
+        "profile_path": "/q3kkmr5ars0K56OQq49MqZ9Orgo.jpg",
+        "character": "United States consul"
+      },
+      {
+        "id": 8979,
+        "order": 6,
+        "credit_id": "52fe4260c3a36847f80197fd",
+        "name": "Patrick Malahide",
+        "cast_id": 22,
+        "profile_path": "/1pULE6z24eKqrMsXN6BOca3bI7u.jpg",
+        "character": "Morgan"
+      },
+      {
+        "id": 8980,
+        "order": 7,
+        "credit_id": "52fe4260c3a36847f8019801",
+        "name": "Katherine Krapum Chey",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Ser Moeum: Dith Pran's wife"
+      },
+      {
+        "id": 8981,
+        "order": 8,
+        "credit_id": "52fe4260c3a36847f8019805",
+        "name": "Oliver Pierpaoli",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Titony: Dith Pran's son"
+      },
+      {
+        "id": 8982,
+        "order": 9,
+        "credit_id": "52fe4260c3a36847f8019809",
+        "name": "Edward Entero Chey",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Sarun, Sydney's Driver"
+      },
+      {
+        "id": 8983,
+        "order": 10,
+        "credit_id": "52fe4260c3a36847f801980d",
+        "name": "Monirak Sisowath",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Phat: Khmer Rouge leader: 2nd village"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8965,
+        "credit_id": "52fe4260c3a36847f801978d",
+        "department": "Directing",
+        "name": "Roland Joffé",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 8966,
+        "credit_id": "52fe4260c3a36847f8019793",
+        "department": "Writing",
+        "name": "Bruce Robinson",
+        "job": "Screenplay",
+        "profile_path": "/mImqLKRBNPUZz8dIAzoIvkADDwS.jpg"
+      },
+      {
+        "id": 8967,
+        "credit_id": "52fe4260c3a36847f8019799",
+        "department": "Production",
+        "name": "David Puttnam",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8374,
+        "credit_id": "52fe4260c3a36847f801979f",
+        "department": "Production",
+        "name": "Iain Smith",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8968,
+        "credit_id": "52fe4260c3a36847f80197a5",
+        "department": "Sound",
+        "name": "Mike Oldfield",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8969,
+        "credit_id": "52fe4260c3a36847f80197ab",
+        "department": "Camera",
+        "name": "Chris Menges",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 8970,
+        "credit_id": "52fe4260c3a36847f80197b1",
+        "department": "Editing",
+        "name": "Jim Clark",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3806,
+        "credit_id": "52fe4260c3a36847f80197b7",
+        "department": "Production",
+        "name": "Marion Dougherty",
+        "job": "Casting",
+        "profile_path": "/vHUj1WzotNrj9PTT6wJ1yhhULbD.jpg"
+      },
+      {
+        "id": 1302,
+        "credit_id": "52fe4260c3a36847f80197bd",
+        "department": "Production",
+        "name": "Susie Figgis",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 8971,
+        "credit_id": "52fe4260c3a36847f80197c3",
+        "department": "Production",
+        "name": "Pat Golden",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1046,
+        "credit_id": "52fe4260c3a36847f80197c9",
+        "department": "Production",
+        "name": "Juliet Taylor",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5022,
+        "credit_id": "52fe4260c3a36847f80197cf",
+        "department": "Art",
+        "name": "Roy Walker",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8936,
+        "credit_id": "52fe4260c3a36847f80197d5",
+        "department": "Art",
+        "name": "Roger Murray-Leach",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8973,
+        "credit_id": "52fe4260c3a36847f80197db",
+        "department": "Art",
+        "name": "Steve Spence",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8974,
+        "credit_id": "52fe4260c3a36847f80197e1",
+        "department": "Costume & Make-Up",
+        "name": "Judy Moorcroft",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 141,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    },
+    {
+      "iso_639_1": "km",
+      "name": ""
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 625,
+  "production_countries": [{
+    "name": "United Kingdom",
+    "iso_3166_1": "GB"
+  }],
+  "title": "The Killing Fields",
+  "overview": "The Killing Fields tells the real life story of a friendship between two journalists, an American and a Cambodian, during the bloody Khmer Rouge takeover of Cambodia in 1975, which lead to the death of 2-3 million Cambodians during the next four years, until Pol Pot's regime was toppled by the intervening Vietnamese in 1979.",
+  "production_companies": [{
+    "id": 7049,
+    "name": "Enigma Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0087553",
+  "release_date": "1984-11-02",
+  "original_title": "The Killing Fields",
+  "vote_count": 17,
+  "poster_path": "/pzSdpgnjJi79UboweTlFDQmRq7M.jpg",
+  "tagline": "",
+  "revenue": 34700291,
+  "popularity": "0.461643423257177"
+}

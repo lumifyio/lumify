@@ -1,0 +1,346 @@
+{
+  "budget": 6000000,
+  "vote_average": 7.7,
+  "backdrop_path": "/c7e3nH3wtSBDrHRB63onrGptl6D.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1979,
+        "order": 0,
+        "credit_id": "52fe4260c3a36847f8019af7",
+        "name": "Kevin Spacey",
+        "cast_id": 23,
+        "profile_path": "/951TgaxvcgbGE1wWEogePSPanoC.jpg",
+        "character": "Roger 'Verbal' Kint"
+      },
+      {
+        "id": 9045,
+        "order": 1,
+        "credit_id": "52fe4260c3a36847f8019ae7",
+        "name": "Stephen Baldwin",
+        "cast_id": 19,
+        "profile_path": "/u1pITf1MUXVbCdiJaFxbHEda1oQ.jpg",
+        "character": "Michael McManus"
+      },
+      {
+        "id": 5168,
+        "order": 2,
+        "credit_id": "52fe4260c3a36847f8019aeb",
+        "name": "Gabriel Byrne",
+        "cast_id": 20,
+        "profile_path": "/yQR6Exu12940oRXoCWmwULyWLP8.jpg",
+        "character": "Dean Keaton"
+      },
+      {
+        "id": 1121,
+        "order": 3,
+        "credit_id": "52fe4260c3a36847f8019aef",
+        "name": "Benicio del Toro",
+        "cast_id": 21,
+        "profile_path": "/cbkXDtNDFYHKsyQzqvzxjn7F7rX.jpg",
+        "character": "Fred Fenster"
+      },
+      {
+        "id": 7166,
+        "order": 4,
+        "credit_id": "52fe4260c3a36847f8019af3",
+        "name": "Kevin Pollak",
+        "cast_id": 22,
+        "profile_path": "/MczJhI5ustPAypTDBDKmYsfrfy.jpg",
+        "character": "Todd Hockney"
+      },
+      {
+        "id": 9046,
+        "order": 5,
+        "credit_id": "52fe4260c3a36847f8019afb",
+        "name": "Chazz Palminteri",
+        "cast_id": 24,
+        "profile_path": "/d9VkmkEO50zP0kww6aLLFpu5Ovh.jpg",
+        "character": "Dave Kujan, US Customs"
+      },
+      {
+        "id": 4935,
+        "order": 6,
+        "credit_id": "52fe4260c3a36847f8019aff",
+        "name": "Pete Postlethwaite",
+        "cast_id": 25,
+        "profile_path": "/5nbSzrwyDcLhC15buncGdrQqJ8e.jpg",
+        "character": "Kobayashi"
+      },
+      {
+        "id": 4808,
+        "order": 7,
+        "credit_id": "52fe4260c3a36847f8019b03",
+        "name": "Giancarlo Esposito",
+        "cast_id": 26,
+        "profile_path": "/d39hOi5lTfqekjFK4JKKPeuGNdW.jpg",
+        "character": "Jack Baer, FBI"
+      },
+      {
+        "id": 2179,
+        "order": 8,
+        "credit_id": "52fe4260c3a36847f8019b07",
+        "name": "Suzy Amis",
+        "cast_id": 27,
+        "profile_path": "/caqw60Y3qBMdlEPYr3ivZf9LAwC.jpg",
+        "character": "Edie Finneran"
+      },
+      {
+        "id": 6486,
+        "order": 9,
+        "credit_id": "52fe4260c3a36847f8019b0b",
+        "name": "Dan Hedaya",
+        "cast_id": 28,
+        "profile_path": "/nnPucf3vQT9RasJYrBhZQF1KPoJ.jpg",
+        "character": "Sgt. Jeffrey Jeff Rabin"
+      },
+      {
+        "id": 9047,
+        "order": 10,
+        "credit_id": "52fe4260c3a36847f8019b0f",
+        "name": "Christine Estabrook",
+        "cast_id": 29,
+        "profile_path": "/882AVj0d1m7A0DoBF5GYr3v7lqf.jpg",
+        "character": "Dr. Plummer"
+      },
+      {
+        "id": 9048,
+        "order": 11,
+        "credit_id": "52fe4260c3a36847f8019b13",
+        "name": "Clark Gregg",
+        "cast_id": 30,
+        "profile_path": "/t8CLS2Zcy7IjcZkE1vtxl40h9rh.jpg",
+        "character": "Dr. Walters"
+      },
+      {
+        "id": 3218,
+        "order": 12,
+        "credit_id": "52fe4260c3a36847f8019b17",
+        "name": "Louis Lombardi",
+        "cast_id": 31,
+        "profile_path": "/xQxODNK3RKu0DZvJYQKBLamSmad.jpg",
+        "character": "Strausz"
+      },
+      {
+        "id": 101377,
+        "order": 13,
+        "credit_id": "52fe4260c3a36847f8019b1b",
+        "name": "Paul Bartel",
+        "cast_id": 32,
+        "profile_path": "/7Kj1Y9V8lfnFXHkjf30H8d3ylQA.jpg",
+        "character": "Smuggler"
+      },
+      {
+        "id": 11803,
+        "order": 14,
+        "credit_id": "52fe4260c3a36847f8019b1f",
+        "name": "Peter Greene",
+        "cast_id": 33,
+        "profile_path": "/6jUi6c9bH8bubXerrpidGpbdYen.jpg",
+        "character": "Redfoot the Fence"
+      }
+    ],
+    "crew": [
+      {
+        "id": 9032,
+        "credit_id": "52fe4260c3a36847f8019a7d",
+        "department": "Directing",
+        "name": "Bryan Singer",
+        "job": "Director",
+        "profile_path": "/fgWDpSgXmkxyc2B57PUkQrBYRyF.jpg"
+      },
+      {
+        "id": 9033,
+        "credit_id": "52fe4260c3a36847f8019a83",
+        "department": "Writing",
+        "name": "Christopher McQuarrie",
+        "job": "Screenplay",
+        "profile_path": "/8R89a58B7B3jmU3v4clIheaxD4k.jpg"
+      },
+      {
+        "id": 9032,
+        "credit_id": "52fe4260c3a36847f8019a89",
+        "department": "Production",
+        "name": "Bryan Singer",
+        "job": "Producer",
+        "profile_path": "/fgWDpSgXmkxyc2B57PUkQrBYRyF.jpg"
+      },
+      {
+        "id": 9034,
+        "credit_id": "52fe4260c3a36847f8019a8f",
+        "department": "Production",
+        "name": "Michael McDonnell",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9035,
+        "credit_id": "52fe4260c3a36847f8019a95",
+        "department": "Production",
+        "name": "Kenneth Kokin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4584,
+        "credit_id": "52fe4260c3a36847f8019a9b",
+        "department": "Production",
+        "name": "Robert Jones",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9036,
+        "credit_id": "52fe4260c3a36847f8019aa1",
+        "department": "Production",
+        "name": "Art Horan",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9037,
+        "credit_id": "52fe4260c3a36847f8019aa7",
+        "department": "Production",
+        "name": "François Duplat",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9038,
+        "credit_id": "52fe4260c3a36847f8019aad",
+        "department": "Production",
+        "name": "Hans Brockmann",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9039,
+        "credit_id": "52fe4260c3a36847f8019ab3",
+        "department": "Sound",
+        "name": "John Ottman",
+        "job": "Original Music Composer",
+        "profile_path": "/7J5J1azmikA9W0ICS0VtKZkc7VV.jpg"
+      },
+      {
+        "id": 9040,
+        "credit_id": "52fe4260c3a36847f8019ab9",
+        "department": "Camera",
+        "name": "Newton Thomas Sigel",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 9039,
+        "credit_id": "52fe4260c3a36847f8019abf",
+        "department": "Editing",
+        "name": "John Ottman",
+        "job": "Editor",
+        "profile_path": "/7J5J1azmikA9W0ICS0VtKZkc7VV.jpg"
+      },
+      {
+        "id": 6410,
+        "credit_id": "52fe4260c3a36847f8019ac5",
+        "department": "Production",
+        "name": "Francine Maisler",
+        "job": "Casting",
+        "profile_path": "/7kOKhRSuwDXqyd2Dm2xdWdi18lQ.jpg"
+      },
+      {
+        "id": 9041,
+        "credit_id": "52fe4260c3a36847f8019acb",
+        "department": "Art",
+        "name": "Howard Cummings",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8221,
+        "credit_id": "52fe4260c3a36847f8019ad1",
+        "department": "Art",
+        "name": "David Lazan",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9042,
+        "credit_id": "52fe4260c3a36847f8019ad7",
+        "department": "Art",
+        "name": "Sara Andrews",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9043,
+        "credit_id": "52fe4260c3a36847f8019add",
+        "department": "Costume & Make-Up",
+        "name": "Louise Mingenbach",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 9044,
+        "credit_id": "52fe4260c3a36847f8019ae3",
+        "department": "Production",
+        "name": "Vicky Herman",
+        "job": "Production Supervisor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 106,
+  "spoken_languages": [
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 629,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Usual Suspects",
+  "overview": "Following a truck hijack in New York, five conmen are arrested and brought together for questioning. As none of them is guilty, they plan a revenge operation against the police. The operation goes well, but then the influence of a legendary mastermind criminal called Keyser Söze is felt. It becomes clear that each one of them has wronged Söze at some point and must pay back now. The payback job leaves 27 men dead in a boat explosion, but the real question arises now: Who actually is Keyser Söze?",
+  "production_companies": [{
+    "id": 1382,
+    "name": "PolyGram Filmed Entertainment"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0114814",
+  "release_date": "1995-08-16",
+  "original_title": "The Usual Suspects",
+  "vote_count": 727,
+  "poster_path": "/jgJoRWltoS17nD5MAQ1yK2Ztefw.jpg",
+  "tagline": "Five Criminals . One Line Up . No Coincidence.",
+  "revenue": 23341568,
+  "popularity": "2.16198458124214"
+}

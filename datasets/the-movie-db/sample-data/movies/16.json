@@ -1,0 +1,481 @@
+{
+  "budget": 0,
+  "vote_average": 7.6,
+  "backdrop_path": "/2PaYKVhagjRwZ4KU914Ohmo1uOO.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 47,
+        "order": 0,
+        "credit_id": "52fe420fc3a36847f8000a17",
+        "name": "Björk",
+        "cast_id": 33,
+        "profile_path": "/6O1UQBeMN1p5LMqCgMajvihe3KI.jpg",
+        "character": "Selma Jezkova"
+      },
+      {
+        "id": 50,
+        "order": 1,
+        "credit_id": "52fe420ec3a36847f8000985",
+        "name": "Catherine Deneuve",
+        "cast_id": 2,
+        "profile_path": "/mes3jMqmUwUE5qPv9ZUJ0GlQghb.jpg",
+        "character": "Kathy"
+      },
+      {
+        "id": 52,
+        "order": 2,
+        "credit_id": "52fe420ec3a36847f8000989",
+        "name": "David Morse",
+        "cast_id": 3,
+        "profile_path": "/9HbsItGl8Zw4U4SVyA4TfC9t6Am.jpg",
+        "character": "Bill Houston"
+      },
+      {
+        "id": 53,
+        "order": 3,
+        "credit_id": "52fe420ec3a36847f800098d",
+        "name": "Peter Stormare",
+        "cast_id": 4,
+        "profile_path": "/dDR0brp5L7fXDyEywrhjQv01LSg.jpg",
+        "character": "Jeff"
+      },
+      {
+        "id": 6748,
+        "order": 4,
+        "credit_id": "52fe420ec3a36847f800099d",
+        "name": "Joel Grey",
+        "cast_id": 7,
+        "profile_path": "/yCLwC64GVp96bNi7eTPT0VPmjON.jpg",
+        "character": "Oldrich Novy"
+      },
+      {
+        "id": 2617,
+        "order": 5,
+        "credit_id": "52fe420ec3a36847f80009a1",
+        "name": "Cara Seymour",
+        "cast_id": 8,
+        "profile_path": "/d1Svp0CCc9kad2mCxKn3L6VZrcq.jpg",
+        "character": "Linda Houston"
+      },
+      {
+        "id": 6749,
+        "order": 6,
+        "credit_id": "52fe420ec3a36847f80009a5",
+        "name": "Vladica Kostic",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Gene Jezkova"
+      },
+      {
+        "id": 1642,
+        "order": 7,
+        "credit_id": "52fe420ec3a36847f80009a9",
+        "name": "Jean-Marc Barr",
+        "cast_id": 10,
+        "profile_path": "/b3E5gzQf1NmivNY2rHO8HJHs6bZ.jpg",
+        "character": "Norman"
+      },
+      {
+        "id": 6750,
+        "order": 8,
+        "credit_id": "52fe420ec3a36847f80009ad",
+        "name": "Vincent Paterson",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Samuel"
+      },
+      {
+        "id": 6751,
+        "order": 9,
+        "credit_id": "52fe420ec3a36847f80009b1",
+        "name": "Siobhan Fallon",
+        "cast_id": 12,
+        "profile_path": "/eRQ5PAXOzrD3Ej4xlkp0RaK8WiZ.jpg",
+        "character": "Brenda"
+      },
+      {
+        "id": 6752,
+        "order": 10,
+        "credit_id": "52fe420ec3a36847f80009b5",
+        "name": "Željko Ivanek",
+        "cast_id": 13,
+        "profile_path": "/bQbyb11FgEPwNSfFeb6ChTfkqEM.jpg",
+        "character": "District Attorney"
+      },
+      {
+        "id": 1646,
+        "order": 11,
+        "credit_id": "52fe420ec3a36847f80009b9",
+        "name": "Udo Kier",
+        "cast_id": 14,
+        "profile_path": "/7uCwKrzoUUkQ3hjeui8IRsfGjZ1.jpg",
+        "character": "Dr. Porkorny"
+      },
+      {
+        "id": 6121,
+        "order": 12,
+        "credit_id": "52fe420ec3a36847f80009bd",
+        "name": "Jens Albinus",
+        "cast_id": 15,
+        "profile_path": "/9CgGf30xp3hreseXoQd3qCQV1cY.jpg",
+        "character": "Morty"
+      },
+      {
+        "id": 6753,
+        "order": 13,
+        "credit_id": "52fe420ec3a36847f80009c1",
+        "name": "Reathel Bean",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Judge"
+      },
+      {
+        "id": 6754,
+        "order": 14,
+        "credit_id": "52fe420ec3a36847f80009c5",
+        "name": "Mette Berggreen",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Receptionist"
+      },
+      {
+        "id": 6755,
+        "order": 15,
+        "credit_id": "52fe420ec3a36847f80009c9",
+        "name": "Lars Michael Dinesen",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Defense Attorney"
+      },
+      {
+        "id": 6756,
+        "order": 16,
+        "credit_id": "52fe420ec3a36847f80009cd",
+        "name": "Katrine Falkenberg",
+        "cast_id": 19,
+        "profile_path": "/vHpgl8FBvEadVJYQfMsWKNTR635.jpg",
+        "character": "Suzan"
+      },
+      {
+        "id": 6757,
+        "order": 17,
+        "credit_id": "52fe420ec3a36847f80009d1",
+        "name": "Michael Flessas",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Angry Man"
+      },
+      {
+        "id": 6758,
+        "order": 18,
+        "credit_id": "52fe420ec3a36847f80009d5",
+        "name": "John Randolph Jones",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Detective"
+      },
+      {
+        "id": 1640,
+        "order": 19,
+        "credit_id": "52fe420ec3a36847f80009d9",
+        "name": "Stellan Skarsgård",
+        "cast_id": 22,
+        "profile_path": "/hjWdhX7zEI0DkF7gA4hcEVcYCZl.jpg",
+        "character": "Doctor"
+      },
+      {
+        "id": 4458,
+        "order": 20,
+        "credit_id": "52fe420ec3a36847f80009dd",
+        "name": "Paprika Steen",
+        "cast_id": 23,
+        "profile_path": "/7iz6g2gXDCVL9LFjqmVV8KwGvNP.jpg",
+        "character": "Woman on Night Shift"
+      }
+    ],
+    "crew": [
+      {
+        "id": 42,
+        "credit_id": "52fe420ec3a36847f8000981",
+        "department": "Directing",
+        "name": "Lars von Trier",
+        "job": "Director",
+        "profile_path": "/zVINg5oIjpSIchNaTWyMPWQKrvm.jpg"
+      },
+      {
+        "id": 42,
+        "credit_id": "52fe420ec3a36847f8000993",
+        "department": "Writing",
+        "name": "Lars von Trier",
+        "job": "Author",
+        "profile_path": "/zVINg5oIjpSIchNaTWyMPWQKrvm.jpg"
+      },
+      {
+        "id": 6146,
+        "credit_id": "52fe420ec3a36847f8000999",
+        "department": "Production",
+        "name": "Vibeke Windeløv",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1174,
+        "credit_id": "52fe420fc3a36847f80009e3",
+        "department": "Production",
+        "name": "Peter Aalbæk Jensen",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6759,
+        "credit_id": "52fe420fc3a36847f80009e9",
+        "department": "Production",
+        "name": "Friðrik Þór Friðriksson",
+        "job": "Producer",
+        "profile_path": "/nNxTNTII7kwHfcvykLvV0EzekVq.jpg"
+      },
+      {
+        "id": 6760,
+        "credit_id": "52fe420fc3a36847f80009ef",
+        "department": "Production",
+        "name": "Finn Gjerdrum",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6761,
+        "credit_id": "52fe420fc3a36847f80009f5",
+        "department": "Production",
+        "name": "Mogens Glad",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6762,
+        "credit_id": "52fe420fc3a36847f80009fb",
+        "department": "Production",
+        "name": "Anja Grafers",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6763,
+        "credit_id": "52fe420fc3a36847f8000a01",
+        "department": "Production",
+        "name": "Torleif Hauge",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6764,
+        "credit_id": "52fe420fc3a36847f8000a07",
+        "department": "Production",
+        "name": "Tero Kaukomaa",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6765,
+        "credit_id": "52fe420fc3a36847f8000a0d",
+        "department": "Production",
+        "name": "Poul Erik Lindeborg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6766,
+        "credit_id": "52fe420fc3a36847f8000a13",
+        "department": "Production",
+        "name": "Els Vandevorst",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1632,
+        "credit_id": "52fe420fc3a36847f8000a1d",
+        "department": "Camera",
+        "name": "Robby Müller",
+        "job": "Director of Photography",
+        "profile_path": "/p5PQzNa7DHY8VfulFYmRH4XqLZF.jpg"
+      },
+      {
+        "id": 6794,
+        "credit_id": "52fe420fc3a36847f8000a23",
+        "department": "Editing",
+        "name": "François Gédigier",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6156,
+        "credit_id": "52fe420fc3a36847f8000a29",
+        "department": "Editing",
+        "name": "Molly Marlene Stensgård",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2952,
+        "credit_id": "52fe420fc3a36847f8000a2f",
+        "department": "Production",
+        "name": "Avy Kaufman",
+        "job": "Casting",
+        "profile_path": "/yQPGktsmkKkhkOQAUlmYlxHJOiJ.jpg"
+      },
+      {
+        "id": 6795,
+        "credit_id": "52fe420fc3a36847f8000a35",
+        "department": "Art",
+        "name": "Karl Júlíusson",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6797,
+        "credit_id": "52fe420fc3a36847f8000a3b",
+        "department": "Costume & Make-Up",
+        "name": "Manon Rasmussen",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6157,
+        "credit_id": "52fe420fc3a36847f8000a41",
+        "department": "Sound",
+        "name": "Kristian Eidnes Andersen",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 6796,
+        "credit_id": "52fe420fc3a36847f8000a47",
+        "department": "Art",
+        "name": "Peter Grant",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 42,
+        "credit_id": "52fe420fc3a36847f8000a4d",
+        "department": "Writing",
+        "name": "Lars von Trier",
+        "job": "Screenplay",
+        "profile_path": "/zVINg5oIjpSIchNaTWyMPWQKrvm.jpg"
+      }
+    ]
+  },
+  "runtime": 140,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 16,
+  "production_countries": [{
+    "name": "Sweden",
+    "iso_3166_1": "SE"
+  }],
+  "title": "Dancer in the Dark",
+  "overview": "Selma, a Czech immigrant on the verge of blindness, struggles to make ends meet for herself and her son, who has inherited the same genetic disorder and will suffer the same fate without an expensive operation. When life gets too difficult, Selma learns to cope through her love of musicals, escaping life's troubles - even if just for a moment - by dreaming up little numbers to the rhythmic beats of her surroundings.",
+  "production_companies": [
+    {
+      "id": 8,
+      "name": "Fine Line Features"
+    },
+    {
+      "id": 76,
+      "name": "Zentropa Entertainments"
+    },
+    {
+      "id": 6417,
+      "name": "Film i Väst"
+    },
+    {
+      "id": 7330,
+      "name": "Blind Spot Pictures Oy"
+    },
+    {
+      "id": 591,
+      "name": "France 3 Cinéma"
+    },
+    {
+      "id": 119,
+      "name": "Danmarks Radio (DR)"
+    },
+    {
+      "id": 6916,
+      "name": "Arte France Cinéma"
+    },
+    {
+      "id": 2996,
+      "name": "Angel films"
+    },
+    {
+      "id": 5358,
+      "name": "Canal+"
+    },
+    {
+      "id": 5755,
+      "name": "Constantin Film Produktion"
+    },
+    {
+      "id": 4524,
+      "name": "TV 1000"
+    },
+    {
+      "id": 8659,
+      "name": "Vrijzinnig Protestantse Radio Omroep (VPRO)"
+    },
+    {
+      "id": 7025,
+      "name": "Westdeutscher Rundfunk (WDR)"
+    },
+    {
+      "id": 5975,
+      "name": "Yleisradio (YLE)"
+    },
+    {
+      "id": 321,
+      "name": "Memfis Film"
+    },
+    {
+      "id": 3221,
+      "name": "Sveriges Television (SVT)"
+    },
+    {
+      "id": 9349,
+      "name": "Film4"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 498,
+    "backdrop_path": "/9TSxhVABUzJqUv0dINNT91ymdyk.jpg",
+    "name": "Heart of Gold Collection",
+    "poster_path": "/cwrmUIVzOuR9FdqKBfERkMHdde0.jpg"
+  },
+  "imdb_id": "tt0168629",
+  "release_date": "2000-09-22",
+  "original_title": "Dancer in the Dark",
+  "vote_count": 51,
+  "poster_path": "/nptwajMLEeMd9Yw7ZqAHotLne9j.jpg",
+  "tagline": "You don't need eyes to see.",
+  "revenue": 0,
+  "popularity": "0.86069618895482"
+}

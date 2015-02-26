@@ -1,0 +1,392 @@
+{
+  "budget": 0,
+  "vote_average": 7.8,
+  "backdrop_path": "/u2YXzSieIsDUZnhPpoytNJiTwyt.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2201,
+        "order": 0,
+        "credit_id": "52fe4249c3a36847f80127d9",
+        "name": "Max von Sydow",
+        "cast_id": 10,
+        "profile_path": "/kCdNYfUlswqjDYhnE54kMoDHWTp.jpg",
+        "character": "Antonius Block"
+      },
+      {
+        "id": 6649,
+        "order": 1,
+        "credit_id": "52fe4249c3a36847f80127ab",
+        "name": "Gunnar Björnstrand",
+        "cast_id": 2,
+        "profile_path": "/AiGcTLr6uQXjtKxh2CMOOIfXEW1.jpg",
+        "character": "Jöns"
+      },
+      {
+        "id": 6656,
+        "order": 2,
+        "credit_id": "52fe4249c3a36847f80127dd",
+        "name": "Bengt Ekerot",
+        "cast_id": 11,
+        "profile_path": "/nxHqm16Oo3mDYrQnPemGqbbwk9Z.jpg",
+        "character": "Death"
+      },
+      {
+        "id": 6658,
+        "order": 3,
+        "credit_id": "52fe4249c3a36847f80127e5",
+        "name": "Nils Poppe",
+        "cast_id": 13,
+        "profile_path": "/78c1QHlrGi8l9ie7s1wD1h1XzmA.jpg",
+        "character": "Jof"
+      },
+      {
+        "id": 6657,
+        "order": 4,
+        "credit_id": "52fe4249c3a36847f80127e1",
+        "name": "Bibi Andersson",
+        "cast_id": 12,
+        "profile_path": "/wIC6RwWanSpubtdjCbB6IGQN4AP.jpg",
+        "character": "Mia"
+      },
+      {
+        "id": 6659,
+        "order": 5,
+        "credit_id": "52fe4249c3a36847f80127e9",
+        "name": "Inga Gill",
+        "cast_id": 14,
+        "profile_path": "/sHkBJzKCgQEHJTiRzX7XrZ1H3UD.jpg",
+        "character": "Lisa, Plog's wife"
+      },
+      {
+        "id": 6660,
+        "order": 6,
+        "credit_id": "52fe4249c3a36847f80127ed",
+        "name": "Maud Hansson",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Witch"
+      },
+      {
+        "id": 6661,
+        "order": 7,
+        "credit_id": "52fe4249c3a36847f80127f1",
+        "name": "Inga Landgré",
+        "cast_id": 16,
+        "profile_path": "/tTMBmDtvEBNOGl9JpvV9WXAqYw2.jpg",
+        "character": "Karin, Block's wife"
+      },
+      {
+        "id": 6662,
+        "order": 8,
+        "credit_id": "52fe4249c3a36847f80127f5",
+        "name": "Gunnel Lindblom",
+        "cast_id": 17,
+        "profile_path": "/pvyxNIdjoNBPGT3Ig8cKu97yTXo.jpg",
+        "character": "Mute girl"
+      },
+      {
+        "id": 6663,
+        "order": 9,
+        "credit_id": "52fe4249c3a36847f80127f9",
+        "name": "Bertil Anderberg",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Raval"
+      },
+      {
+        "id": 6664,
+        "order": 10,
+        "credit_id": "52fe4249c3a36847f80127fd",
+        "name": "Anders Ek",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Monk"
+      },
+      {
+        "id": 6665,
+        "order": 11,
+        "credit_id": "52fe4249c3a36847f8012801",
+        "name": "Åke Fridell",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Plog the smith"
+      },
+      {
+        "id": 6666,
+        "order": 12,
+        "credit_id": "52fe4249c3a36847f8012805",
+        "name": "Gunnar Olsson",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Albertus Pictor, church painter"
+      },
+      {
+        "id": 6667,
+        "order": 13,
+        "credit_id": "52fe4249c3a36847f8012809",
+        "name": "Erik Strandmark",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Jonas Skat"
+      },
+      {
+        "id": 403150,
+        "order": 14,
+        "credit_id": "52fe4249c3a36847f801280d",
+        "name": "Sten Ardenstam",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Knight (uncredited)"
+      },
+      {
+        "id": 58305,
+        "order": 15,
+        "credit_id": "52fe4249c3a36847f8012811",
+        "name": "Gudrun Brost",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Woman at inn (uncredited)"
+      },
+      {
+        "id": 231921,
+        "order": 16,
+        "credit_id": "52fe4249c3a36847f8012815",
+        "name": "Lars Lind",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "The young monk (uncredited)"
+      },
+      {
+        "id": 550014,
+        "order": 17,
+        "credit_id": "52fe4249c3a36847f8012819",
+        "name": "Benkt-Åke Benktsson",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Merchant at the inn (uncredited)"
+      },
+      {
+        "id": 321845,
+        "order": 18,
+        "credit_id": "52fe4249c3a36847f801281d",
+        "name": "Tor Borong",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Farmer at the inn (uncredited)"
+      },
+      {
+        "id": 1194870,
+        "order": 19,
+        "credit_id": "52fe4249c3a36847f8012821",
+        "name": "Harry Asklund",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "The landlord (uncredited)"
+      },
+      {
+        "id": 1194871,
+        "order": 20,
+        "credit_id": "52fe4249c3a36847f8012825",
+        "name": "Tommy Karlsson",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Mikael, Jof and Maria's son (uncredited)"
+      },
+      {
+        "id": 34774,
+        "order": 21,
+        "credit_id": "52fe4249c3a36847f8012829",
+        "name": "Gösta Prüzelius",
+        "cast_id": 30,
+        "profile_path": "/q0q00ZlAmPnEjZn2KDnKvfzeUYG.jpg",
+        "character": "Man (uncredited)"
+      },
+      {
+        "id": 244278,
+        "order": 22,
+        "credit_id": "52fe4249c3a36847f801282d",
+        "name": "Tor Isedal",
+        "cast_id": 31,
+        "profile_path": "/7pbBfMkJlH0Crq3K8QHRERKJLNw.jpg",
+        "character": "Man (uncredited)"
+      },
+      {
+        "id": 32729,
+        "order": 23,
+        "credit_id": "52fe4249c3a36847f8012831",
+        "name": "Mona Malm",
+        "cast_id": 32,
+        "profile_path": "/tckU77KETSkD0y2Ci0mUP3TaiYI.jpg",
+        "character": "Young pregnant woman (uncredited)"
+      },
+      {
+        "id": 1194872,
+        "order": 24,
+        "credit_id": "52fe4249c3a36847f8012835",
+        "name": "Josef Norman",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Old man at the inn (uncredited)"
+      },
+      {
+        "id": 1194873,
+        "order": 25,
+        "credit_id": "52fe4249c3a36847f8012839",
+        "name": "Fritjof Tall",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Man (uncredited)"
+      },
+      {
+        "id": 1186207,
+        "order": 26,
+        "credit_id": "52fe4249c3a36847f801283d",
+        "name": "Catherine Berg",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Young woman kneeling for the flagellants (uncredited)"
+      },
+      {
+        "id": 1194874,
+        "order": 27,
+        "credit_id": "52fe4249c3a36847f8012841",
+        "name": "Lena Bergman",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Young woman kneeling for the flagellants (uncredited)"
+      },
+      {
+        "id": 131579,
+        "order": 28,
+        "credit_id": "52fe4249c3a36847f8012845",
+        "name": "Ulf Johanson",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Knight Commander (uncredited)"
+      },
+      {
+        "id": 1194875,
+        "order": 29,
+        "credit_id": "52fe4249c3a36847f8012849",
+        "name": "Gordon Löwenadler",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Knight (uncredited)"
+      },
+      {
+        "id": 1194876,
+        "order": 30,
+        "credit_id": "52fe4249c3a36847f801284d",
+        "name": "Nils Whiten",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Old man addressed by the monk (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6648,
+        "credit_id": "52fe4249c3a36847f80127a7",
+        "department": "Directing",
+        "name": "Ingmar Bergman",
+        "job": "Director",
+        "profile_path": "/rHYYP3N2ivz6WTuTHsLX58Gab7G.jpg"
+      },
+      {
+        "id": 6650,
+        "credit_id": "52fe4249c3a36847f80127b1",
+        "department": "Production",
+        "name": "Allan Ekelund",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6651,
+        "credit_id": "52fe4249c3a36847f80127b7",
+        "department": "Sound",
+        "name": "Erik Nordgren",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6652,
+        "credit_id": "52fe4249c3a36847f80127bd",
+        "department": "Camera",
+        "name": "Gunnar Fischer",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6653,
+        "credit_id": "52fe4249c3a36847f80127c3",
+        "department": "Editing",
+        "name": "Lennart Wallén",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6654,
+        "credit_id": "52fe4249c3a36847f80127c9",
+        "department": "Art",
+        "name": "P.A. Lundgren",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6655,
+        "credit_id": "52fe4249c3a36847f80127cf",
+        "department": "Costume & Make-Up",
+        "name": "Manne Lindholm",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6648,
+        "credit_id": "52fe4249c3a36847f80127d5",
+        "department": "Writing",
+        "name": "Ingmar Bergman",
+        "job": "Screenplay",
+        "profile_path": "/rHYYP3N2ivz6WTuTHsLX58Gab7G.jpg"
+      }
+    ]
+  },
+  "runtime": 97,
+  "spoken_languages": [{
+    "iso_639_1": "sv",
+    "name": "svenska"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 490,
+  "production_countries": [{
+    "name": "Sweden",
+    "iso_3166_1": "SE"
+  }],
+  "title": "The Seventh Seal",
+  "overview": "Ingmar Bergmann\u2019s masterpiece film about confronting death. Death comes to a knight upon his arrival from battle and attempts to take him away. The knight challenges Death to a chess match as the people around them are haunted by the plague. The Seventh Seal comes from a riddle about crusaders who arrive home after a few years to find their people affected by the plague.",
+  "production_companies": [{
+    "id": 6416,
+    "name": "Svensk Filmindustri"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0050976",
+  "release_date": "1957-02-16",
+  "original_title": "Det sjunde inseglet",
+  "vote_count": 90,
+  "poster_path": "/pIt6yOdFGoZ7yj9NdclYYhnZEQT.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "1.15214796545976"
+}

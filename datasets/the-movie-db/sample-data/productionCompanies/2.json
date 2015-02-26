@@ -1,0 +1,13 @@
+{
+  "id": 2,
+  "logo_path": "/jGaqSWErdoohxIi6Y6wpd9xPPVt.png",
+  "description": null,
+  "name": "Walt Disney Pictures",
+  "parent_company": {
+    "id": 10079,
+    "logo_path": null,
+    "name": "The Walt Disney Company"
+  },
+  "homepage": "http://www.disneypictures.com/",
+  "headquarters": "Burbank, California"
+}

@@ -1,0 +1,368 @@
+{
+  "budget": 0,
+  "vote_average": 9,
+  "backdrop_path": "/tboLeHSCEh85EHrNxqAKF9oDSUM.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 7107,
+        "order": 0,
+        "credit_id": "52fe424cc3a36847f80135e7",
+        "name": "Daniel Olbrychski",
+        "cast_id": 20,
+        "profile_path": "/nfqJ8xiVNyBQQhnYRkwJzl3iS7s.jpg",
+        "character": "Karol Borowiecki"
+      },
+      {
+        "id": 7108,
+        "order": 1,
+        "credit_id": "52fe424cc3a36847f80135eb",
+        "name": "Wojciech Pszoniak",
+        "cast_id": 21,
+        "profile_path": "/bE7dvJ55cEqnVOrQFzMqohmyyQi.jpg",
+        "character": "Moryc Welt"
+      },
+      {
+        "id": 2829,
+        "order": 2,
+        "credit_id": "52fe424cc3a36847f80135ef",
+        "name": "Andrzej Seweryn",
+        "cast_id": 22,
+        "profile_path": "/aSFdg0xq0qZaFnbuAAg9iGr021d.jpg",
+        "character": "Maks Baum"
+      },
+      {
+        "id": 7109,
+        "order": 3,
+        "credit_id": "52fe424cc3a36847f80135f3",
+        "name": "Kalina Jędrusik",
+        "cast_id": 23,
+        "profile_path": "/aKf3J0sRsaUTBZ9eCuJei0s0RSz.jpg",
+        "character": "Lucy Zuckerowa"
+      },
+      {
+        "id": 7110,
+        "order": 4,
+        "credit_id": "52fe424cc3a36847f80135f7",
+        "name": "Anna Nehrebecka",
+        "cast_id": 24,
+        "profile_path": "/3p1fEiMguEpARB2gpWnQmlwvAzu.jpg",
+        "character": "Anka"
+      },
+      {
+        "id": 7111,
+        "order": 5,
+        "credit_id": "52fe424cc3a36847f80135fb",
+        "name": "Bożena Dykiel",
+        "cast_id": 25,
+        "profile_path": "/52zo2dTAKyeXcuIGIFNhqPrhblk.jpg",
+        "character": "Mada Müller"
+      },
+      {
+        "id": 7112,
+        "order": 6,
+        "credit_id": "52fe424cc3a36847f80135ff",
+        "name": "Andrzej Szalawski",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Herman Bucholz"
+      },
+      {
+        "id": 7113,
+        "order": 7,
+        "credit_id": "52fe424cc3a36847f8013603",
+        "name": "Stanislaw Igar",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Grünspan"
+      },
+      {
+        "id": 7114,
+        "order": 8,
+        "credit_id": "52fe424cc3a36847f8013607",
+        "name": "Franciszek Pieczka",
+        "cast_id": 28,
+        "profile_path": "/7kNnUmgf2Ut3TqXeFHCQ7MPTqD1.jpg",
+        "character": "Müller"
+      },
+      {
+        "id": 7115,
+        "order": 9,
+        "credit_id": "52fe424cc3a36847f801360b",
+        "name": "Kazimierz Opaliński",
+        "cast_id": 29,
+        "profile_path": "/2IhcreENFSleYIw2HQ10qzYQa8j.jpg",
+        "character": "Maks' Father"
+      },
+      {
+        "id": 7116,
+        "order": 10,
+        "credit_id": "52fe424cc3a36847f801360f",
+        "name": "Andrzej Łapicki",
+        "cast_id": 30,
+        "profile_path": "/bVh4UACWQZk6kijsleqQrZ6sZFt.jpg",
+        "character": "Trawinski"
+      },
+      {
+        "id": 7117,
+        "order": 11,
+        "credit_id": "52fe424cc3a36847f8013613",
+        "name": "Wojciech Siemion",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Wilczek"
+      },
+      {
+        "id": 7118,
+        "order": 12,
+        "credit_id": "52fe424cc3a36847f8013617",
+        "name": "Tadeusz Białoszczyński",
+        "cast_id": 32,
+        "profile_path": "/c0a0gJJsuKN47KBvmdw4hYOe9k1.jpg",
+        "character": "Karol's Father"
+      },
+      {
+        "id": 1405,
+        "order": 13,
+        "credit_id": "52fe424cc3a36847f801361b",
+        "name": "Zbigniew Zapasiewicz",
+        "cast_id": 33,
+        "profile_path": "/xg2g7q0oAsbAZI40zgt78QBWbaS.jpg",
+        "character": "Kessler"
+      },
+      {
+        "id": 7119,
+        "order": 14,
+        "credit_id": "52fe424cc3a36847f801361f",
+        "name": "Jerzy Nowak",
+        "cast_id": 34,
+        "profile_path": "/b1td2cfJhlxEG7QEijf3c6e2mCi.jpg",
+        "character": "Zucker"
+      },
+      {
+        "id": 7120,
+        "order": 15,
+        "credit_id": "52fe424cc3a36847f8013623",
+        "name": "Piotr Fronczewski",
+        "cast_id": 35,
+        "profile_path": "/9qj9q3mU4aDyTUutctrVftssImh.jpg",
+        "character": "Horn"
+      },
+      {
+        "id": 7121,
+        "order": 16,
+        "credit_id": "52fe424cc3a36847f8013627",
+        "name": "Jerzy Zelnik",
+        "cast_id": 36,
+        "profile_path": "/vloh0dybT5k9VK7mBNdWSBhwNNf.jpg",
+        "character": "Stein"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2801,
+        "credit_id": "52fe424cc3a36847f801357d",
+        "department": "Directing",
+        "name": "Andrzej Wajda",
+        "job": "Director",
+        "profile_path": "/5jWSUFlAe8YedXLHWg54kIQlZdw.jpg"
+      },
+      {
+        "id": 7091,
+        "credit_id": "52fe424cc3a36847f8013583",
+        "department": "Writing",
+        "name": "Władysław Stanisław Reymont",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 2801,
+        "credit_id": "52fe424cc3a36847f8013589",
+        "department": "Writing",
+        "name": "Andrzej Wajda",
+        "job": "Screenplay",
+        "profile_path": "/5jWSUFlAe8YedXLHWg54kIQlZdw.jpg"
+      },
+      {
+        "id": 1400,
+        "credit_id": "52fe424cc3a36847f801358f",
+        "department": "Sound",
+        "name": "Wojciech Kilar",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7092,
+        "credit_id": "52fe424cc3a36847f8013595",
+        "department": "Camera",
+        "name": "Waclaw Dybowski",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7094,
+        "credit_id": "52fe424cc3a36847f801359b",
+        "department": "Camera",
+        "name": "Witold Sobocinski",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7095,
+        "credit_id": "52fe424cc3a36847f80135a1",
+        "department": "Editing",
+        "name": "Zofia Dwornik",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7096,
+        "credit_id": "52fe424cc3a36847f80135a7",
+        "department": "Editing",
+        "name": "Halina Prugar-Ketling",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7097,
+        "credit_id": "52fe424cc3a36847f80135ad",
+        "department": "Art",
+        "name": "Tadeusz Kosarewicz",
+        "job": "Set Designer",
+        "profile_path": null
+      },
+      {
+        "id": 7098,
+        "credit_id": "52fe424cc3a36847f80135b3",
+        "department": "Art",
+        "name": "Maria Kuminek-Osiecka",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7099,
+        "credit_id": "52fe424cc3a36847f80135b9",
+        "department": "Art",
+        "name": "Maciej Maria Putowski",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7100,
+        "credit_id": "52fe424cc3a36847f80135bf",
+        "department": "Costume & Make-Up",
+        "name": "Danuta Kowner-Halatek",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 7101,
+        "credit_id": "52fe424cc3a36847f80135c5",
+        "department": "Costume & Make-Up",
+        "name": "Barbara Ptak",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 7102,
+        "credit_id": "52fe424cc3a36847f80135cb",
+        "department": "Production",
+        "name": "Janina Krassowska",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 7103,
+        "credit_id": "52fe424cc3a36847f80135d1",
+        "department": "Production",
+        "name": "Barbara Pec-Slesicka",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 7104,
+        "credit_id": "52fe424cc3a36847f80135d7",
+        "department": "Sound",
+        "name": "Krzysztof Wodzinski",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 7105,
+        "credit_id": "52fe424cc3a36847f80135dd",
+        "department": "Sound",
+        "name": "Leszek Wronko",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 7106,
+        "credit_id": "52fe424cc3a36847f80135e3",
+        "department": "Crew",
+        "name": "Jerzy Rogowski",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 1143,
+        "credit_id": "52fe424cc3a36847f801362d",
+        "department": "Camera",
+        "name": "Edward Klosinski",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 179,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    },
+    {
+      "iso_639_1": "yi",
+      "name": ""
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 511,
+  "production_countries": [{
+    "name": "Poland",
+    "iso_3166_1": "PL"
+  }],
+  "title": "The Promised Land",
+  "overview": "The Polish film based on the book of the same name by Wladyslaw Reymont. Taking place in the nineteenth century town of Łódź, Poland, three friends want to make a lot of money by building and investing in a textile factory. An exceptional portrait of rapid industrial expansion shown through the eyes of one Polish town.",
+  "production_companies": [
+    {
+      "id": 38,
+      "name": "Zespół Filmowy TOR"
+    },
+    {
+      "id": 52,
+      "name": "Film Polski Film Agency"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0072446",
+  "release_date": "1975-02-21",
+  "original_title": "Ziemia obiecana",
+  "vote_count": 1,
+  "poster_path": "/vQLocx1ruaPlv2bbAL21aldnUEc.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.214285834219046"
+}

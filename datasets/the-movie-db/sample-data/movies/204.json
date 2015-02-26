@@ -1,0 +1,269 @@
+{
+  "budget": 0,
+  "vote_average": 9,
+  "backdrop_path": "/mqsKjPYDvbIYZhghgL4N5HMnEKa.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2565,
+        "order": 0,
+        "credit_id": "52fe4226c3a36847f8007e43",
+        "name": "Yves Montand",
+        "cast_id": 5,
+        "profile_path": "/3EYZa9K4B1voXciLVFkrfVp8ea7.jpg",
+        "character": "Mario"
+      },
+      {
+        "id": 2566,
+        "order": 1,
+        "credit_id": "52fe4226c3a36847f8007e47",
+        "name": "Charles Vanel",
+        "cast_id": 6,
+        "profile_path": "/m3zN5n0ehtZcSJHu4E2miJt7dsp.jpg",
+        "character": "M. Jo"
+      },
+      {
+        "id": 2567,
+        "order": 2,
+        "credit_id": "52fe4226c3a36847f8007e4b",
+        "name": "Peter van Eyck",
+        "cast_id": 7,
+        "profile_path": "/xXkWcMKcFSEiupgII0VMCt942Zz.jpg",
+        "character": "Bimba"
+      },
+      {
+        "id": 2568,
+        "order": 3,
+        "credit_id": "52fe4226c3a36847f8007e4f",
+        "name": "Folco Lulli",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Camp"
+      },
+      {
+        "id": 2569,
+        "order": 4,
+        "credit_id": "52fe4226c3a36847f8007e53",
+        "name": "Véra Clouzot",
+        "cast_id": 9,
+        "profile_path": "/3Vm5wRXAVSQoSq4rfa0Z5hvWYa8.jpg",
+        "character": "Linda"
+      },
+      {
+        "id": 2570,
+        "order": 5,
+        "credit_id": "52fe4226c3a36847f8007e57",
+        "name": "Antonio Centa",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Camp Chief"
+      },
+      {
+        "id": 2572,
+        "order": 6,
+        "credit_id": "52fe4226c3a36847f8007e5b",
+        "name": "Luis De Lima",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Bernardo"
+      },
+      {
+        "id": 2573,
+        "order": 7,
+        "credit_id": "52fe4226c3a36847f8007e5f",
+        "name": "Jo Dest",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Smerloff"
+      },
+      {
+        "id": 397,
+        "order": 8,
+        "credit_id": "52fe4226c3a36847f8007e63",
+        "name": "Darío Moreno",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Hernandez"
+      },
+      {
+        "id": 2576,
+        "order": 9,
+        "credit_id": "52fe4226c3a36847f8007e67",
+        "name": "William Tubbs",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Bill O'Brien"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2559,
+        "credit_id": "52fe4226c3a36847f8007e2d",
+        "department": "Directing",
+        "name": "Henri-Georges Clouzot",
+        "job": "Director",
+        "profile_path": "/nhwGnyQSoC3HhCM6SSACdZnysAK.jpg"
+      },
+      {
+        "id": 2559,
+        "credit_id": "52fe4226c3a36847f8007e33",
+        "department": "Writing",
+        "name": "Henri-Georges Clouzot",
+        "job": "Screenplay",
+        "profile_path": "/nhwGnyQSoC3HhCM6SSACdZnysAK.jpg"
+      },
+      {
+        "id": 2562,
+        "credit_id": "52fe4226c3a36847f8007e39",
+        "department": "Writing",
+        "name": "Jérôme Géronimi",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2560,
+        "credit_id": "52fe4226c3a36847f8007e3f",
+        "department": "Writing",
+        "name": "Georges Arnaud",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 2577,
+        "credit_id": "52fe4226c3a36847f8007e6d",
+        "department": "Production",
+        "name": "Raymond Borderie",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2559,
+        "credit_id": "52fe4226c3a36847f8007e73",
+        "department": "Production",
+        "name": "Henri-Georges Clouzot",
+        "job": "Producer",
+        "profile_path": "/nhwGnyQSoC3HhCM6SSACdZnysAK.jpg"
+      },
+      {
+        "id": 2578,
+        "credit_id": "52fe4226c3a36847f8007e79",
+        "department": "Sound",
+        "name": "Georges Auric",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2579,
+        "credit_id": "52fe4226c3a36847f8007e7f",
+        "department": "Camera",
+        "name": "Armand Thirard",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2580,
+        "credit_id": "52fe4226c3a36847f8007e85",
+        "department": "Editing",
+        "name": "Madeleine Gug",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2581,
+        "credit_id": "52fe4226c3a36847f8007e8b",
+        "department": "Editing",
+        "name": "Etiennette Muse",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2582,
+        "credit_id": "52fe4226c3a36847f8007e91",
+        "department": "Editing",
+        "name": "Henri Rust",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 131,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 204,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "The Wages of Fear",
+  "overview": "In a squalid South American oil town, four desperate men sign on for a suicide mission to drive trucks loaded with nitroglycerin over a treacherous mountain route. As they ferry their explosive cargo to a faraway oil fire, each bump and jolt tests their courage, their friendship, and their nerves. The result is one of the greatest thrillers ever committed to celluloid, a white-knuckle ride from France\u2019s legendary master of suspense, Henri-Georges Clouzot.",
+  "production_companies": [
+    {
+      "id": 141,
+      "name": "Véra Films"
+    },
+    {
+      "id": 142,
+      "name": "Silver Films"
+    },
+    {
+      "id": 143,
+      "name": "CICC"
+    },
+    {
+      "id": 144,
+      "name": "Fono Roma"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0046268",
+  "release_date": "1953-04-22",
+  "original_title": "Le salaire de la peur",
+  "vote_count": 15,
+  "poster_path": "/n1fhjxFvKuDggfCqr3uTKD5L9mW.jpg",
+  "tagline": "Dynamic Tremendous Shattering",
+  "revenue": 0,
+  "popularity": "0.400181612553897"
+}

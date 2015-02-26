@@ -1,0 +1,283 @@
+{
+  "birthday": "1906-03-17",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nBrigitte Helm (17 March 1906 \u2013 11 June 1996) was a German actress, best-remembered for her dual role as Maria and her double, the Maschinenmensch, in Fritz Lang's 1927 silent film Metropolis.\n\nDescription above from the Wikipedia article Brigitte Helm, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/gHCAWZxoYMUMfT1yQFG0WqdmAnU.jpg",
+  "id": 75,
+  "also_known_as": [],
+  "deathday": "1996-06-11",
+  "imdb_id": "nm0375609",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 2969,
+        "media_type": "movie",
+        "title": "A Daughter Of Destiny",
+        "credit_id": "52fe4377c3a36847f80564e5",
+        "release_date": "1928-01-25",
+        "original_title": "Alraune",
+        "adult": false,
+        "poster_path": "/nQ86wagyaAOF9KgsxQKUAHYlhCZ.jpg",
+        "character": "Alraune ten Brinken"
+      },
+      {
+        "id": 2970,
+        "media_type": "movie",
+        "title": "Alraune",
+        "credit_id": "52fe4377c3a36847f8056583",
+        "release_date": "1930-03-02",
+        "original_title": "Alraune",
+        "adult": false,
+        "poster_path": "/j1WCIVcHZ0g9x4jV17CoFPGUOt0.jpg",
+        "character": "Alraune ten Brinken"
+      },
+      {
+        "id": 3474,
+        "media_type": "movie",
+        "title": "Queen of Atlantis",
+        "credit_id": "52fe4394c3a36847f805f48b",
+        "release_date": "1932-06-24",
+        "original_title": "Die Herrin von Atlantis",
+        "adult": false,
+        "poster_path": null,
+        "character": "Antinea"
+      },
+      {
+        "id": 50181,
+        "media_type": "movie",
+        "title": "L'argent",
+        "credit_id": "52fe47bdc3a36847f8145ab1",
+        "release_date": "1928-12-25",
+        "original_title": "L'argent",
+        "adult": false,
+        "poster_path": "/vPFZZaiF9MK47IR5k4MbnAlz0hN.jpg",
+        "character": "Baronin Sandorf"
+      },
+      {
+        "id": 99598,
+        "media_type": "movie",
+        "title": "Autour de l'argent",
+        "credit_id": "52fe4a3a9251416c750e1f77",
+        "release_date": "1929-01-01",
+        "original_title": "Autour de l'argent",
+        "adult": false,
+        "poster_path": null,
+        "character": "Herself"
+      },
+      {
+        "id": 125693,
+        "media_type": "movie",
+        "title": "The Love of Jeanne Ney",
+        "credit_id": "52fe4accc3a368484e1678b5",
+        "release_date": "1927-12-06",
+        "original_title": "Die Liebe der Jeanne Ney",
+        "adult": false,
+        "poster_path": "/17zmvQ0hosR9tSNqIGJJC8sTMkV.jpg",
+        "character": "Gabrielle"
+      },
+      {
+        "id": 113630,
+        "media_type": "movie",
+        "title": "The Mistress of Atlantis",
+        "credit_id": "52fe4b3ac3a36847f81f8fcd",
+        "release_date": "1932-12-25",
+        "original_title": "The Mistress of Atlantis",
+        "adult": false,
+        "poster_path": "/isqdfdFm4NFsY2CNmvD2mNv3huc.jpg",
+        "character": "Antinea"
+      },
+      {
+        "id": 144877,
+        "media_type": "movie",
+        "title": "Gloria",
+        "credit_id": "52fe4b459251416c750fd8bb",
+        "release_date": "1931-10-30",
+        "original_title": "Gloria",
+        "adult": false,
+        "poster_path": null,
+        "character": "Véra Latour"
+      },
+      {
+        "id": 144932,
+        "media_type": "movie",
+        "title": "L'étoile de Valencia",
+        "credit_id": "52fe4b469251416c750fdc8d",
+        "release_date": "1933-06-16",
+        "original_title": "L'étoile de Valencia",
+        "adult": false,
+        "poster_path": "/dar3vdRcNl0SJ8qYAFtU0wd0Z7a.jpg",
+        "character": "Marion Savedra"
+      },
+      {
+        "id": 144933,
+        "media_type": "movie",
+        "title": "Adieu les beaux jours",
+        "credit_id": "52fe4b469251416c750fdcd7",
+        "release_date": "1933-09-03",
+        "original_title": "Adieu les beaux jours",
+        "adult": false,
+        "poster_path": null,
+        "character": "Olga"
+      },
+      {
+        "id": 19,
+        "media_type": "movie",
+        "title": "Metropolis",
+        "credit_id": "52fe420fc3a36847f8000c87",
+        "release_date": "1927-01-10",
+        "original_title": "Metropolis",
+        "adult": false,
+        "poster_path": "/hnj1AptUFmYYZNjrbIHgNjgt3ZX.jpg",
+        "character": "Maria"
+      },
+      {
+        "id": 133659,
+        "media_type": "movie",
+        "title": "The Wonderful Lies of Nina Petrovna",
+        "credit_id": "52fe4bb8c3a368484e196777",
+        "release_date": "1929-04-15",
+        "original_title": "Die wunderbare Lüge der Nina Petrowna",
+        "adult": false,
+        "poster_path": "/n4E3ap5tNE0VNewXagBNhzJfA9b.jpg",
+        "character": ""
+      },
+      {
+        "id": 190368,
+        "media_type": "movie",
+        "title": "Manolescu - Der König der Hochstapler",
+        "credit_id": "52fe4c5f9251416c910f2df1",
+        "release_date": "1929-04-30",
+        "original_title": "Manolescu - Der König der Hochstapler",
+        "adult": false,
+        "poster_path": "/mxY759PXYe6N5gzlSsVn0gL5pPr.jpg",
+        "character": "Cleo"
+      },
+      {
+        "id": 191453,
+        "media_type": "movie",
+        "title": "L'Atlantide",
+        "credit_id": "52fe4c849251416c910f7737",
+        "release_date": "1932-06-09",
+        "original_title": "L'Atlantide",
+        "adult": false,
+        "poster_path": "/sr3J6gijSwrUW93kqUnKbDscEdk.jpg",
+        "character": "Antinéa"
+      },
+      {
+        "id": 166590,
+        "media_type": "movie",
+        "title": "Die singende Stadt",
+        "credit_id": "52fe4c9fc3a36847f82373d5",
+        "release_date": "1930-09-27",
+        "original_title": "Die singende Stadt",
+        "adult": false,
+        "poster_path": null,
+        "character": "Claire Landshoff - junge Witwe"
+      },
+      {
+        "id": 170309,
+        "media_type": "movie",
+        "title": "Gold",
+        "credit_id": "52fe4cf5c3a36847f8246d9d",
+        "release_date": "1934-07-29",
+        "original_title": "Gold",
+        "adult": false,
+        "poster_path": "/9lwQWzqHR0sKXWbqbFtgOtr2hiA.jpg",
+        "character": "Florence Wills"
+      },
+      {
+        "id": 171215,
+        "media_type": "movie",
+        "title": "The Devious Path",
+        "credit_id": "52fe4d06c3a36847f824a883",
+        "release_date": "1928-08-10",
+        "original_title": "Abwege",
+        "adult": false,
+        "poster_path": "/rWb45FtGkVNFSo470bCxAk1OaWN.jpg",
+        "character": ""
+      },
+      {
+        "id": 173813,
+        "media_type": "movie",
+        "title": "Die Yacht der sieben Sünden",
+        "credit_id": "52fe4d3dc3a36847f8256277",
+        "release_date": "1928-08-05",
+        "original_title": "Die Yacht der sieben Sünden",
+        "adult": false,
+        "poster_path": "/tE1DTsenEU7UD1GVSMikHG4aXdA.jpg",
+        "character": "Marfa Petrowna"
+      },
+      {
+        "id": 189669,
+        "media_type": "movie",
+        "title": "At the Edge of the World",
+        "credit_id": "52fe4d5f9251416c75139071",
+        "release_date": "1927-09-18",
+        "original_title": "Am Rande der Welt",
+        "adult": false,
+        "poster_path": null,
+        "character": "Magda"
+      },
+      {
+        "id": 176799,
+        "media_type": "movie",
+        "title": "Gloria",
+        "credit_id": "52fe4d78c3a36847f82628d7",
+        "release_date": "1931-09-28",
+        "original_title": "Gloria",
+        "adult": false,
+        "poster_path": null,
+        "character": "Maria, seine Frau"
+      },
+      {
+        "id": 176852,
+        "media_type": "movie",
+        "title": "Die Gräfin von Monte-Christo",
+        "credit_id": "52fe4d79c3a36847f8262e53",
+        "release_date": "1932-04-21",
+        "original_title": "Die Gräfin von Monte-Christo",
+        "adult": false,
+        "poster_path": null,
+        "character": "Jeanette Heider, Filmkomparsin"
+      },
+      {
+        "id": 283504,
+        "media_type": "movie",
+        "title": "Ein idealer Gatte",
+        "credit_id": "53d0fe870e0a265df300ccbe",
+        "release_date": "1935-09-05",
+        "original_title": "Ein idealer Gatte",
+        "adult": false,
+        "poster_path": null,
+        "character": "Lady Gertrud Chiltern"
+      },
+      {
+        "id": 285907,
+        "media_type": "movie",
+        "title": "Inge und die Millionen",
+        "credit_id": "53e55cf10e0a2628db0002d5",
+        "release_date": "1933-12-22",
+        "original_title": "Inge und die Millionen",
+        "adult": false,
+        "poster_path": null,
+        "character": "Inge"
+      },
+      {
+        "id": 286423,
+        "media_type": "movie",
+        "title": "Im Geheimdienst",
+        "credit_id": "53ea0a290e0a2660250015af",
+        "release_date": "1931-08-13",
+        "original_title": "Im Geheimdienst",
+        "adult": false,
+        "poster_path": null,
+        "character": "Vera Lanskaja"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Brigitte Helm",
+  "place_of_birth": "Berlin, Germany",
+  "popularity": 1.2585741326157
+}

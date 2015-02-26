@@ -1,0 +1,267 @@
+{
+  "budget": 10500000,
+  "vote_average": 6.3,
+  "backdrop_path": "/74OOkCoNbMb5bDg1AVXQxmGUTex.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11863,
+        "order": 0,
+        "credit_id": "52fe4277c3a36847f8021003",
+        "name": "Sarah Michelle Gellar",
+        "cast_id": 1,
+        "profile_path": "/rweJ98bNan86oIliWZYT552oRra.jpg",
+        "character": "Kathryn Merteuil"
+      },
+      {
+        "id": 11864,
+        "order": 1,
+        "credit_id": "52fe4277c3a36847f8021007",
+        "name": "Ryan Phillippe",
+        "cast_id": 2,
+        "profile_path": "/x45ClG3kzHgTuThl9Rj8GPMuelk.jpg",
+        "character": "Sebastian Valmont"
+      },
+      {
+        "id": 368,
+        "order": 2,
+        "credit_id": "52fe4277c3a36847f802100b",
+        "name": "Reese Witherspoon",
+        "cast_id": 3,
+        "profile_path": "/r7UH0Dn2aQbQAtAzO01bMzPrGV0.jpg",
+        "character": "Annette Hargrove"
+      },
+      {
+        "id": 11826,
+        "order": 3,
+        "credit_id": "52fe4277c3a36847f802100f",
+        "name": "Selma Blair",
+        "cast_id": 4,
+        "profile_path": "/xltCuuG4xjACQ6vQm55iuR5LFJC.jpg",
+        "character": "Cecile Caldwell"
+      },
+      {
+        "id": 7071,
+        "order": 4,
+        "credit_id": "52fe4277c3a36847f8021013",
+        "name": "Louise Fletcher",
+        "cast_id": 5,
+        "profile_path": "/A4Cn7LsuLlOXvOMKv5ez4ThyeZL.jpg",
+        "character": "Helen Rosemond"
+      },
+      {
+        "id": 11866,
+        "order": 5,
+        "credit_id": "52fe4277c3a36847f8021017",
+        "name": "Joshua Jackson",
+        "cast_id": 6,
+        "profile_path": "/e1btrP27otWpSRvgVV9PsOKCpJG.jpg",
+        "character": "Blaine Tuttle"
+      },
+      {
+        "id": 11867,
+        "order": 6,
+        "credit_id": "52fe4277c3a36847f802101b",
+        "name": "Eric Mabius",
+        "cast_id": 7,
+        "profile_path": "/hCOfUMrboXnSHXURQ3HhVHcgRL6.jpg",
+        "character": "Greg McConnell"
+      },
+      {
+        "id": 11868,
+        "order": 7,
+        "credit_id": "52fe4277c3a36847f802101f",
+        "name": "Sean Patrick Thomas",
+        "cast_id": 8,
+        "profile_path": "/8cXF4Ywgs70ZL1j2q5A2yOvd2AY.jpg",
+        "character": "Ronald Clifford"
+      },
+      {
+        "id": 11870,
+        "order": 8,
+        "credit_id": "52fe4277c3a36847f8021023",
+        "name": "Christine Baranski",
+        "cast_id": 10,
+        "profile_path": "/iaTOSTj3VsrAbtEmmDH1avizJuv.jpg",
+        "character": "Bunny Caldwell"
+      },
+      {
+        "id": 11871,
+        "order": 9,
+        "credit_id": "52fe4277c3a36847f8021027",
+        "name": "Alaina Reed Hall",
+        "cast_id": 11,
+        "profile_path": "/gzz8PaJjPbP2j6x8ViZcyHq3C85.jpg",
+        "character": "Nurse"
+      },
+      {
+        "id": 11872,
+        "order": 10,
+        "credit_id": "52fe4277c3a36847f802102b",
+        "name": "Deborah Offner",
+        "cast_id": 12,
+        "profile_path": "/ywOLdDO1sXMc5ygatNxeHgg4SQo.jpg",
+        "character": "Mrs. Michalak"
+      },
+      {
+        "id": 1234,
+        "order": 11,
+        "credit_id": "52fe4277c3a36847f802102f",
+        "name": "Tara Reid",
+        "cast_id": 13,
+        "profile_path": "/tnK1AaA3Xt6cjy621s6B3TeIrYV.jpg",
+        "character": "Marci Greenbaum"
+      },
+      {
+        "id": 12967,
+        "order": 12,
+        "credit_id": "52fe4277c3a36847f8021069",
+        "name": "Swoosie Kurtz",
+        "cast_id": 24,
+        "profile_path": "/vMZajDmqbbfzSw6jxgAYIf3CrJm.jpg",
+        "character": "Dr. Greenbaum"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11873,
+        "credit_id": "52fe4277c3a36847f8021035",
+        "department": "Directing",
+        "name": "Roger Kumble",
+        "job": "Director",
+        "profile_path": "/uGKg8pacbWifsUK5IBvmPziHDKK.jpg"
+      },
+      {
+        "id": 11874,
+        "credit_id": "52fe4277c3a36847f802103b",
+        "department": "Production",
+        "name": "Neal H. Moritz",
+        "job": "Producer",
+        "profile_path": "/cNcsEYmoS4niCz3UkVAA09dUIob.jpg"
+      },
+      {
+        "id": 10815,
+        "credit_id": "52fe4277c3a36847f8021041",
+        "department": "Camera",
+        "name": "Theo van de Sande",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11876,
+        "credit_id": "52fe4277c3a36847f8021047",
+        "department": "Editing",
+        "name": "Jeff Freeman",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11877,
+        "credit_id": "52fe4277c3a36847f802104d",
+        "department": "Art",
+        "name": "Jon Gary Steele",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8221,
+        "credit_id": "52fe4277c3a36847f8021053",
+        "department": "Art",
+        "name": "David Lazan",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11878,
+        "credit_id": "52fe4277c3a36847f8021059",
+        "department": "Art",
+        "name": "Tessa Posnansky",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 1999,
+        "credit_id": "52fe4277c3a36847f802105f",
+        "department": "Sound",
+        "name": "Ed Shearmur",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11879,
+        "credit_id": "52fe4277c3a36847f8021065",
+        "department": "Writing",
+        "name": "Choderlos de Laclos",
+        "job": "Author",
+        "profile_path": "/ik1fh3xfadWWZ4DuPdnPQ5vFJPw.jpg"
+      },
+      {
+        "id": 11873,
+        "credit_id": "52fe4277c3a36847f802106f",
+        "department": "Writing",
+        "name": "Roger Kumble",
+        "job": "Screenplay",
+        "profile_path": "/uGKg8pacbWifsUK5IBvmPziHDKK.jpg"
+      }
+    ]
+  },
+  "runtime": 97,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 796,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Cruel Intentions",
+  "overview": "Slaking a thirst for dangerous games, Kathryn challenges her stepbrother, Sebastian, to deflower their headmaster's daughter before the summer ends. If he succeeds, the prize is the chance to bed Kathryn. But if he loses, Kathryn will claim his most prized possession.",
+  "production_companies": [
+    {
+      "id": 505,
+      "name": "Cruel Productions"
+    },
+    {
+      "id": 506,
+      "name": "Newmarket Capital Group"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 52789,
+    "backdrop_path": "/10KZhETCbOGoffxglHDRyStgdc8.jpg",
+    "name": "Cruel Intentions Collection",
+    "poster_path": "/yptBHHG66NKUOVWheChblNdOiBT.jpg"
+  },
+  "imdb_id": "tt0139134",
+  "release_date": "1999-03-05",
+  "original_title": "Cruel Intentions",
+  "vote_count": 170,
+  "poster_path": "/6RQu0J2u7viDa34Nn98sKaHv5jD.jpg",
+  "tagline": "In the game of seduction, There is only one rule: Never fall in love.",
+  "revenue": 75902208,
+  "popularity": "0.895061388735058"
+}

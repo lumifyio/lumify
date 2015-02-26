@@ -1,0 +1,284 @@
+{
+  "budget": 10000000,
+  "vote_average": 7.3,
+  "backdrop_path": "/9ATuEme5NEY5vNfyZGlROjpjwSG.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2876,
+        "order": 0,
+        "credit_id": "52fe422ac3a36847f8008f19",
+        "name": "Matt Dillon",
+        "cast_id": 1,
+        "profile_path": "/sqHNX9iyxdxZffl6wYWSoc7QoVG.jpg",
+        "character": "Rusty James"
+      },
+      {
+        "id": 2295,
+        "order": 1,
+        "credit_id": "52fe422ac3a36847f8008f1d",
+        "name": "Mickey Rourke",
+        "cast_id": 2,
+        "profile_path": "/AvGzQ8fvjurGmZW3W1wlQ5WfSeT.jpg",
+        "character": "The Motorcycle Boy"
+      },
+      {
+        "id": 2882,
+        "order": 2,
+        "credit_id": "52fe422ac3a36847f8008f21",
+        "name": "Diane Lane",
+        "cast_id": 3,
+        "profile_path": "/dMjEMuNXIT3g66qv92DOUVGBFC8.jpg",
+        "character": "Patty"
+      },
+      {
+        "id": 2778,
+        "order": 3,
+        "credit_id": "52fe422ac3a36847f8008f25",
+        "name": "Dennis Hopper",
+        "cast_id": 4,
+        "profile_path": "/56nj2DfMVU3F9qUagZWMePLbrKF.jpg",
+        "character": "Father"
+      },
+      {
+        "id": 2958,
+        "order": 4,
+        "credit_id": "52fe422ac3a36847f8008f29",
+        "name": "Diana Scarwid",
+        "cast_id": 5,
+        "profile_path": "/oljzUqUTrZcqEATP02ZvuNb7vZ.jpg",
+        "character": "Cassandra"
+      },
+      {
+        "id": 147119,
+        "order": 5,
+        "credit_id": "530fbe589251411013000145",
+        "name": "Vincent Spano",
+        "cast_id": 27,
+        "profile_path": "/puKutdiHTWPVw4SnOPxVRPY1LxS.jpg",
+        "character": "Steve"
+      },
+      {
+        "id": 2963,
+        "order": 6,
+        "credit_id": "52fe422ac3a36847f8008f31",
+        "name": "Nicolas Cage",
+        "cast_id": 7,
+        "profile_path": "/zM9xqZgen8gRDN0ygJwkdiAwWWy.jpg",
+        "character": "Smokey"
+      },
+      {
+        "id": 2969,
+        "order": 7,
+        "credit_id": "52fe422ac3a36847f8008f35",
+        "name": "Chris Penn",
+        "cast_id": 8,
+        "profile_path": "/57imnLRyaOowXElsxNESvhG1UZk.jpg",
+        "character": "B.J. Jackson (as Christopher Penn)"
+      },
+      {
+        "id": 2975,
+        "order": 8,
+        "credit_id": "52fe422ac3a36847f8008f39",
+        "name": "Laurence Fishburne",
+        "cast_id": 9,
+        "profile_path": "/mh0lZ1XsT84FayMNiT6Erh91mVu.jpg",
+        "character": "Midget"
+      },
+      {
+        "id": 2979,
+        "order": 9,
+        "credit_id": "52fe422ac3a36847f8008f3d",
+        "name": "Michael Higgins",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Mr. Harrigan"
+      },
+      {
+        "id": 2881,
+        "order": 10,
+        "credit_id": "52fe422ac3a36847f8008f41",
+        "name": "Glenn Withrow",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Biff Wilcox"
+      },
+      {
+        "id": 2887,
+        "order": 11,
+        "credit_id": "52fe422ac3a36847f8008f45",
+        "name": "Tom Waits",
+        "cast_id": 12,
+        "profile_path": "/dnot1ccAdk15BAFtrpW07UTPpWu.jpg",
+        "character": "Benny"
+      },
+      {
+        "id": 1769,
+        "order": 12,
+        "credit_id": "52fe422ac3a36847f8008f85",
+        "name": "Sofia Coppola",
+        "cast_id": 23,
+        "profile_path": "/zG1WS4sS5jvYkObHMxsK6fGK7Uk.jpg",
+        "character": "Donna"
+      },
+      {
+        "id": 2868,
+        "order": 13,
+        "credit_id": "52fe422ac3a36847f8008f89",
+        "name": "S.E. Hinton",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Hooker on Strip"
+      },
+      {
+        "id": 98102,
+        "order": 14,
+        "credit_id": "52fe422ac3a36847f8008f93",
+        "name": "William Smith",
+        "cast_id": 26,
+        "profile_path": "/tWYurHQCqBdwgq7YAdaZ2AoRV0a.jpg",
+        "character": "Patterson the Cop"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1776,
+        "credit_id": "52fe422ac3a36847f8008f4b",
+        "department": "Directing",
+        "name": "Francis Ford Coppola",
+        "job": "Director",
+        "profile_path": "/z60KH0VzNO071wagvzMxMKNj9ZQ.jpg"
+      },
+      {
+        "id": 2868,
+        "credit_id": "52fe422ac3a36847f8008f51",
+        "department": "Writing",
+        "name": "S.E. Hinton",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1776,
+        "credit_id": "52fe422ac3a36847f8008f57",
+        "department": "Writing",
+        "name": "Francis Ford Coppola",
+        "job": "Screenplay",
+        "profile_path": "/z60KH0VzNO071wagvzMxMKNj9ZQ.jpg"
+      },
+      {
+        "id": 2986,
+        "credit_id": "52fe422ac3a36847f8008f5d",
+        "department": "Production",
+        "name": "Doug Claybourne",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2871,
+        "credit_id": "52fe422ac3a36847f8008f63",
+        "department": "Production",
+        "name": "Fred Roos",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2987,
+        "credit_id": "52fe422ac3a36847f8008f69",
+        "department": "Sound",
+        "name": "Stewart Copeland",
+        "job": "Original Music Composer",
+        "profile_path": "/e0spn3RZW1DCziwyCQsSNPyQIU5.jpg"
+      },
+      {
+        "id": 1258,
+        "credit_id": "52fe422ac3a36847f8008f6f",
+        "department": "Camera",
+        "name": "Stephen H. Burum",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2875,
+        "credit_id": "52fe422ac3a36847f8008f75",
+        "department": "Art",
+        "name": "Dean Tavoularis",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2889,
+        "credit_id": "52fe422ac3a36847f8008f7b",
+        "department": "Sound",
+        "name": "Richard Beggs",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 2988,
+        "credit_id": "52fe422ac3a36847f8008f81",
+        "department": "Editing",
+        "name": "Barry Malkin",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2868,
+        "credit_id": "52fe422ac3a36847f8008f8f",
+        "department": "Writing",
+        "name": "S.E. Hinton",
+        "job": "Novel",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 94,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 232,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Rumble Fish",
+  "overview": "Rusty James, an absent-minded street thug struggles to live up to his legendary older brother's reputation, and longs for the days when gang warfare was going on.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0086216",
+  "release_date": "1983-10-21",
+  "original_title": "Rumble Fish",
+  "vote_count": 10,
+  "poster_path": "/uADRJslD2ymkZF6rKUTRY5iYxpH.jpg",
+  "tagline": "Rusty James can't live up to his brother's reputation. His brother can't live it down.",
+  "revenue": 2500000,
+  "popularity": "0.440249858547451"
+}

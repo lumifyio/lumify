@@ -1,0 +1,151 @@
+{
+  "budget": 0,
+  "vote_average": 9,
+  "backdrop_path": "/tHY95Rf3qJAfcDmq9DqsPORHHd0.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1405,
+        "order": 0,
+        "credit_id": "52fe421bc3a36847f800492b",
+        "name": "Zbigniew Zapasiewicz",
+        "cast_id": 8,
+        "profile_path": "/xg2g7q0oAsbAZI40zgt78QBWbaS.jpg",
+        "character": "Adam"
+      },
+      {
+        "id": 1408,
+        "order": 1,
+        "credit_id": "52fe421bc3a36847f800492f",
+        "name": "Marzena Trybała",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Werka"
+      },
+      {
+        "id": 1148,
+        "order": 2,
+        "credit_id": "52fe421bc3a36847f8004933",
+        "name": "Jerzy Stuhr",
+        "cast_id": 10,
+        "profile_path": "/i7xajg5pWYUIjNhx3lCe8RkkLHG.jpg",
+        "character": "Jugendaktivist"
+      },
+      {
+        "id": 1409,
+        "order": 3,
+        "credit_id": "52fe421bc3a36847f8004937",
+        "name": "Adam Ferency",
+        "cast_id": 11,
+        "profile_path": "/1Ca0T9bVsHa5TJ6NzeDc4yT7ZUD.jpg",
+        "character": "Priester"
+      },
+      {
+        "id": 1413,
+        "order": 4,
+        "credit_id": "52fe421bc3a36847f800493b",
+        "name": "Tadeusz Lomnicki",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Werner"
+      },
+      {
+        "id": 144972,
+        "order": 5,
+        "credit_id": "52fe421bc3a36847f800493f",
+        "name": "Bogusław Linda",
+        "cast_id": 13,
+        "profile_path": "/zTLLj81HETfUo9OrexdIuMVOHjB.jpg",
+        "character": "Witek Długosz"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1126,
+        "credit_id": "52fe421bc3a36847f8004909",
+        "department": "Directing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Director",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      },
+      {
+        "id": 1380,
+        "credit_id": "52fe421bc3a36847f800490f",
+        "department": "Production",
+        "name": "Jacek Szeligowski",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1126,
+        "credit_id": "52fe421bc3a36847f8004915",
+        "department": "Writing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Author",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      },
+      {
+        "id": 1397,
+        "credit_id": "52fe421bc3a36847f800491b",
+        "department": "Camera",
+        "name": "Krzysztof Pakulski",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1400,
+        "credit_id": "52fe421bc3a36847f8004921",
+        "department": "Sound",
+        "name": "Wojciech Kilar",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1401,
+        "credit_id": "52fe421bc3a36847f8004927",
+        "department": "Editing",
+        "name": "Elzbieta Kurkowska",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 114,
+  "spoken_languages": [{
+    "iso_639_1": "pl",
+    "name": "Polski"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 127,
+  "production_countries": [{
+    "name": "Poland",
+    "iso_3166_1": "PL"
+  }],
+  "title": "Blind Chance",
+  "overview": "Witek runs after a train. Three variations follow on how such a seemingly banal incident could influence the rest of Witek's life.",
+  "production_companies": [{
+    "id": 1587,
+    "name": "P.P. Film Polski"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0084549",
+  "release_date": "1987-01-10",
+  "original_title": "Przypadek",
+  "vote_count": 3,
+  "poster_path": "/kPgxYkh217IXjn8SM2eys1RQNrB.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.369287575347186"
+}

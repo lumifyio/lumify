@@ -1,0 +1,237 @@
+{
+  "budget": 0,
+  "vote_average": 8.8,
+  "backdrop_path": "/dCDAqOqcFagHpkjicAIRfxgmDmE.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2807,
+        "order": 0,
+        "credit_id": "52fe4228c3a36847f8008963",
+        "name": "Krystyna Janda",
+        "cast_id": 5,
+        "profile_path": "/v1WhK7TNvAdw9a2xRuyPLy5sF4u.jpg",
+        "character": "Agnieszka"
+      },
+      {
+        "id": 1386,
+        "order": 1,
+        "credit_id": "52fe4228c3a36847f8008967",
+        "name": "Jerzy Radziwiłowicz",
+        "cast_id": 6,
+        "profile_path": "/fKTbFcO0fkpFVkVjbbQRlaprxsg.jpg",
+        "character": "Mateusz Birkut"
+      },
+      {
+        "id": 1386,
+        "order": 2,
+        "credit_id": "52fe4229c3a36847f80089a5",
+        "name": "Jerzy Radziwiłowicz",
+        "cast_id": 21,
+        "profile_path": "/fKTbFcO0fkpFVkVjbbQRlaprxsg.jpg",
+        "character": "Maciek Tomczyk"
+      },
+      {
+        "id": 1413,
+        "order": 3,
+        "credit_id": "52fe4228c3a36847f800896b",
+        "name": "Tadeusz Lomnicki",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Jerzy Burski"
+      },
+      {
+        "id": 2811,
+        "order": 4,
+        "credit_id": "52fe4228c3a36847f800896f",
+        "name": "Jacek Lomnicki",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Jerzy Burski (young)"
+      },
+      {
+        "id": 2812,
+        "order": 5,
+        "credit_id": "52fe4228c3a36847f8008973",
+        "name": "Michał Tarkowski",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Witek"
+      },
+      {
+        "id": 2815,
+        "order": 6,
+        "credit_id": "52fe4228c3a36847f800897d",
+        "name": "Piotr Cieslak",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Michalak"
+      },
+      {
+        "id": 2816,
+        "order": 7,
+        "credit_id": "52fe4228c3a36847f8008981",
+        "name": "Wieslaw Wójcik",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Sekretär Jodła"
+      },
+      {
+        "id": 2817,
+        "order": 8,
+        "credit_id": "52fe4228c3a36847f8008985",
+        "name": "Krystyna Zachwatowicz",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Hanka Tomczyk"
+      },
+      {
+        "id": 2818,
+        "order": 9,
+        "credit_id": "52fe4228c3a36847f8008989",
+        "name": "Magda Teresa Wójcik",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "..."
+      },
+      {
+        "id": 2819,
+        "order": 10,
+        "credit_id": "52fe4229c3a36847f800898d",
+        "name": "Zdzisław Kozień",
+        "cast_id": 15,
+        "profile_path": "/22thwniT9092nfjRoGELsQbez3J.jpg",
+        "character": "Agnieszkas Vater"
+      },
+      {
+        "id": 2820,
+        "order": 11,
+        "credit_id": "52fe4229c3a36847f8008991",
+        "name": "Dorota Stalińska",
+        "cast_id": 16,
+        "profile_path": "/wlsY82PD0CP73pZGmdUtlFc8gis.jpg",
+        "character": "..."
+      },
+      {
+        "id": 2821,
+        "order": 12,
+        "credit_id": "52fe4229c3a36847f8008995",
+        "name": "Kazimierz Kaczor",
+        "cast_id": 17,
+        "profile_path": "/4QSQDLJ27uFHcwcoFsTBiZ1YMD4.jpg",
+        "character": "pulkownik"
+      },
+      {
+        "id": 2822,
+        "order": 13,
+        "credit_id": "52fe4229c3a36847f8008999",
+        "name": "Ewa Ziętek",
+        "cast_id": 18,
+        "profile_path": "/9WhDwc8Nq24IK05hiy3xfkffpFs.jpg",
+        "character": "Sekretarka"
+      },
+      {
+        "id": 2823,
+        "order": 14,
+        "credit_id": "52fe4229c3a36847f800899d",
+        "name": "Andrzej Graziewicz",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Richter bei Witeks Prozess"
+      },
+      {
+        "id": 2824,
+        "order": 15,
+        "credit_id": "52fe4229c3a36847f80089a1",
+        "name": "Jerzy Moniak",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Ingenieur Moniak, Vertreter Witkas auf der Baustelle Huta Katowice"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2801,
+        "credit_id": "52fe4228c3a36847f8008953",
+        "department": "Directing",
+        "name": "Andrzej Wajda",
+        "job": "Director",
+        "profile_path": "/gCfx35G5HB6FqCvDhx5x365lUEm.jpg"
+      },
+      {
+        "id": 2802,
+        "credit_id": "52fe4228c3a36847f8008959",
+        "department": "Sound",
+        "name": "Andrzej Korzynski",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7096,
+        "credit_id": "52fe4228c3a36847f800895f",
+        "department": "Editing",
+        "name": "Halina Prugar-Ketling",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2814,
+        "credit_id": "52fe4228c3a36847f8008979",
+        "department": "Writing",
+        "name": "Aleksander Scibor-Rylski",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1143,
+        "credit_id": "52fe4229c3a36847f80089ab",
+        "department": "Camera",
+        "name": "Edward Klosinski",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 165,
+  "spoken_languages": [{
+    "iso_639_1": "pl",
+    "name": "Polski"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 224,
+  "production_countries": [{
+    "name": "Poland",
+    "iso_3166_1": "PL"
+  }],
+  "title": "Man of Marble",
+  "overview": "Man of Marble is a Polish film about a student making a film about a bricklayer who was once idolized. She interviews people who knew him and finds old footage that lead to an unfolding mystery that causes her producer to cancel the project.",
+  "production_companies": [{
+    "id": 52,
+    "name": "Film Polski Film Agency"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0075902",
+  "release_date": "1977-02-25",
+  "original_title": "Czlowiek z marmuru",
+  "vote_count": 2,
+  "poster_path": "/rqksE3bd3Eq8NuEsjSK3tOUIQB2.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.185287856120108"
+}

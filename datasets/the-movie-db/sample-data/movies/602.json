@@ -1,0 +1,808 @@
+{
+  "budget": 75000000,
+  "vote_average": 6.3,
+  "backdrop_path": "/ewMSszqEvI3G1U21SfYbOeoKdxS.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2888,
+        "order": 0,
+        "credit_id": "52fe425bc3a36847f8017f8b",
+        "name": "Will Smith",
+        "cast_id": 16,
+        "profile_path": "/2iYXDlCvLyVO49louRyDDXagZ0G.jpg",
+        "character": "Captain Steven Hiller"
+      },
+      {
+        "id": 8984,
+        "order": 1,
+        "credit_id": "52fe425bc3a36847f8017f8f",
+        "name": "Bill Pullman",
+        "cast_id": 17,
+        "profile_path": "/lBeo0LqPSRe9JWN2SnQNwY8Rtiu.jpg",
+        "character": "President Thomas J. Whitmore"
+      },
+      {
+        "id": 4785,
+        "order": 2,
+        "credit_id": "52fe425bc3a36847f8017f93",
+        "name": "Jeff Goldblum",
+        "cast_id": 18,
+        "profile_path": "/iDW7y4R8cx4SZzWd8nN2gvL7My1.jpg",
+        "character": "David Levinson"
+      },
+      {
+        "id": 1581,
+        "order": 3,
+        "credit_id": "52fe425bc3a36847f8017f97",
+        "name": "Mary McDonnell",
+        "cast_id": 19,
+        "profile_path": "/juVhJmd33540E9yT8revFlYtl2F.jpg",
+        "character": "First Lady Marilyn Whitmore"
+      },
+      {
+        "id": 6167,
+        "order": 4,
+        "credit_id": "52fe425bc3a36847f8017f9b",
+        "name": "Judd Hirsch",
+        "cast_id": 20,
+        "profile_path": "/8KEAz46shCkoPk7YPgJqI1SKmTW.jpg",
+        "character": "Julius Levinson"
+      },
+      {
+        "id": 1162,
+        "order": 5,
+        "credit_id": "52fe425bc3a36847f8017f9f",
+        "name": "Robert Loggia",
+        "cast_id": 21,
+        "profile_path": "/7xtU12KT12xjy4UY1O6VKpw7FLx.jpg",
+        "character": "General William Grey"
+      },
+      {
+        "id": 1811,
+        "order": 6,
+        "credit_id": "52fe425bc3a36847f8017fa3",
+        "name": "Randy Quaid",
+        "cast_id": 22,
+        "profile_path": "/dEv00CcMYzv3y6BetWufyEeqKgT.jpg",
+        "character": "Russell Casse"
+      },
+      {
+        "id": 8985,
+        "order": 7,
+        "credit_id": "52fe425bc3a36847f8017fa7",
+        "name": "Margaret Colin",
+        "cast_id": 23,
+        "profile_path": "/A9nBbgguaRqjssJyqTfoFIQgADV.jpg",
+        "character": "Constance Spano"
+      },
+      {
+        "id": 2535,
+        "order": 8,
+        "credit_id": "52fe425bc3a36847f8017fab",
+        "name": "Vivica A. Fox",
+        "cast_id": 24,
+        "profile_path": "/uxTOzgRhk0VkbK1ZiOrQSTYuzAl.jpg",
+        "character": "Jasmine Dubrow"
+      },
+      {
+        "id": 8986,
+        "order": 9,
+        "credit_id": "52fe425bc3a36847f8017faf",
+        "name": "James Rebhorn",
+        "cast_id": 25,
+        "profile_path": "/cRbeDNPpcWKP0nLkXo5Bi1tq61w.jpg",
+        "character": "Albert Nimzicki"
+      },
+      {
+        "id": 7420,
+        "order": 10,
+        "credit_id": "52fe425bc3a36847f8017fb3",
+        "name": "Harvey Fierstein",
+        "cast_id": 26,
+        "profile_path": "/7AN3n6TENCrRhU5pKxEM6W0mCjg.jpg",
+        "character": "Marty Gilbert"
+      },
+      {
+        "id": 2059,
+        "order": 11,
+        "credit_id": "52fe425bc3a36847f8017fb7",
+        "name": "Adam Baldwin",
+        "cast_id": 27,
+        "profile_path": "/w76VLhGjRELFkETeFF0iPMJO9eJ.jpg",
+        "character": "Major Mitchell"
+      },
+      {
+        "id": 1582,
+        "order": 12,
+        "credit_id": "52fe425bc3a36847f8017fbb",
+        "name": "James Duval",
+        "cast_id": 29,
+        "profile_path": "/ydlb3Rp5vkle9codpcfBWxFmUYr.jpg",
+        "character": "Miguel Casse"
+      },
+      {
+        "id": 8987,
+        "order": 13,
+        "credit_id": "52fe425bc3a36847f8017fbf",
+        "name": "Lisa Jakub",
+        "cast_id": 30,
+        "profile_path": "/1iw0l7zewS6L1FzQCKJTHu5Eg0e.jpg",
+        "character": "Alicia Casse"
+      },
+      {
+        "id": 4133,
+        "order": 14,
+        "credit_id": "52fe425bc3a36847f8017fc3",
+        "name": "Giuseppe Andrews",
+        "cast_id": 31,
+        "profile_path": "/uzlBCYC4AMcXuB9KGonYTGjfQ08.jpg",
+        "character": "Troy Casse"
+      },
+      {
+        "id": 18688,
+        "order": 15,
+        "credit_id": "52fe425bc3a36847f8017fc7",
+        "name": "Harry Connick, Jr.",
+        "cast_id": 32,
+        "profile_path": "/zdIXPJyfpje8BGBjNQAe73CzSTx.jpg",
+        "character": "Captain Jimmy Wilder"
+      },
+      {
+        "id": 52404,
+        "order": 16,
+        "credit_id": "52fe425bc3a36847f8017fcb",
+        "name": "Mae Whitman",
+        "cast_id": 33,
+        "profile_path": "/j4fIjf2giXPsZQ2dGlLNQecf0LK.jpg",
+        "character": "Patricia Whitmore"
+      },
+      {
+        "id": 23504,
+        "order": 17,
+        "credit_id": "52fe425bc3a36847f8017fcf",
+        "name": "Kiersten Warren",
+        "cast_id": 34,
+        "profile_path": "/nzbUkAYhC6x3Zwdmm93nusN5vg6.jpg",
+        "character": "Tiffany"
+      },
+      {
+        "id": 1240779,
+        "order": 18,
+        "credit_id": "52fe425bc3a36847f8017fd3",
+        "name": "John Storey",
+        "cast_id": 35,
+        "profile_path": "/1EaywymiUzuQQz0pP8762LWcZfw.jpg",
+        "character": "Dr. Isaacs"
+      },
+      {
+        "id": 46930,
+        "order": 19,
+        "credit_id": "52fe425bc3a36847f8017fd7",
+        "name": "Frank Novak",
+        "cast_id": 36,
+        "profile_path": "/qD6p4ZqXU5HmX1h2qTL4B43dMfc.jpg",
+        "character": "Teddy"
+      },
+      {
+        "id": 54455,
+        "order": 20,
+        "credit_id": "52fe425bc3a36847f8017fdb",
+        "name": "Devon Gummersall",
+        "cast_id": 37,
+        "profile_path": "/aVpEjsbP343W81vxHqoctujnGc9.jpg",
+        "character": "Philip"
+      },
+      {
+        "id": 2221,
+        "order": 21,
+        "credit_id": "52fe425bc3a36847f8017fdf",
+        "name": "Leland Orser",
+        "cast_id": 38,
+        "profile_path": "/9PtidQdsYBETZDHf4Euchp78YVm.jpg",
+        "character": "Technician/ Medical Assistant 1"
+      },
+      {
+        "id": 1173560,
+        "order": 22,
+        "credit_id": "52fe425bc3a36847f8017fe3",
+        "name": "Mirron E. Willis",
+        "cast_id": 39,
+        "profile_path": "/ozlYwIqYAzwhqfCWZK2GqtG8XWz.jpg",
+        "character": "Aide"
+      },
+      {
+        "id": 199697,
+        "order": 23,
+        "credit_id": "52fe425bc3a36847f8017fe7",
+        "name": "Ross Lacy",
+        "cast_id": 40,
+        "profile_path": "/jseRsA15GLR88mGV3gvg9UTyo0U.jpg",
+        "character": "Aide"
+      },
+      {
+        "id": 111514,
+        "order": 24,
+        "credit_id": "52fe425bc3a36847f8017feb",
+        "name": "David Pressman",
+        "cast_id": 41,
+        "profile_path": "/d7E1CW5DfYEFvlxOGQ5IioQbW8t.jpg",
+        "character": "Whitmore's Aide"
+      },
+      {
+        "id": 97943,
+        "order": 25,
+        "credit_id": "52fe425bc3a36847f8017fef",
+        "name": "Raphael Sbarge",
+        "cast_id": 42,
+        "profile_path": "/dqJaYxVxOKJjMcIzOnAf3ef1RfR.jpg",
+        "character": "Commander / Tech"
+      },
+      {
+        "id": 29775,
+        "order": 26,
+        "credit_id": "52fe425bc3a36847f8017ff3",
+        "name": "Bobby Hosea",
+        "cast_id": 43,
+        "profile_path": "/sGdelSFgmBYH3pKKZktIBUzqp9S.jpg",
+        "character": "Commanding Officer"
+      },
+      {
+        "id": 29774,
+        "order": 27,
+        "credit_id": "52fe425bc3a36847f8017ff7",
+        "name": "Dan Lauria",
+        "cast_id": 44,
+        "profile_path": "/c20f3mN45sOOyasgOv43GCNxNpd.jpg",
+        "character": "Commanding Officer"
+      },
+      {
+        "id": 1116827,
+        "order": 28,
+        "credit_id": "52fe425bc3a36847f8017ffb",
+        "name": "Steve Giannelli",
+        "cast_id": 45,
+        "profile_path": "/aIMSzuRTYTWHlaAUfzc2uS6KIJf.jpg",
+        "character": "Radar Technician"
+      },
+      {
+        "id": 179969,
+        "order": 29,
+        "credit_id": "52fe425bc3a36847f8017fff",
+        "name": "Eric Paskel",
+        "cast_id": 46,
+        "profile_path": null,
+        "character": "Radar Technician"
+      },
+      {
+        "id": 1212247,
+        "order": 30,
+        "credit_id": "52fe425bc3a36847f8018003",
+        "name": "Carlos Lacámara",
+        "cast_id": 47,
+        "profile_path": "/mf5a9afrahmA2bOwgfaJVjDrzpJ.jpg",
+        "character": "Radar Operator"
+      },
+      {
+        "id": 20361,
+        "order": 31,
+        "credit_id": "52fe425bc3a36847f8018007",
+        "name": "John Bennett Perry",
+        "cast_id": 48,
+        "profile_path": "/bzFhwuXsdZiOHRtBgz4XVELIFYO.jpg",
+        "character": "Secret Service Agent"
+      },
+      {
+        "id": 1272408,
+        "order": 32,
+        "credit_id": "52fe425bc3a36847f801800b",
+        "name": "Troy Willis",
+        "cast_id": 49,
+        "profile_path": null,
+        "character": "Secret Service Agent"
+      },
+      {
+        "id": 72864,
+        "order": 33,
+        "credit_id": "52fe425bc3a36847f801800f",
+        "name": "Tim Kelleher",
+        "cast_id": 50,
+        "profile_path": "/y1sYHWkXNeW09Iy2BUed4SveKl7.jpg",
+        "character": "Technician"
+      },
+      {
+        "id": 1216179,
+        "order": 34,
+        "credit_id": "52fe425bc3a36847f8018013",
+        "name": "Wayne Wilderson",
+        "cast_id": 51,
+        "profile_path": "/r5GVLXdvJovWZiBUzgFsWlpIwVW.jpg",
+        "character": "Area 51 Technician"
+      },
+      {
+        "id": 42547,
+        "order": 35,
+        "credit_id": "52fe425bc3a36847f8018017",
+        "name": "Jay Acovone",
+        "cast_id": 52,
+        "profile_path": "/7nTfBxzeO6jBzUSdukF2OWm5uBo.jpg",
+        "character": "Area 51 Guard"
+      },
+      {
+        "id": 57134,
+        "order": 36,
+        "credit_id": "52fe425bc3a36847f801801b",
+        "name": "James Wong",
+        "cast_id": 53,
+        "profile_path": "/4TIHQFKSdS8WDeZ6xYrzZclgoaC.jpg",
+        "character": "SETI Technician 1"
+      },
+      {
+        "id": 1213344,
+        "order": 37,
+        "credit_id": "52fe425bc3a36847f801801f",
+        "name": "Jana Marie Hupp",
+        "cast_id": 54,
+        "profile_path": "/vxwpMDXUfvBpJ53SOcfv7oNI2J3.jpg",
+        "character": "SETI Technician 3"
+      },
+      {
+        "id": 74573,
+        "order": 38,
+        "credit_id": "52fe425bc3a36847f8018023",
+        "name": "Robert Pine",
+        "cast_id": 55,
+        "profile_path": "/dZTRdcp57vdnCtxIp8vNYR6pOtp.jpg",
+        "character": "Chief of Staff"
+      },
+      {
+        "id": 186657,
+        "order": 39,
+        "credit_id": "52fe425bc3a36847f8018027",
+        "name": "David Channell",
+        "cast_id": 56,
+        "profile_path": "/3EwGgjGSmA6AUwqkkPerLm1BVk.jpg",
+        "character": "Secret Service Agent"
+      },
+      {
+        "id": 31007,
+        "order": 40,
+        "credit_id": "52fe425bc3a36847f801802b",
+        "name": "John Capodice",
+        "cast_id": 57,
+        "profile_path": "/sQuJV9o2FSXr5UBo2MaiTLObXiY.jpg",
+        "character": "Mario"
+      },
+      {
+        "id": 58950,
+        "order": 41,
+        "credit_id": "52fe425bc3a36847f801802f",
+        "name": "Greg Collins",
+        "cast_id": 58,
+        "profile_path": "/lrY41HBJIjWWBdxRZlfLM0av3JE.jpg",
+        "character": "Military Aide"
+      },
+      {
+        "id": 157029,
+        "order": 42,
+        "credit_id": "52fe425bc3a36847f8018033",
+        "name": "Derek Webster",
+        "cast_id": 59,
+        "profile_path": "/vS6FyYyx2G41Zozn1bINybpmsKY.jpg",
+        "character": "Sky Crane Pilot"
+      },
+      {
+        "id": 122805,
+        "order": 43,
+        "credit_id": "52fe425bc3a36847f8018037",
+        "name": "Mark Fite",
+        "cast_id": 60,
+        "profile_path": "/A46OLuNRFPu1NA61VQBf0NzQNFN.jpg",
+        "character": "Pilot"
+      },
+      {
+        "id": 27037,
+        "order": 44,
+        "credit_id": "52fe425bc3a36847f801803b",
+        "name": "Levan Uchaneishvili",
+        "cast_id": 61,
+        "profile_path": "/36mEusN0UbOvwsq8DVDgYOpoaet.jpg",
+        "character": "Russian Pilot (Levani)"
+      },
+      {
+        "id": 74502,
+        "order": 45,
+        "credit_id": "52fe425bc3a36847f801803f",
+        "name": "Kristof Konrad",
+        "cast_id": 62,
+        "profile_path": "/glLoabE6ofcj9gEW0ejwvN3CyB4.jpg",
+        "character": "Russian Pilot"
+      },
+      {
+        "id": 102578,
+        "order": 46,
+        "credit_id": "52fe425bc3a36847f8018043",
+        "name": "Kevin Sifuentes",
+        "cast_id": 63,
+        "profile_path": "/8sX4lmfYnU0q0XXoxfbxju4c4tW.jpg",
+        "character": "Tank Commander"
+      },
+      {
+        "id": 188212,
+        "order": 47,
+        "credit_id": "52fe425bc3a36847f8018047",
+        "name": "Elston Ridgle",
+        "cast_id": 64,
+        "profile_path": "/33ubq4IENRuOcLt1iqU3k5jOnF2.jpg",
+        "character": "Soldier"
+      },
+      {
+        "id": 102567,
+        "order": 48,
+        "credit_id": "52fe425bc3a36847f801804b",
+        "name": "Randy Oglesby",
+        "cast_id": 65,
+        "profile_path": "/i6Zrn7JKMnemYZysNqhkcGs9cjk.jpg",
+        "character": "Mechanic"
+      },
+      {
+        "id": 117564,
+        "order": 49,
+        "credit_id": "52fe425bc3a36847f801804f",
+        "name": "Jack Moore",
+        "cast_id": 66,
+        "profile_path": "/5vplad1c1016jguS31AqqOGQ3p2.jpg",
+        "character": "Mechanic"
+      },
+      {
+        "id": 8214,
+        "order": 50,
+        "credit_id": "52fe425bc3a36847f8018053",
+        "name": "Barry Del Sherman",
+        "cast_id": 67,
+        "profile_path": "/ef6NhEgc8g6kPUfqumVWvZ0JjVZ.jpg",
+        "character": "Street Preacher"
+      },
+      {
+        "id": 90198,
+        "order": 51,
+        "credit_id": "52fe425bc3a36847f8018057",
+        "name": "Lyman Ward",
+        "cast_id": 68,
+        "profile_path": "/lL1dAVbBcSU4O2wD4XZcsmOCcRZ.jpg",
+        "character": "Secret Service Agent"
+      },
+      {
+        "id": 31367,
+        "order": 52,
+        "credit_id": "52fe425bc3a36847f801805b",
+        "name": "Anthony Crivello",
+        "cast_id": 69,
+        "profile_path": "/3oZXNW4V0AeT1JjwDTu4lUOZNH3.jpg",
+        "character": "Lincoln"
+      },
+      {
+        "id": 58112,
+        "order": 53,
+        "credit_id": "52fe425bc3a36847f801805f",
+        "name": "Richard Speight Jr.",
+        "cast_id": 70,
+        "profile_path": "/o5tlyRPkZXtkXOTDcwKTUfGldhM.jpg",
+        "character": "Ed"
+      },
+      {
+        "id": 169931,
+        "order": 54,
+        "credit_id": "52fe425bc3a36847f8018063",
+        "name": "Joe Fowler",
+        "cast_id": 71,
+        "profile_path": "/6Qp1ino2A6MP9MKZeCc6Q6hM9Si.jpg",
+        "character": "Reporter"
+      },
+      {
+        "id": 156131,
+        "order": 55,
+        "credit_id": "52fe425bc3a36847f8018067",
+        "name": "Sharon Tay",
+        "cast_id": 72,
+        "profile_path": "/qJhvCSCXHD9Duvz5pP0sLQQl6n2.jpg",
+        "character": "Reporter"
+      },
+      {
+        "id": 18905,
+        "order": 56,
+        "credit_id": "52fe425bc3a36847f801806b",
+        "name": "Peter J. Lucas",
+        "cast_id": 73,
+        "profile_path": "/bQgIi61v5NBhDDZjArvzSpjwxxg.jpg",
+        "character": "Russian Reporter"
+      },
+      {
+        "id": 163159,
+        "order": 57,
+        "credit_id": "52fe425bc3a36847f801806f",
+        "name": "Yelena Danova",
+        "cast_id": 74,
+        "profile_path": "/kdA28JAPdY7Yru5469KFVGNOfDM.jpg",
+        "character": "Russian Newscaster"
+      },
+      {
+        "id": 64881,
+        "order": 58,
+        "credit_id": "52fe425bc3a36847f8018073",
+        "name": "Johnny Kim",
+        "cast_id": 75,
+        "profile_path": "/Akh2IyKfZ4rXWb1k0c8U50d53Ew.jpg",
+        "character": "Korean Newscaster"
+      },
+      {
+        "id": 192276,
+        "order": 59,
+        "credit_id": "52fe425bc3a36847f8018077",
+        "name": "Vanessa J. Wells",
+        "cast_id": 76,
+        "profile_path": null,
+        "character": "Newscaster"
+      },
+      {
+        "id": 173810,
+        "order": 60,
+        "credit_id": "52fe425bc3a36847f801807b",
+        "name": "Sayed Badreya",
+        "cast_id": 77,
+        "profile_path": "/wMpSb8QfErr5a0NBKWc2a3Zxj47.jpg",
+        "character": "Arab Pilot"
+      },
+      {
+        "id": 177144,
+        "order": 61,
+        "credit_id": "52fe425bc3a36847f801807f",
+        "name": "Adam Tomei",
+        "cast_id": 78,
+        "profile_path": "/cW697JowVOiLwq3bw30aCZdsRwc.jpg",
+        "character": "Sailor"
+      },
+      {
+        "id": 1010135,
+        "order": 62,
+        "credit_id": "52fe425bc3a36847f8018083",
+        "name": "John Bradley",
+        "cast_id": 79,
+        "profile_path": "/NYYgcHhFNLOwYVAGePUq9NsV3N.jpg",
+        "character": "Lucas"
+      },
+      {
+        "id": 2174,
+        "order": 63,
+        "credit_id": "52fe425bc3a36847f8018087",
+        "name": "Kimberly Beck",
+        "cast_id": 80,
+        "profile_path": "/wt7KIBun88QLlxlXnPj7Tp9lwkB.jpg",
+        "character": "Housewife"
+      },
+      {
+        "id": 40979,
+        "order": 64,
+        "credit_id": "52fe425bc3a36847f801808b",
+        "name": "Andrew Keegan",
+        "cast_id": 81,
+        "profile_path": "/3GNxQcRNySLlO25wcPuwnxuPv3f.jpg",
+        "character": "Older Boy"
+      },
+      {
+        "id": 120560,
+        "order": 65,
+        "credit_id": "52fe425bc3a36847f801808f",
+        "name": "Jim Piddock",
+        "cast_id": 82,
+        "profile_path": "/vdsY1X3LBvXzX84kl9sxCNaTxjw.jpg",
+        "character": "Reginald"
+      },
+      {
+        "id": 6326,
+        "order": 66,
+        "credit_id": "52fe425bc3a36847f8018093",
+        "name": "Pat Skipper",
+        "cast_id": 83,
+        "profile_path": "/yz3OrX0JKWcNDLLc8TBoRUhWAcC.jpg",
+        "character": "Redneck"
+      },
+      {
+        "id": 18917,
+        "order": 67,
+        "credit_id": "52fe425bc3a36847f8018097",
+        "name": "Erick Avari",
+        "cast_id": 84,
+        "profile_path": "/ZtoLoKTlsZbCxc0JVqb8UeSIBS.jpg",
+        "character": "SETI Chief"
+      },
+      {
+        "id": 1213786,
+        "order": 68,
+        "credit_id": "52fe425bc3a36847f801809b",
+        "name": "Brent Spiner",
+        "cast_id": 85,
+        "profile_path": "/gYaOWwycKcSEPQzUOITt9DA5AcY.jpg",
+        "character": "Dr. Brackish Okun"
+      }
+    ],
+    "crew": [
+      {
+        "id": 21812,
+        "credit_id": "53490c53c3a3684b9a0010ef",
+        "department": "Production",
+        "name": "Wendy Kurtzman",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6046,
+        "credit_id": "52fe425bc3a36847f8017f33",
+        "department": "Directing",
+        "name": "Roland Emmerich",
+        "job": "Director",
+        "profile_path": "/eJ13f8Hlwwaabr5DrNCnhYbUX14.jpg"
+      },
+      {
+        "id": 8676,
+        "credit_id": "52fe425bc3a36847f8017f39",
+        "department": "Writing",
+        "name": "Dean Devlin",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6046,
+        "credit_id": "52fe425bc3a36847f8017f3f",
+        "department": "Writing",
+        "name": "Roland Emmerich",
+        "job": "Screenplay",
+        "profile_path": "/eJ13f8Hlwwaabr5DrNCnhYbUX14.jpg"
+      },
+      {
+        "id": 8676,
+        "credit_id": "52fe425bc3a36847f8017f45",
+        "department": "Production",
+        "name": "Dean Devlin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6489,
+        "credit_id": "52fe425bc3a36847f8017f4b",
+        "department": "Sound",
+        "name": "David Arnold",
+        "job": "Original Music Composer",
+        "profile_path": "/quJ5BYpkU79sCwn7NHFCvzBSwwX.jpg"
+      },
+      {
+        "id": 8677,
+        "credit_id": "52fe425bc3a36847f8017f51",
+        "department": "Camera",
+        "name": "Karl Walter Lindenlaub",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6051,
+        "credit_id": "52fe425bc3a36847f8017f57",
+        "department": "Editing",
+        "name": "David Brenner",
+        "job": "Editor",
+        "profile_path": "/euiuZdsHDXkh53Dm7TbaG5UBcF1.jpg"
+      },
+      {
+        "id": 8678,
+        "credit_id": "52fe425bc3a36847f8017f5d",
+        "department": "Art",
+        "name": "Oliver Scholl",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3964,
+        "credit_id": "52fe425bc3a36847f8017f63",
+        "department": "Art",
+        "name": "Patrick Tatopoulos",
+        "job": "Production Design",
+        "profile_path": "/RXqyZV2z5qk7TUVCXcXdatFFkd.jpg"
+      },
+      {
+        "id": 8679,
+        "credit_id": "52fe425bc3a36847f8017f69",
+        "department": "Art",
+        "name": "William James Teegarden",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8680,
+        "credit_id": "52fe425bc3a36847f8017f6f",
+        "department": "Art",
+        "name": "Jim Erickson",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 8681,
+        "credit_id": "52fe425bc3a36847f8017f75",
+        "department": "Costume & Make-Up",
+        "name": "Joseph A. Porro",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 8682,
+        "credit_id": "52fe425bc3a36847f8017f7b",
+        "department": "Crew",
+        "name": "Gino Acevedo",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 8683,
+        "credit_id": "52fe425bc3a36847f8017f81",
+        "department": "Visual Effects",
+        "name": "Victor Abbene",
+        "job": "Visual Effects",
+        "profile_path": null
+      },
+      {
+        "id": 8684,
+        "credit_id": "52fe425bc3a36847f8017f87",
+        "department": "Crew",
+        "name": "Dan Bradley",
+        "job": "Stunts",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 145,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 602,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Independence Day",
+  "overview": "On July 2, a giant alien mothership enters orbit around Earth and deploys several dozen saucer-shaped \"destroyer\" spacecraft that quickly lay waste to major cities around the planet. On July 3, the United States conducts a coordinated counterattack that fails. On July 4 the a plan is devised to gain access to the interior of the alien mothership in space in order to plant a nuclear missile.",
+  "production_companies": [
+    {
+      "id": 347,
+      "name": "Centropolis Entertainment"
+    },
+    {
+      "id": 306,
+      "name": "Twentieth Century Fox Film Corporation"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0116629",
+  "release_date": "1996-06-25",
+  "original_title": "Independence Day",
+  "vote_count": 777,
+  "poster_path": "/Ac5OBW8xUFDKX86fQkvBBDOhFzr.jpg",
+  "tagline": "Earth. Take a good look. It might be your last.",
+  "revenue": 816969268,
+  "popularity": "2.12165147499897"
+}

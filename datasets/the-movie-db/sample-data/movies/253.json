@@ -1,0 +1,306 @@
+{
+  "budget": 7000000,
+  "vote_average": 5.9,
+  "backdrop_path": "/gY5D80kK6QBgHa8c9aL3tx0aTEb.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 10222,
+        "order": 0,
+        "credit_id": "52fe422ec3a36847f800a117",
+        "name": "Roger Moore",
+        "cast_id": 19,
+        "profile_path": "/6nGnOdejsqi8WF2UgvRGcxd3zm6.jpg",
+        "character": "James Bond"
+      },
+      {
+        "id": 5050,
+        "order": 1,
+        "credit_id": "52fe422ec3a36847f800a11b",
+        "name": "Yaphet Kotto",
+        "cast_id": 20,
+        "profile_path": "/vjQOWuoig5b2b7JZ8caN4vuFxsg.jpg",
+        "character": "Kananga/Mr. Big"
+      },
+      {
+        "id": 10223,
+        "order": 2,
+        "credit_id": "52fe422ec3a36847f800a11f",
+        "name": "Jane Seymour",
+        "cast_id": 21,
+        "profile_path": "/tlcY3RAVmTrq60PmE6715YDHZJ.jpg",
+        "character": "Solitaire"
+      },
+      {
+        "id": 10224,
+        "order": 3,
+        "credit_id": "52fe422ec3a36847f800a123",
+        "name": "Clifton James",
+        "cast_id": 22,
+        "profile_path": "/gFVSzkcGt5arYsrf2aSSEJ1MXRj.jpg",
+        "character": "Sheriff J.W. Pepper"
+      },
+      {
+        "id": 6772,
+        "order": 4,
+        "credit_id": "52fe422ec3a36847f800a127",
+        "name": "Julius Harris",
+        "cast_id": 23,
+        "profile_path": "/vhyuxFmam4SQSjTOLPStOVYMgbb.jpg",
+        "character": "Tee Hee"
+      },
+      {
+        "id": 10225,
+        "order": 5,
+        "credit_id": "52fe422ec3a36847f800a12b",
+        "name": "Geoffrey Holder",
+        "cast_id": 24,
+        "profile_path": "/bmNg7Ld2H1V3Sqz2PmxvOJOof8z.jpg",
+        "character": "Baron Samedi"
+      },
+      {
+        "id": 10226,
+        "order": 6,
+        "credit_id": "52fe422ec3a36847f800a12f",
+        "name": "David Hedison",
+        "cast_id": 25,
+        "profile_path": "/1Wp1EV1Kcpr85imqCEkFvqCMYDZ.jpg",
+        "character": "Felix Leiter"
+      },
+      {
+        "id": 10227,
+        "order": 7,
+        "credit_id": "52fe422ec3a36847f800a133",
+        "name": "Gloria Hendry",
+        "cast_id": 26,
+        "profile_path": "/2RmBVfzSFb0tSYezSyYPiRWHt5O.jpg",
+        "character": "Rosie Carver"
+      },
+      {
+        "id": 9874,
+        "order": 8,
+        "credit_id": "52fe422ec3a36847f800a137",
+        "name": "Bernard Lee",
+        "cast_id": 27,
+        "profile_path": "/vCLXqcJNAijcVrRrJuoduc5VnSd.jpg",
+        "character": "M"
+      },
+      {
+        "id": 9878,
+        "order": 9,
+        "credit_id": "52fe422ec3a36847f800a13b",
+        "name": "Lois Maxwell",
+        "cast_id": 28,
+        "profile_path": "/uQneO3fT5H7vmjxusi3lJmm3xT3.jpg",
+        "character": "Miss Moneypenny"
+      }
+    ],
+    "crew": [
+      {
+        "id": 9915,
+        "credit_id": "52fe422dc3a36847f800a0ad",
+        "department": "Directing",
+        "name": "Guy Hamilton",
+        "job": "Director",
+        "profile_path": "/dceCLQrZlpEXdZnZLZJpAEqqfnb.jpg"
+      },
+      {
+        "id": 9856,
+        "credit_id": "52fe422dc3a36847f800a0b3",
+        "department": "Writing",
+        "name": "Ian Fleming",
+        "job": "Novel",
+        "profile_path": "/91U37Em6Ru87DiAPMdsocGKyQ0W.jpg"
+      },
+      {
+        "id": 7190,
+        "credit_id": "52fe422dc3a36847f800a0b9",
+        "department": "Writing",
+        "name": "Tom Mankiewicz",
+        "job": "Screenplay",
+        "profile_path": "/ldYH2f8UPevGExyCzwN7Mn3ZPjZ.jpg"
+      },
+      {
+        "id": 9861,
+        "credit_id": "52fe422dc3a36847f800a0bf",
+        "department": "Production",
+        "name": "Albert R. Broccoli",
+        "job": "Producer",
+        "profile_path": "/bgYayDE2fRsgF3ytSzbWvdkDejJ.jpg"
+      },
+      {
+        "id": 9863,
+        "credit_id": "52fe422dc3a36847f800a0c5",
+        "department": "Production",
+        "name": "Harry Saltzman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 10214,
+        "credit_id": "52fe422dc3a36847f800a0cb",
+        "department": "Sound",
+        "name": "George Martin",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 9864,
+        "credit_id": "52fe422dc3a36847f800a0d1",
+        "department": "Sound",
+        "name": "Monty Norman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 10215,
+        "credit_id": "52fe422dc3a36847f800a0d7",
+        "department": "Sound",
+        "name": "Paul McCartney",
+        "job": "Songs",
+        "profile_path": "/f36WntRunmN5j49cXL3EgTyp5Qq.jpg"
+      },
+      {
+        "id": 9867,
+        "credit_id": "52fe422dc3a36847f800a0dd",
+        "department": "Camera",
+        "name": "Ted Moore",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 10185,
+        "credit_id": "52fe422dc3a36847f800a0e3",
+        "department": "Editing",
+        "name": "Bert Bates",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10218,
+        "credit_id": "52fe422dc3a36847f800a0ef",
+        "department": "Editing",
+        "name": "Raymond Poulton",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10219,
+        "credit_id": "52fe422dc3a36847f800a0f5",
+        "department": "Editing",
+        "name": "John Shirley",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 9904,
+        "credit_id": "52fe422ec3a36847f800a0fb",
+        "department": "Production",
+        "name": "Weston Drury Jr.",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 10220,
+        "credit_id": "52fe422ec3a36847f800a101",
+        "department": "Art",
+        "name": "Stephen Hendrickson",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7757,
+        "credit_id": "52fe422ec3a36847f800a107",
+        "department": "Art",
+        "name": "Robert W. Laing",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8524,
+        "credit_id": "52fe422ec3a36847f800a10d",
+        "department": "Art",
+        "name": "Peter Lamont",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 10221,
+        "credit_id": "52fe422ec3a36847f800a113",
+        "department": "Costume & Make-Up",
+        "name": "Julie Harris",
+        "job": "Costume Design",
+        "profile_path": "/9A3cUoEWbxTWcW3D3rRlsPa0UTk.jpg"
+      }
+    ]
+  },
+  "runtime": 121,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.mgm.com/view/movie/1130/Live-and-Let-Die/",
+  "id": 253,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "Jamaica",
+      "iso_3166_1": "JM"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Live and Let Die",
+  "overview": "James Bond must investigate a mysterious murder case of a British agent in New Orleans. Soon he finds himself up against a gangster boss named Mr. Big.",
+  "production_companies": [
+    {
+      "id": 21,
+      "name": "Metro-Goldwyn-Mayer"
+    },
+    {
+      "id": 7576,
+      "name": "Eon Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 645,
+    "backdrop_path": "/v57QgSTbbiN33sshS1AS0QDcPC2.jpg",
+    "name": "James Bond Collection",
+    "poster_path": "/ckNgEItskTZHeTySYfGvageRFSq.jpg"
+  },
+  "imdb_id": "tt0070328",
+  "release_date": "1973-07-05",
+  "original_title": "Live and Let Die",
+  "vote_count": 117,
+  "poster_path": "/xuuoqXxhUDS1o417edMilIvGa88.jpg",
+  "tagline": "Roger Moore is James Bond.",
+  "revenue": 161777836,
+  "popularity": "1.78478571582976"
+}

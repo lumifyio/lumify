@@ -1,0 +1,312 @@
+{
+  "budget": 6400000,
+  "vote_average": 6.7,
+  "backdrop_path": "/6yFoLNQgFdVbA8TZMdfgVpszOla.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1100,
+        "order": 0,
+        "credit_id": "52fe4228c3a36847f8008581",
+        "name": "Arnold Schwarzenegger",
+        "cast_id": 26,
+        "profile_path": "/dulCsiwzZihFGmjtGA6p0yDWEN1.jpg",
+        "character": "The Terminator"
+      },
+      {
+        "id": 2712,
+        "order": 1,
+        "credit_id": "52fe4228c3a36847f800851f",
+        "name": "Michael Biehn",
+        "cast_id": 6,
+        "profile_path": "/uZvJIfVirbv32OK4nba5bMZ6t9G.jpg",
+        "character": "Kyle Reese"
+      },
+      {
+        "id": 2713,
+        "order": 2,
+        "credit_id": "52fe4228c3a36847f8008523",
+        "name": "Linda Hamilton",
+        "cast_id": 7,
+        "profile_path": "/kTrmBZiS5qWWSqGI1wMobf0zWFV.jpg",
+        "character": "Sarah Connor"
+      },
+      {
+        "id": 1818,
+        "order": 3,
+        "credit_id": "52fe4228c3a36847f8008527",
+        "name": "Paul Winfield",
+        "cast_id": 8,
+        "profile_path": "/6oc80tWtRg8pRAPXOhV3FQBvBR5.jpg",
+        "character": "Lieutenant Ed Traxler"
+      },
+      {
+        "id": 2714,
+        "order": 4,
+        "credit_id": "52fe4228c3a36847f800852b",
+        "name": "Lance Henriksen",
+        "cast_id": 9,
+        "profile_path": "/5XY7XCtoqEAXeNHmLQU1CLPQa52.jpg",
+        "character": "Detective Vukovich"
+      },
+      {
+        "id": 2715,
+        "order": 5,
+        "credit_id": "52fe4228c3a36847f800852f",
+        "name": "Bess Motta",
+        "cast_id": 10,
+        "profile_path": "/pHbJBDT0bYimybwMGPs6AnO59ZN.jpg",
+        "character": "Ginger Ventura"
+      },
+      {
+        "id": 2716,
+        "order": 6,
+        "credit_id": "52fe4228c3a36847f8008533",
+        "name": "Earl Boen",
+        "cast_id": 11,
+        "profile_path": "/haOeh8ZWSjD9PgQvWqvQIHfXK5A.jpg",
+        "character": "Dr. Peter Silberman"
+      },
+      {
+        "id": 2717,
+        "order": 7,
+        "credit_id": "52fe4228c3a36847f8008537",
+        "name": "Rick Rossovich",
+        "cast_id": 12,
+        "profile_path": "/f2bFBUT1WRImsKVkSq7A3yACFAa.jpg",
+        "character": "Matt Buchanan"
+      },
+      {
+        "id": 2053,
+        "order": 8,
+        "credit_id": "52fe4228c3a36847f800853b",
+        "name": "Bill Paxton",
+        "cast_id": 13,
+        "profile_path": "/w3ysyErGWrXoj0NymSKt6RX4wc6.jpg",
+        "character": "Punk Leader"
+      },
+      {
+        "id": 2719,
+        "order": 9,
+        "credit_id": "52fe4228c3a36847f800853f",
+        "name": "Brian Thompson",
+        "cast_id": 14,
+        "profile_path": "/sNEutiY9Drgfu8j9ttqweoRthMy.jpg",
+        "character": "Punk"
+      },
+      {
+        "id": 35710,
+        "order": 10,
+        "credit_id": "52fe4228c3a36847f800856d",
+        "name": "Franco Columbu",
+        "cast_id": 22,
+        "profile_path": "/Ajjtqewy65900sHWWkPMdhTZ2E4.jpg",
+        "character": "Future Terminator"
+      },
+      {
+        "id": 102441,
+        "order": 11,
+        "credit_id": "52fe4228c3a36847f800857d",
+        "name": "Dick Miller",
+        "cast_id": 25,
+        "profile_path": "/m4Yx1MaNn3H95HLTBCMNHOfUVv8.jpg",
+        "character": "Pawnshop Clerk"
+      }
+    ],
+    "crew": [
+      {
+        "id": 45090,
+        "credit_id": "537a1ef7c3a3681cdf000046",
+        "department": "Art",
+        "name": "George Costello",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 1098702,
+        "credit_id": "537a1f38c3a3681cc700003a",
+        "department": "Art",
+        "name": "Maria Caso",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 3995,
+        "credit_id": "537a1f82c3a3681cd5000055",
+        "department": "Costume & Make-Up",
+        "name": "Jeff Dawn",
+        "job": "Makeup Department Head",
+        "profile_path": null
+      },
+      {
+        "id": 22107,
+        "credit_id": "537a1fa1c3a3681cef00004b",
+        "department": "Costume & Make-Up",
+        "name": "Deborah Everton",
+        "job": "Costume Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 2710,
+        "credit_id": "52fe4228c3a36847f8008515",
+        "department": "Directing",
+        "name": "James Cameron",
+        "job": "Director",
+        "profile_path": "/6Zk8h1XsPGKUM8M8cKUHAnmnc8O.jpg"
+      },
+      {
+        "id": 2711,
+        "credit_id": "52fe4228c3a36847f800851b",
+        "department": "Writing",
+        "name": "William Wisher Jr.",
+        "job": "Dialogue",
+        "profile_path": null
+      },
+      {
+        "id": 869,
+        "credit_id": "52fe4228c3a36847f8008545",
+        "department": "Production",
+        "name": "Gale Anne Hurd",
+        "job": "Producer",
+        "profile_path": "/oRWGpXdIm2lu870aaKpgO3wy19n.jpg"
+      },
+      {
+        "id": 2720,
+        "credit_id": "52fe4228c3a36847f800854b",
+        "department": "Production",
+        "name": "Derek Gibson",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2721,
+        "credit_id": "52fe4228c3a36847f8008551",
+        "department": "Production",
+        "name": "John Daly",
+        "job": "Executive Producer",
+        "profile_path": "/aSn9EdjxbU5VkmF7INPdumGfJWG.jpg"
+      },
+      {
+        "id": 2722,
+        "credit_id": "52fe4228c3a36847f8008557",
+        "department": "Sound",
+        "name": "Brad Fiedel",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2723,
+        "credit_id": "52fe4228c3a36847f800855d",
+        "department": "Camera",
+        "name": "Adam Greenberg",
+        "job": "Director of Photography",
+        "profile_path": "/te3aqArBCPkza8DeJpDx0Rncen8.jpg"
+      },
+      {
+        "id": 898,
+        "credit_id": "52fe4228c3a36847f8008563",
+        "department": "Editing",
+        "name": "Mark Goldblatt",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2724,
+        "credit_id": "52fe4228c3a36847f8008569",
+        "department": "Production",
+        "name": "Stanzi Stokes",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2710,
+        "credit_id": "52fe4228c3a36847f8008573",
+        "department": "Writing",
+        "name": "James Cameron",
+        "job": "Writer",
+        "profile_path": "/6Zk8h1XsPGKUM8M8cKUHAnmnc8O.jpg"
+      },
+      {
+        "id": 869,
+        "credit_id": "52fe4228c3a36847f8008579",
+        "department": "Writing",
+        "name": "Gale Anne Hurd",
+        "job": "Writer",
+        "profile_path": "/oRWGpXdIm2lu870aaKpgO3wy19n.jpg"
+      }
+    ]
+  },
+  "runtime": 108,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.mgm.com/#/our-titles/1970/The-Terminator/",
+  "id": 218,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "The Terminator",
+  "overview": "In the post-apocalyptic future, reigning tyrannical supercomputers teleport a cyborg assassin known as the \"Terminator\" back to 1984 to kill Sarah Connor, whose unborn son is destined to lead insurgents against 21st century mechanical hegemony. Meanwhile, the human-resistance movement dispatches a lone warrior to safeguard Sarah. Can he stop the virtually indestructible killing machine?",
+  "production_companies": [
+    {
+      "id": 469,
+      "name": "Hemdale Film Corporation"
+    },
+    {
+      "id": 7746,
+      "name": "Pacific Western Production"
+    },
+    {
+      "id": 7745,
+      "name": "Euro Film Funding"
+    },
+    {
+      "id": 4764,
+      "name": "Cinema 84"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 528,
+    "backdrop_path": "/tP1SCFnlYTHSMqp1yuFDVTQeLUD.jpg",
+    "name": "The Terminator Collection",
+    "poster_path": "/xsRbnABGAPJafKR479ppTHJfB9N.jpg"
+  },
+  "imdb_id": "tt0088247",
+  "release_date": "1984-10-26",
+  "original_title": "The Terminator",
+  "vote_count": 1285,
+  "poster_path": "/q8ffBuxQlYOHrvPniLgCbmKK4Lv.jpg",
+  "tagline": "Your future is in his hands.",
+  "revenue": 78371200,
+  "popularity": "4.46327828026783"
+}

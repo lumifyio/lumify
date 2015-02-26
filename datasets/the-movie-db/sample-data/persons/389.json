@@ -1,0 +1,206 @@
+{
+  "birthday": "1972-05-22",
+  "adult": false,
+  "biography": "Alison Eastwood  (born May 22, 1972) is an American film director, Hollywood actress, fashion model, and fashion designer. She made her directorial debut with Rails &amp; Ties (2007), starring Kevin Bacon and Marcia Gay Harden.\n\nDescription above from the Wikipedia article Alison Eastwood, licensed under CC-BY-SA, full list of contributors on Wikipedia",
+  "homepage": "",
+  "profile_path": "/mRXDleUiPyNFSv3mOF4PNR7nhkY.jpg",
+  "id": 389,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0002055",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 11707,
+        "media_type": "movie",
+        "title": "Tightrope",
+        "credit_id": "52fe447d9251416c75036a93",
+        "release_date": "1984-08-17",
+        "original_title": "Tightrope",
+        "adult": false,
+        "poster_path": "/2B2M5KwEoXghuLVHaWqI0c45y4k.jpg",
+        "character": "Amanda Block"
+      },
+      {
+        "id": 8197,
+        "media_type": "movie",
+        "title": "Midnight in the Garden of Good and Evil",
+        "credit_id": "52fe4494c3a36847f809e3ed",
+        "release_date": "1997-11-21",
+        "original_title": "Midnight in the Garden of Good and Evil",
+        "adult": false,
+        "poster_path": "/aBnUxDAqULcUasM5cZiMy0970ZU.jpg",
+        "character": "Mandy Nichols"
+      },
+      {
+        "id": 34679,
+        "media_type": "movie",
+        "title": "One Long Night",
+        "credit_id": "52fe45749251416c91032fb3",
+        "release_date": "2007-03-25",
+        "original_title": "One Long Night",
+        "adult": false,
+        "poster_path": "/mYidL9Yz4LmTXFmpCDd1M2nPH03.jpg",
+        "character": "Wendy"
+      },
+      {
+        "id": 14293,
+        "media_type": "movie",
+        "title": "Poolhall Junkies",
+        "credit_id": "52fe45e39251416c75065eb3",
+        "release_date": "2002-06-07",
+        "original_title": "Poolhall Junkies",
+        "adult": false,
+        "poster_path": "/8Q6ogHOPUkPDOBOe3rgDzHHMj4y.jpg",
+        "character": "Tara"
+      },
+      {
+        "id": 43674,
+        "media_type": "movie",
+        "title": "The Spring",
+        "credit_id": "52fe4659c3a36847f80f9fb9",
+        "release_date": "2000-01-16",
+        "original_title": "The Spring",
+        "adult": false,
+        "poster_path": "/b7cSvs0lmjTPzX4HJ9v91uDMYDw.jpg",
+        "character": "Sophie Weston"
+      },
+      {
+        "id": 66166,
+        "media_type": "movie",
+        "title": "Black & White",
+        "credit_id": "52fe472ec3a368484e0b9125",
+        "release_date": "1999-12-07",
+        "original_title": "Black & White",
+        "adult": false,
+        "poster_path": "/zmLQUZn71cuwE3qwRN30J1vpE1R.jpg",
+        "character": ""
+      },
+      {
+        "id": 67616,
+        "media_type": "movie",
+        "title": "The Lost Angel",
+        "credit_id": "52fe476ec3a368484e0c69c9",
+        "release_date": "2005-04-26",
+        "original_title": "The Lost Angel",
+        "adult": false,
+        "poster_path": "/3P88zSh15h8udTgUuO6XQmqxUxs.jpg",
+        "character": "Billie"
+      },
+      {
+        "id": 76718,
+        "media_type": "movie",
+        "title": "How to Go Out on a Date in Queens",
+        "credit_id": "52fe494ac3a368484e123fb9",
+        "release_date": "2006-07-28",
+        "original_title": "How to Go Out on a Date in Queens",
+        "adult": false,
+        "poster_path": "/kOjyNRVPCclasIacIF8OTkeLRDP.jpg",
+        "character": "Karen"
+      },
+      {
+        "id": 78813,
+        "media_type": "movie",
+        "title": "Lesser Evil",
+        "credit_id": "52fe49b4c3a368484e13a505",
+        "release_date": "2006-03-19",
+        "original_title": "Lesser Evil",
+        "adult": false,
+        "poster_path": "/tOrbpqhJTnR7KxdNQSs3kA6OIOI.jpg",
+        "character": "Karen Max"
+      },
+      {
+        "id": 66,
+        "media_type": "movie",
+        "title": "Absolute Power",
+        "credit_id": "52fe4212c3a36847f8001d45",
+        "release_date": "1997-02-13",
+        "original_title": "Absolute Power",
+        "adult": false,
+        "poster_path": "/oJQdp09Oc51DkArsMDvgDLdWiDu.jpg",
+        "character": "Art Student"
+      },
+      {
+        "id": 117179,
+        "media_type": "movie",
+        "title": "Just a Little Harmless Sex",
+        "credit_id": "52fe4babc3a36847f820ebe7",
+        "release_date": "1998-01-01",
+        "original_title": "Just a Little Harmless Sex",
+        "adult": false,
+        "poster_path": "/rn4o5MMWGMIQ4tnaEDXdwghFGgV.jpg",
+        "character": "Laura"
+      },
+      {
+        "id": 118302,
+        "media_type": "movie",
+        "title": "I'll Be Seeing You",
+        "credit_id": "52fe4bd3c3a36847f8215707",
+        "release_date": "2004-05-01",
+        "original_title": "I'll Be Seeing You",
+        "adult": false,
+        "poster_path": "/hR4k7gfvbDF1JUxamEeaVHVCTds.jpg",
+        "character": "Patricia Collins"
+      },
+      {
+        "id": 176570,
+        "media_type": "movie",
+        "title": "Shadow People",
+        "credit_id": "52fe4d73c3a36847f8261aaf",
+        "release_date": "2013-03-17",
+        "original_title": "Shadow People",
+        "adult": false,
+        "poster_path": "/7raFGrh2PFXpCMNKNFs7H6UAtCk.jpg",
+        "character": ""
+      },
+      {
+        "id": 212277,
+        "media_type": "movie",
+        "title": "Waitin' to Live",
+        "credit_id": "52fe4da8c3a368484e1f58dd",
+        "release_date": null,
+        "original_title": "Waitin' to Live",
+        "adult": false,
+        "poster_path": "/9EcJK0oP3Yz4nFnCuIFXgdePfeb.jpg",
+        "character": "Harriett Williams"
+      },
+      {
+        "id": 279135,
+        "media_type": "movie",
+        "title": "Suicide, the Comedy",
+        "credit_id": "53af11ae0e0a265989004ef5",
+        "release_date": "1998-01-01",
+        "original_title": "Suicide, the Comedy",
+        "adult": false,
+        "poster_path": "/92k1FYATP9N9VkXip5RFZsbzfri.jpg",
+        "character": "Amanda"
+      },
+      {
+        "id": 27213,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5258844e760ee34661433d5a",
+        "name": "The Late Late Show with Craig Kilborn",
+        "poster_path": null,
+        "original_name": "The Late Late Show with Craig Kilborn",
+        "first_air_date": "1999-03-30",
+        "character": ""
+      }
+    ],
+    "crew": [{
+      "id": 15006,
+      "media_type": "movie",
+      "title": "Rails & Ties",
+      "credit_id": "52fe462e9251416c7506fed3",
+      "department": "Directing",
+      "release_date": "2007-09-01",
+      "original_title": "Rails & Ties",
+      "job": "Director",
+      "adult": false,
+      "poster_path": "/aKupDLSZGOam5jhPBj6yzAsml7z.jpg"
+    }]
+  },
+  "name": "Alison Eastwood",
+  "place_of_birth": "Carmel - California - USA",
+  "popularity": "1.00460017910113"
+}

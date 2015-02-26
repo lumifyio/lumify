@@ -1,0 +1,354 @@
+{
+  "budget": 0,
+  "vote_average": 8.3,
+  "backdrop_path": "/eISDmexTFnQlGMts5slYbEW2Fbg.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1639,
+        "order": 0,
+        "credit_id": "52fe421ec3a36847f800550d",
+        "name": "Emily Watson",
+        "cast_id": 8,
+        "profile_path": "/jyIC8axLoCrbQoKGGjGFRU7hfNI.jpg",
+        "character": "Bess McNeill"
+      },
+      {
+        "id": 1640,
+        "order": 1,
+        "credit_id": "52fe421ec3a36847f8005511",
+        "name": "Stellan Skarsgård",
+        "cast_id": 9,
+        "profile_path": "/hjWdhX7zEI0DkF7gA4hcEVcYCZl.jpg",
+        "character": "Jan Nyman"
+      },
+      {
+        "id": 1641,
+        "order": 2,
+        "credit_id": "52fe421ec3a36847f8005515",
+        "name": "Katrin Cartlidge",
+        "cast_id": 10,
+        "profile_path": "/gs1DKojYoO49yNDgtwWkITt3iGN.jpg",
+        "character": "Dodo McNeill"
+      },
+      {
+        "id": 1642,
+        "order": 3,
+        "credit_id": "52fe421ec3a36847f8005519",
+        "name": "Jean-Marc Barr",
+        "cast_id": 11,
+        "profile_path": "/b3E5gzQf1NmivNY2rHO8HJHs6bZ.jpg",
+        "character": "Terry"
+      },
+      {
+        "id": 1643,
+        "order": 4,
+        "credit_id": "52fe421ec3a36847f800551d",
+        "name": "Adrian Rawlins",
+        "cast_id": 12,
+        "profile_path": "/bqUlzzI0PrnJxvVbnxV86ORkoEY.jpg",
+        "character": "Dr. Richardson"
+      },
+      {
+        "id": 1644,
+        "order": 5,
+        "credit_id": "52fe421ec3a36847f8005521",
+        "name": "Jonathan Hackett",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Priest"
+      },
+      {
+        "id": 1645,
+        "order": 6,
+        "credit_id": "52fe421ec3a36847f8005525",
+        "name": "Sandra Voe",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Mother"
+      },
+      {
+        "id": 1646,
+        "order": 7,
+        "credit_id": "52fe421ec3a36847f8005529",
+        "name": "Udo Kier",
+        "cast_id": 15,
+        "profile_path": "/ltidqLA5xO7JHjoBBmsA18np143.jpg",
+        "character": "Sadistic Sailor"
+      },
+      {
+        "id": 1647,
+        "order": 8,
+        "credit_id": "52fe421ec3a36847f800552d",
+        "name": "Mikkel Gaup",
+        "cast_id": 16,
+        "profile_path": "/gt8qQquilEofMCM4qBQ4fGt8suM.jpg",
+        "character": "Pits"
+      },
+      {
+        "id": 1648,
+        "order": 9,
+        "credit_id": "52fe421ec3a36847f8005531",
+        "name": "Roef Ragas",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Pim"
+      },
+      {
+        "id": 1649,
+        "order": 10,
+        "credit_id": "52fe421ec3a36847f8005535",
+        "name": "Robert Robertson",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Chairman"
+      },
+      {
+        "id": 3913,
+        "order": 11,
+        "credit_id": "52fe421ec3a36847f8005539",
+        "name": "Phil McCall",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Grandfather"
+      },
+      {
+        "id": 3914,
+        "order": 12,
+        "credit_id": "52fe421ec3a36847f800553d",
+        "name": "Desmond Reilly",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "An Elder"
+      },
+      {
+        "id": 3915,
+        "order": 13,
+        "credit_id": "52fe421ec3a36847f8005541",
+        "name": "Sarah Gudgeon",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Sybilla"
+      },
+      {
+        "id": 3916,
+        "order": 14,
+        "credit_id": "52fe421ec3a36847f8005545",
+        "name": "Finlay Welsh",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Coroner"
+      },
+      {
+        "id": 3917,
+        "order": 15,
+        "credit_id": "52fe421ec3a36847f8005549",
+        "name": "David Gallacher",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Glasgow Doctor"
+      },
+      {
+        "id": 3918,
+        "order": 16,
+        "credit_id": "52fe421ec3a36847f800554d",
+        "name": "Ray Jeffries",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Man on Bus"
+      },
+      {
+        "id": 3919,
+        "order": 17,
+        "credit_id": "52fe421ec3a36847f8005551",
+        "name": "Owen Kavanagh",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Man at Lighthouse"
+      },
+      {
+        "id": 3920,
+        "order": 18,
+        "credit_id": "52fe421ec3a36847f8005555",
+        "name": "Bob Docherty",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Man on Boat"
+      },
+      {
+        "id": 3921,
+        "order": 19,
+        "credit_id": "52fe421ec3a36847f8005559",
+        "name": "David Bateson",
+        "cast_id": 27,
+        "profile_path": "/qlAbrkkQJIFMw8VHgi1PpAEs4oL.jpg",
+        "character": "Young Sailor"
+      }
+    ],
+    "crew": [
+      {
+        "id": 42,
+        "credit_id": "52fe421ec3a36847f80054e5",
+        "department": "Directing",
+        "name": "Lars von Trier",
+        "job": "Director",
+        "profile_path": "/zVINg5oIjpSIchNaTWyMPWQKrvm.jpg"
+      },
+      {
+        "id": 42,
+        "credit_id": "52fe421ec3a36847f80054eb",
+        "department": "Writing",
+        "name": "Lars von Trier",
+        "job": "Author",
+        "profile_path": "/zVINg5oIjpSIchNaTWyMPWQKrvm.jpg"
+      },
+      {
+        "id": 1631,
+        "credit_id": "52fe421ec3a36847f80054f1",
+        "department": "Writing",
+        "name": "Peter Asmussen",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1632,
+        "credit_id": "52fe421ec3a36847f80054f7",
+        "department": "Camera",
+        "name": "Robby Müller",
+        "job": "Director of Photography",
+        "profile_path": "/p5PQzNa7DHY8VfulFYmRH4XqLZF.jpg"
+      },
+      {
+        "id": 1634,
+        "credit_id": "52fe421ec3a36847f80054fd",
+        "department": "Editing",
+        "name": "Anders Refn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1174,
+        "credit_id": "52fe421ec3a36847f8005503",
+        "department": "Production",
+        "name": "Peter Aalbæk Jensen",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1637,
+        "credit_id": "52fe421ec3a36847f8005509",
+        "department": "Sound",
+        "name": "Joachim Holbek",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3922,
+        "credit_id": "52fe421ec3a36847f800555f",
+        "department": "Production",
+        "name": "Joyce Nettles",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3923,
+        "credit_id": "52fe421ec3a36847f8005565",
+        "department": "Production",
+        "name": "Job Gosschalk",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3924,
+        "credit_id": "52fe421ec3a36847f800556b",
+        "department": "Camera",
+        "name": "Jean-Paul Meurisse",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3925,
+        "credit_id": "52fe421ec3a36847f8005571",
+        "department": "Camera",
+        "name": "Eric Kress",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 159,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 145,
+  "production_countries": [
+    {
+      "name": "Denmark",
+      "iso_3166_1": "DK"
+    },
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Iceland",
+      "iso_3166_1": "IS"
+    },
+    {
+      "name": "Netherlands",
+      "iso_3166_1": "NL"
+    },
+    {
+      "name": "Norway",
+      "iso_3166_1": "NO"
+    },
+    {
+      "name": "Sweden",
+      "iso_3166_1": "SE"
+    }
+  ],
+  "title": "Breaking the Waves",
+  "overview": "Breaking the Waves is Lars von Tier\u2019s intimate story of love, loss, faith, and tragedy. Filmed in the Dogma 95 style; a woman tries to keep a relationship with her husband during hard times. The scenic imagery and excellent performances create a powerful film.",
+  "production_companies": [
+    {
+      "id": 123,
+      "name": "Trust Film"
+    },
+    {
+      "id": 125,
+      "name": "Danish Film Institute"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 498,
+    "backdrop_path": "/9TSxhVABUzJqUv0dINNT91ymdyk.jpg",
+    "name": "Heart of Gold Collection",
+    "poster_path": "/cwrmUIVzOuR9FdqKBfERkMHdde0.jpg"
+  },
+  "imdb_id": "tt0115751",
+  "release_date": "1996-05-17",
+  "original_title": "Breaking the Waves",
+  "vote_count": 10,
+  "poster_path": "/hYVIxSPfSvqFLbcigUu1gNVLSoq.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.617023207272211"
+}

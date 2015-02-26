@@ -1,0 +1,180 @@
+{
+  "budget": 0,
+  "vote_average": 7,
+  "backdrop_path": "/2xzwyXRkAxmrE66gq1AhhKh4whB.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 12336,
+        "order": 0,
+        "credit_id": "52fe427ec3a36847f8022f87",
+        "name": "Carlo Battisti",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Umberto Domenico Ferrari"
+      },
+      {
+        "id": 12337,
+        "order": 1,
+        "credit_id": "52fe427ec3a36847f8022f8b",
+        "name": "Maria-Pia Casilio",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Maria, la servetta"
+      },
+      {
+        "id": 12338,
+        "order": 2,
+        "credit_id": "52fe427ec3a36847f8022f8f",
+        "name": "Lina Gennari",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Antonia, la padrona di case"
+      },
+      {
+        "id": 12339,
+        "order": 3,
+        "credit_id": "52fe427ec3a36847f8022f93",
+        "name": "Ileana Simova",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "La donna nella camera di Umberto"
+      },
+      {
+        "id": 12340,
+        "order": 4,
+        "credit_id": "52fe427ec3a36847f8022f97",
+        "name": "Elena Rea",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "La suora all' ospedale"
+      },
+      {
+        "id": 12341,
+        "order": 5,
+        "credit_id": "52fe427ec3a36847f8022f9b",
+        "name": "Memmo Carotenuto",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Il degente all' ospedale"
+      }
+    ],
+    "crew": [
+      {
+        "id": 12329,
+        "credit_id": "52fe427ec3a36847f8022f4d",
+        "department": "Directing",
+        "name": "Vittorio De Sica",
+        "job": "Director",
+        "profile_path": "/w3mu9GT4YdarLFDrKjdW2Sb2HgI.jpg"
+      },
+      {
+        "id": 12330,
+        "credit_id": "52fe427ec3a36847f8022f53",
+        "department": "Writing",
+        "name": "Cesare Zavattini",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4411,
+        "credit_id": "52fe427ec3a36847f8022f59",
+        "department": "Production",
+        "name": "Giuseppe Amato",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5679,
+        "credit_id": "52fe427ec3a36847f8022f5f",
+        "department": "Production",
+        "name": "Angelo Rizzoli",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 12331,
+        "credit_id": "52fe427ec3a36847f8022f65",
+        "department": "Sound",
+        "name": "Alessandro Cicognini",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 12332,
+        "credit_id": "52fe427ec3a36847f8022f6b",
+        "department": "Camera",
+        "name": "Aldo Graziati",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4418,
+        "credit_id": "52fe427ec3a36847f8022f71",
+        "department": "Editing",
+        "name": "Eraldo Da Roma",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12333,
+        "credit_id": "52fe427ec3a36847f8022f77",
+        "department": "Art",
+        "name": "Virgilio Marchi",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 12334,
+        "credit_id": "52fe427ec3a36847f8022f7d",
+        "department": "Art",
+        "name": "Ferdinando Ruffo",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 12335,
+        "credit_id": "52fe427ec3a36847f8022f83",
+        "department": "Sound",
+        "name": "Ennio Sensi",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 89,
+  "spoken_languages": [{
+    "iso_639_1": "it",
+    "name": "Italiano"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 833,
+  "production_countries": [{
+    "name": "Italy",
+    "iso_3166_1": "IT"
+  }],
+  "title": "Umberto D.",
+  "overview": "Umberto Domenico Ferrari, an elderly and retired civil servant, is desperately trying to maintain a decent standard of living on a rapidly dwindling state pension. But he's up against his tyrannical landlady, who keeps demanding rent that he can't pay (while renting his room out to prostitutes during the day), and his only friends are the pregnant housemaid and his little dog Flike.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0045274",
+  "release_date": "1952-01-20",
+  "original_title": "Umberto D.",
+  "vote_count": 3,
+  "poster_path": "/zwslsX98Hp4GyJGoVI4mZMU9mDO.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.156701657057651"
+}

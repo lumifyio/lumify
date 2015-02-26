@@ -1,0 +1,341 @@
+{
+  "birthday": "1938-07-18",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nHampton Fancher (born July 18, 1938) is a former actor who became a producer and screenwriter in the late 1970s. Fancher was born to a Mexican mother and an American father in East Los Angeles, California, US. At 15, he ran away to Spain to become a flamenco dancer and renamed himself Mario Montejo. He was married briefly to Sue Lyon of Lolita fame.\n\nFancher lives in New York City.\n\nDescription above from the Wikipedia article Hampton Fancher, licensed under CC-BY-SA, full list of contributors on Wikipedia",
+  "homepage": "",
+  "profile_path": "/lrGecnLhzjzgwjKHvrmYtRAqOsP.jpg",
+  "id": 583,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0266684",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 28284,
+        "media_type": "movie",
+        "title": "Parrish",
+        "credit_id": "52fe4588c3a368484e060ad1",
+        "release_date": "1961-05-04",
+        "original_title": "Parrish",
+        "adult": false,
+        "poster_path": "/ex3bvPrXLMDVHzpXuudaD2gqd6f.jpg",
+        "character": "Edgar Raike"
+      },
+      {
+        "id": 57656,
+        "media_type": "movie",
+        "title": "Dangerous Days: Making Blade Runner",
+        "credit_id": "52fe493ec3a36847f819068f",
+        "release_date": "2007-12-18",
+        "original_title": "Dangerous Days: Making Blade Runner",
+        "adult": false,
+        "poster_path": "/op2PlKEpGRyQ6iGNXiPvwWMu5Gu.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 85214,
+        "media_type": "movie",
+        "title": "On the Edge of 'Blade Runner'",
+        "credit_id": "53c872fac3a3686e8200041e",
+        "release_date": "2000-01-01",
+        "original_title": "On the Edge of 'Blade Runner'",
+        "adult": false,
+        "poster_path": null,
+        "character": "Himself"
+      },
+      {
+        "id": 925,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52540e6f19c295794031cb7e",
+        "name": "77 Sunset Strip",
+        "poster_path": "/1OfZQQeuJmvyJ55oj6aehGIJgAV.jpg",
+        "original_name": "77 Sunset Strip",
+        "first_air_date": "1958-10-10",
+        "character": ""
+      },
+      {
+        "id": 3713,
+        "media_type": "tv",
+        "episode_count": 3,
+        "credit_id": "525754c3760ee36aaa209eff",
+        "name": "Gunsmoke",
+        "poster_path": "/aHIHwuVatcTuPdgPHmqaxhnxL3v.jpg",
+        "original_name": "Gunsmoke",
+        "first_air_date": "1955-09-10",
+        "character": ""
+      },
+      {
+        "id": 4177,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52575d4019c29531db1a5f5d",
+        "name": "Perry Mason",
+        "poster_path": "/qNQQIq8kyTGiB8dURMrr1XvVC28.jpg",
+        "original_name": "Perry Mason",
+        "first_air_date": "1957-09-21",
+        "character": ""
+      },
+      {
+        "id": 9855,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257f83419c29531db2cf4cb",
+        "name": "Police Story",
+        "poster_path": "/ecq8PGtN14DIWWsOl3G934yHD2i.jpg",
+        "original_name": "Police Story",
+        "first_air_date": "1973-09-25",
+        "character": ""
+      },
+      {
+        "id": 10083,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257fc5219c29531db30df70",
+        "name": "The Fugitive",
+        "poster_path": "/rQsMXF1qCAK6HRqnm3oC3UWCCJw.jpg",
+        "original_name": "The Fugitive",
+        "first_air_date": "1963-09-17",
+        "character": ""
+      },
+      {
+        "id": 10980,
+        "media_type": "tv",
+        "episode_count": 4,
+        "credit_id": "52580a0919c29531db3f0dc8",
+        "name": "Have Gun \u2013 Will Travel",
+        "poster_path": "/c2ABqnVHgkVUcDA05xP3GsC3Fc2.jpg",
+        "original_name": "Have Gun \u2013 Will Travel",
+        "first_air_date": "1957-09-14",
+        "character": ""
+      },
+      {
+        "id": 11053,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52580b0319c29531db4023bc",
+        "name": "Daniel Boone",
+        "poster_path": "/7rv8eq5ioXaziEQGNHBGNTdeoBf.jpg",
+        "original_name": "Daniel Boone",
+        "first_air_date": "1964-09-24",
+        "character": ""
+      },
+      {
+        "id": 13859,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52582ba6760ee36aaa87efe5",
+        "name": "The Rifleman",
+        "poster_path": "/eTSfZyhBYGkleClh1GlbpDjDzXg.jpg",
+        "original_name": "The Rifleman",
+        "first_air_date": "1958-09-30",
+        "character": ""
+      },
+      {
+        "id": 14457,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5258315a760ee36aaa8ec7df",
+        "name": "Tate",
+        "poster_path": "/uhoSFEIptVvLXIzrjivyMITAPxp.jpg",
+        "original_name": "Tate",
+        "first_air_date": "1960-06-08",
+        "character": ""
+      },
+      {
+        "id": 14656,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52583436760ee36aaa91b854",
+        "name": "Law of the Plainsman",
+        "poster_path": "/tQnb3fYs4v077X21LU5hKC2guIR.jpg",
+        "original_name": "Law of the Plainsman",
+        "first_air_date": "1959-10-01",
+        "character": ""
+      },
+      {
+        "id": 947,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52540f5a19c295794032a31f",
+        "name": "Cheyenne",
+        "poster_path": null,
+        "original_name": "Cheyenne",
+        "first_air_date": "1955-09-20",
+        "character": ""
+      },
+      {
+        "id": 1247,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525419c519c2957940396c5a",
+        "name": "The Great Adventure",
+        "poster_path": null,
+        "original_name": "The Great Adventure",
+        "first_air_date": "1963-09-27",
+        "character": ""
+      },
+      {
+        "id": 2813,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525747e119c29531db0801cf",
+        "name": "Mannix",
+        "poster_path": "/a19iS9fT53n5LsV0MIR1lwuU8aF.jpg",
+        "original_name": "Mannix",
+        "first_air_date": "1967-09-07",
+        "character": ""
+      },
+      {
+        "id": 3176,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52574d8719c29531db0c6fee",
+        "name": "Arrest and Trial",
+        "poster_path": "/a23WW5hmYxbdVnApeSBwvB578tk.jpg",
+        "original_name": "Arrest and Trial",
+        "first_air_date": "1963-09-15",
+        "character": ""
+      },
+      {
+        "id": 7346,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52578b92760ee36aaa681a72",
+        "name": "The Monroes",
+        "poster_path": null,
+        "original_name": "The Monroes",
+        "first_air_date": "1966-09-07",
+        "character": ""
+      },
+      {
+        "id": 8270,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52579067760ee36aaa6ca31e",
+        "name": "The Outlaws",
+        "poster_path": null,
+        "original_name": "The Outlaws",
+        "first_air_date": "1960-09-26",
+        "character": ""
+      },
+      {
+        "id": 9865,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257f85b19c29531db2d235d",
+        "name": "Switch",
+        "poster_path": "/9dO8JH4m6SGTpOiwtUNsl8ttx7M.jpg",
+        "original_name": "Switch",
+        "first_air_date": "1975-09-09",
+        "character": ""
+      },
+      {
+        "id": 10377,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525800cb19c29531db35be73",
+        "name": "Alcoa Presents: One Step Beyond",
+        "poster_path": "/dHXUESKXcwTVNfIgARFQsXKC6vx.jpg",
+        "original_name": "Alcoa Presents: One Step Beyond",
+        "first_air_date": "1959-01-20",
+        "character": ""
+      },
+      {
+        "id": 10952,
+        "media_type": "tv",
+        "episode_count": 3,
+        "credit_id": "5258099b19c29531db3e9c21",
+        "name": "Rawhide",
+        "poster_path": "/kpTgf8Kzws5jndrwmxtcvgCWK9K.jpg",
+        "original_name": "Rawhide",
+        "first_air_date": "1959-01-09",
+        "character": ""
+      },
+      {
+        "id": 12802,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5258239d760ee36aaa7dbea8",
+        "name": "Temple Houston",
+        "poster_path": null,
+        "original_name": "Temple Houston",
+        "first_air_date": "1963-09-19",
+        "character": ""
+      },
+      {
+        "id": 13844,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52582b78760ee36aaa87a1af",
+        "name": "The Rebel",
+        "poster_path": "/sYGQVjOe2g7Q849PSVNDGrdWA7X.jpg",
+        "original_name": "The Rebel",
+        "first_air_date": "1959-10-04",
+        "character": ""
+      },
+      {
+        "id": 14328,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5258300e760ee36aaa8d972e",
+        "name": "Dick Powell's Zane Grey Theater",
+        "poster_path": null,
+        "original_name": "Dick Powell's Zane Grey Theater",
+        "first_air_date": "1956-10-05",
+        "character": ""
+      },
+      {
+        "id": 24368,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525877a1760ee346612c12b1",
+        "name": "General Electric True",
+        "poster_path": null,
+        "original_name": "General Electric True",
+        "first_air_date": "1962-09-30",
+        "character": ""
+      },
+      {
+        "id": 953,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52715ff3760ee37ebb05c685",
+        "name": "Maverick",
+        "poster_path": "/ch7I6z09OmhES5Jg38ddjCCV1PA.jpg",
+        "original_name": "Maverick",
+        "first_air_date": "1957-09-22",
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 21719,
+        "media_type": "movie",
+        "title": "The Minus Man",
+        "credit_id": "52fe4424c3a368484e011e3f",
+        "department": "Directing",
+        "release_date": "1999-02-25",
+        "original_title": "The Minus Man",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/sM19O4vTx70Zzorov7EurqWpG3Q.jpg"
+      },
+      {
+        "id": 78,
+        "media_type": "movie",
+        "title": "Blade Runner",
+        "credit_id": "52fe4214c3a36847f800261b",
+        "department": "Writing",
+        "release_date": "1982-06-25",
+        "original_title": "Blade Runner",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/p64TtbZGCElxQHpAMWmDHkWJlH2.jpg"
+      }
+    ]
+  },
+  "name": "Hampton Fancher",
+  "place_of_birth": "East Los Angeles, California, USA",
+  "popularity": "1.09275759802068"
+}

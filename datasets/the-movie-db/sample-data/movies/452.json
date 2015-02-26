@@ -1,0 +1,487 @@
+{
+  "budget": 0,
+  "vote_average": 7.4,
+  "backdrop_path": "/pWdwo7mxBmECnIhDPxzv0enzva.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6120,
+        "order": 0,
+        "credit_id": "52fe4245c3a36847f801124f",
+        "name": "Bodil Jørgensen",
+        "cast_id": 1,
+        "profile_path": "/yu2e7EE9LPpKwYEZp16mKGplv9p.jpg",
+        "character": "Karen"
+      },
+      {
+        "id": 6121,
+        "order": 1,
+        "credit_id": "52fe4245c3a36847f8011253",
+        "name": "Jens Albinus",
+        "cast_id": 2,
+        "profile_path": "/9CgGf30xp3hreseXoQd3qCQV1cY.jpg",
+        "character": "Stoffer"
+      },
+      {
+        "id": 6122,
+        "order": 2,
+        "credit_id": "52fe4245c3a36847f8011257",
+        "name": "Anne Louise Hassing",
+        "cast_id": 3,
+        "profile_path": "/nl3XzXVRifRNEnVl08n2S6DsN6y.jpg",
+        "character": "Susanne"
+      },
+      {
+        "id": 6123,
+        "order": 3,
+        "credit_id": "52fe4245c3a36847f801125b",
+        "name": "Troels Lyby",
+        "cast_id": 4,
+        "profile_path": "/fCzizgD6Xsqyodhtag0zMb3hYVf.jpg",
+        "character": "Henrik"
+      },
+      {
+        "id": 1018,
+        "order": 4,
+        "credit_id": "52fe4245c3a36847f801125f",
+        "name": "Nikolaj Lie Kaas",
+        "cast_id": 5,
+        "profile_path": "/xO4yWra3xoK0rdzDN4OC8Jwh0FH.jpg",
+        "character": "Jeppe"
+      },
+      {
+        "id": 6124,
+        "order": 5,
+        "credit_id": "52fe4245c3a36847f8011263",
+        "name": "Louise Mieritz",
+        "cast_id": 6,
+        "profile_path": "/p0nD3GClnRBUWtxhBMhzbHrF3rk.jpg",
+        "character": "Josephine"
+      },
+      {
+        "id": 6125,
+        "order": 6,
+        "credit_id": "52fe4245c3a36847f8011267",
+        "name": "Henrik Prip",
+        "cast_id": 7,
+        "profile_path": "/sAz0vA2lypx6qg9bMTjuNU1cHBI.jpg",
+        "character": "Ped"
+      },
+      {
+        "id": 6126,
+        "order": 7,
+        "credit_id": "52fe4245c3a36847f801126b",
+        "name": "Luis Mesonero",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Miguel"
+      },
+      {
+        "id": 6127,
+        "order": 8,
+        "credit_id": "52fe4245c3a36847f801126f",
+        "name": "Knud Romer Jørgensen",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Axel"
+      },
+      {
+        "id": 6128,
+        "order": 9,
+        "credit_id": "52fe4245c3a36847f8011273",
+        "name": "Trine Michelsen",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Nana"
+      },
+      {
+        "id": 6129,
+        "order": 10,
+        "credit_id": "52fe4245c3a36847f8011277",
+        "name": "Anne-Grethe Bjarup Riis",
+        "cast_id": 11,
+        "profile_path": "/tC6B10xowwx3iymDaF9bF3OJFQV.jpg",
+        "character": "Katrine"
+      },
+      {
+        "id": 4458,
+        "order": 11,
+        "credit_id": "52fe4245c3a36847f801127b",
+        "name": "Paprika Steen",
+        "cast_id": 12,
+        "profile_path": "/7iz6g2gXDCVL9LFjqmVV8KwGvNP.jpg",
+        "character": "High Class Lady"
+      },
+      {
+        "id": 6130,
+        "order": 12,
+        "credit_id": "52fe4245c3a36847f801127f",
+        "name": "Erik Wedersøe",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Stoffer's Uncle Svend"
+      },
+      {
+        "id": 6131,
+        "order": 13,
+        "credit_id": "52fe4245c3a36847f8011283",
+        "name": "Michael Moritzen",
+        "cast_id": 14,
+        "profile_path": "/ykQCLrCSbc5gZD0QkvGZgZO2dRj.jpg",
+        "character": "Man from Municipality"
+      },
+      {
+        "id": 1566,
+        "order": 14,
+        "credit_id": "52fe4245c3a36847f8011287",
+        "name": "Anders Hove",
+        "cast_id": 15,
+        "profile_path": "/m9UAUhR7CzC376jy9dV9HGctqSV.jpg",
+        "character": "Josephine's Father"
+      },
+      {
+        "id": 6132,
+        "order": 15,
+        "credit_id": "52fe4245c3a36847f8011297",
+        "name": "Jan Elle",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Waiter"
+      },
+      {
+        "id": 6133,
+        "order": 16,
+        "credit_id": "52fe4245c3a36847f801129b",
+        "name": "Claus Strandberg",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Guide at Factory"
+      },
+      {
+        "id": 6134,
+        "order": 17,
+        "credit_id": "52fe4245c3a36847f801129f",
+        "name": "Jens Jørn Spottag",
+        "cast_id": 20,
+        "profile_path": "/cU5mgaK1GrewoPLfxvHDnMYXDNb.jpg",
+        "character": "Boss at Advertising Agency"
+      },
+      {
+        "id": 6135,
+        "order": 18,
+        "credit_id": "52fe4245c3a36847f80112a3",
+        "name": "John Martinus",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Man in Morning-Jacket"
+      },
+      {
+        "id": 6136,
+        "order": 19,
+        "credit_id": "52fe4245c3a36847f80112a7",
+        "name": "Lars Bjarke",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Rocker #1"
+      },
+      {
+        "id": 6137,
+        "order": 20,
+        "credit_id": "52fe4245c3a36847f80112ab",
+        "name": "Ewald Larsen",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Rocker #2"
+      },
+      {
+        "id": 6138,
+        "order": 21,
+        "credit_id": "52fe4245c3a36847f80112af",
+        "name": "Christian Friis",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Rocker #3"
+      },
+      {
+        "id": 6139,
+        "order": 22,
+        "credit_id": "52fe4245c3a36847f80112b3",
+        "name": "Louise B. Clausen",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Rocker Girl Linda"
+      },
+      {
+        "id": 6140,
+        "order": 23,
+        "credit_id": "52fe4245c3a36847f80112b7",
+        "name": "Hans Henrik Clemensen",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Karen's Husband Anders"
+      },
+      {
+        "id": 6141,
+        "order": 24,
+        "credit_id": "52fe4245c3a36847f80112bb",
+        "name": "Lone Lindorff",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Karen's Mother"
+      },
+      {
+        "id": 6142,
+        "order": 25,
+        "credit_id": "52fe4245c3a36847f80112bf",
+        "name": "Erno Müller",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Karen's Grandfather"
+      },
+      {
+        "id": 6143,
+        "order": 26,
+        "credit_id": "52fe4245c3a36847f80112c3",
+        "name": "Regitze Estrup",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Karen's Sister Louise"
+      },
+      {
+        "id": 6144,
+        "order": 27,
+        "credit_id": "52fe4245c3a36847f80112c7",
+        "name": "Lotte Munk Fure",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Karen's Sister Britta"
+      },
+      {
+        "id": 6145,
+        "order": 28,
+        "credit_id": "52fe4245c3a36847f80112cb",
+        "name": "Marina Bouras",
+        "cast_id": 31,
+        "profile_path": "/1SMaSFhJonfbcdE5jE4oGu6zWd3.jpg",
+        "character": "Axel's Wife"
+      }
+    ],
+    "crew": [
+      {
+        "id": 42,
+        "credit_id": "52fe4245c3a36847f801128d",
+        "department": "Directing",
+        "name": "Lars von Trier",
+        "job": "Director",
+        "profile_path": "/zVINg5oIjpSIchNaTWyMPWQKrvm.jpg"
+      },
+      {
+        "id": 42,
+        "credit_id": "52fe4245c3a36847f8011293",
+        "department": "Writing",
+        "name": "Lars von Trier",
+        "job": "Screenplay",
+        "profile_path": "/zVINg5oIjpSIchNaTWyMPWQKrvm.jpg"
+      },
+      {
+        "id": 6146,
+        "credit_id": "52fe4245c3a36847f80112d1",
+        "department": "Production",
+        "name": "Vibeke Windeløv",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1174,
+        "credit_id": "52fe4245c3a36847f80112d7",
+        "department": "Production",
+        "name": "Peter Aalbæk Jensen",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6148,
+        "credit_id": "52fe4245c3a36847f80112dd",
+        "department": "Production",
+        "name": "Dag Alveberg",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6149,
+        "credit_id": "52fe4245c3a36847f80112e3",
+        "department": "Production",
+        "name": "Svend Abrahamsen",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6150,
+        "credit_id": "52fe4245c3a36847f80112e9",
+        "department": "Production",
+        "name": "Erik Schut",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6151,
+        "credit_id": "52fe4245c3a36847f80112ef",
+        "department": "Production",
+        "name": "Marianne Slot",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6152,
+        "credit_id": "52fe4245c3a36847f80112f5",
+        "department": "Production",
+        "name": "Peter van Vogelpoel",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6153,
+        "credit_id": "52fe4245c3a36847f80112fb",
+        "department": "Camera",
+        "name": "Casper Holm",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6154,
+        "credit_id": "52fe4245c3a36847f8011301",
+        "department": "Camera",
+        "name": "Jesper Jargil",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6155,
+        "credit_id": "52fe4245c3a36847f8011307",
+        "department": "Camera",
+        "name": "Kristoffer Nyholm",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 42,
+        "credit_id": "52fe4245c3a36847f801130d",
+        "department": "Camera",
+        "name": "Lars von Trier",
+        "job": "Director of Photography",
+        "profile_path": "/zVINg5oIjpSIchNaTWyMPWQKrvm.jpg"
+      },
+      {
+        "id": 6156,
+        "credit_id": "52fe4245c3a36847f8011313",
+        "department": "Editing",
+        "name": "Molly Marlene Stensgård",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4476,
+        "credit_id": "52fe4245c3a36847f8011319",
+        "department": "Production",
+        "name": "Marie Louise Hedegaard",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1029,
+        "credit_id": "52fe4245c3a36847f801131f",
+        "department": "Sound",
+        "name": "Per Streit",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 6157,
+        "credit_id": "52fe4245c3a36847f8011325",
+        "department": "Sound",
+        "name": "Kristian Eidnes Andersen",
+        "job": "Sound Engineer",
+        "profile_path": null
+      },
+      {
+        "id": 6158,
+        "credit_id": "52fe4245c3a36847f801132b",
+        "department": "Sound",
+        "name": "Johan Winbladh",
+        "job": "Sound Engineer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 117,
+  "spoken_languages": [{
+    "iso_639_1": "da",
+    "name": "Dansk"
+  }],
+  "adult": false,
+  "homepage": "http://www.dogme95.dk/the_idiots/content/index.htm",
+  "id": 452,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "Denmark",
+      "iso_3166_1": "DK"
+    },
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    },
+    {
+      "name": "Netherlands",
+      "iso_3166_1": "NL"
+    },
+    {
+      "name": "Sweden",
+      "iso_3166_1": "SE"
+    }
+  ],
+  "title": "The Idiots",
+  "overview": "With his first Dogma-95 film director Lars von Trier opens up a completely new film platform. With a mix of home-video and documentary styles the film tells the story of a group of young people who have decided to get to know their \u201cinner-idiots\u201d and thus not only facing and breaking their outer appearance but also their inner.",
+  "production_companies": [
+    {
+      "id": 639,
+      "name": "DR TV"
+    },
+    {
+      "id": 29619,
+      "name": "ZENTROPA ENTERTAINMENTS2"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 498,
+    "backdrop_path": "/9TSxhVABUzJqUv0dINNT91ymdyk.jpg",
+    "name": "Heart of Gold Collection",
+    "poster_path": "/cwrmUIVzOuR9FdqKBfERkMHdde0.jpg"
+  },
+  "imdb_id": "tt0154421",
+  "release_date": "1998-04-28",
+  "original_title": "Idioterne",
+  "vote_count": 9,
+  "poster_path": "/4DhYJyMpepFgzd74wziKMC7SEQd.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.588400013938218"
+}

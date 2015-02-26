@@ -1,0 +1,333 @@
+{
+  "budget": 0,
+  "vote_average": 7,
+  "backdrop_path": "/xRJ332EntToXGS7Wr2EZ6i96xHM.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3636,
+        "order": 0,
+        "credit_id": "52fe428ac3a36847f8026daf",
+        "name": "Paul Newman",
+        "cast_id": 13,
+        "profile_path": "/n6y6VxJKf0tNC2xFvbsAgcOeLbg.jpg",
+        "character": "Luke Jackson"
+      },
+      {
+        "id": 12950,
+        "order": 1,
+        "credit_id": "52fe428ac3a36847f8026db3",
+        "name": "George Kennedy",
+        "cast_id": 14,
+        "profile_path": "/vNYRh8f0QuA2eK8ahKftOBxtDN7.jpg",
+        "character": "Dragline"
+      },
+      {
+        "id": 8962,
+        "order": 2,
+        "credit_id": "52fe428ac3a36847f8026db7",
+        "name": "Luke Askew",
+        "cast_id": 15,
+        "profile_path": "/mGBZQGBck9rIZeTsP0H0jnMeDmC.jpg",
+        "character": "Boss Paul"
+      },
+      {
+        "id": 13869,
+        "order": 3,
+        "credit_id": "52fe428ac3a36847f8026dbb",
+        "name": "Morgan Woodward",
+        "cast_id": 16,
+        "profile_path": "/n9eD22nE4ABPF1P3tVhkEd1xj4K.jpg",
+        "character": "Boss Godfrey"
+      },
+      {
+        "id": 5048,
+        "order": 4,
+        "credit_id": "52fe428ac3a36847f8026dbf",
+        "name": "Harry Dean Stanton",
+        "cast_id": 18,
+        "profile_path": "/nDSav6v9Z8dSJSXoooT2g0LjbCd.jpg",
+        "character": "Tramp"
+      },
+      {
+        "id": 2778,
+        "order": 5,
+        "credit_id": "52fe428ac3a36847f8026dc3",
+        "name": "Dennis Hopper",
+        "cast_id": 19,
+        "profile_path": "/56nj2DfMVU3F9qUagZWMePLbrKF.jpg",
+        "character": "Babalugats"
+      },
+      {
+        "id": 13871,
+        "order": 6,
+        "credit_id": "52fe428ac3a36847f8026dc7",
+        "name": "Lou Antonio",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Koko"
+      },
+      {
+        "id": 13872,
+        "order": 7,
+        "credit_id": "52fe428ac3a36847f8026dcb",
+        "name": "Robert Drivas",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Loudmouth Steve"
+      },
+      {
+        "id": 8260,
+        "order": 8,
+        "credit_id": "52fe428ac3a36847f8026dcf",
+        "name": "Strother Martin",
+        "cast_id": 22,
+        "profile_path": "/64R2JqNX6MQMBZZK8wkXXKM9pTF.jpg",
+        "character": "Captain"
+      },
+      {
+        "id": 2752,
+        "order": 9,
+        "credit_id": "52fe428ac3a36847f8026dd3",
+        "name": "Jo Van Fleet",
+        "cast_id": 23,
+        "profile_path": "/ten759vBLpScDUP4FUSMBwQMWeE.jpg",
+        "character": "Arletta"
+      },
+      {
+        "id": 10224,
+        "order": 10,
+        "credit_id": "52fe428ac3a36847f8026dd7",
+        "name": "Clifton James",
+        "cast_id": 24,
+        "profile_path": "/92MyAjAdLwgYJEjuHViU3dCSj09.jpg",
+        "character": "Carr"
+      },
+      {
+        "id": 13874,
+        "order": 11,
+        "credit_id": "52fe428ac3a36847f8026ddb",
+        "name": "Marc Cavell",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Rabbitt"
+      },
+      {
+        "id": 2751,
+        "order": 12,
+        "credit_id": "52fe428ac3a36847f8026ddf",
+        "name": "Richard Davalos",
+        "cast_id": 26,
+        "profile_path": "/fQxCuObBh1hQ3CyTGerDHfshYFM.jpg",
+        "character": "Blind Dick"
+      },
+      {
+        "id": 13875,
+        "order": 13,
+        "credit_id": "52fe428ac3a36847f8026de3",
+        "name": "Robert Donner",
+        "cast_id": 27,
+        "profile_path": "/6GXjsXEC5a0BoFwq1pad5OqJ5M9.jpg",
+        "character": "Boss Shorty"
+      },
+      {
+        "id": 19106,
+        "order": 14,
+        "credit_id": "52fe428ac3a36847f8026de7",
+        "name": "J. D. Cannon",
+        "cast_id": 28,
+        "profile_path": "/fMtH2X3lphfTcmldSTLFSSL3oox.jpg",
+        "character": "Society Red"
+      },
+      {
+        "id": 10671,
+        "order": 15,
+        "credit_id": "52fe428ac3a36847f8026df1",
+        "name": "Joe Don Baker",
+        "cast_id": 30,
+        "profile_path": "/bLvWzzb9SyoyjwPpj5pgzXb9tuC.jpg",
+        "character": "Fixer"
+      },
+      {
+        "id": 16433,
+        "order": 16,
+        "credit_id": "52fe428ac3a36847f8026df5",
+        "name": "James Gammon",
+        "cast_id": 31,
+        "profile_path": "/2veM9cas1G6UP1Np7Jux190Ei1m.jpg",
+        "character": "Sleepy"
+      },
+      {
+        "id": 25579,
+        "order": 17,
+        "credit_id": "52fe428ac3a36847f8026df9",
+        "name": "Chuck Hicks",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Chief"
+      },
+      {
+        "id": 22250,
+        "order": 18,
+        "credit_id": "538329e1c3a368059e0087ed",
+        "name": "Rance Howard",
+        "cast_id": 35,
+        "profile_path": "/i7tkpb7GLJXjwUNyrpOy63FiStt.jpg",
+        "character": "Sheriff"
+      },
+      {
+        "id": 79646,
+        "order": 19,
+        "credit_id": "52fe428ac3a36847f8026e01",
+        "name": "James Jeter",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Wickerman"
+      }
+    ],
+    "crew": [
+      {
+        "id": 13859,
+        "credit_id": "52fe428ac3a36847f8026d69",
+        "department": "Directing",
+        "name": "Stuart Rosenberg",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 13860,
+        "credit_id": "52fe428ac3a36847f8026d6f",
+        "department": "Writing",
+        "name": "Donn Pearce",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 13861,
+        "credit_id": "52fe428ac3a36847f8026d75",
+        "department": "Writing",
+        "name": "Frank Pierson",
+        "job": "Screenplay",
+        "profile_path": "/axfzYzJadObycIpq8hnwCPhJk5g.jpg"
+      },
+      {
+        "id": 5053,
+        "credit_id": "52fe428ac3a36847f8026d7b",
+        "department": "Production",
+        "name": "Gordon Carroll",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13862,
+        "credit_id": "52fe428ac3a36847f8026d81",
+        "department": "Production",
+        "name": "Carter De Haven Jr.",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9217,
+        "credit_id": "52fe428ac3a36847f8026d87",
+        "department": "Sound",
+        "name": "Lalo Schifrin",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8217,
+        "credit_id": "52fe428ac3a36847f8026d8d",
+        "department": "Camera",
+        "name": "Conrad L. Hall",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12015,
+        "credit_id": "52fe428ac3a36847f8026d93",
+        "department": "Editing",
+        "name": "Sam O'Steen",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13864,
+        "credit_id": "52fe428ac3a36847f8026d99",
+        "department": "Art",
+        "name": "Cary Odell",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 13865,
+        "credit_id": "52fe428ac3a36847f8026d9f",
+        "department": "Art",
+        "name": "Fred Price",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 13866,
+        "credit_id": "52fe428ac3a36847f8026da5",
+        "department": "Costume & Make-Up",
+        "name": "Howard Shoup",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 13867,
+        "credit_id": "52fe428ac3a36847f8026dab",
+        "department": "Sound",
+        "name": "Larry Jost",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 13860,
+        "credit_id": "52fe428ac3a36847f8026ded",
+        "department": "Writing",
+        "name": "Donn Pearce",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 126,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 903,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Cool Hand Luke",
+  "overview": "Luke Jackson is a cool, gutsy prisoner in a Southern chain gang who, while refusing to buckle under to authority, keeps escaping and being recaptured. Nevertheless, the camp staff actively works to crush Luke until he finally breaks.",
+  "production_companies": [{
+    "id": 11496,
+    "name": "Jalem Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0061512",
+  "release_date": "1967-11-01",
+  "original_title": "Cool Hand Luke",
+  "vote_count": 52,
+  "poster_path": "/3rg6PsJfQgI1kMJRK4N7Yc6OH2P.jpg",
+  "tagline": "What we've got here is failure to communicate.",
+  "revenue": 16217773,
+  "popularity": "0.981508815484897"
+}

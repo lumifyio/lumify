@@ -1,0 +1,376 @@
+{
+  "budget": 31000000,
+  "vote_average": 7.3,
+  "backdrop_path": "/w6VwFCdQypTKEZAkzWtyPVii3zp.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5064,
+        "order": 0,
+        "credit_id": "52fe425cc3a36847f8018697",
+        "name": "Meryl Streep",
+        "cast_id": 22,
+        "profile_path": "/uyalVm3tH5DaUoxCmvILS9sUFsR.jpg",
+        "character": "Karen Christence Dinesen Blixen"
+      },
+      {
+        "id": 4135,
+        "order": 1,
+        "credit_id": "52fe425cc3a36847f801869b",
+        "name": "Robert Redford",
+        "cast_id": 23,
+        "profile_path": "/b4mJIBWvEyzB8yyZWbmvfzwrdtp.jpg",
+        "character": "Denys George Finch Hatton"
+      },
+      {
+        "id": 10647,
+        "order": 2,
+        "credit_id": "52fe425cc3a36847f801869f",
+        "name": "Klaus Maria Brandauer",
+        "cast_id": 24,
+        "profile_path": "/7TQOSrbO4tk3jecFSg2dVdZjTHQ.jpg",
+        "character": "Baron Bror Blixen/Baron Hans Blixen"
+      },
+      {
+        "id": 10648,
+        "order": 3,
+        "credit_id": "52fe425cc3a36847f80186a3",
+        "name": "Michael Kitchen",
+        "cast_id": 25,
+        "profile_path": "/bt1UWcegfSflLONcFN6XNqgayZt.jpg",
+        "character": "Berkeley Cole"
+      },
+      {
+        "id": 10649,
+        "order": 4,
+        "credit_id": "52fe425cc3a36847f80186a7",
+        "name": "Malick Bowens",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Farah"
+      },
+      {
+        "id": 10650,
+        "order": 5,
+        "credit_id": "52fe425cc3a36847f80186ab",
+        "name": "Joseph Thiaka",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Kamante"
+      },
+      {
+        "id": 10651,
+        "order": 6,
+        "credit_id": "52fe425cc3a36847f80186af",
+        "name": "Stephen Kinyanjui",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Kinanjui"
+      },
+      {
+        "id": 3796,
+        "order": 7,
+        "credit_id": "52fe425cc3a36847f80186b3",
+        "name": "Michael Gough",
+        "cast_id": 29,
+        "profile_path": "/lSADK0gjUtcq4B6zKIUwB3SofSP.jpg",
+        "character": "Lord Delamere"
+      },
+      {
+        "id": 10652,
+        "order": 8,
+        "credit_id": "52fe425cc3a36847f80186b7",
+        "name": "Suzanna Hamilton",
+        "cast_id": 30,
+        "profile_path": "/ei41XX9AYpFFTk36t0mD3KYs4bg.jpg",
+        "character": "Felicity"
+      },
+      {
+        "id": 10653,
+        "order": 9,
+        "credit_id": "52fe425cc3a36847f80186bb",
+        "name": "Rachel Kempson",
+        "cast_id": 31,
+        "profile_path": "/bdnBRD6SXiJGqgt0jH5I6ZqH4yD.jpg",
+        "character": "Lady Belfield"
+      },
+      {
+        "id": 10654,
+        "order": 10,
+        "credit_id": "52fe425cc3a36847f80186bf",
+        "name": "Graham Crowden",
+        "cast_id": 32,
+        "profile_path": "/wyGg5BXqE1N8oG1Ag82I3yHYQdW.jpg",
+        "character": "Lord Belfield"
+      },
+      {
+        "id": 10655,
+        "order": 11,
+        "credit_id": "52fe425cc3a36847f80186c3",
+        "name": "Leslie Phillips",
+        "cast_id": 33,
+        "profile_path": "/A1vO83wMO5eG0AxRvBwwQwu5NCg.jpg",
+        "character": "Sir Joseph"
+      },
+      {
+        "id": 10656,
+        "order": 12,
+        "credit_id": "52fe425cc3a36847f80186c7",
+        "name": "Mike Bugara",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Juma"
+      },
+      {
+        "id": 10657,
+        "order": 13,
+        "credit_id": "52fe425cc3a36847f80186cb",
+        "name": "Shane Rimmer",
+        "cast_id": 35,
+        "profile_path": "/ctrIOcWLjOB5rocS0vVHEjbS1Sx.jpg",
+        "character": "Belknap, farm manager"
+      },
+      {
+        "id": 10658,
+        "order": 14,
+        "credit_id": "52fe425cc3a36847f80186cf",
+        "name": "Job Seda",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Kanuthia"
+      },
+      {
+        "id": 1154526,
+        "order": 15,
+        "credit_id": "52fe425cc3a36847f80186df",
+        "name": "Mohammed Umar",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Ismail"
+      },
+      {
+        "id": 2124,
+        "order": 16,
+        "credit_id": "52fe425cc3a36847f80186e3",
+        "name": "Iman",
+        "cast_id": 40,
+        "profile_path": "/4HAfEFjc7XkJSGeL7nKiQzntHuw.jpg",
+        "character": "Mariammo"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2226,
+        "credit_id": "52fe425cc3a36847f8018621",
+        "department": "Directing",
+        "name": "Sydney Pollack",
+        "job": "Director",
+        "profile_path": "/zxkoU2diKtvarV1Qk4z9He2lJj9.jpg"
+      },
+      {
+        "id": 10634,
+        "credit_id": "52fe425cc3a36847f8018627",
+        "department": "Writing",
+        "name": "Karen Blixen",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 10635,
+        "credit_id": "52fe425cc3a36847f801862d",
+        "department": "Writing",
+        "name": "Judith Thurman",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 10636,
+        "credit_id": "52fe425cc3a36847f8018633",
+        "department": "Writing",
+        "name": "Errol Trzebinski",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 10637,
+        "credit_id": "52fe425cc3a36847f8018639",
+        "department": "Writing",
+        "name": "Kurt Luedtke",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2226,
+        "credit_id": "52fe425cc3a36847f801863f",
+        "department": "Production",
+        "name": "Sydney Pollack",
+        "job": "Producer",
+        "profile_path": "/zxkoU2diKtvarV1Qk4z9He2lJj9.jpg"
+      },
+      {
+        "id": 10639,
+        "credit_id": "52fe425cc3a36847f8018645",
+        "department": "Camera",
+        "name": "David Watkin",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1531,
+        "credit_id": "52fe425cc3a36847f801864b",
+        "department": "Editing",
+        "name": "Pembroke J. Herring",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7068,
+        "credit_id": "52fe425cc3a36847f8018651",
+        "department": "Editing",
+        "name": "Sheldon Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10640,
+        "credit_id": "52fe425cc3a36847f8018657",
+        "department": "Editing",
+        "name": "Fredric Steinkamp",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2241,
+        "credit_id": "52fe425cc3a36847f801865d",
+        "department": "Editing",
+        "name": "William Steinkamp",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 668,
+        "credit_id": "52fe425cc3a36847f8018663",
+        "department": "Production",
+        "name": "Mary Selway",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 10641,
+        "credit_id": "52fe425cc3a36847f8018669",
+        "department": "Art",
+        "name": "Stephen B. Grimes",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 10642,
+        "credit_id": "52fe425cc3a36847f801866f",
+        "department": "Art",
+        "name": "Colin Grimes",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7789,
+        "credit_id": "52fe425cc3a36847f8018675",
+        "department": "Art",
+        "name": "Cliff Robinson",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 10643,
+        "credit_id": "52fe425cc3a36847f801867b",
+        "department": "Art",
+        "name": "Herbert Westbrook",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 10644,
+        "credit_id": "52fe425cc3a36847f8018681",
+        "department": "Art",
+        "name": "Josie MacAvin",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 5671,
+        "credit_id": "52fe425cc3a36847f8018687",
+        "department": "Costume & Make-Up",
+        "name": "Milena Canonero",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 10645,
+        "credit_id": "52fe425cc3a36847f801868d",
+        "department": "Costume & Make-Up",
+        "name": "Mary Hillman",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 10646,
+        "credit_id": "52fe425cc3a36847f8018693",
+        "department": "Crew",
+        "name": "David Harris",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 2289,
+        "credit_id": "52fe425cc3a36847f80186d5",
+        "department": "Sound",
+        "name": "John Barry",
+        "job": "Original Music Composer",
+        "profile_path": "/hcKxefFH5M6euZfJ8h0WJnEYMHa.jpg"
+      }
+    ]
+  },
+  "runtime": 161,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "sw",
+      "name": "Kiswahili"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 606,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Out of Africa",
+  "overview": "Out of Africa tells the story of the life of Danish author Karen Blixen, who at the beginning of the 20th century moved to Africa to build a new life for herself. The film is based on the autobiographical novel by Karen Blixen from 1937.",
+  "production_companies": [
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    },
+    {
+      "id": 205,
+      "name": "Mirage Entertainment"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0089755",
+  "release_date": "1985-12-10",
+  "original_title": "Out of Africa",
+  "vote_count": 28,
+  "poster_path": "/hkDRRU2UIb1FuXzeg4SqjOn8qOf.jpg",
+  "tagline": "",
+  "revenue": 128499205,
+  "popularity": "0.471578624598379"
+}

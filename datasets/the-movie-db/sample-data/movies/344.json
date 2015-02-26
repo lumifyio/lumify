@@ -1,0 +1,294 @@
+{
+  "budget": 0,
+  "vote_average": 8.8,
+  "backdrop_path": "/1MHdaIwVcz00OkzJPGRDmVviuTr.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4920,
+        "order": 0,
+        "credit_id": "52fe423ac3a36847f800de7b",
+        "name": "Oliver Korittke",
+        "cast_id": 4,
+        "profile_path": "/eq19WoGZCqexLDOKAPb0fXqSClx.jpg",
+        "character": "Keek"
+      },
+      {
+        "id": 1861,
+        "order": 1,
+        "credit_id": "52fe423ac3a36847f800dedd",
+        "name": "Markus Knüfken",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Andreas 'Andy' Fink"
+      },
+      {
+        "id": 4922,
+        "order": 2,
+        "credit_id": "52fe423ac3a36847f800de7f",
+        "name": "Ralf Richter",
+        "cast_id": 6,
+        "profile_path": "/AnTdFifILOwDLZAT9xxYshUgJbF.jpg",
+        "character": "Karl-Heinz 'Kalle' Grabowski"
+      },
+      {
+        "id": 4923,
+        "order": 3,
+        "credit_id": "52fe423ac3a36847f800de83",
+        "name": "Diether Krebs",
+        "cast_id": 7,
+        "profile_path": "/bN98q3EobVUAUS1Wt9hVyzjr0sb.jpg",
+        "character": "Werner Kampmann"
+      },
+      {
+        "id": 4924,
+        "order": 4,
+        "credit_id": "52fe423ac3a36847f800de87",
+        "name": "Martin Semmelrogge",
+        "cast_id": 8,
+        "profile_path": "/1QLBQoyszTLfk4WZmoXixpyjBb6.jpg",
+        "character": "'Schlucke'"
+      },
+      {
+        "id": 4927,
+        "order": 5,
+        "credit_id": "52fe423ac3a36847f800de8b",
+        "name": "Alexandra Neldel",
+        "cast_id": 10,
+        "profile_path": "/dFFZPIEWQwg7Zx5VlPHbBGc2acW.jpg",
+        "character": "Melanie"
+      },
+      {
+        "id": 4925,
+        "order": 6,
+        "credit_id": "52fe423ac3a36847f800ded1",
+        "name": "Heinrich Giskes",
+        "cast_id": 30,
+        "profile_path": "/uFVM6ufYsxxNnVhUXO8z2FeSxDb.jpg",
+        "character": "'Ratte'"
+      },
+      {
+        "id": 43454,
+        "order": 7,
+        "credit_id": "52fe423ac3a36847f800ded9",
+        "name": "Christian Kahrmann",
+        "cast_id": 32,
+        "profile_path": "/2JvAMivK1VkjBP2BfEF1CrSUjD2.jpg",
+        "character": "Mark Kampmann"
+      },
+      {
+        "id": 4928,
+        "order": 8,
+        "credit_id": "52fe423ac3a36847f800de8f",
+        "name": "Monica Nancy Wick",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Andrea"
+      },
+      {
+        "id": 1862,
+        "order": 9,
+        "credit_id": "52fe423ac3a36847f800de93",
+        "name": "Willi Thomczyk",
+        "cast_id": 12,
+        "profile_path": "/11jn6LXhC3Mhv7nKcKQ13GEm4vl.jpg",
+        "character": "Willi"
+      },
+      {
+        "id": 4929,
+        "order": 10,
+        "credit_id": "52fe423ac3a36847f800de97",
+        "name": "Sabine Kaack",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Manuela Grabowski"
+      },
+      {
+        "id": 11258,
+        "order": 11,
+        "credit_id": "53a3d7fbc3a3682a36000911",
+        "name": "Hilmi Sözer",
+        "cast_id": 34,
+        "profile_path": "/lvyoPkilNn23h0UUgxJl4pTuPeQ.jpg",
+        "character": "Hilmi"
+      },
+      {
+        "id": 4936,
+        "order": 12,
+        "credit_id": "52fe423ac3a36847f800deb9",
+        "name": "Jochen Nickel",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Franky"
+      },
+      {
+        "id": 1844,
+        "order": 13,
+        "credit_id": "52fe423ac3a36847f800debd",
+        "name": "Til Schweiger",
+        "cast_id": 20,
+        "profile_path": "/mRQ9URazBbImeV0NxHZsGS3Px7D.jpg",
+        "character": "Brown"
+      },
+      {
+        "id": 14637,
+        "order": 14,
+        "credit_id": "52fe423ac3a36847f800dec1",
+        "name": "Detlef Bothe",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Arne"
+      },
+      {
+        "id": 19928,
+        "order": 15,
+        "credit_id": "52fe423ac3a36847f800dec5",
+        "name": "Ömer Simsek",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Schiedsrichter"
+      },
+      {
+        "id": 21995,
+        "order": 16,
+        "credit_id": "52fe423ac3a36847f800ded5",
+        "name": "Ingolf Lück",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Pornoregisseur Uwe"
+      },
+      {
+        "id": 1856,
+        "order": 17,
+        "credit_id": "52fe423ac3a36847f800dec9",
+        "name": "Ralph Herforth",
+        "cast_id": 24,
+        "profile_path": "/3soxWivaOiRS05nP5KfbCTg9nPs.jpg",
+        "character": "Pornodarsteller"
+      },
+      {
+        "id": 4918,
+        "order": 18,
+        "credit_id": "52fe423ac3a36847f800decd",
+        "name": "Peter Thorwarth",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Juppie"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4918,
+        "credit_id": "52fe423ac3a36847f800de6b",
+        "department": "Directing",
+        "name": "Peter Thorwarth",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 4919,
+        "credit_id": "52fe423ac3a36847f800de71",
+        "department": "Writing",
+        "name": "Stefan Holtz",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 4918,
+        "credit_id": "52fe423ac3a36847f800de77",
+        "department": "Writing",
+        "name": "Peter Thorwarth",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 4930,
+        "credit_id": "52fe423ac3a36847f800de9d",
+        "department": "Production",
+        "name": "Christian Becker",
+        "job": "Producer",
+        "profile_path": "/kXhz8GnEtDtJ6UkwLUUZzVcCoQk.jpg"
+      },
+      {
+        "id": 4931,
+        "credit_id": "52fe423ac3a36847f800dea3",
+        "department": "Production",
+        "name": "Thomas Häberle",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4932,
+        "credit_id": "52fe423ac3a36847f800dea9",
+        "department": "Sound",
+        "name": "Rainer Kühn",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4933,
+        "credit_id": "52fe423ac3a36847f800deaf",
+        "department": "Camera",
+        "name": "Eckhard Jansen",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4934,
+        "credit_id": "52fe423ac3a36847f800deb5",
+        "department": "Editing",
+        "name": "Anja Pohl",
+        "job": "Editor",
+        "profile_path": "/e6qY5Rc5rBfOiGa2iWd4j9bXLMv.jpg"
+      }
+    ]
+  },
+  "runtime": 110,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "http://www.bangboombang.de/",
+  "id": 344,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Bang Boom Bang",
+  "overview": "Bank robber Kelle Grabowski escapes from prison while his unemployed smalltime crook buddy is sitting around doing nothing after he just lost all their money. A fast paced comedy from German director Peter Thorwarth.",
+  "production_companies": [
+    {
+      "id": 8465,
+      "name": "Traumwerk Filmproduktion GmbH"
+    },
+    {
+      "id": 5011,
+      "name": "Becker & Häberle Filmproduktion GmbH"
+    },
+    {
+      "id": 191,
+      "name": "Senator Film Produktion"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0135790",
+  "release_date": "1999-08-26",
+  "original_title": "Bang Boom Bang",
+  "vote_count": 5,
+  "poster_path": "/iZfGuCkQHvE8IHnDhMtzmXjNKER.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.516017027126819"
+}

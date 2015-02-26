@@ -1,0 +1,289 @@
+{
+  "budget": 19000000,
+  "vote_average": 7.4,
+  "backdrop_path": "/eOJbXOjo1GHfO6yMFTEzjsjNL0M.jpg",
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 514,
+        "order": 0,
+        "credit_id": "52fe426bc3a36847f801d3ff",
+        "name": "Jack Nicholson",
+        "cast_id": 18,
+        "profile_path": "/z5kVLyn3sxj0wNRlFgVgT6deeRO.jpg",
+        "character": "Jack Torrance"
+      },
+      {
+        "id": 10409,
+        "order": 1,
+        "credit_id": "52fe426bc3a36847f801d403",
+        "name": "Shelley Duvall",
+        "cast_id": 19,
+        "profile_path": "/4MDrH9PxYrGGHXB7LmObYTdoEHV.jpg",
+        "character": "Wendy Torrance"
+      },
+      {
+        "id": 10410,
+        "order": 2,
+        "credit_id": "52fe426bc3a36847f801d407",
+        "name": "Danny Lloyd",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Danny Torrance"
+      },
+      {
+        "id": 7077,
+        "order": 3,
+        "credit_id": "52fe426bc3a36847f801d40b",
+        "name": "Scatman Crothers",
+        "cast_id": 21,
+        "profile_path": "/n3REW3TGbjLC8SbaZG7g48pm98n.jpg",
+        "character": "Dick Hallorann"
+      },
+      {
+        "id": 10411,
+        "order": 4,
+        "credit_id": "52fe426bc3a36847f801d40f",
+        "name": "Barry Nelson",
+        "cast_id": 22,
+        "profile_path": "/d07leQJAhNZbpjfMwWHH0e6VBG6.jpg",
+        "character": "Stuart Ullman"
+      },
+      {
+        "id": 694,
+        "order": 5,
+        "credit_id": "52fe426bc3a36847f801d413",
+        "name": "Philip Stone",
+        "cast_id": 23,
+        "profile_path": "/qtaBPJZC7MpoyWfcyXJ1zdEfYwU.jpg",
+        "character": "Delbert Grady"
+      },
+      {
+        "id": 592,
+        "order": 6,
+        "credit_id": "52fe426bc3a36847f801d417",
+        "name": "Joe Turkel",
+        "cast_id": 24,
+        "profile_path": "/8d16GA57SnVXP3WGB0fbkFCKily.jpg",
+        "character": "Lloyd the Bartender"
+      },
+      {
+        "id": 10412,
+        "order": 7,
+        "credit_id": "52fe426bc3a36847f801d41b",
+        "name": "Anne Jackson",
+        "cast_id": 25,
+        "profile_path": "/t6htAqvpvAkWmwdIiwBDZjWS2Ne.jpg",
+        "character": "Doctor"
+      },
+      {
+        "id": 16504,
+        "order": 8,
+        "credit_id": "52fe426bc3a36847f801d41f",
+        "name": "Tony Burton",
+        "cast_id": 26,
+        "profile_path": "/8VY0hZcxMhwM1wUzNZTSfG7cwAX.jpg",
+        "character": "Larry Durkin"
+      },
+      {
+        "id": 72742,
+        "order": 9,
+        "credit_id": "52fe426bc3a36847f801d423",
+        "name": "Barry Dennen",
+        "cast_id": 27,
+        "profile_path": "/zELog0P3l2ikmhZ9TIJmk81FFla.jpg",
+        "character": "Bill Watson"
+      }
+    ],
+    "crew": [
+      {
+        "id": 240,
+        "credit_id": "52fe426bc3a36847f801d39b",
+        "department": "Directing",
+        "name": "Stanley Kubrick",
+        "job": "Director",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe426bc3a36847f801d3a1",
+        "department": "Writing",
+        "name": "Stanley Kubrick",
+        "job": "Screenplay",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 3027,
+        "credit_id": "52fe426bc3a36847f801d3a7",
+        "department": "Writing",
+        "name": "Stephen King",
+        "job": "Novel",
+        "profile_path": "/qCGKepqazqcurcD39eIiQZHLosz.jpg"
+      },
+      {
+        "id": 10404,
+        "credit_id": "52fe426bc3a36847f801d3ad",
+        "department": "Writing",
+        "name": "Diane Johnson",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe426bc3a36847f801d3b3",
+        "department": "Production",
+        "name": "Stanley Kubrick",
+        "job": "Producer",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 5016,
+        "credit_id": "52fe426bc3a36847f801d3b9",
+        "department": "Production",
+        "name": "Jan Harlan",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2284,
+        "credit_id": "52fe426bc3a36847f801d3bf",
+        "department": "Sound",
+        "name": "Wendy Carlos",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2285,
+        "credit_id": "52fe426bc3a36847f801d3c5",
+        "department": "Sound",
+        "name": "Rachel Elkind",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2286,
+        "credit_id": "52fe426bc3a36847f801d3cb",
+        "department": "Camera",
+        "name": "John Alcott",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 244,
+        "credit_id": "52fe426bc3a36847f801d3d1",
+        "department": "Editing",
+        "name": "Ray Lovejoy",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2288,
+        "credit_id": "52fe426bc3a36847f801d3d7",
+        "department": "Production",
+        "name": "James Liggat",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5022,
+        "credit_id": "52fe426bc3a36847f801d3dd",
+        "department": "Art",
+        "name": "Roy Walker",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5021,
+        "credit_id": "52fe426bc3a36847f801d3e3",
+        "department": "Art",
+        "name": "Leslie Tomkins",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5671,
+        "credit_id": "52fe426bc3a36847f801d3e9",
+        "department": "Costume & Make-Up",
+        "name": "Milena Canonero",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 10405,
+        "credit_id": "52fe426bc3a36847f801d3ef",
+        "department": "Costume & Make-Up",
+        "name": "Barbara Daly",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 10407,
+        "credit_id": "52fe426bc3a36847f801d3f5",
+        "department": "Costume & Make-Up",
+        "name": "Tom Smith",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 10408,
+        "credit_id": "52fe426bc3a36847f801d3fb",
+        "department": "Production",
+        "name": "Douglas Twiddy",
+        "job": "Production Manager",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 144,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 694,
+  "production_countries": [{
+    "name": "United Kingdom",
+    "iso_3166_1": "GB"
+  }],
+  "title": "The Shining",
+  "overview": "Jack Torrance accepts a caretaker job at the Overlook Hotel, where he, along with his wife Wendy and their son Danny, must live isolated from the rest of the world for the winter. But they aren't prepared for the madness that lurks within.",
+  "production_companies": [
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 88,
+      "name": "Hawk Films"
+    },
+    {
+      "id": 11272,
+      "name": "Peregrine"
+    },
+    {
+      "id": 734,
+      "name": "Producers Circle"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0081505",
+  "release_date": "1980-05-22",
+  "original_title": "The Shining",
+  "vote_count": 596,
+  "poster_path": "/70MHVrl1Zb3KXFyHY0hIu8VSoac.jpg",
+  "tagline": "A masterpiece of modern horror.",
+  "revenue": 44017374,
+  "popularity": 2.7533567916969
+}

@@ -1,0 +1,327 @@
+{
+  "budget": 12000000,
+  "vote_average": 6.8,
+  "backdrop_path": "/jW8xv6xP6yeuAFM4I1xJWnQAkAz.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3317,
+        "order": 0,
+        "credit_id": "52fe4238c3a36847f800d1b9",
+        "name": "Takeshi Kitano",
+        "cast_id": 3,
+        "profile_path": "/blZ2IDxDR7Z4pV06R7iWrIyOSqK.jpg",
+        "character": "Aniki Yamamoto"
+      },
+      {
+        "id": 4987,
+        "order": 1,
+        "credit_id": "52fe4238c3a36847f800d1bd",
+        "name": "Omar Epps",
+        "cast_id": 4,
+        "profile_path": "/t4Qg5ANKK2idfOt4RzWzhiP7IEv.jpg",
+        "character": "Denny"
+      },
+      {
+        "id": 4988,
+        "order": 2,
+        "credit_id": "52fe4238c3a36847f800d1c1",
+        "name": "Kurôdo Maki",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Ken"
+      },
+      {
+        "id": 4990,
+        "order": 3,
+        "credit_id": "52fe4238c3a36847f800d1c9",
+        "name": "Susumu Terajima",
+        "cast_id": 7,
+        "profile_path": "/oZPxC2TvOu9DeeVUg38P043ItpJ.jpg",
+        "character": "Kato"
+      },
+      {
+        "id": 4989,
+        "order": 4,
+        "credit_id": "52fe4238c3a36847f800d1c5",
+        "name": "Masaya Kato",
+        "cast_id": 6,
+        "profile_path": "/aEEPwO7ktXDv97um0DcTJNsH0wL.jpg",
+        "character": "Shirase"
+      },
+      {
+        "id": 4991,
+        "order": 5,
+        "credit_id": "52fe4238c3a36847f800d1cd",
+        "name": "Royale Watkins",
+        "cast_id": 8,
+        "profile_path": "/ylDze6fvOEfwKsD7lyCQzcBH0Cj.jpg",
+        "character": "Jay"
+      },
+      {
+        "id": 4992,
+        "order": 6,
+        "credit_id": "52fe4238c3a36847f800d1d1",
+        "name": "Lombardo Boyar",
+        "cast_id": 9,
+        "profile_path": "/ygctSZGBRkmwARihr8F1Bb7PkIP.jpg",
+        "character": "Mo"
+      },
+      {
+        "id": 4994,
+        "order": 7,
+        "credit_id": "52fe4238c3a36847f800d1d5",
+        "name": "Ryo Ishibashi",
+        "cast_id": 11,
+        "profile_path": "/aPyICNQIlt0kUlIbXSQ21bK2mo2.jpg",
+        "character": "Ishihara"
+      },
+      {
+        "id": 4995,
+        "order": 8,
+        "credit_id": "52fe4238c3a36847f800d1d9",
+        "name": "James Shigeta",
+        "cast_id": 12,
+        "profile_path": "/rBqmvcdbuMU7NCOxqmfjSxZfDsh.jpg",
+        "character": "Sugimoto"
+      },
+      {
+        "id": 4996,
+        "order": 9,
+        "credit_id": "52fe4238c3a36847f800d1dd",
+        "name": "Tatyana Ali",
+        "cast_id": 13,
+        "profile_path": "/7Mzcrk00fmLKS1VwQwouTHmwOXP.jpg",
+        "character": "Latifa"
+      },
+      {
+        "id": 5063,
+        "order": 10,
+        "credit_id": "52fe4238c3a36847f800d20b",
+        "name": "Joseph Ragno",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Rossi"
+      },
+      {
+        "id": 137029,
+        "order": 11,
+        "credit_id": "52fe4238c3a36847f800d239",
+        "name": "Ren Osugi",
+        "cast_id": 29,
+        "profile_path": "/cQ8Q7RB5onATWkbZioR2obrom2l.jpg",
+        "character": "Harada"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3317,
+        "credit_id": "52fe4238c3a36847f800d1af",
+        "department": "Directing",
+        "name": "Takeshi Kitano",
+        "job": "Director",
+        "profile_path": "/blZ2IDxDR7Z4pV06R7iWrIyOSqK.jpg"
+      },
+      {
+        "id": 3317,
+        "credit_id": "52fe4238c3a36847f800d1b5",
+        "department": "Writing",
+        "name": "Takeshi Kitano",
+        "job": "Author",
+        "profile_path": "/blZ2IDxDR7Z4pV06R7iWrIyOSqK.jpg"
+      },
+      {
+        "id": 7452,
+        "credit_id": "52fe4238c3a36847f800d1e3",
+        "department": "Production",
+        "name": "Masayuki Mori",
+        "job": "Producer",
+        "profile_path": "/rqzt1uXnruuRQfVbv3PuD1nV2LX.jpg"
+      },
+      {
+        "id": 3056,
+        "credit_id": "52fe4238c3a36847f800d1e9",
+        "department": "Production",
+        "name": "Jeremy Thomas",
+        "job": "Producer",
+        "profile_path": "/pcXYU5j3MjBgLATJIeUFV199ryt.jpg"
+      },
+      {
+        "id": 636,
+        "credit_id": "52fe4238c3a36847f800d1ef",
+        "department": "Sound",
+        "name": "Joe Hisaishi",
+        "job": "Original Music Composer",
+        "profile_path": "/cmYyWvG0rupbPTsTaCDkCooOFGT.jpg"
+      },
+      {
+        "id": 4998,
+        "credit_id": "52fe4238c3a36847f800d1f5",
+        "department": "Camera",
+        "name": "Katsumi Yanagijima",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3317,
+        "credit_id": "52fe4238c3a36847f800d1fb",
+        "department": "Editing",
+        "name": "Takeshi Kitano",
+        "job": "Editor",
+        "profile_path": "/blZ2IDxDR7Z4pV06R7iWrIyOSqK.jpg"
+      },
+      {
+        "id": 4999,
+        "credit_id": "52fe4238c3a36847f800d201",
+        "department": "Editing",
+        "name": "Yoshinori Ôta",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5000,
+        "credit_id": "52fe4238c3a36847f800d207",
+        "department": "Art",
+        "name": "Norihiro Isoda",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 79535,
+        "credit_id": "52fe4238c3a36847f800d211",
+        "department": "Production",
+        "name": "Ann Carli",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 69883,
+        "credit_id": "52fe4238c3a36847f800d217",
+        "department": "Production",
+        "name": "Peter Watson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 46581,
+        "credit_id": "52fe4238c3a36847f800d21d",
+        "department": "Production",
+        "name": "Takio Yoshida",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 36081,
+        "credit_id": "52fe4238c3a36847f800d223",
+        "department": "Production",
+        "name": "Shinji Komiya",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1120582,
+        "credit_id": "52fe4238c3a36847f800d229",
+        "department": "Production",
+        "name": "Robi Reed",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 13273,
+        "credit_id": "52fe4238c3a36847f800d22f",
+        "department": "Production",
+        "name": "Takefumi Yoshikawa",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 114,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "ja",
+      "name": "日本語"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.office-kitano.co.jp/brother/index.html",
+  "id": 327,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "Japan",
+      "iso_3166_1": "JP"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Brother",
+  "overview": "A Japanese Yakuza gangster\u2019s deadly existence in his homeland gets him exiled to Los Angeles, California where he is taken in by his little brother and his brother\u2019s gang. This is the first English film by Takeshi Kitano.",
+  "production_companies": [
+    {
+      "id": 11561,
+      "name": "Recorded Picture Company (RPC)"
+    },
+    {
+      "id": 567,
+      "name": "Office Kitano"
+    },
+    {
+      "id": 528,
+      "name": "Bandai Visual Company"
+    },
+    {
+      "id": 11562,
+      "name": "Fuzzy Bunny Films (I)"
+    },
+    {
+      "id": 11563,
+      "name": "Little Brother Inc."
+    },
+    {
+      "id": 6516,
+      "name": "Tokyo FM Broadcasting Co."
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0222851",
+  "release_date": "2000-10-01",
+  "original_title": "Brother",
+  "vote_count": 9,
+  "poster_path": "/dffp8n5DrvcgKxCV2lIxnllA9Uw.jpg",
+  "tagline": "Are You Japanese?",
+  "revenue": 15250000,
+  "popularity": "0.359400655116869"
+}

@@ -1,0 +1,129 @@
+{
+  "birthday": "1951-06-04",
+  "adult": false,
+  "biography": "",
+  "homepage": "",
+  "profile_path": "/s2ApWZ620ZMe8nwvKM2y8TwjenE.jpg",
+  "id": 696,
+  "also_known_as": ["David Nicholas Yip"],
+  "deathday": "",
+  "imdb_id": "nm0948118",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 87,
+        "media_type": "movie",
+        "title": "Indiana Jones and the Temple of Doom",
+        "credit_id": null,
+        "release_date": "1984-05-22",
+        "original_title": "Indiana Jones and the Temple of Doom",
+        "adult": false,
+        "poster_path": "/f2nTRKk2zGdUTE7tLJ5EGGSuKA6.jpg",
+        "character": "Wu Han"
+      },
+      {
+        "id": 707,
+        "media_type": "movie",
+        "title": "A View to a Kill",
+        "credit_id": null,
+        "release_date": "1985-06-12",
+        "original_title": "A View to a Kill",
+        "adult": false,
+        "poster_path": "/o8E86sXJOqAVmoxnNRoeZVCr0aa.jpg",
+        "character": "Chuck Lee"
+      },
+      {
+        "id": 41456,
+        "media_type": "movie",
+        "title": "The Quatermass Conclusion",
+        "credit_id": null,
+        "release_date": "1979-10-24",
+        "original_title": "The Quatermass Conclusion",
+        "adult": false,
+        "poster_path": "/nj0vC2TjQ2a6a1pZ704fsPG6UZm.jpg",
+        "character": "Frank Chen"
+      },
+      {
+        "id": 1844,
+        "media_type": "movie",
+        "title": "Entrapment",
+        "credit_id": null,
+        "release_date": "1999-04-29",
+        "original_title": "Entrapment",
+        "adult": false,
+        "poster_path": "/6IKmjW52qeMXx8xXMdX6RRshmY0.jpg",
+        "character": "Chief of Police"
+      },
+      {
+        "id": 3084,
+        "media_type": "tv",
+        "episode_count": 14,
+        "credit_id": "52574c02760ee36aaa14a78f",
+        "name": "The Chinese Detective",
+        "poster_path": "/ome46l1AQKx7RSQa8vMSaUUWQPg.jpg",
+        "original_name": "The Chinese Detective",
+        "first_air_date": "1981-04-30",
+        "character": ""
+      },
+      {
+        "id": 7,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52532e8319c2957940002d54",
+        "name": "Bugs",
+        "poster_path": "/6jXJ0jrnT29X3pLyWmZiCqVNId5.jpg",
+        "original_name": "Bugs",
+        "first_air_date": "1995-04-01",
+        "character": ""
+      },
+      {
+        "id": 121,
+        "media_type": "tv",
+        "episode_count": 3,
+        "credit_id": "52572edb19c295731c07937f",
+        "name": "Doctor Who",
+        "poster_path": "/2JQuvqyAIaznRSr5RjKofMAfpq5.jpg",
+        "original_name": "Doctor Who",
+        "first_air_date": "1963-11-23",
+        "character": ""
+      },
+      {
+        "id": 22694,
+        "media_type": "tv",
+        "episode_count": 6,
+        "credit_id": "5258701e760ee34661218ea8",
+        "name": "Every Silver Lining",
+        "poster_path": null,
+        "original_name": "Every Silver Lining",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 26047,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52587e96760ee34661363e9f",
+        "name": "Liverpool Nativity",
+        "poster_path": null,
+        "original_name": "Liverpool Nativity",
+        "first_air_date": "2007-12-16",
+        "character": ""
+      },
+      {
+        "id": 28681,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52588fa9760ee34661502a7e",
+        "name": "Six Fifty-Five",
+        "poster_path": null,
+        "original_name": "Six Fifty-Five",
+        "first_air_date": "1983-07-04",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "David Yip",
+  "place_of_birth": null,
+  "popularity": "1.02295020327623"
+}

@@ -1,0 +1,228 @@
+{
+  "birthday": "1950-10-20",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 829,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 30352,
+        "media_type": "movie",
+        "title": "Disorganized Crime",
+        "credit_id": "52fe44109251416c91003abf",
+        "release_date": "1989-01-01",
+        "original_title": "Disorganized Crime",
+        "adult": false,
+        "poster_path": "/b5HCJX5yAL49BPp4imtyRO7vxi1.jpg",
+        "character": "Nick Bartkowski"
+      },
+      {
+        "id": 23599,
+        "media_type": "movie",
+        "title": "Wanted: Dead or Alive",
+        "credit_id": "52fe446fc3a368484e022d33",
+        "release_date": "1986-11-13",
+        "original_title": "Wanted: Dead or Alive",
+        "adult": false,
+        "poster_path": "/dcvbAmfcqNQXxvOFIB0x0gV5dzw.jpg",
+        "character": "Danny Quintz"
+      },
+      {
+        "id": 26328,
+        "media_type": "movie",
+        "title": "Just You and Me, Kid",
+        "credit_id": "52fe44fbc3a368484e041e99",
+        "release_date": "1979-07-13",
+        "original_title": "Just You and Me, Kid",
+        "adult": false,
+        "poster_path": "/d1aLeJu0PweR9Jb2DywUQghhZle.jpg",
+        "character": "Demesta"
+      },
+      {
+        "id": 45795,
+        "media_type": "movie",
+        "title": "Death Bed: The Bed That Eats",
+        "credit_id": "52fe46d4c3a36847f81147a9",
+        "release_date": "1977-01-01",
+        "original_title": "Death Bed: The Bed That Eats",
+        "adult": false,
+        "poster_path": "/dUsWj2yjzgA5yGWj6wlu8ry4KBy.jpg",
+        "character": "Sharon's Brother (as Rusty Russ)"
+      },
+      {
+        "id": 70199,
+        "media_type": "movie",
+        "title": "Dead of Winter",
+        "credit_id": "52fe47efc3a368484e0e145b",
+        "release_date": "1987-02-06",
+        "original_title": "Dead of Winter",
+        "adult": false,
+        "poster_path": "/eT5NAo9hScpOxPx3Ss1d5CZBqSC.jpg",
+        "character": "Rob Sweeney"
+      },
+      {
+        "id": 52752,
+        "media_type": "movie",
+        "title": "Finding John Christmas",
+        "credit_id": "52fe4841c3a36847f815e517",
+        "release_date": "2003-11-30",
+        "original_title": "Finding John Christmas",
+        "adult": false,
+        "poster_path": "/jKJfSoIpwZlb5DgPI7ucCvoFaDS.jpg",
+        "character": "Hank McAllister"
+      },
+      {
+        "id": 82840,
+        "media_type": "movie",
+        "title": "Green Guys",
+        "credit_id": "52fe48789251416c9108d933",
+        "release_date": "2011-11-22",
+        "original_title": "Green Guys",
+        "adult": false,
+        "poster_path": "/jFDIyHu1PSMMM4QCoBX7r2pCNkH.jpg",
+        "character": "Peter Donnelly"
+      },
+      {
+        "id": 84180,
+        "media_type": "movie",
+        "title": "California Solo",
+        "credit_id": "52fe48de9251416c9109af17",
+        "release_date": "2012-11-30",
+        "original_title": "California Solo",
+        "adult": false,
+        "poster_path": "/w0Ckc07q88aXFNPo5VoyLtnjp98.jpg",
+        "character": "Rusty"
+      },
+      {
+        "id": 86680,
+        "media_type": "movie",
+        "title": "The Unholy",
+        "credit_id": "52fe49969251416c910b21e1",
+        "release_date": "1988-04-22",
+        "original_title": "The Unholy",
+        "adult": false,
+        "poster_path": "/oi2UtVkpA7K0IeWNWe6C13c0VMF.jpg",
+        "character": "Luke"
+      },
+      {
+        "id": 103299,
+        "media_type": "movie",
+        "title": "Traces of red",
+        "credit_id": "52fe4a1bc3a36847f81b9efb",
+        "release_date": "1992-11-11",
+        "original_title": "Traces of red",
+        "adult": false,
+        "poster_path": "/e9naqRdrDlQMS8uNixUFRYkLNzz.jpg",
+        "character": "Michael Dobson"
+      },
+      {
+        "id": 73,
+        "media_type": "movie",
+        "title": "American History X",
+        "credit_id": "52fe4213c3a36847f80021af",
+        "release_date": "1998-10-30",
+        "original_title": "American History X",
+        "adult": false,
+        "poster_path": "/fXepRAYOx1qC3wju7XdDGx60775.jpg",
+        "character": "Dennis Vinyard"
+      },
+      {
+        "id": 167262,
+        "media_type": "movie",
+        "title": "Cattle Annie and Little Britches",
+        "credit_id": "52fe4cacc3a36847f8239cb5",
+        "release_date": "1981-04-24",
+        "original_title": "Cattle Annie and Little Britches",
+        "adult": false,
+        "poster_path": "/LlmYLFfUiPSSG7TpZbT4cqLfIH.jpg",
+        "character": "Little Dick Raidler"
+      },
+      {
+        "id": 173899,
+        "media_type": "movie",
+        "title": "The Long Hot Summer",
+        "credit_id": "52fe4d3ec3a36847f8256779",
+        "release_date": "1985-10-06",
+        "original_title": "The Long Hot Summer",
+        "adult": false,
+        "poster_path": "/tahwucSfjxOhtX7MCoaqC1x75Hs.jpg",
+        "character": "Jody Varner"
+      },
+      {
+        "id": 220766,
+        "media_type": "movie",
+        "title": "Bay City Story",
+        "credit_id": "52fe4db69251416c7513e087",
+        "release_date": "1992-01-01",
+        "original_title": "Bay City Story",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 214114,
+        "media_type": "movie",
+        "title": "Crisis at Central High",
+        "credit_id": "52fe4dd4c3a368484e200101",
+        "release_date": "1981-02-04",
+        "original_title": "Crisis at Central High",
+        "adult": false,
+        "poster_path": "/hyNDjAlCyalgug6vCAdn1P4FcRK.jpg",
+        "character": "J.O. Powell"
+      },
+      {
+        "id": 238515,
+        "media_type": "movie",
+        "title": "The Test of Love",
+        "credit_id": "52fe4e7ec3a36847f8293e01",
+        "release_date": "1999-12-01",
+        "original_title": "The Test of Love",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 247069,
+        "media_type": "movie",
+        "title": "Crazy From the Heart",
+        "credit_id": "52fe4f1fc3a36847f82bf0e7",
+        "release_date": "1991-08-19",
+        "original_title": "Crazy From the Heart",
+        "adult": false,
+        "poster_path": "/yeWsAt3aKS3rJSEYRzVAKzH1Hqo.jpg",
+        "character": "Dewey Whitcomb"
+      },
+      {
+        "id": 137445,
+        "media_type": "movie",
+        "title": "Second Serve",
+        "credit_id": "5356f444c3a36856190001cd",
+        "release_date": "1986-01-01",
+        "original_title": "Second Serve",
+        "adult": false,
+        "poster_path": "/rQQs9Gtez7UsW9ioak0Yyi6Uoyc.jpg",
+        "character": "Josh"
+      },
+      {
+        "id": 272000,
+        "media_type": "movie",
+        "title": "Replacing dad",
+        "credit_id": "5382fbff0e0a2624c000c347",
+        "release_date": "1999-03-14",
+        "original_title": "Replacing dad",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "William Russ",
+  "place_of_birth": null,
+  "popularity": "1.50000020328218"
+}

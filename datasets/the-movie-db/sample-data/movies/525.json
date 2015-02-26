@@ -1,0 +1,676 @@
+{
+  "budget": 27000000,
+  "vote_average": 7,
+  "backdrop_path": "/qugcFtH0nsG6vfLFOzxNhPpuezV.jpg",
+  "genres": [{
+    "id": 35,
+    "name": "Comedy"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 707,
+        "order": 0,
+        "credit_id": "52fe424dc3a36847f8013ae3",
+        "name": "Dan Aykroyd",
+        "cast_id": 4,
+        "profile_path": "/h2PT9yZYv5ml5hL9jvCpWBTWgU.jpg",
+        "character": "Elwood Blues (as Elwood)"
+      },
+      {
+        "id": 7171,
+        "order": 1,
+        "credit_id": "52fe424dc3a36847f8013ae7",
+        "name": "John Belushi",
+        "cast_id": 5,
+        "profile_path": "/xVD48zqKxJWBOMYouWlnNExhM3g.jpg",
+        "character": "'Joliet' Jake Blues (as Jake)"
+      },
+      {
+        "id": 7173,
+        "order": 2,
+        "credit_id": "52fe424dc3a36847f8013aef",
+        "name": "Cab Calloway",
+        "cast_id": 7,
+        "profile_path": "/7L1vq9I4Jt31BYsTsahhGn8wcc5.jpg",
+        "character": "Curtis"
+      },
+      {
+        "id": 4,
+        "order": 3,
+        "credit_id": "52fe424dc3a36847f8013b0f",
+        "name": "Carrie Fisher",
+        "cast_id": 15,
+        "profile_path": "/1Kpvl1B7SRrdLKjqDfT6kb7nyRB.jpg",
+        "character": "Mystery Woman"
+      },
+      {
+        "id": 7174,
+        "order": 4,
+        "credit_id": "52fe424dc3a36847f8013af3",
+        "name": "Ray Charles",
+        "cast_id": 8,
+        "profile_path": "/5LqWrAGyYb9K0RTP7tVF2S0WoZX.jpg",
+        "character": "Ray"
+      },
+      {
+        "id": 7172,
+        "order": 5,
+        "credit_id": "52fe424dc3a36847f8013aeb",
+        "name": "James Brown",
+        "cast_id": 6,
+        "profile_path": "/opGiGzOwSRmhnUtWZcFjlyyK8Zx.jpg",
+        "character": "Reverend Cleophus James"
+      },
+      {
+        "id": 7175,
+        "order": 6,
+        "credit_id": "52fe424dc3a36847f8013af7",
+        "name": "Aretha Franklin",
+        "cast_id": 9,
+        "profile_path": "/85vRw9urUHSYzn9eGssB1KmqayZ.jpg",
+        "character": "Mrs. Murphy"
+      },
+      {
+        "id": 7176,
+        "order": 7,
+        "credit_id": "52fe424dc3a36847f8013afb",
+        "name": "Steve Cropper",
+        "cast_id": 10,
+        "profile_path": "/sDp2m5fIAUamVu5BpGk30WWWRoS.jpg",
+        "character": "Steve 'The Colonel' Cropper"
+      },
+      {
+        "id": 7177,
+        "order": 8,
+        "credit_id": "52fe424dc3a36847f8013aff",
+        "name": "Donald \"Duck\" Dunn",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Donald 'Duck' Dunn"
+      },
+      {
+        "id": 7178,
+        "order": 9,
+        "credit_id": "52fe424dc3a36847f8013b03",
+        "name": "Murphy Dunne",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Murphy 'Murph' Dunne"
+      },
+      {
+        "id": 7179,
+        "order": 10,
+        "credit_id": "52fe424dc3a36847f8013b07",
+        "name": "Willie Hall",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Willie 'Too Big' Hall"
+      },
+      {
+        "id": 7180,
+        "order": 11,
+        "credit_id": "52fe424dc3a36847f8013b0b",
+        "name": "John Candy",
+        "cast_id": 14,
+        "profile_path": "/mNC2yH2Q7wRoPk4o0aonIcIULfI.jpg",
+        "character": "Burton Mercer"
+      },
+      {
+        "id": 7207,
+        "order": 12,
+        "credit_id": "52fe424dc3a36847f8013b37",
+        "name": "John Lee Hooker",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "John Lee Hooker"
+      },
+      {
+        "id": 7208,
+        "order": 13,
+        "credit_id": "52fe424dc3a36847f8013b3b",
+        "name": "Lou Marini",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "'Blue Lou' Marini"
+      },
+      {
+        "id": 7209,
+        "order": 14,
+        "credit_id": "52fe424dc3a36847f8013b3f",
+        "name": "Matt Murphy",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Matt 'Guitar' Murphy"
+      },
+      {
+        "id": 7210,
+        "order": 15,
+        "credit_id": "52fe424dc3a36847f8013b43",
+        "name": "Kathleen Freeman",
+        "cast_id": 25,
+        "profile_path": "/qqupkOdnSowZ5L3eHu6an7fndjP.jpg",
+        "character": "Schwester Mary Stigmata ('Die Pinguin-Tante')"
+      },
+      {
+        "id": 122094,
+        "order": 16,
+        "credit_id": "52fe424dc3a36847f8013b4d",
+        "name": "Tom Erhart",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Prison Guard"
+      },
+      {
+        "id": 122095,
+        "order": 17,
+        "credit_id": "52fe424dc3a36847f8013b51",
+        "name": "Gerald Walling",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Prison Guard"
+      },
+      {
+        "id": 122096,
+        "order": 18,
+        "credit_id": "52fe424dc3a36847f8013b55",
+        "name": "Walter Levine",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Prison Guard"
+      },
+      {
+        "id": 122098,
+        "order": 19,
+        "credit_id": "52fe424dc3a36847f8013b59",
+        "name": "Alonzo Atkins",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Choirmaster"
+      },
+      {
+        "id": 122099,
+        "order": 20,
+        "credit_id": "52fe424dc3a36847f8013b5d",
+        "name": "Chaka Khan",
+        "cast_id": 31,
+        "profile_path": "/4gLs6Lonpt89dqnNtSIQdnP6TF7.jpg",
+        "character": "Choir Soloist"
+      },
+      {
+        "id": 122101,
+        "order": 21,
+        "credit_id": "52fe424dc3a36847f8013b61",
+        "name": "Armand Cerami",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Trooper Daniel"
+      },
+      {
+        "id": 51579,
+        "order": 22,
+        "credit_id": "537c7fd20e0a262a8800122f",
+        "name": "Steven Williams",
+        "cast_id": 83,
+        "profile_path": "/jJCa0bKe9zBe31bbuDsiNtgoo5W.jpg",
+        "character": "Trooper Mount"
+      },
+      {
+        "id": 122105,
+        "order": 24,
+        "credit_id": "52fe424dc3a36847f8013b69",
+        "name": "Kristi Oleson",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Sales Girl"
+      },
+      {
+        "id": 122106,
+        "order": 25,
+        "credit_id": "52fe424dc3a36847f8013b6d",
+        "name": "Gary McLarty",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Man in Toy Store"
+      },
+      {
+        "id": 122107,
+        "order": 26,
+        "credit_id": "52fe424dc3a36847f8013b71",
+        "name": "Joe Cuttone",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Lloyd"
+      },
+      {
+        "id": 122108,
+        "order": 27,
+        "credit_id": "52fe424dc3a36847f8013b75",
+        "name": "Layne Britton",
+        "cast_id": 41,
+        "profile_path": null,
+        "character": "The Cheese Whiz"
+      },
+      {
+        "id": 122110,
+        "order": 28,
+        "credit_id": "52fe424dc3a36847f8013b79",
+        "name": "Toni Fleming",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "Mrs. Tarantino"
+      },
+      {
+        "id": 122114,
+        "order": 29,
+        "credit_id": "52fe424dc3a36847f8013b7d",
+        "name": "Rosie Shuster",
+        "cast_id": 45,
+        "profile_path": null,
+        "character": "Cocktail Waitress"
+      },
+      {
+        "id": 122115,
+        "order": 30,
+        "credit_id": "52fe424dc3a36847f8013b81",
+        "name": "Alan Rubin",
+        "cast_id": 46,
+        "profile_path": null,
+        "character": "Mr. Fabulous"
+      },
+      {
+        "id": 5129,
+        "order": 31,
+        "credit_id": "52fe424dc3a36847f8013b85",
+        "name": "Paul Reubens",
+        "cast_id": 47,
+        "profile_path": "/3g77Qz12qjCpVGfBP2kOPx4rRai.jpg",
+        "character": "Waiter"
+      },
+      {
+        "id": 90163,
+        "order": 32,
+        "credit_id": "52fe424dc3a36847f8013b89",
+        "name": "Ben Piazza",
+        "cast_id": 48,
+        "profile_path": "/8pvVOp2fuIkOb4Go6P1I2rHLb68.jpg",
+        "character": "Father"
+      },
+      {
+        "id": 122116,
+        "order": 33,
+        "credit_id": "52fe424dc3a36847f8013b8d",
+        "name": "Gwen Banta",
+        "cast_id": 49,
+        "profile_path": null,
+        "character": "Mother"
+      },
+      {
+        "id": 122117,
+        "order": 34,
+        "credit_id": "52fe424dc3a36847f8013b91",
+        "name": "Lari Taylor",
+        "cast_id": 50,
+        "profile_path": null,
+        "character": "Daughter #1"
+      },
+      {
+        "id": 122118,
+        "order": 35,
+        "credit_id": "52fe424dc3a36847f8013b95",
+        "name": "Cindy Fisher",
+        "cast_id": 51,
+        "profile_path": "/eorSm5IPzlmph90cw5e70F9LGoF.jpg",
+        "character": "Daughter #2"
+      },
+      {
+        "id": 122119,
+        "order": 36,
+        "credit_id": "52fe424dc3a36847f8013b99",
+        "name": "Elizabeth Hoy",
+        "cast_id": 52,
+        "profile_path": null,
+        "character": "Daughter #3"
+      },
+      {
+        "id": 122120,
+        "order": 37,
+        "credit_id": "52fe424dc3a36847f8013b9d",
+        "name": "Tony M. Conde",
+        "cast_id": 53,
+        "profile_path": null,
+        "character": "Sommelier"
+      },
+      {
+        "id": 74840,
+        "order": 38,
+        "credit_id": "52fe424dc3a36847f8013ba1",
+        "name": "Eugene J. Anthony",
+        "cast_id": 55,
+        "profile_path": null,
+        "character": "Gruppenführer"
+      },
+      {
+        "id": 122122,
+        "order": 39,
+        "credit_id": "52fe424dc3a36847f8013ba5",
+        "name": "Dean Hill",
+        "cast_id": 56,
+        "profile_path": null,
+        "character": "Nazi"
+      },
+      {
+        "id": 122124,
+        "order": 40,
+        "credit_id": "52fe424dc3a36847f8013ba9",
+        "name": "Jack Orend",
+        "cast_id": 58,
+        "profile_path": null,
+        "character": "Nazi"
+      },
+      {
+        "id": 122125,
+        "order": 41,
+        "credit_id": "52fe424dc3a36847f8013bad",
+        "name": "Gene Schuldt",
+        "cast_id": 59,
+        "profile_path": null,
+        "character": "Nazi"
+      },
+      {
+        "id": 122126,
+        "order": 42,
+        "credit_id": "52fe424dc3a36847f8013bb1",
+        "name": "Charles Mountain",
+        "cast_id": 60,
+        "profile_path": null,
+        "character": "Cop"
+      },
+      {
+        "id": 7908,
+        "order": 43,
+        "credit_id": "52fe424dc3a36847f8013bb5",
+        "name": "Frank Oz",
+        "cast_id": 61,
+        "profile_path": "/9KqCa2wS4EO2yymrVIgMiFHh6M4.jpg",
+        "character": "Corrections Officer"
+      },
+      {
+        "id": 4610,
+        "order": 44,
+        "credit_id": "52fe424dc3a36847f8013bef",
+        "name": "John Landis",
+        "cast_id": 72,
+        "profile_path": "/pHqwE4XKehtONaRVyXAml0I3mSy.jpg",
+        "character": "Trooper La Fong"
+      },
+      {
+        "id": 19439,
+        "order": 45,
+        "credit_id": "52fe424dc3a36847f8013bf3",
+        "name": "Henry Gibson",
+        "cast_id": 73,
+        "profile_path": "/lLzzFLkPa3jKmu1sfJRxdm7zkmM.jpg",
+        "character": "Head Nazi"
+      },
+      {
+        "id": 3909,
+        "order": 46,
+        "credit_id": "52fe424dc3a36847f8013bf7",
+        "name": "Gary Houston",
+        "cast_id": 75,
+        "profile_path": "/sHnbRD3qic7ndwrYB3qRRPSiEFE.jpg",
+        "character": "Nazi"
+      },
+      {
+        "id": 55247,
+        "order": 47,
+        "credit_id": "52fe424dc3a36847f8013bfb",
+        "name": "Judith Belushi-Pisano",
+        "cast_id": 76,
+        "profile_path": null,
+        "character": "Cocktail Waitress"
+      },
+      {
+        "id": 56271,
+        "order": 48,
+        "credit_id": "52fe424dc3a36847f8013bff",
+        "name": "Elmore James",
+        "cast_id": 77,
+        "profile_path": null,
+        "character": "Choir"
+      },
+      {
+        "id": 76150,
+        "order": 49,
+        "credit_id": "52fe424dc3a36847f8013c03",
+        "name": "Tom Malone",
+        "cast_id": 78,
+        "profile_path": null,
+        "character": "\"Bones\" Malone"
+      },
+      {
+        "id": 938558,
+        "order": 50,
+        "credit_id": "52fe424dc3a36847f8013c0d",
+        "name": "Stephen Bishop",
+        "cast_id": 80,
+        "profile_path": "/uhUDLWO1QDTyYmnByPyzqYKiLXh.jpg",
+        "character": "Charming Trooper"
+      },
+      {
+        "id": 16119,
+        "order": 51,
+        "credit_id": "52fe424dc3a36847f8013c11",
+        "name": "Charles Napier",
+        "cast_id": 81,
+        "profile_path": "/hZ3bCBxnHc7Zvrm3Rt2CPgXSLLT.jpg",
+        "character": "Tucker McElroy"
+      },
+      {
+        "id": 488,
+        "order": 52,
+        "credit_id": "52fe424dc3a36847f8013c15",
+        "name": "Steven Spielberg",
+        "cast_id": 82,
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg",
+        "character": "Cook County Assessor's Office Clerk"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4610,
+        "credit_id": "52fe424dc3a36847f8013ad3",
+        "department": "Directing",
+        "name": "John Landis",
+        "job": "Director",
+        "profile_path": "/pHqwE4XKehtONaRVyXAml0I3mSy.jpg"
+      },
+      {
+        "id": 4610,
+        "credit_id": "52fe424dc3a36847f8013ad9",
+        "department": "Writing",
+        "name": "John Landis",
+        "job": "Author",
+        "profile_path": "/pHqwE4XKehtONaRVyXAml0I3mSy.jpg"
+      },
+      {
+        "id": 707,
+        "credit_id": "52fe424dc3a36847f8013adf",
+        "department": "Writing",
+        "name": "Dan Aykroyd",
+        "job": "Author",
+        "profile_path": "/h2PT9yZYv5ml5hL9jvCpWBTWgU.jpg"
+      },
+      {
+        "id": 7181,
+        "credit_id": "52fe424dc3a36847f8013b15",
+        "department": "Production",
+        "name": "Robert K. Weiss",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7182,
+        "credit_id": "52fe424dc3a36847f8013b1b",
+        "department": "Sound",
+        "name": "Elmer Bernstein",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7183,
+        "credit_id": "52fe424dc3a36847f8013b21",
+        "department": "Camera",
+        "name": "Stephen M. Katz",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7184,
+        "credit_id": "52fe424dc3a36847f8013b27",
+        "department": "Editing",
+        "name": "George Folsey Jr.",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7185,
+        "credit_id": "52fe424dc3a36847f8013b2d",
+        "department": "Production",
+        "name": "Michael Chinich",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7186,
+        "credit_id": "52fe424dc3a36847f8013b33",
+        "department": "Art",
+        "name": "John J. Lloyd",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 7211,
+        "credit_id": "52fe424dc3a36847f8013b49",
+        "department": "Costume & Make-Up",
+        "name": "Deborah Nadoolman",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 122106,
+        "credit_id": "52fe424dc3a36847f8013bbb",
+        "department": "Crew",
+        "name": "Gary McLarty",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 122106,
+        "credit_id": "52fe424dc3a36847f8013bc1",
+        "department": "Crew",
+        "name": "Gary McLarty",
+        "job": "Stunt Coordinator",
+        "profile_path": null
+      },
+      {
+        "id": 1261,
+        "credit_id": "52fe424dc3a36847f8013bc7",
+        "department": "Art",
+        "name": "Hal Gausman",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 55226,
+        "credit_id": "52fe424dc3a36847f8013bcd",
+        "department": "Directing",
+        "name": "Katherine Wooten",
+        "job": "Script Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 55228,
+        "credit_id": "52fe424dc3a36847f8013bd3",
+        "department": "Sound",
+        "name": "Earl Sampson",
+        "job": "Boom Operator",
+        "profile_path": null
+      },
+      {
+        "id": 122131,
+        "credit_id": "52fe424dc3a36847f8013bd9",
+        "department": "Production",
+        "name": "Fran Roy",
+        "job": "Production Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 55232,
+        "credit_id": "52fe424dc3a36847f8013bdf",
+        "department": "Camera",
+        "name": "Steve Yaconelli",
+        "job": "Camera Operator",
+        "profile_path": null
+      },
+      {
+        "id": 122132,
+        "credit_id": "52fe424dc3a36847f8013be5",
+        "department": "Camera",
+        "name": "John LeBlanc",
+        "job": "Camera Operator",
+        "profile_path": null
+      },
+      {
+        "id": 122133,
+        "credit_id": "52fe424dc3a36847f8013beb",
+        "department": "Camera",
+        "name": "Mako Koiwai",
+        "job": "Camera Operator",
+        "profile_path": null
+      },
+      {
+        "id": 603,
+        "credit_id": "52fe424dc3a36847f8013c09",
+        "department": "Art",
+        "name": "Leslie McCarthy-Frankenheimer",
+        "job": "Set Decoration",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 133,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.bluesbrothers.com/",
+  "id": 525,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Blues Brothers",
+  "overview": "Direct out of jail, Jake Blues and his Brother Elwood are off on a \u201cmission from God\u201d to raise funds for the orphanage in which they grew up. The only thing they can do is do what they do best: play music. So they get their old band together and they're on their way yet not without getting in a bit of trouble here and there.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 112636,
+    "backdrop_path": "/i4Jai1IlkbOWd8eNFM0S1lupyLt.jpg",
+    "name": "The Blues Brothers",
+    "poster_path": "/pQf9LzCokihzlLmgQlPG7yBpZ1o.jpg"
+  },
+  "imdb_id": "tt0080455",
+  "release_date": "1980-06-17",
+  "original_title": "The Blues Brothers",
+  "vote_count": 253,
+  "poster_path": "/wdcoPIqOHk3dJ1s3fQOGgrMDNYu.jpg",
+  "tagline": "They'll never get caught. They're on a mission from God.",
+  "revenue": 115229890,
+  "popularity": "2.46154693336074"
+}

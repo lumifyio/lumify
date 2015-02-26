@@ -1,0 +1,268 @@
+{
+  "budget": 0,
+  "vote_average": 6.7,
+  "backdrop_path": "/jansnSUSVM8ujoFCUfFrygyNSba.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5064,
+        "order": 0,
+        "credit_id": "52fe426ac3a36847f801cfc5",
+        "name": "Meryl Streep",
+        "cast_id": 10,
+        "profile_path": "/uyalVm3tH5DaUoxCmvILS9sUFsR.jpg",
+        "character": "Francesca Johnson"
+      },
+      {
+        "id": 190,
+        "order": 1,
+        "credit_id": "52fe426ac3a36847f801cfc9",
+        "name": "Clint Eastwood",
+        "cast_id": 11,
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg",
+        "character": "Robert Kincaid"
+      },
+      {
+        "id": 6907,
+        "order": 2,
+        "credit_id": "52fe426ac3a36847f801cfcd",
+        "name": "Annie Corley",
+        "cast_id": 12,
+        "profile_path": "/ypA6im4I1S5SzzNAJOdRmZq01YX.jpg",
+        "character": "Caroline Johnson"
+      },
+      {
+        "id": 10379,
+        "order": 3,
+        "credit_id": "52fe426ac3a36847f801cfd1",
+        "name": "Victor Slezak",
+        "cast_id": 13,
+        "profile_path": "/m3Wi4uifukUJl2GA3QEOHctPESz.jpg",
+        "character": "Michael Johnson"
+      },
+      {
+        "id": 10380,
+        "order": 4,
+        "credit_id": "52fe426ac3a36847f801cfd5",
+        "name": "Jim Haynie",
+        "cast_id": 14,
+        "profile_path": "/aFXy2ef18bE6gqibhDoZ7EAsq8n.jpg",
+        "character": "Richard Johnson"
+      },
+      {
+        "id": 10381,
+        "order": 5,
+        "credit_id": "52fe426ac3a36847f801cfd9",
+        "name": "Sarah Kathryn Schmitt",
+        "cast_id": 15,
+        "profile_path": "/nKr6sUws5FKof5Am9svH436GzJK.jpg",
+        "character": "Caroline as a young girl"
+      },
+      {
+        "id": 10382,
+        "order": 6,
+        "credit_id": "52fe426ac3a36847f801cfdd",
+        "name": "Christopher Kroon",
+        "cast_id": 16,
+        "profile_path": "/laNbeJ8BRJy8dOJqXCALHcWQWqP.jpg",
+        "character": "Michael as a young boy"
+      },
+      {
+        "id": 10383,
+        "order": 7,
+        "credit_id": "52fe426bc3a36847f801cfe1",
+        "name": "Phyllis Lyons",
+        "cast_id": 17,
+        "profile_path": "/gShHL20sIsP5AS2w6ZGPvGb10Hz.jpg",
+        "character": "Betty"
+      },
+      {
+        "id": 10386,
+        "order": 8,
+        "credit_id": "52fe426bc3a36847f801cfe5",
+        "name": "Debra Monk",
+        "cast_id": 18,
+        "profile_path": "/ufZO6Uo9cy4ayM6jJfHfnqL5Elt.jpg",
+        "character": "Madge"
+      },
+      {
+        "id": 10388,
+        "order": 9,
+        "credit_id": "52fe426bc3a36847f801cfe9",
+        "name": "Richard Lage",
+        "cast_id": 19,
+        "profile_path": "/8UYkue0JxE9JGZ887NWuyvIYITV.jpg",
+        "character": "Lawyer Peterson"
+      },
+      {
+        "id": 10389,
+        "order": 10,
+        "credit_id": "52fe426bc3a36847f801cfed",
+        "name": "Michelle Benes",
+        "cast_id": 20,
+        "profile_path": "/sEz3lmycMzoMPFpX2Wr3hfq9ZkG.jpg",
+        "character": "Lucy Redfield"
+      }
+    ],
+    "crew": [
+      {
+        "id": 190,
+        "credit_id": "52fe426ac3a36847f801cf97",
+        "department": "Directing",
+        "name": "Clint Eastwood",
+        "job": "Director",
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg"
+      },
+      {
+        "id": 2163,
+        "credit_id": "52fe426ac3a36847f801cf9d",
+        "department": "Writing",
+        "name": "Richard LaGravenese",
+        "job": "Screenplay",
+        "profile_path": "/8AF47SFj7L50qpWIz8PmdOEcU62.jpg"
+      },
+      {
+        "id": 190,
+        "credit_id": "52fe426ac3a36847f801cfa3",
+        "department": "Production",
+        "name": "Clint Eastwood",
+        "job": "Producer",
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg"
+      },
+      {
+        "id": 489,
+        "credit_id": "52fe426ac3a36847f801cfa9",
+        "department": "Production",
+        "name": "Kathleen Kennedy",
+        "job": "Producer",
+        "profile_path": "/uHEExgTTzJNDX1Gal9CW5n3QdEJ.jpg"
+      },
+      {
+        "id": 195,
+        "credit_id": "52fe426ac3a36847f801cfaf",
+        "department": "Sound",
+        "name": "Lennie Niehaus",
+        "job": "Original Music Composer",
+        "profile_path": "/tiGnFqQ4o4m81Y10Roghm4bycvo.jpg"
+      },
+      {
+        "id": 190,
+        "credit_id": "52fe426ac3a36847f801cfb5",
+        "department": "Sound",
+        "name": "Clint Eastwood",
+        "job": "Original Music Composer",
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg"
+      },
+      {
+        "id": 356,
+        "credit_id": "52fe426ac3a36847f801cfbb",
+        "department": "Camera",
+        "name": "Jack N. Green",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 384,
+        "credit_id": "52fe426ac3a36847f801cfc1",
+        "department": "Editing",
+        "name": "Joel Cox",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10378,
+        "credit_id": "52fe426bc3a36847f801cff3",
+        "department": "Writing",
+        "name": "Robert James Waller",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 168769,
+        "credit_id": "52fe426bc3a36847f801cff9",
+        "department": "Production",
+        "name": "Michael Maurer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 347,
+        "credit_id": "52fe426bc3a36847f801cfff",
+        "department": "Production",
+        "name": "Tom Rooker",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1484,
+        "credit_id": "52fe426bc3a36847f801d005",
+        "department": "Production",
+        "name": "Ellen Chenoweth",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 9269,
+        "credit_id": "52fe426bc3a36847f801d00b",
+        "department": "Art",
+        "name": "Jeannine Oppewall",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 135,
+  "spoken_languages": [
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 688,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Bridges Of Madison County",
+  "overview": "A melancholy romance about a farmers wife who meets a photographer who\u2019s way of life that is completely foreign to her leading her to become attracted to him. She is confronted with the difficult decision to go on with the relationship thus leaving her family, or to stay and continue her ordinary life until her death. Meryl Streep was nominated for an Oscar for her excellent performance.",
+  "production_companies": [
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    },
+    {
+      "id": 171,
+      "name": "Malpaso Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0112579",
+  "release_date": "1995-09-28",
+  "original_title": "The Bridges Of Madison County",
+  "vote_count": 36,
+  "poster_path": "/zBzIFqhYzaKJ6sg8p7svRUFwtD6.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.673982448952698"
+}

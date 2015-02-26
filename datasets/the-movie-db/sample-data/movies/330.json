@@ -1,0 +1,305 @@
+{
+  "budget": 73000000,
+  "vote_average": 5.9,
+  "backdrop_path": "/6KOPTlgmEb6MkKYTcDA1QAN6vGJ.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4785,
+        "order": 0,
+        "credit_id": "52fe4238c3a36847f800d383",
+        "name": "Jeff Goldblum",
+        "cast_id": 1,
+        "profile_path": "/iDW7y4R8cx4SZzWd8nN2gvL7My1.jpg",
+        "character": "Dr. Ian Malcolm"
+      },
+      {
+        "id": 1231,
+        "order": 1,
+        "credit_id": "52fe4238c3a36847f800d387",
+        "name": "Julianne Moore",
+        "cast_id": 2,
+        "profile_path": "/5TP6PXUMfVlckGfDAmAk8ijVpLX.jpg",
+        "character": "Dr. Sarah Harding"
+      },
+      {
+        "id": 4935,
+        "order": 2,
+        "credit_id": "52fe4238c3a36847f800d38b",
+        "name": "Pete Postlethwaite",
+        "cast_id": 3,
+        "profile_path": "/5nbSzrwyDcLhC15buncGdrQqJ8e.jpg",
+        "character": "Roland Tembo"
+      },
+      {
+        "id": 4786,
+        "order": 3,
+        "credit_id": "52fe4238c3a36847f800d38f",
+        "name": "Richard Attenborough",
+        "cast_id": 4,
+        "profile_path": "/qzedA4XCNjbmR7z3fWiFinGukzx.jpg",
+        "character": "John Hammond"
+      },
+      {
+        "id": 4937,
+        "order": 4,
+        "credit_id": "52fe4238c3a36847f800d393",
+        "name": "Vince Vaughn",
+        "cast_id": 5,
+        "profile_path": "/1Ta0BKSJ1wku88M8qCfmlTQLzAf.jpg",
+        "character": "Nick Van Owen"
+      },
+      {
+        "id": 3229,
+        "order": 5,
+        "credit_id": "52fe4238c3a36847f800d397",
+        "name": "Arliss Howard",
+        "cast_id": 6,
+        "profile_path": "/3mrUl2agLneG40JFd2zzXmxZ65w.jpg",
+        "character": "Peter Ludlow"
+      },
+      {
+        "id": 4938,
+        "order": 6,
+        "credit_id": "52fe4238c3a36847f800d39b",
+        "name": "Vanessa Lee Chester",
+        "cast_id": 7,
+        "profile_path": "/7MISWIcns6CLagoPnKGzRXchoMz.jpg",
+        "character": "Kelly Curtis Malcolm"
+      },
+      {
+        "id": 4787,
+        "order": 7,
+        "credit_id": "52fe4238c3a36847f800d39f",
+        "name": "Joseph Mazzello",
+        "cast_id": 8,
+        "profile_path": "/zsBGvymDqB737PerJTqhS9dPuBd.jpg",
+        "character": "Tim Murphy"
+      },
+      {
+        "id": 4788,
+        "order": 8,
+        "credit_id": "52fe4238c3a36847f800d3a3",
+        "name": "Ariana Richards",
+        "cast_id": 9,
+        "profile_path": "/b4S0q3uSDIophwYcPlBABgJObSX.jpg",
+        "character": "Lex Murphy"
+      },
+      {
+        "id": 488,
+        "order": 9,
+        "credit_id": "52fe4238c3a36847f800d3a7",
+        "name": "Steven Spielberg",
+        "cast_id": 10,
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg",
+        "character": "Popcorn-Eating Man"
+      },
+      {
+        "id": 53,
+        "order": 10,
+        "credit_id": "52fe4238c3a36847f800d3e7",
+        "name": "Peter Stormare",
+        "cast_id": 22,
+        "profile_path": "/dDR0brp5L7fXDyEywrhjQv01LSg.jpg",
+        "character": "Dieter Stark"
+      },
+      {
+        "id": 38670,
+        "order": 11,
+        "credit_id": "52fe4238c3a36847f800d3f1",
+        "name": "Camilla Belle",
+        "cast_id": 24,
+        "profile_path": "/kT5B59bSDBOIa1qVRtwrMgbxehS.jpg",
+        "character": "Cathy Bowman"
+      },
+      {
+        "id": 43010,
+        "order": 12,
+        "credit_id": "52fe4238c3a36847f800d3f5",
+        "name": "Thomas Rosales, Jr.",
+        "cast_id": 25,
+        "profile_path": "/vQj5seGz2vviAjxqIcAdHNMXgCt.jpg",
+        "character": "Carter"
+      },
+      {
+        "id": 46919,
+        "order": 13,
+        "credit_id": "52fe4238c3a36847f800d3f9",
+        "name": "Thomas F. Duffy",
+        "cast_id": 26,
+        "profile_path": "/jLANWUvY91SUNcBfB4z7PQUieE7.jpg",
+        "character": "Dr. Robert Burke"
+      },
+      {
+        "id": 31028,
+        "order": 14,
+        "credit_id": "52fe4238c3a36847f800d3fd",
+        "name": "Richard Schiff",
+        "cast_id": 28,
+        "profile_path": "/gHFxL7MIGvmcbg5hhTNrbjIttQN.jpg",
+        "character": "Eddie Carr"
+      },
+      {
+        "id": 113935,
+        "order": 15,
+        "credit_id": "52fe4238c3a36847f800d401",
+        "name": "Harvey Jason",
+        "cast_id": 29,
+        "profile_path": "/8wgzBygmr51OnXS2uJFZMerIzXT.jpg",
+        "character": "Ajay Sidhu"
+      },
+      {
+        "id": 11764,
+        "order": 16,
+        "credit_id": "52fe4238c3a36847f800d405",
+        "name": "Ian Abercrombie",
+        "cast_id": 30,
+        "profile_path": "/qci9vBTZJXQNLIFpCtIpXU881g8.jpg",
+        "character": "Butler"
+      }
+    ],
+    "crew": [
+      {
+        "id": 488,
+        "credit_id": "52fe4238c3a36847f800d3ad",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 4782,
+        "credit_id": "52fe4238c3a36847f800d3b3",
+        "department": "Writing",
+        "name": "Michael Crichton",
+        "job": "Author",
+        "profile_path": "/hWEu802x48GlW0vx9Lx1XZO8mTX.jpg"
+      },
+      {
+        "id": 2211,
+        "credit_id": "52fe4238c3a36847f800d3b9",
+        "department": "Production",
+        "name": "Gerald R. Molen",
+        "job": "Producer",
+        "profile_path": "/ih3yLiYixeQuW2Zp545aHtD5nq.jpg"
+      },
+      {
+        "id": 490,
+        "credit_id": "52fe4238c3a36847f800d3bf",
+        "department": "Production",
+        "name": "Colin Wilson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 491,
+        "credit_id": "52fe4238c3a36847f800d3c5",
+        "department": "Sound",
+        "name": "John Williams",
+        "job": "Original Music Composer",
+        "profile_path": "/d7NNRZQAIzLBSaoez550QHLpTk.jpg"
+      },
+      {
+        "id": 492,
+        "credit_id": "52fe4238c3a36847f800d3cb",
+        "department": "Camera",
+        "name": "Janusz Kaminski",
+        "job": "Director of Photography",
+        "profile_path": "/5LNGARjEfMDOcEP6fMNtJypAGYx.jpg"
+      },
+      {
+        "id": 493,
+        "credit_id": "52fe4238c3a36847f800d3d1",
+        "department": "Editing",
+        "name": "Michael Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2874,
+        "credit_id": "52fe4238c3a36847f800d3d7",
+        "department": "Production",
+        "name": "Janet Hirshenson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3275,
+        "credit_id": "52fe4238c3a36847f800d3dd",
+        "department": "Production",
+        "name": "Jane Jenkins",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 496,
+        "credit_id": "52fe4238c3a36847f800d3e3",
+        "department": "Art",
+        "name": "Rick Carter",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 508,
+        "credit_id": "52fe4238c3a36847f800d3ed",
+        "department": "Writing",
+        "name": "David Koepp",
+        "job": "Screenplay",
+        "profile_path": "/3A7kfyMXaVjGcSbGdRD25msbHcj.jpg"
+      }
+    ]
+  },
+  "runtime": 129,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 330,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Lost World: Jurassic Park",
+  "overview": "Four years after Jurassic Park's genetically bred dinosaurs ran amok, multimillionaire John Hammond shocks chaos theorist Ian Malcolm by revealing that Hammond has been breeding more beasties at a secret location. Malcolm, his paleontologist ladylove and a wildlife videographer join an expedition to document the lethal lizards' natural behavior in this action-packed thriller.",
+  "production_companies": [
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    },
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 328,
+    "backdrop_path": "/pJjIH9QN0OkHFV9eue6XfRVnPkr.jpg",
+    "name": "Jurassic Park Collection",
+    "poster_path": "/aQR4VLVxfrTZedr5fml385PFRzI.jpg"
+  },
+  "imdb_id": "tt0119567",
+  "release_date": "1997-05-19",
+  "original_title": "The Lost World: Jurassic Park",
+  "vote_count": 872,
+  "poster_path": "/u1fXmEQUCI9CjyHCCYOPBSq2DYo.jpg",
+  "tagline": "Something has survived.",
+  "revenue": 229074524,
+  "popularity": "3.64825482784449"
+}

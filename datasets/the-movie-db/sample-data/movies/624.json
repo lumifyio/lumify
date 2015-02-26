@@ -1,0 +1,269 @@
+{
+  "budget": 350000,
+  "vote_average": 7,
+  "backdrop_path": "/7HVnz5THbqJZKmAuRvF9vDNaLcK.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8949,
+        "order": 0,
+        "credit_id": "52fe4260c3a36847f8019735",
+        "name": "Peter Fonda",
+        "cast_id": 17,
+        "profile_path": "/itxzMl2GUCGdAG3fv2Yh7ksjyeb.jpg",
+        "character": "Wyatt"
+      },
+      {
+        "id": 2778,
+        "order": 1,
+        "credit_id": "52fe4260c3a36847f8019739",
+        "name": "Dennis Hopper",
+        "cast_id": 18,
+        "profile_path": "/56nj2DfMVU3F9qUagZWMePLbrKF.jpg",
+        "character": "Billy"
+      },
+      {
+        "id": 8960,
+        "order": 2,
+        "credit_id": "52fe4260c3a36847f801973d",
+        "name": "Antonio Mendoza",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Jesus"
+      },
+      {
+        "id": 8961,
+        "order": 3,
+        "credit_id": "52fe4260c3a36847f8019741",
+        "name": "Phil Spector",
+        "cast_id": 20,
+        "profile_path": "/8Y14xgLM4rrkdNEroj5mO7HmO0G.jpg",
+        "character": "Connection"
+      },
+      {
+        "id": 514,
+        "order": 4,
+        "credit_id": "52fe4260c3a36847f8019745",
+        "name": "Jack Nicholson",
+        "cast_id": 21,
+        "profile_path": "/z5kVLyn3sxj0wNRlFgVgT6deeRO.jpg",
+        "character": "George Hanson"
+      },
+      {
+        "id": 8962,
+        "order": 5,
+        "credit_id": "52fe4260c3a36847f8019749",
+        "name": "Luke Askew",
+        "cast_id": 22,
+        "profile_path": "/mGBZQGBck9rIZeTsP0H0jnMeDmC.jpg",
+        "character": "Stranger on Highway"
+      },
+      {
+        "id": 8963,
+        "order": 6,
+        "credit_id": "52fe4260c3a36847f801974d",
+        "name": "Karen Black",
+        "cast_id": 23,
+        "profile_path": "/d2Zf3vIWOWovWKnPe13GSz2BTLY.jpg",
+        "character": "Karen"
+      },
+      {
+        "id": 8964,
+        "order": 7,
+        "credit_id": "52fe4260c3a36847f8019751",
+        "name": "Toni Basil",
+        "cast_id": 24,
+        "profile_path": "/xrhQq8UynWnFbxWV2kwDQBpWbbK.jpg",
+        "character": "Mary"
+      }
+    ],
+    "crew": [
+      {
+        "id": 121347,
+        "credit_id": "53a193750e0a26653d003482",
+        "department": "Directing",
+        "name": "Joyce King",
+        "job": "Script Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 2778,
+        "credit_id": "52fe4260c3a36847f80196d7",
+        "department": "Directing",
+        "name": "Dennis Hopper",
+        "job": "Director",
+        "profile_path": "/56nj2DfMVU3F9qUagZWMePLbrKF.jpg"
+      },
+      {
+        "id": 2778,
+        "credit_id": "52fe4260c3a36847f80196dd",
+        "department": "Writing",
+        "name": "Dennis Hopper",
+        "job": "Screenplay",
+        "profile_path": "/56nj2DfMVU3F9qUagZWMePLbrKF.jpg"
+      },
+      {
+        "id": 8949,
+        "credit_id": "52fe4260c3a36847f80196e3",
+        "department": "Writing",
+        "name": "Peter Fonda",
+        "job": "Screenplay",
+        "profile_path": "/itxzMl2GUCGdAG3fv2Yh7ksjyeb.jpg"
+      },
+      {
+        "id": 8950,
+        "credit_id": "52fe4260c3a36847f80196e9",
+        "department": "Writing",
+        "name": "Terry Southern",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 8949,
+        "credit_id": "52fe4260c3a36847f80196ef",
+        "department": "Production",
+        "name": "Peter Fonda",
+        "job": "Producer",
+        "profile_path": "/itxzMl2GUCGdAG3fv2Yh7ksjyeb.jpg"
+      },
+      {
+        "id": 8951,
+        "credit_id": "52fe4260c3a36847f80196f5",
+        "department": "Production",
+        "name": "William Hayward",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8952,
+        "credit_id": "52fe4260c3a36847f80196fb",
+        "department": "Production",
+        "name": "Bert Schneider",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8862,
+        "credit_id": "52fe4260c3a36847f8019701",
+        "department": "Camera",
+        "name": "László Kovács",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 8847,
+        "credit_id": "52fe4260c3a36847f8019707",
+        "department": "Editing",
+        "name": "Donn Cambern",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8953,
+        "credit_id": "52fe4260c3a36847f801970d",
+        "department": "Art",
+        "name": "Jeremy Kay",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8954,
+        "credit_id": "52fe4260c3a36847f8019713",
+        "department": "Costume & Make-Up",
+        "name": "Virgil Frye",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 8955,
+        "credit_id": "52fe4260c3a36847f8019719",
+        "department": "Production",
+        "name": "Paul Lewis",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 8956,
+        "credit_id": "52fe4260c3a36847f801971f",
+        "department": "Visual Effects",
+        "name": "Robert Vincent O'Neill",
+        "job": "Creature Design",
+        "profile_path": null
+      },
+      {
+        "id": 8957,
+        "credit_id": "52fe4260c3a36847f8019725",
+        "department": "Visual Effects",
+        "name": "James Contrares",
+        "job": "Creature Design",
+        "profile_path": null
+      },
+      {
+        "id": 8958,
+        "credit_id": "52fe4260c3a36847f801972b",
+        "department": "Sound",
+        "name": "Le Roy Robbins",
+        "job": "Sound mixer",
+        "profile_path": null
+      },
+      {
+        "id": 8959,
+        "credit_id": "52fe4260c3a36847f8019731",
+        "department": "Crew",
+        "name": "Steve Karkus",
+        "job": "Special Effects",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 95,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 624,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Easy Rider",
+  "overview": "Easy Rider is the classic cult film from the 1960\u2019s. A road movie that embodies the feeling of being a hippie as two friends head cross-country to Mardi Gras. A controversial period film by Dennis Hopper and Peter Fonda with some classic music from a generation of wanderers.",
+  "production_companies": [{
+    "id": 4541,
+    "name": "Raybert Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0064276",
+  "release_date": "1969-07-14",
+  "original_title": "Easy Rider",
+  "vote_count": 30,
+  "poster_path": "/rXNOO7fajRjNEeW1mAGPhZDFZ5p.jpg",
+  "tagline": "A man went looking for America and couldn\u2019t find it anywhere...",
+  "revenue": 0,
+  "popularity": "0.549091656525163"
+}

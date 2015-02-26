@@ -1,0 +1,250 @@
+{
+  "birthday": "1948-10-02",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia\n\nAvery Franklin Brooks (born October 2, 1948) is an American actor, jazz musician, opera singer and college professor. Brooks is perhaps best known for his television roles as Benjamin Sisko on Star Trek: Deep Space Nine, and as Hawk on Spenser: For Hire and its spinoff A Man Called Hawk.\n\nDescription above from the Wikipedia article Avery Brooks, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/K379Wd8DemmrVUkEKNmCGrcDf0.jpg",
+  "id": 822,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0000984",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 2749,
+        "media_type": "movie",
+        "title": "15 Minutes",
+        "credit_id": "52fe4369c3a36847f80525a7",
+        "release_date": "2001-03-01",
+        "original_title": "15 Minutes",
+        "adult": false,
+        "poster_path": "/qqqleHV8y7NLKt7isSZAvOwVPH6.jpg",
+        "character": "Detective Leon Jackson"
+      },
+      {
+        "id": 21423,
+        "media_type": "movie",
+        "title": "Drain the Ocean",
+        "credit_id": "52fe4418c3a368484e00f32f",
+        "release_date": "2009-08-09",
+        "original_title": "Drain the Ocean",
+        "adult": false,
+        "poster_path": "/2Zmrc6FHcGkI3mwldXtYR4F3SE9.jpg",
+        "character": "Narrator"
+      },
+      {
+        "id": 21740,
+        "media_type": "movie",
+        "title": "The Greatest Places",
+        "credit_id": "52fe4425c3a368484e0120cd",
+        "release_date": "1998-06-30",
+        "original_title": "The Greatest Places",
+        "adult": false,
+        "poster_path": "/gn4sqfe89mcggXjiM47ImlwHWop.jpg",
+        "character": "Narrator"
+      },
+      {
+        "id": 9448,
+        "media_type": "movie",
+        "title": "The Big Hit",
+        "credit_id": "52fe44f8c3a36847f80b50b9",
+        "release_date": "1998-04-24",
+        "original_title": "The Big Hit",
+        "adult": false,
+        "poster_path": "/4J1eAqwaf16mpgUNzaDmrQukUTm.jpg",
+        "character": "Paris"
+      },
+      {
+        "id": 33249,
+        "media_type": "movie",
+        "title": "For Love of Liberty: The Story of America's Black Patriots",
+        "credit_id": "52fe45069251416c91024fa7",
+        "release_date": "2010-01-01",
+        "original_title": "For Love of Liberty: The Story of America's Black Patriots",
+        "adult": false,
+        "poster_path": "/24AnVSaa6uuOKBMFYEmXKRJKukq.jpg",
+        "character": "Narrator"
+      },
+      {
+        "id": 70703,
+        "media_type": "movie",
+        "title": "The Captains",
+        "credit_id": "52fe480cc3a368484e0e6cf9",
+        "release_date": "2011-07-22",
+        "original_title": "The Captains",
+        "adult": false,
+        "poster_path": "/5IEIy3TsdtashRxNAgI2TQ34o23.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 88655,
+        "media_type": "movie",
+        "title": "Roots: The Gift",
+        "credit_id": "52fe49fe9251416c910bfb55",
+        "release_date": "1988-12-11",
+        "original_title": "Roots: The Gift",
+        "adult": false,
+        "poster_path": "/pKsMRTHKimSBiszK74kAWVqwuIF.jpg",
+        "character": "Cletus Moyer"
+      },
+      {
+        "id": 151055,
+        "media_type": "movie",
+        "title": "Spenser: A Savage Place",
+        "credit_id": "52fe4af69251416c910cb599",
+        "release_date": "1995-05-20",
+        "original_title": "Spenser: A Savage Place",
+        "adult": false,
+        "poster_path": "/xYiTaRf14KZ1gbnqzPJR09exNrB.jpg",
+        "character": "Hawk"
+      },
+      {
+        "id": 151058,
+        "media_type": "movie",
+        "title": "Spenser: Ceremony",
+        "credit_id": "52fe4af69251416c910cb635",
+        "release_date": "1993-07-23",
+        "original_title": "Spenser: Ceremony",
+        "adult": false,
+        "poster_path": "/yHCxxLLAoHRLhLEKFklVX3HNDNv.jpg",
+        "character": "Hawk"
+      },
+      {
+        "id": 151074,
+        "media_type": "movie",
+        "title": "Spenser: The Judas Goat",
+        "credit_id": "52fe4af79251416c910cb761",
+        "release_date": "1994-12-01",
+        "original_title": "Spenser: The Judas Goat",
+        "adult": false,
+        "poster_path": "/aZhI9C8ojleuRHlYKPsOdOzZaQb.jpg",
+        "character": "Hawk"
+      },
+      {
+        "id": 154725,
+        "media_type": "movie",
+        "title": "The Ballad of Big Al",
+        "credit_id": "52fe4b699251416c910d9955",
+        "release_date": "2000-12-25",
+        "original_title": "The Ballad of Big Al",
+        "adult": false,
+        "poster_path": "/lIqcsRPECcG1zBUGmp7YI4H6vJC.jpg",
+        "character": "Narrator (US version)"
+      },
+      {
+        "id": 73,
+        "media_type": "movie",
+        "title": "American History X",
+        "credit_id": "52fe4213c3a36847f8002193",
+        "release_date": "1998-10-30",
+        "original_title": "American History X",
+        "adult": false,
+        "poster_path": "/fXepRAYOx1qC3wju7XdDGx60775.jpg",
+        "character": "Dr. Bob Sweeney"
+      },
+      {
+        "id": 272165,
+        "media_type": "movie",
+        "title": "Solomon Northup's Odyssey",
+        "credit_id": "5384c1f60e0a2624bd010053",
+        "release_date": "1984-01-02",
+        "original_title": "Solomon Northup's Odyssey",
+        "adult": false,
+        "poster_path": "/gNLeM8G4vxV6XU5UVdbn7CNrbNK.jpg",
+        "character": ""
+      },
+      {
+        "id": 1719,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525711f219c295711405471e",
+        "name": "Gargoyles",
+        "poster_path": "/dlcAj4PKR8i0MnIRu0LqPYtJ62C.jpg",
+        "original_name": "Gargoyles",
+        "first_air_date": "1994-10-24",
+        "character": ""
+      },
+      {
+        "id": 5505,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52578156760ee36aaa5f0f2a",
+        "name": "Roots: The Gift",
+        "poster_path": null,
+        "original_name": "Roots: The Gift",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 10906,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "525808a819c29531db3d88e2",
+        "name": "Happily Ever After: Fairy Tales for Every Child",
+        "poster_path": null,
+        "original_name": "Happily Ever After: Fairy Tales for Every Child",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 34169,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5258ac32760ee34661700c99",
+        "name": "Star Trek: Beyond the Final Frontier",
+        "poster_path": "/LGSosMsJJKELZuvRKuZkkgOuts.jpg",
+        "original_name": "Star Trek: Beyond the Final Frontier",
+        "first_air_date": "2007-02-19",
+        "character": ""
+      },
+      {
+        "id": 37158,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "5258e804760ee34661853f63",
+        "name": "Drain The Ocean",
+        "poster_path": null,
+        "original_name": "Drain The Ocean",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 996,
+        "media_type": "tv",
+        "episode_count": 60,
+        "credit_id": "525411a819c2957940345347",
+        "name": "Spenser: For Hire",
+        "poster_path": "/627jVOhfXYIAvshzSJtZBcSnv8I.jpg",
+        "original_name": "Spenser: For Hire",
+        "first_air_date": "1985-09-20",
+        "character": ""
+      },
+      {
+        "id": 1137,
+        "media_type": "tv",
+        "episode_count": 13,
+        "credit_id": "525416d919c2957940381131",
+        "name": "A Man Called Hawk",
+        "poster_path": "/gpchD8qQSHhGvMEgBhGA3Qmb7JY.jpg",
+        "original_name": "A Man Called Hawk",
+        "first_air_date": "1989-01-28",
+        "character": ""
+      },
+      {
+        "id": 580,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525388c219c295794022d2c0",
+        "name": "Star Trek: Deep Space Nine",
+        "poster_path": "/8pVgCBKU7oxoob4q6T6MMcM6PbI.jpg",
+        "original_name": "Star Trek: Deep Space Nine",
+        "first_air_date": "1993-01-03",
+        "character": "Benjamin Sisko"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Avery Brooks",
+  "place_of_birth": "Evansville, Indiana, U.S.",
+  "popularity": "1.68337324122058"
+}

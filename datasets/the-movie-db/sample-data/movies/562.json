@@ -1,0 +1,399 @@
+{
+  "budget": 28000000,
+  "vote_average": 6.9,
+  "backdrop_path": "/j31bCZR33MLwgH5IFMcGKjbr3z5.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 62,
+        "order": 0,
+        "credit_id": "52fe4252c3a36847f801543f",
+        "name": "Bruce Willis",
+        "cast_id": 5,
+        "profile_path": "/kI1OluWhLJk3pnR19VjOfABpnTY.jpg",
+        "character": "John McClane"
+      },
+      {
+        "id": 4566,
+        "order": 1,
+        "credit_id": "52fe4252c3a36847f801545f",
+        "name": "Alan Rickman",
+        "cast_id": 13,
+        "profile_path": "/1FSeUCtGrUT06coH5jTuePwVn5x.jpg",
+        "character": "Hans Gruber"
+      },
+      {
+        "id": 7672,
+        "order": 2,
+        "credit_id": "52fe4252c3a36847f8015443",
+        "name": "Reginald VelJohnson",
+        "cast_id": 6,
+        "profile_path": "/dZtIIOI0PpD3dmTVfUOWiQzOY28.jpg",
+        "character": "Sgt. Al Powell"
+      },
+      {
+        "id": 7673,
+        "order": 3,
+        "credit_id": "52fe4252c3a36847f8015447",
+        "name": "Bonnie Bedelia",
+        "cast_id": 7,
+        "profile_path": "/u0DOzyTNZhtFgPHIFX5OITMb7wm.jpg",
+        "character": "Holly Gennero McClane"
+      },
+      {
+        "id": 7674,
+        "order": 4,
+        "credit_id": "52fe4252c3a36847f801544b",
+        "name": "Alexander Godunov",
+        "cast_id": 8,
+        "profile_path": "/lZyg3u3i2OrJJMKGhHDglln5GUm.jpg",
+        "character": "Karl"
+      },
+      {
+        "id": 7675,
+        "order": 5,
+        "credit_id": "52fe4252c3a36847f801544f",
+        "name": "Paul Gleason",
+        "cast_id": 9,
+        "profile_path": "/TKFcITuV9vyTSZe55B8klclPor.jpg",
+        "character": "Deputy Police Chief Dwayne T. Robinson"
+      },
+      {
+        "id": 7676,
+        "order": 6,
+        "credit_id": "52fe4252c3a36847f8015453",
+        "name": "William Atherton",
+        "cast_id": 10,
+        "profile_path": "/dtzWBSXsuZB2NeAfTiytTBOnUoB.jpg",
+        "character": "Richard Thornburg"
+      },
+      {
+        "id": 7677,
+        "order": 7,
+        "credit_id": "52fe4252c3a36847f8015457",
+        "name": "De'voreaux White",
+        "cast_id": 11,
+        "profile_path": "/1EG5K8vovv6Hp9XvUplPDlJFPNz.jpg",
+        "character": "Argyle"
+      },
+      {
+        "id": 7678,
+        "order": 8,
+        "credit_id": "52fe4252c3a36847f801545b",
+        "name": "Hart Bochner",
+        "cast_id": 12,
+        "profile_path": "/jZcZHV9cac6rf0Q7nWOPSapqAwc.jpg",
+        "character": "Harry Ellis"
+      },
+      {
+        "id": 7679,
+        "order": 9,
+        "credit_id": "52fe4252c3a36847f8015463",
+        "name": "Dennis Hayden",
+        "cast_id": 14,
+        "profile_path": "/at1krMDognbGU9g2NmDYPbmEiea.jpg",
+        "character": "Eddie"
+      },
+      {
+        "id": 4995,
+        "order": 10,
+        "credit_id": "52fe4252c3a36847f8015467",
+        "name": "James Shigeta",
+        "cast_id": 15,
+        "profile_path": "/rBqmvcdbuMU7NCOxqmfjSxZfDsh.jpg",
+        "character": "Joseph Yoshinobu Takagi"
+      },
+      {
+        "id": 2055,
+        "order": 11,
+        "credit_id": "52fe4253c3a36847f80154b9",
+        "name": "Robert Davi",
+        "cast_id": 29,
+        "profile_path": "/uilt7kT1m61AZHq0eBcJeloZCmb.jpg",
+        "character": "FBI Special Agent Johnson"
+      },
+      {
+        "id": 113506,
+        "order": 12,
+        "credit_id": "52fe4253c3a36847f80154bd",
+        "name": "Bob Jennings",
+        "cast_id": 30,
+        "profile_path": "/iaOIeKW3Og5gYxNnsHpEJsnldBR.jpg",
+        "character": "Cameraman"
+      },
+      {
+        "id": 14333,
+        "order": 13,
+        "credit_id": "52fe4253c3a36847f80154c1",
+        "name": "Grand L. Bush",
+        "cast_id": 31,
+        "profile_path": "/gAh3iIR7Pbpjx6o5qtAa9GTKKKe.jpg",
+        "character": "FBI Agent Little Johnson"
+      },
+      {
+        "id": 23967,
+        "order": 14,
+        "credit_id": "52fe4253c3a36847f80154c5",
+        "name": "Mary Ellen Trainor",
+        "cast_id": 32,
+        "profile_path": "/w5QWW4oyQWNX51hMcnaCUTPToYX.jpg",
+        "character": "Gail Wallens"
+      },
+      {
+        "id": 10673,
+        "order": 15,
+        "credit_id": "52fe4253c3a36847f80154c9",
+        "name": "Andreas Wisniewski",
+        "cast_id": 33,
+        "profile_path": "/uZwfBgn0GBfmfjbxA69GDXctN5W.jpg",
+        "character": "Tony"
+      },
+      {
+        "id": 61704,
+        "order": 16,
+        "credit_id": "52fe4253c3a36847f80154cd",
+        "name": "Al Leong",
+        "cast_id": 34,
+        "profile_path": "/oSzEpyFgC796ztjroVqnPykOdOw.jpg",
+        "character": "Uli"
+      },
+      {
+        "id": 51581,
+        "order": 17,
+        "credit_id": "52fe4253c3a36847f80154d1",
+        "name": "Clarence Gilyard",
+        "cast_id": 36,
+        "profile_path": "/nmDObJEti5drH4dheZw2Pz3QOsV.jpg",
+        "character": "Theo"
+      },
+      {
+        "id": 1217001,
+        "order": 18,
+        "credit_id": "52fe4253c3a36847f80154d5",
+        "name": "Lorenzo Caccialanza",
+        "cast_id": 37,
+        "profile_path": "/8R2HOMyov4Ck7roKf05TvuUWbc3.jpg",
+        "character": "Marco"
+      },
+      {
+        "id": 1290983,
+        "order": 19,
+        "credit_id": "52fe4253c3a36847f80154d9",
+        "name": "Hans Buhringer",
+        "cast_id": 39,
+        "profile_path": "/r12yCpbNuF0gChVlWYmoeaiDY4N.jpg",
+        "character": "Fritz"
+      },
+      {
+        "id": 141747,
+        "order": 20,
+        "credit_id": "52fe4253c3a36847f80154dd",
+        "name": "Anthony Peck",
+        "cast_id": 40,
+        "profile_path": "/57e2de2WH5jFm6AJYNTSSjGymtS.jpg",
+        "character": "Young Cop"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1090,
+        "credit_id": "52fe4252c3a36847f8015429",
+        "department": "Directing",
+        "name": "John McTiernan",
+        "job": "Director",
+        "profile_path": "/tknmquMIO2oAVUZ0vVX78ALHyaT.jpg"
+      },
+      {
+        "id": 7670,
+        "credit_id": "52fe4252c3a36847f801542f",
+        "department": "Writing",
+        "name": "Roderick Thorp",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 7671,
+        "credit_id": "52fe4252c3a36847f8015435",
+        "department": "Writing",
+        "name": "Jeb Stuart",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1726,
+        "credit_id": "52fe4252c3a36847f801543b",
+        "department": "Writing",
+        "name": "Steven E. de Souza",
+        "job": "Screenplay",
+        "profile_path": "/vdNUgaeJEZy67vhwTeJnftfBRzB.jpg"
+      },
+      {
+        "id": 7681,
+        "credit_id": "52fe4252c3a36847f801546d",
+        "department": "Production",
+        "name": "Charles Gordon",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1093,
+        "credit_id": "52fe4252c3a36847f8015473",
+        "department": "Production",
+        "name": "Lawrence Gordon",
+        "job": "Producer",
+        "profile_path": "/hcjzZT71C7bKzhkgL6TAcEjsmkS.jpg"
+      },
+      {
+        "id": 7713,
+        "credit_id": "52fe4252c3a36847f8015479",
+        "department": "Production",
+        "name": "Beau Marks",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1091,
+        "credit_id": "52fe4252c3a36847f801547f",
+        "department": "Production",
+        "name": "Joel Silver",
+        "job": "Producer",
+        "profile_path": "/1LIjLDXGRhwXohHL2jKhyvLv0rZ.jpg"
+      },
+      {
+        "id": 7714,
+        "credit_id": "52fe4252c3a36847f8015485",
+        "department": "Sound",
+        "name": "Michael Kamen",
+        "job": "Original Music Composer",
+        "profile_path": "/y83bqw1VP1PkuvOhG2XROwc9eXG.jpg"
+      },
+      {
+        "id": 2209,
+        "credit_id": "52fe4252c3a36847f801548b",
+        "department": "Camera",
+        "name": "Jan de Bont",
+        "job": "Director of Photography",
+        "profile_path": "/9kPf2LuyLLwCawSGyPIQCX7ighX.jpg"
+      },
+      {
+        "id": 1099,
+        "credit_id": "52fe4252c3a36847f8015491",
+        "department": "Editing",
+        "name": "John F. Link",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7715,
+        "credit_id": "52fe4252c3a36847f8015497",
+        "department": "Editing",
+        "name": "Frank J. Urioste",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1097,
+        "credit_id": "52fe4253c3a36847f801549d",
+        "department": "Production",
+        "name": "Jackie Burch",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7716,
+        "credit_id": "52fe4253c3a36847f80154a3",
+        "department": "Art",
+        "name": "Jackson De Govia",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 7717,
+        "credit_id": "52fe4253c3a36847f80154a9",
+        "department": "Art",
+        "name": "John R. Jensen",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7718,
+        "credit_id": "52fe4253c3a36847f80154af",
+        "department": "Art",
+        "name": "Philip Leonard",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7719,
+        "credit_id": "52fe4253c3a36847f80154b5",
+        "department": "Costume & Make-Up",
+        "name": "Marilyn Vance",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 131,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 562,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Die Hard",
+  "overview": "NYPD cop John McClane's plan to reconcile with his estranged wife, Holly, is thrown for a serious loop when minutes after he arrives at her office, the entire building is overtaken by a group of pitiless terrorists. With little help from the LAPD, wisecracking McClane sets out to single-handedly rescue the hostages and bring the bad guys down.",
+  "production_companies": [
+    {
+      "id": 25,
+      "name": "20th Century Fox"
+    },
+    {
+      "id": 1073,
+      "name": "Gordon Company"
+    },
+    {
+      "id": 840,
+      "name": "Lawrence Gordon Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 1570,
+    "backdrop_path": "/5kHVblr87FUScuab1PVSsK692IL.jpg",
+    "name": "Die Hard Collection",
+    "poster_path": "/dQP1lu4tBtCiAMeCRcuTFpJiM7y.jpg"
+  },
+  "imdb_id": "tt0095016",
+  "release_date": "1988-07-14",
+  "original_title": "Die Hard",
+  "vote_count": 1699,
+  "poster_path": "/mc7MubOLcIw3MDvnuQFrO9psfCa.jpg",
+  "tagline": "40 Stories. Twelve Terrorists. One Cop.",
+  "revenue": 138708852,
+  "popularity": "4.88831110827748"
+}

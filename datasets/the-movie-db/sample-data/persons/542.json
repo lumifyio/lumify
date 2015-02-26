@@ -1,0 +1,52 @@
+{
+  "birthday": "",
+  "adult": false,
+  "biography": "",
+  "homepage": "",
+  "profile_path": "/sgIVwvbipevAf9SplOOctJRuP36.jpg",
+  "id": 542,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0132649",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 77,
+        "media_type": "movie",
+        "title": "Memento",
+        "credit_id": "52fe4214c3a36847f8002503",
+        "release_date": "2000-09-05",
+        "original_title": "Memento",
+        "adult": false,
+        "poster_path": "/fQMSaP88cf1nz4qwuNEEFtazuDM.jpg",
+        "character": "Blonde"
+      },
+      {
+        "id": 217331,
+        "media_type": "movie",
+        "title": "Billy the Kid",
+        "credit_id": "52fe4e2fc3a368484e212e3b",
+        "release_date": "2013-08-27",
+        "original_title": "Billy the Kid",
+        "adult": false,
+        "poster_path": "/ikO30N93RyzeIjaBhsx7cTHVJoG.jpg",
+        "character": "Katherine Bonney"
+      },
+      {
+        "id": 123105,
+        "media_type": "movie",
+        "title": "The Bay",
+        "credit_id": "5372507dc3a36843510013a9",
+        "release_date": "2012-11-02",
+        "original_title": "The Bay",
+        "adult": false,
+        "poster_path": "/qEQRsxwgHNDVkbiihdCSlK0dc4U.jpg",
+        "character": "Nurse Rebecca"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Kimberly Campbell",
+  "place_of_birth": null,
+  "popularity": "1.00000001219659"
+}

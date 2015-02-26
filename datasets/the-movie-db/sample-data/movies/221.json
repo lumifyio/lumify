@@ -1,0 +1,330 @@
+{
+  "budget": 1500000,
+  "vote_average": 7.5,
+  "backdrop_path": "/pGliXT5cGvJ2NuPjeZeVh10PdRu.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2749,
+        "order": 0,
+        "credit_id": "52fe4228c3a36847f8008765",
+        "name": "James Dean",
+        "cast_id": 6,
+        "profile_path": "/6mwJ4asrsQ8SJqTX4Ar0EQJgTJI.jpg",
+        "character": "Jim Stark"
+      },
+      {
+        "id": 2769,
+        "order": 1,
+        "credit_id": "52fe4228c3a36847f8008769",
+        "name": "Natalie Wood",
+        "cast_id": 7,
+        "profile_path": "/iAFtRflUEWSUObRZaqHPxx5CWSn.jpg",
+        "character": "Judy"
+      },
+      {
+        "id": 2770,
+        "order": 2,
+        "credit_id": "52fe4228c3a36847f800876d",
+        "name": "Sal Mineo",
+        "cast_id": 8,
+        "profile_path": "/eqI5jNcsntOCtSjTUdacR72grlI.jpg",
+        "character": "John 'Plato' Crawford"
+      },
+      {
+        "id": 2772,
+        "order": 3,
+        "credit_id": "52fe4228c3a36847f8008771",
+        "name": "Ann Doran",
+        "cast_id": 9,
+        "profile_path": "/4Wap8hgpstjM2kDQSYJFoTgf7f6.jpg",
+        "character": "Mrs. Carol Stark"
+      },
+      {
+        "id": 2771,
+        "order": 4,
+        "credit_id": "52fe4228c3a36847f8008775",
+        "name": "Jim Backus",
+        "cast_id": 10,
+        "profile_path": "/aDWcSSDSP3ClsGbGhTxENOT2uZm.jpg",
+        "character": "Frank Stark"
+      },
+      {
+        "id": 2775,
+        "order": 5,
+        "credit_id": "52fe4228c3a36847f800878b",
+        "name": "Corey Allen",
+        "cast_id": 14,
+        "profile_path": "/qVyzs7OIRon1uvTexzOJpyFRsYq.jpg",
+        "character": "Buzz Gunderson"
+      },
+      {
+        "id": 2776,
+        "order": 6,
+        "credit_id": "52fe4228c3a36847f800878f",
+        "name": "William Hopper",
+        "cast_id": 15,
+        "profile_path": "/BL7uBK6sy6DjaGgHWu79KJ0Ftg.jpg",
+        "character": "Judy's Father"
+      },
+      {
+        "id": 2777,
+        "order": 7,
+        "credit_id": "52fe4228c3a36847f8008793",
+        "name": "Rochelle Hudson",
+        "cast_id": 16,
+        "profile_path": "/ecCkMB0gOfP1O2VdFOBaFmDsxQj.jpg",
+        "character": "Judy's Mother"
+      },
+      {
+        "id": 2778,
+        "order": 8,
+        "credit_id": "52fe4228c3a36847f8008797",
+        "name": "Dennis Hopper",
+        "cast_id": 17,
+        "profile_path": "/56nj2DfMVU3F9qUagZWMePLbrKF.jpg",
+        "character": "Goon"
+      },
+      {
+        "id": 2646,
+        "order": 9,
+        "credit_id": "52fe4228c3a36847f800879b",
+        "name": "Edward Platt",
+        "cast_id": 18,
+        "profile_path": "/3ZEEg2FwYjDxJVzNU4nR03l0K2h.jpg",
+        "character": "Ray Fremick"
+      },
+      {
+        "id": 2779,
+        "order": 10,
+        "credit_id": "52fe4228c3a36847f800879f",
+        "name": "Steffi Sidney",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Mil"
+      },
+      {
+        "id": 2780,
+        "order": 11,
+        "credit_id": "52fe4228c3a36847f80087a3",
+        "name": "Virginia Brissac",
+        "cast_id": 20,
+        "profile_path": "/At0bnWMBlJNqWKCg7uBe66nRdXL.jpg",
+        "character": "Mrs. Stark, Jim's grandmother"
+      },
+      {
+        "id": 2781,
+        "order": 12,
+        "credit_id": "52fe4228c3a36847f80087a7",
+        "name": "Beverly Long",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Helen"
+      },
+      {
+        "id": 2782,
+        "order": 13,
+        "credit_id": "52fe4228c3a36847f80087ab",
+        "name": "Ian Wolfe",
+        "cast_id": 22,
+        "profile_path": "/ylp7puM2Hcd0VkQvXfmD7zkP4m7.jpg",
+        "character": "Dr. Minton (lecturer at planetarium)"
+      },
+      {
+        "id": 2783,
+        "order": 14,
+        "credit_id": "52fe4228c3a36847f80087af",
+        "name": "Frank Mazzola",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Crunch"
+      },
+      {
+        "id": 2784,
+        "order": 15,
+        "credit_id": "52fe4228c3a36847f80087b3",
+        "name": "Robert Foulk",
+        "cast_id": 24,
+        "profile_path": "/pKTK3aa34Xp1J6uQK3bLnAIjPoc.jpg",
+        "character": "Gene"
+      },
+      {
+        "id": 2785,
+        "order": 16,
+        "credit_id": "52fe4228c3a36847f80087b7",
+        "name": "Jack Simmons",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Cookie"
+      },
+      {
+        "id": 2787,
+        "order": 17,
+        "credit_id": "52fe4228c3a36847f80087bb",
+        "name": "Nick Adams",
+        "cast_id": 27,
+        "profile_path": "/wtA4pLwHxAROYry4MPq0eLWZ9Cd.jpg",
+        "character": "Chick"
+      },
+      {
+        "id": 2788,
+        "order": 18,
+        "credit_id": "52fe4228c3a36847f80087bf",
+        "name": "Jack Grinnage",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Moose"
+      },
+      {
+        "id": 2789,
+        "order": 19,
+        "credit_id": "52fe4228c3a36847f80087c3",
+        "name": "Clifford Morris",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Cliff"
+      },
+      {
+        "id": 2790,
+        "order": 20,
+        "credit_id": "52fe4228c3a36847f80087d3",
+        "name": "Marietta Canty",
+        "cast_id": 33,
+        "profile_path": "/zOe9wEFzYQnmWw9yMWpyMke5drq.jpg",
+        "character": "Housekeeper at Plato's home"
+      },
+      {
+        "id": 107678,
+        "order": 21,
+        "credit_id": "52fe4228c3a36847f80087d7",
+        "name": "Almira Sessions",
+        "cast_id": 34,
+        "profile_path": "/9KaLRatIUKBnjNNIFS3PlVLNYXY.jpg",
+        "character": "Teacher at planetarium"
+      },
+      {
+        "id": 98450,
+        "order": 22,
+        "credit_id": "52fe4228c3a36847f80087db",
+        "name": "Paul Birch",
+        "cast_id": 35,
+        "profile_path": "/nvGXpH0pZzxvt47lFuMOqek1Dm9.jpg",
+        "character": "Police Lieutenant"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2765,
+        "credit_id": "52fe4228c3a36847f8008749",
+        "department": "Directing",
+        "name": "Nicholas Ray",
+        "job": "Director",
+        "profile_path": "/42a9DSzvMEIHnxBy64GaN0AEyR1.jpg"
+      },
+      {
+        "id": 2766,
+        "credit_id": "52fe4228c3a36847f800874f",
+        "department": "Production",
+        "name": "David Weisbart",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2765,
+        "credit_id": "52fe4228c3a36847f8008755",
+        "department": "Writing",
+        "name": "Nicholas Ray",
+        "job": "Author",
+        "profile_path": "/42a9DSzvMEIHnxBy64GaN0AEyR1.jpg"
+      },
+      {
+        "id": 2767,
+        "credit_id": "52fe4228c3a36847f800875b",
+        "department": "Writing",
+        "name": "Irving Shulman",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2768,
+        "credit_id": "52fe4228c3a36847f8008761",
+        "department": "Writing",
+        "name": "Stewart Stern",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2773,
+        "credit_id": "52fe4228c3a36847f800877b",
+        "department": "Editing",
+        "name": "William H. Ziegler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2774,
+        "credit_id": "52fe4228c3a36847f8008781",
+        "department": "Camera",
+        "name": "Ernest Haller",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2027,
+        "credit_id": "52fe4228c3a36847f8008787",
+        "department": "Sound",
+        "name": "Leonard Rosenman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2764,
+        "credit_id": "52fe4228c3a36847f80087c9",
+        "department": "Art",
+        "name": "Malcolm C. Bert",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2791,
+        "credit_id": "52fe4228c3a36847f80087cf",
+        "department": "Sound",
+        "name": "Stanley Jones",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 111,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 221,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Rebel Without a Cause",
+  "overview": "Jim Stark, a rebellious young man with a troubled past, moves to a new town with his parents in hope for a fresh start. It doesn't take Jim long to settle in and make new friends... or new enemies.",
+  "production_companies": [{
+    "id": 174,
+    "name": "Warner Bros. Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0048545",
+  "release_date": "1955-10-27",
+  "original_title": "Rebel Without a Cause",
+  "vote_count": 19,
+  "poster_path": "/KRcfiim8WW59LMMuypFC5iuR8B.jpg",
+  "tagline": "Jim Stark - a kid from a 'good' family - what makes him tick...like a bomb?",
+  "revenue": 0,
+  "popularity": "1.07452601857349"
+}

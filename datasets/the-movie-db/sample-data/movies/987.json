@@ -1,0 +1,293 @@
+{
+  "budget": 0,
+  "vote_average": 7.6,
+  "backdrop_path": "/cBn0siLJYRKSWDLfXT8g6PI43K7.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3151,
+        "order": 0,
+        "credit_id": "52fe4296c3a36847f802a75d",
+        "name": "Jack Lemmon",
+        "cast_id": 15,
+        "profile_path": "/1Y3wQsqRALOL3LZQtKmulmN3qff.jpg",
+        "character": "Hildebrand Johnson"
+      },
+      {
+        "id": 6837,
+        "order": 1,
+        "credit_id": "52fe4296c3a36847f802a761",
+        "name": "Walter Matthau",
+        "cast_id": 16,
+        "profile_path": "/xJVkvprOnzP5Zdh5y63y8HHniDZ.jpg",
+        "character": "Walter Burns/Otto Fishbine"
+      },
+      {
+        "id": 4038,
+        "order": 2,
+        "credit_id": "52fe4296c3a36847f802a765",
+        "name": "Susan Sarandon",
+        "cast_id": 17,
+        "profile_path": "/n1xy3X3is9IKKqsyHVkc3lJhj2T.jpg",
+        "character": "Peggy Grant"
+      },
+      {
+        "id": 14830,
+        "order": 3,
+        "credit_id": "52fe4296c3a36847f802a769",
+        "name": "Vincent Gardenia",
+        "cast_id": 18,
+        "profile_path": "/g7iwqHaaIKh5lSTW39pXT0OOXVC.jpg",
+        "character": "'Honest Pete' Hartman Sheriff of Clark County"
+      },
+      {
+        "id": 14831,
+        "order": 4,
+        "credit_id": "52fe4296c3a36847f802a76d",
+        "name": "David Wayne",
+        "cast_id": 19,
+        "profile_path": "/dCeAidD39Q2SN9gaeDJOZ5vZwMb.jpg",
+        "character": "Roy Bensinger of the Tribune"
+      },
+      {
+        "id": 922,
+        "order": 5,
+        "credit_id": "52fe4296c3a36847f802a771",
+        "name": "Allen Garfield",
+        "cast_id": 20,
+        "profile_path": "/wa8WAH20QGm1fLPR5Wrbja5C5rx.jpg",
+        "character": "Kruger"
+      },
+      {
+        "id": 6168,
+        "order": 6,
+        "credit_id": "52fe4296c3a36847f802a775",
+        "name": "Austin Pendleton",
+        "cast_id": 21,
+        "profile_path": "/5zCfkpsDFAilHv1nMFWiz5lx6ZH.jpg",
+        "character": "Earl Williams"
+      },
+      {
+        "id": 1466,
+        "order": 7,
+        "credit_id": "52fe4296c3a36847f802a779",
+        "name": "Charles Durning",
+        "cast_id": 22,
+        "profile_path": "/3gVvKQykDvMuiUcPEHnAkJrfLg3.jpg",
+        "character": "Murphy"
+      },
+      {
+        "id": 14832,
+        "order": 8,
+        "credit_id": "52fe4296c3a36847f802a77d",
+        "name": "Herb Edelman",
+        "cast_id": 23,
+        "profile_path": "/v11kEIY1NpJ6vb7DR5XjttpAJuZ.jpg",
+        "character": "Schwartz"
+      },
+      {
+        "id": 6931,
+        "order": 9,
+        "credit_id": "52fe4296c3a36847f802a781",
+        "name": "Martin Gabel",
+        "cast_id": 24,
+        "profile_path": "/xIXlyqLPUa7rBGzUGL4HFxpPFrs.jpg",
+        "character": "Dr. Max J. Eggelhofer"
+      },
+      {
+        "id": 14833,
+        "order": 10,
+        "credit_id": "52fe4296c3a36847f802a785",
+        "name": "Harold Gould",
+        "cast_id": 25,
+        "profile_path": "/ntLYtxvSrsuWu2pZHGuSUA4gXLy.jpg",
+        "character": "The Mayor/Herbie/Green Hornet"
+      },
+      {
+        "id": 14834,
+        "order": 11,
+        "credit_id": "52fe4296c3a36847f802a789",
+        "name": "Cliff Osmond",
+        "cast_id": 26,
+        "profile_path": "/tTxv0TKz8SDgKAhayx6LJsQOXU4.jpg",
+        "character": "Officer Jacobi"
+      },
+      {
+        "id": 14835,
+        "order": 12,
+        "credit_id": "52fe4296c3a36847f802a78d",
+        "name": "Dick O'Neill",
+        "cast_id": 27,
+        "profile_path": "/t4yEaFexDrQvLqrpNW1FaAuBtq3.jpg",
+        "character": "McHugh"
+      },
+      {
+        "id": 14836,
+        "order": 13,
+        "credit_id": "52fe4296c3a36847f802a791",
+        "name": "Jon Korkes",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Rudy Keppler of the Chicago Examiner"
+      },
+      {
+        "id": 14837,
+        "order": 14,
+        "credit_id": "52fe4296c3a36847f802a795",
+        "name": "Carol Burnett",
+        "cast_id": 29,
+        "profile_path": "/uUN23A8WtaLcItllwFADuyqF8Ci.jpg",
+        "character": "Mollie Malloy"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3146,
+        "credit_id": "52fe4296c3a36847f802a70b",
+        "department": "Directing",
+        "name": "Billy Wilder",
+        "job": "Director",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 4341,
+        "credit_id": "52fe4296c3a36847f802a711",
+        "department": "Writing",
+        "name": "Ben Hecht",
+        "job": "Theatre Play",
+        "profile_path": "/is5faYjaFObagG3b8xgwocMkUcX.jpg"
+      },
+      {
+        "id": 14824,
+        "credit_id": "52fe4296c3a36847f802a717",
+        "department": "Writing",
+        "name": "Charles MacArthur",
+        "job": "Theatre Play",
+        "profile_path": null
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe4296c3a36847f802a71d",
+        "department": "Writing",
+        "name": "Billy Wilder",
+        "job": "Screenplay",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3147,
+        "credit_id": "52fe4296c3a36847f802a723",
+        "department": "Writing",
+        "name": "I. A. L. Diamond",
+        "job": "Screenplay",
+        "profile_path": "/lii36e0Ntvq7sL1rA0tVs4FePYT.jpg"
+      },
+      {
+        "id": 9579,
+        "credit_id": "52fe4296c3a36847f802a729",
+        "department": "Production",
+        "name": "Paul Monash",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 14825,
+        "credit_id": "52fe4296c3a36847f802a72f",
+        "department": "Production",
+        "name": "Jennings Lang",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 594,
+        "credit_id": "52fe4296c3a36847f802a735",
+        "department": "Camera",
+        "name": "Jordan Cronenweth",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 10007,
+        "credit_id": "52fe4296c3a36847f802a73b",
+        "department": "Editing",
+        "name": "Ralph E. Winters",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 369,
+        "credit_id": "52fe4296c3a36847f802a741",
+        "department": "Art",
+        "name": "Henry Bumstead",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 14826,
+        "credit_id": "52fe4296c3a36847f802a747",
+        "department": "Art",
+        "name": "James W. Payne",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 14827,
+        "credit_id": "52fe4296c3a36847f802a74d",
+        "department": "Costume & Make-Up",
+        "name": "Burton Miller",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14828,
+        "credit_id": "52fe4296c3a36847f802a753",
+        "department": "Sound",
+        "name": "Robert Martin",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 14829,
+        "credit_id": "52fe4296c3a36847f802a759",
+        "department": "Sound",
+        "name": "Robert L. Hoyt",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 987,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Front Page",
+  "overview": "The Front Page is a comedy from director Billy Wilder from 1974 starring Jack Lemmon, Walter Matthau and Susan Sarandon. A journalist named Johnson is suffering from burn-out and wants to finally say goodbye to his office except for the fact that his boss doesn\u2019t like the idea one bit.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0071524",
+  "release_date": "1974-12-01",
+  "original_title": "The Front Page",
+  "vote_count": 5,
+  "poster_path": "/mqjMvQCZ0C1uPxudeZcnpcJwbLt.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.384764566333405"
+}

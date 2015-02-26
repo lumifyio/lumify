@@ -1,0 +1,28 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/l7lzg6gG389TIl7QGHrJeEA5s0e.jpg",
+  "id": 733,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0616629",
+  "combined_credits": {
+    "cast": [{
+      "id": 88,
+      "media_type": "movie",
+      "title": "Dirty Dancing",
+      "credit_id": null,
+      "release_date": "1987-08-20",
+      "original_title": "Dirty Dancing",
+      "adult": false,
+      "poster_path": "/69e0YxX4tMow7VQrXrZMFwAAAQO.jpg",
+      "character": "Mr. Schumacher"
+    }],
+    "crew": []
+  },
+  "name": "Alvin Myerovich",
+  "place_of_birth": null,
+  "popularity": "1.00000000000001"
+}

@@ -1,0 +1,41 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 80,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0084430",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 19,
+        "media_type": "movie",
+        "title": "Metropolis",
+        "credit_id": "52fe420fc3a36847f8000c97",
+        "release_date": "1927-01-10",
+        "original_title": "Metropolis",
+        "adult": false,
+        "poster_path": "/hnj1AptUFmYYZNjrbIHgNjgt3ZX.jpg",
+        "character": "No. 11811"
+      },
+      {
+        "id": 247231,
+        "media_type": "movie",
+        "title": "Earth Spirit",
+        "credit_id": "52fe4f21c3a36847f82bfbd5",
+        "release_date": "1923-02-22",
+        "original_title": "Erdgeist",
+        "adult": false,
+        "poster_path": null,
+        "character": "Eulenber"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Erwin Biswanger",
+  "place_of_birth": null,
+  "popularity": "1.00000011268276"
+}

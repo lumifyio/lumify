@@ -1,0 +1,296 @@
+{
+  "budget": 0,
+  "vote_average": 7.9,
+  "backdrop_path": "/vYmJOrvjHl9trvRsmrmpYoQUCse.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1505,
+        "order": 0,
+        "credit_id": "52fe421cc3a36847f8004e37",
+        "name": "Edgar Allan Woolf",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Phroso"
+      },
+      {
+        "id": 1507,
+        "order": 1,
+        "credit_id": "52fe421cc3a36847f8004e3b",
+        "name": "Leila Hyams",
+        "cast_id": 11,
+        "profile_path": "/vBqU2tbjO4dUWZknAugyJc4bkzn.jpg",
+        "character": "Venus"
+      },
+      {
+        "id": 1508,
+        "order": 2,
+        "credit_id": "52fe421cc3a36847f8004e3f",
+        "name": "Olga Baclanova",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Cleopatra"
+      },
+      {
+        "id": 1509,
+        "order": 3,
+        "credit_id": "52fe421cc3a36847f8004e43",
+        "name": "Roscoe Ates",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Roscoe"
+      },
+      {
+        "id": 1510,
+        "order": 4,
+        "credit_id": "52fe421cc3a36847f8004e47",
+        "name": "Henry Victor",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Hercules"
+      },
+      {
+        "id": 1513,
+        "order": 5,
+        "credit_id": "52fe421cc3a36847f8004e4b",
+        "name": "Rose Dione",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Madame Tetrallini"
+      },
+      {
+        "id": 1514,
+        "order": 6,
+        "credit_id": "52fe421cc3a36847f8004e4f",
+        "name": "Daisy Hilton",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Siamesische Zwillinge"
+      },
+      {
+        "id": 1515,
+        "order": 7,
+        "credit_id": "52fe421cc3a36847f8004e53",
+        "name": "Violet Hilton",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Siamesische Zwillinge"
+      },
+      {
+        "id": 1516,
+        "order": 8,
+        "credit_id": "52fe421cc3a36847f8004e57",
+        "name": "Schlitze",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Schlitze"
+      },
+      {
+        "id": 1517,
+        "order": 9,
+        "credit_id": "52fe421cc3a36847f8004e5b",
+        "name": "Josephine Joseph",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Zwitter"
+      },
+      {
+        "id": 1519,
+        "order": 10,
+        "credit_id": "52fe421cc3a36847f8004e5f",
+        "name": "Koo Koo",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Koo Koo"
+      },
+      {
+        "id": 1522,
+        "order": 11,
+        "credit_id": "52fe421cc3a36847f8004e63",
+        "name": "Johnny Eck",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "der Junge ohne Unterleib"
+      },
+      {
+        "id": 1523,
+        "order": 12,
+        "credit_id": "52fe421cc3a36847f8004e67",
+        "name": "Peter Robinson",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "das menschliche Skeltett"
+      },
+      {
+        "id": 1521,
+        "order": 13,
+        "credit_id": "52fe421cc3a36847f8004e6b",
+        "name": "Prince Randian",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "der lebende Torso"
+      },
+      {
+        "id": 1512,
+        "order": 14,
+        "credit_id": "52fe421cc3a36847f8004e6f",
+        "name": "Daisy Earles",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Frieda"
+      },
+      {
+        "id": 1511,
+        "order": 15,
+        "credit_id": "52fe421cc3a36847f8004e73",
+        "name": "Harry Earles",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Hans"
+      },
+      {
+        "id": 18348,
+        "order": 16,
+        "credit_id": "52fe421cc3a36847f8004e77",
+        "name": "Frances O'Connor",
+        "cast_id": 26,
+        "profile_path": "/r86uTbVwrkwHzXDsD2tDTymmNjN.jpg",
+        "character": "Armlose"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1496,
+        "credit_id": "52fe421cc3a36847f8004e03",
+        "department": "Directing",
+        "name": "Tod Browning",
+        "job": "Director",
+        "profile_path": "/a1xXZoQEvikjdzZFqO6v5bwlZxV.jpg"
+      },
+      {
+        "id": 1497,
+        "credit_id": "52fe421cc3a36847f8004e09",
+        "department": "Production",
+        "name": "Irving Thalberg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1496,
+        "credit_id": "52fe421cc3a36847f8004e0f",
+        "department": "Production",
+        "name": "Tod Browning",
+        "job": "Producer",
+        "profile_path": "/a1xXZoQEvikjdzZFqO6v5bwlZxV.jpg"
+      },
+      {
+        "id": 1498,
+        "credit_id": "52fe421cc3a36847f8004e15",
+        "department": "Camera",
+        "name": "Merritt B. Gerstad",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1499,
+        "credit_id": "52fe421cc3a36847f8004e1b",
+        "department": "Editing",
+        "name": "Basil Wrangell",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1500,
+        "credit_id": "52fe421cc3a36847f8004e21",
+        "department": "Writing",
+        "name": "Al Boasberg",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1503,
+        "credit_id": "52fe421cc3a36847f8004e27",
+        "department": "Writing",
+        "name": "Willis Goldbeck",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1504,
+        "credit_id": "52fe421cc3a36847f8004e2d",
+        "department": "Writing",
+        "name": "Leon Gordon",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1505,
+        "credit_id": "52fe421cc3a36847f8004e33",
+        "department": "Writing",
+        "name": "Edgar Allan Woolf",
+        "job": "Author",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 64,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 136,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Freaks",
+  "overview": "A carnival barker displays a sideshow freak called the Feathered Hen and tells her story. Cleopatra, a trapeze artist with the carnival, is adored by a midget named Hans. Frieda, Hans' fiancée (also a midget), warns Hans that Cleopatra is only interested in him so that he will give her money. Cleopatra has an affair with Hercules, and when Frieda lets it slip that Hans is to come into an inheritance, Cleopatra and Hercules plan to get the money be having Cleopatra marry Hans. During the wedding reception, Cleopatra, although openly romantic with Hercules, is accepted by the freaks, but is revolted and mocks them. The freaks decide that they no longer need Hercules in their carnival and have a new career for Cleopatra all lined up, and make sure she doesn't 'chicken' out.",
+  "production_companies": [{
+    "id": 8411,
+    "name": "Metro-Goldwyn-Mayer (MGM)"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0022913",
+  "release_date": "1932-02-20",
+  "original_title": "Freaks",
+  "vote_count": 18,
+  "poster_path": "/zNqf4OWk19Qo5HzawFu40YpfgPr.jpg",
+  "tagline": "The love story of a SIREN, a GIANT, and a DWARF!",
+  "revenue": 0,
+  "popularity": "0.583690438468603"
+}

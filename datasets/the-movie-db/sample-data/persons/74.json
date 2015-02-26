@@ -1,0 +1,272 @@
+{
+  "birthday": "1902-03-21",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nGustav Fröhlich (March 21, 1902 \u2013 December 22, 1987) was a German actor. He landed secondary roles in a number of films and plays before landing his breakthrough role of Freder Fredersen in Fritz Lang's 1927 film Metropolis.\n\nDescription above from the Wikipedia article Gustav Fröhlich, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/z8fMRjarFtxAeLsI9rurs3v1R9D.jpg",
+  "id": 74,
+  "also_known_as": [],
+  "deathday": "1987-12-22",
+  "imdb_id": "nm0297054",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 4467,
+        "media_type": "movie",
+        "title": "Sunderin",
+        "credit_id": "52fe43c4c3a36847f806df7f",
+        "release_date": "1951-01-18",
+        "original_title": "Die Sünderin",
+        "adult": false,
+        "poster_path": "/rc2zEAcsDyGH9bxbfHiKuL9rVUR.jpg",
+        "character": "Alexander"
+      },
+      {
+        "id": 6794,
+        "media_type": "movie",
+        "title": "Rosen aus dem Süden",
+        "credit_id": "52fe4465c3a36847f8093959",
+        "release_date": "1954-01-01",
+        "original_title": "Rosen aus dem Süden",
+        "adult": false,
+        "poster_path": "/vLLhPTGrsa91kHOjxUwKSM05Mz7.jpg",
+        "character": "Julien de Costa"
+      },
+      {
+        "id": 6959,
+        "media_type": "movie",
+        "title": "Was Frauen träumen",
+        "credit_id": "52fe446ac3a36847f8094d5f",
+        "release_date": "1933-01-01",
+        "original_title": "Was Frauen träumen",
+        "adult": false,
+        "poster_path": null,
+        "character": "Walter König"
+      },
+      {
+        "id": 7217,
+        "media_type": "movie",
+        "title": "Das verlorene Gesicht",
+        "credit_id": "52fe4474c3a36847f8096dff",
+        "release_date": "1948-11-19",
+        "original_title": "Das verlorene Gesicht",
+        "adult": false,
+        "poster_path": null,
+        "character": "Dr. Thomas Martin"
+      },
+      {
+        "id": 55584,
+        "media_type": "movie",
+        "title": "Asphalt",
+        "credit_id": "52fe48d5c3a36847f817bcd1",
+        "release_date": "1929-03-12",
+        "original_title": "Asphalt",
+        "adult": false,
+        "poster_path": "/uqCxjvU5pgDi7avjhx00DKkHLXd.jpg",
+        "character": "Wachtmeister Albert Holk"
+      },
+      {
+        "id": 19,
+        "media_type": "movie",
+        "title": "Metropolis",
+        "credit_id": "52fe420fc3a36847f8000c83",
+        "release_date": "1927-01-10",
+        "original_title": "Metropolis",
+        "adult": false,
+        "poster_path": "/hnj1AptUFmYYZNjrbIHgNjgt3ZX.jpg",
+        "character": "Freder Fredersen"
+      },
+      {
+        "id": 206237,
+        "media_type": "movie",
+        "title": "Ray of Sunshine",
+        "credit_id": "52fe4d18c3a368484e1d6cad",
+        "release_date": "1933-08-25",
+        "original_title": "Sonnenstrahl",
+        "adult": false,
+        "poster_path": "/VmVHwYlKLd0aTEHIvjqHz3Qbrn.jpg",
+        "character": "Hans"
+      },
+      {
+        "id": 206903,
+        "media_type": "movie",
+        "title": "The Little Town will go to Sleep",
+        "credit_id": "52fe4d29c3a368484e1da66f",
+        "release_date": "1954-02-11",
+        "original_title": "Die kleine Stadt will schlafen gehen",
+        "adult": false,
+        "poster_path": null,
+        "character": "Peter Bruck"
+      },
+      {
+        "id": 176799,
+        "media_type": "movie",
+        "title": "Gloria",
+        "credit_id": "52fe4d78c3a36847f82628d3",
+        "release_date": "1931-09-28",
+        "original_title": "Gloria",
+        "adult": false,
+        "poster_path": null,
+        "character": "Georg Köhler"
+      },
+      {
+        "id": 212530,
+        "media_type": "movie",
+        "title": "The Great King",
+        "credit_id": "52fe4db0c3a368484e1f6fcf",
+        "release_date": "1942-03-02",
+        "original_title": "Der große König",
+        "adult": false,
+        "poster_path": "/vQnjTaPe8CxBtrsoqtN4qHcIc4S.jpg",
+        "character": "Sgt. Treskow"
+      },
+      {
+        "id": 283819,
+        "media_type": "movie",
+        "title": "Der Flüchtling aus Chicago",
+        "credit_id": "53d3a3ecc3a3686b8b001256",
+        "release_date": "1934-01-02",
+        "original_title": "Der Flüchtling aus Chicago",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 237438,
+        "media_type": "movie",
+        "title": "Barcarole",
+        "credit_id": "52fe4e6bc3a36847f828eefd",
+        "release_date": "1935-03-03",
+        "original_title": "Barcarole",
+        "adult": false,
+        "poster_path": "/fMRHKPTAlQoas5Uhb3ioNYMCEm2.jpg",
+        "character": ""
+      },
+      {
+        "id": 133649,
+        "media_type": "movie",
+        "title": "Homecoming",
+        "credit_id": "53359c09925141445a004942",
+        "release_date": "1928-11-17",
+        "original_title": "Homecoming",
+        "adult": false,
+        "poster_path": "/sfXDAmQcS6QDbIaC7GQKhgNHXQ6.jpg",
+        "character": "Karl"
+      },
+      {
+        "id": 262109,
+        "media_type": "movie",
+        "title": "Sag die Wahrheit",
+        "credit_id": "53380acb9251417da70028a3",
+        "release_date": "1946-01-01",
+        "original_title": "Sag die Wahrheit",
+        "adult": false,
+        "poster_path": null,
+        "character": "Peter Hellmer"
+      },
+      {
+        "id": 264616,
+        "media_type": "movie",
+        "title": "Familie Buchholz",
+        "credit_id": "534bdbe9c3a3682ddf002c20",
+        "release_date": "1944-03-03",
+        "original_title": "Familie Buchholz",
+        "adult": false,
+        "poster_path": null,
+        "character": "Frauenarzt Dr. Franz Wrenzchen"
+      },
+      {
+        "id": 265120,
+        "media_type": "movie",
+        "title": "Haus des Lebens",
+        "credit_id": "534f9ed1c3a3681ce50009e5",
+        "release_date": "1952-09-11",
+        "original_title": "Haus des Lebens",
+        "adult": false,
+        "poster_path": null,
+        "character": "Dr. Peter Haidt"
+      },
+      {
+        "id": 266864,
+        "media_type": "movie",
+        "title": "Neigungsehe",
+        "credit_id": "535c371d0e0a264fd5001fa3",
+        "release_date": "1944-03-24",
+        "original_title": "Neigungsehe",
+        "adult": false,
+        "poster_path": null,
+        "character": "Frauenarzt Dr. Franz Wrenzchen"
+      },
+      {
+        "id": 268069,
+        "media_type": "movie",
+        "title": "Stadt Anatol",
+        "credit_id": "5365720d0e0a2647c4001cc4",
+        "release_date": "1936-10-15",
+        "original_title": "Stadt Anatol",
+        "adult": false,
+        "poster_path": null,
+        "character": "Jacques Gregor"
+      },
+      {
+        "id": 268700,
+        "media_type": "movie",
+        "title": "Voruntersuchung",
+        "credit_id": "536b669d0e0a2647c800bff8",
+        "release_date": "1931-04-19",
+        "original_title": "Voruntersuchung",
+        "adult": false,
+        "poster_path": null,
+        "character": "Fritz Bernt, Student"
+      },
+      {
+        "id": 285811,
+        "media_type": "movie",
+        "title": "Der unsterbliche Lump",
+        "credit_id": "53e4c3e90e0a262b83006b22",
+        "release_date": "1930-02-21",
+        "original_title": "Der unsterbliche Lump",
+        "adult": false,
+        "poster_path": null,
+        "character": "Hans Ritter"
+      },
+      {
+        "id": 286428,
+        "media_type": "movie",
+        "title": "Mein Leopold",
+        "credit_id": "53ea11330e0a266025001654",
+        "release_date": "1931-12-18",
+        "original_title": "Mein Leopold",
+        "adult": false,
+        "poster_path": null,
+        "character": "Rudolf Starke"
+      },
+      {
+        "id": 40843,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "535659990e0a262868002f38",
+        "name": "Das Kriminalmuseum",
+        "poster_path": null,
+        "original_name": "Das Kriminalmuseum",
+        "first_air_date": "1963-04-04",
+        "character": "Herr Eggers"
+      }
+    ],
+    "crew": [{
+      "id": 281561,
+      "media_type": "movie",
+      "title": "Die Lüge",
+      "credit_id": "53c061a9c3a3684cdf0056b2",
+      "department": "Directing",
+      "release_date": "1950-08-10",
+      "original_title": "Die Lüge",
+      "job": "Director",
+      "adult": false,
+      "poster_path": null
+    }]
+  },
+  "name": "Gustav Fröhlich",
+  "place_of_birth": "Hannover, Lower Saxony, Germany",
+  "popularity": "1.50607500247251"
+}

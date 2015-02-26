@@ -1,0 +1,304 @@
+{
+  "budget": 60000000,
+  "vote_average": 6.7,
+  "backdrop_path": "/gZwhqo1CfYKAqTRUmnyxQw8U8Ti.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 11661,
+        "order": 0,
+        "credit_id": "52fe4276c3a36847f80207db",
+        "name": "Kate Hudson",
+        "cast_id": 14,
+        "profile_path": "/yUNYh4jpIunwILbbKBAlHPomKIO.jpg",
+        "character": "Penny Lane"
+      },
+      {
+        "id": 8289,
+        "order": 1,
+        "credit_id": "52fe4276c3a36847f80207df",
+        "name": "Billy Crudup",
+        "cast_id": 15,
+        "profile_path": "/zcG2lJNoXw6IAV3fvGumviqfZfe.jpg",
+        "character": "Russell Hammond"
+      },
+      {
+        "id": 3910,
+        "order": 2,
+        "credit_id": "52fe4276c3a36847f80207e3",
+        "name": "Frances McDormand",
+        "cast_id": 16,
+        "profile_path": "/jodV4NuQAvxQWIHxqnop1jUX77N.jpg",
+        "character": "Elaine Miller"
+      },
+      {
+        "id": 11662,
+        "order": 3,
+        "credit_id": "52fe4276c3a36847f80207e7",
+        "name": "Jason Lee",
+        "cast_id": 17,
+        "profile_path": "/67wSoVHxlOqtRhh3KJFBYf2qrDJ.jpg",
+        "character": "Jeff Bebe"
+      },
+      {
+        "id": 11663,
+        "order": 4,
+        "credit_id": "52fe4276c3a36847f80207eb",
+        "name": "Patrick Fugit",
+        "cast_id": 18,
+        "profile_path": "/vndJENwYkWunTNEuRtAskVifOu3.jpg",
+        "character": "William Miller"
+      },
+      {
+        "id": 11664,
+        "order": 5,
+        "credit_id": "52fe4276c3a36847f80207ef",
+        "name": "Zooey Deschanel",
+        "cast_id": 19,
+        "profile_path": "/ktjfylBzoJJik70F5VyGFiRgxUf.jpg",
+        "character": "Anita Miller"
+      },
+      {
+        "id": 11665,
+        "order": 6,
+        "credit_id": "52fe4276c3a36847f80207f3",
+        "name": "Michael Angarano",
+        "cast_id": 20,
+        "profile_path": "/zNoj0cJHoD8RPUDOgTpVgJ0KcXM.jpg",
+        "character": "Young William"
+      },
+      {
+        "id": 10690,
+        "order": 7,
+        "credit_id": "52fe4276c3a36847f802080d",
+        "name": "Anna Paquin",
+        "cast_id": 46,
+        "profile_path": "/5Q4vZK2PqHkreQLmbPspIgrSLUP.jpg",
+        "character": "Polexia Aphrodisia"
+      },
+      {
+        "id": 826,
+        "order": 8,
+        "credit_id": "52fe4276c3a36847f8020811",
+        "name": "Fairuza Balk",
+        "cast_id": 47,
+        "profile_path": "/cpeniV326TyPyzryxgbAWiXmLkz.jpg",
+        "character": "Sapphire"
+      },
+      {
+        "id": 1284,
+        "order": 9,
+        "credit_id": "52fe4276c3a36847f8020815",
+        "name": "Noah Taylor",
+        "cast_id": 48,
+        "profile_path": "/dSlH0WA09dVqQhgB7LB5xn8WzD.jpg",
+        "character": "Dick Roswell"
+      },
+      {
+        "id": 1233,
+        "order": 10,
+        "credit_id": "52fe4276c3a36847f8020809",
+        "name": "Philip Seymour Hoffman",
+        "cast_id": 45,
+        "profile_path": "/de37JbzZ80KP1LOhzIkVe5XfSwe.jpg",
+        "character": "Lester Bangs"
+      },
+      {
+        "id": 11669,
+        "order": 11,
+        "credit_id": "52fe4276c3a36847f8020819",
+        "name": "Jimmy Fallon",
+        "cast_id": 49,
+        "profile_path": "/n6CRQu6aEMNNXFM0sQBnzfe92x2.jpg",
+        "character": "Dennis Hope"
+      },
+      {
+        "id": 11678,
+        "order": 12,
+        "credit_id": "52fe4276c3a36847f802081d",
+        "name": "Rainn Wilson",
+        "cast_id": 50,
+        "profile_path": "/Adq8cYhhzmSYRwMWDTc7O53L7FR.jpg",
+        "character": "David Felton"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11649,
+        "credit_id": "52fe4276c3a36847f802078f",
+        "department": "Directing",
+        "name": "Cameron Crowe",
+        "job": "Director",
+        "profile_path": "/xBWkc3OCQ05T7odQfkOYRBAuWna.jpg"
+      },
+      {
+        "id": 9987,
+        "credit_id": "52fe4276c3a36847f8020795",
+        "department": "Production",
+        "name": "Ian Bryce",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11652,
+        "credit_id": "52fe4276c3a36847f802079b",
+        "department": "Production",
+        "name": "Lisa Stewart",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11653,
+        "credit_id": "52fe4276c3a36847f80207a1",
+        "department": "Production",
+        "name": "Steven P. Saeta",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11654,
+        "credit_id": "52fe4276c3a36847f80207a7",
+        "department": "Production",
+        "name": "Scott M. Martin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11655,
+        "credit_id": "52fe4276c3a36847f80207ad",
+        "department": "Production",
+        "name": "Marty P. Ewing",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11656,
+        "credit_id": "52fe4276c3a36847f80207b3",
+        "department": "Sound",
+        "name": "Nancy Wilson",
+        "job": "Original Music Composer",
+        "profile_path": "/1kfPxx8Jj178P7ofYX21LbNrUJC.jpg"
+      },
+      {
+        "id": 2483,
+        "credit_id": "52fe4276c3a36847f80207b9",
+        "department": "Camera",
+        "name": "John Toll",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4186,
+        "credit_id": "52fe4276c3a36847f80207bf",
+        "department": "Editing",
+        "name": "Joe Hutshing",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11657,
+        "credit_id": "52fe4276c3a36847f80207c5",
+        "department": "Editing",
+        "name": "Saar Klein",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11658,
+        "credit_id": "52fe4276c3a36847f80207cb",
+        "department": "Production",
+        "name": "Gail Levin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4197,
+        "credit_id": "52fe4276c3a36847f80207d1",
+        "department": "Art",
+        "name": "Clay A. Griffith",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8274,
+        "credit_id": "52fe4276c3a36847f80207d7",
+        "department": "Art",
+        "name": "Robert Greenfield",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 11649,
+        "credit_id": "52fe4276c3a36847f80207f9",
+        "department": "Writing",
+        "name": "Cameron Crowe",
+        "job": "Screenplay",
+        "profile_path": "/xBWkc3OCQ05T7odQfkOYRBAuWna.jpg"
+      },
+      {
+        "id": 11649,
+        "credit_id": "52fe4276c3a36847f80207ff",
+        "department": "Production",
+        "name": "Cameron Crowe",
+        "job": "Producer",
+        "profile_path": "/xBWkc3OCQ05T7odQfkOYRBAuWna.jpg"
+      },
+      {
+        "id": 11802,
+        "credit_id": "52fe4276c3a36847f8020805",
+        "department": "Costume & Make-Up",
+        "name": "Betsy Heimann",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 164,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 786,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Almost Famous",
+  "overview": "Almost Famous is an autobiographical inspired film about a 15-year-old who is hired by Rolling Stone magazine to follow and interview a rock band during their tour. A film about growing up, first love, disappointment, and the life of a rock star.",
+  "production_companies": [
+    {
+      "id": 5,
+      "name": "Columbia Pictures"
+    },
+    {
+      "id": 7293,
+      "name": "DreamWorks Pictures"
+    },
+    {
+      "id": 485,
+      "name": "Vinyl Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0181875",
+  "release_date": "2000-09-15",
+  "original_title": "Almost Famous",
+  "vote_count": 145,
+  "poster_path": "/vdujOuqWzWe8Wk7Lv79SwMJptov.jpg",
+  "tagline": "Experience it. Enjoy it. Just don't fall for it.",
+  "revenue": 47383689,
+  "popularity": "1.60880662705009"
+}

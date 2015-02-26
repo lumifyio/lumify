@@ -1,0 +1,325 @@
+{
+  "budget": 5000000,
+  "vote_average": 7.2,
+  "backdrop_path": "/vg08n0OYu7CF4rjZut3uOgbd8wB.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 258,
+        "order": 0,
+        "credit_id": "52fe421dc3a36847f800512b",
+        "name": "Gael García Bernal",
+        "cast_id": 7,
+        "profile_path": "/o4sdHKTBbF8GpooIwp5bvliubyY.jpg",
+        "character": "Ángel/Juan/Zahara"
+      },
+      {
+        "id": 1602,
+        "order": 1,
+        "credit_id": "52fe421dc3a36847f800512f",
+        "name": "Fele Martínez",
+        "cast_id": 8,
+        "profile_path": "/69Q0vNghrRTosI82xwd3gLBv7Qx.jpg",
+        "character": "Enrique"
+      },
+      {
+        "id": 1603,
+        "order": 2,
+        "credit_id": "52fe421dc3a36847f8005133",
+        "name": "Daniel Giménez Cacho",
+        "cast_id": 9,
+        "profile_path": "/9kP26DdoH55mdVhH9whbFiFNP0j.jpg",
+        "character": "Padre Manolo"
+      },
+      {
+        "id": 1604,
+        "order": 3,
+        "credit_id": "52fe421dc3a36847f8005137",
+        "name": "Lluís Homar",
+        "cast_id": 10,
+        "profile_path": "/oJ7RcDbvXGxJNurtqzvZzgT6Edm.jpg",
+        "character": "Sr. Manuel Berenguer"
+      },
+      {
+        "id": 1605,
+        "order": 4,
+        "credit_id": "52fe421dc3a36847f800513b",
+        "name": "Francisco Maestre",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Padre José"
+      },
+      {
+        "id": 1606,
+        "order": 5,
+        "credit_id": "52fe421dc3a36847f800513f",
+        "name": "Francisco Boira",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Ignacio"
+      },
+      {
+        "id": 1608,
+        "order": 6,
+        "credit_id": "52fe421dc3a36847f8005143",
+        "name": "Nacho Pérez",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Young Ignacio"
+      },
+      {
+        "id": 1609,
+        "order": 7,
+        "credit_id": "52fe421dc3a36847f8005147",
+        "name": "Raúl García Forneiro",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Young Enrique"
+      },
+      {
+        "id": 1610,
+        "order": 8,
+        "credit_id": "52fe421dc3a36847f800514b",
+        "name": "Javier Cámara",
+        "cast_id": 16,
+        "profile_path": "/pbS8PFYTSh2LqODPUuygKLmytVu.jpg",
+        "character": "Paca/Paquito"
+      },
+      {
+        "id": 1611,
+        "order": 9,
+        "credit_id": "52fe421dc3a36847f800514f",
+        "name": "Alberto Ferreiro",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Enrique Serrano"
+      },
+      {
+        "id": 101,
+        "order": 10,
+        "credit_id": "52fe421dc3a36847f8005153",
+        "name": "Leonor Watling",
+        "cast_id": 18,
+        "profile_path": "/6M9s0VigBmmVOBbkRTQz1K0LbN4.jpg",
+        "character": "Mónica"
+      },
+      {
+        "id": 132999,
+        "order": 11,
+        "credit_id": "52fe421dc3a36847f8005181",
+        "name": "Petra Martínez",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Madre"
+      },
+      {
+        "id": 1061872,
+        "order": 12,
+        "credit_id": "52fe421dc3a36847f8005185",
+        "name": "Roberto Hoyas",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Camarero"
+      },
+      {
+        "id": 952,
+        "order": 13,
+        "credit_id": "52fe421dc3a36847f8005189",
+        "name": "Agustín Almodóvar",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Enrique's pool attendant (uncredited)"
+      },
+      {
+        "id": 309,
+        "order": 14,
+        "credit_id": "52fe421dc3a36847f800518d",
+        "name": "Pedro Almodóvar",
+        "cast_id": 29,
+        "profile_path": "/Y32fKy8z0xTRq4LESm2yN6W7NJ.jpg",
+        "character": "Pool cleaner (uncredited)"
+      },
+      {
+        "id": 73572,
+        "order": 15,
+        "credit_id": "52fe421dc3a36847f8005191",
+        "name": "Sara Montiel",
+        "cast_id": 30,
+        "profile_path": "/nutJVcqQc1hx11DUzBFznKdPOGE.jpg",
+        "character": "Soledad (archive footage) (uncredited)"
+      },
+      {
+        "id": 586106,
+        "order": 16,
+        "credit_id": "52fe421dc3a36847f8005195",
+        "name": "Pau Poch",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Niño (uncredited)"
+      },
+      {
+        "id": 1284938,
+        "order": 17,
+        "credit_id": "52fe421dc3a36847f8005199",
+        "name": "Juan Fernández",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Martín"
+      }
+    ],
+    "crew": [
+      {
+        "id": 309,
+        "credit_id": "52fe421dc3a36847f800510f",
+        "department": "Directing",
+        "name": "Pedro Almodóvar",
+        "job": "Director",
+        "profile_path": "/Y32fKy8z0xTRq4LESm2yN6W7NJ.jpg"
+      },
+      {
+        "id": 952,
+        "credit_id": "52fe421dc3a36847f8005115",
+        "department": "Production",
+        "name": "Agustín Almodóvar",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4376,
+        "credit_id": "52fe421dc3a36847f800511b",
+        "department": "Camera",
+        "name": "José Luis Alcaine",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 405,
+        "credit_id": "52fe421dc3a36847f8005121",
+        "department": "Sound",
+        "name": "Alberto Iglesias",
+        "job": "Original Music Composer",
+        "profile_path": "/2PGZyiqdAAyi2S0ZpFw5V0ojCqY.jpg"
+      },
+      {
+        "id": 413,
+        "credit_id": "52fe421dc3a36847f8005127",
+        "department": "Editing",
+        "name": "José Salcedo",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 93,
+        "credit_id": "52fe421dc3a36847f8005159",
+        "department": "Production",
+        "name": "Esther García",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 309,
+        "credit_id": "52fe421dc3a36847f800515f",
+        "department": "Production",
+        "name": "Pedro Almodóvar",
+        "job": "Producer",
+        "profile_path": "/Y32fKy8z0xTRq4LESm2yN6W7NJ.jpg"
+      },
+      {
+        "id": 3630,
+        "credit_id": "52fe421dc3a36847f8005165",
+        "department": "Art",
+        "name": "Antxón Gómez",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3682,
+        "credit_id": "52fe421dc3a36847f800516b",
+        "department": "Production",
+        "name": "Joserra Cadiñanos",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3683,
+        "credit_id": "52fe421dc3a36847f8005171",
+        "department": "Costume & Make-Up",
+        "name": "Paco Delgado",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 979,
+        "credit_id": "52fe421dc3a36847f8005177",
+        "department": "Sound",
+        "name": "Miguel Rejas",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 309,
+        "credit_id": "52fe421dc3a36847f800517d",
+        "department": "Writing",
+        "name": "Pedro Almodóvar",
+        "job": "Screenplay",
+        "profile_path": "/Y32fKy8z0xTRq4LESm2yN6W7NJ.jpg"
+      }
+    ]
+  },
+  "runtime": 106,
+  "spoken_languages": [{
+    "iso_639_1": "es",
+    "name": "Español"
+  }],
+  "adult": false,
+  "homepage": "http://www.lamalaeducacion.com",
+  "id": 140,
+  "production_countries": [{
+    "name": "Spain",
+    "iso_3166_1": "ES"
+  }],
+  "title": "Bad Education",
+  "overview": "This Pedro Almodóvar film explores the sexual misconduct in the Catholic Church in 1960\u2019s Spain. The film is about two boys who are mistreated in a Catholic school and the struggles they face later in life with their sexual identity and hatred for priests.",
+  "production_companies": [
+    {
+      "id": 9335,
+      "name": "Canal+ España"
+    },
+    {
+      "id": 11736,
+      "name": "El Deseo S.A."
+    },
+    {
+      "id": 6780,
+      "name": "Televisión Española TVE"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0275491",
+  "release_date": "2004-03-19",
+  "original_title": "La mala educación",
+  "vote_count": 18,
+  "poster_path": "/2wPhxmIveLgp8ClczFSHQhupF29.jpg",
+  "tagline": "",
+  "revenue": 40266982,
+  "popularity": "0.579803930351206"
+}

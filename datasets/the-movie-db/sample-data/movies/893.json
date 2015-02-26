@@ -1,0 +1,211 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": null,
+  "genres": [
+    {
+      "id": 99,
+      "name": "Documentary"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4619,
+        "order": 0,
+        "credit_id": "52fe4288c3a36847f80266fd",
+        "name": "Gabriela Maria Schmeide",
+        "cast_id": 6,
+        "profile_path": "/vkWh5WdOqY917xu9GWW8cA3ysln.jpg",
+        "character": "Anne"
+      },
+      {
+        "id": 4621,
+        "order": 1,
+        "credit_id": "52fe4288c3a36847f8026701",
+        "name": "Axel Prahl",
+        "cast_id": 7,
+        "profile_path": "/llAu0AMON07SiEgWeDJWzpVcpY.jpg",
+        "character": "Mike"
+      },
+      {
+        "id": 13737,
+        "order": 2,
+        "credit_id": "52fe4288c3a36847f8026705",
+        "name": "Yevgeni Sitokhin",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Jegor"
+      },
+      {
+        "id": 4792,
+        "order": 3,
+        "credit_id": "52fe4288c3a36847f8026709",
+        "name": "Katrin Saß",
+        "cast_id": 9,
+        "profile_path": "/xnXEz2KIzZGn0P46LAWYpW2iYdf.jpg",
+        "character": "Frau Kubitschek"
+      },
+      {
+        "id": 13738,
+        "order": 4,
+        "credit_id": "52fe4288c3a36847f802670d",
+        "name": "Klaus Manchen",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Wagner"
+      },
+      {
+        "id": 13739,
+        "order": 5,
+        "credit_id": "52fe4289c3a36847f8026711",
+        "name": "Heidemarie Schneider",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Frau Seifert"
+      },
+      {
+        "id": 13740,
+        "order": 6,
+        "credit_id": "52fe4289c3a36847f8026715",
+        "name": "Ursula Werner",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Mutter Schmiedel"
+      },
+      {
+        "id": 13741,
+        "order": 7,
+        "credit_id": "52fe4289c3a36847f8026719",
+        "name": "Peter Pauli",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Vater Schmiedel"
+      },
+      {
+        "id": 13743,
+        "order": 8,
+        "credit_id": "52fe4289c3a36847f802671d",
+        "name": "Eberhard Bremer",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Otto"
+      },
+      {
+        "id": 13746,
+        "order": 9,
+        "credit_id": "52fe4289c3a36847f8026721",
+        "name": "Eberhard Kirchberg",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Harald"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4617,
+        "credit_id": "52fe4288c3a36847f80266e1",
+        "department": "Directing",
+        "name": "Andreas Dresen",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 13734,
+        "credit_id": "52fe4288c3a36847f80266e7",
+        "department": "Writing",
+        "name": "Laila Stieler",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4630,
+        "credit_id": "52fe4288c3a36847f80266ed",
+        "department": "Camera",
+        "name": "Michael Hammon",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 13735,
+        "credit_id": "52fe4288c3a36847f80266f3",
+        "department": "Production",
+        "name": "Norbert Sauer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13736,
+        "credit_id": "52fe4288c3a36847f80266f9",
+        "department": "Production",
+        "name": "Christian Granderath",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 13751,
+        "credit_id": "52fe4289c3a36847f8026727",
+        "department": "Writing",
+        "name": "Annegret Held",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 13754,
+        "credit_id": "52fe4289c3a36847f802672d",
+        "department": "Editing",
+        "name": "Monika Schindler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13758,
+        "credit_id": "52fe4289c3a36847f8026733",
+        "department": "Sound",
+        "name": "Peter Schmidt",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 13761,
+        "credit_id": "52fe4289c3a36847f8026739",
+        "department": "Costume & Make-Up",
+        "name": "Sabine Greuning",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 97,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 893,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Die Polizistin",
+  "overview": "Die Polizistin is a documentary by Andreas Dresen about the life of a young police woman who is faced with the difficulties between her responsibilities at work and her personal responsibilities.",
+  "production_companies": [{
+    "id": 583,
+    "name": "Westdeutsche Universum-Film GmbH"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0246859",
+  "release_date": "2000-05-10",
+  "original_title": "Die Polizistin",
+  "vote_count": 0,
+  "poster_path": "/vISRIr6zokEi7EUtnS1Al9BlVj4.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.143466087735844"
+}

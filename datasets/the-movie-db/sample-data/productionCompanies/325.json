@@ -1,0 +1,13 @@
+{
+  "id": 325,
+  "logo_path": "/qBUZpLDmunHzcUY0ByuhxSyOaw6.png",
+  "description": null,
+  "name": "Marvel Entertainment, LLC",
+  "parent_company": {
+    "id": 10079,
+    "logo_path": null,
+    "name": "The Walt Disney Company"
+  },
+  "homepage": "http://www.marvel.com",
+  "headquarters": "New York, New York, USA"
+}

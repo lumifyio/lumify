@@ -1,0 +1,107 @@
+{
+  "birthday": "1968-03-10",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia\n\nDaniel Travis (born March 10, 1968) is an American actor.\n\nTravis was born and raised in Clarkston, Michigan. He received a BFA in theater from Miami University in Oxford, Ohio. He went on to receive an MFA at The Mason Gross School of the Arts at Rutgers University. His early work was on the stage, playing John Buchanan in Summer and Smoke, The Earl of Richmond in Richard III and Paul in Barefoot in the Park.\n\nIn 2001, Travis made his small-screen debut with guest appearances on the short-lived television show The Education of Max Bickford, starring Richard Dreyfuss. Without ever having appeared in a film, Travis made his big-screen debut in a starring role in Open Water (2004), about a couple who goes scuba diving and is left behind in the ocean by accident while on an organized dive.\n\nMost recently, Travis starred in the Subaru television commercial, Ricky.\n\nDescription above from the Wikipedia article Daniel Travis, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/lvgCjRKCdT0vxIyQLjwRkwqLVio.jpg",
+  "id": 646,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm1047403",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 83,
+        "media_type": "movie",
+        "title": "Open Water",
+        "credit_id": null,
+        "release_date": "2003-10-26",
+        "original_title": "Open Water",
+        "adult": false,
+        "poster_path": "/5XirvjFzd6z6AbSKKjbzqOVfHcD.jpg",
+        "character": "Daniel Kintner"
+      },
+      {
+        "id": 242610,
+        "media_type": "movie",
+        "title": "Last Time Forever",
+        "credit_id": null,
+        "release_date": null,
+        "original_title": "Last Time Forever",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 2171,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "525725a5760ee3776a259c36",
+        "name": "Cold Case",
+        "poster_path": "/lc0FIYUzisq5jbqXpmZkDCY99kL.jpg",
+        "original_name": "Cold Case",
+        "first_air_date": "2003-09-28",
+        "character": ""
+      },
+      {
+        "id": 1620,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570e6f760ee3776a09dbf7",
+        "name": "CSI: Miami",
+        "poster_path": "/9brFwnnRmnHykxcrvn7ez79dXb6.jpg",
+        "original_name": "CSI: Miami",
+        "first_air_date": "2002-09-23",
+        "character": ""
+      },
+      {
+        "id": 2458,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52573949760ee3668d01b3ae",
+        "name": "CSI: NY",
+        "poster_path": "/rtvezj8Z2NVE9fu83YOU1HimwYP.jpg",
+        "original_name": "CSI: NY",
+        "first_air_date": "2004-09-21",
+        "character": ""
+      },
+      {
+        "id": 2734,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525742d1760ee36aaa0c8d10",
+        "name": "Law & Order: Special Victims Unit",
+        "poster_path": "/tsxiLPFlpNlJaMFlKIFqffGkiJt.jpg",
+        "original_name": "Law & Order: Special Victims Unit",
+        "first_air_date": "1999-09-20",
+        "character": ""
+      },
+      {
+        "id": 4614,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52577675760ee36aaa5248d2",
+        "name": "NCIS",
+        "poster_path": "/4fXBP3R2n193C6QvthPmvFprNs0.jpg",
+        "original_name": "NCIS",
+        "first_air_date": "2003-09-23",
+        "character": ""
+      },
+      {
+        "id": 30704,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52589990760ee346615d541b",
+        "name": "The Forgotten",
+        "poster_path": "/hSKuKnqLNNVwYZJ6d4M0pFZ6q1C.jpg",
+        "original_name": "The Forgotten",
+        "first_air_date": "2009-09-22",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Daniel Travis",
+  "place_of_birth": "Clarkston, Michigan, USA",
+  "popularity": "1.00000000365897"
+}

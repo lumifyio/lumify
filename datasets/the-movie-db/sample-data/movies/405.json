@@ -1,0 +1,205 @@
+{
+  "budget": 0,
+  "vote_average": 7.2,
+  "backdrop_path": "/6L3PxWcAn6Rw7so51HVNcqW5PX0.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5401,
+        "order": 0,
+        "credit_id": "52fe423fc3a36847f800f821",
+        "name": "Anthony Quinn",
+        "cast_id": 10,
+        "profile_path": "/9sKpm4KCoUbmMbR86fpqcgBCHrJ.jpg",
+        "character": "Zampanò"
+      },
+      {
+        "id": 5402,
+        "order": 1,
+        "credit_id": "52fe423fc3a36847f800f825",
+        "name": "Giulietta Masina",
+        "cast_id": 11,
+        "profile_path": "/qBL7OJRXc0xytUUyo9aiO2IEmPZ.jpg",
+        "character": "Gelsomina"
+      },
+      {
+        "id": 5403,
+        "order": 2,
+        "credit_id": "52fe423fc3a36847f800f829",
+        "name": "Richard Basehart",
+        "cast_id": 12,
+        "profile_path": "/vGGYYIOBSVY6RooMldG5ozSHCty.jpg",
+        "character": "Il 'Matto'"
+      },
+      {
+        "id": 5404,
+        "order": 3,
+        "credit_id": "52fe423fc3a36847f800f82d",
+        "name": "Aldo Silvani",
+        "cast_id": 13,
+        "profile_path": "/ewxScX0nkDRPNHLwBVJ5R9K77kg.jpg",
+        "character": "Il Signor Giraffa"
+      },
+      {
+        "id": 5405,
+        "order": 4,
+        "credit_id": "52fe423fc3a36847f800f831",
+        "name": "Marcella Rovere",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "La Vedova"
+      },
+      {
+        "id": 5406,
+        "order": 5,
+        "credit_id": "52fe423fc3a36847f800f835",
+        "name": "Livia Venturini",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "La Suorina"
+      },
+      {
+        "id": 5407,
+        "order": 6,
+        "credit_id": "52fe423fc3a36847f800f839",
+        "name": "Gustavo Giorgi",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "uncredited"
+      },
+      {
+        "id": 5408,
+        "order": 7,
+        "credit_id": "52fe423fc3a36847f800f83d",
+        "name": "Yami Kamadeva",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "uncredited"
+      },
+      {
+        "id": 5409,
+        "order": 8,
+        "credit_id": "52fe423fc3a36847f800f841",
+        "name": "Mario Passante",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "uncredited"
+      },
+      {
+        "id": 5410,
+        "order": 9,
+        "credit_id": "52fe423fc3a36847f800f845",
+        "name": "Anna Primula",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "uncredited"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4415,
+        "credit_id": "52fe423fc3a36847f800f7ed",
+        "department": "Directing",
+        "name": "Federico Fellini",
+        "job": "Director",
+        "profile_path": "/z90Xi07Ywtkyp5GTL2ahFZiY0Ru.jpg"
+      },
+      {
+        "id": 4415,
+        "credit_id": "52fe423fc3a36847f800f7f3",
+        "department": "Writing",
+        "name": "Federico Fellini",
+        "job": "Screenplay",
+        "profile_path": "/z90Xi07Ywtkyp5GTL2ahFZiY0Ru.jpg"
+      },
+      {
+        "id": 5396,
+        "credit_id": "52fe423fc3a36847f800f7f9",
+        "department": "Writing",
+        "name": "Tullio Pinelli",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5397,
+        "credit_id": "52fe423fc3a36847f800f7ff",
+        "department": "Writing",
+        "name": "Ennio Flaiano",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5398,
+        "credit_id": "52fe423fc3a36847f800f805",
+        "department": "Production",
+        "name": "Dino De Laurentiis",
+        "job": "Producer",
+        "profile_path": "/dPmGC0nArXLjWGzcI0TYOlkjeLJ.jpg"
+      },
+      {
+        "id": 3778,
+        "credit_id": "52fe423fc3a36847f800f80b",
+        "department": "Production",
+        "name": "Carlo Ponti",
+        "job": "Producer",
+        "profile_path": "/zgCkHXt5HdXjaiIk8kOcZyQJlZh.jpg"
+      },
+      {
+        "id": 3098,
+        "credit_id": "52fe423fc3a36847f800f811",
+        "department": "Sound",
+        "name": "Nino Rota",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5399,
+        "credit_id": "52fe423fc3a36847f800f817",
+        "department": "Camera",
+        "name": "Otello Martelli",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5400,
+        "credit_id": "52fe423fc3a36847f800f81d",
+        "department": "Editing",
+        "name": "Leo Cattozzo",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 104,
+  "spoken_languages": [{
+    "iso_639_1": "it",
+    "name": "Italiano"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 405,
+  "production_countries": [{
+    "name": "Italy",
+    "iso_3166_1": "IT"
+  }],
+  "title": "La Strada",
+  "overview": "A traveling strongman, Zampano, repays the death of Rosa, his assistant, by offering the same job to little sister Gelsomina,  whose mother receives compensation in return.",
+  "production_companies": [{
+    "id": 217,
+    "name": "Ponti-De Laurentiis Cinematografica"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0047528",
+  "release_date": "1954-07-16",
+  "original_title": "La Strada",
+  "vote_count": 20,
+  "poster_path": "/lU2gLjPCPdtWWqSRHZ9EqPwrbNQ.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.71712484214616"
+}

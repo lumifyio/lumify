@@ -1,0 +1,275 @@
+{
+  "birthday": "1933-11-25",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nKathryn Crosby (born November 25, 1933) is an American actress and singer who also performed under the stage-name Kathryn Grant.\n\nBorn Olive Kathryn Grandstaff in Houston, Texas, she graduated from the University of Texas at Austin with a Bachelor of Fine Arts in 1955. Two years later she became Bing Crosby's second wife. The couple had three children, Harry, Mary Frances, and Nathaniel. She appeared as a guest star on her husband's 1964\u20131965 ABC sitcom The Bing Crosby Show.\n\nShe largely retired after their marriage, but did have a featured role in the courtroom drama Anatomy of a Murder. She also played the part of \"Mama Bear\" alongside her husband and children in Goldilocks and starred with Jack Lemmon in Operation Mad Ball in 1957.\n\nIn the mid-1970s, she hosted The Kathryn Crosby Show, a 30-minute local talk-show on KPIX-TV in San Francisco. Husband Bing appeared as a guest occasionally.\n\nSince Bing Crosby's death in 1977, she has taken on a few smaller roles and the lead in the short-lived 1996 Broadway musical State Fair.\n\nFor 16 years ending in 2001, Crosby hosted the Crosby National Golf Tournament at Bermuda Run Country Club in Bermuda Run, North Carolina. A nearby bridge carrying U.S. Route 158 over the Yadkin River is named for Crosby.\n\nOn November 4, 2010, Crosby was seriously injured in an automobile accident in the Sierra Nevada that killed her 85-year-old husband, Maurice William Sullivan. Description above from the Wikipedia article Kathryn Crosby, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/lJXrVvijSSeXwZXS6f01vGqcXaO.jpg",
+  "id": 861,
+  "also_known_as": [
+    "Olive Kathryn Grandstaff",
+    " Kathryn Grant Crosby"
+  ],
+  "deathday": "",
+  "imdb_id": "nm0335497",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 93,
+        "media_type": "movie",
+        "title": "Anatomy of a Murder",
+        "credit_id": "52fe4216c3a36847f8003073",
+        "release_date": "1959-07-01",
+        "original_title": "Anatomy of a Murder",
+        "adult": false,
+        "poster_path": "/7mQblEoXnRS1psj3WERIKHKkXQY.jpg",
+        "character": "Mary Pilant"
+      },
+      {
+        "id": 35017,
+        "media_type": "movie",
+        "title": "The Brothers Rico",
+        "credit_id": "52fe458b9251416c91036155",
+        "release_date": "1957-09-01",
+        "original_title": "The Brothers Rico",
+        "adult": false,
+        "poster_path": "/qhRCthuEw5KXhSmwzCFyQEJ4tC5.jpg",
+        "character": "Norah Malaks Rico"
+      },
+      {
+        "id": 35956,
+        "media_type": "movie",
+        "title": "The Phenix City Story",
+        "credit_id": "52fe45c39251416c9103d873",
+        "release_date": "1955-08-14",
+        "original_title": "The Phenix City Story",
+        "adult": false,
+        "poster_path": "/AmVrs5YUzXzx3ItJMZcbVT01sTk.jpg",
+        "character": "Ellie Rhodes"
+      },
+      {
+        "id": 42871,
+        "media_type": "movie",
+        "title": "Gunman's Walk",
+        "credit_id": "52fe461fc3a36847f80ee11f",
+        "release_date": "1958-07-01",
+        "original_title": "Gunman's Walk",
+        "adult": false,
+        "poster_path": "/uCpiMTmOJBpp6DtqtR4z69Rzud8.jpg",
+        "character": "Clee Chouard"
+      },
+      {
+        "id": 60387,
+        "media_type": "movie",
+        "title": "Operation Mad Ball",
+        "credit_id": "52fe4622c3a368484e0808eb",
+        "release_date": "1957-08-17",
+        "original_title": "Operation Mad Ball",
+        "adult": false,
+        "poster_path": "/8cxhRMPRUVWUtSjdsYHsA15KVx9.jpg",
+        "character": "Lt. Betty Bixby"
+      },
+      {
+        "id": 61701,
+        "media_type": "movie",
+        "title": "The Night the World Exploded",
+        "credit_id": "52fe465ec3a368484e08cfeb",
+        "release_date": "1957-06-14",
+        "original_title": "The Night the World Exploded",
+        "adult": false,
+        "poster_path": "/oqyzPujVspQszVrToigyFLtCab4.jpg",
+        "character": "Laura 'Hutch' Hutchinson"
+      },
+      {
+        "id": 15515,
+        "media_type": "movie",
+        "title": "The 7th Voyage of Sinbad",
+        "credit_id": "52fe46639251416c75076b51",
+        "release_date": "1958-12-23",
+        "original_title": "The 7th Voyage of Sinbad",
+        "adult": false,
+        "poster_path": "/7OM74RzURLOpiVCrySlYmLxaFMw.jpg",
+        "character": "Princess Parisa"
+      },
+      {
+        "id": 37911,
+        "media_type": "movie",
+        "title": "5 Against the House",
+        "credit_id": "52fe467d9251416c910561a9",
+        "release_date": "1955-06-10",
+        "original_title": "5 Against the House",
+        "adult": false,
+        "poster_path": "/6vgxtRorkj8k81iOzuQjaVtLTIQ.jpg",
+        "character": "Nightclub patron"
+      },
+      {
+        "id": 44871,
+        "media_type": "movie",
+        "title": "1001 Arabian Nights",
+        "credit_id": "52fe46a0c3a36847f8109511",
+        "release_date": "1959-12-01",
+        "original_title": "1001 Arabian Nights",
+        "adult": false,
+        "poster_path": "/cFdvLCU1S9roalu36lEBggXfrY0.jpg",
+        "character": "Princess Yasminda (voice)"
+      },
+      {
+        "id": 45239,
+        "media_type": "movie",
+        "title": "Storm Center",
+        "credit_id": "52fe46b7c3a36847f810e53f",
+        "release_date": "1956-07-31",
+        "original_title": "Storm Center",
+        "adult": false,
+        "poster_path": "/bTslp4vyE6LbVrg7D0JwK5uORn.jpg",
+        "character": "Hazel Levering"
+      },
+      {
+        "id": 47058,
+        "media_type": "movie",
+        "title": "Queen of the Lot",
+        "credit_id": "52fe471cc3a36847f8123f69",
+        "release_date": "2013-11-20",
+        "original_title": "Queen of the Lot",
+        "adult": false,
+        "poster_path": "/xVrVcgPKqOpzurM9cQhCVuYMW48.jpg",
+        "character": "Elizabeth Lambert"
+      },
+      {
+        "id": 567,
+        "media_type": "movie",
+        "title": "Rear Window",
+        "credit_id": "52fe4253c3a36847f8015897",
+        "release_date": "1954-08-01",
+        "original_title": "Rear Window",
+        "adult": false,
+        "poster_path": "/6EDhk01fESTcdfRAvIHct4jfWk5.jpg",
+        "character": "Girl at Songwriter's Party (uncredited)"
+      },
+      {
+        "id": 57849,
+        "media_type": "movie",
+        "title": "Casanova's Big Night",
+        "credit_id": "534db2560e0a2679ee000717",
+        "release_date": "1954-04-07",
+        "original_title": "Casanova's Big Night",
+        "adult": false,
+        "poster_path": "/o5xaCY9fT5YX89snuyfWihazNFp.jpg",
+        "character": "Girl on Bridge (uncredited)"
+      },
+      {
+        "id": 183532,
+        "media_type": "movie",
+        "title": "Reprisal!",
+        "credit_id": "534db2b90e0a2679d800072d",
+        "release_date": "1956-11-02",
+        "original_title": "Reprisal!",
+        "adult": false,
+        "poster_path": "/dKlx9MpO9A6mhnSAmVQVhAQcK5L.jpg",
+        "character": "Taini"
+      },
+      {
+        "id": 118549,
+        "media_type": "movie",
+        "title": "The Wild Party",
+        "credit_id": "52fe4bddc3a36847f821711b",
+        "release_date": "1956-12-21",
+        "original_title": "The Wild Party",
+        "adult": false,
+        "poster_path": "/35Ic3juHhF1RMFsyrC2kQQM1Ab3.jpg",
+        "character": "Honey"
+      },
+      {
+        "id": 118990,
+        "media_type": "movie",
+        "title": "Mister Cory",
+        "credit_id": "52fe4befc3a36847f8219dcd",
+        "release_date": "1957-02-23",
+        "original_title": "Mister Cory",
+        "adult": false,
+        "poster_path": "/ucc71uaXtREY5UCjAXpfFxjGLKi.jpg",
+        "character": "Jen Vollard"
+      },
+      {
+        "id": 119001,
+        "media_type": "movie",
+        "title": "The Big Circus",
+        "credit_id": "52fe4bf0c3a36847f8219f5d",
+        "release_date": "1959-07-05",
+        "original_title": "The Big Circus",
+        "adult": false,
+        "poster_path": "/miHS2gUCGiGSvfWG3bj054uOFWm.jpg",
+        "character": "Jeannie Whirling"
+      },
+      {
+        "id": 23692,
+        "media_type": "movie",
+        "title": "The Initiation of Sarah",
+        "credit_id": "52fe4473c3a368484e023a8f",
+        "release_date": "1978-02-06",
+        "original_title": "The Initiation of Sarah",
+        "adult": false,
+        "poster_path": "/fMK1jk9QfrokcHlQ3BPHeqTLuKS.jpg",
+        "character": "Mrs. Goodwin"
+      },
+      {
+        "id": 33862,
+        "media_type": "movie",
+        "title": "Cell 2455 Death Row",
+        "credit_id": "52fe45419251416c9102c0c1",
+        "release_date": "1955-04-19",
+        "original_title": "Cell 2455 Death Row",
+        "adult": false,
+        "poster_path": "/l0hp9ygjcaqML1TDCNWUMrWXSOx.jpg",
+        "character": "Jo-Anne"
+      },
+      {
+        "id": 4586,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257728f760ee36aaa4bc959",
+        "name": "Gilmore Girls",
+        "poster_path": "/u0gBUcn4LPhAF7xRiDiJoO1Tc7b.jpg",
+        "original_name": "Gilmore Girls",
+        "first_air_date": "2000-10-05",
+        "character": ""
+      },
+      {
+        "id": 13897,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52582c60760ee36aaa8917ae",
+        "name": "Ben Casey",
+        "poster_path": "/lixwhbKJZesQnyFhTVEYPkvcQnR.jpg",
+        "original_name": "Ben Casey",
+        "first_air_date": "1961-10-02",
+        "character": ""
+      },
+      {
+        "id": 319,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52534dc719c2957940104189",
+        "name": "The Tony Danza Show",
+        "poster_path": null,
+        "original_name": "The Tony Danza Show",
+        "first_air_date": "2004-09-13",
+        "character": ""
+      },
+      {
+        "id": 16364,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52584e07760ee3466101f509",
+        "name": "The Bing Crosby Show",
+        "poster_path": null,
+        "original_name": "The Bing Crosby Show",
+        "first_air_date": "1964-09-14",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Kathryn Grant",
+  "place_of_birth": "Houston, TX",
+  "popularity": "1.05331613077574"
+}

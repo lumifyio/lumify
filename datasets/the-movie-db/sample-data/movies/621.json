@@ -1,0 +1,375 @@
+{
+  "budget": 6000000,
+  "vote_average": 6.4,
+  "backdrop_path": "/dSukjx8A3kOitewpG2n7HuRt4rH.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 22,
+      "name": "Musical"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8891,
+        "order": 0,
+        "credit_id": "52fe425fc3a36847f8019413",
+        "name": "John Travolta",
+        "cast_id": 17,
+        "profile_path": "/ns8uZHEHzV18ifqA9secv8c2Ard.jpg",
+        "character": "Danny Zuko"
+      },
+      {
+        "id": 8892,
+        "order": 1,
+        "credit_id": "52fe425fc3a36847f8019417",
+        "name": "Olivia Newton-John",
+        "cast_id": 18,
+        "profile_path": "/59u5Vo1ZhmTQPNW1W8wu66DZ0Cc.jpg",
+        "character": "Sandy Olsson"
+      },
+      {
+        "id": 8893,
+        "order": 2,
+        "credit_id": "52fe425fc3a36847f801941b",
+        "name": "Stockard Channing",
+        "cast_id": 19,
+        "profile_path": "/5UFMOfbzod42UiPUna59Ch1e37a.jpg",
+        "character": "Betty Rizzo"
+      },
+      {
+        "id": 8894,
+        "order": 3,
+        "credit_id": "52fe425fc3a36847f801941f",
+        "name": "Jeff Conaway",
+        "cast_id": 20,
+        "profile_path": "/dzsbIbWFlwsKpOU6D8Men0Geumi.jpg",
+        "character": "Kenickie"
+      },
+      {
+        "id": 8895,
+        "order": 4,
+        "credit_id": "52fe425fc3a36847f8019423",
+        "name": "Didi Conn",
+        "cast_id": 21,
+        "profile_path": "/62QEVe9v68BfjJWUrSzrXbsXsta.jpg",
+        "character": "Frenchy"
+      },
+      {
+        "id": 8896,
+        "order": 5,
+        "credit_id": "52fe425fc3a36847f8019427",
+        "name": "Barry Pearl",
+        "cast_id": 22,
+        "profile_path": "/dak967RCCBCifb1aINsRrUUv5Qf.jpg",
+        "character": "Doody"
+      },
+      {
+        "id": 8897,
+        "order": 6,
+        "credit_id": "52fe425fc3a36847f801942b",
+        "name": "Michael Tucci",
+        "cast_id": 23,
+        "profile_path": "/reUFx7dyg2d5PMPMLjDagwqlrtP.jpg",
+        "character": "Sonny"
+      },
+      {
+        "id": 8898,
+        "order": 7,
+        "credit_id": "52fe425fc3a36847f801942f",
+        "name": "Kelly Ward",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Putzie"
+      },
+      {
+        "id": 8899,
+        "order": 8,
+        "credit_id": "52fe425fc3a36847f8019433",
+        "name": "Jamie Donnelly",
+        "cast_id": 25,
+        "profile_path": "/skTjfWWRX3CXCwIDLDFQBhNgJQy.jpg",
+        "character": "Jan"
+      },
+      {
+        "id": 8900,
+        "order": 9,
+        "credit_id": "52fe425fc3a36847f8019437",
+        "name": "Dinah Manoff",
+        "cast_id": 26,
+        "profile_path": "/kCULJZUXCTWUTolDb2C9saK2PMj.jpg",
+        "character": "Marty Maraschino"
+      },
+      {
+        "id": 860,
+        "order": 10,
+        "credit_id": "52fe425fc3a36847f801943b",
+        "name": "Eve Arden",
+        "cast_id": 27,
+        "profile_path": "/rS1rPs0lu5owJ2BrrE51k7icMnV.jpg",
+        "character": "Principal McGee"
+      },
+      {
+        "id": 8901,
+        "order": 11,
+        "credit_id": "52fe425fc3a36847f801943f",
+        "name": "Edward Byrnes",
+        "cast_id": 28,
+        "profile_path": "/94hMBEx91g87unjV4AxQJ1f1nut.jpg",
+        "character": "Vince Fontaine"
+      },
+      {
+        "id": 8902,
+        "order": 12,
+        "credit_id": "52fe425fc3a36847f8019443",
+        "name": "Sid Caesar",
+        "cast_id": 29,
+        "profile_path": "/8Dy80VkBbapAPZYleneH7CbxDzm.jpg",
+        "character": "Coach Calhoun"
+      },
+      {
+        "id": 8903,
+        "order": 13,
+        "credit_id": "52fe425fc3a36847f8019447",
+        "name": "Dody Goodman",
+        "cast_id": 30,
+        "profile_path": "/hLWhBWoSrBGhO9kUJiG8Q4Qy4EV.jpg",
+        "character": "Blanche"
+      },
+      {
+        "id": 8904,
+        "order": 14,
+        "credit_id": "52fe425fc3a36847f801944b",
+        "name": "Susan Buckner",
+        "cast_id": 31,
+        "profile_path": "/9yH7GW2IvVChIzr8HidVhAWg8kp.jpg",
+        "character": "Patty Simcox"
+      },
+      {
+        "id": 8905,
+        "order": 15,
+        "credit_id": "52fe425fc3a36847f801944f",
+        "name": "Ellen Travolta",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Waitress"
+      },
+      {
+        "id": 8906,
+        "order": 16,
+        "credit_id": "52fe425fc3a36847f8019453",
+        "name": "Annette Charles",
+        "cast_id": 33,
+        "profile_path": "/jQcH1tULa2ZGUEq17sdNMpoD85f.jpg",
+        "character": "Cha Cha DiGregorio"
+      },
+      {
+        "id": 8907,
+        "order": 17,
+        "credit_id": "52fe425fc3a36847f8019457",
+        "name": "Dennis Stewart",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Leo, Scorpions member"
+      },
+      {
+        "id": 13568,
+        "order": 18,
+        "credit_id": "52fe425fc3a36847f8019461",
+        "name": "Joan Blondell",
+        "cast_id": 36,
+        "profile_path": "/2KnL9VyFPBxZ4xIxpvCUTMicVY2.jpg",
+        "character": "Vi"
+      },
+      {
+        "id": 42362,
+        "order": 19,
+        "credit_id": "52fe425fc3a36847f8019465",
+        "name": "Eddie Deezen",
+        "cast_id": 37,
+        "profile_path": "/xtZhHIcUY0Qok8gFSO9GzGru01o.jpg",
+        "character": "Eugene Felnic"
+      },
+      {
+        "id": 18251,
+        "order": 20,
+        "credit_id": "5305af1bc3a3685a87169428",
+        "name": "Fannie Flagg",
+        "cast_id": 38,
+        "profile_path": "/nelYB0M6WvF7uwArMwhYJZZkyjv.jpg",
+        "character": "Nurse Wilkins"
+      }
+    ],
+    "crew": [
+      {
+        "id": 121347,
+        "credit_id": "53a197a60e0a2665410032cc",
+        "department": "Directing",
+        "name": "Joyce King",
+        "job": "Script Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 8876,
+        "credit_id": "52fe425fc3a36847f80193c1",
+        "department": "Directing",
+        "name": "Randal Kleiser",
+        "job": "Director",
+        "profile_path": "/lK8FzeNDwD9VmNvKPRGd3dFVzJy.jpg"
+      },
+      {
+        "id": 8877,
+        "credit_id": "52fe425fc3a36847f80193c7",
+        "department": "Writing",
+        "name": "Bronte Woodard",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 8878,
+        "credit_id": "52fe425fc3a36847f80193cd",
+        "department": "Production",
+        "name": "Allan Carr",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8879,
+        "credit_id": "52fe425fc3a36847f80193d3",
+        "department": "Production",
+        "name": "Robert Stigwood",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8880,
+        "credit_id": "52fe425fc3a36847f80193d9",
+        "department": "Production",
+        "name": "Neil A. Machlis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2287,
+        "credit_id": "53807b97c3a36805a1004d86",
+        "department": "Camera",
+        "name": "Bill Butler",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 8881,
+        "credit_id": "52fe425fc3a36847f80193e5",
+        "department": "Editing",
+        "name": "John F. Burnett",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8882,
+        "credit_id": "52fe425fc3a36847f80193eb",
+        "department": "Production",
+        "name": "Joel Thurm",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 8883,
+        "credit_id": "52fe425fc3a36847f80193f1",
+        "department": "Art",
+        "name": "Philip M. Jefferies",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8884,
+        "credit_id": "52fe425fc3a36847f80193f7",
+        "department": "Art",
+        "name": "James L. Berkey",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 8885,
+        "credit_id": "52fe425fc3a36847f80193fd",
+        "department": "Costume & Make-Up",
+        "name": "Albert Wolsky",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 8888,
+        "credit_id": "52fe425fc3a36847f8019403",
+        "department": "Sound",
+        "name": "June Edgerton",
+        "job": "Music Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8889,
+        "credit_id": "52fe425fc3a36847f8019409",
+        "department": "Sound",
+        "name": "Jerry Jost",
+        "job": "Sound mixer",
+        "profile_path": null
+      },
+      {
+        "id": 8890,
+        "credit_id": "52fe425fc3a36847f801940f",
+        "department": "Crew",
+        "name": "Ken Speed",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 8880,
+        "credit_id": "52fe425fc3a36847f801945d",
+        "department": "Production",
+        "name": "Neil A. Machlis",
+        "job": "Unit Production Manager",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 110,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 621,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Grease",
+  "overview": "Australian good girl Sandy and greaser Danny fell in love over the summer. But when they unexpectedly discover they're now in the same high school, will they be able to rekindle their romance despite their eccentric friends?",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 86083,
+    "backdrop_path": "/95ASlSlkBSILVLrZA69P0OdniP5.jpg",
+    "name": "Grease Collection",
+    "poster_path": "/hm752B8LthSSizb4f4Owah4NtxX.jpg"
+  },
+  "imdb_id": "tt0077631",
+  "release_date": "1978-07-07",
+  "original_title": "Grease",
+  "vote_count": 270,
+  "poster_path": "/d9yM3GjUyqLgzHiTGkAx5r1dfZj.jpg",
+  "tagline": "Grease is the word",
+  "revenue": 181813770,
+  "popularity": "1.23334940656246"
+}

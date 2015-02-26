@@ -1,0 +1,271 @@
+{
+  "budget": 0,
+  "vote_average": 8,
+  "backdrop_path": "/AbhlG5C2hYfy26pDJy31ucyQu1G.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 738,
+        "order": 0,
+        "credit_id": "52fe4296c3a36847f802a48d",
+        "name": "Sean Connery",
+        "cast_id": 17,
+        "profile_path": "/gmx8QIn5l1psAEeq4BJKZcFFI0j.jpg",
+        "character": "Daniel Dravot"
+      },
+      {
+        "id": 3895,
+        "order": 1,
+        "credit_id": "52fe4296c3a36847f802a491",
+        "name": "Michael Caine",
+        "cast_id": 18,
+        "profile_path": "/nlIjMLp9zvvYM2eFm77UhI7s1nW.jpg",
+        "character": "Peachy Carnehan"
+      },
+      {
+        "id": 290,
+        "order": 2,
+        "credit_id": "52fe4296c3a36847f802a495",
+        "name": "Christopher Plummer",
+        "cast_id": 19,
+        "profile_path": "/fauMGxa6dc86nHNenQ8X6DlE6YV.jpg",
+        "character": "Rudyard Kipling"
+      },
+      {
+        "id": 11852,
+        "order": 3,
+        "credit_id": "52fe4296c3a36847f802a499",
+        "name": "Saeed Jaffrey",
+        "cast_id": 20,
+        "profile_path": "/nDSQCtZjVNqeOWG1QooKq2NkElb.jpg",
+        "character": "Billy Fish"
+      },
+      {
+        "id": 14754,
+        "order": 4,
+        "credit_id": "52fe4296c3a36847f802a49d",
+        "name": "Doghmi Larbi",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Ootah"
+      },
+      {
+        "id": 14755,
+        "order": 5,
+        "credit_id": "52fe4296c3a36847f802a4a1",
+        "name": "Jack May",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "District Commissioner"
+      },
+      {
+        "id": 14756,
+        "order": 6,
+        "credit_id": "52fe4296c3a36847f802a4a5",
+        "name": "Karroom Ben Bouih",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Kafu Selim"
+      },
+      {
+        "id": 14758,
+        "order": 7,
+        "credit_id": "52fe4296c3a36847f802a4a9",
+        "name": "Mohammad Shamsi",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Babu"
+      },
+      {
+        "id": 14759,
+        "order": 8,
+        "credit_id": "52fe4296c3a36847f802a4ad",
+        "name": "Albert Moses",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Ghulam"
+      },
+      {
+        "id": 14760,
+        "order": 9,
+        "credit_id": "52fe4296c3a36847f802a4b1",
+        "name": "Paul Antrim",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Mulvaney"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6593,
+        "credit_id": "52fe4296c3a36847f802a435",
+        "department": "Directing",
+        "name": "John Huston",
+        "job": "Director",
+        "profile_path": "/x5P9KPVj6i8XnrgeEEWiiYKCSdd.jpg"
+      },
+      {
+        "id": 6593,
+        "credit_id": "52fe4296c3a36847f802a43b",
+        "department": "Writing",
+        "name": "John Huston",
+        "job": "Screenplay",
+        "profile_path": "/x5P9KPVj6i8XnrgeEEWiiYKCSdd.jpg"
+      },
+      {
+        "id": 14743,
+        "credit_id": "52fe4296c3a36847f802a441",
+        "department": "Writing",
+        "name": "Gladys Hill",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 9578,
+        "credit_id": "52fe4296c3a36847f802a447",
+        "department": "Production",
+        "name": "John Foreman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7751,
+        "credit_id": "52fe4296c3a36847f802a44d",
+        "department": "Production",
+        "name": "William Hill",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2704,
+        "credit_id": "52fe4296c3a36847f802a453",
+        "department": "Sound",
+        "name": "Maurice Jarre",
+        "job": "Original Music Composer",
+        "profile_path": "/yJDDi7RKlxHjb7g8NZTEhnS4drG.jpg"
+      },
+      {
+        "id": 10339,
+        "credit_id": "52fe4296c3a36847f802a459",
+        "department": "Camera",
+        "name": "Oswald Morris",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14745,
+        "credit_id": "52fe4296c3a36847f802a45f",
+        "department": "Editing",
+        "name": "Russell Lloyd",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 14746,
+        "credit_id": "52fe4296c3a36847f802a465",
+        "department": "Production",
+        "name": "Boaty Boatwright",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4103,
+        "credit_id": "52fe4296c3a36847f802a46b",
+        "department": "Art",
+        "name": "Alexandre Trauner",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 14747,
+        "credit_id": "52fe4296c3a36847f802a471",
+        "department": "Art",
+        "name": "Tony Inglis",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 4350,
+        "credit_id": "52fe4296c3a36847f802a477",
+        "department": "Costume & Make-Up",
+        "name": "Edith Head",
+        "job": "Costume Design",
+        "profile_path": "/63ZeXQOh26sGa8nTbYWntieyWrz.jpg"
+      },
+      {
+        "id": 14748,
+        "credit_id": "52fe4296c3a36847f802a47d",
+        "department": "Costume & Make-Up",
+        "name": "George Frost",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 14750,
+        "credit_id": "52fe4296c3a36847f802a483",
+        "department": "Costume & Make-Up",
+        "name": "Patricia McDermott",
+        "job": "Hairstylist",
+        "profile_path": null
+      },
+      {
+        "id": 14752,
+        "credit_id": "52fe4296c3a36847f802a489",
+        "department": "Crew",
+        "name": "Richard Parker",
+        "job": "Special Effects",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 129,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 983,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "The Man Who Would Be King",
+  "overview": "A robust adventure about two British adventurers who take over primitive Kafiristan as \"godlike\" rulers, meeting a tragic end through their desire for a native girl. Based on a short story by Rudyard Kipling.",
+  "production_companies": [
+    {
+      "id": 624,
+      "name": "Persky-Bright Productions"
+    },
+    {
+      "id": 625,
+      "name": "Devon"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0073341",
+  "release_date": "1975-12-17",
+  "original_title": "The Man Who Would Be King",
+  "vote_count": 13,
+  "poster_path": "/nGivKoDBPT8P2MU6oQlQR5rcHlG.jpg",
+  "tagline": "Rudyard Kipling's epic of splendor, spectacle and high adventure at the top of a legendary world.",
+  "revenue": 0,
+  "popularity": "0.661410694608799"
+}

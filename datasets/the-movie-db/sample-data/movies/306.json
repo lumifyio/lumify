@@ -1,0 +1,357 @@
+{
+  "budget": 50000000,
+  "vote_average": 5.7,
+  "backdrop_path": "/9En9020IPIGzVW4cgaqmSMCNNiw.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 776,
+        "order": 0,
+        "credit_id": "52fe4235c3a36847f800c2e7",
+        "name": "Eddie Murphy",
+        "cast_id": 1,
+        "profile_path": "/WlmlpM6YeQwgEmOX0n4bVZ08dc.jpg",
+        "character": "Axel Foley"
+      },
+      {
+        "id": 777,
+        "order": 1,
+        "credit_id": "52fe4235c3a36847f800c2fb",
+        "name": "Judge Reinhold",
+        "cast_id": 7,
+        "profile_path": "/oN7TsF0yFJhsoKe9KzxXEOhheci.jpg",
+        "character": "Billy Rosewood"
+      },
+      {
+        "id": 1210,
+        "order": 2,
+        "credit_id": "52fe4235c3a36847f800c2eb",
+        "name": "Héctor Elizondo",
+        "cast_id": 2,
+        "profile_path": "/48UNfVFZVr0jyMIlLPhzm8IIM7f.jpg",
+        "character": "Jon Flint"
+      },
+      {
+        "id": 1,
+        "order": 3,
+        "credit_id": "52fe4235c3a36847f800c2f7",
+        "name": "George Lucas",
+        "cast_id": 5,
+        "profile_path": "/rJ1zvSeZfge0mHtLnzJn4Mkw18S.jpg",
+        "character": "Disappointed Man"
+      },
+      {
+        "id": 4689,
+        "order": 4,
+        "credit_id": "52fe4235c3a36847f800c2ef",
+        "name": "Bronson Pinchot",
+        "cast_id": 3,
+        "profile_path": "/hGaFZsohQbRIskmkLtNbwJNgLPN.jpg",
+        "character": "Serge"
+      },
+      {
+        "id": 4600,
+        "order": 5,
+        "credit_id": "52fe4235c3a36847f800c2f3",
+        "name": "Joe Dante",
+        "cast_id": 4,
+        "profile_path": "/6tXq6DyArD72Nus1PBdxuksIgXo.jpg",
+        "character": "Jailer"
+      },
+      {
+        "id": 4602,
+        "order": 6,
+        "credit_id": "52fe4235c3a36847f800c2ff",
+        "name": "Jon Tenney",
+        "cast_id": 8,
+        "profile_path": "/fiG1bW6DX1szsRDPIYjfIKPQ0kV.jpg",
+        "character": "Levine"
+      },
+      {
+        "id": 4603,
+        "order": 7,
+        "credit_id": "52fe4235c3a36847f800c303",
+        "name": "Joey Travolta",
+        "cast_id": 9,
+        "profile_path": "/7wNm5XjMTbMM7EoetlXPfEw6T8x.jpg",
+        "character": "Giolito"
+      },
+      {
+        "id": 4604,
+        "order": 8,
+        "credit_id": "52fe4235c3a36847f800c307",
+        "name": "Theresa Randle",
+        "cast_id": 10,
+        "profile_path": "/18LVR034VKDGOFqDw1EA1VZQVoe.jpg",
+        "character": "Janice"
+      },
+      {
+        "id": 4605,
+        "order": 9,
+        "credit_id": "52fe4235c3a36847f800c30b",
+        "name": "Eugene Collier",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Leppert"
+      },
+      {
+        "id": 4606,
+        "order": 10,
+        "credit_id": "52fe4235c3a36847f800c30f",
+        "name": "Jimmy Ortega",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Rondell"
+      },
+      {
+        "id": 4607,
+        "order": 11,
+        "credit_id": "52fe4235c3a36847f800c313",
+        "name": "Ousaun Elam",
+        "cast_id": 13,
+        "profile_path": "/wYr28o3cuqZ3iLCMWBMwjhrA05o.jpg",
+        "character": "Pederson"
+      },
+      {
+        "id": 4608,
+        "order": 12,
+        "credit_id": "52fe4235c3a36847f800c317",
+        "name": "Ray Lykins",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Nixon"
+      },
+      {
+        "id": 4609,
+        "order": 13,
+        "credit_id": "52fe4235c3a36847f800c31b",
+        "name": "Tim Gilbert",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "McKee"
+      },
+      {
+        "id": 787,
+        "order": 14,
+        "credit_id": "52fe4235c3a36847f800c361",
+        "name": "Gilbert R. Hill",
+        "cast_id": 27,
+        "profile_path": "/9kgwJTs4hT9oJuRiC4zj4zxwn68.jpg",
+        "character": "Insp. Douglas Todd"
+      },
+      {
+        "id": 133259,
+        "order": 15,
+        "credit_id": "52fe4235c3a36847f800c371",
+        "name": "Arthur Hiller",
+        "cast_id": 30,
+        "profile_path": "/irrSj7cAn2ByM7hhu2emkMdFOai.jpg",
+        "character": "Bar Patron"
+      },
+      {
+        "id": 1264849,
+        "order": 16,
+        "credit_id": "52fe4235c3a36847f800c375",
+        "name": "Timothy Carnhart",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Ellis Dewald"
+      },
+      {
+        "id": 17396,
+        "order": 17,
+        "credit_id": "52fe4235c3a36847f800c379",
+        "name": "Timothy Carhart",
+        "cast_id": 32,
+        "profile_path": "/1UEUs6UJdxjSbGakZflWuN4TS7T.jpg",
+        "character": "Ellis Dewald"
+      },
+      {
+        "id": 11163,
+        "order": 18,
+        "credit_id": "52fe4235c3a36847f800c37d",
+        "name": "John Saxon",
+        "cast_id": 33,
+        "profile_path": "/jggn6H9ezT1iizRHI0hJUDJ2jOo.jpg",
+        "character": "Orrin Sanderson"
+      },
+      {
+        "id": 66758,
+        "order": 19,
+        "credit_id": "52fe4235c3a36847f800c381",
+        "name": "Ray Harryhausen",
+        "cast_id": 34,
+        "profile_path": "/nxsvHuPnWQBFuGOq6Gs100kh74R.jpg",
+        "character": "Bar Patron"
+      },
+      {
+        "id": 21377,
+        "order": 20,
+        "credit_id": "52fe4235c3a36847f800c385",
+        "name": "Peter Medak",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Man at Corner"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4610,
+        "credit_id": "52fe4235c3a36847f800c321",
+        "department": "Directing",
+        "name": "John Landis",
+        "job": "Director",
+        "profile_path": "/pHqwE4XKehtONaRVyXAml0I3mSy.jpg"
+      },
+      {
+        "id": 772,
+        "credit_id": "52fe4235c3a36847f800c327",
+        "department": "Writing",
+        "name": "Danilo Bach",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 774,
+        "credit_id": "52fe4235c3a36847f800c32d",
+        "department": "Writing",
+        "name": "Daniel Petrie, Jr.",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1726,
+        "credit_id": "52fe4235c3a36847f800c333",
+        "department": "Writing",
+        "name": "Steven E. de Souza",
+        "job": "Author",
+        "profile_path": "/vdNUgaeJEZy67vhwTeJnftfBRzB.jpg"
+      },
+      {
+        "id": 4611,
+        "credit_id": "52fe4235c3a36847f800c339",
+        "department": "Production",
+        "name": "Mace Neufeld",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4612,
+        "credit_id": "52fe4235c3a36847f800c33f",
+        "department": "Production",
+        "name": "Robert Rehme",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4613,
+        "credit_id": "52fe4235c3a36847f800c345",
+        "department": "Sound",
+        "name": "Nile Rodgers",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4614,
+        "credit_id": "52fe4235c3a36847f800c34b",
+        "department": "Camera",
+        "name": "Mac Ahlberg",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4615,
+        "credit_id": "52fe4235c3a36847f800c351",
+        "department": "Editing",
+        "name": "Dale Beldin",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1097,
+        "credit_id": "52fe4235c3a36847f800c357",
+        "department": "Production",
+        "name": "Jackie Burch",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4616,
+        "credit_id": "52fe4235c3a36847f800c35d",
+        "department": "Art",
+        "name": "Michael Seymour",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 772,
+        "credit_id": "52fe4235c3a36847f800c367",
+        "department": "Writing",
+        "name": "Danilo Bach",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 774,
+        "credit_id": "52fe4235c3a36847f800c36d",
+        "department": "Writing",
+        "name": "Daniel Petrie, Jr.",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 104,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 306,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Beverly Hills Cop III",
+  "overview": "Detroit cop Axel Foley is back in sunny Southern California in the third installment of the comedic fish-out-of-water Beverly Hills Cop series. On the trail of two murderers, Axel again teams up with Los Angeles cop Billy Rosewood. Soon, they discover that an amusement park is being used as a front for a massive counterfeiting ring -- and it's run by the same gang that shot Billy's boss.",
+  "production_companies": [
+    {
+      "id": 4,
+      "name": "Paramount Pictures"
+    },
+    {
+      "id": 30,
+      "name": "Eddie Murphy Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 85861,
+    "backdrop_path": "/lhZQuT76B9YcxZIudXZMhhWCKcl.jpg",
+    "name": "Beverly Hills Cop Collection",
+    "poster_path": "/ty7zsl0xkVDUlibYkFUjRAYUkvE.jpg"
+  },
+  "imdb_id": "tt0109254",
+  "release_date": "1994-05-24",
+  "original_title": "Beverly Hills Cop III",
+  "vote_count": 82,
+  "poster_path": "/tw9gAhqQcBFX0X0XfVbWqUsmzoU.jpg",
+  "tagline": "In for the ride of his life!",
+  "revenue": 42614912,
+  "popularity": "0.873421979811565"
+}

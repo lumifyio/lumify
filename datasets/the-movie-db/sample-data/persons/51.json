@@ -1,0 +1,41 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 51,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0253355",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 17,
+        "media_type": "movie",
+        "title": "The Dark",
+        "credit_id": "52fe420fc3a36847f8000a97",
+        "release_date": "2006-04-07",
+        "original_title": "The Dark",
+        "adult": false,
+        "poster_path": "/spMYhC9Fom3QHiirsaf8nRS6Edd.jpg",
+        "character": "Rowan"
+      },
+      {
+        "id": 105138,
+        "media_type": "movie",
+        "title": "The History of Mr Polly",
+        "credit_id": "52fe4a48c3a36847f81c5207",
+        "release_date": "2007-05-07",
+        "original_title": "The History of Mr Polly",
+        "adult": false,
+        "poster_path": "/jCV7qH2pHzQkDfbXwhZUHVNCCwZ.jpg",
+        "character": "William Polly"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Richard Elfyn",
+  "place_of_birth": null,
+  "popularity": "1.07650000660254"
+}

@@ -1,0 +1,308 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/7dh36SvWkJl6XJFlvfVWd5sPCJy.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 14168,
+        "order": 0,
+        "credit_id": "52fe428fc3a36847f8028597",
+        "name": "Hildegard Knef",
+        "cast_id": 12,
+        "profile_path": "/yQHR9HgNKDZ8CZXDBMfxJryml3A.jpg",
+        "character": "Susanne Wallner"
+      },
+      {
+        "id": 14169,
+        "order": 1,
+        "credit_id": "52fe428fc3a36847f802859b",
+        "name": "Ernst Wilhelm Borchert",
+        "cast_id": 13,
+        "profile_path": "/vnrHWmcY1Fwph3PyOQkSHpwGUJy.jpg",
+        "character": "Dr. Mertens"
+      },
+      {
+        "id": 14170,
+        "order": 2,
+        "credit_id": "52fe428fc3a36847f802859f",
+        "name": "Erna Sellmer",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Frau Brückner"
+      },
+      {
+        "id": 14171,
+        "order": 3,
+        "credit_id": "52fe428fc3a36847f80285a3",
+        "name": "Arno Paulsen",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Ferdinand Brückner"
+      },
+      {
+        "id": 14173,
+        "order": 4,
+        "credit_id": "52fe428fc3a36847f80285a7",
+        "name": "Michael Günther",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Herbert"
+      },
+      {
+        "id": 14174,
+        "order": 5,
+        "credit_id": "52fe428fc3a36847f80285ab",
+        "name": "Christian Schwarzwald",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Otto"
+      },
+      {
+        "id": 14175,
+        "order": 6,
+        "credit_id": "52fe428fc3a36847f80285af",
+        "name": "Robert Forsch",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Mondschein"
+      },
+      {
+        "id": 14176,
+        "order": 7,
+        "credit_id": "52fe428fc3a36847f80285b3",
+        "name": "Elly Burgmer",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Mutter des kranken Kindes"
+      },
+      {
+        "id": 14177,
+        "order": 8,
+        "credit_id": "52fe428fc3a36847f80285b7",
+        "name": "Marlise Ludwig",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Sonja"
+      },
+      {
+        "id": 14178,
+        "order": 9,
+        "credit_id": "52fe428fc3a36847f80285bb",
+        "name": "Hilde Adolphi",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Daisy"
+      },
+      {
+        "id": 14179,
+        "order": 10,
+        "credit_id": "52fe428fc3a36847f80285bf",
+        "name": "Albert Johannes",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Bartholomäus"
+      },
+      {
+        "id": 14180,
+        "order": 11,
+        "credit_id": "52fe428fc3a36847f80285c3",
+        "name": "Ursula Krieg",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Carola Schulz."
+      },
+      {
+        "id": 14181,
+        "order": 12,
+        "credit_id": "52fe428fc3a36847f80285c7",
+        "name": "Wolfgang Dohnberg",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Fritz Knochenhauer"
+      },
+      {
+        "id": 14182,
+        "order": 13,
+        "credit_id": "52fe428fc3a36847f80285cb",
+        "name": "Ernst Stahl-Nachbaur",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Arzt"
+      },
+      {
+        "id": 14183,
+        "order": 14,
+        "credit_id": "52fe428fc3a36847f80285cf",
+        "name": "Wanda Peters",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Schwester"
+      },
+      {
+        "id": 14184,
+        "order": 15,
+        "credit_id": "52fe428fc3a36847f80285d3",
+        "name": "Christiane Hanson",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Dienstmädchen"
+      },
+      {
+        "id": 14185,
+        "order": 16,
+        "credit_id": "52fe428fc3a36847f80285d7",
+        "name": "Käthe Jöken-König",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Kundin"
+      }
+    ],
+    "crew": [
+      {
+        "id": 14158,
+        "credit_id": "52fe428fc3a36847f8028563",
+        "department": "Directing",
+        "name": "Wolfgang Staudte",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 14161,
+        "credit_id": "52fe428fc3a36847f8028569",
+        "department": "Camera",
+        "name": "Friedl Behn-Grund",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14162,
+        "credit_id": "52fe428fc3a36847f802856f",
+        "department": "Camera",
+        "name": "Eugen Klagemann",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 14163,
+        "credit_id": "52fe428fc3a36847f8028575",
+        "department": "Editing",
+        "name": "Hans Heinrich",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 14164,
+        "credit_id": "52fe428fc3a36847f802857b",
+        "department": "Sound",
+        "name": "Dr. Klaus Jungk",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 13887,
+        "credit_id": "52fe428fc3a36847f8028581",
+        "department": "Art",
+        "name": "Otto Hunte",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 14165,
+        "credit_id": "52fe428fc3a36847f8028587",
+        "department": "Art",
+        "name": "Bruno Monden",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 14166,
+        "credit_id": "52fe428fc3a36847f802858d",
+        "department": "Costume & Make-Up",
+        "name": "Gertraud Recke",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14167,
+        "credit_id": "52fe428fc3a36847f8028593",
+        "department": "Sound",
+        "name": "Ernst Roters",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 14186,
+        "credit_id": "52fe428fc3a36847f80285dd",
+        "department": "Production",
+        "name": "Herbert Uhlich",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 14187,
+        "credit_id": "52fe428fc3a36847f80285e3",
+        "department": "Production",
+        "name": "Willi Herrmann",
+        "job": "Location Manager",
+        "profile_path": null
+      },
+      {
+        "id": 11640,
+        "credit_id": "52fe428fc3a36847f80285e9",
+        "department": "Production",
+        "name": "Max Sablotzki",
+        "job": "Location Manager",
+        "profile_path": null
+      },
+      {
+        "id": 14163,
+        "credit_id": "52fe428fc3a36847f80285ef",
+        "department": "Directing",
+        "name": "Hans Heinrich",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 14158,
+        "credit_id": "52fe428fc3a36847f80285f5",
+        "department": "Writing",
+        "name": "Wolfgang Staudte",
+        "job": "Writer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 91,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 932,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Murderers Among Us",
+  "overview": "Murderers Among Us was the first German film after the Second World War. Filmed in the Soviet occupied section of Berlin in the summer of 1946. The film would be the first film about the wreckage from the war and the first film produced by DEFA.",
+  "production_companies": [{
+    "id": 602,
+    "name": "DEFA"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0038769",
+  "release_date": "1946-10-15",
+  "original_title": "Die Mörder sind unter uns",
+  "vote_count": 0,
+  "poster_path": "/bnTPnjVgrTwSnCfa0jjcB1mhMKv.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.179941624690533"
+}

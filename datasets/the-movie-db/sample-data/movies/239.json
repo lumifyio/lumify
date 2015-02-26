@@ -1,0 +1,207 @@
+{
+  "budget": 3500000,
+  "vote_average": 7.4,
+  "backdrop_path": "/sdibVacEUaYcM41zmepM0J2xNqq.jpg",
+  "genres": [{
+    "id": 35,
+    "name": "Comedy"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3149,
+        "order": 0,
+        "credit_id": "52fe422bc3a36847f8009465",
+        "name": "Marilyn Monroe",
+        "cast_id": 15,
+        "profile_path": "/AjIAEUq6JrsTG6vTFNEEmzFZVca.jpg",
+        "character": "Sugar Kane Kowalczyk"
+      },
+      {
+        "id": 3150,
+        "order": 1,
+        "credit_id": "52fe422bc3a36847f8009437",
+        "name": "Tony Curtis",
+        "cast_id": 5,
+        "profile_path": "/y2y6QFlLkbDzNbAaKKa8mSH3Lde.jpg",
+        "character": "Joe (Josephine)"
+      },
+      {
+        "id": 3151,
+        "order": 2,
+        "credit_id": "52fe422bc3a36847f800943b",
+        "name": "Jack Lemmon",
+        "cast_id": 6,
+        "profile_path": "/1Y3wQsqRALOL3LZQtKmulmN3qff.jpg",
+        "character": "Jerry (Daphne)"
+      },
+      {
+        "id": 3152,
+        "order": 3,
+        "credit_id": "52fe422bc3a36847f8009469",
+        "name": "George Raft",
+        "cast_id": 16,
+        "profile_path": "/ftXWCxlAF1n4AyiZLLPWpHQQauL.jpg",
+        "character": "Spats Colombo"
+      },
+      {
+        "id": 3156,
+        "order": 4,
+        "credit_id": "52fe422bc3a36847f800943f",
+        "name": "Joe E. Brown",
+        "cast_id": 7,
+        "profile_path": "/sFU0iVNQrDRA5TYi3WJQHoAbUya.jpg",
+        "character": "Osgood Fielding III"
+      },
+      {
+        "id": 3160,
+        "order": 5,
+        "credit_id": "52fe422bc3a36847f800944f",
+        "name": "Nehemiah Persoff",
+        "cast_id": 10,
+        "profile_path": "/nA4ouztzxQvhfFkGejiveBQJxng.jpg",
+        "character": "Little Bonaparte"
+      },
+      {
+        "id": 3161,
+        "order": 6,
+        "credit_id": "52fe422bc3a36847f8009453",
+        "name": "Joan Shawlee",
+        "cast_id": 11,
+        "profile_path": "/1KSTHsyQsyuIAaj4k1BLmdpMaEc.jpg",
+        "character": "Sweet Sue"
+      },
+      {
+        "id": 3168,
+        "order": 7,
+        "credit_id": "52fe422bc3a36847f8009457",
+        "name": "Barbara Drew",
+        "cast_id": 12,
+        "profile_path": "/v6S957xjM9g36qdlS3CUTgEiSxl.jpg",
+        "character": "Nellie"
+      },
+      {
+        "id": 81501,
+        "order": 8,
+        "credit_id": "52fe422bc3a36847f8009461",
+        "name": "Edward G. Robinson Jr.",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Johnny Paradise"
+      },
+      {
+        "id": 3155,
+        "order": 9,
+        "credit_id": "52fe422bc3a36847f800946d",
+        "name": "Pat O'Brien",
+        "cast_id": 17,
+        "profile_path": "/nRd6AufixcDcptqRSJwq1pTLArX.jpg",
+        "character": "Det. Mulligan"
+      },
+      {
+        "id": 3163,
+        "order": 10,
+        "credit_id": "52fe422bc3a36847f8009471",
+        "name": "George E. Stone",
+        "cast_id": 18,
+        "profile_path": "/zTW4BPeu6LpCHuNXhNVz2pYL5tk.jpg",
+        "character": "Toothpick Charlie"
+      },
+      {
+        "id": 84229,
+        "order": 11,
+        "credit_id": "52fe422bc3a36847f8009475",
+        "name": "Mike Mazurki",
+        "cast_id": 19,
+        "profile_path": "/s1alibwL5JiBhBNZQGiN91Hccc3.jpg",
+        "character": "Spats' henchman"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3146,
+        "credit_id": "52fe422bc3a36847f8009421",
+        "department": "Directing",
+        "name": "Billy Wilder",
+        "job": "Director",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3147,
+        "credit_id": "52fe422bc3a36847f8009427",
+        "department": "Writing",
+        "name": "I. A. L. Diamond",
+        "job": "Author",
+        "profile_path": "/lii36e0Ntvq7sL1rA0tVs4FePYT.jpg"
+      },
+      {
+        "id": 3148,
+        "credit_id": "52fe422bc3a36847f800942d",
+        "department": "Camera",
+        "name": "Charles Lang",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe422bc3a36847f8009433",
+        "department": "Production",
+        "name": "Billy Wilder",
+        "job": "Producer",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3158,
+        "credit_id": "52fe422bc3a36847f8009445",
+        "department": "Writing",
+        "name": "Michael Logan",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 3159,
+        "credit_id": "52fe422bc3a36847f800944b",
+        "department": "Production",
+        "name": "Doane Harrison",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8621,
+        "credit_id": "52fe422bc3a36847f800945d",
+        "department": "Editing",
+        "name": "Arthur P. Schmidt",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 122,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 239,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Some Like It Hot",
+  "overview": "Two musicians witness a mob hit and struggle to find a way out of the city before they are found by the gangsters. Their only opportunity is to join an all-girl band as they leave on a tour. To make their getaway they must first disguise themselves as women, then keep their identities secret and deal with the problems this brings - such as an attractive bandmate and a very determined suitor.",
+  "production_companies": [{
+    "id": 60,
+    "name": "United Artists"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0053291",
+  "release_date": "1959-03-29",
+  "original_title": "Some Like It Hot",
+  "vote_count": 123,
+  "poster_path": "/pxc9EFCMYkItESpqqrI783yl8Gh.jpg",
+  "tagline": "The movie too HOT for words!",
+  "revenue": 0,
+  "popularity": "2.08270827170543"
+}

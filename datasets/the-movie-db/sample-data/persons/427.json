@@ -1,0 +1,151 @@
+{
+  "birthday": "1940-08-02",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/x84X0jwGl063wTGSmw7M8J0SxhS.jpg",
+  "id": 427,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0480808",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 11596,
+        "media_type": "movie",
+        "title": "New Nightmare",
+        "credit_id": "52fe44649251416c750330cd",
+        "release_date": "1994-10-14",
+        "original_title": "New Nightmare",
+        "adult": false,
+        "poster_path": "/oLEZibnraixTE68rTaYv4FEmvYd.jpg",
+        "character": "Senior Nurse with Needle"
+      },
+      {
+        "id": 37534,
+        "media_type": "movie",
+        "title": "The New Daughter",
+        "credit_id": "52fe46539251416c91050d3b",
+        "release_date": "2009-12-18",
+        "original_title": "The New Daughter",
+        "adult": false,
+        "poster_path": "/w0seBWI24cTf6t1rKEO2bPJXdKL.jpg",
+        "character": "Ms. Arnworth"
+      },
+      {
+        "id": 68817,
+        "media_type": "movie",
+        "title": "Footloose",
+        "credit_id": "52fe47a8c3a368484e0d2df5",
+        "release_date": "2011-10-14",
+        "original_title": "Footloose",
+        "adult": false,
+        "poster_path": "/kDpo6G7rYRHQ1bFhyLiJEW9ESPO.jpg",
+        "character": "Mrs. Allyson (as Sandra Lafferty)"
+      },
+      {
+        "id": 146233,
+        "media_type": "movie",
+        "title": "Prisoners",
+        "credit_id": "52fe4b799251416c75103f6b",
+        "release_date": "2013-09-21",
+        "original_title": "Prisoners",
+        "adult": false,
+        "poster_path": "/3w79tTsv6tmlT8Jww6snyPrgVok.jpg",
+        "character": "Mrs. Milland"
+      },
+      {
+        "id": 69,
+        "media_type": "movie",
+        "title": "Walk the Line",
+        "credit_id": "52fe4213c3a36847f8001f87",
+        "release_date": "2005-11-18",
+        "original_title": "Walk the Line",
+        "adult": false,
+        "poster_path": "/nUsaYt9Wk4fVP8jp1ncfQe7Io7t.jpg",
+        "character": "Maybelle Carter"
+      },
+      {
+        "id": 118063,
+        "media_type": "movie",
+        "title": "Spark",
+        "credit_id": "52fe4bc9c3a36847f8213cbd",
+        "release_date": "1998-01-16",
+        "original_title": "Spark",
+        "adult": false,
+        "poster_path": "/n16y5vqJkhLXC1wzoBIg4dlG8sQ.jpg",
+        "character": "Deb"
+      },
+      {
+        "id": 118612,
+        "media_type": "movie",
+        "title": "After",
+        "credit_id": "52fe4bdec3a36847f82174a5",
+        "release_date": "2012-09-14",
+        "original_title": "After",
+        "adult": false,
+        "poster_path": "/5Wj6IazHsDQOJDnlOfJBVirUEDG.jpg",
+        "character": "Aunt Lu"
+      },
+      {
+        "id": 47676,
+        "media_type": "movie",
+        "title": "Bodies, Rest & Motion",
+        "credit_id": "5396b086c3a368641500556f",
+        "release_date": "1993-01-10",
+        "original_title": "Bodies, Rest & Motion",
+        "adult": false,
+        "poster_path": "/spBRv0p3cpwyaxIff8d9LrpDk8W.jpg",
+        "character": "Yard Sale Lady (as Sandra Lafferty)"
+      },
+      {
+        "id": 4349,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257650f760ee36aaa35a82d",
+        "name": "Melrose Place",
+        "poster_path": "/zwMIVinUhgEvf0dOeNSady871he.jpg",
+        "original_name": "Melrose Place",
+        "first_air_date": "1992-07-08",
+        "character": ""
+      },
+      {
+        "id": 164,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5253415919c29579400a2350",
+        "name": "Dark Skies",
+        "poster_path": "/qJJLkKKnvekQ2JtHFgb6244gFK0.jpg",
+        "original_name": "Dark Skies",
+        "first_air_date": "1996-09-21",
+        "character": ""
+      },
+      {
+        "id": 1777,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525714ad19c2957114075a98",
+        "name": "Boy Meets World",
+        "poster_path": "/kkI4AqxjefCQdjzOV6vc4cvYu4X.jpg",
+        "original_name": "Boy Meets World",
+        "first_air_date": "1993-09-24",
+        "character": ""
+      },
+      {
+        "id": 2297,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52572f91760ee3776a329db2",
+        "name": "The Wayans Bros.",
+        "poster_path": "/4s5NeKM9wgjz6HpY4luGJ91NsyI.jpg",
+        "original_name": "The Wayans Bros.",
+        "first_air_date": "1995-01-11",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Sandra Ellis Lafferty",
+  "place_of_birth": null,
+  "popularity": 1.006885
+}

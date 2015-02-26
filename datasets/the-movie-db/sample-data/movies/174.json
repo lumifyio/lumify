@@ -1,0 +1,372 @@
+{
+  "budget": 27000000,
+  "vote_average": 6.7,
+  "backdrop_path": "/qzrOCLviAseY5WOmsgkNVIAHQea.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1748,
+        "order": 0,
+        "credit_id": "52fe4222c3a36847f8006acb",
+        "name": "William Shatner",
+        "cast_id": 6,
+        "profile_path": "/5hWNPFmnzlFAkGMleBKkeFFcxhY.jpg",
+        "character": "James Tiberius Kirk"
+      },
+      {
+        "id": 1749,
+        "order": 1,
+        "credit_id": "52fe4222c3a36847f8006acf",
+        "name": "Leonard Nimoy",
+        "cast_id": 7,
+        "profile_path": "/5B5blUXy0PDvToh2nxZk4SVTdyP.jpg",
+        "character": "Spock"
+      },
+      {
+        "id": 1750,
+        "order": 2,
+        "credit_id": "52fe4222c3a36847f8006ad3",
+        "name": "DeForest Kelley",
+        "cast_id": 8,
+        "profile_path": "/fUL1BY8XjLsQihueDD1UUAm0Qy6.jpg",
+        "character": "Dr. Leonard McCoy"
+      },
+      {
+        "id": 1751,
+        "order": 3,
+        "credit_id": "52fe4222c3a36847f8006ad7",
+        "name": "James Doohan",
+        "cast_id": 9,
+        "profile_path": "/fzPmUR60dIqu9oLiqJe4iLw6XBn.jpg",
+        "character": "Montgomery Scott"
+      },
+      {
+        "id": 1752,
+        "order": 4,
+        "credit_id": "52fe4222c3a36847f8006adb",
+        "name": "George Takei",
+        "cast_id": 10,
+        "profile_path": "/yXQsJ0ahBXsbxzJUYjwyCxpJHgp.jpg",
+        "character": "Hikaru Sulu"
+      },
+      {
+        "id": 1753,
+        "order": 5,
+        "credit_id": "52fe4222c3a36847f8006adf",
+        "name": "Nichelle Nichols",
+        "cast_id": 11,
+        "profile_path": "/1p5EIwiyFBxjs5e8a6AzPRzy1JL.jpg",
+        "character": "Uhura"
+      },
+      {
+        "id": 1754,
+        "order": 6,
+        "credit_id": "52fe4222c3a36847f8006ae3",
+        "name": "Walter Koenig",
+        "cast_id": 12,
+        "profile_path": "/aq4fu8vSQQxMklB7FdXbN6uNQoV.jpg",
+        "character": "Pavel Chekov"
+      },
+      {
+        "id": 290,
+        "order": 7,
+        "credit_id": "52fe4222c3a36847f8006ae7",
+        "name": "Christopher Plummer",
+        "cast_id": 13,
+        "profile_path": "/fauMGxa6dc86nHNenQ8X6DlE6YV.jpg",
+        "character": "General Chang"
+      },
+      {
+        "id": 2109,
+        "order": 8,
+        "credit_id": "52fe4222c3a36847f8006aeb",
+        "name": "Kim Cattrall",
+        "cast_id": 14,
+        "profile_path": "/A6jOlVc2aMgVSLZSGJHppYdzafq.jpg",
+        "character": "Lieutenant Valeris"
+      },
+      {
+        "id": 2076,
+        "order": 9,
+        "credit_id": "52fe4222c3a36847f8006aef",
+        "name": "David Warner",
+        "cast_id": 15,
+        "profile_path": "/eogsvYwdu7gwCv8CCZsvUsSJyjG.jpg",
+        "character": "Chancellor Gorkon"
+      },
+      {
+        "id": 2111,
+        "order": 10,
+        "credit_id": "52fe4222c3a36847f8006af3",
+        "name": "Rosanna DeSoto",
+        "cast_id": 16,
+        "profile_path": "/ppAz1PLGnuxTgXYDVWblLgXKkqp.jpg",
+        "character": "Azetbur"
+      },
+      {
+        "id": 2112,
+        "order": 11,
+        "credit_id": "52fe4222c3a36847f8006af7",
+        "name": "Brock Peters",
+        "cast_id": 17,
+        "profile_path": "/iFSHbqBaOKiqsZFpUteqbCJQmR7.jpg",
+        "character": "Admiral Cartwright"
+      },
+      {
+        "id": 2115,
+        "order": 12,
+        "credit_id": "52fe4222c3a36847f8006afb",
+        "name": "Kurtwood Smith",
+        "cast_id": 18,
+        "profile_path": "/3yTfpjjLXK6efurRGwXhoPeIQTk.jpg",
+        "character": "Federation President"
+      },
+      {
+        "id": 2124,
+        "order": 13,
+        "credit_id": "52fe4222c3a36847f8006b35",
+        "name": "Iman",
+        "cast_id": 28,
+        "profile_path": "/4HAfEFjc7XkJSGeL7nKiQzntHuw.jpg",
+        "character": "Martia"
+      },
+      {
+        "id": 1820,
+        "order": 14,
+        "credit_id": "52fe4222c3a36847f8006b39",
+        "name": "Mark Lenard",
+        "cast_id": 29,
+        "profile_path": "/sROqIxtLAUlK0BhbmNwRfCyPXrY.jpg",
+        "character": "Sarek"
+      },
+      {
+        "id": 1759,
+        "order": 15,
+        "credit_id": "52fe4222c3a36847f8006b3d",
+        "name": "Grace Lee Whitney",
+        "cast_id": 30,
+        "profile_path": "/h1uisJQaVHhNCYqvxgx3VevGNtA.jpg",
+        "character": "Excelsior Communications Officer"
+      },
+      {
+        "id": 169920,
+        "order": 16,
+        "credit_id": "52fe4222c3a36847f8006b41",
+        "name": "Leon Russom",
+        "cast_id": 31,
+        "profile_path": "/kITkYMh1VZgHSAMlMxsZ6jaUF7C.jpg",
+        "character": "Chief in Command"
+      },
+      {
+        "id": 24046,
+        "order": 17,
+        "credit_id": "52fe4222c3a36847f8006b45",
+        "name": "John Schuck",
+        "cast_id": 32,
+        "profile_path": "/liBIO7P3HMO4Nil7ZsW7OFNChvb.jpg",
+        "character": "Klingon Ambassador"
+      },
+      {
+        "id": 1054307,
+        "order": 18,
+        "credit_id": "52fe4222c3a36847f8006b49",
+        "name": "Michael Dor",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Klingon Defense Attorney"
+      },
+      {
+        "id": 160414,
+        "order": 19,
+        "credit_id": "52fe4222c3a36847f8006b4d",
+        "name": "Paul Rossilli",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Kerla"
+      },
+      {
+        "id": 32494,
+        "order": 20,
+        "credit_id": "52fe4222c3a36847f8006b51",
+        "name": "Robert Easton",
+        "cast_id": 35,
+        "profile_path": "/1FtmmVRUFFepaE5ovwfwcSId8Ka.jpg",
+        "character": "Klingon Judge"
+      },
+      {
+        "id": 2391,
+        "order": 21,
+        "credit_id": "52fe4222c3a36847f8006b55",
+        "name": "Michael Dorn",
+        "cast_id": 36,
+        "profile_path": "/66oVi2UrJSYdyNEaRC5FTS8KlYG.jpg",
+        "character": "Klingon Defense Attorney"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1788,
+        "credit_id": "52fe4222c3a36847f8006aaf",
+        "department": "Directing",
+        "name": "Nicholas Meyer",
+        "job": "Director",
+        "profile_path": "/iDQ5NP10dTa7e0WyY16cELdAid4.jpg"
+      },
+      {
+        "id": 2093,
+        "credit_id": "52fe4222c3a36847f8006ab5",
+        "department": "Production",
+        "name": "Steven-Charles Jaffe",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2095,
+        "credit_id": "52fe4222c3a36847f8006abb",
+        "department": "Production",
+        "name": "Ralph Winter",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1788,
+        "credit_id": "52fe4222c3a36847f8006ac1",
+        "department": "Writing",
+        "name": "Nicholas Meyer",
+        "job": "Screenplay",
+        "profile_path": "/iDQ5NP10dTa7e0WyY16cELdAid4.jpg"
+      },
+      {
+        "id": 2104,
+        "credit_id": "52fe4222c3a36847f8006ac7",
+        "department": "Writing",
+        "name": "Denny Martin Flinn",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2116,
+        "credit_id": "52fe4222c3a36847f8006b01",
+        "department": "Camera",
+        "name": "Hiro Narita",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2025,
+        "credit_id": "52fe4222c3a36847f8006b07",
+        "department": "Art",
+        "name": "Nilo Rodis-Jamero",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 2118,
+        "credit_id": "52fe4222c3a36847f8006b0d",
+        "department": "Art",
+        "name": "Mickey S. Michaels",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 2119,
+        "credit_id": "52fe4222c3a36847f8006b13",
+        "department": "Costume & Make-Up",
+        "name": "Dodie Shepard",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 2120,
+        "credit_id": "52fe4222c3a36847f8006b19",
+        "department": "Sound",
+        "name": "Cliff Eidelman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2083,
+        "credit_id": "52fe4222c3a36847f8006b1f",
+        "department": "Art",
+        "name": "Herman F. Zimmerman",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2121,
+        "credit_id": "52fe4222c3a36847f8006b25",
+        "department": "Production",
+        "name": "Mary Jo Slater",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2122,
+        "credit_id": "52fe4222c3a36847f8006b2b",
+        "department": "Editing",
+        "name": "William Hoy",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2123,
+        "credit_id": "52fe4222c3a36847f8006b31",
+        "department": "Editing",
+        "name": "Ronald Roose",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 113,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 174,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Star Trek VI: The Undiscovered Country",
+  "overview": "The crews of the Enterprise and the Excelsior must stop a plot to prevent a peace treaty between the Klingon Empire and the Federation",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 151,
+    "backdrop_path": "/9BQj9hq0aK6yM9Tm2NJ28jg572y.jpg",
+    "name": "Star Trek: The Original Series Collection",
+    "poster_path": "/zcB8KxHA4EapOoZZPAvwgmE1iGK.jpg"
+  },
+  "imdb_id": "tt0102975",
+  "release_date": "1991-12-05",
+  "original_title": "Star Trek VI: The Undiscovered Country",
+  "vote_count": 106,
+  "poster_path": "/5PvIZAOFDe63M1oByFEFDoQobkc.jpg",
+  "tagline": "The battle for peace has begun.",
+  "revenue": 96900000,
+  "popularity": "2.25234898440346"
+}

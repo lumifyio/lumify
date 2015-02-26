@@ -1,0 +1,334 @@
+{
+  "budget": 102000000,
+  "vote_average": 6.5,
+  "backdrop_path": "/6HbOqP1GUElNLdX8Bx2uP542CIP.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 500,
+        "order": 0,
+        "credit_id": "52fe4223c3a36847f8006f53",
+        "name": "Tom Cruise",
+        "cast_id": 5,
+        "profile_path": "/3oWEuo0e8Nx8JvkqYCDec2iMY6K.jpg",
+        "character": "Chief John Anderton"
+      },
+      {
+        "id": 2201,
+        "order": 1,
+        "credit_id": "52fe4223c3a36847f8006f57",
+        "name": "Max von Sydow",
+        "cast_id": 6,
+        "profile_path": "/kCdNYfUlswqjDYhnE54kMoDHWTp.jpg",
+        "character": "Pre-Crime Director Lamar Burgess"
+      },
+      {
+        "id": 2202,
+        "order": 2,
+        "credit_id": "52fe4223c3a36847f8006f5b",
+        "name": "Steve Harris",
+        "cast_id": 7,
+        "profile_path": "/nmwjKA40QFUJoHl0XmHIeAZ9kKF.jpg",
+        "character": "Jad"
+      },
+      {
+        "id": 2203,
+        "order": 3,
+        "credit_id": "52fe4223c3a36847f8006f5f",
+        "name": "Neal McDonough",
+        "cast_id": 8,
+        "profile_path": "/8Vg7WKE4QEGz18at8mQHP9aqEbB.jpg",
+        "character": "Officer Gordon 'Fletch' Fletcher"
+      },
+      {
+        "id": 2205,
+        "order": 4,
+        "credit_id": "52fe4223c3a36847f8006f63",
+        "name": "Jessica Capshaw",
+        "cast_id": 10,
+        "profile_path": "/iQL4ePgdr4sPXlvmotUieHrrGWF.jpg",
+        "character": "Evanna"
+      },
+      {
+        "id": 72466,
+        "order": 5,
+        "credit_id": "52fe4223c3a36847f8006f67",
+        "name": "Colin Farrell",
+        "cast_id": 11,
+        "profile_path": "/9FDzNq8cixv5PzJwjNXx1mJKAhU.jpg",
+        "character": "Danny Witwer"
+      },
+      {
+        "id": 2206,
+        "order": 6,
+        "credit_id": "52fe4223c3a36847f8006f6b",
+        "name": "Samantha Morton",
+        "cast_id": 12,
+        "profile_path": "/iGThEengA4ziHy9JyrlWzzHeO8k.jpg",
+        "character": "Agatha"
+      },
+      {
+        "id": 2207,
+        "order": 7,
+        "credit_id": "52fe4223c3a36847f8006f6f",
+        "name": "Lois Smith",
+        "cast_id": 13,
+        "profile_path": "/oyIYQpGu3L0yDzXH4utRb24xI5h.jpg",
+        "character": "Dr. Iris Hineman"
+      },
+      {
+        "id": 2208,
+        "order": 8,
+        "credit_id": "52fe4223c3a36847f8006f73",
+        "name": "Kathryn Morris",
+        "cast_id": 14,
+        "profile_path": "/kacv3Og9yU1bp6RJGb4Asnhsavt.jpg",
+        "character": "Lara Clarke Anderton"
+      },
+      {
+        "id": 53,
+        "order": 9,
+        "credit_id": "52fe4223c3a36847f8006f77",
+        "name": "Peter Stormare",
+        "cast_id": 15,
+        "profile_path": "/dDR0brp5L7fXDyEywrhjQv01LSg.jpg",
+        "character": "Dr. Solomon Eddie"
+      },
+      {
+        "id": 83141,
+        "order": 10,
+        "credit_id": "52fe4223c3a36847f8006fc9",
+        "name": "Paul Wesley",
+        "cast_id": 29,
+        "profile_path": "/arhkjiCDzV9GxwKWIqBt095tnna.jpg",
+        "character": "Nathan with Bicycle"
+      },
+      {
+        "id": 32286,
+        "order": 11,
+        "credit_id": "52fe4223c3a36847f8006fcd",
+        "name": "Patrick Kilpatrick",
+        "cast_id": 30,
+        "profile_path": "/i1RztWUYH3oWkM8QSNeIidHzBN4.jpg",
+        "character": "Officer Jeff Knott"
+      },
+      {
+        "id": 15318,
+        "order": 12,
+        "credit_id": "53b95639c3a3685eba005605",
+        "name": "Keith Campbell",
+        "cast_id": 32,
+        "profile_path": "/1PQSshXQ2AgifwYbykqXEyQYmDg.jpg",
+        "character": "Pre-Crime Cop"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8527,
+        "credit_id": "5356273d0e0a26285e002d16",
+        "department": "Costume & Make-Up",
+        "name": "Deborah Lynn Scott",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4223c3a36847f8006f3d",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 584,
+        "credit_id": "52fe4223c3a36847f8006f43",
+        "department": "Writing",
+        "name": "Philip K. Dick",
+        "job": "Author",
+        "profile_path": "/jDOKJN8SQ17QsJ7omv4yBNZi7XY.jpg"
+      },
+      {
+        "id": 2199,
+        "credit_id": "52fe4223c3a36847f8006f49",
+        "department": "Writing",
+        "name": "Scott Frank",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2200,
+        "credit_id": "52fe4223c3a36847f8006f4f",
+        "department": "Writing",
+        "name": "Jon Cohen",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2209,
+        "credit_id": "52fe4223c3a36847f8006f7d",
+        "department": "Production",
+        "name": "Jan de Bont",
+        "job": "Producer",
+        "profile_path": "/9kPf2LuyLLwCawSGyPIQCX7ighX.jpg"
+      },
+      {
+        "id": 2210,
+        "credit_id": "52fe4223c3a36847f8006f83",
+        "department": "Production",
+        "name": "Bonnie Curtis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2211,
+        "credit_id": "52fe4223c3a36847f8006f89",
+        "department": "Production",
+        "name": "Gerald R. Molen",
+        "job": "Producer",
+        "profile_path": "/ih3yLiYixeQuW2Zp545aHtD5nq.jpg"
+      },
+      {
+        "id": 2212,
+        "credit_id": "52fe4223c3a36847f8006f8f",
+        "department": "Production",
+        "name": "Walter F. Parkes",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2213,
+        "credit_id": "52fe4223c3a36847f8006f95",
+        "department": "Sound",
+        "name": "Matthew Ferraro",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 491,
+        "credit_id": "52fe4223c3a36847f8006f9b",
+        "department": "Sound",
+        "name": "John Williams",
+        "job": "Original Music Composer",
+        "profile_path": "/d7NNRZQAIzLBSaoez550QHLpTk.jpg"
+      },
+      {
+        "id": 2214,
+        "credit_id": "52fe4223c3a36847f8006fa1",
+        "department": "Sound",
+        "name": "Paul Haslinger",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 492,
+        "credit_id": "52fe4223c3a36847f8006fa7",
+        "department": "Camera",
+        "name": "Janusz Kaminski",
+        "job": "Director of Photography",
+        "profile_path": "/5LNGARjEfMDOcEP6fMNtJypAGYx.jpg"
+      },
+      {
+        "id": 2215,
+        "credit_id": "52fe4223c3a36847f8006fad",
+        "department": "Production",
+        "name": "Denise Chamian",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1303,
+        "credit_id": "52fe4223c3a36847f8006fb9",
+        "department": "Art",
+        "name": "Alex McDowell",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2216,
+        "credit_id": "52fe4223c3a36847f8006fbf",
+        "department": "Sound",
+        "name": "Gary Rydstrom",
+        "job": "Sound Designer",
+        "profile_path": "/jZpr1nVfO7lldWI0YtmP1FGw7Rj.jpg"
+      },
+      {
+        "id": 493,
+        "credit_id": "52fe4223c3a36847f8006fc5",
+        "department": "Editing",
+        "name": "Michael Kahn",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 145,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "sv",
+      "name": "svenska"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 180,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Minority Report",
+  "overview": "John Anderton is a top \"Precrime\" cop in the late-21st century, when technology can predict crimes before they're committed. But Anderton becomes the quarry when another investigator targets him for a murder charge. Can Anderton find a glitch in the system and prove his innocence before it's too late?",
+  "production_companies": [
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    },
+    {
+      "id": 306,
+      "name": "Twentieth Century Fox Film Corporation"
+    },
+    {
+      "id": 27,
+      "name": "DreamWorks SKG"
+    },
+    {
+      "id": 44,
+      "name": "Cruise/Wagner Productions"
+    },
+    {
+      "id": 26265,
+      "name": "Ronald Shusett/Gary Goldman"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0181689",
+  "release_date": "2002-06-20",
+  "original_title": "Minority Report",
+  "vote_count": 685,
+  "poster_path": "/h3lpltSn7Rj1eYTPQO1lYGdw4Bz.jpg",
+  "tagline": "The system is perfect until it comes after you.",
+  "revenue": 358372926,
+  "popularity": "2.33767008032916"
+}

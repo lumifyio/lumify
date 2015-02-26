@@ -1,0 +1,249 @@
+{
+  "budget": 0,
+  "vote_average": 6.4,
+  "backdrop_path": "/kQxUCFDQP6SO40W61TfS3Q7ntPI.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 22,
+      "name": "Musical"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3149,
+        "order": 0,
+        "credit_id": "52fe4272c3a36847f801f489",
+        "name": "Marilyn Monroe",
+        "cast_id": 1,
+        "profile_path": "/AjIAEUq6JrsTG6vTFNEEmzFZVca.jpg",
+        "character": "Lorelei Lee"
+      },
+      {
+        "id": 11165,
+        "order": 1,
+        "credit_id": "52fe4272c3a36847f801f48d",
+        "name": "Jane Russell",
+        "cast_id": 2,
+        "profile_path": "/4XDiI0NL6ROiPGuJMGOjUQHctR8.jpg",
+        "character": "Dorothy Shaw"
+      },
+      {
+        "id": 11168,
+        "order": 2,
+        "credit_id": "52fe4272c3a36847f801f491",
+        "name": "Elliott Reid",
+        "cast_id": 3,
+        "profile_path": "/nRRsBDG0uxNmuDO4V2FigeTXS3j.jpg",
+        "character": "Ernie Malone"
+      },
+      {
+        "id": 11169,
+        "order": 3,
+        "credit_id": "52fe4272c3a36847f801f495",
+        "name": "Charles Coburn",
+        "cast_id": 4,
+        "profile_path": "/aXGf4dmBC2wS842miRteFJcCRrV.jpg",
+        "character": "Sir Francis Beekman"
+      },
+      {
+        "id": 11170,
+        "order": 4,
+        "credit_id": "52fe4272c3a36847f801f499",
+        "name": "Tommy Noonan",
+        "cast_id": 5,
+        "profile_path": "/2brYO4Sye2btso3g4GciTgQB1WM.jpg",
+        "character": "Gus Esmond"
+      },
+      {
+        "id": 11171,
+        "order": 5,
+        "credit_id": "52fe4272c3a36847f801f49d",
+        "name": "George Winslow",
+        "cast_id": 6,
+        "profile_path": "/oxxpBrLeHKmh5ivjhOvRGah9SE1.jpg",
+        "character": "Henry Spofford III"
+      },
+      {
+        "id": 10926,
+        "order": 6,
+        "credit_id": "52fe4272c3a36847f801f4a1",
+        "name": "Norma Varden",
+        "cast_id": 7,
+        "profile_path": "/2Ypt67es6XciWAyihkcG2MSjUzT.jpg",
+        "character": "Lady Beekman"
+      },
+      {
+        "id": 11172,
+        "order": 7,
+        "credit_id": "52fe4272c3a36847f801f4a5",
+        "name": "Taylor Holmes",
+        "cast_id": 8,
+        "profile_path": "/dmdGm5SHP6gJDbbANZMHTrYM4Kn.jpg",
+        "character": "Mr. Esmond Sr."
+      },
+      {
+        "id": 97284,
+        "order": 8,
+        "credit_id": "52fe4272c3a36847f801f4fd",
+        "name": "Henri Letondal",
+        "cast_id": 23,
+        "profile_path": "/uSaLbsL8aujGaKNInAjfXn90tcI.jpg",
+        "character": "Grotier (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11435,
+        "credit_id": "52fe4272c3a36847f801f4ab",
+        "department": "Directing",
+        "name": "Howard Hawks",
+        "job": "Director",
+        "profile_path": "/4cJbjAgSNXMqsTgxCRc4IL7z9Da.jpg"
+      },
+      {
+        "id": 11436,
+        "credit_id": "52fe4272c3a36847f801f4b1",
+        "department": "Writing",
+        "name": "Anita Loos",
+        "job": "Novel",
+        "profile_path": "/lmG2K9YK8zmvwsOMmJgStgx4DLM.jpg"
+      },
+      {
+        "id": 11437,
+        "credit_id": "52fe4272c3a36847f801f4b7",
+        "department": "Writing",
+        "name": "Joseph Fields",
+        "job": "Theatre Play",
+        "profile_path": null
+      },
+      {
+        "id": 4358,
+        "credit_id": "52fe4272c3a36847f801f4bd",
+        "department": "Writing",
+        "name": "Charles Lederer",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 11438,
+        "credit_id": "52fe4272c3a36847f801f4c3",
+        "department": "Production",
+        "name": "Sol C. Siegel",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11439,
+        "credit_id": "52fe4272c3a36847f801f4c9",
+        "department": "Sound",
+        "name": "Hoagy Carmichael",
+        "job": "Original Music Composer",
+        "profile_path": "/refT3oWPSER0iUaKrWFqwq3WYfe.jpg"
+      },
+      {
+        "id": 11440,
+        "credit_id": "52fe4272c3a36847f801f4cf",
+        "department": "Sound",
+        "name": "Eliot Daniel",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11441,
+        "credit_id": "52fe4272c3a36847f801f4d5",
+        "department": "Sound",
+        "name": "Lionel Newman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11442,
+        "credit_id": "52fe4272c3a36847f801f4db",
+        "department": "Camera",
+        "name": "Harry J. Wild",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11443,
+        "credit_id": "52fe4272c3a36847f801f4e1",
+        "department": "Editing",
+        "name": "Hugh S. Fowler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 11444,
+        "credit_id": "52fe4272c3a36847f801f4e7",
+        "department": "Art",
+        "name": "Claude E. Carpenter",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 11445,
+        "credit_id": "52fe4272c3a36847f801f4ed",
+        "department": "Costume & Make-Up",
+        "name": "Travilla",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 11446,
+        "credit_id": "52fe4272c3a36847f801f4f3",
+        "department": "Sound",
+        "name": "E. Clayton Ward",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 8511,
+        "credit_id": "52fe4272c3a36847f801f4f9",
+        "department": "Sound",
+        "name": "Roger Heman Sr.",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 91,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 759,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Gentlemen Prefer Blondes",
+  "overview": "Marilyn Monroe is the blonde in question in this second film version of Gentlemen Prefer Blondes: Miss Lorelei Lee, whose philosophy is \"diamonds are a girl's best friend.\" Together with her best human friend Dorothy (Jane Russell), showgirl Lorelei embarks upon a boat trip to Paris, where she intends to marry millionaire Gus Esmond. En route, the girls are bedeviled by private detective Malone, hired by Esmond's father to make certain that Lorelei isn't just another gold-digger. When Dorothy falls in love with the poverty-stricken Malone, Lorelei decides to find her pal a wealthier potential husband, and that's how she gets mixed up with flirtatious diamond merchant Sir Francis Beekman and precocious youngster Henry Spofford III. Most of the Leo Robin-Jule Styne songs from the Broadway show remain intact, including Marilyn Monroe's rendition of \"Diamonds are a Girl's Best Friend,\" a production number later imitated by pop icon Madonna.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0045810",
+  "release_date": "1953-07-15",
+  "original_title": "Gentlemen Prefer Blondes",
+  "vote_count": 8,
+  "poster_path": "/Awicned51GHh64EODKPY2oUxbiH.jpg",
+  "tagline": "The Two M-M-Marvels Of Our Age In The Wonder Musical Of The World!",
+  "revenue": 0,
+  "popularity": "0.285370228762709"
+}

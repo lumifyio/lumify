@@ -1,0 +1,238 @@
+{
+  "budget": 275000,
+  "vote_average": 8,
+  "backdrop_path": "/1uOVWFR1AElZijHCeaZAdtLxYOa.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4800,
+        "order": 0,
+        "credit_id": "52fe4271c3a36847f801f031",
+        "name": "Gena Rowlands",
+        "cast_id": 1,
+        "profile_path": "/vPsX71UdwG21lFdG6pxijJWxL91.jpg",
+        "character": "Jeannie Rapp"
+      },
+      {
+        "id": 3142,
+        "order": 1,
+        "credit_id": "52fe4271c3a36847f801f035",
+        "name": "John Marley",
+        "cast_id": 2,
+        "profile_path": "/8XhyUzSWIhcHQSBURSCjydRe2Fx.jpg",
+        "character": "Richard Forst"
+      },
+      {
+        "id": 11140,
+        "order": 2,
+        "credit_id": "52fe4271c3a36847f801f039",
+        "name": "Lynn Carlin",
+        "cast_id": 3,
+        "profile_path": "/5MefaWZKNlBN5wKg7BPdDQua6JK.jpg",
+        "character": "Maria Forst"
+      },
+      {
+        "id": 5950,
+        "order": 3,
+        "credit_id": "52fe4271c3a36847f801f03d",
+        "name": "Seymour Cassel",
+        "cast_id": 4,
+        "profile_path": "/atWyQvsLNjmXP5dxsOiaf5Qg9j.jpg",
+        "character": "Chet"
+      },
+      {
+        "id": 11141,
+        "order": 4,
+        "credit_id": "52fe4271c3a36847f801f041",
+        "name": "Fred Draper",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Freddie Draper"
+      },
+      {
+        "id": 3014,
+        "order": 5,
+        "credit_id": "52fe4271c3a36847f801f045",
+        "name": "Val Avery",
+        "cast_id": 6,
+        "profile_path": "/jIBEZ5xoM7I5PxG3pW62VeWwYih.jpg",
+        "character": "Jim McCarthy"
+      },
+      {
+        "id": 11142,
+        "order": 6,
+        "credit_id": "52fe4271c3a36847f801f049",
+        "name": "Dorothy Gulliver",
+        "cast_id": 7,
+        "profile_path": "/up7NF9BpRm3BRbs6SlTnhe1wOpB.jpg",
+        "character": "Florence"
+      },
+      {
+        "id": 11143,
+        "order": 7,
+        "credit_id": "52fe4271c3a36847f801f04d",
+        "name": "Joanne Moore Jordan",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Louise Draper"
+      },
+      {
+        "id": 11144,
+        "order": 8,
+        "credit_id": "52fe4271c3a36847f801f051",
+        "name": "Darlene Conley",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Billy Mae"
+      },
+      {
+        "id": 11145,
+        "order": 9,
+        "credit_id": "52fe4271c3a36847f801f055",
+        "name": "Gene Darfler",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Joe Jackson"
+      },
+      {
+        "id": 11146,
+        "order": 10,
+        "credit_id": "52fe4271c3a36847f801f059",
+        "name": "Elizabeth Deering",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Stella"
+      }
+    ],
+    "crew": [
+      {
+        "id": 11147,
+        "credit_id": "52fe4271c3a36847f801f05f",
+        "department": "Directing",
+        "name": "John Cassavetes",
+        "job": "Director",
+        "profile_path": "/pp71Xsx63aoXTMQgatnYtGRU2fi.jpg"
+      },
+      {
+        "id": 11147,
+        "credit_id": "52fe4271c3a36847f801f065",
+        "department": "Writing",
+        "name": "John Cassavetes",
+        "job": "Screenplay",
+        "profile_path": "/pp71Xsx63aoXTMQgatnYtGRU2fi.jpg"
+      },
+      {
+        "id": 11147,
+        "credit_id": "52fe4271c3a36847f801f06b",
+        "department": "Production",
+        "name": "John Cassavetes",
+        "job": "Producer",
+        "profile_path": "/pp71Xsx63aoXTMQgatnYtGRU2fi.jpg"
+      },
+      {
+        "id": 11414,
+        "credit_id": "52fe4271c3a36847f801f071",
+        "department": "Production",
+        "name": "Maurice McEndree",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11415,
+        "credit_id": "52fe4271c3a36847f801f077",
+        "department": "Production",
+        "name": "Al Ruban",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11416,
+        "credit_id": "52fe4271c3a36847f801f07d",
+        "department": "Sound",
+        "name": "Jack Ackerman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11415,
+        "credit_id": "52fe4271c3a36847f801f083",
+        "department": "Camera",
+        "name": "Al Ruban",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11147,
+        "credit_id": "52fe4271c3a36847f801f089",
+        "department": "Editing",
+        "name": "John Cassavetes",
+        "job": "Editor",
+        "profile_path": "/pp71Xsx63aoXTMQgatnYtGRU2fi.jpg"
+      },
+      {
+        "id": 432,
+        "credit_id": "52fe4271c3a36847f801f08f",
+        "department": "Art",
+        "name": "Phedon Papamichael",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 11414,
+        "credit_id": "52fe4271c3a36847f801f095",
+        "department": "Camera",
+        "name": "Maurice McEndree",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 130,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 753,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Faces",
+  "overview": "Director Cassavetes created Faces after his first experimental film Shadows. In the style of Cinema Verite the film tells the story of a marriage right before a divorce.",
+  "production_companies": [
+    {
+      "id": 452,
+      "name": "Maurice McEndree Productions"
+    },
+    {
+      "id": 453,
+      "name": "Walter Reade Organization Inc."
+    },
+    {
+      "id": 454,
+      "name": "Faces International Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0062952",
+  "release_date": "1968-11-24",
+  "original_title": "Faces",
+  "vote_count": 5,
+  "poster_path": "/9lv38wymNYrjIa0dXBswPClrTA0.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.385319422647919"
+}

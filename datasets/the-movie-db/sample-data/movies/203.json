@@ -1,0 +1,217 @@
+{
+  "budget": 500000,
+  "vote_average": 7.4,
+  "backdrop_path": "/11HyjcaDbuHQceElP9gpAshdNez.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1037,
+        "order": 0,
+        "credit_id": "52fe4226c3a36847f8007dc9",
+        "name": "Harvey Keitel",
+        "cast_id": 8,
+        "profile_path": "/oP3A0NaJShM1BbI7WwMFui72b7O.jpg",
+        "character": "Charlie Cappa"
+      },
+      {
+        "id": 380,
+        "order": 1,
+        "credit_id": "52fe4226c3a36847f8007dc5",
+        "name": "Robert De Niro",
+        "cast_id": 7,
+        "profile_path": "/8Bgdfv1oN9Mw0YuMHP6fw8KzDkc.jpg",
+        "character": "John 'Johnny Boy' Civello"
+      },
+      {
+        "id": 2555,
+        "order": 2,
+        "credit_id": "52fe4226c3a36847f8007dcd",
+        "name": "David Proval",
+        "cast_id": 9,
+        "profile_path": "/ujBzP61tYlwqWpB3oOxknl1XuEg.jpg",
+        "character": "Tony DeVienazo"
+      },
+      {
+        "id": 2556,
+        "order": 3,
+        "credit_id": "52fe4226c3a36847f8007dd1",
+        "name": "Amy Robinson",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Teresa Ronchelli"
+      },
+      {
+        "id": 2557,
+        "order": 4,
+        "credit_id": "52fe4226c3a36847f8007dd5",
+        "name": "Richard Romanus",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Michael Longo"
+      },
+      {
+        "id": 2558,
+        "order": 5,
+        "credit_id": "52fe4226c3a36847f8007dd9",
+        "name": "Cesare Danova",
+        "cast_id": 12,
+        "profile_path": "/8TZCVyWtXAT1PhALPASgS8RSiBr.jpg",
+        "character": "Giovanni Cappa"
+      },
+      {
+        "id": 2561,
+        "order": 6,
+        "credit_id": "52fe4226c3a36847f8007ddd",
+        "name": "Victor Argo",
+        "cast_id": 13,
+        "profile_path": "/kYwuOpT59qqJnssl9R4226yHSAG.jpg",
+        "character": "Mario (as Vic Argo)"
+      },
+      {
+        "id": 2563,
+        "order": 7,
+        "credit_id": "52fe4226c3a36847f8007de1",
+        "name": "George Memmoli",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Joey 'Clams' Scala"
+      },
+      {
+        "id": 2564,
+        "order": 8,
+        "credit_id": "52fe4226c3a36847f8007de5",
+        "name": "Lenny Scaletta",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Jimmy"
+      },
+      {
+        "id": 2575,
+        "order": 9,
+        "credit_id": "52fe4226c3a36847f8007de9",
+        "name": "Jean Bell",
+        "cast_id": 16,
+        "profile_path": "/sZSD8C9vlgAmIrgeWifvMlGkfkU.jpg",
+        "character": "Diane"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1032,
+        "credit_id": "52fe4226c3a36847f8007da3",
+        "department": "Directing",
+        "name": "Martin Scorsese",
+        "job": "Director",
+        "profile_path": "/yGs4PPDPTJV687P1NdydeEFzYRK.jpg"
+      },
+      {
+        "id": 2552,
+        "credit_id": "52fe4226c3a36847f8007da9",
+        "department": "Production",
+        "name": "E. Lee Perry",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1032,
+        "credit_id": "52fe4226c3a36847f8007daf",
+        "department": "Production",
+        "name": "Martin Scorsese",
+        "job": "Producer",
+        "profile_path": "/yGs4PPDPTJV687P1NdydeEFzYRK.jpg"
+      },
+      {
+        "id": 2553,
+        "credit_id": "52fe4226c3a36847f8007db5",
+        "department": "Production",
+        "name": "Jonathan T. Taplin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1032,
+        "credit_id": "52fe4226c3a36847f8007dbb",
+        "department": "Writing",
+        "name": "Martin Scorsese",
+        "job": "Screenplay",
+        "profile_path": "/yGs4PPDPTJV687P1NdydeEFzYRK.jpg"
+      },
+      {
+        "id": 2554,
+        "credit_id": "52fe4226c3a36847f8007dc1",
+        "department": "Writing",
+        "name": "Mardik Martin",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2583,
+        "credit_id": "52fe4226c3a36847f8007def",
+        "department": "Camera",
+        "name": "Kent L. Wakeford",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2585,
+        "credit_id": "52fe4226c3a36847f8007df5",
+        "department": "Sound",
+        "name": "Eric Clapton",
+        "job": "Original Music Composer",
+        "profile_path": "/5Y9eRWlz7AMR4eofCm6OVSZkc1s.jpg"
+      },
+      {
+        "id": 2588,
+        "credit_id": "52fe4226c3a36847f8007dfb",
+        "department": "Editing",
+        "name": "Sidney Levin",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 110,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 203,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Mean Streets",
+  "overview": "Two-time Academy Award-winner Robert De Niro (\"GoodFellas,\" \"The Godfather, Part II\") stars in Martin Scorsese's (\"Raging Bull,\" \"The Age of Innocence\") drama of young men coming to manhood by the code of New York's Little Italy. A harrowing, intense, and grueling dramatic experience -- brilliantly acted and directed. Also starring Academy Award-nominee Harvey Keitel (\"Pulp Fiction,\" \"The Piano\") and future producer Amy Robinson (\"After Hours,\" \"Running on Empty\"). Inducted into the Library of Congress National Film Registry. Recently selected by the prestigious American Film Institute as one of the 400 greatest American films of all time. Leonard Maltin praises this as the \"technically dazzling film that put director Scorsese on the map... and deservedly so,\" giving it his highest rating of \"****\" (four stars).",
+  "production_companies": [{
+    "id": 120,
+    "name": "Scorsese Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0070379",
+  "release_date": "1973-10-02",
+  "original_title": "Mean Streets",
+  "vote_count": 19,
+  "poster_path": "/3awGnJPs7XmGyCB2eFdxVm6GlGd.jpg",
+  "tagline": "You don't make up for your sins in church. You do it in the streets...",
+  "revenue": 0,
+  "popularity": "0.656853100899211"
+}

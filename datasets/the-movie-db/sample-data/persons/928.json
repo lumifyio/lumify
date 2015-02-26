@@ -1,0 +1,118 @@
+{
+  "birthday": "1964-11-27",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/jkj9xVFHEftdPfuDTxqLF1WgoZr.jpg",
+  "id": 928,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0274216",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 31131,
+        "media_type": "movie",
+        "title": "Outlaw of Gor",
+        "credit_id": "52fe44619251416c9100eb61",
+        "release_date": "1989-03-21",
+        "original_title": "Outlaw of Gor",
+        "adult": false,
+        "poster_path": "/ioUJRODnX4KA8OOelPsqqCmkf21.jpg",
+        "character": "Talena"
+      },
+      {
+        "id": 8388,
+        "media_type": "movie",
+        "title": "Three Amigos",
+        "credit_id": "52fe44a4c3a36847f80a1d6d",
+        "release_date": "1986-12-12",
+        "original_title": "Three Amigos",
+        "adult": false,
+        "poster_path": "/ehCzedovkiM8CnDeuSSHlRbdfxI.jpg",
+        "character": "Hot Señorita"
+      },
+      {
+        "id": 25391,
+        "media_type": "movie",
+        "title": "Cyborg 3: The Recycler",
+        "credit_id": "52fe44c6c3a368484e03616d",
+        "release_date": "1995-12-19",
+        "original_title": "Cyborg 3: The Recycler",
+        "adult": false,
+        "poster_path": "/zeNED2FRZ8aB8MV67JANIxilck6.jpg",
+        "character": "Elexia"
+      },
+      {
+        "id": 27307,
+        "media_type": "movie",
+        "title": "How I Got Into College",
+        "credit_id": "52fe4540c3a368484e04f97f",
+        "release_date": "1989-05-19",
+        "original_title": "How I Got Into College",
+        "adult": false,
+        "poster_path": "/9cKFRvbKJDCniaKFljx6wTlQNTw.jpg",
+        "character": "Game Show Hostess"
+      },
+      {
+        "id": 40391,
+        "media_type": "movie",
+        "title": "Silent Assassins",
+        "credit_id": "52fe458fc3a36847f80ce1b5",
+        "release_date": "1988-01-01",
+        "original_title": "Silent Assassins",
+        "adult": false,
+        "poster_path": "/ePWS5JrdTUw0vFKcokupr3ZQYLP.jpg",
+        "character": "Miss Amy"
+      },
+      {
+        "id": 18392,
+        "media_type": "movie",
+        "title": "Embrace of the Vampire",
+        "credit_id": "52fe47779251416c7509a6a9",
+        "release_date": "1995-01-01",
+        "original_title": "Embrace of the Vampire",
+        "adult": false,
+        "poster_path": "/uOxKpn3aY4N6JQy49pKdoIz5STE.jpg",
+        "character": "Princess"
+      },
+      {
+        "id": 86337,
+        "media_type": "movie",
+        "title": "Gor",
+        "credit_id": "52fe49819251416c910af7bb",
+        "release_date": "1987-05-08",
+        "original_title": "Gor",
+        "adult": false,
+        "poster_path": "/ho2LPf3coWs1SrMFL878OiEJ8h.jpg",
+        "character": "Talena"
+      },
+      {
+        "id": 128141,
+        "media_type": "movie",
+        "title": "California Heat",
+        "credit_id": "52fe4b13c3a368484e1764f7",
+        "release_date": "1995-01-01",
+        "original_title": "California Heat",
+        "adult": false,
+        "poster_path": "/3J5QbR16FCKNnyJFXrfyxJ05hKN.jpg",
+        "character": "Alice"
+      },
+      {
+        "id": 96,
+        "media_type": "movie",
+        "title": "Beverly Hills Cop II",
+        "credit_id": "52fe4217c3a36847f80032d5",
+        "release_date": "1987-05-18",
+        "original_title": "Beverly Hills Cop II",
+        "adult": false,
+        "poster_path": "/2y1z1baxKT0coTTRlnkI6McnR9f.jpg",
+        "character": "Playboy Playmate"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Rebecca Ferratti",
+  "place_of_birth": null,
+  "popularity": 1.0001860319502
+}

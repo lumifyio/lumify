@@ -1,0 +1,129 @@
+{
+  "budget": 0,
+  "vote_average": 8.5,
+  "backdrop_path": "/kggWFrr7Gzkno4dmArJZcG17v2x.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 7565,
+        "order": 0,
+        "credit_id": "52fe424ac3a36847f8012c65",
+        "name": "Corinne Marchand",
+        "cast_id": 4,
+        "profile_path": "/1PDv2xR3qze2J9F1biHRBSmfUDu.jpg",
+        "character": "Cléo Victoire, Florence"
+      },
+      {
+        "id": 7566,
+        "order": 1,
+        "credit_id": "52fe424ac3a36847f8012c69",
+        "name": "Antoine Bourseiller",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Antoine"
+      },
+      {
+        "id": 7568,
+        "order": 2,
+        "credit_id": "52fe424ac3a36847f8012c6d",
+        "name": "Dominique Davray",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Angèle"
+      },
+      {
+        "id": 1151713,
+        "order": 3,
+        "credit_id": "52fe424ac3a36847f8012c71",
+        "name": "Dorothée Blanck",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Dorothée"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6817,
+        "credit_id": "52fe424ac3a36847f8012c55",
+        "department": "Directing",
+        "name": "Agnès Varda",
+        "job": "Director",
+        "profile_path": "/tNFk0ma0TdBq00XYhSiV3Pbec7R.jpg"
+      },
+      {
+        "id": 6817,
+        "credit_id": "52fe424ac3a36847f8012c5b",
+        "department": "Production",
+        "name": "Agnès Varda",
+        "job": "Producer",
+        "profile_path": "/tNFk0ma0TdBq00XYhSiV3Pbec7R.jpg"
+      },
+      {
+        "id": 6817,
+        "credit_id": "52fe424ac3a36847f8012c61",
+        "department": "Writing",
+        "name": "Agnès Varda",
+        "job": "Author",
+        "profile_path": "/tNFk0ma0TdBq00XYhSiV3Pbec7R.jpg"
+      }
+    ]
+  },
+  "runtime": 90,
+  "spoken_languages": [{
+    "iso_639_1": "fr",
+    "name": "Français"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 499,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "Cléo from 5 to 7",
+  "overview": "Cléo is a pop singer who wanders around Paris while she awaits her biopsy results in fear she may have cancer. As Cléo readies herself to meet with her doctor at 7 o'clock, she meets with several friends and strangers while trying to grapple with mortality. Sensing indifference from those nearest to her, she finds herself questioning the doll-like image people have of her and is overcome by a feeling of solitude and helplessness. She finally finds some comfort in the company of stranger she meets in a park and with whom she is able to have a sincere conversation.",
+  "production_companies": [
+    {
+      "id": 14683,
+      "name": "Ciné Tamaris"
+    },
+    {
+      "id": 109,
+      "name": "Rome Paris Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0055852",
+  "release_date": "1962-09-04",
+  "original_title": "Cléo de cinq à sept",
+  "vote_count": 4,
+  "poster_path": "/tQqE3GQmhS6XFyFtuQOujdRpx6.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.214762422706401"
+}

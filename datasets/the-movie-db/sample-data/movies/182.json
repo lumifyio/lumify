@@ -1,0 +1,243 @@
+{
+  "budget": 0,
+  "vote_average": 5.5,
+  "backdrop_path": "/9prbtWjAID9HZIpLHcZgC2teIDo.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1461,
+        "order": 0,
+        "credit_id": "52fe4223c3a36847f8007005",
+        "name": "George Clooney",
+        "cast_id": 3,
+        "profile_path": "/z4SBfpKDThuQY0FsvDbajcooBdA.jpg",
+        "character": "Jake Geismar"
+      },
+      {
+        "id": 112,
+        "order": 1,
+        "credit_id": "52fe4223c3a36847f8007009",
+        "name": "Cate Blanchett",
+        "cast_id": 4,
+        "profile_path": "/wkWpYrtA1QCNv4B6L6fBTMRBiQ9.jpg",
+        "character": "Lena Brandt"
+      },
+      {
+        "id": 2219,
+        "order": 2,
+        "credit_id": "52fe4223c3a36847f800700d",
+        "name": "Tobey Maguire",
+        "cast_id": 5,
+        "profile_path": "/g423LRluvo5JjxGtEgnclsNdX7Y.jpg",
+        "character": "Tully"
+      },
+      {
+        "id": 2220,
+        "order": 3,
+        "credit_id": "52fe4223c3a36847f8007011",
+        "name": "Tony Curran",
+        "cast_id": 6,
+        "profile_path": "/8ljyYhiinZD1RlVkzy0woxfu4bY.jpg",
+        "character": "Danny"
+      },
+      {
+        "id": 2221,
+        "order": 4,
+        "credit_id": "52fe4223c3a36847f8007015",
+        "name": "Leland Orser",
+        "cast_id": 7,
+        "profile_path": "/9PtidQdsYBETZDHf4Euchp78YVm.jpg",
+        "character": "Bernie Teitel"
+      },
+      {
+        "id": 2222,
+        "order": 5,
+        "credit_id": "52fe4223c3a36847f8007019",
+        "name": "Beau Bridges",
+        "cast_id": 8,
+        "profile_path": "/xv6sDCHxHvBgCK4y96H32kxgcdr.jpg",
+        "character": "Colonel Muller"
+      },
+      {
+        "id": 12536,
+        "order": 6,
+        "credit_id": "52fe4223c3a36847f800702f",
+        "name": "Jack Thompson",
+        "cast_id": 12,
+        "profile_path": "/l2NNfs9bd6qxqzIOahcz2hErrq8.jpg",
+        "character": "Congressman Breimer"
+      },
+      {
+        "id": 79087,
+        "order": 7,
+        "credit_id": "52fe4223c3a36847f8007033",
+        "name": "Robin Weigert",
+        "cast_id": 13,
+        "profile_path": "/7Rx1DupJPMUuUU78IXQ9enlsSH5.jpg",
+        "character": "Hannelore"
+      },
+      {
+        "id": 41742,
+        "order": 8,
+        "credit_id": "52fe4223c3a36847f8007037",
+        "name": "Ravil Isyanov",
+        "cast_id": 14,
+        "profile_path": "/m5c0R8VBsuV8gdL5TFpcDCVntsE.jpg",
+        "character": "General Sikorsky"
+      },
+      {
+        "id": 114034,
+        "order": 9,
+        "credit_id": "52fe4223c3a36847f800703b",
+        "name": "Christian Oliver",
+        "cast_id": 15,
+        "profile_path": "/6OMWYee9EdhT3ubXkjetyEIjkXD.jpg",
+        "character": "Emil Brandt"
+      },
+      {
+        "id": 78598,
+        "order": 10,
+        "credit_id": "52fe4223c3a36847f800703f",
+        "name": "Dave Power",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Lieutenant Schaeffer"
+      },
+      {
+        "id": 157618,
+        "order": 11,
+        "credit_id": "52fe4223c3a36847f8007043",
+        "name": "Don Pugsley",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Gunther"
+      },
+      {
+        "id": 200094,
+        "order": 12,
+        "credit_id": "52fe4223c3a36847f8007047",
+        "name": "Dominic Comperatore",
+        "cast_id": 18,
+        "profile_path": "/1YYgwIjrdqGbuhsRkJXQW1Z9NQE.jpg",
+        "character": "Levi"
+      },
+      {
+        "id": 1278019,
+        "order": 13,
+        "credit_id": "52fe4223c3a36847f800704b",
+        "name": "John Roeder",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Gunther"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2217,
+        "credit_id": "52fe4223c3a36847f8006ffb",
+        "department": "Writing",
+        "name": "Joseph Kanon",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 1884,
+        "credit_id": "52fe4223c3a36847f8007001",
+        "department": "Directing",
+        "name": "Steven Soderbergh",
+        "job": "Director",
+        "profile_path": "/dxdMRsAosaGlMRd7EMmm9lrXXsW.jpg"
+      },
+      {
+        "id": 45543,
+        "credit_id": "52fe4223c3a36847f800701f",
+        "department": "Writing",
+        "name": "Paul Attanasio",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1884,
+        "credit_id": "52fe4223c3a36847f8007025",
+        "department": "Camera",
+        "name": "Steven Soderbergh",
+        "job": "Director of Photography",
+        "profile_path": "/dxdMRsAosaGlMRd7EMmm9lrXXsW.jpg"
+      },
+      {
+        "id": 1884,
+        "credit_id": "52fe4223c3a36847f800702b",
+        "department": "Editing",
+        "name": "Steven Soderbergh",
+        "job": "Editor",
+        "profile_path": "/dxdMRsAosaGlMRd7EMmm9lrXXsW.jpg"
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 182,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Good German",
+  "overview": "An American journalist played by George Clooney arrives in Berlin just after the end of World War Two. He becomes involved in a murder mystery surrounding a dead GI who washes up at a lakeside mansion during the Potsdam negotiations between the Allied powers. Soon his investigation connects with his search for his married pre-war German lover played by Cate Blanchett.",
+  "production_companies": [
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 14315,
+      "name": "Section Eight Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0452624",
+  "release_date": "2006-12-08",
+  "original_title": "The Good German",
+  "vote_count": 10,
+  "poster_path": "/3eELLBj64Rtu8AdFpzMl12q6bYV.jpg",
+  "tagline": "If war is Hell, then what comes after?",
+  "revenue": 0,
+  "popularity": "0.631314214177709"
+}

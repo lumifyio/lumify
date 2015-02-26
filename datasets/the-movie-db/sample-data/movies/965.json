@@ -1,0 +1,242 @@
+{
+  "budget": 0,
+  "vote_average": 7.6,
+  "backdrop_path": "/aSeQ1JXkRDszmjUHqVr2dWpGGe0.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 7664,
+        "order": 0,
+        "credit_id": "52fe4294c3a36847f8029b8f",
+        "name": "Joseph Cotten",
+        "cast_id": 15,
+        "profile_path": "/bTUTrTnzacCQV4F0rs1xH4QaETf.jpg",
+        "character": "Eugene"
+      },
+      {
+        "id": 14515,
+        "order": 1,
+        "credit_id": "52fe4294c3a36847f8029b93",
+        "name": "Dolores Costello",
+        "cast_id": 16,
+        "profile_path": "/hLK7G9mvDtQfBatXs3djYpyvH44.jpg",
+        "character": "Isabel"
+      },
+      {
+        "id": 10606,
+        "order": 2,
+        "credit_id": "52fe4294c3a36847f8029b97",
+        "name": "Anne Baxter",
+        "cast_id": 17,
+        "profile_path": "/jOnJoazpO6q2vAVL37IQfzQbjav.jpg",
+        "character": "Lucy"
+      },
+      {
+        "id": 14517,
+        "order": 3,
+        "credit_id": "52fe4294c3a36847f8029b9b",
+        "name": "Tim Holt",
+        "cast_id": 18,
+        "profile_path": "/buXEx1oCl76QayzlIRQ2sz5kCBL.jpg",
+        "character": "George"
+      },
+      {
+        "id": 11025,
+        "order": 4,
+        "credit_id": "52fe4294c3a36847f8029b9f",
+        "name": "Agnes Moorehead",
+        "cast_id": 19,
+        "profile_path": "/5FzeKtI94nExMbdY9GCsLVJUMgf.jpg",
+        "character": "Fanny"
+      },
+      {
+        "id": 14518,
+        "order": 5,
+        "credit_id": "52fe4294c3a36847f8029ba3",
+        "name": "Ray Collins",
+        "cast_id": 20,
+        "profile_path": "/gJe4Jfdzi01MoQ9eRTr9v4FyD76.jpg",
+        "character": "Jack"
+      },
+      {
+        "id": 14364,
+        "order": 6,
+        "credit_id": "52fe4294c3a36847f8029ba7",
+        "name": "Erskine Sanford",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Roger Bronson"
+      },
+      {
+        "id": 14519,
+        "order": 7,
+        "credit_id": "52fe4294c3a36847f8029bab",
+        "name": "Richard Bennett",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Maj. Amberson"
+      },
+      {
+        "id": 40,
+        "order": 8,
+        "credit_id": "52fe4294c3a36847f8029baf",
+        "name": "Orson Welles",
+        "cast_id": 23,
+        "profile_path": "/pZz07JqawZP3eKUwpaAZq63vEmF.jpg",
+        "character": "Narrator (voice)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 40,
+        "credit_id": "52fe4294c3a36847f8029b3d",
+        "department": "Directing",
+        "name": "Orson Welles",
+        "job": "Director",
+        "profile_path": "/pZz07JqawZP3eKUwpaAZq63vEmF.jpg"
+      },
+      {
+        "id": 40,
+        "credit_id": "52fe4294c3a36847f8029b43",
+        "department": "Writing",
+        "name": "Orson Welles",
+        "job": "Screenplay",
+        "profile_path": "/pZz07JqawZP3eKUwpaAZq63vEmF.jpg"
+      },
+      {
+        "id": 40,
+        "credit_id": "52fe4294c3a36847f8029b49",
+        "department": "Production",
+        "name": "Orson Welles",
+        "job": "Producer",
+        "profile_path": "/pZz07JqawZP3eKUwpaAZq63vEmF.jpg"
+      },
+      {
+        "id": 14510,
+        "credit_id": "52fe4294c3a36847f8029b4f",
+        "department": "Production",
+        "name": "Jack Moss",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 11035,
+        "credit_id": "52fe4294c3a36847f8029b55",
+        "department": "Production",
+        "name": "George Schaefer",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1045,
+        "credit_id": "52fe4294c3a36847f8029b5b",
+        "department": "Sound",
+        "name": "Bernard Herrmann",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7648,
+        "credit_id": "52fe4294c3a36847f8029b61",
+        "department": "Camera",
+        "name": "Stanley Cortez",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4349,
+        "credit_id": "52fe4294c3a36847f8029b67",
+        "department": "Art",
+        "name": "Albert S. D'Agostino",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 7338,
+        "credit_id": "52fe4294c3a36847f8029b6d",
+        "department": "Art",
+        "name": "Darrell Silvera",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 10153,
+        "credit_id": "52fe4294c3a36847f8029b73",
+        "department": "Costume & Make-Up",
+        "name": "Edward Stevenson",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 14511,
+        "credit_id": "52fe4294c3a36847f8029b79",
+        "department": "Directing",
+        "name": "Fred Fleck",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 14512,
+        "credit_id": "52fe4294c3a36847f8029b7f",
+        "department": "Crew",
+        "name": "Bailey Fesler",
+        "job": "Sound Recordist",
+        "profile_path": null
+      },
+      {
+        "id": 14513,
+        "credit_id": "52fe4294c3a36847f8029b85",
+        "department": "Crew",
+        "name": "James G. Stewart",
+        "job": "Sound Recordist",
+        "profile_path": null
+      },
+      {
+        "id": 3252,
+        "credit_id": "52fe4294c3a36847f8029b8b",
+        "department": "Crew",
+        "name": "Vernon L. Walker",
+        "job": "Special Effects",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 88,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 965,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Magnificent Ambersons",
+  "overview": "The Magnificent Ambersons is director Orson Welles\u2019 second film which according to him is better than his first film Citizen Kane. The family saga tells the fate of the Amberson family.",
+  "production_companies": [
+    {
+      "id": 11447,
+      "name": "Mercury Productions"
+    },
+    {
+      "id": 6,
+      "name": "RKO Radio Pictures"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0035015",
+  "release_date": "1942-07-10",
+  "original_title": "The Magnificent Ambersons",
+  "vote_count": 5,
+  "poster_path": "/xIpdXKQrt0ZFkbg1KODh80THwTp.jpg",
+  "tagline": "Orson Welles' Mercury Production of Booth Tarkington's Great Novel",
+  "revenue": 0,
+  "popularity": "0.212914319870445"
+}

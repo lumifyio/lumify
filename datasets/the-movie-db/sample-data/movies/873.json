@@ -1,0 +1,377 @@
+{
+  "budget": 15000000,
+  "vote_average": 7.6,
+  "backdrop_path": "/mGzHgeXhGSRVMfwq0oo7VAltiZH.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2395,
+        "order": 0,
+        "credit_id": "52fe4285c3a36847f802580b",
+        "name": "Whoopi Goldberg",
+        "cast_id": 19,
+        "profile_path": "/n3lF8w4X4rDa4J2LMDIxMEcuUeH.jpg",
+        "character": "Celie"
+      },
+      {
+        "id": 13307,
+        "order": 1,
+        "credit_id": "52fe4285c3a36847f802580f",
+        "name": "Margaret Avery",
+        "cast_id": 20,
+        "profile_path": "/fgl2niNcBqHCPEw9TAjcwIIEqiq.jpg",
+        "character": "Shug Avery"
+      },
+      {
+        "id": 2047,
+        "order": 2,
+        "credit_id": "52fe4285c3a36847f8025813",
+        "name": "Danny Glover",
+        "cast_id": 21,
+        "profile_path": "/jSNTEnm0Sxm8FRtoBfJmhmQyozH.jpg",
+        "character": "Albert"
+      },
+      {
+        "id": 13308,
+        "order": 3,
+        "credit_id": "52fe4285c3a36847f8025817",
+        "name": "Akosua Busia",
+        "cast_id": 22,
+        "profile_path": "/wxelYaGa4xWcFhII3EebwX5pscZ.jpg",
+        "character": "Netti"
+      },
+      {
+        "id": 13309,
+        "order": 4,
+        "credit_id": "52fe4285c3a36847f802581b",
+        "name": "Oprah Winfrey",
+        "cast_id": 23,
+        "profile_path": "/jlsGiD71V3sZYrGG5aNgcQsElMn.jpg",
+        "character": "Sofia"
+      },
+      {
+        "id": 13310,
+        "order": 5,
+        "credit_id": "52fe4285c3a36847f802581f",
+        "name": "Willard E. Pugh",
+        "cast_id": 24,
+        "profile_path": "/iihJATSCFfsXnjcKR6OMDm1bDSS.jpg",
+        "character": "Harpo"
+      },
+      {
+        "id": 13311,
+        "order": 6,
+        "credit_id": "52fe4285c3a36847f8025823",
+        "name": "Desreta Jackson",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Young Celie Harris"
+      },
+      {
+        "id": 13312,
+        "order": 7,
+        "credit_id": "52fe4285c3a36847f8025827",
+        "name": "Rae Dawn Chong",
+        "cast_id": 26,
+        "profile_path": "/1PsWKOXvH07V8ptJ1LjAuU8g07L.jpg",
+        "character": "Squeak"
+      },
+      {
+        "id": 13313,
+        "order": 8,
+        "credit_id": "52fe4285c3a36847f802582b",
+        "name": "Adolph Caesar",
+        "cast_id": 27,
+        "profile_path": "/hSOR5aPnQ2Bp1ZoyH4OOG5DMkvV.jpg",
+        "character": "Old Mister"
+      },
+      {
+        "id": 13314,
+        "order": 9,
+        "credit_id": "52fe4285c3a36847f802582f",
+        "name": "Dana Ivey",
+        "cast_id": 28,
+        "profile_path": "/ewYWFkaZ1oon5BMMlx54OWl9MEo.jpg",
+        "character": "Miss Millie"
+      },
+      {
+        "id": 13315,
+        "order": 10,
+        "credit_id": "52fe4285c3a36847f8025833",
+        "name": "Leonard Jackson",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Pa"
+      },
+      {
+        "id": 13316,
+        "order": 11,
+        "credit_id": "52fe4285c3a36847f8025837",
+        "name": "Ben Guillory",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Grady"
+      },
+      {
+        "id": 956838,
+        "order": 12,
+        "credit_id": "52fe4285c3a36847f8025847",
+        "name": "John Patton Jr.",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Preacher"
+      },
+      {
+        "id": 72740,
+        "order": 13,
+        "credit_id": "52fe4285c3a36847f802584b",
+        "name": "Carl Anderson",
+        "cast_id": 34,
+        "profile_path": "/bL9rkbAxVlxKBURw5SmUobFumpO.jpg",
+        "character": "Reverend Samuel"
+      },
+      {
+        "id": 162869,
+        "order": 14,
+        "credit_id": "52fe4285c3a36847f802584f",
+        "name": "Susan Beaubian",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Corrine"
+      },
+      {
+        "id": 1119468,
+        "order": 15,
+        "credit_id": "52fe4285c3a36847f8025853",
+        "name": "James Tillis",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Buster"
+      },
+      {
+        "id": 1119469,
+        "order": 16,
+        "credit_id": "52fe4285c3a36847f8025857",
+        "name": "Phillip Strong",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Mayor"
+      },
+      {
+        "id": 2975,
+        "order": 17,
+        "credit_id": "52fe4285c3a36847f802585b",
+        "name": "Laurence Fishburne",
+        "cast_id": 38,
+        "profile_path": "/mh0lZ1XsT84FayMNiT6Erh91mVu.jpg",
+        "character": "Swain"
+      },
+      {
+        "id": 1119470,
+        "order": 18,
+        "credit_id": "52fe4285c3a36847f802585f",
+        "name": "Peto Kinsaka",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Adam"
+      },
+      {
+        "id": 1119471,
+        "order": 19,
+        "credit_id": "52fe4285c3a36847f8025863",
+        "name": "Lelo Masamba",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Olivia"
+      }
+    ],
+    "crew": [
+      {
+        "id": 488,
+        "credit_id": "52fe4285c3a36847f80257ad",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 13300,
+        "credit_id": "52fe4285c3a36847f80257b3",
+        "department": "Writing",
+        "name": "Alice Walker",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 736,
+        "credit_id": "52fe4285c3a36847f80257b9",
+        "department": "Writing",
+        "name": "Menno Meyjes",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4285c3a36847f80257bf",
+        "department": "Production",
+        "name": "Steven Spielberg",
+        "job": "Producer",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 664,
+        "credit_id": "52fe4285c3a36847f80257c5",
+        "department": "Production",
+        "name": "Frank Marshall",
+        "job": "Producer",
+        "profile_path": "/iZrDellT1OWf1syKzBgQHjY2hJe.jpg"
+      },
+      {
+        "id": 489,
+        "credit_id": "52fe4285c3a36847f80257cb",
+        "department": "Production",
+        "name": "Kathleen Kennedy",
+        "job": "Producer",
+        "profile_path": "/uHEExgTTzJNDX1Gal9CW5n3QdEJ.jpg"
+      },
+      {
+        "id": 13301,
+        "credit_id": "52fe4285c3a36847f80257d1",
+        "department": "Production",
+        "name": "Quincy Jones",
+        "job": "Producer",
+        "profile_path": "/mV7hXHeUSXV7KZEfsxJ8lMrKpAt.jpg"
+      },
+      {
+        "id": 3804,
+        "credit_id": "52fe4285c3a36847f80257d7",
+        "department": "Production",
+        "name": "Peter Guber",
+        "job": "Executive Producer",
+        "profile_path": "/ndfEiDJFkjAHojchBDjOshZIxwz.jpg"
+      },
+      {
+        "id": 13302,
+        "credit_id": "52fe4285c3a36847f80257dd",
+        "department": "Production",
+        "name": "Carole Isenberg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3805,
+        "credit_id": "52fe4285c3a36847f80257e3",
+        "department": "Production",
+        "name": "Jon Peters",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9965,
+        "credit_id": "52fe4285c3a36847f80257e9",
+        "department": "Camera",
+        "name": "Allen Daviau",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 493,
+        "credit_id": "52fe4285c3a36847f80257ef",
+        "department": "Editing",
+        "name": "Michael Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13304,
+        "credit_id": "52fe4285c3a36847f80257f5",
+        "department": "Art",
+        "name": "J. Michael Riva",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5133,
+        "credit_id": "52fe4285c3a36847f80257fb",
+        "department": "Art",
+        "name": "Bo Welch",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8428,
+        "credit_id": "52fe4285c3a36847f8025801",
+        "department": "Costume & Make-Up",
+        "name": "Aggie Guerard Rodgers",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 13306,
+        "credit_id": "52fe4285c3a36847f8025807",
+        "department": "Costume & Make-Up",
+        "name": "Richard Alonzo",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 13301,
+        "credit_id": "52fe4285c3a36847f802583d",
+        "department": "Sound",
+        "name": "Quincy Jones",
+        "job": "Original Music Composer",
+        "profile_path": "/mV7hXHeUSXV7KZEfsxJ8lMrKpAt.jpg"
+      },
+      {
+        "id": 602,
+        "credit_id": "52fe4285c3a36847f8025843",
+        "department": "Art",
+        "name": "Linda DeScenna",
+        "job": "Set Decoration",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 154,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 873,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Color Purple",
+  "overview": "In the southern United States in the 1930s, a male-dominated African American woman fights her way through a troubled life.",
+  "production_companies": [
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    },
+    {
+      "id": 4357,
+      "name": "The Guber-Peters Company"
+    },
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0088939",
+  "release_date": "1985-12-18",
+  "original_title": "The Color Purple",
+  "vote_count": 34,
+  "poster_path": "/2a50LyRInWGLWq3u3DeGBQnvBHR.jpg",
+  "tagline": "It's about life. It's about love. It's about all of us.",
+  "revenue": 98467863,
+  "popularity": "0.421202379409522"
+}

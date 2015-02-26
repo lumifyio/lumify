@@ -1,0 +1,243 @@
+{
+  "budget": 8000000,
+  "vote_average": 5.8,
+  "backdrop_path": "/pXor0Uw2IeOMvyW6k2hyMAg3n9Q.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1271,
+        "order": 0,
+        "credit_id": "52fe423ec3a36847f800f323",
+        "name": "Andy García",
+        "cast_id": 3,
+        "profile_path": "/q3LAfRFLNhnNrIp7BFthDDosEHt.jpg",
+        "character": "Jimmy 'The Saint' Tosnia"
+      },
+      {
+        "id": 1062,
+        "order": 1,
+        "credit_id": "52fe423ec3a36847f800f327",
+        "name": "Christopher Lloyd",
+        "cast_id": 4,
+        "profile_path": "/iQzG9apaIsHnn7iGrer3YEDp8Zo.jpg",
+        "character": "Pieces"
+      },
+      {
+        "id": 4520,
+        "order": 2,
+        "credit_id": "52fe423ec3a36847f800f32b",
+        "name": "William Forsythe",
+        "cast_id": 5,
+        "profile_path": "/3oaz2y7hIm3r3OyDKvQ1i2D8cLR.jpg",
+        "character": "Franchise"
+      },
+      {
+        "id": 5502,
+        "order": 3,
+        "credit_id": "52fe423ec3a36847f800f32f",
+        "name": "Bill Nunn",
+        "cast_id": 6,
+        "profile_path": "/cT4sK7SCranK3yeelYTHMlTaq3a.jpg",
+        "character": "Easy Wind"
+      },
+      {
+        "id": 4515,
+        "order": 4,
+        "credit_id": "52fe423ec3a36847f800f333",
+        "name": "Treat Williams",
+        "cast_id": 7,
+        "profile_path": "/uKejRJTEVOy6IOsJX2mJH3SwbTl.jpg",
+        "character": "Critical Bill"
+      },
+      {
+        "id": 5251,
+        "order": 5,
+        "credit_id": "52fe423ec3a36847f800f337",
+        "name": "Jack Warden",
+        "cast_id": 8,
+        "profile_path": "/7Pfj27pVjkQIu5HS85MlGdsl7MQ.jpg",
+        "character": "Joe Heff"
+      },
+      {
+        "id": 884,
+        "order": 6,
+        "credit_id": "52fe423ec3a36847f800f33b",
+        "name": "Steve Buscemi",
+        "cast_id": 9,
+        "profile_path": "/7sDzFRScCv85usSwPG01BTac7UY.jpg",
+        "character": "Mister Shhh"
+      },
+      {
+        "id": 826,
+        "order": 7,
+        "credit_id": "52fe423ec3a36847f800f33f",
+        "name": "Fairuza Balk",
+        "cast_id": 10,
+        "profile_path": "/cpeniV326TyPyzryxgbAWiXmLkz.jpg",
+        "character": "Lucinda"
+      },
+      {
+        "id": 5503,
+        "order": 8,
+        "credit_id": "52fe423ec3a36847f800f343",
+        "name": "Gabrielle Anwar",
+        "cast_id": 11,
+        "profile_path": "/khnEDczzSy6UcbnqZ6Sb4lWxnkE.jpg",
+        "character": "Dagney"
+      },
+      {
+        "id": 4690,
+        "order": 9,
+        "credit_id": "52fe423ec3a36847f800f347",
+        "name": "Christopher Walken",
+        "cast_id": 12,
+        "profile_path": "/t0gzpYe6FOWH1yKeRBOIpTKgFsB.jpg",
+        "character": "The Man with the Plan"
+      },
+      {
+        "id": 5504,
+        "order": 10,
+        "credit_id": "52fe423ec3a36847f800f34b",
+        "name": "Michael Nicolosi",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Bernard"
+      },
+      {
+        "id": 5601,
+        "order": 11,
+        "credit_id": "52fe423ec3a36847f800f373",
+        "name": "Sarah Trigger",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Meg"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5501,
+        "credit_id": "52fe423ec3a36847f800f319",
+        "department": "Directing",
+        "name": "Gary Fleder",
+        "job": "Director",
+        "profile_path": "/rRxdnJbRT8Ygg8KNpdoxULszClx.jpg"
+      },
+      {
+        "id": 3228,
+        "credit_id": "52fe423ec3a36847f800f31f",
+        "department": "Writing",
+        "name": "Scott Rosenberg",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5505,
+        "credit_id": "52fe423ec3a36847f800f351",
+        "department": "Production",
+        "name": "Cary Woods",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4055,
+        "credit_id": "52fe423ec3a36847f800f357",
+        "department": "Sound",
+        "name": "Michael Convertino",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5506,
+        "credit_id": "52fe423ec3a36847f800f35d",
+        "department": "Camera",
+        "name": "Elliot Davis",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3175,
+        "credit_id": "52fe423ec3a36847f800f363",
+        "department": "Editing",
+        "name": "Richard Marks",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5507,
+        "credit_id": "52fe423ec3a36847f800f369",
+        "department": "Production",
+        "name": "Ronnie Yeskel",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5508,
+        "credit_id": "52fe423ec3a36847f800f36f",
+        "department": "Art",
+        "name": "Nelson Coates",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 115,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 400,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Things to Do in Denver When You're Dead",
+  "overview": "A mafia film in Tarantino style with a star-studded cast. Jimmy\u2019s \u201cThe Saint\u201d gangster career has finally ended. Yet now he finds him self doing favors for a wise godfather known as \u201cThe Man with the Plan.\u201d",
+  "production_companies": [{
+    "id": 14,
+    "name": "Miramax Films"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0114660",
+  "release_date": "1995-12-01",
+  "original_title": "Things to Do in Denver When You're Dead",
+  "vote_count": 7,
+  "poster_path": "/cBl7Yms567eR7UDhLOX8qI0LH0L.jpg",
+  "tagline": "Protect. Love. Honor. Avenge.",
+  "revenue": 529766,
+  "popularity": "0.565161234625868"
+}

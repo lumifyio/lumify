@@ -1,0 +1,96 @@
+{
+  "birthday": "1971-08-20",
+  "adult": false,
+  "biography": null,
+  "homepage": "",
+  "profile_path": "/1cKtw6cBhWPHtjUBiY3si8odVIE.jpg",
+  "id": 690,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0702841",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 87,
+        "media_type": "movie",
+        "title": "Indiana Jones and the Temple of Doom",
+        "credit_id": "52fe4215c3a36847f8002c11",
+        "release_date": "1984-05-22",
+        "original_title": "Indiana Jones and the Temple of Doom",
+        "adult": false,
+        "poster_path": "/f2nTRKk2zGdUTE7tLJ5EGGSuKA6.jpg",
+        "character": "Short Round"
+      },
+      {
+        "id": 45385,
+        "media_type": "movie",
+        "title": "Second Time Around",
+        "credit_id": "52fe46c0c3a36847f8110235",
+        "release_date": "2002-01-11",
+        "original_title": "Mou han fou wut",
+        "adult": false,
+        "poster_path": "/bYnXCNl6Xpcm1oG2wD38KSinILW.jpg",
+        "character": "Sing Wong"
+      },
+      {
+        "id": 69056,
+        "media_type": "movie",
+        "title": "Breathing Fire",
+        "credit_id": "52fe47b7c3a368484e0d5bcb",
+        "release_date": "1991-09-25",
+        "original_title": "Breathing Fire",
+        "adult": false,
+        "poster_path": "/jPaU6LsAL2rr6fmVylUK9x3vncU.jpg",
+        "character": "Charlie Moore"
+      },
+      {
+        "id": 9340,
+        "media_type": "movie",
+        "title": "The Goonies",
+        "credit_id": "52fe44eac3a36847f80b17f1",
+        "release_date": "1985-06-06",
+        "original_title": "The Goonies",
+        "adult": false,
+        "poster_path": "/bZUbpjwnarSHJK40W9sGpyedWhx.jpg",
+        "character": "Richard 'Data' Wang"
+      },
+      {
+        "id": 2589,
+        "media_type": "tv",
+        "episode_count": 114,
+        "credit_id": "52573d9a760ee36aaa048336",
+        "name": "Head of the Class",
+        "poster_path": "/Dyy3E7SqkeuYpiQET2rIwsGPxZ.jpg",
+        "original_name": "Head of the Class",
+        "first_air_date": "1986-09-17",
+        "character": ""
+      },
+      {
+        "id": 2391,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257351f760ee3776a39bdc5",
+        "name": "Tales from the Crypt",
+        "poster_path": "/eN5mW5SVCtsu7AycQtZSTnOoLot.jpg",
+        "original_name": "Tales from the Crypt",
+        "first_air_date": "1989-06-10",
+        "character": ""
+      },
+      {
+        "id": 11023,
+        "media_type": "tv",
+        "episode_count": 19,
+        "credit_id": "52580a9c19c29531db3fb910",
+        "name": "Together We Stand",
+        "poster_path": null,
+        "original_name": "Together We Stand",
+        "first_air_date": "1986-09-22",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Jonathan Ke Quan",
+  "place_of_birth": "Saigon",
+  "popularity": "1.01369125583672"
+}

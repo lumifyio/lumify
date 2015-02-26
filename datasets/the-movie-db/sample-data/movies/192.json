@@ -1,0 +1,402 @@
+{
+  "budget": 20000000,
+  "vote_average": 7,
+  "backdrop_path": "/qthiIjX8Lt4Jg6hqPAdp2EIyJss.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 738,
+        "order": 0,
+        "credit_id": "52fe4225c3a36847f800763d",
+        "name": "Sean Connery",
+        "cast_id": 16,
+        "profile_path": "/ce84udJZ9QRSR44jxwK2apM3DM8.jpg",
+        "character": "William of Baskerville"
+      },
+      {
+        "id": 2224,
+        "order": 1,
+        "credit_id": "52fe4225c3a36847f8007641",
+        "name": "Christian Slater",
+        "cast_id": 17,
+        "profile_path": "/9CB3uFqhYla5QTzyRbQ2dJBzepJ.jpg",
+        "character": "Adso of Melk"
+      },
+      {
+        "id": 2367,
+        "order": 2,
+        "credit_id": "52fe4225c3a36847f8007645",
+        "name": "Helmut Qualtinger",
+        "cast_id": 18,
+        "profile_path": "/sgSX0fYUBre1dqGgbsTC4Vi0BZf.jpg",
+        "character": "Remigio de Varagine"
+      },
+      {
+        "id": 2368,
+        "order": 3,
+        "credit_id": "52fe4225c3a36847f8007649",
+        "name": "Elya Baskin",
+        "cast_id": 19,
+        "profile_path": "/tM5oF8bl5p1LfgXCkDAh8JYOLiU.jpg",
+        "character": "Severinus"
+      },
+      {
+        "id": 2371,
+        "order": 4,
+        "credit_id": "52fe4225c3a36847f800764d",
+        "name": "Feodor Chaliapin, Jr.",
+        "cast_id": 20,
+        "profile_path": "/fB2wL1MEqOmNrlJ7gDM9pgRvocq.jpg",
+        "character": "Jorge de Burgos"
+      },
+      {
+        "id": 2173,
+        "order": 5,
+        "credit_id": "52fe4225c3a36847f8007651",
+        "name": "Valentina Vargas",
+        "cast_id": 21,
+        "profile_path": "/rG1QVgI2giG46XiYL0coozKzJ2H.jpg",
+        "character": "The Girl"
+      },
+      {
+        "id": 2372,
+        "order": 6,
+        "credit_id": "52fe4225c3a36847f8007655",
+        "name": "Ron Perlman",
+        "cast_id": 22,
+        "profile_path": "/xZyrXT2iEmSOokQRc1hedmxrbTi.jpg",
+        "character": "Salvatore"
+      },
+      {
+        "id": 2373,
+        "order": 7,
+        "credit_id": "52fe4225c3a36847f8007659",
+        "name": "Lucien Bodard",
+        "cast_id": 23,
+        "profile_path": "/32E18j61qgCTSljV2OBz2eD7ORr.jpg",
+        "character": "Cardinal Bertrand"
+      },
+      {
+        "id": 1164,
+        "order": 8,
+        "credit_id": "52fe4225c3a36847f800765d",
+        "name": "F. Murray Abraham",
+        "cast_id": 24,
+        "profile_path": "/luHava7pnJLEqGH05bqENXkOsKH.jpg",
+        "character": "Bernardo Gui"
+      },
+      {
+        "id": 2374,
+        "order": 9,
+        "credit_id": "52fe4225c3a36847f8007661",
+        "name": "Dwight Weist",
+        "cast_id": 25,
+        "profile_path": "/beXKkE6tJ3DXtepD463yjcDcznJ.jpg",
+        "character": "Adso as Old Man (voice)"
+      },
+      {
+        "id": 2369,
+        "order": 10,
+        "credit_id": "52fe4225c3a36847f8007665",
+        "name": "Michael Lonsdale",
+        "cast_id": 26,
+        "profile_path": "/3C07s7mFBEFoV1ye7jDdoNWrN8b.jpg",
+        "character": "The Abbot"
+      },
+      {
+        "id": 2370,
+        "order": 11,
+        "credit_id": "52fe4225c3a36847f8007669",
+        "name": "Volker Prechtel",
+        "cast_id": 27,
+        "profile_path": "/phEHxCDidfdrCWoZ7Cj8rxCiFVv.jpg",
+        "character": "Malachias"
+      },
+      {
+        "id": 2375,
+        "order": 12,
+        "credit_id": "52fe4225c3a36847f800766d",
+        "name": "Lars Bodin-Jorgensen",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Adelmo"
+      },
+      {
+        "id": 2376,
+        "order": 13,
+        "credit_id": "52fe4225c3a36847f8007671",
+        "name": "Urs Althaus",
+        "cast_id": 29,
+        "profile_path": "/eOFu7foiVOX5ydZ5Lwop0Uwuj77.jpg",
+        "character": "Venantius"
+      },
+      {
+        "id": 2377,
+        "order": 14,
+        "credit_id": "52fe4225c3a36847f8007675",
+        "name": "Michael Habeck",
+        "cast_id": 30,
+        "profile_path": "/aZ3RjWeBf7oULzw02F4KMPpBN7q.jpg",
+        "character": "Berengar"
+      }
+    ],
+    "crew": [
+      {
+        "id": 124454,
+        "credit_id": "53578e17c3a368561900289e",
+        "department": "Production",
+        "name": "Bernd Schaefers",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 235398,
+        "credit_id": "53578e3bc3a36855f2002985",
+        "department": "Production",
+        "name": "Gianni Arduini",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 21680,
+        "credit_id": "53578e53c3a36855f2002988",
+        "department": "Production",
+        "name": "Dominique Besnehard",
+        "job": "Casting",
+        "profile_path": "/xh3UJRvzFdFfliMIBYvetL5olYZ.jpg"
+      },
+      {
+        "id": 970,
+        "credit_id": "53578e69c3a36855f200298a",
+        "department": "Production",
+        "name": "Celestia Fox",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5490,
+        "credit_id": "53578e8fc3a36855f200298c",
+        "department": "Production",
+        "name": "David Rubin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 49103,
+        "credit_id": "53578ebec3a3685621002941",
+        "department": "Production",
+        "name": "Sabine Schroth",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1304,
+        "credit_id": "53578eddc3a36855eb0028ab",
+        "department": "Costume & Make-Up",
+        "name": "Gabriella Pescucci",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 2352,
+        "credit_id": "52fe4224c3a36847f80075e5",
+        "department": "Directing",
+        "name": "Jean-Jacques Annaud",
+        "job": "Director",
+        "profile_path": "/wWECpMbiIcKZF8VXsNfxJVeW2Rr.jpg"
+      },
+      {
+        "id": 673,
+        "credit_id": "52fe4224c3a36847f80075eb",
+        "department": "Production",
+        "name": "Bernd Eichinger",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2353,
+        "credit_id": "52fe4224c3a36847f80075f1",
+        "department": "Writing",
+        "name": "Umberto Eco",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 2355,
+        "credit_id": "52fe4224c3a36847f80075f7",
+        "department": "Writing",
+        "name": "Andrew Birkin",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2356,
+        "credit_id": "52fe4224c3a36847f80075fd",
+        "department": "Writing",
+        "name": "Gérard Brach",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2357,
+        "credit_id": "52fe4224c3a36847f8007603",
+        "department": "Writing",
+        "name": "Howard Franklin",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2358,
+        "credit_id": "52fe4224c3a36847f8007609",
+        "department": "Writing",
+        "name": "Alain Godard",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2359,
+        "credit_id": "52fe4224c3a36847f800760f",
+        "department": "Production",
+        "name": "Jake Eberts",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2360,
+        "credit_id": "52fe4225c3a36847f8007615",
+        "department": "Production",
+        "name": "Thomas Schühly",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1729,
+        "credit_id": "52fe4225c3a36847f800761b",
+        "department": "Sound",
+        "name": "James Horner",
+        "job": "Original Music Composer",
+        "profile_path": "/iEiRtIdTjlwxrh1dF27RFbLl9LD.jpg"
+      },
+      {
+        "id": 2361,
+        "credit_id": "52fe4225c3a36847f8007621",
+        "department": "Camera",
+        "name": "Tonino Delli Colli",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2362,
+        "credit_id": "52fe4225c3a36847f8007627",
+        "department": "Editing",
+        "name": "Jane Seitz",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2364,
+        "credit_id": "52fe4225c3a36847f8007633",
+        "department": "Sound",
+        "name": "Frank Jahn",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 2366,
+        "credit_id": "52fe4225c3a36847f8007639",
+        "department": "Art",
+        "name": "Dante Ferretti",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2378,
+        "credit_id": "52fe4225c3a36847f800767b",
+        "department": "Production",
+        "name": "Franco Cristaldi",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2379,
+        "credit_id": "52fe4225c3a36847f8007681",
+        "department": "Production",
+        "name": "Alexandre Mnouchkine",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 130,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "la",
+      "name": "Latin"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 192,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "The Name of the Rose",
+  "overview": "The Franciscan friar William of Baskerville and his young apprentice investigate a series of mysterious deaths in a medieval abbey.",
+  "production_companies": [
+    {
+      "id": 47,
+      "name": "Constantin Film"
+    },
+    {
+      "id": 48,
+      "name": "Cristaldifilm S.r.l."
+    },
+    {
+      "id": 7110,
+      "name": "Les Films Ariane"
+    },
+    {
+      "id": 4606,
+      "name": "Zweites Deutsches Fernsehen (ZDF)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0091605",
+  "release_date": "1986-09-24",
+  "original_title": "The Name of the Rose",
+  "vote_count": 122,
+  "poster_path": "/dk3Vmp86t4lacnI3sQuU9ihOCUh.jpg",
+  "tagline": "They believed in God, but traded with the Devil",
+  "revenue": 77200000,
+  "popularity": "1.62239742819454"
+}

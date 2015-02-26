@@ -1,0 +1,295 @@
+{
+  "budget": 3500000,
+  "vote_average": 7.5,
+  "backdrop_path": "/8u2L2sHHAQVJ4xksOMzuYvL4SPx.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 55636,
+        "order": 0,
+        "credit_id": "52fe4264c3a36847f801af75",
+        "name": "Donald Sutherland",
+        "cast_id": 17,
+        "profile_path": "/tPLVaPjxEscGPKS3ieByloa8Mqj.jpg",
+        "character": "Captain Benjamin Franklin 'Hawkeye' Pierce"
+      },
+      {
+        "id": 827,
+        "order": 1,
+        "credit_id": "52fe4264c3a36847f801af79",
+        "name": "Elliott Gould",
+        "cast_id": 18,
+        "profile_path": "/bo5jSwWyFRsKVAkELT9n7AKQqMk.jpg",
+        "character": "Captain John Francis Xavier 'Trapper John' McIntyre"
+      },
+      {
+        "id": 4139,
+        "order": 2,
+        "credit_id": "52fe4264c3a36847f801af7d",
+        "name": "Tom Skerritt",
+        "cast_id": 19,
+        "profile_path": "/fceYkRIZkLKIbpIxPg0jVUIci50.jpg",
+        "character": "Captain Augustus Bedford 'Duke' Forrest"
+      },
+      {
+        "id": 9805,
+        "order": 3,
+        "credit_id": "52fe4264c3a36847f801af81",
+        "name": "Sally Kellerman",
+        "cast_id": 20,
+        "profile_path": "/5MeWRlE2F8S6tGiPx3hZHdDGVml.jpg",
+        "character": "Major Margaret 'Hot Lips' O'Houlihan"
+      },
+      {
+        "id": 3087,
+        "order": 4,
+        "credit_id": "52fe4264c3a36847f801af85",
+        "name": "Robert Duvall",
+        "cast_id": 21,
+        "profile_path": "/1aBC7NxPy10ofng6HsJBecJ1vMZ.jpg",
+        "character": "Major Franklin Archimedes 'Frank' Burns"
+      },
+      {
+        "id": 9806,
+        "order": 5,
+        "credit_id": "52fe4264c3a36847f801af89",
+        "name": "Roger Bowen",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Lt. Col. Henry Barymore Adlai Blake"
+      },
+      {
+        "id": 9807,
+        "order": 6,
+        "credit_id": "52fe4264c3a36847f801af8d",
+        "name": "Rene Auberjonois",
+        "cast_id": 23,
+        "profile_path": "/eAF43tqzBqq7Lgi7jG27BBUZ6Bp.jpg",
+        "character": "Father Mulcahy"
+      },
+      {
+        "id": 9808,
+        "order": 7,
+        "credit_id": "52fe4264c3a36847f801af91",
+        "name": "David Arkin",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "SSgt. Wade Douglas Vollmer/PA Announcer"
+      },
+      {
+        "id": 9809,
+        "order": 8,
+        "credit_id": "52fe4264c3a36847f801af95",
+        "name": "Jo Ann Pflug",
+        "cast_id": 25,
+        "profile_path": "/bPT3KVtukqHEHX09cvpchtD70jK.jpg",
+        "character": "Lt. Maria 'Dish' Schneider"
+      },
+      {
+        "id": 9810,
+        "order": 9,
+        "credit_id": "52fe4264c3a36847f801af99",
+        "name": "Gary Burghoff",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Cpl. Walter 'Radar' O'Reilly"
+      },
+      {
+        "id": 9811,
+        "order": 10,
+        "credit_id": "52fe4264c3a36847f801af9d",
+        "name": "Fred Williamson",
+        "cast_id": 27,
+        "profile_path": "/n6CAXv0dbKvCyBfMvppdUmeAwt2.jpg",
+        "character": "Capt. Oliver Harmon 'Spearchucker' Jones"
+      },
+      {
+        "id": 4776,
+        "order": 11,
+        "credit_id": "52fe4264c3a36847f801afa1",
+        "name": "Michael Murphy",
+        "cast_id": 28,
+        "profile_path": "/ebbKhFgIHugUywSL5udMFNfRxvQ.jpg",
+        "character": "Capt. Ezekiel Bradbury 'Me Lai' Marston IV"
+      }
+    ],
+    "crew": [
+      {
+        "id": 9789,
+        "credit_id": "52fe4264c3a36847f801af23",
+        "department": "Directing",
+        "name": "Robert Altman",
+        "job": "Director",
+        "profile_path": "/pGrUkaOv0Z7DBBow1YZs00SjEmj.jpg"
+      },
+      {
+        "id": 9790,
+        "credit_id": "52fe4264c3a36847f801af29",
+        "department": "Writing",
+        "name": "H. Richard Hornberger",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 9791,
+        "credit_id": "52fe4264c3a36847f801af2f",
+        "department": "Writing",
+        "name": "Ring Lardner, Jr.",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 9793,
+        "credit_id": "52fe4264c3a36847f801af35",
+        "department": "Production",
+        "name": "Ingo Preminger",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9796,
+        "credit_id": "52fe4264c3a36847f801af3b",
+        "department": "Sound",
+        "name": "Johnny Mandel",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7509,
+        "credit_id": "52fe4264c3a36847f801af41",
+        "department": "Camera",
+        "name": "Harold E. Stine",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 9797,
+        "credit_id": "52fe4264c3a36847f801af47",
+        "department": "Editing",
+        "name": "Danford B. Greene",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 9798,
+        "credit_id": "52fe4264c3a36847f801af4d",
+        "department": "Art",
+        "name": "Arthur Lonergan",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9061,
+        "credit_id": "52fe4264c3a36847f801af53",
+        "department": "Art",
+        "name": "Jack Martin Smith",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9799,
+        "credit_id": "52fe4264c3a36847f801af59",
+        "department": "Art",
+        "name": "Stuart A. Reiss",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9587,
+        "credit_id": "52fe4264c3a36847f801af5f",
+        "department": "Art",
+        "name": "Walter M. Scott",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9800,
+        "credit_id": "52fe4264c3a36847f801af65",
+        "department": "Production",
+        "name": "Norman A. Cook",
+        "job": "Unit Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 9803,
+        "credit_id": "52fe4264c3a36847f801af6b",
+        "department": "Sound",
+        "name": "Bernard Freericks",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 9804,
+        "credit_id": "52fe4264c3a36847f801af71",
+        "department": "Sound",
+        "name": "John D. Stack",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 32772,
+        "credit_id": "52fe4264c3a36847f801afa7",
+        "department": "Production",
+        "name": "Leon Ericksen",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 116,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    },
+    {
+      "iso_639_1": "ja",
+      "name": "日本語"
+    },
+    {
+      "iso_639_1": "ko",
+      "name": "한국어/조선말"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 651,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "MASH",
+  "overview": "One of the world's most acclaimed comedies, MASH focuses on three Korean War Army surgeons brilliantly brought to life by Donald Sutherland, Tom Skerritt and Elliott Gould. Though highly skilled and deeply dedicated, they adopt a hilarious, lunatic lifestyle as an antidote to the tragedies of their Mobile Army Surgical Hospital, and in the process infuriate Army bureaucrats. Robert Duvall, Gary Burghoff and Sally Kellerman co-star as a sanctimonious Major, an other-worldly Corporal, and a self-righteous yet lusty nurse.",
+  "production_companies": [{
+    "id": 7392,
+    "name": "Twentieth Century Fox"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0066026",
+  "release_date": "1970-01-25",
+  "original_title": "MASH",
+  "vote_count": 35,
+  "poster_path": "/y3RASshnPkZKeOpBNJjgALrtqtl.jpg",
+  "tagline": "M*A*S*H Gives A D*A*M*N.",
+  "revenue": 81600000,
+  "popularity": "0.771407659706372"
+}

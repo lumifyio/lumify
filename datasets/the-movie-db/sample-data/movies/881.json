@@ -1,0 +1,257 @@
+{
+  "budget": 40000000,
+  "vote_average": 6.6,
+  "backdrop_path": "/86UvnqQsefvHfBX6F65PUQHjVPc.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 500,
+        "order": 0,
+        "credit_id": "52fe4286c3a36847f8025da7",
+        "name": "Tom Cruise",
+        "cast_id": 10,
+        "profile_path": "/3oWEuo0e8Nx8JvkqYCDec2iMY6K.jpg",
+        "character": "Lt. Daniel Kaffee"
+      },
+      {
+        "id": 514,
+        "order": 1,
+        "credit_id": "52fe4286c3a36847f8025dab",
+        "name": "Jack Nicholson",
+        "cast_id": 11,
+        "profile_path": "/z5kVLyn3sxj0wNRlFgVgT6deeRO.jpg",
+        "character": "Col. Nathan R. Jessep"
+      },
+      {
+        "id": 3416,
+        "order": 2,
+        "credit_id": "52fe4286c3a36847f8025daf",
+        "name": "Demi Moore",
+        "cast_id": 12,
+        "profile_path": "/eLNoOYnxvhpV0BMSkNNnyyo5In7.jpg",
+        "character": "Lt. Cdr. JoAnne Galloway"
+      },
+      {
+        "id": 4724,
+        "order": 3,
+        "credit_id": "52fe4286c3a36847f8025db3",
+        "name": "Kevin Bacon",
+        "cast_id": 13,
+        "profile_path": "/bMVujB1SaHhXD5gQdO4Xf47WXD3.jpg",
+        "character": "Capt. Jack Ross"
+      },
+      {
+        "id": 2628,
+        "order": 4,
+        "credit_id": "52fe4286c3a36847f8025db7",
+        "name": "Kiefer Sutherland",
+        "cast_id": 14,
+        "profile_path": "/4YvDfOfD4TgyzDkLGoq76g5BZNe.jpg",
+        "character": "Lt. Jonathan Kendrick"
+      },
+      {
+        "id": 7166,
+        "order": 5,
+        "credit_id": "52fe4286c3a36847f8025dbb",
+        "name": "Kevin Pollak",
+        "cast_id": 15,
+        "profile_path": "/MczJhI5ustPAypTDBDKmYsfrfy.jpg",
+        "character": "Lt. Sam Weinberg"
+      },
+      {
+        "id": 68672,
+        "order": 6,
+        "credit_id": "52fe4286c3a36847f8025ddb",
+        "name": "Wolfgang Bodison",
+        "cast_id": 23,
+        "profile_path": "/bYpIjl1G8NGrDfQXxtoAYpxLp5F.jpg",
+        "character": "Lance Cpl. Harold W. Dawson"
+      },
+      {
+        "id": 6717,
+        "order": 7,
+        "credit_id": "52fe4286c3a36847f8025dbf",
+        "name": "James Marshall",
+        "cast_id": 16,
+        "profile_path": "/8ytq4mu3fLWlLU80QeGCBz4z0tW.jpg",
+        "character": "Pfc.Louden Downey"
+      },
+      {
+        "id": 22131,
+        "order": 8,
+        "credit_id": "52fe4286c3a36847f8025dd7",
+        "name": "J. T. Walsh",
+        "cast_id": 22,
+        "profile_path": "/rJfkdcpmDROTSrSxh2vbnbFol6e.jpg",
+        "character": "Lt. Col. Matthew A. Markinson"
+      },
+      {
+        "id": 13524,
+        "order": 9,
+        "credit_id": "52fe4286c3a36847f8025dc3",
+        "name": "Christopher Guest",
+        "cast_id": 17,
+        "profile_path": "/fhEQq0q2aR2sh4HU824xunoyAce.jpg",
+        "character": "Dr. Stone"
+      },
+      {
+        "id": 13525,
+        "order": 10,
+        "credit_id": "52fe4286c3a36847f8025dc7",
+        "name": "Matt Craven",
+        "cast_id": 18,
+        "profile_path": "/atUkssC0DowpBbFvsnRf92cEf9y.jpg",
+        "character": "Lt. Dave Spradling"
+      },
+      {
+        "id": 3982,
+        "order": 11,
+        "credit_id": "52fe4286c3a36847f8025dcb",
+        "name": "Xander Berkeley",
+        "cast_id": 19,
+        "profile_path": "/vlZ9FDMk2Xd1WHixPKxnheZoXgR.jpg",
+        "character": "Capt. Whitaker"
+      },
+      {
+        "id": 13526,
+        "order": 12,
+        "credit_id": "52fe4286c3a36847f8025dcf",
+        "name": "Noah Wyle",
+        "cast_id": 20,
+        "profile_path": "/m0xbQ1sWZuhZc4fOOUrvGUKNMPu.jpg",
+        "character": "Cpl. Jeffrey Barnes"
+      },
+      {
+        "id": 9777,
+        "order": 13,
+        "credit_id": "52fe4286c3a36847f8025dd3",
+        "name": "Cuba Gooding Jr.",
+        "cast_id": 21,
+        "profile_path": "/yu8Q3ImFu3RJne585jjgeQO2Boo.jpg",
+        "character": "Cpl. Carl Hammaker"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3026,
+        "credit_id": "52fe4286c3a36847f8025d73",
+        "department": "Directing",
+        "name": "Rob Reiner",
+        "job": "Director",
+        "profile_path": "/xOr2ySS6EfS34xV8aiZIjaec0aV.jpg"
+      },
+      {
+        "id": 13520,
+        "credit_id": "52fe4286c3a36847f8025d79",
+        "department": "Writing",
+        "name": "Aaron Sorkin",
+        "job": "Screenplay",
+        "profile_path": "/wmvbawQwKeaDYb2GzoOMyfxQogI.jpg"
+      },
+      {
+        "id": 13521,
+        "credit_id": "52fe4286c3a36847f8025d7f",
+        "department": "Production",
+        "name": "William S. Gilmore",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7530,
+        "credit_id": "52fe4286c3a36847f8025d85",
+        "department": "Production",
+        "name": "Rachel Pfeffer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9251,
+        "credit_id": "52fe4286c3a36847f8025d8b",
+        "department": "Sound",
+        "name": "Marc Shaiman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 149,
+        "credit_id": "52fe4286c3a36847f8025d91",
+        "department": "Camera",
+        "name": "Robert Richardson",
+        "job": "Director of Photography",
+        "profile_path": "/7G3fK147n8EdVMgLcLoO30Nj4Ik.jpg"
+      },
+      {
+        "id": 3032,
+        "credit_id": "52fe4286c3a36847f8025d97",
+        "department": "Editing",
+        "name": "Robert Leighton",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 13522,
+        "credit_id": "52fe4286c3a36847f8025d9d",
+        "department": "Editing",
+        "name": "Steven Nevius",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3030,
+        "credit_id": "52fe4286c3a36847f8025da3",
+        "department": "Production",
+        "name": "Andrew Scheinman",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 138,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 881,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "A Few Good Men",
+  "overview": "When cocky military lawyer Lt. Daniel Kaffee and his co-counsel, Lt. Cmdr. JoAnne Galloway, are assigned to a murder case, they uncover a hazing ritual that could implicate high-ranking officials such as shady Col. Nathan Jessep.",
+  "production_companies": [
+    {
+      "id": 5,
+      "name": "Columbia Pictures"
+    },
+    {
+      "id": 12,
+      "name": "New Line Cinema"
+    },
+    {
+      "id": 97,
+      "name": "Castle Rock Entertainment"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0104257",
+  "release_date": "1992-12-11",
+  "original_title": "A Few Good Men",
+  "vote_count": 191,
+  "poster_path": "/WgWLwk55YaXFZdlMnPJTKlxGcz.jpg",
+  "tagline": "In the heart of the nation's capital, in a courthouse of the U.S. government, one man will stop at nothing to keep his honor, and one will stop at nothing to find the truth.",
+  "revenue": 243240178,
+  "popularity": "1.53897082681294"
+}

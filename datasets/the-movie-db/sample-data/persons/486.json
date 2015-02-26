@@ -1,0 +1,203 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.  Wallace Wolodarsky is an American television writer and director. He wrote for The Simpsons during the first four seasons; all of his episodes were co-written with former writing partner Jay Kogen. Since he left, he has directed several films (the most notable being Sorority Boys).\n\nAccording to DVD commentary for the season 9 episode, \"Miracle on Evergreen Terrace\", Wolodarsky had a wiffle ball bat that read \"I KEELL YOU!\" which was one of the threats spray-painted on The Simpsons' car after the family is shunned by the town for lying to them about a robber stealing the family's Christmas tree.\n\nThe character \"Vladimir Wolodarsky\" in The Life Aquatic with Steve Zissou was named after him. He has roles in Rushmore and The Darjeeling Limited, and is a voice actor in Fantastic Mr. Fox.\n\nDescription above from the Wikipedia article Wallace Wolodarsky, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": null,
+  "profile_path": "/dvmEq92L4UwL20uO2BOQ8vnpPBP.jpg",
+  "id": 486,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0938645",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 4538,
+        "media_type": "movie",
+        "title": "The Darjeeling Limited",
+        "credit_id": "52fe43cac3a36847f806fb7f",
+        "release_date": "2007-09-29",
+        "original_title": "The Darjeeling Limited",
+        "adult": false,
+        "poster_path": "/9LGVmZ8dJK0B5LvTSschhKeCQkl.jpg",
+        "character": "Brendan"
+      },
+      {
+        "id": 120467,
+        "media_type": "movie",
+        "title": "The Grand Budapest Hotel",
+        "credit_id": "5319c325c3a3685c4a00300f",
+        "release_date": "2014-03-07",
+        "original_title": "The Grand Budapest Hotel",
+        "adult": false,
+        "poster_path": "/nX5XotM9yprCKarRH4fzOq1VM1J.jpg",
+        "character": "M. Georges"
+      },
+      {
+        "id": 32298,
+        "media_type": "movie",
+        "title": "Seeing Other People",
+        "credit_id": "5399a6790e0a263e30001f60",
+        "release_date": "2004-01-01",
+        "original_title": "Seeing Other People",
+        "adult": false,
+        "poster_path": "/65wiBeo8CzCmBb0VHYjIztlpYu.jpg",
+        "character": "Salesman"
+      },
+      {
+        "id": 10315,
+        "media_type": "movie",
+        "title": "Fantastic Mr. Fox",
+        "credit_id": "52fe43589251416c7500cb93",
+        "release_date": "2009-11-13",
+        "original_title": "Fantastic Mr. Fox",
+        "adult": false,
+        "poster_path": "/750pfEttsYAVmynRg2vmt1AXh4q.jpg",
+        "character": "Kylie (voice) (as Wally Wolodarsky)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 136799,
+        "media_type": "movie",
+        "title": "Trolls",
+        "credit_id": "52fe4c1ec3a368484e1a8253",
+        "department": "Writing",
+        "release_date": "2015-06-05",
+        "original_title": "Trolls",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": null
+      },
+      {
+        "id": 32298,
+        "media_type": "movie",
+        "title": "Seeing Other People",
+        "credit_id": "5399a8230e0a263e36002054",
+        "department": "Writing",
+        "release_date": "2004-01-01",
+        "original_title": "Seeing Other People",
+        "job": "Writer",
+        "adult": false,
+        "poster_path": "/65wiBeo8CzCmBb0VHYjIztlpYu.jpg"
+      },
+      {
+        "id": 10186,
+        "media_type": "movie",
+        "title": "The Rocker",
+        "credit_id": "52fe433d9251416c75008d15",
+        "department": "Writing",
+        "release_date": "2008-06-12",
+        "original_title": "The Rocker",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/yQfng0iKQVuGDdI5JeoKPINlXuH.jpg"
+      },
+      {
+        "id": 6020,
+        "media_type": "movie",
+        "title": "Sorority Boys",
+        "credit_id": "52fe4437c3a36847f8089183",
+        "department": "Directing",
+        "release_date": "2002-03-22",
+        "original_title": "Sorority Boys",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/57Zym2MVEVBzPif3Pd5IoeJ4ar.jpg"
+      },
+      {
+        "id": 32298,
+        "media_type": "movie",
+        "title": "Seeing Other People",
+        "credit_id": "52fe44ca9251416c9101d033",
+        "department": "Directing",
+        "release_date": "2004-01-01",
+        "original_title": "Seeing Other People",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/65wiBeo8CzCmBb0VHYjIztlpYu.jpg"
+      },
+      {
+        "id": 15512,
+        "media_type": "movie",
+        "title": "Monsters vs Aliens",
+        "credit_id": "52fe46639251416c75076a51",
+        "department": "Writing",
+        "release_date": "2009-03-26",
+        "original_title": "Monsters vs Aliens",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/8x0WrDcFQDC2eoXJe6iC34wXZE8.jpg"
+      },
+      {
+        "id": 82650,
+        "media_type": "movie",
+        "title": "Diary of a Wimpy Kid: Dog Days",
+        "credit_id": "52fe48639251416c9108ab79",
+        "department": "Writing",
+        "release_date": "2012-08-03",
+        "original_title": "Diary of a Wimpy Kid: Dog Days",
+        "job": "Writer",
+        "adult": false,
+        "poster_path": "/7Vurwe3RbOnKxqoi32meZ0GieTA.jpg"
+      },
+      {
+        "id": 456,
+        "media_type": "tv",
+        "episode_count": 10,
+        "credit_id": "5256bdcc19c2956ff6001fc0",
+        "department": "Writing",
+        "name": "The Simpsons",
+        "job": "Writer",
+        "poster_path": "/oadXgs77zoLQm04J9dG4fQ3Huwn.jpg",
+        "original_name": "The Simpsons"
+      },
+      {
+        "id": 1679,
+        "media_type": "tv",
+        "episode_count": 81,
+        "credit_id": "5257103b19c295711403f442",
+        "department": "Production",
+        "name": "The Tracey Ullman Show",
+        "job": "Producer",
+        "poster_path": "/xggUSgZDvClzdVrAoI0bqz85ynI.jpg",
+        "original_name": "The Tracey Ullman Show"
+      },
+      {
+        "id": 47416,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "525975c2760ee34661a60e48",
+        "department": "Production",
+        "name": "The Best Of The Tracey Ullman Show",
+        "job": "Producer",
+        "poster_path": null,
+        "original_name": "The Best Of The Tracey Ullman Show"
+      },
+      {
+        "id": 1679,
+        "media_type": "tv",
+        "episode_count": 81,
+        "credit_id": "5257103519c295711403f1ae",
+        "department": "Writing",
+        "name": "The Tracey Ullman Show",
+        "job": "Writer",
+        "poster_path": "/xggUSgZDvClzdVrAoI0bqz85ynI.jpg",
+        "original_name": "The Tracey Ullman Show"
+      },
+      {
+        "id": 456,
+        "media_type": "tv",
+        "episode_count": 600,
+        "credit_id": "5256bdd219c2956ff60023e2",
+        "department": "Production",
+        "name": "The Simpsons",
+        "job": "Producer",
+        "poster_path": "/oadXgs77zoLQm04J9dG4fQ3Huwn.jpg",
+        "original_name": "The Simpsons"
+      }
+    ]
+  },
+  "name": "Wallace Wolodarsky",
+  "place_of_birth": null,
+  "popularity": "1.04600328882736"
+}

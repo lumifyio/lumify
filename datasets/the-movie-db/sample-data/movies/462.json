@@ -1,0 +1,242 @@
+{
+  "budget": 51000000,
+  "vote_average": 6.5,
+  "backdrop_path": "/b21P45NQHZ9J8C871pNBrK0rJr3.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1204,
+        "order": 0,
+        "credit_id": "52fe4246c3a36847f801198d",
+        "name": "Julia Roberts",
+        "cast_id": 25,
+        "profile_path": "/yzaIyUEKHSnEYDwltXs8gpF4SVC.jpg",
+        "character": "Erin Brockovich"
+      },
+      {
+        "id": 3926,
+        "order": 1,
+        "credit_id": "52fe4246c3a36847f8011991",
+        "name": "Albert Finney",
+        "cast_id": 26,
+        "profile_path": "/eD1BZEydFYFXi4GFr3GAPpdHcls.jpg",
+        "character": "Ed Masry"
+      },
+      {
+        "id": 6383,
+        "order": 2,
+        "credit_id": "52fe4246c3a36847f8011995",
+        "name": "Aaron Eckhart",
+        "cast_id": 27,
+        "profile_path": "/aRSofX2rMpOhPanB9Wh7veYmFn4.jpg",
+        "character": "George"
+      },
+      {
+        "id": 19838,
+        "order": 3,
+        "credit_id": "52fe4246c3a36847f8011999",
+        "name": "Marg Helgenberger",
+        "cast_id": 28,
+        "profile_path": "/9jIgVEJGZkfjQI1bItxFIaNN3b3.jpg",
+        "character": "Donna Jensen"
+      },
+      {
+        "id": 1956,
+        "order": 4,
+        "credit_id": "52fe4246c3a36847f801199d",
+        "name": "Cherry Jones",
+        "cast_id": 29,
+        "profile_path": "/vhJQCBWah9L84HefqvJt8fyf7y7.jpg",
+        "character": "Pamela Duncan"
+      },
+      {
+        "id": 26719,
+        "order": 5,
+        "credit_id": "52fe4246c3a36847f80119a1",
+        "name": "Veanne Cox",
+        "cast_id": 30,
+        "profile_path": "/7fxVktlpPBAEWImceQB9wTPb90H.jpg",
+        "character": "Theresa Dallavale"
+      },
+      {
+        "id": 1909,
+        "order": 6,
+        "credit_id": "52fe4246c3a36847f80119a5",
+        "name": "Conchata Ferrell",
+        "cast_id": 31,
+        "profile_path": "/xPCxuPJSSK6F78NtJOw0J1dzynE.jpg",
+        "character": "Brenda"
+      },
+      {
+        "id": 3801,
+        "order": 7,
+        "credit_id": "52fe4246c3a36847f80119a9",
+        "name": "Tracey Walter",
+        "cast_id": 32,
+        "profile_path": "/kRFzCvB08MVF9T8pLT0V1GiXzXF.jpg",
+        "character": "Charles Embry"
+      },
+      {
+        "id": 9979,
+        "order": 8,
+        "credit_id": "52fe4246c3a36847f80119ad",
+        "name": "Peter Coyote",
+        "cast_id": 33,
+        "profile_path": "/5zVvYZxE6T0OeL1iaFBBCzY3QOi.jpg",
+        "character": "Kurt Potter"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1884,
+        "credit_id": "52fe4246c3a36847f801193b",
+        "department": "Directing",
+        "name": "Steven Soderbergh",
+        "job": "Director",
+        "profile_path": "/dxdMRsAosaGlMRd7EMmm9lrXXsW.jpg"
+      },
+      {
+        "id": 6340,
+        "credit_id": "52fe4246c3a36847f8011941",
+        "department": "Writing",
+        "name": "Susannah Grant",
+        "job": "Screenplay",
+        "profile_path": "/jEvMIuUbTu9HDzNfv5P23kQixy7.jpg"
+      },
+      {
+        "id": 518,
+        "credit_id": "52fe4246c3a36847f8011947",
+        "department": "Production",
+        "name": "Danny DeVito",
+        "job": "Producer",
+        "profile_path": "/zKuyzmKzPLG7RJo7lbbHjx6CCZc.jpg"
+      },
+      {
+        "id": 6341,
+        "credit_id": "52fe4246c3a36847f801194d",
+        "department": "Production",
+        "name": "John Hardy",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6342,
+        "credit_id": "52fe4246c3a36847f8011953",
+        "department": "Production",
+        "name": "Gail Lyon",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5381,
+        "credit_id": "52fe4246c3a36847f8011959",
+        "department": "Production",
+        "name": "Michael Shamberg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5382,
+        "credit_id": "52fe4246c3a36847f801195f",
+        "department": "Production",
+        "name": "Stacey Sher",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6344,
+        "credit_id": "52fe4246c3a36847f8011965",
+        "department": "Production",
+        "name": "Carla Santos Shamberg",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 153,
+        "credit_id": "52fe4246c3a36847f801196b",
+        "department": "Sound",
+        "name": "Thomas Newman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6345,
+        "credit_id": "52fe4246c3a36847f8011971",
+        "department": "Camera",
+        "name": "Edward Lachman",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6346,
+        "credit_id": "52fe4246c3a36847f8011977",
+        "department": "Editing",
+        "name": "Anne V. Coates",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6347,
+        "credit_id": "52fe4246c3a36847f801197d",
+        "department": "Production",
+        "name": "Margery Simkin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1890,
+        "credit_id": "52fe4246c3a36847f8011983",
+        "department": "Art",
+        "name": "Philip Messina",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6348,
+        "credit_id": "52fe4246c3a36847f8011989",
+        "department": "Costume & Make-Up",
+        "name": "Jeffrey Kurland",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 131,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.brockovich.com/movie.html",
+  "id": 462,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Erin Brockovich",
+  "overview": "A twice-divorced mother of three who sees an injustice, takes on the bad guy and wins -- with a little help from her push-up bra. Erin goes to work for an attorney and comes across medical records describing illnesses clustered in one nearby town. She starts investigating and soon exposes a monumental cover-up.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0195685",
+  "release_date": "2000-03-13",
+  "original_title": "Erin Brockovich",
+  "vote_count": 126,
+  "poster_path": "/8WLnzPVUh9rSYGGQ11q4wfbwf6H.jpg",
+  "tagline": "She brought a small town to its feet and a huge corporation to its knees.",
+  "revenue": 256271286,
+  "popularity": "1.09143371953962"
+}

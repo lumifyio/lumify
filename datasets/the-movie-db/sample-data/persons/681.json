@@ -1,0 +1,239 @@
+{
+  "birthday": "1975-07-07",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia\n\nNina Hoss (born July 7, 1975) is a German actress.\n\nDescription above from the Wikipedia article Nina Hoss, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/5D6DH6PjSldIf3LkPGFSLAkMRIC.jpg",
+  "id": 681,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0396125",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 1740,
+        "media_type": "movie",
+        "title": "Naked",
+        "credit_id": "52fe4313c3a36847f8038735",
+        "release_date": "2002-09-02",
+        "original_title": "Nackt",
+        "adult": false,
+        "poster_path": "/aSsVLOHIeDjb6HqrJp11WrxYLzs.jpg",
+        "character": "Charlotte"
+      },
+      {
+        "id": 3037,
+        "media_type": "movie",
+        "title": "Yella",
+        "credit_id": "52fe437fc3a36847f8058971",
+        "release_date": "2007-02-14",
+        "original_title": "Yella",
+        "adult": false,
+        "poster_path": "/1WEdllY3qZe6lL37QQK7ulc2F61.jpg",
+        "character": "Yella"
+      },
+      {
+        "id": 4243,
+        "media_type": "movie",
+        "title": "The Heart Is a Dark Forest",
+        "credit_id": "52fe43b5c3a36847f80695ab",
+        "release_date": "2007-12-27",
+        "original_title": "Das Herz ist ein Dunkler Wald",
+        "adult": false,
+        "poster_path": "/mUQDDTtnZyfshgqp0W5gw2SPvbd.jpg",
+        "character": "Marie"
+      },
+      {
+        "id": 4387,
+        "media_type": "movie",
+        "title": "A Girl Called Rosemarie",
+        "credit_id": "52fe43bec3a36847f806c5c7",
+        "release_date": "1996-12-13",
+        "original_title": "Das Mädchen Rosemarie",
+        "adult": false,
+        "poster_path": "/pSGCxPDLXDbzGuisciGU7zdcR5Q.jpg",
+        "character": "Rosemarie Nitribitt"
+      },
+      {
+        "id": 6967,
+        "media_type": "movie",
+        "title": "The White Massai",
+        "credit_id": "52fe446cc3a36847f8095189",
+        "release_date": "2005-09-14",
+        "original_title": "Die weisse Massai",
+        "adult": false,
+        "poster_path": "/Aw1PRBrbLj26ZOU7lc76VpSzN5g.jpg",
+        "character": "Carola Lehmann"
+      },
+      {
+        "id": 12161,
+        "media_type": "movie",
+        "title": "Jerichow",
+        "credit_id": "52fe44c19251416c7503fe81",
+        "release_date": "2008-09-06",
+        "original_title": "Jerichow",
+        "adult": false,
+        "poster_path": "/yelmNboSLEUhAeDcsKQU9tqF1B2.jpg",
+        "character": "Laura"
+      },
+      {
+        "id": 8889,
+        "media_type": "movie",
+        "title": "The Anarchist's Wife",
+        "credit_id": "52fe44c5c3a36847f80a916d",
+        "release_date": "2008-06-26",
+        "original_title": "The Anarchist's Wife",
+        "adult": false,
+        "poster_path": "/nuciBbdnobeBnqGSH99u3PuAR3G.jpg",
+        "character": "Lenin"
+      },
+      {
+        "id": 12832,
+        "media_type": "movie",
+        "title": "A Woman in Berlin",
+        "credit_id": "52fe45299251416c7504db19",
+        "release_date": "2008-09-10",
+        "original_title": "Anonyma - Eine Frau in Berlin",
+        "adult": false,
+        "poster_path": "/c1ILatDxfakmEYJmtdU7AW8V6ED.jpg",
+        "character": "Anonyma"
+      },
+      {
+        "id": 52587,
+        "media_type": "movie",
+        "title": "We Are the Night",
+        "credit_id": "52fe4834c3a36847f815c655",
+        "release_date": "2010-10-28",
+        "original_title": "Wir sind die Nacht",
+        "adult": false,
+        "poster_path": "/cddXRgqtvNQ3iqnjfBR6JQmxrXT.jpg",
+        "character": "Louise"
+      },
+      {
+        "id": 88284,
+        "media_type": "movie",
+        "title": "Barbara",
+        "credit_id": "52fe49ef9251416c910bda3d",
+        "release_date": "2012-03-08",
+        "original_title": "Barbara",
+        "adult": false,
+        "poster_path": "/9I6UVNgdklYofnTQljFvifbK3oT.jpg",
+        "character": "Barbara"
+      },
+      {
+        "id": 88418,
+        "media_type": "movie",
+        "title": "Wolfsburg",
+        "credit_id": "52fe49f59251416c910be6f7",
+        "release_date": "2003-02-13",
+        "original_title": "Wolfsburg",
+        "adult": false,
+        "poster_path": "/lyqfPO9QvmrfVRAs0TrlphQgSKY.jpg",
+        "character": "Laura Reiser"
+      },
+      {
+        "id": 106984,
+        "media_type": "movie",
+        "title": "Summer Window",
+        "credit_id": "52fe4a75c3a36847f81cf2e7",
+        "release_date": "2011-11-03",
+        "original_title": "Fenster zum Sommer",
+        "adult": false,
+        "poster_path": "/2RKOdIM8JbnIxg5AWaXdxsHsCcN.jpg",
+        "character": "Juliane Kreisler"
+      },
+      {
+        "id": 86,
+        "media_type": "movie",
+        "title": "The Elementary Particles",
+        "credit_id": "52fe4215c3a36847f8002b21",
+        "release_date": "2006-02-10",
+        "original_title": "Elementarteilchen",
+        "adult": false,
+        "poster_path": "/6IgQZl06sNRSBZE1Te74ENb6mhx.jpg",
+        "character": "Jane"
+      },
+      {
+        "id": 157849,
+        "media_type": "movie",
+        "title": "A Most Wanted Man",
+        "credit_id": "52fe4bd59251416c910e7115",
+        "release_date": "2014-07-25",
+        "original_title": "A Most Wanted Man",
+        "adult": false,
+        "poster_path": "/k0qWBpfSFLnMDaS43AkdkR9F2vA.jpg",
+        "character": "Erna Frey"
+      },
+      {
+        "id": 158144,
+        "media_type": "movie",
+        "title": "Something to Remind Me",
+        "credit_id": "52fe4bdd9251416c910e8289",
+        "release_date": "2002-05-31",
+        "original_title": "Toter Mann",
+        "adult": false,
+        "poster_path": "/rFiTp3Cdp9BJCe0cZDiG96cmzQL.jpg",
+        "character": "Leyla"
+      },
+      {
+        "id": 159344,
+        "media_type": "movie",
+        "title": "Gold",
+        "credit_id": "52fe4c0d9251416c910ee2f9",
+        "release_date": "2013-02-09",
+        "original_title": "Gold",
+        "adult": false,
+        "poster_path": "/lbCw6KoyNz0L3X0h550vruKvuBf.jpg",
+        "character": "Emily Meyer"
+      },
+      {
+        "id": 202804,
+        "media_type": "movie",
+        "title": "Hannah",
+        "credit_id": "52fe4cd1c3a368484e1c8263",
+        "release_date": "2006-10-01",
+        "original_title": "Hannah",
+        "adult": false,
+        "poster_path": null,
+        "character": "Hannah"
+      },
+      {
+        "id": 172988,
+        "media_type": "movie",
+        "title": "Rider of the Flames",
+        "credit_id": "52fe4d2bc3a36847f8252559",
+        "release_date": "1998-05-26",
+        "original_title": "Feuerreiter",
+        "adult": false,
+        "poster_path": "/pC5Lg0ZSQ6vBk9tZtE6HxyUnW5Q.jpg",
+        "character": ""
+      },
+      {
+        "id": 254578,
+        "media_type": "movie",
+        "title": "Phoenix",
+        "credit_id": "52fe4ec59251416c9113d31b",
+        "release_date": "2014-12-31",
+        "original_title": "Phoenix",
+        "adult": false,
+        "poster_path": "/kLE0IlcwLRRZm7xF4SE2JYaCxLU.jpg",
+        "character": "Nelly Lenz"
+      },
+      {
+        "id": 278978,
+        "media_type": "movie",
+        "title": "Und keiner weint mir nach",
+        "credit_id": "53add6000e0a265983002a23",
+        "release_date": "1996-02-29",
+        "original_title": "Und keiner weint mir nach",
+        "adult": false,
+        "poster_path": null,
+        "character": "Marilli Kosemund"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Nina Hoss",
+  "place_of_birth": "Stuttgart, Germany",
+  "popularity": "2.55203757895624"
+}

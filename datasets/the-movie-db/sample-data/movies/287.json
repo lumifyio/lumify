@@ -1,0 +1,346 @@
+{
+  "budget": 7000000,
+  "vote_average": 7,
+  "backdrop_path": "/ovLXNT8egeJtTOlhfg2nbJXJGcq.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 9805,
+      "name": "Sport"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1269,
+        "order": 0,
+        "credit_id": "52fe4232c3a36847f800b667",
+        "name": "Kevin Costner",
+        "cast_id": 2,
+        "profile_path": "/ybwfOhuuDPJ6NCcX7Y5XJxE6nMs.jpg",
+        "character": "Crash Davis"
+      },
+      {
+        "id": 4038,
+        "order": 1,
+        "credit_id": "52fe4232c3a36847f800b66b",
+        "name": "Susan Sarandon",
+        "cast_id": 3,
+        "profile_path": "/tRDPATibAPVKzlv6nC7IBd5rjiF.jpg",
+        "character": "Annie Savoy"
+      },
+      {
+        "id": 504,
+        "order": 2,
+        "credit_id": "52fe4232c3a36847f800b66f",
+        "name": "Tim Robbins",
+        "cast_id": 4,
+        "profile_path": "/tuZCyZVVbHcpvtCgriSp5RRPwMX.jpg",
+        "character": "Ebby Calvin 'Nuke' LaLoosh"
+      },
+      {
+        "id": 4039,
+        "order": 3,
+        "credit_id": "52fe4232c3a36847f800b673",
+        "name": "Trey Wilson",
+        "cast_id": 5,
+        "profile_path": "/lT3Ia2j6BpNflu3duzK0bU2t83m.jpg",
+        "character": "Joe Riggins"
+      },
+      {
+        "id": 4040,
+        "order": 4,
+        "credit_id": "52fe4232c3a36847f800b677",
+        "name": "Robert Wuhl",
+        "cast_id": 6,
+        "profile_path": "/ibDgbYtVwOwTuClvFclLybMk24T.jpg",
+        "character": "Larry Hockett"
+      },
+      {
+        "id": 4041,
+        "order": 5,
+        "credit_id": "52fe4232c3a36847f800b67b",
+        "name": "William O'Leary",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Jimmy"
+      },
+      {
+        "id": 4042,
+        "order": 6,
+        "credit_id": "52fe4232c3a36847f800b67f",
+        "name": "David Neidorf",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Bobby"
+      },
+      {
+        "id": 4043,
+        "order": 7,
+        "credit_id": "52fe4232c3a36847f800b683",
+        "name": "Danny Gans",
+        "cast_id": 9,
+        "profile_path": "/y77GWClciGhZ4v0TwOFmNSM5CpI.jpg",
+        "character": "Deke"
+      },
+      {
+        "id": 4045,
+        "order": 8,
+        "credit_id": "52fe4232c3a36847f800b687",
+        "name": "Tom Silardi",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Tony"
+      },
+      {
+        "id": 4046,
+        "order": 9,
+        "credit_id": "52fe4232c3a36847f800b68b",
+        "name": "Lloyd T. Williams",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Mickey McFee"
+      },
+      {
+        "id": 4047,
+        "order": 10,
+        "credit_id": "52fe4232c3a36847f800b68f",
+        "name": "Rick Marzan",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Jose"
+      },
+      {
+        "id": 4048,
+        "order": 11,
+        "credit_id": "52fe4232c3a36847f800b693",
+        "name": "George Buck",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Mr. Laloosh"
+      },
+      {
+        "id": 4049,
+        "order": 12,
+        "credit_id": "52fe4232c3a36847f800b697",
+        "name": "Garland Bunting",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Teddy Cullinane"
+      },
+      {
+        "id": 4050,
+        "order": 13,
+        "credit_id": "52fe4232c3a36847f800b69b",
+        "name": "Robert Dickman",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Whitey Sherrard"
+      },
+      {
+        "id": 4051,
+        "order": 14,
+        "credit_id": "52fe4232c3a36847f800b69f",
+        "name": "Jenny Robertson",
+        "cast_id": 16,
+        "profile_path": "/yA8hjV3vs4miI1Tho8vgAEsiAYo.jpg",
+        "character": "Millie"
+      },
+      {
+        "id": 16506,
+        "order": 15,
+        "credit_id": "52fe4232c3a36847f800b70f",
+        "name": "Henry G. Sanders",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Sandy Grimes"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4037,
+        "credit_id": "52fe4232c3a36847f800b663",
+        "department": "Directing",
+        "name": "Ron Shelton",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 2145,
+        "credit_id": "52fe4232c3a36847f800b6a5",
+        "department": "Production",
+        "name": "Mark Burg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4052,
+        "credit_id": "52fe4232c3a36847f800b6ab",
+        "department": "Production",
+        "name": "Thom Mount",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4053,
+        "credit_id": "52fe4232c3a36847f800b6b1",
+        "department": "Production",
+        "name": "Charles Hirschhorn",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4054,
+        "credit_id": "52fe4232c3a36847f800b6b7",
+        "department": "Production",
+        "name": "David V. Lester",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4055,
+        "credit_id": "52fe4232c3a36847f800b6bd",
+        "department": "Sound",
+        "name": "Michael Convertino",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4056,
+        "credit_id": "52fe4232c3a36847f800b6c3",
+        "department": "Camera",
+        "name": "Bobby Byrne",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3032,
+        "credit_id": "52fe4232c3a36847f800b6c9",
+        "department": "Editing",
+        "name": "Robert Leighton",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4057,
+        "credit_id": "52fe4232c3a36847f800b6cf",
+        "department": "Editing",
+        "name": "Adam Weiss",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 897,
+        "credit_id": "52fe4232c3a36847f800b6d5",
+        "department": "Production",
+        "name": "Bonnie Timmermann",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4058,
+        "credit_id": "52fe4232c3a36847f800b6db",
+        "department": "Art",
+        "name": "Armin Ganz",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4059,
+        "credit_id": "52fe4232c3a36847f800b6e1",
+        "department": "Art",
+        "name": "David Lubin",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 4060,
+        "credit_id": "52fe4232c3a36847f800b6e7",
+        "department": "Art",
+        "name": "Kris Boxell",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 4061,
+        "credit_id": "52fe4232c3a36847f800b6ed",
+        "department": "Costume & Make-Up",
+        "name": "Louise Frogley",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 4054,
+        "credit_id": "52fe4232c3a36847f800b6f3",
+        "department": "Production",
+        "name": "David V. Lester",
+        "job": "Unit Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 4062,
+        "credit_id": "52fe4232c3a36847f800b6f9",
+        "department": "Crew",
+        "name": "Jeff Hyde",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 4063,
+        "credit_id": "52fe4232c3a36847f800b6ff",
+        "department": "Crew",
+        "name": "Vern Hyde",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 4064,
+        "credit_id": "52fe4232c3a36847f800b705",
+        "department": "Crew",
+        "name": "Webster Whinery",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 4037,
+        "credit_id": "52fe4232c3a36847f800b70b",
+        "department": "Writing",
+        "name": "Ron Shelton",
+        "job": "Author",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 108,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 287,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Bull Durham",
+  "overview": "Veteran catcher Crash Davis is brought to the minor league Durham Bulls to help their up and coming pitching prospect, \"Nuke\" Laloosh. Their relationship gets off to a rocky start and is further complicated when baseball groupie Annie Savoy sets her sights on the two men.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0094812",
+  "release_date": "1988-06-15",
+  "original_title": "Bull Durham",
+  "vote_count": 22,
+  "poster_path": "/wZwXLiR1cisTXaJiuBLvgkS5HWw.jpg",
+  "tagline": "Romance is a lot like baseball. It's not whether you win or lose. It's how you play the game.",
+  "revenue": 50888000,
+  "popularity": "0.283858266794506"
+}

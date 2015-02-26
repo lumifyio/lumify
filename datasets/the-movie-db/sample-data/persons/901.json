@@ -1,0 +1,85 @@
+{
+  "birthday": "1973",
+  "adult": false,
+  "biography": "",
+  "homepage": "",
+  "profile_path": "/3m59CM46gAXipl77JoQ3b0xOOJT.jpg",
+  "id": 901,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0501854",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 9,
+        "media_type": "movie",
+        "title": "Sunday in August",
+        "credit_id": "52fe420dc3a36847f8000333",
+        "release_date": "2004-09-02",
+        "original_title": "Sonntag im August",
+        "adult": false,
+        "poster_path": null,
+        "character": "Alexandra"
+      },
+      {
+        "id": 30508,
+        "media_type": "movie",
+        "title": "Berlin Calling",
+        "credit_id": "52fe44229251416c91005fad",
+        "release_date": "2008-10-01",
+        "original_title": "Berlin Calling",
+        "adult": false,
+        "poster_path": "/ut36GgrLVyq7D5DqAmPWbDTqkT6.jpg",
+        "character": "Mathilde"
+      },
+      {
+        "id": 36284,
+        "media_type": "movie",
+        "title": "Das allerbeste Stück",
+        "credit_id": "52fe45db9251416c91040d71",
+        "release_date": "2004-03-18",
+        "original_title": "Das allerbeste Stück",
+        "adult": false,
+        "poster_path": "/qiRywJEcVRX9ao6kUMed1RUtSyG.jpg",
+        "character": "Nicole"
+      },
+      {
+        "id": 39216,
+        "media_type": "movie",
+        "title": "Es geht nicht immer nur um Sex",
+        "credit_id": "5369fb6bc3a368123800771d",
+        "release_date": "2000-10-17",
+        "original_title": "Es geht nicht immer nur um Sex",
+        "adult": false,
+        "poster_path": null,
+        "character": "Janni"
+      },
+      {
+        "id": 155282,
+        "media_type": "movie",
+        "title": "Das beste Stück",
+        "credit_id": "52fe4b789251416c910db783",
+        "release_date": "2002-10-16",
+        "original_title": "Das beste Stück",
+        "adult": false,
+        "poster_path": "/rn56mbcPgLsg5q3jHFb0d5AM4dN.jpg",
+        "character": "Nicole"
+      },
+      {
+        "id": 174621,
+        "media_type": "movie",
+        "title": "GLOBAL PLAYER - Von Schwaben & Chinesen",
+        "credit_id": "52fe4d4dc3a36847f8259cb9",
+        "release_date": "2013-10-03",
+        "original_title": "GLOBAL PLAYER - Von Schwaben & Chinesen",
+        "adult": false,
+        "poster_path": "/rokxeEJlT8xpUJqVJLvIMs0QAzt.jpg",
+        "character": "Silke Bogenschütz"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Rita Lengyel",
+  "place_of_birth": null,
+  "popularity": "1.03850815362033"
+}

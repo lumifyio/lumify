@@ -1,0 +1,428 @@
+{
+  "budget": 175000000,
+  "vote_average": 6.5,
+  "backdrop_path": "/lIyNUZbIeEwWpaWXAO5gnciB8Dq.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 287,
+        "order": 0,
+        "credit_id": "52fe4264c3a36847f801b083",
+        "name": "Brad Pitt",
+        "cast_id": 43,
+        "profile_path": "/kc3M04QQAuZ9woUvH3Ju5T7ZqG5.jpg",
+        "character": "Achilles"
+      },
+      {
+        "id": 114,
+        "order": 1,
+        "credit_id": "52fe4264c3a36847f801b087",
+        "name": "Orlando Bloom",
+        "cast_id": 44,
+        "profile_path": "/vq90ECKinICxJYYZpbga4pMwch.jpg",
+        "character": "Paris"
+      },
+      {
+        "id": 8783,
+        "order": 2,
+        "credit_id": "52fe4264c3a36847f801b08b",
+        "name": "Eric Bana",
+        "cast_id": 45,
+        "profile_path": "/36As49OkTNvT96CzzjXNuKMeuyx.jpg",
+        "character": "Hector"
+      },
+      {
+        "id": 1248,
+        "order": 3,
+        "credit_id": "52fe4264c3a36847f801b08f",
+        "name": "Brian Cox",
+        "cast_id": 46,
+        "profile_path": "/m15C58NWii5WCIg57Llr7hejnfy.jpg",
+        "character": "King Agamemnon"
+      },
+      {
+        "id": 48,
+        "order": 4,
+        "credit_id": "52fe4264c3a36847f801b093",
+        "name": "Sean Bean",
+        "cast_id": 47,
+        "profile_path": "/arkVBI4myH8kvxFc7QIapy2DuT6.jpg",
+        "character": "Odysseus"
+      },
+      {
+        "id": 2039,
+        "order": 5,
+        "credit_id": "52fe4264c3a36847f801b097",
+        "name": "Brendan Gleeson",
+        "cast_id": 48,
+        "profile_path": "/pUTBk2sqFgg4aFBXHckD0qKLUYP.jpg",
+        "character": "Menelaos"
+      },
+      {
+        "id": 9824,
+        "order": 6,
+        "credit_id": "52fe4264c3a36847f801b09b",
+        "name": "Diane Kruger",
+        "cast_id": 49,
+        "profile_path": "/zbRqfYLEkhbqcmR9GYyg1nhYHVz.jpg",
+        "character": "Helena"
+      },
+      {
+        "id": 11390,
+        "order": 7,
+        "credit_id": "52fe4265c3a36847f801b09f",
+        "name": "Peter O'Toole",
+        "cast_id": 50,
+        "profile_path": "/i4qteYphjkqtwsuQwcfQPEdV1ZI.jpg",
+        "character": "Priam"
+      },
+      {
+        "id": 9827,
+        "order": 8,
+        "credit_id": "52fe4265c3a36847f801b0a3",
+        "name": "Rose Byrne",
+        "cast_id": 51,
+        "profile_path": "/tCryj14tNJkBBf08uflJv7fE9xD.jpg",
+        "character": "Briseis"
+      },
+      {
+        "id": 9825,
+        "order": 9,
+        "credit_id": "52fe4265c3a36847f801b0a7",
+        "name": "Saffron Burrows",
+        "cast_id": 52,
+        "profile_path": "/9avh3TGQ2dgrwMBk38YLdmLXGr3.jpg",
+        "character": "Andromache"
+      },
+      {
+        "id": 9828,
+        "order": 10,
+        "credit_id": "52fe4265c3a36847f801b0ab",
+        "name": "Garrett Hedlund",
+        "cast_id": 53,
+        "profile_path": "/2UXqL30fM8ygySH0I5iy5RFx9Tp.jpg",
+        "character": "Patroclos"
+      },
+      {
+        "id": 9831,
+        "order": 11,
+        "credit_id": "52fe4265c3a36847f801b0af",
+        "name": "Vincent Regan",
+        "cast_id": 54,
+        "profile_path": "/tiyjPHwmX8dMMfx0F8HUpXyLHeY.jpg",
+        "character": "Eudorus"
+      },
+      {
+        "id": 1666,
+        "order": 12,
+        "credit_id": "52fe4265c3a36847f801b0b3",
+        "name": "Julie Christie",
+        "cast_id": 55,
+        "profile_path": "/73SExI7sunDfkSQmHQhUMryUSR2.jpg",
+        "character": "Thetis"
+      },
+      {
+        "id": 940,
+        "order": 13,
+        "credit_id": "52fe4265c3a36847f801b0b7",
+        "name": "John Shrapnel",
+        "cast_id": 56,
+        "profile_path": "/nDIK01IoVNx7cfYOrKqGugItqO9.jpg",
+        "character": "Nestor"
+      },
+      {
+        "id": 9832,
+        "order": 14,
+        "credit_id": "52fe4265c3a36847f801b0bb",
+        "name": "Tyler Mane",
+        "cast_id": 57,
+        "profile_path": "/ppGbITxSnakqHhZIqh5fTjQjq2D.jpg",
+        "character": "Ajax"
+      }
+    ],
+    "crew": [
+      {
+        "id": 34513,
+        "credit_id": "537f4c1fc3a3680595003313",
+        "department": "Crew",
+        "name": "John King",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 8382,
+        "credit_id": "537f4c50c3a3680592003291",
+        "department": "Crew",
+        "name": "Kevin Phipps",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 5021,
+        "credit_id": "537f4c6cc3a368059200329a",
+        "department": "Crew",
+        "name": "Leslie Tomkins",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 1323295,
+        "credit_id": "537f4cb90e0a2624c7004e1a",
+        "department": "Costume & Make-Up",
+        "name": "Graham Churchyard",
+        "job": "Costume Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 5231,
+        "credit_id": "52fe4264c3a36847f801affb",
+        "department": "Directing",
+        "name": "Wolfgang Petersen",
+        "job": "Director",
+        "profile_path": "/2dXaZDJWOmjWagbnbfDxaPqCAbj.jpg"
+      },
+      {
+        "id": 9812,
+        "credit_id": "52fe4264c3a36847f801b001",
+        "department": "Writing",
+        "name": "Homer",
+        "job": "Author",
+        "profile_path": "/roXLV7QNLUvqP0lfa630rhtiZdP.jpg"
+      },
+      {
+        "id": 9813,
+        "credit_id": "52fe4264c3a36847f801b007",
+        "department": "Writing",
+        "name": "David Benioff",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 490,
+        "credit_id": "52fe4264c3a36847f801b00d",
+        "department": "Production",
+        "name": "Colin Wilson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9814,
+        "credit_id": "52fe4264c3a36847f801b013",
+        "department": "Production",
+        "name": "Diana Rathbun",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5231,
+        "credit_id": "52fe4264c3a36847f801b019",
+        "department": "Production",
+        "name": "Wolfgang Petersen",
+        "job": "Producer",
+        "profile_path": "/2dXaZDJWOmjWagbnbfDxaPqCAbj.jpg"
+      },
+      {
+        "id": 6871,
+        "credit_id": "52fe4264c3a36847f801b01f",
+        "department": "Production",
+        "name": "Barbara Huber",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 9815,
+        "credit_id": "52fe4264c3a36847f801b025",
+        "department": "Production",
+        "name": "Winston Azzopardi",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1729,
+        "credit_id": "52fe4264c3a36847f801b02b",
+        "department": "Sound",
+        "name": "James Horner",
+        "job": "Original Music Composer",
+        "profile_path": "/iEiRtIdTjlwxrh1dF27RFbLl9LD.jpg"
+      },
+      {
+        "id": 293,
+        "credit_id": "52fe4264c3a36847f801b031",
+        "department": "Camera",
+        "name": "Roger Pratt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 9816,
+        "credit_id": "52fe4264c3a36847f801b037",
+        "department": "Camera",
+        "name": "Paul Bond",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6875,
+        "credit_id": "52fe4264c3a36847f801b03d",
+        "department": "Editing",
+        "name": "Peter Honess",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1113,
+        "credit_id": "52fe4264c3a36847f801b043",
+        "department": "Production",
+        "name": "Lucinda Syson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 9817,
+        "credit_id": "52fe4264c3a36847f801b049",
+        "department": "Art",
+        "name": "Nigel Phelps",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 9818,
+        "credit_id": "52fe4264c3a36847f801b04f",
+        "department": "Art",
+        "name": "Julian Ashby",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9819,
+        "credit_id": "52fe4264c3a36847f801b055",
+        "department": "Art",
+        "name": "Jon Billington",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9820,
+        "credit_id": "52fe4264c3a36847f801b05b",
+        "department": "Art",
+        "name": "Andy Nicholson",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9821,
+        "credit_id": "52fe4264c3a36847f801b061",
+        "department": "Art",
+        "name": "Marco Niro",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9822,
+        "credit_id": "52fe4264c3a36847f801b067",
+        "department": "Art",
+        "name": "Adam O'Neill",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8384,
+        "credit_id": "52fe4264c3a36847f801b06d",
+        "department": "Art",
+        "name": "Anna Pinnock",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 9823,
+        "credit_id": "52fe4264c3a36847f801b073",
+        "department": "Art",
+        "name": "Peter Young",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 2530,
+        "credit_id": "52fe4264c3a36847f801b079",
+        "department": "Costume & Make-Up",
+        "name": "Bob Ringwood",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 163,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 652,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "Malta",
+      "iso_3166_1": "MT"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Troy",
+  "overview": "In year 1250 B.C. during the late Bronze age, two emerging nations begin to clash. Paris, the Trojan prince, convinces Helen, Queen of Sparta, to leave her husband Menelaus, and sail with him back to Troy. After Menelaus finds out that his wife was taken by the Trojans, he asks his brother Agamemnom to help him get her back. Agamemnon sees this as an opportunity for power. So they set off with 1,000 ships holding 50,000 Greeks to Troy. With the help of Achilles, the Greeks are able to fight the never before defeated Trojans.",
+  "production_companies": [
+    {
+      "id": 6194,
+      "name": "Warner Bros."
+    },
+    {
+      "id": 18990,
+      "name": "Radiant Productions"
+    },
+    {
+      "id": 19107,
+      "name": "Helena Productions"
+    },
+    {
+      "id": 19108,
+      "name": "Latina Pictures"
+    },
+    {
+      "id": 81,
+      "name": "Plan B Entertainment"
+    },
+    {
+      "id": 7636,
+      "name": "Nimar Studios"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0332452",
+  "release_date": "2004-05-13",
+  "original_title": "Troy",
+  "vote_count": 557,
+  "poster_path": "/edMlij7nw2NMla32xskDnzMCFBM.jpg",
+  "tagline": "For passion.",
+  "revenue": 497409852,
+  "popularity": "2.68687163333184"
+}

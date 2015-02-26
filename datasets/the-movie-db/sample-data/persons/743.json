@@ -1,0 +1,96 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/aq3elIciFeSrvbVyDNeoozQqLnm.jpg",
+  "id": 743,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0539616",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 89,
+        "media_type": "movie",
+        "title": "Indiana Jones and the Last Crusade",
+        "credit_id": "52fe4216c3a36847f8002e3d",
+        "release_date": "1989-05-24",
+        "original_title": "Indiana Jones and the Last Crusade",
+        "adult": false,
+        "poster_path": "/4p1N2Qrt8j0H8xMHMHvtRxv9weZ.jpg",
+        "character": "Kazim"
+      },
+      {
+        "id": 4910,
+        "media_type": "movie",
+        "title": "The Man Who Haunted Himself",
+        "credit_id": "52fe43e1c3a36847f8075fd3",
+        "release_date": "1970-02-18",
+        "original_title": "The Man Who Haunted Himself",
+        "adult": false,
+        "poster_path": "/mkLzn5OZCqL5HHeniuJXzMzpEYK.jpg",
+        "character": "Luigi"
+      },
+      {
+        "id": 82675,
+        "media_type": "movie",
+        "title": "Taken 2",
+        "credit_id": "52fe48679251416c9108b40d",
+        "release_date": "2012-10-04",
+        "original_title": "Taken 2",
+        "adult": false,
+        "poster_path": "/rKz1AQSjRBTFb7VR5YTFC4mfKWW.jpg",
+        "character": "Inspector Durmaz"
+      },
+      {
+        "id": 215525,
+        "media_type": "movie",
+        "title": "Singing Women",
+        "credit_id": "52fe4e01c3a368484e20921f",
+        "release_date": "2014-02-21",
+        "original_title": "Şarkı Söyleyen Kadınlar",
+        "adult": false,
+        "poster_path": "/ey9FjOjj0xFjxB7I0uyUjSuLz5U.jpg",
+        "character": ""
+      },
+      {
+        "id": 11866,
+        "media_type": "movie",
+        "title": "Flight of the Phoenix",
+        "credit_id": "52fe44969251416c7503a09b",
+        "release_date": "2004-12-17",
+        "original_title": "Flight of the Phoenix",
+        "adult": false,
+        "poster_path": "/qecorw3Y4UtHabV0pskpvbJylms.jpg",
+        "character": "Rady"
+      },
+      {
+        "id": 9389,
+        "media_type": "movie",
+        "title": "Renaissance",
+        "credit_id": "52fe44f1c3a36847f80b3365",
+        "release_date": "2006-03-16",
+        "original_title": "Renaissance",
+        "adult": false,
+        "poster_path": "/qLCgkxWisyDBLLQWaANRiaMG6wn.jpg",
+        "character": "Nusrat Farfella"
+      },
+      {
+        "id": 2508,
+        "media_type": "tv",
+        "episode_count": 42,
+        "credit_id": "52573af319c29531db02e7bb",
+        "name": "Mind Your Language",
+        "poster_path": "/6oRaFVFGh7bOyPbVBGw72g3Lbi1.jpg",
+        "original_name": "Mind Your Language",
+        "first_air_date": "1977-12-30",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Kevork Malikyan",
+  "place_of_birth": null,
+  "popularity": 1.0003645000004
+}

@@ -1,0 +1,367 @@
+{
+  "budget": 22000000,
+  "vote_average": 6.9,
+  "backdrop_path": "/yN4mQzPthU1l3PQWxYhzWKargL5.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2282,
+        "order": 0,
+        "credit_id": "52fe4275c3a36847f8020621",
+        "name": "Ben Kingsley",
+        "cast_id": 7,
+        "profile_path": "/n0cVP5K2VxlohkAf7LoRwPt4xhu.jpg",
+        "character": "Mahatma Gandhi"
+      },
+      {
+        "id": 11849,
+        "order": 1,
+        "credit_id": "52fe4275c3a36847f8020625",
+        "name": "Rohini Hattangadi",
+        "cast_id": 8,
+        "profile_path": "/w1EqXVtxige0wmMa8kk2eK9C9NT.jpg",
+        "character": "Kasturba Gandhi"
+      },
+      {
+        "id": 11850,
+        "order": 2,
+        "credit_id": "52fe4275c3a36847f8020629",
+        "name": "Candice Bergen",
+        "cast_id": 9,
+        "profile_path": "/wzRihM7eZyCyAuKpgyBewCzDRWJ.jpg",
+        "character": "Margaret Bourke-White"
+      },
+      {
+        "id": 693,
+        "order": 3,
+        "credit_id": "52fe4275c3a36847f802062d",
+        "name": "Roshan Seth",
+        "cast_id": 10,
+        "profile_path": "/hC4VtvW0lUmzGy54NLqyUeufnQT.jpg",
+        "character": "Pandit Nehru"
+      },
+      {
+        "id": 11851,
+        "order": 4,
+        "credit_id": "52fe4275c3a36847f8020631",
+        "name": "Om Puri",
+        "cast_id": 11,
+        "profile_path": "/omm9W5Ae1uwccnLPeVB5PWqh0ix.jpg",
+        "character": "Nahari"
+      },
+      {
+        "id": 11852,
+        "order": 5,
+        "credit_id": "52fe4275c3a36847f8020635",
+        "name": "Saeed Jaffrey",
+        "cast_id": 12,
+        "profile_path": "/nDSQCtZjVNqeOWG1QooKq2NkElb.jpg",
+        "character": "Sardar Vallabhbhai Patel"
+      },
+      {
+        "id": 11853,
+        "order": 6,
+        "credit_id": "52fe4275c3a36847f8020639",
+        "name": "Alyque Padamsee",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Mohammad Ali Jinnah"
+      },
+      {
+        "id": 8349,
+        "order": 7,
+        "credit_id": "52fe4275c3a36847f802063d",
+        "name": "Martin Sheen",
+        "cast_id": 14,
+        "profile_path": "/mityfK8XVZ76Vse6h5oPECl9nGw.jpg",
+        "character": "Vince Walker"
+      },
+      {
+        "id": 691,
+        "order": 8,
+        "credit_id": "52fe4275c3a36847f8020641",
+        "name": "Amrish Puri",
+        "cast_id": 15,
+        "profile_path": "/9WsIjfAyhYgkT4Nvbffn98NLvio.jpg",
+        "character": "Khan"
+      },
+      {
+        "id": 11854,
+        "order": 9,
+        "credit_id": "52fe4275c3a36847f8020645",
+        "name": "Ian Charleson",
+        "cast_id": 16,
+        "profile_path": "/rQXBpZDKYUxaCxVN6rMYzW5m2cI.jpg",
+        "character": "Reverend Charlie Andrews"
+      },
+      {
+        "id": 9126,
+        "order": 10,
+        "credit_id": "52fe4275c3a36847f8020649",
+        "name": "Edward Fox",
+        "cast_id": 17,
+        "profile_path": "/iNk3GvWMWm37PjsidHY9M6Unmwm.jpg",
+        "character": "General Dyer"
+      },
+      {
+        "id": 11855,
+        "order": 11,
+        "credit_id": "52fe4275c3a36847f802064d",
+        "name": "Geraldine James",
+        "cast_id": 18,
+        "profile_path": "/iHKFccX2qpSzMbhIBdfvr835MVg.jpg",
+        "character": "Mirabehn"
+      },
+      {
+        "id": 11856,
+        "order": 12,
+        "credit_id": "52fe4275c3a36847f8020651",
+        "name": "Daniel Day-Lewis",
+        "cast_id": 19,
+        "profile_path": "/hknfCSSU6AMeKV9yn9NTtTzIEGc.jpg",
+        "character": "Colin"
+      },
+      {
+        "id": 11857,
+        "order": 13,
+        "credit_id": "52fe4275c3a36847f8020655",
+        "name": "John Gielgud",
+        "cast_id": 20,
+        "profile_path": "/vLXym0KxtYTHXqq1KEzdCl74F5n.jpg",
+        "character": "Lord Irwin"
+      },
+      {
+        "id": 12726,
+        "order": 14,
+        "credit_id": "52fe4275c3a36847f8020659",
+        "name": "Trevor Howard",
+        "cast_id": 21,
+        "profile_path": "/drj1FPryhAimWCiufEnMLzUxpBQ.jpg",
+        "character": "Judge Broomfield"
+      },
+      {
+        "id": 11859,
+        "order": 15,
+        "credit_id": "52fe4276c3a36847f802065d",
+        "name": "John Mills",
+        "cast_id": 22,
+        "profile_path": "/aGBQSdOPz640G7gTvNtgqd4HsBQ.jpg",
+        "character": "Lord Chelmsford"
+      },
+      {
+        "id": 11860,
+        "order": 16,
+        "credit_id": "52fe4276c3a36847f8020661",
+        "name": "Athol Fugard",
+        "cast_id": 23,
+        "profile_path": "/5Ig083fp2F4QG3BXsAaPwLle0QY.jpg",
+        "character": "General Jan Christiaan Smuts"
+      },
+      {
+        "id": 11861,
+        "order": 17,
+        "credit_id": "52fe4276c3a36847f8020665",
+        "name": "Dalip Tahil",
+        "cast_id": 24,
+        "profile_path": "/gEJ9KxcMBnrrRpl9NHJ0eIktHlu.jpg",
+        "character": "Zia"
+      },
+      {
+        "id": 2344,
+        "order": 18,
+        "credit_id": "52fe4276c3a36847f8020669",
+        "name": "Günther Maria Halmer",
+        "cast_id": 25,
+        "profile_path": "/skOeHeqcRKfMXoxgf96JBhcjlz1.jpg",
+        "character": "Dr. Herman Kallenbach"
+      },
+      {
+        "id": 110723,
+        "order": 19,
+        "credit_id": "52fe4276c3a36847f8020697",
+        "name": "Shreeram Lagoo",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Gopal Krishna Gokhale"
+      },
+      {
+        "id": 139444,
+        "order": 20,
+        "credit_id": "52fe4276c3a36847f802069b",
+        "name": "Terrence Hardiman",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Ramsay MacDonald"
+      },
+      {
+        "id": 1037720,
+        "order": 21,
+        "credit_id": "52fe4276c3a36847f802069f",
+        "name": "David Grant",
+        "cast_id": 35,
+        "profile_path": "/eEb0jqvElciRyfjs4rGSgD32efX.jpg",
+        "character": "Daniels"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4786,
+        "credit_id": "52fe4275c3a36847f80205ff",
+        "department": "Directing",
+        "name": "Richard Attenborough",
+        "job": "Director",
+        "profile_path": "/qzedA4XCNjbmR7z3fWiFinGukzx.jpg"
+      },
+      {
+        "id": 11845,
+        "credit_id": "52fe4275c3a36847f8020605",
+        "department": "Writing",
+        "name": "John Briley",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4786,
+        "credit_id": "52fe4275c3a36847f802060b",
+        "department": "Production",
+        "name": "Richard Attenborough",
+        "job": "Producer",
+        "profile_path": "/qzedA4XCNjbmR7z3fWiFinGukzx.jpg"
+      },
+      {
+        "id": 13745,
+        "credit_id": "52fe4275c3a36847f8020611",
+        "department": "Sound",
+        "name": "Ravi Shankar",
+        "job": "Music",
+        "profile_path": "/jruqRUiLeYXxEx1bs6xnfBHro6h.jpg"
+      },
+      {
+        "id": 11847,
+        "credit_id": "52fe4275c3a36847f8020617",
+        "department": "Camera",
+        "name": "Ronnie Taylor",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11848,
+        "credit_id": "52fe4275c3a36847f802061d",
+        "department": "Camera",
+        "name": "Billy Williams",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 11862,
+        "credit_id": "52fe4276c3a36847f802066f",
+        "department": "Production",
+        "name": "Michael Stanley-Evans",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6491,
+        "credit_id": "52fe4276c3a36847f8020675",
+        "department": "Editing",
+        "name": "John Bloom",
+        "job": "Editor",
+        "profile_path": "/spEEPB8yWINH9zCDjC1nodPTGmM.jpg"
+      },
+      {
+        "id": 5491,
+        "credit_id": "52fe4276c3a36847f802067b",
+        "department": "Art",
+        "name": "Stuart Craig",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6801,
+        "credit_id": "52fe4276c3a36847f8020681",
+        "department": "Art",
+        "name": "Michael Seirton",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 1528,
+        "credit_id": "52fe4276c3a36847f8020687",
+        "department": "Sound",
+        "name": "George Fenton",
+        "job": "Music",
+        "profile_path": null
+      },
+      {
+        "id": 11847,
+        "credit_id": "52fe4276c3a36847f8020693",
+        "department": "Crew",
+        "name": "Ronnie Taylor",
+        "job": "Cinematography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 191,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 783,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "India",
+      "iso_3166_1": "IN"
+    }
+  ],
+  "title": "Gandhi",
+  "overview": "In 1893, Gandhi is thrown off a South African train for being an Indian and traveling in a first class compartment. Gandhi realizes that the laws are biased against Indians and decides to start a non-violent protest campaign for the rights of all Indians in South Africa. After numerous arrests and the unwanted attention of the world, the government finally relents by recognizing rights for Indians, though not for the native blacks of South Africa. After this victory, Gandhi is invited back to India, where he is now considered something of a national hero. He is urged to take up the fight for India's independence from the British Empire. Gandhi agrees, and mounts a non-violent non-cooperation campaign of unprecedented scale, coordinating millions of Indians nationwide. There are some setbacks, such as violence against the protesters and Gandhi's occasional imprisonment. Nevertheless...",
+  "production_companies": [
+    {
+      "id": 502,
+      "name": "International Film Investors"
+    },
+    {
+      "id": 503,
+      "name": "National Film Development Corporation of India"
+    },
+    {
+      "id": 500,
+      "name": "Goldcrest Films International"
+    },
+    {
+      "id": 501,
+      "name": "Indo-British"
+    },
+    {
+      "id": 504,
+      "name": "Carolina Bank"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0083987",
+  "release_date": "1982-11-30",
+  "original_title": "Gandhi",
+  "vote_count": 139,
+  "poster_path": "/2z9A4FSu1YySrhhcuqkdMIXpgyN.jpg",
+  "tagline": "His Triumph Changed The World Forever.",
+  "revenue": 77737889,
+  "popularity": "0.728509600188933"
+}

@@ -1,0 +1,74 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 963,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0134786",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 99,
+        "media_type": "movie",
+        "title": "All About My Mother",
+        "credit_id": "52fe4217c3a36847f8003517",
+        "release_date": "1999-04-19",
+        "original_title": "Todo sobre mi madre",
+        "adult": false,
+        "poster_path": "/jopVQl2gYGPeSfEfDX9ZktlG0In.jpg",
+        "character": "Lola"
+      },
+      {
+        "id": 36004,
+        "media_type": "movie",
+        "title": "My Hero",
+        "credit_id": "52fe45c79251416c9103e0f5",
+        "release_date": "2003-05-30",
+        "original_title": "Eres Mi Héroe",
+        "adult": false,
+        "poster_path": "/jgB1W91dZZL2wj2bz6mL1g0m3UM.jpg",
+        "character": "Mateo"
+      },
+      {
+        "id": 122753,
+        "media_type": "movie",
+        "title": "Pon un hombre en tu vida",
+        "credit_id": "52fe4a82c3a368484e1575a5",
+        "release_date": "1996-08-23",
+        "original_title": "Pon un hombre en tu vida",
+        "adult": false,
+        "poster_path": "/3e9hHx2jd7UwzEaUu0OQ2Ov0b2e.jpg",
+        "character": "Juan Antonio"
+      },
+      {
+        "id": 140528,
+        "media_type": "movie",
+        "title": "Your Name Poisons My Dreams",
+        "credit_id": "52fe4a939251416c750e6cd5",
+        "release_date": "1996-09-25",
+        "original_title": "Tu nombre envenena mis sueños",
+        "adult": false,
+        "poster_path": "/4XbQvul08wa9yglDW5vn8cwo6Fa.jpg",
+        "character": "Jaime Méndez"
+      },
+      {
+        "id": 115477,
+        "media_type": "movie",
+        "title": "Los peores años de nuestra vida",
+        "credit_id": "52fe4b6ec3a36847f8203585",
+        "release_date": "1994-09-09",
+        "original_title": "Los peores años de nuestra vida",
+        "adult": false,
+        "poster_path": "/bCfFMGUYY0DtLOgJCOQvDGfcQkB.jpg",
+        "character": "Actor"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Toni Cantò",
+  "place_of_birth": null,
+  "popularity": "1.00018657545375"
+}
