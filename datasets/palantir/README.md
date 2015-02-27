@@ -36,7 +36,7 @@
         (cd palantir-import-mr; jar -xf ../ojdbc6.jar)
         jar -cf palantir-import-mr.jar -C palantir-import-mr .
 
-1. Run the import MR process `io.lumify.palantir.mr.ImportMR` as the mapred user.
+1. Run the import MR process `io.lumify.palantir.mr.ImportMR` as the mapred user (make sure the baseiri is the same as the steps above).
 
         yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtUser http://lumify.io/palantir#
         yarn jar palantir-import-mr.jar io.lumify.palantir.mr.ImportMR hdfs:///palantir-export/ PtGraph http://lumify.io/palantir#
