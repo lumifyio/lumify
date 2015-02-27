@@ -118,6 +118,7 @@ public final class TweetTransformer {
         processHashtags(tweetVertex, tweetStatus.getHashtagEntities());
         processUrls(tweetVertex, tweetStatus.getURLEntities());
         processUserMentions(tweetVertex, tweetStatus.getUserMentionEntities());
+        processUrls(tweetVertex, tweetStatus.getMediaEntities());
     }
 
 
