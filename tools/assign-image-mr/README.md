@@ -1,8 +1,7 @@
 
-1. Configure has media edge types in your lumify.properties. These IRIs represent the edge labels from an entity to an images:
+1. Configure has media edge types in your `lumify.properties` file, these IRIs represent the edge labels from an entity to an images. e.g.:
 
-      assignImageMR.hasImageLabel.0=<edge iri>
-      assignImageMR.hasImageLabel.1=<edge iri>
+        assignImageMR.hasImageLabel.0=http://lumify.io/palantir-import#hasMedia
 
 1. Run:
 
