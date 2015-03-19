@@ -19,12 +19,6 @@
             <useProjectArtifact>true</useProjectArtifact>
             <unpack>true</unpack>
             <scope>runtime</scope>
-            <!--
-            <excludes>
-                <exclude>org.slf4j:slf4j-api</exclude>
-                <exclude>org.slf4j:slf4j-log4j12</exclude>
-            </excludes>
-            -->
         </dependencySet>
     </dependencySets>
 </assembly>
