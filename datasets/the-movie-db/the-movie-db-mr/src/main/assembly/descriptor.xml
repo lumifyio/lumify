@@ -6,17 +6,19 @@
         <format>jar</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    
+
+    <containerDescriptorHandlers>
+        <containerDescriptorHandler>
+            <handlerName>metaInf-services</handlerName>
+        </containerDescriptorHandler>
+    </containerDescriptorHandlers>
+
     <dependencySets>
         <dependencySet>
             <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <unpack>true</unpack>
             <scope>runtime</scope>
-            <excludes>
-                <exclude>org.slf4j:slf4j-api</exclude>
-                <exclude>org.slf4j:slf4j-log4j12</exclude>
-            </excludes>
         </dependencySet>
     </dependencySets>
 </assembly>
