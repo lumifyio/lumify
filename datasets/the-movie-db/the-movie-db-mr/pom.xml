@@ -27,8 +27,19 @@
 
         <dependency>
             <groupId>io.lumify</groupId>
+            <artifactId>lumify-model-bigtable</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-model-securegraph</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs</artifactId>
         </dependency>
 
         <!-- Required for MR job -->
