@@ -18,3 +18,4 @@ sed -i -e "s|localhost|0.0.0.0|" /opt/accumulo/conf/slaves
 sed -i -e "s|localhost|0.0.0.0|" /opt/accumulo/conf/tracers
 sed -i -e "s|localhost|0.0.0.0|" /opt/accumulo/conf/gc
 sed -i -e "s|localhost|0.0.0.0|" /opt/accumulo/conf/monitor
+sed -i -e "s|<value>secret</value>|<value>password</value>|" /opt/accumulo/conf/accumulo-site.xml
