@@ -7,12 +7,6 @@
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
 
-    <containerDescriptorHandlers>
-        <containerDescriptorHandler>
-            <handlerName>metaInf-services</handlerName>
-        </containerDescriptorHandler>
-    </containerDescriptorHandlers>
-
     <dependencySets>
         <dependencySet>
             <outputDirectory>/</outputDirectory>
