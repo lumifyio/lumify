@@ -154,7 +154,7 @@
             <id>lumify-releases</id>
             <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
                  To test clear your local m2 repo of the lumify root pom, then maven compile. -->
-            <url>http://bits.lumify.io/nexus/content/repositories/releases</url>
+            <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </repository>
         <repository>
             <snapshots>
@@ -164,7 +164,7 @@
             <id>lumify-snapshots</id>
             <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
                  To test clear your local m2 repo of the lumify root pom, then maven compile. -->
-            <url>http://bits.lumify.io/nexus/content/repositories/snapshots/</url>
+            <url>https://bits.lumify.io/nexus/content/repositories/snapshots/</url>
         </repository>
 
         <!-- FOR: SecureGraph Snapshots -->
