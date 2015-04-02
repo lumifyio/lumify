@@ -68,7 +68,7 @@ define([
                         resize: function() {
                             self.trigger(document, 'paneResized');
                         }
-                    }).show().find('.content');
+                    }).show().find('.content'),
                 component = _.find(lumifyAdminPlugins.ALL_COMPONENTS, function(c) {
                     return c.name.toLowerCase() === data.name &&
                         c.section.toLowerCase() === data.section;
