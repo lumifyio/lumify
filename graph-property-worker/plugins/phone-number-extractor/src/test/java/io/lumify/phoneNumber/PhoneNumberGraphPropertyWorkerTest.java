@@ -9,6 +9,7 @@ import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -48,6 +49,9 @@ public class PhoneNumberGraphPropertyWorkerTest {
     @Mock
     private OntologyRepository ontologyRepository;
 
+    @Mock
+    private WorkQueueRepository workQueueRepository;
+
     private PhoneNumberGraphPropertyWorker extractor;
     private InMemoryAuthorizations authorizations;
     private InMemoryGraph graph;
@@ -72,6 +76,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         extractor.setConfiguration(configuration);
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setOntologyRepository(ontologyRepository);
+        extractor.setWorkQueueRepository(workQueueRepository);
 
         FileSystem hdfsFileSystem = null;
         authorizations = new InMemoryAuthorizations(TermMentionRepository.VISIBILITY_STRING);

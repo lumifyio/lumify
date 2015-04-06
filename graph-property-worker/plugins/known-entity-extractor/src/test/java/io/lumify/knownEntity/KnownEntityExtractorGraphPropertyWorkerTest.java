@@ -9,6 +9,7 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -19,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.MockPolicy;
 import org.securegraph.*;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 import org.securegraph.inmemory.InMemoryGraph;
@@ -48,6 +50,9 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
     @Mock
     private OntologyRepository ontologyRepository;
 
+    @Mock
+    private WorkQueueRepository workQueueRepository;
+
     String dictionaryPath;
     private InMemoryAuthorizations authorizations;
     private InMemoryAuthorizations termMentionAuthorizations;
@@ -75,6 +80,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setConfiguration(configuration);
         extractor.setOntologyRepository(ontologyRepository);
+        extractor.setWorkQueueRepository(workQueueRepository);
 
         config.put(KnownEntityExtractorGraphPropertyWorker.PATH_PREFIX_CONFIG, "file://" + dictionaryPath);
         FileSystem hdfsFileSystem = FileSystem.get(new Configuration());
