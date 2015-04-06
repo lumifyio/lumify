@@ -91,3 +91,11 @@ Importing movies, people, etc. and importing images.
         hadoop jar lumify-the-movie-db-mr-with-dependencies.jar io.lumify.themoviedb.ImportJsonMR themoviedb.json.seq
 
         hadoop jar lumify-the-movie-db-mr-with-dependencies.jar io.lumify.themoviedb.ImportImgMR themoviedb.img.seq
+
+### Re-index the data
+
+After ingesting the movie data, the last step is to re-index the database using the reindex-mr command line tool.  The reindex-mr tool will rebuild the Elasticsearch for the entire database.
+
+Instructions for re-inexing are found on the following page.
+
+[Re-index the data](../../tools/reindex-mr)
