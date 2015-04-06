@@ -10,6 +10,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.InMemoryAuthorizationRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -61,6 +62,9 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
     @Mock
     private OntologyRepository ontologyRepository;
 
+    @Mock
+    private WorkQueueRepository workQueueRepository;
+
     private InMemoryGraph graph;
     private VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
     private TermMentionRepository termMentionRepository;
@@ -93,6 +97,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
         extractor.setVisibilityTranslator(visibilityTranslator);
         extractor.setGraph(graph);
         extractor.setOntologyRepository(ontologyRepository);
+        extractor.setWorkQueueRepository(workQueueRepository);
 
         AuthorizationRepository authorizationRepository = new InMemoryAuthorizationRepository();
         termMentionRepository = new TermMentionRepository(graph, authorizationRepository);

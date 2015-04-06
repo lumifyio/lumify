@@ -8,6 +8,7 @@ import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -52,6 +53,9 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
     @Mock
     private User user;
 
+    @Mock
+    private WorkQueueRepository workQueueRepository;
+
     private String text = "This is a sentenc®, written by Bob Robértson, who curréntly makes 2 million "
             + "a year. If by 1:30, you don't know what you are doing, you should go watch CNN and see "
             + "what the latest is on the Benghazi nonsense. I'm 47% sure that this test will pass, but will it?";
@@ -76,6 +80,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
         extractor.setConfiguration(configuration);
         extractor.setGraph(graph);
         extractor.setOntologyRepository(ontologyRepository);
+        extractor.setWorkQueueRepository(workQueueRepository);
 
         Map<String, String> conf = new HashMap<>();
         conf.put("ontology.intent.concept.location", "http://lumify.io/test#location");
