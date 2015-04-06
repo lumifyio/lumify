@@ -19,10 +19,11 @@ To get started quickly, you can try out a hosted installation of Lumify, or down
 	  host Docker on these platforms.  After installing Boot2Docker you'll need to initialize and start Boot2Docker with
 	  sufficient memory to run the system.
 	  
-	- Initialize and start boot2docker on OSX/Windows with sufficient memory
+	- Initialize and start boot2docker on OSX/Windows with sufficient memory.  The instructions below illustrate initializing
+	  boot2docker with 4GB of memory, however, this can be increased if more memory is needed.
 
 		```sh
-		boot2docker init -m 10240
+		boot2docker init -m 4096
 		boot2docker start
 		```
 
