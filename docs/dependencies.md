@@ -23,7 +23,7 @@ Some optional Lumify features require the installation of additional dependencie
 
 | Category | Feature                                               | Lumify YARN Plugins              | Dependencies |
 | -------- | ----------------------------------------------------- | -------------------------------- | ------------ |
-| text     | resolution of location terms to geolocations          | clavin                           | [CLAVIN](http://clavin.bericotechnologies.com/) |
+| text     | resolution of location terms to geolocations          | clavin                           | [CLAVIN](CLAVIN.md) |
 | text     | translation of foreign language text to English       | translate <br /> translator-bing | Bing Translate API Key <br /> see [../graph-property-worker/plugins/translator-bing/README.md](../graph-property-worker/plugins/translator-bing/README.md) |
 | media    | conversion of video files to web compatible formats   | _n/a - base topology feature_    | [FFmpeg](https://www.ffmpeg.org/) <br /> see [setup-ffmpeg.md](setup-ffmpeg.md) |
 | media    | closed caption transcription of video files           | ccextractor                      | [CCExtractor](http://ccextractor.sourceforge.net/) |
