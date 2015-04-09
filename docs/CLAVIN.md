@@ -26,7 +26,7 @@ the opennlp-me-extractor plugin.
 The following instructions can be used to build the Lucene index of geonames data that CLAVIN uses.
 
 ## Build
-Instructions for building CLAVIN can be found at [URL](https://github.com/Berico-Technologies/CLAVIN#how-to-build--use-clavin)
+Instructions for building CLAVIN can be found at [https://github.com/Berico-Technologies/CLAVIN#how-to-build--use-clavin](https://github.com/Berico-Technologies/CLAVIN#how-to-build--use-clavin)
 
 ## Install Locally
     Step 1: If you have older indices, please remove them as below. Otherwise move to step 2.
