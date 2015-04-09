@@ -26,12 +26,12 @@ the opennlp-me-extractor plugin.
 The following instructions can be used to build the Lucene index of geonames data that CLAVIN uses.
 
 ## Build
-[Follow the CLAVIN site to build the CLAVIN:] 
-(https://github.com/Berico-Technologies/CLAVIN#how-to-build--use-clavin)
+Instructions for building CLAVIN can be found at [URL](https://github.com/Berico-Technologies/CLAVIN#how-to-build--use-clavin)
 
 ## Install Locally
-
-    mkdir -p /opt/lumify/clavin-index
+    Step 1: If you have older indices, please remove them as below. Otherwise move to step 2.
+    rm -rf /opt/lumify/clavin-index
+    Step 2: Copy the indices to Lumify configured location as below.
     mv CLAVIN/IndexDirectory/* /opt/lumify/clavin-index
 
 Sample lumify-clavin.properties
