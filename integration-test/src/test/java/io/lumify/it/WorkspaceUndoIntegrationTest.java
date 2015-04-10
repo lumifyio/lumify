@@ -39,8 +39,8 @@ public class WorkspaceUndoIntegrationTest extends TestBase {
         ClientApiElement jeffKunkleVertex = lumifyApi.getVertexApi().create(TestOntology.CONCEPT_PERSON, "");
         lumifyApi.getVertexApi().setProperty(jeffKunkleVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Jeff Kunkle", "", "test", null, null);
 
-        lumifyApi.getEdgeApi().create(susanFengVertex.getId(), jeffKunkleVertex.getId(), TestOntology.EDGE_LABEL_WORKS_FOR, "");
-        lumifyApi.getEdgeApi().setProperty(susanFengVertex.getId(), "key1", "http://lumify.io/test#firstName", "edge property value", "", "");
+        ClientApiEdgeWithVertexData clientApiEdgeWithVertexData = lumifyApi.getEdgeApi().create(susanFengVertex.getId(), jeffKunkleVertex.getId(), TestOntology.EDGE_LABEL_WORKS_FOR, "");
+        lumifyApi.getEdgeApi().setProperty(clientApiEdgeWithVertexData.getId(), "key1", "http://lumify.io/test#firstName", "edge property value", "", "");
         ClientApiVertexEdges edges = lumifyApi.getVertexApi().getEdges(susanFengVertex.getId(), null, null, null);
         assertEquals(1, edges.getRelationships().size());
         List<ClientApiProperty> edgeProperties = edges.getRelationships().get(0).getRelationship().getProperties();
