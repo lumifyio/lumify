@@ -306,7 +306,7 @@ public class VertexApi {
        throw new ApiException(400, "missing required params");
     }
     // create path and map variables
-    String path = "/vertex/edge".replaceAll("\\{format\\}","json");
+    String path = "/edge".replaceAll("\\{format\\}","json");
 
     // query params
     Map<String, String> queryParams = new HashMap<String, String>();

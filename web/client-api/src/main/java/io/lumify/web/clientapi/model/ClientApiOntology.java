@@ -1,5 +1,6 @@
 package io.lumify.web.clientapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.*;
@@ -280,6 +281,7 @@ public class ClientApiOntology implements ClientApiObject {
             this.dependentPropertyIris = dependentPropertyIris;
         }
 
+        @JsonIgnore
         public void setDependentPropertyIris(Collection<String> dependentPropertyIris) {
             if (dependentPropertyIris == null || dependentPropertyIris.size() == 0) {
                 this.dependentPropertyIris = null;
