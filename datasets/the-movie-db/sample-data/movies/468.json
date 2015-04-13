@@ -1,0 +1,254 @@
+{
+  "budget": 2500000,
+  "vote_average": 6.8,
+  "backdrop_path": "/kr3qgk9bBc8cFyu6uHxwD8wY0Ic.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 741,
+        "order": 0,
+        "credit_id": "52fe4247c3a36847f8011cf5",
+        "name": "River Phoenix",
+        "cast_id": 3,
+        "profile_path": "/qfokbmRwRvmIVsLHScshxLPAB3C.jpg",
+        "character": "Mike Waters"
+      },
+      {
+        "id": 6384,
+        "order": 1,
+        "credit_id": "52fe4247c3a36847f8011cf9",
+        "name": "Keanu Reeves",
+        "cast_id": 4,
+        "profile_path": "/cEIZlUQvnlXfoxF0mPJsvDPh2Po.jpg",
+        "character": "Scott Favor"
+      },
+      {
+        "id": 785,
+        "order": 2,
+        "credit_id": "52fe4247c3a36847f8011cfd",
+        "name": "James Russo",
+        "cast_id": 5,
+        "profile_path": "/isjC6gy4yLBuwGuI1iko0nraGhm.jpg",
+        "character": "Richard Waters"
+      },
+      {
+        "id": 6385,
+        "order": 3,
+        "credit_id": "52fe4247c3a36847f8011d01",
+        "name": "William Richert",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Bob Pigeon"
+      },
+      {
+        "id": 6386,
+        "order": 4,
+        "credit_id": "52fe4247c3a36847f8011d05",
+        "name": "Rodney Harvey",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Gary"
+      },
+      {
+        "id": 6405,
+        "order": 5,
+        "credit_id": "52fe4247c3a36847f8011d3f",
+        "name": "Chiara Caselli",
+        "cast_id": 17,
+        "profile_path": "/eXrEpcV8HEuvddz3eWFEPi5uSQM.jpg",
+        "character": "Carmella"
+      },
+      {
+        "id": 6465,
+        "order": 6,
+        "credit_id": "52fe4247c3a36847f8011d43",
+        "name": "Grace Zabriskie",
+        "cast_id": 18,
+        "profile_path": "/oGC4FHzqtf69qszARQuDP0v3Cv1.jpg",
+        "character": "Mother"
+      },
+      {
+        "id": 6466,
+        "order": 7,
+        "credit_id": "52fe4247c3a36847f8011d47",
+        "name": "Tom Troupe",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Jack Favor"
+      },
+      {
+        "id": 53361,
+        "order": 8,
+        "credit_id": "52fe4247c3a36847f8011d51",
+        "name": "Michael Parker",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Digger"
+      },
+      {
+        "id": 188589,
+        "order": 9,
+        "credit_id": "52fe4247c3a36847f8011d55",
+        "name": "Jessie Thomas",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Denise"
+      },
+      {
+        "id": 1237,
+        "order": 10,
+        "credit_id": "52fe4247c3a36847f8011d59",
+        "name": "Michael Peter Balzary",
+        "cast_id": 23,
+        "profile_path": "/sKZq4DWMszQiSYUmNho1Y6ORhIw.jpg",
+        "character": "Budd"
+      },
+      {
+        "id": 1646,
+        "order": 11,
+        "credit_id": "52fe4247c3a36847f8011d5d",
+        "name": "Udo Kier",
+        "cast_id": 24,
+        "profile_path": "/ltidqLA5xO7JHjoBBmsA18np143.jpg",
+        "character": "Hans"
+      },
+      {
+        "id": 1048023,
+        "order": 12,
+        "credit_id": "52fe4247c3a36847f8011d61",
+        "name": "Sally Curtice",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Jane Lightwork"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5216,
+        "credit_id": "52fe4247c3a36847f8011cf1",
+        "department": "Directing",
+        "name": "Gus Van Sant",
+        "job": "Director",
+        "profile_path": "/jebdl8P5osH8N8bbXa5KTOTLj4c.jpg"
+      },
+      {
+        "id": 512,
+        "credit_id": "52fe4247c3a36847f8011d0b",
+        "department": "Production",
+        "name": "Laurie Parker",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6387,
+        "credit_id": "52fe4247c3a36847f8011d11",
+        "department": "Production",
+        "name": "Anthony Brand",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6388,
+        "credit_id": "52fe4247c3a36847f8011d17",
+        "department": "Sound",
+        "name": "Bill Stafford",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5227,
+        "credit_id": "52fe4247c3a36847f8011d1d",
+        "department": "Camera",
+        "name": "John J. Campbell",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6389,
+        "credit_id": "52fe4247c3a36847f8011d23",
+        "department": "Camera",
+        "name": "Eric Alan Edwards",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6390,
+        "credit_id": "52fe4247c3a36847f8011d29",
+        "department": "Editing",
+        "name": "Curtiss Clayton",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6391,
+        "credit_id": "52fe4247c3a36847f8011d2f",
+        "department": "Art",
+        "name": "David Brisbin",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6392,
+        "credit_id": "52fe4247c3a36847f8011d35",
+        "department": "Costume & Make-Up",
+        "name": "Beatrix Aruna Pasztor",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6393,
+        "credit_id": "52fe4247c3a36847f8011d3b",
+        "department": "Costume & Make-Up",
+        "name": "Gina Monaci",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 5216,
+        "credit_id": "52fe4247c3a36847f8011d4d",
+        "department": "Writing",
+        "name": "Gus Van Sant",
+        "job": "Screenplay",
+        "profile_path": "/jebdl8P5osH8N8bbXa5KTOTLj4c.jpg"
+      }
+    ]
+  },
+  "runtime": 104,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 468,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "My Own Private Idaho",
+  "overview": "River Phoenix and Keanu Reeves star in Gus Van Sant\u2019s haunting tale of two young street hustlers: Mike Waters, a sensitive narcoleptic who dreams of the mother who abandoned him, and Scott Favor, the wayward son of the mayor of Portland and object of Mike\u2019s desire. Navigating a volatile world of junkies, thieves, and johns, Mike takes Scott on a quest from the grungy streets to the open highways of the Pacific Northwest, in search of an elusive place called home. Visually dazzling and groundbreaking, My Own Private Idaho is a deeply moving look at unrequited love and life at society\u2019s margins.",
+  "production_companies": [{
+    "id": 8,
+    "name": "Fine Line Features"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0102494",
+  "release_date": "1991-10-18",
+  "original_title": "My Own Private Idaho",
+  "vote_count": 13,
+  "poster_path": "/8Zfb4oYH8cMkmkbZ9geKgg3IlW5.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.703136130201494"
+}

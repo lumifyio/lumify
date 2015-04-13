@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lumify-graph-property-worker-group</artifactId>
+        <groupId>io.lumify</groupId>
+        <version>0.4.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <artifactId>lumify-graph-property-worker-plugins-group</artifactId>
+    <name>Lumify: GraphPropertyWorker: Plugins</name>
+
+    <modules>
+        <module>ccextractor</module>
+        <module>email-extractor</module>
+        <module>known-entity-extractor</module>
+        <module>opennlp-dictionary-extractor</module>
+        <module>opennlp-me-extractor</module>
+        <module>phone-number-extractor</module>
+        <module>sphinx</module>
+        <module>subrip-parser</module>
+        <module>subrip-transcript</module>
+        <module>tesseract</module>
+        <module>tika-mime-type</module>
+        <module>tika-text-extractor</module>
+        <module>youtube-transcript</module>
+        <module>zipcode-extractor</module>
+        <module>zipcode-resolver</module>
+        <module>reindex</module>
+        <module>translate</module>
+        <module>translator-bing</module>
+        <module>opencv-object-detector</module>
+        <module>clavin</module>
+        <module>drewnoakes-image-metadata-extractor</module>
+        <module>java-code</module>
+        <module>mime-type-ontology-mapper</module>
+        <module>csv</module>
+        <module>rdf</module>
+        <module>video-mp4-encoder</module>
+        <module>video-webm-encoder</module>
+        <module>video-audio-extract</module>
+        <module>audio-mp4-encoder</module>
+        <module>audio-ogg-encoder</module>
+        <module>video-poster-frame</module>
+        <module>video-frame-extract</module>
+        <module>video-metadata</module>
+    </modules>
+</project>

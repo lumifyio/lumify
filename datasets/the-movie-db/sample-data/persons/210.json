@@ -1,0 +1,28 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 210,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm1552908",
+  "combined_credits": {
+    "cast": [{
+      "id": 38,
+      "media_type": "movie",
+      "title": "Eternal Sunshine of the Spotless Mind",
+      "credit_id": "52fe4211c3a36847f80016af",
+      "release_date": "2004-03-19",
+      "original_title": "Eternal Sunshine of the Spotless Mind",
+      "adult": false,
+      "poster_path": "/gutwXkVChJkpIrclokNESybj0GC.jpg",
+      "character": "Young Bully"
+    }],
+    "crew": []
+  },
+  "name": "Amir Ali Said",
+  "place_of_birth": null,
+  "popularity": "1.00019339146246"
+}

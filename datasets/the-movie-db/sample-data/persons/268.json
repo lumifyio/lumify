@@ -1,0 +1,129 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/qZkZhM3fa0IH5qgMOArHtZ0K6pH.jpg",
+  "id": 268,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0080657",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 55,
+        "media_type": "movie",
+        "title": "Amores Perros",
+        "credit_id": "52fe4211c3a36847f8001765",
+        "release_date": "2000-03-14",
+        "original_title": "Amores perros",
+        "adult": false,
+        "poster_path": "/8gEXmIzw1tDnBfOaCFPimkNIkmm.jpg",
+        "character": "Tía Luisa"
+      },
+      {
+        "id": 269451,
+        "media_type": "movie",
+        "title": "Una pared para Cecilia",
+        "credit_id": "537052a4c3a3683bf90066f0",
+        "release_date": null,
+        "original_title": "Una pared para Cecilia",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 48185,
+        "media_type": "movie",
+        "title": "Fuera Del Cielo",
+        "credit_id": "52fe4758c3a36847f8130acb",
+        "release_date": "2007-01-12",
+        "original_title": "Fuera Del Cielo",
+        "adult": false,
+        "poster_path": "/bVaPMsGFh4vBklpSW11OeDGFlbG.jpg",
+        "character": "Señora García Luna"
+      },
+      {
+        "id": 161186,
+        "media_type": "movie",
+        "title": "Miroslava",
+        "credit_id": "52fe4c3fc3a36847f8224dc1",
+        "release_date": "1993-04-03",
+        "original_title": "Miroslava",
+        "adult": false,
+        "poster_path": null,
+        "character": "Sofía"
+      },
+      {
+        "id": 13010,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "5258250e760ee36aaa7f6493",
+        "name": "Alborada",
+        "poster_path": "/qsZ2OdE9EdMnf5UpO20mXNgHex6.jpg",
+        "original_name": "Alborada",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 16305,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "52584da7760ee34661019a70",
+        "name": "La Otra",
+        "poster_path": null,
+        "original_name": "La Otra",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 19125,
+        "media_type": "tv",
+        "episode_count": 40,
+        "credit_id": "532c5fbec3a3686ee50000c4",
+        "name": "Killer Women",
+        "poster_path": "/2ZHLMMuOVl05AfCFkEC1J7Vy8xL.jpg",
+        "original_name": "Mujeres Asesinas",
+        "first_air_date": "2008-06-17",
+        "character": "doctora Sofía Capellán"
+      },
+      {
+        "id": 12859,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "532c818ec3a3685fdb000040",
+        "name": "Den of Wolves",
+        "poster_path": "/ey7g7bk1tEkqaUHqnKicVDdCACt.jpg",
+        "original_name": "Cuna de lobos",
+        "first_air_date": "1986-10-13",
+        "character": "Bertha Moscoso"
+      },
+      {
+        "id": 34566,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "533076169251413a7e005aea",
+        "name": "The Power of Destiny",
+        "poster_path": "/J2RhR89tmOWersKS7Y0xJSw0tj.jpg",
+        "original_name": "La Fuerza del Destino",
+        "first_air_date": "2011-03-14",
+        "character": "Lucrecia Curiel de Lomelí"
+      },
+      {
+        "id": 60645,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5330d6f8c3a3686aaf0004c9",
+        "name": "Blameless Love",
+        "poster_path": "/7niHTIwf3Xap7MDNGR2fOLrwwP2.jpg",
+        "original_name": "Sin pecado concebido",
+        "first_air_date": "2001-05-28",
+        "character": "Carmen Albán"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Rosa María Bianchi",
+  "place_of_birth": null,
+  "popularity": "1.00000000002964"
+}

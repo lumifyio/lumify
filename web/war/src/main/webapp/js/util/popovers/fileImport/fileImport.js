@@ -68,6 +68,8 @@ define([
 
                 this.on(this.popover, 'visibilitychange', this.onVisibilityChange);
 
+                this.enterShouldSubmit = 'importSelector';
+
                 VisibilityEditor.attachTo(this.popover.find('.visibility'));
 
                 this.on(this.popover, 'click', {
@@ -154,13 +156,14 @@ define([
                     .attr('disabled', true),
                 cancelButton = this.popover.find('.btn-default').show(),
                 collapsed = this.isVisibilityCollapsed(),
+                files = this.attr.files,
                 visibilityValue = collapsed ?
                     this.visibilitySource.value :
                     _.map(this.visibilitySources, _.property('value'));
 
             this.attr.teardownOnTap = false;
 
-            this.request = this.dataRequest('vertex', 'importFiles', this.attr.files, visibilityValue);
+            this.request = this.dataRequest('vertex', 'importFiles', files, visibilityValue);
 
             this.request
                 .progress(function(complete) {
@@ -168,11 +171,16 @@ define([
                     button.text(percent + '% ' + i18n('popovers.file_import.importing'));
                 })
                 .then(function(result) {
-                    // TODO: somehow tie in fileDropPosition: self.attr.anchorTo.page
                     self.trigger('updateWorkspace', {
+                        options: {
+                            selectAll: true
+                        },
                         entityUpdates: result.vertexIds.map(function(vId) {
                             return {
-                                vertexId: vId
+                                vertexId: vId,
+                                graphLayoutJson: {
+                                    pagePosition: self.attr.anchorTo.page
+                                }
                             }
                         })
                     });

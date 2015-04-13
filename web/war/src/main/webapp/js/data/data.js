@@ -6,11 +6,13 @@ define([
     './withDataRequestHandler',
     './withCurrentUser',
     './withCachedConceptIcons',
+    './withDocumentCopyText',
     './withWebsocket',
     './withWebsocketLegacy',
     './withKeyboardRegistration',
     './withObjectSelection',
     './withObjectsUpdated',
+    './withClipboard',
     './withWorkspaces',
     './withWorkspaceFiltering',
     './withWorkspaceVertexDrop'
@@ -54,6 +56,14 @@ define([
             this.messagesPromise = this.dataRequestPromise.then(function() {
                     return Promise.require('util/messages');
                 }).then(this.setupMessages.bind(this));
+
+            if (typeof DEBUG !== 'undefined') {
+                DEBUG.logCacheStats = function() {
+                    self.worker.postMessage({
+                        type: 'postCacheStats'
+                    });
+                }
+            }
         });
 
         this.setupMessages = function(i18n) {
@@ -61,7 +71,8 @@ define([
         };
 
         this.setupDataWorker = function() {
-            this.worker = new Worker(PATH_TO_WORKER);
+            this.worker = new Worker(PATH_TO_WORKER + '?' + window.lumifyCacheBreaker);
+            this.worker.postMessage(window.lumifyCacheBreaker);
             this.worker.onmessage = this.onDataWorkerMessage.bind(this);
             this.worker.onerror = this.onDataWorkerError.bind(this);
         };

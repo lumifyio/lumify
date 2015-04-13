@@ -1,6 +1,8 @@
 <ul class="nav nav-list permissions-list">
   <li><label><input data-permissions="READ" 
     type="radio" name="permission" <%= access == 'READ' ? 'checked' : '' %>/><%= i18n('workspaces.form.sharing.access.view') %></label></li>
+  <li><label><input data-permissions="COMMENT" 
+    type="radio" name="permission" <%= access == 'COMMENT' ? 'checked' : '' %>/><%= i18n('workspaces.form.sharing.access.comment') %></label></li>
   <li><label><input data-permissions="WRITE" 
     type="radio" name="permission" <%= access == 'WRITE' ? 'checked' : '' %>/><%= i18n('workspaces.form.sharing.access.edit') %></label></li>
   <li class="divider"> </li>

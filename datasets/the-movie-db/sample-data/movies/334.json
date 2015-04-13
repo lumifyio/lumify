@@ -1,0 +1,406 @@
+{
+  "budget": 37000000,
+  "vote_average": 7,
+  "backdrop_path": "/9In3XGQSdr2yfgUoEdCpqxEGAOO.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1231,
+        "order": 0,
+        "credit_id": "52fe4239c3a36847f800d681",
+        "name": "Julianne Moore",
+        "cast_id": 3,
+        "profile_path": "/5TP6PXUMfVlckGfDAmAk8ijVpLX.jpg",
+        "character": "Linda Partridge"
+      },
+      {
+        "id": 3905,
+        "order": 1,
+        "credit_id": "52fe4239c3a36847f800d6f3",
+        "name": "William H. Macy",
+        "cast_id": 26,
+        "profile_path": "/rpUv9mDece5LQuWI7iBNQaAesFg.jpg",
+        "character": "Donnie Smith"
+      },
+      {
+        "id": 4764,
+        "order": 2,
+        "credit_id": "52fe4239c3a36847f800d685",
+        "name": "John C. Reilly",
+        "cast_id": 4,
+        "profile_path": "/kUo2TPQp4kOWWvijvkjLl0v9PQB.jpg",
+        "character": "Jim Kurring"
+      },
+      {
+        "id": 500,
+        "order": 3,
+        "credit_id": "52fe4239c3a36847f800d689",
+        "name": "Tom Cruise",
+        "cast_id": 5,
+        "profile_path": "/3oWEuo0e8Nx8JvkqYCDec2iMY6K.jpg",
+        "character": "Frank T.J. Mackey"
+      },
+      {
+        "id": 4492,
+        "order": 4,
+        "credit_id": "52fe4239c3a36847f800d68d",
+        "name": "Philip Baker Hall",
+        "cast_id": 6,
+        "profile_path": "/eH7GrivSuLEvhJL85qPkhNvg3E7.jpg",
+        "character": "Jimmy Gator"
+      },
+      {
+        "id": 1233,
+        "order": 5,
+        "credit_id": "52fe4239c3a36847f800d691",
+        "name": "Philip Seymour Hoffman",
+        "cast_id": 7,
+        "profile_path": "/de37JbzZ80KP1LOhzIkVe5XfSwe.jpg",
+        "character": "Phil Parma"
+      },
+      {
+        "id": 4765,
+        "order": 6,
+        "credit_id": "52fe4239c3a36847f800d695",
+        "name": "Jason Robards",
+        "cast_id": 8,
+        "profile_path": "/26W5Ev9zMqG8OJ81sLVXGSFVdWn.jpg",
+        "character": "Earl Partridge"
+      },
+      {
+        "id": 658,
+        "order": 7,
+        "credit_id": "52fe4239c3a36847f800d699",
+        "name": "Alfred Molina",
+        "cast_id": 9,
+        "profile_path": "/uJQVkqEVJGLMaJbwI2tTDlJ9Oo0.jpg",
+        "character": "Solomon Solomon"
+      },
+      {
+        "id": 4766,
+        "order": 8,
+        "credit_id": "52fe4239c3a36847f800d69d",
+        "name": "Melora Walters",
+        "cast_id": 10,
+        "profile_path": "/ffxBL8NSiXYJMSMzY37FgYuYRTw.jpg",
+        "character": "Claudia Wilson Gator"
+      },
+      {
+        "id": 2234,
+        "order": 9,
+        "credit_id": "52fe4239c3a36847f800d6a1",
+        "name": "Michael Bowen",
+        "cast_id": 11,
+        "profile_path": "/wQmxAvRQzNR3TBdgQAG3jJYVF4b.jpg",
+        "character": "Rick Spector"
+      },
+      {
+        "id": 4779,
+        "order": 10,
+        "credit_id": "52fe4239c3a36847f800d6ef",
+        "name": "Jeremy Blackman",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Stanley Spector"
+      },
+      {
+        "id": 4777,
+        "order": 11,
+        "credit_id": "52fe4239c3a36847f800d6e7",
+        "name": "Emmanuel Johnson",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Dixon"
+      },
+      {
+        "id": 4778,
+        "order": 12,
+        "credit_id": "52fe4239c3a36847f800d6eb",
+        "name": "Melinda Dillon",
+        "cast_id": 24,
+        "profile_path": "/f4DU3lNCJqNVgwDZmHMlNV96rKV.jpg",
+        "character": "Rose Gator"
+      },
+      {
+        "id": 10691,
+        "order": 13,
+        "credit_id": "52fe4239c3a36847f800d6f7",
+        "name": "April Grace",
+        "cast_id": 27,
+        "profile_path": "/9vHFcPQS463AjDgst7vFJy6ZUnA.jpg",
+        "character": "Gwenovier"
+      },
+      {
+        "id": 7427,
+        "order": 14,
+        "credit_id": "52fe4239c3a36847f800d6fb",
+        "name": "Felicity Huffman",
+        "cast_id": 28,
+        "profile_path": "/wtFoENVM5jo4NhcWx9qFWuvFuXC.jpg",
+        "character": "Cynthia"
+      },
+      {
+        "id": 18270,
+        "order": 15,
+        "credit_id": "52fe4239c3a36847f800d6ff",
+        "name": "Orlando Jones",
+        "cast_id": 29,
+        "profile_path": "/7QOW3bgYjPxnjwrZDclmnJenhPH.jpg",
+        "character": "Worm"
+      },
+      {
+        "id": 10743,
+        "order": 16,
+        "credit_id": "52fe4239c3a36847f800d703",
+        "name": "Ricky Jay",
+        "cast_id": 30,
+        "profile_path": "/gc0cJJzCb1tAe6pWQpXDMWtTDVj.jpg",
+        "character": "Narrator/Burt Ramsey"
+      },
+      {
+        "id": 10872,
+        "order": 17,
+        "credit_id": "52fe4239c3a36847f800d707",
+        "name": "Patton Oswalt",
+        "cast_id": 31,
+        "profile_path": "/t4u6Fk074mGeMb0GnZKEp4TnDEn.jpg",
+        "character": "Delmer Darion"
+      },
+      {
+        "id": 43776,
+        "order": 18,
+        "credit_id": "52fe4239c3a36847f800d70b",
+        "name": "Neil Flynn",
+        "cast_id": 32,
+        "profile_path": "/2s934K6IOUhtjXul54wJbmkeZhK.jpg",
+        "character": "Stanley Berry"
+      },
+      {
+        "id": 19439,
+        "order": 19,
+        "credit_id": "52fe4239c3a36847f800d72d",
+        "name": "Henry Gibson",
+        "cast_id": 38,
+        "profile_path": "/lLzzFLkPa3jKmu1sfJRxdm7zkmM.jpg",
+        "character": "Thurston Howell"
+      },
+      {
+        "id": 6199,
+        "order": 20,
+        "credit_id": "53071373c3a368518100005a",
+        "name": "Miriam Margolyes",
+        "cast_id": 39,
+        "profile_path": "/7Fijg5sZ7gKbooq6tId3MUS5sDY.jpg",
+        "character": "Faye Barringer"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4762,
+        "credit_id": "52fe4239c3a36847f800d677",
+        "department": "Directing",
+        "name": "Paul Thomas Anderson",
+        "job": "Director",
+        "profile_path": "/6lDE5N6lQUvAbKBRazn2Q0mRk44.jpg"
+      },
+      {
+        "id": 4762,
+        "credit_id": "52fe4239c3a36847f800d67d",
+        "department": "Writing",
+        "name": "Paul Thomas Anderson",
+        "job": "Screenplay",
+        "profile_path": "/6lDE5N6lQUvAbKBRazn2Q0mRk44.jpg"
+      },
+      {
+        "id": 4762,
+        "credit_id": "52fe4239c3a36847f800d6a7",
+        "department": "Production",
+        "name": "Paul Thomas Anderson",
+        "job": "Producer",
+        "profile_path": "/6lDE5N6lQUvAbKBRazn2Q0mRk44.jpg"
+      },
+      {
+        "id": 4767,
+        "credit_id": "52fe4239c3a36847f800d6ad",
+        "department": "Production",
+        "name": "Michael De Luca",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4768,
+        "credit_id": "52fe4239c3a36847f800d6b3",
+        "department": "Production",
+        "name": "Lynn Harris",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4769,
+        "credit_id": "52fe4239c3a36847f800d6b9",
+        "department": "Production",
+        "name": "Daniel Lupi",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4770,
+        "credit_id": "52fe4239c3a36847f800d6bf",
+        "department": "Production",
+        "name": "JoAnne Sellar",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1809,
+        "credit_id": "52fe4239c3a36847f800d6c5",
+        "department": "Production",
+        "name": "Dylan Tichenor",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 312,
+        "credit_id": "52fe4239c3a36847f800d6cb",
+        "department": "Sound",
+        "name": "Jon Brion",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4771,
+        "credit_id": "52fe4239c3a36847f800d6d1",
+        "department": "Sound",
+        "name": "Aimee Mann",
+        "job": "Songs",
+        "profile_path": "/2qP6xS8h9SKFOSi053duEFVv6b0.jpg"
+      },
+      {
+        "id": 2950,
+        "credit_id": "52fe4239c3a36847f800d6d7",
+        "department": "Camera",
+        "name": "Robert Elswit",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1809,
+        "credit_id": "52fe4239c3a36847f800d6dd",
+        "department": "Editing",
+        "name": "Dylan Tichenor",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4772,
+        "credit_id": "52fe4239c3a36847f800d6e3",
+        "department": "Production",
+        "name": "Cassandra Kulukundis",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 21747,
+        "credit_id": "52fe4239c3a36847f800d711",
+        "department": "Art",
+        "name": "William Arnold",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 40471,
+        "credit_id": "52fe4239c3a36847f800d717",
+        "department": "Art",
+        "name": "Mark Bridges",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 41082,
+        "credit_id": "52fe4239c3a36847f800d71d",
+        "department": "Art",
+        "name": "Chris L. Spellman",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 40471,
+        "credit_id": "52fe4239c3a36847f800d723",
+        "department": "Costume & Make-Up",
+        "name": "Mark Bridges",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 215486,
+        "credit_id": "52fe4239c3a36847f800d729",
+        "department": "Crew",
+        "name": "Fiona Apple",
+        "job": "Additional Music",
+        "profile_path": "/sQ0NjOBQ8R0sXjOrGLkfuGNAgjr.jpg"
+      }
+    ]
+  },
+  "runtime": 188,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.magnoliamovie.com/",
+  "id": 334,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Magnolia",
+  "overview": "An epic mosaic of many interrelated characters in search of happiness, forgiveness, and meaning in the San Fernando Valley.",
+  "production_companies": [
+    {
+      "id": 178,
+      "name": "Ghoulardi Film Company"
+    },
+    {
+      "id": 179,
+      "name": "The Magnolia Project"
+    },
+    {
+      "id": 12,
+      "name": "New Line Cinema"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0175880",
+  "release_date": "1999-12-08",
+  "original_title": "Magnolia",
+  "vote_count": 117,
+  "poster_path": "/jSbbDL8aXfJfRk3zzjoVHui2Fsx.jpg",
+  "tagline": "Things fall down. People look up. And when it rains, it pours.",
+  "revenue": 48451803,
+  "popularity": "1.62267335343877"
+}

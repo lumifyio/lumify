@@ -1,12 +1,10 @@
 
 define([
     'flight/lib/component',
-    'tpl!./actionbar',
-    'util/withTeardown'
+    'tpl!./actionbar'
 ], function(
     defineComponent,
-    template,
-    withTeardown
+    template
 ) {
     'use strict';
 
@@ -17,15 +15,19 @@ define([
             'node'
         ];
 
-    return defineComponent(ActionBar, withTeardown);
+    return defineComponent(ActionBar);
 
     function ActionBar() {
 
-        this.before('teardown', function() {
-            $(document).off('.actionbar');
+        this.around('teardown', function(original) {
+            this.$tip.hide();
             this[this.attr.alignTo + 'Teardown']();
             this.$node.tooltip('destroy');
-            this.$tip.hide();
+            if (this.alreadyDisposed) {
+                return;
+            }
+            original.call(this);
+            this.alreadyDisposed = true;
         });
 
         this.after('initialize', function() {
@@ -55,11 +57,12 @@ define([
             this[this.attr.alignTo + 'Initializer']();
             this.updatePosition();
             this.on(document, 'graphPaddingUpdated', this.updatePosition);
+            this.on(document, 'windowResize', this.updatePosition);
 
             var self = this;
-            $(document).off('.actionbar').on('click.actionbar', function() {
+
+            this.on(document, 'click', function() {
                 _.defer(function() {
-                    $(document).off('.actionbar');
                     self.teardown();
                 });
             });
@@ -117,7 +120,8 @@ define([
         };
 
         this.updateTipPositionWithDomElement = function(el, alignment) {
-            var rects = el.getClientRects();
+            var box = null,
+                rects = el.getClientRects();
 
             if (rects.length) {
                 box = _.sortBy(rects, function(r) {
@@ -127,13 +131,33 @@ define([
                 box = el.getBoundingClientRect();
             }
 
-            this.$tip.css({
-                left: (alignment === 'center' && rects.length === 1) ?
-                    box.left + box.width / 2 - this.$tip.width() / 2 :
-                    box.left + box.width - this.$tip.width() / 2,
-                top: box.top + box.height,
-                opacity: box.top < TOP_HIDE_THRESHOLD ? '0' : '1'
-            });
+            var windowScroll = $(window).scrollTop(), // for fullscreen view
+                top = box.top + windowScroll,
+                position = (alignment === 'center' && rects.length === 1) ?
+                    box.left + box.width / 2 :
+                    box.left + box.width,
+                css = {
+                    left: position - this.$tip.width() / 2,
+                    top: top + box.height
+                };
+
+            if (this.attr.alignWithin) {
+                var offset = this.attr.alignWithin.offset(),
+                    width = this.attr.alignWithin.width(),
+                    padding = parseInt(this.attr.alignWithin.css('padding-left')) * 2,
+                    extraPadding = 3,
+                    totalWidth = width + (isNaN(padding) ? 0 : padding),
+                    tipWidth = this.$tip.width();
+
+                css.left = Math.max(offset.left + extraPadding, css.left);
+                css.left = Math.min(offset.left + totalWidth - tipWidth - extraPadding, css.left);
+                var arrowPercent = (position - css.left) / tipWidth * 100;
+                this.$tip.find('.tooltip-arrow').css('left', arrowPercent.toFixed(2) + '%');
+            }
+
+            css.opacity = top < TOP_HIDE_THRESHOLD ? '0' : '1';
+
+            this.$tip.css(css);
         };
     }
 });

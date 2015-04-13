@@ -8,14 +8,14 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.PropertyJustificationMetadata;
-import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.*;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.web.clientapi.model.PropertyType;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.version.VersionService;
+import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
@@ -27,7 +27,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -105,9 +104,18 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     @Override
-    public Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue, Object newValue,
-                                     String process, String comment, Map<String, Object> metadata, User user,
-                                     Visibility visibility) {
+    public Audit auditEntityProperty(
+            AuditAction action,
+            Object id,
+            String propertyKey,
+            String propertyName,
+            Object oldValue,
+            Object newValue,
+            String process,
+            String comment,
+            Metadata metadata,
+            User user,
+            Visibility visibility) {
         checkNotNull(action, "action cannot be null");
         checkNotNull(id, "id cannot be null");
         checkNotNull(propertyName, "propertyName cannot be null");
@@ -153,7 +161,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
         }
         audit.getAuditProperty().setPropertyName(propertyName, visibility);
 
-        if (metadata != null && !metadata.isEmpty()) {
+        if (metadata != null && !metadata.entrySet().isEmpty()) {
             audit.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
         }
 
@@ -177,7 +185,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
         Audit auditEdge = new Audit(AuditRowKey.build(edge.getId()));
         visibility = orVisibility(visibility);
 
-        List<Audit> audits = new ArrayList<Audit>();
+        List<Audit> audits = new ArrayList<>();
         String displayLabel = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
         checkNotNull(displayLabel, "Could not find display name for label '" + edge.getLabel() + "' on edge " + edge.getId());
         audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, displayLabel, process, comment, user, visibility));
@@ -303,8 +311,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
         auditSourceDest.getAuditProperty().setPropertyName(propertyName, visibility);
         auditEdge.getAuditProperty().setPropertyName(propertyName, visibility);
 
-        Map<String, Object> metadata = edge.getProperty(propertyKey, propertyName).getMetadata();
-        if (metadata != null && !metadata.isEmpty()) {
+        Metadata metadata = edge.getProperty(propertyKey, propertyName).getMetadata();
+        if (metadata != null && !metadata.entrySet().isEmpty()) {
             auditDestSource.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
             auditSourceDest.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
             auditEdge.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
@@ -393,8 +401,19 @@ public class SecureGraphAuditRepository extends AuditRepository {
             for (Property property : vertexElementMutation.getProperties()) {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property (" + property + ") value cannot be null");
-                auditEntityProperty(action, vertex.getId(), property.getKey(), property.getName(), null, newPropertyValue, process, "",
-                        property.getMetadata(), user, visibility);
+                auditEntityProperty(
+                        action,
+                        vertex.getId(),
+                        property.getKey(),
+                        property.getName(),
+                        null,
+                        newPropertyValue,
+                        process,
+                        "",
+                        property.getMetadata(),
+                        user,
+                        visibility
+                );
             }
         }
     }
@@ -409,7 +428,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
                 if (!newPropertyValue.equals(oldPropertyValue)) {
-                    auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(), property.getKey(),
+                    auditRelationshipProperty(action, sourceVertex.getId(), destVertex.getId(), property.getKey(),
                             property.getName(), oldPropertyValue, newPropertyValue, edge, process, "", user, visibility);
                 }
             }
@@ -418,7 +437,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
             for (Property property : edgeElementMutation.getProperties()) {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
-                auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(), property.getKey(),
+                auditRelationshipProperty(action, sourceVertex.getId(), destVertex.getId(), property.getKey(),
                         property.getName(), null, newPropertyValue, edge, process, "", user, visibility);
             }
         }
@@ -429,27 +448,32 @@ public class SecureGraphAuditRepository extends AuditRepository {
         getModelSession().alterColumnsVisibility(audit, orVisibility(originalEdgeVisibility).getVisibilityString(), visibilityString, FlushFlag.FLUSH);
     }
 
-    private JSONObject jsonMetadata(Map<String, Object> metadata) {
+    private JSONObject jsonMetadata(Metadata metadata) {
         JSONObject json = new JSONObject();
-        for (String key : metadata.keySet()) {
-            if (key.equals(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
-                json.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, ((PropertyJustificationMetadata) metadata.get(key)).toJson());
-            } else if (key.equals(PropertySourceMetadata.PROPERTY_SOURCE_METADATA)) {
-                json.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, ((PropertySourceMetadata) metadata.get(key)).toJson());
+        for (Metadata.Entry metadataEntry : metadata.entrySet()) {
+            if (metadataEntry.getKey().equals(LumifyProperties.JUSTIFICATION.getPropertyName())) {
+                PropertyJustificationMetadata propertyJustificationMetadata;
+                Object metadataEntryValue = metadataEntry.getValue();
+                if (metadataEntryValue instanceof PropertyJustificationMetadata) {
+                    propertyJustificationMetadata = (PropertyJustificationMetadata) metadataEntryValue;
+                } else {
+                    propertyJustificationMetadata = new PropertyJustificationMetadata(new JSONObject(metadataEntryValue.toString()));
+                }
+                json.put(LumifyProperties.JUSTIFICATION.getPropertyName(), (propertyJustificationMetadata).toJson());
             } else {
-                json.put(key, metadata.get(key));
+                json.put(metadataEntry.getKey(), metadataEntry.getValue());
             }
         }
         return json;
     }
 
     private Visibility orVisibility(Visibility visibility) {
-        if (!configuration.get(Configuration.AUDIT_VISIBILITY_LABEL).equals(Configuration.UNKNOWN_STRING) && !visibility.toString().equals("")) {
-            String auditVisibility = configuration.get(Configuration.AUDIT_VISIBILITY_LABEL);
-            if (visibility.toString().equals(auditVisibility)) {
-                return new Visibility(auditVisibility);
+        String auditVisibilityLabel = configuration.get(Configuration.AUDIT_VISIBILITY_LABEL, null);
+        if (auditVisibilityLabel != null && !visibility.toString().equals("")) {
+            if (visibility.toString().equals(auditVisibilityLabel)) {
+                return new Visibility(auditVisibilityLabel);
             }
-            return new Visibility("(" + auditVisibility + "|" + visibility.toString() + ")");
+            return new Visibility("(" + auditVisibilityLabel + "|" + visibility.toString() + ")");
         }
         return visibility;
     }

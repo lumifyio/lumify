@@ -1,6 +1,5 @@
 package io.lumify.web.routes.resource;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
@@ -13,6 +12,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 
 import javax.imageio.ImageIO;
@@ -26,6 +26,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MapMarkerImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MapMarkerImage.class);
@@ -114,7 +116,7 @@ public class MapMarkerImage extends BaseRequestHandler {
         }
         int[] resourceImageDim = new int[]{resourceImage.getWidth(), resourceImage.getHeight()};
 
-        BufferedImage image = new BufferedImage(backgroundImage.getWidth(), backgroundImage.getHeight(), backgroundImage.getType());
+        BufferedImage image = new BufferedImage(backgroundImage.getWidth(), backgroundImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
         if (isMapGlyphIcon) {
             int[] boundary = new int[]{backgroundImage.getWidth(), backgroundImage.getHeight()};
@@ -143,15 +145,19 @@ public class MapMarkerImage extends BaseRequestHandler {
     }
 
     private BufferedImage getBackgroundImage(long scale, boolean selected) throws IOException {
-        InputStream res;
+        String imageFileName;
         if (scale == 1) {
-            res = this.getClass().getResourceAsStream(selected ? "marker-background-selected.png" : "marker-background.png");
+            imageFileName = selected ? "marker-background-selected.png" : "marker-background.png";
         } else if (scale == 2) {
-            res = this.getClass().getResourceAsStream(selected ? "marker-background-selected-2x.png" : "marker-background-2x.png");
+            imageFileName = selected ? "marker-background-selected-2x.png" : "marker-background-2x.png";
         } else {
             return null;
         }
-        return ImageIO.read(res);
+
+        try (InputStream resourceInputStream = MapMarkerImage.class.getResourceAsStream(imageFileName)) {
+            checkNotNull(resourceInputStream, "Could not find image resource: " + imageFileName);
+            return ImageIO.read(resourceInputStream);
+        }
     }
 
     private byte[] imageToBytes(BufferedImage image) throws IOException {
@@ -170,7 +176,7 @@ public class MapMarkerImage extends BaseRequestHandler {
     }
 
     private byte[] getGlyphIcon(Concept concept, User user) {
-        byte [] glyphIcon = null;
+        byte[] glyphIcon = null;
         for (Concept con = concept; glyphIcon == null && con != null; con = ontologyRepository.getParentConcept(con)) {
             glyphIcon = con.hasGlyphIconResource() ? con.getGlyphIcon() : null;
         }

@@ -37,7 +37,7 @@ define([
                 if ($this.data('user').id === user.id) {
                     $this.find('.user-status')
                         .removeClass('active idle offline unknown')
-                        .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                        .addClass('st-' + (user.status && user.status.toLowerCase() || 'unknown'));
                 }
             })
         };
@@ -61,7 +61,7 @@ define([
             this.select('inputSelector').typeahead({
                 source: function(query, callback) {
                     if ($.trim(query).length) {
-                        self.dataRequest('user', 'search', query)
+                        self.dataRequest('user', 'search', { query: query })
                             .done(function(users) {
                                 var otherUsers = users.filter(function(user) {
                                         return self.attr.filterUserIds.indexOf(user.id) === -1;

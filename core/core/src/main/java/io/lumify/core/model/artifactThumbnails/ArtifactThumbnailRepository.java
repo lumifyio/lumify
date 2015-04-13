@@ -3,8 +3,10 @@ package io.lumify.core.model.artifactThumbnails;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
-import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
+import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.types.BooleanLumifyProperty;
+import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -24,13 +26,21 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
     public static int FRAMES_PER_PREVIEW = 20;
     public static int PREVIEW_FRAME_WIDTH = 360;
     public static int PREVIEW_FRAME_HEIGHT = 240;
-    private final String yAxisFlippedIri;
-    private final String clockwiseRotationIri;
+    private BooleanLumifyProperty yAxisFlippedProperty;
+    private IntegerLumifyProperty clockwiseRotationProperty;
 
-    public ArtifactThumbnailRepository(ModelSession modelSession, final Configuration configuration) {
+    public ArtifactThumbnailRepository(ModelSession modelSession, final OntologyRepository ontologyRepository) {
         super(modelSession);
-        this.yAxisFlippedIri = configuration.get("ontology.iri.media.yAxisFlipped", null);
-        this.clockwiseRotationIri = configuration.get("ontology.iri.media.clockwiseRotation", null);
+
+        String yAxisFlippedPropertyIri = ontologyRepository.getPropertyIRIByIntent("media.yAxisFlipped");
+        if (yAxisFlippedPropertyIri != null) {
+            this.yAxisFlippedProperty = new BooleanLumifyProperty(yAxisFlippedPropertyIri);
+        }
+
+        String clockwiseRotationPropertyIri = ontologyRepository.getPropertyIRIByIntent("media.clockwiseRotation");
+        if (clockwiseRotationPropertyIri != null) {
+            this.clockwiseRotationProperty = new IntegerLumifyProperty(clockwiseRotationPropertyIri);
+        }
     }
 
     public abstract BigTableArtifactThumbnail fromRow(Row row);
@@ -55,23 +65,7 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             type = ImageUtils.thumbnailType(originalImage);
             format = ImageUtils.thumbnailFormat(originalImage);
 
-            int cwRotationNeeded = 0;
-            if (clockwiseRotationIri != null) {
-                Integer nullable = (Integer) artifactVertex.getPropertyValue(clockwiseRotationIri);
-                if (nullable != null) {
-                    cwRotationNeeded = nullable;
-                }
-            }
-            boolean yAxisFlipNeeded = false;
-            if (yAxisFlippedIri != null) {
-                Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlippedIri);
-                if (nullable != null) {
-                    yAxisFlipNeeded = nullable;
-                }
-            }
-
-            //Rotate and flip image.
-            BufferedImage transformedImage = ImageUtils.reOrientImage(originalImage, yAxisFlipNeeded, cwRotationNeeded);
+            BufferedImage transformedImage = getTransformedImage(originalImage, artifactVertex);
 
             //Get new image dimensions, which will be used for the icon.
             int[] transformedImageDims = new int[]{transformedImage.getWidth(), transformedImage.getHeight()};
@@ -82,8 +76,6 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
                         transformedImageDims[0], transformedImageDims[1],
                         newImageDims[0], newImageDims[1]);
             }
-
-
             //Resize the image.
             BufferedImage resizedImage = new BufferedImage(newImageDims[0], newImageDims[1], type);
             Graphics2D g = resizedImage.createGraphics();
@@ -100,6 +92,26 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             throw new LumifyResourceNotFoundException("Error reading inputstream");
         }
         return new ArtifactThumbnail(out.toByteArray(), type, format);
+    }
+
+    public BufferedImage getTransformedImage(BufferedImage originalImage, Vertex artifactVertex) {
+        int cwRotationNeeded = 0;
+        if (clockwiseRotationProperty != null) {
+            Integer nullable = clockwiseRotationProperty.getPropertyValue(artifactVertex);
+            if (nullable != null) {
+                cwRotationNeeded = nullable;
+            }
+        }
+        boolean yAxisFlipNeeded = false;
+        if (yAxisFlippedProperty != null) {
+            Boolean nullable = yAxisFlippedProperty.getPropertyValue(artifactVertex);
+            if (nullable != null) {
+                yAxisFlipNeeded = nullable;
+            }
+        }
+
+        //Rotate and flip image.
+        return ImageUtils.reOrientImage(originalImage, yAxisFlipNeeded, cwRotationNeeded);
     }
 
     public int[] getScaledDimension(int[] imgSize, int[] boundary) {

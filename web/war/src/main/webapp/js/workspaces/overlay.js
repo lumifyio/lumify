@@ -3,11 +3,13 @@ define([
     'flight/lib/component',
     'tpl!./overlay',
     'util/formatters',
+    'util/privileges',
     'util/withDataRequest'
 ], function(
     defineComponent,
     template,
     F,
+    Privilege,
     withDataRequest) {
     'use strict';
 
@@ -60,24 +62,26 @@ define([
 
             this.on(document, 'verticesUpdated', this.updateDiffBadge);
             this.on(document, 'verticesAdded', this.updateDiffBadge);
+            this.on(document, 'verticesDeleted', this.updateDiffBadge);
+            this.on(document, 'edgesUpdated', this.updateDiffBadge);
             this.on(document, 'edgesDeleted', this.updateDiffBadge);
             this.on(document, 'updateDiff', this.updateDiffBadge);
 
-            this.on(document, 'showDiffPanel', this.showDiffPanel);
+            this.on(document, 'toggleDiffPanel', this.toggleDiffPanel);
             this.on(document, 'escape', this.closeDiffPanel);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
                 shortcuts: {
-                    'alt-d':  { fire: 'showDiffPanel', desc: i18n('workspaces.help.show_diff') }
+                    'alt-d':  { fire: 'toggleDiffPanel', desc: i18n('workspaces.help.show_diff') }
                 }
             });
         });
 
-        this.showDiffPanel = function() {
+        this.toggleDiffPanel = function() {
             var badge = this.$node.find('.badge');
             if (badge.is(':visible')) {
-                badge.popover('show');
+                badge.popover('toggle');
             }
         };
 
@@ -123,17 +127,24 @@ define([
             }
         }
 
-        this.setContent = function(title, editable, subtitle) {
+        this.setContent = function(title, editable, commentable, subtitle) {
             this.select('nameSelector').text(title);
             this.select('subtitleSelector').html(
-                editable === false ?
-                    i18n('workspaces.overlay.read_only') :
-                    subtitle
+                editable === false || Privilege.missingEDIT ?
+                commentable === false || Privilege.missingCOMMENT ?
+                i18n('workspaces.overlay.read_only') :
+                i18n('workspaces.overlay.read_only_comment') :
+                subtitle
             );
         };
 
         this.updateWithNewWorkspaceData = function(workspace) {
-            this.setContent(workspace.title, workspace.editable, i18n('workspaces.overlay.no_changes'));
+            this.setContent(
+                workspace.title,
+                workspace.editable,
+                workspace.commentable,
+                i18n('workspaces.overlay.no_changes')
+            );
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(workspace);
         };
@@ -152,6 +163,9 @@ define([
         this.onWorkspaceUpdated = function(event, data) {
             if (lumifyData.currentWorkspaceId === data.workspace.workspaceId) {
                 this.updateWithNewWorkspaceData(data.workspace);
+            }
+            if (data.newVertices.length) {
+                this.updateDiffBadge();
             }
         };
 
@@ -204,12 +218,6 @@ define([
             var self = this,
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');
-
-            if (event && event.type === 'verticesUpdated') {
-                if (!data || !data.options || data.options.originalEvent !== 'propertiesChange') {
-                    return;
-                }
-            }
 
             if (!badge.length) {
                 badge = $('<span class="badge"></span>')
@@ -381,24 +389,26 @@ define([
 
         this.updateUserTooltip = function(data) {
             if (data && data.user) {
-                this.select('userSelector').text(data.user.displayName)
-                    .tooltip('destroy')
+                this.select('userSelector')
+                    .text(data.user.displayName)
+                    .css({ cursor: 'pointer' })
+                    .on('click', function() {
+                        require([
+                            'hbs!workspaces/userAccount/modal',
+                            'workspaces/userAccount/userAccount'
+                        ], function(modalTemplate, UserAccount) {
+                            var modal = $(modalTemplate({
+                                userName: lumifyData.currentUser.userName
+                            })).appendTo(document.body);
+                            UserAccount.attachTo(modal);
+                            modal.modal('show');
+                        });
+                    })
                     .tooltip({
                         placement: 'right',
-                        html: true,
-                        title: '<span><strong>' +
-                            i18n('workspaces.overlay.authorizations') +
-                            '</strong> ' +
-                                    (data.user.authorizations.join(', ') ||
-                                     i18n('workspaces.overlay.authorizations.none')) +
-                                '</span>' +
-                                '<div><strong>' +
-                                i18n('workspaces.overlay.privileges') +
-                                '</strong> ' +
-                                    _.without(data.user.privileges, 'READ').join(', ') +
-                                '</div>',
+                        title: i18n('workspaces.overlay.open.useraccount'),
                         trigger: 'hover',
-                        delay: { show: 500, hide: 0 }
+                        delay: { show: 250, hide: 0 }
                     })
             }
         }

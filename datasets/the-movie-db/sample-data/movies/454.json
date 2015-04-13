@@ -1,0 +1,340 @@
+{
+  "budget": 14500000,
+  "vote_average": 6.3,
+  "backdrop_path": "/ldiZsKkwVR7sHnkQZmzoPhKmEo3.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6193,
+        "order": 0,
+        "credit_id": "52fe4245c3a36847f80114bf",
+        "name": "Leonardo DiCaprio",
+        "cast_id": 1,
+        "profile_path": "/mNRMgj7K5ztvkSqrcdwEYNZIS1M.jpg",
+        "character": "Romeo"
+      },
+      {
+        "id": 6194,
+        "order": 1,
+        "credit_id": "52fe4245c3a36847f80114c3",
+        "name": "Claire Danes",
+        "cast_id": 2,
+        "profile_path": "/lz16Z3yR8JFwt9nCJP2JJE2o3zq.jpg",
+        "character": "Juliet"
+      },
+      {
+        "id": 5723,
+        "order": 2,
+        "credit_id": "52fe4245c3a36847f80114c7",
+        "name": "John Leguizamo",
+        "cast_id": 3,
+        "profile_path": "/35GP0AuAtmCNf29sq0cpZE2LHU5.jpg",
+        "character": "Tybalt"
+      },
+      {
+        "id": 6195,
+        "order": 3,
+        "credit_id": "52fe4245c3a36847f80114cb",
+        "name": "Harold Perrineau Jr.",
+        "cast_id": 4,
+        "profile_path": "/kHdfkvm6KAmYQaoCMegLp9303D2.jpg",
+        "character": "Mercutio"
+      },
+      {
+        "id": 4935,
+        "order": 4,
+        "credit_id": "52fe4245c3a36847f80114cf",
+        "name": "Pete Postlethwaite",
+        "cast_id": 5,
+        "profile_path": "/5nbSzrwyDcLhC15buncGdrQqJ8e.jpg",
+        "character": "Father Laurence"
+      },
+      {
+        "id": 7004,
+        "order": 5,
+        "credit_id": "52fe4245c3a36847f8011563",
+        "name": "Paul Sorvino",
+        "cast_id": 34,
+        "profile_path": "/d0wnkVR1VuNuF1yd4gwoxxFkP4w.jpg",
+        "character": "Fulgencio Capulet"
+      },
+      {
+        "id": 6197,
+        "order": 6,
+        "credit_id": "52fe4245c3a36847f80114d3",
+        "name": "Brian Dennehy",
+        "cast_id": 6,
+        "profile_path": "/5OgSljTrXQ3pZvy66WveAGpygnS.jpg",
+        "character": "Ted Montague"
+      },
+      {
+        "id": 6198,
+        "order": 7,
+        "credit_id": "52fe4245c3a36847f80114d7",
+        "name": "Vondie Curtis-Hall",
+        "cast_id": 7,
+        "profile_path": "/tH7QvQ9ST9zLuZZsTHzxMXkgtIy.jpg",
+        "character": "Captain Prince"
+      },
+      {
+        "id": 6199,
+        "order": 8,
+        "credit_id": "52fe4245c3a36847f80114db",
+        "name": "Miriam Margolyes",
+        "cast_id": 8,
+        "profile_path": "/7Fijg5sZ7gKbooq6tId3MUS5sDY.jpg",
+        "character": "The Nurse"
+      },
+      {
+        "id": 6200,
+        "order": 9,
+        "credit_id": "52fe4245c3a36847f80114df",
+        "name": "Diane Venora",
+        "cast_id": 9,
+        "profile_path": "/ddH9bTkWVrygOX6fdtVb0bABPZ8.jpg",
+        "character": "Gloria Capulet"
+      },
+      {
+        "id": 6213,
+        "order": 10,
+        "credit_id": "52fe4245c3a36847f801154f",
+        "name": "Jamie Kennedy",
+        "cast_id": 29,
+        "profile_path": "/lOoXGQ1hxwthTjlzZaCJny65lTp.jpg",
+        "character": "Sampson"
+      },
+      {
+        "id": 6066,
+        "order": 11,
+        "credit_id": "52fe4245c3a36847f8011553",
+        "name": "Dash Mihok",
+        "cast_id": 30,
+        "profile_path": "/ueAfHRLOObXtYdLB2ga29mY19H3.jpg",
+        "character": "Benvolio"
+      },
+      {
+        "id": 1983,
+        "order": 12,
+        "credit_id": "52fe4245c3a36847f8011557",
+        "name": "Vincent Laresca",
+        "cast_id": 31,
+        "profile_path": "/7tHu85FMT8417SNlwLmVFG7lY8N.jpg",
+        "character": "Abra"
+      },
+      {
+        "id": 6214,
+        "order": 13,
+        "credit_id": "52fe4245c3a36847f801155b",
+        "name": "Edwina Moore",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Anchorwoman"
+      },
+      {
+        "id": 22226,
+        "order": 14,
+        "credit_id": "52fe4245c3a36847f801155f",
+        "name": "Paul Rudd",
+        "cast_id": 33,
+        "profile_path": "/oUJyLVn3kCmQuFeug4SBIo7Tc02.jpg",
+        "character": "Dave Paris"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6201,
+        "credit_id": "52fe4245c3a36847f80114e5",
+        "department": "Production",
+        "name": "Baz Luhrmann",
+        "job": "Producer",
+        "profile_path": "/5fWNstvlHs3oWJtvb2kU6RuRErt.jpg"
+      },
+      {
+        "id": 6202,
+        "credit_id": "52fe4245c3a36847f80114eb",
+        "department": "Production",
+        "name": "Gabriella Martinelli",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3050,
+        "credit_id": "52fe4245c3a36847f80114f1",
+        "department": "Production",
+        "name": "Jill Bilcock",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6203,
+        "credit_id": "52fe4245c3a36847f80114f7",
+        "department": "Production",
+        "name": "Catherine Martin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6204,
+        "credit_id": "52fe4245c3a36847f80114fd",
+        "department": "Production",
+        "name": "Martin Brown",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6205,
+        "credit_id": "52fe4245c3a36847f8011503",
+        "department": "Sound",
+        "name": "Tim Atack",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6206,
+        "credit_id": "52fe4245c3a36847f8011509",
+        "department": "Sound",
+        "name": "Nellee Hooper",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1095,
+        "credit_id": "52fe4245c3a36847f801150f",
+        "department": "Camera",
+        "name": "Donald McAlpine",
+        "job": "Director of Photography",
+        "profile_path": "/fKCV0jG6PECfYyhsPGevvt7KtsM.jpg"
+      },
+      {
+        "id": 3050,
+        "credit_id": "52fe4245c3a36847f8011515",
+        "department": "Editing",
+        "name": "Jill Bilcock",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5490,
+        "credit_id": "52fe4245c3a36847f801151b",
+        "department": "Production",
+        "name": "David Rubin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6203,
+        "credit_id": "52fe4245c3a36847f8011521",
+        "department": "Art",
+        "name": "Catherine Martin",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6207,
+        "credit_id": "52fe4245c3a36847f8011527",
+        "department": "Art",
+        "name": "Doug Hardwick",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6208,
+        "credit_id": "52fe4245c3a36847f801152d",
+        "department": "Art",
+        "name": "Brigitte Broch",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 6209,
+        "credit_id": "52fe4245c3a36847f8011533",
+        "department": "Costume & Make-Up",
+        "name": "Kym Barrett",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6201,
+        "credit_id": "52fe4245c3a36847f8011539",
+        "department": "Directing",
+        "name": "Baz Luhrmann",
+        "job": "Director",
+        "profile_path": "/5fWNstvlHs3oWJtvb2kU6RuRErt.jpg"
+      },
+      {
+        "id": 6201,
+        "credit_id": "52fe4245c3a36847f801153f",
+        "department": "Writing",
+        "name": "Baz Luhrmann",
+        "job": "Screenplay",
+        "profile_path": "/5fWNstvlHs3oWJtvb2kU6RuRErt.jpg"
+      },
+      {
+        "id": 6210,
+        "credit_id": "52fe4245c3a36847f8011545",
+        "department": "Writing",
+        "name": "William Shakespeare",
+        "job": "Author",
+        "profile_path": "/6A9cHOA0eq6GfVkLtrAUAjjEp6D.jpg"
+      },
+      {
+        "id": 6211,
+        "credit_id": "52fe4245c3a36847f801154b",
+        "department": "Writing",
+        "name": "Craig Pearce",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 120,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.romeoandjuliet.com/",
+  "id": 454,
+  "production_countries": [
+    {
+      "name": "Mexico",
+      "iso_3166_1": "MX"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Romeo + Juliet",
+  "overview": "In director Baz Luhrmann's contemporary take on William Shakespeare's classic tragedy, the Montagues and Capulets have moved their ongoing feud to the sweltering suburb of Verona Beach, where Romeo and Juliet fall in love and secretly wed. Though the film is visually modern, the bard's dialogue remains.",
+  "production_companies": [
+    {
+      "id": 25,
+      "name": "20th Century Fox"
+    },
+    {
+      "id": 240,
+      "name": "Bazmark Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0117509",
+  "release_date": "1996-10-31",
+  "original_title": "Romeo + Juliet",
+  "vote_count": 160,
+  "poster_path": "/f9C1NpoQfQ7Z4fJkyihNcjNDQJ.jpg",
+  "tagline": "My only love sprung from my only hate.",
+  "revenue": 147298761,
+  "popularity": "0.960516721786332"
+}

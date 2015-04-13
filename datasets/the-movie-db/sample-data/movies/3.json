@@ -1,0 +1,191 @@
+{
+  "budget": 0,
+  "vote_average": 8.5,
+  "backdrop_path": "/6YjUX87VtIEuDzanBE6obVxE9V3.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4826,
+        "order": 0,
+        "credit_id": "52fe420dc3a36847f8000087",
+        "name": "Matti Pellonpää",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Nikander"
+      },
+      {
+        "id": 5999,
+        "order": 1,
+        "credit_id": "52fe420dc3a36847f800008b",
+        "name": "Kati Outinen",
+        "cast_id": 6,
+        "profile_path": "/cjcuhAXRcg8C0VIDHtfz1BIVE3m.jpg",
+        "character": "Ilona Rajamäki"
+      },
+      {
+        "id": 4828,
+        "order": 2,
+        "credit_id": "52fe420dc3a36847f800008f",
+        "name": "Sakari Kuosmanen",
+        "cast_id": 7,
+        "profile_path": "/fziy9WDgG5aW2fiKpK3kK0lfhuS.jpg",
+        "character": "Melartin"
+      },
+      {
+        "id": 53508,
+        "order": 3,
+        "credit_id": "52fe420dc3a36847f8000099",
+        "name": "Esko Nikkari",
+        "cast_id": 9,
+        "profile_path": "/r9ZdJTXkb3pZqqZS9TMziVl2eCn.jpg",
+        "character": "Co-worker"
+      },
+      {
+        "id": 1086499,
+        "order": 4,
+        "credit_id": "52fe420dc3a36847f800009d",
+        "name": "Kylli Köngäs",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Ilona's Girlfriend"
+      },
+      {
+        "id": 222320,
+        "order": 5,
+        "credit_id": "52fe420dc3a36847f80000a1",
+        "name": "Pekka Laiho",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Shop Steward"
+      },
+      {
+        "id": 1086500,
+        "order": 6,
+        "credit_id": "52fe420dc3a36847f80000a5",
+        "name": "Jukka-Pekka Palo",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Third Man"
+      }
+    ],
+    "crew": [
+      {
+        "id": 16767,
+        "credit_id": "52fe420dc3a36847f8000071",
+        "department": "Directing",
+        "name": "Aki Kaurismäki",
+        "job": "Director",
+        "profile_path": "/jo2NeVWFvRxj941LBBB9pLN89H.jpg"
+      },
+      {
+        "id": 16767,
+        "credit_id": "52fe420dc3a36847f8000077",
+        "department": "Writing",
+        "name": "Aki Kaurismäki",
+        "job": "Screenplay",
+        "profile_path": "/jo2NeVWFvRxj941LBBB9pLN89H.jpg"
+      },
+      {
+        "id": 16769,
+        "credit_id": "52fe420dc3a36847f800007d",
+        "department": "Camera",
+        "name": "Timo Salminen",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 54766,
+        "credit_id": "52fe420dc3a36847f8000083",
+        "department": "Editing",
+        "name": "Raija Talvio",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 54767,
+        "credit_id": "52fe420dc3a36847f8000095",
+        "department": "Production",
+        "name": "Mika Kaurismäki",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1084614,
+        "credit_id": "52fe420dc3a36847f80000ab",
+        "department": "Art",
+        "name": "Pertti Hilkamo",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 1084612,
+        "credit_id": "52fe420dc3a36847f80000b1",
+        "department": "Art",
+        "name": "Heikki Ukkonen",
+        "job": "Art Direction",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 76,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fi",
+      "name": "suomi"
+    },
+    {
+      "iso_639_1": "sv",
+      "name": "svenska"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 3,
+  "production_countries": [{
+    "name": "Finland",
+    "iso_3166_1": "FI"
+  }],
+  "title": "Shadows in Paradise",
+  "overview": "An episode in the life of Nikander, a garbage man, involving the death of a co-worker, an affair and much more.",
+  "production_companies": [{
+    "id": 2303,
+    "name": "Villealfa Filmproduction Oy"
+  }],
+  "belongs_to_collection": {
+    "id": 8384,
+    "backdrop_path": "/ibLeWo3X3dVo4rxvn4m3y90ms1I.jpg",
+    "name": "Proletariat Collection",
+    "poster_path": null
+  },
+  "imdb_id": "tt0092149",
+  "release_date": "1986-10-16",
+  "original_title": "Varjoja paratiisissa",
+  "vote_count": 1,
+  "poster_path": "/lfaiYUVL7vPE57xgTscJN3kN5P1.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.251895190388295"
+}

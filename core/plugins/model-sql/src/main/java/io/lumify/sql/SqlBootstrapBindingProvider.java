@@ -40,7 +40,7 @@ public class SqlBootstrapBindingProvider implements BootstrapBindingProvider {
                         for (String key : lumifyConfiguration.getKeys()) {
                             if (key.startsWith(HIBERNATE_PROPERTY_PREFIX) || OTHER_HIBERNATE_PROPERTIES.contains(key)) {
                                 String xmlValue = hibernateConfiguration.getProperty(key);
-                                String lumifyValue = lumifyConfiguration.getOrNull(key);
+                                String lumifyValue = lumifyConfiguration.get(key, null);
                                 if (lumifyValue != null) {
                                     if (xmlValue == null) {
                                         LOGGER.info("setting Hibernate configuration %s with Lumify configuration value", key);

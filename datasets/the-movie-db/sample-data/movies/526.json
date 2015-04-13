@@ -1,0 +1,296 @@
+{
+  "budget": 20000000,
+  "vote_average": 6.8,
+  "backdrop_path": "/ghkGmfUDN389Q3apyhakXm4dbih.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4756,
+        "order": 0,
+        "credit_id": "52fe424dc3a36847f8013c6f",
+        "name": "Matthew Broderick",
+        "cast_id": 6,
+        "profile_path": "/lgtBvPJGsTNa5cFaluxCFoRg26A.jpg",
+        "character": "Phillipe Gaston"
+      },
+      {
+        "id": 585,
+        "order": 1,
+        "credit_id": "52fe424dc3a36847f8013c73",
+        "name": "Rutger Hauer",
+        "cast_id": 7,
+        "profile_path": "/96XEG75LYFFPb9R03EaN8zipWP4.jpg",
+        "character": "Captain Etienne Navarre"
+      },
+      {
+        "id": 1160,
+        "order": 2,
+        "credit_id": "52fe424dc3a36847f8013c77",
+        "name": "Michelle Pfeiffer",
+        "cast_id": 8,
+        "profile_path": "/nhfGgJMRJvAxIEm1JJM7DOYutwy.jpg",
+        "character": "Isabeau d'Anjou"
+      },
+      {
+        "id": 658,
+        "order": 3,
+        "credit_id": "52fe424dc3a36847f8013c83",
+        "name": "Alfred Molina",
+        "cast_id": 11,
+        "profile_path": "/uJQVkqEVJGLMaJbwI2tTDlJ9Oo0.jpg",
+        "character": "Cezar"
+      },
+      {
+        "id": 7192,
+        "order": 4,
+        "credit_id": "52fe424dc3a36847f8013c7b",
+        "name": "Leo McKern",
+        "cast_id": 9,
+        "profile_path": "/qcO1TFO6SowLOQAwKRMKrqmrk6A.jpg",
+        "character": "Father Imperius"
+      },
+      {
+        "id": 7194,
+        "order": 5,
+        "credit_id": "52fe424dc3a36847f8013c7f",
+        "name": "Ken Hutchison",
+        "cast_id": 10,
+        "profile_path": "/9qVmE5BXPWNhFDc77VgZfJQ5tD9.jpg",
+        "character": "Marquet"
+      },
+      {
+        "id": 7195,
+        "order": 6,
+        "credit_id": "52fe424dc3a36847f8013c87",
+        "name": "Giancarlo Prete",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Fornac"
+      },
+      {
+        "id": 7196,
+        "order": 7,
+        "credit_id": "52fe424dc3a36847f8013c8b",
+        "name": "Loris Loddi",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Jehan"
+      },
+      {
+        "id": 7197,
+        "order": 8,
+        "credit_id": "52fe424dc3a36847f8013c8f",
+        "name": "Alessandro Serra",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Mr. Pitou"
+      },
+      {
+        "id": 7198,
+        "order": 9,
+        "credit_id": "52fe424dc3a36847f8013c93",
+        "name": "Charles Borromel",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Insane Prisoner"
+      },
+      {
+        "id": 8937,
+        "order": 10,
+        "credit_id": "52fe424dc3a36847f8013cd9",
+        "name": "John Wood",
+        "cast_id": 27,
+        "profile_path": "/bWt4JT9eGxFtu3q0iCAKFtNv5XK.jpg",
+        "character": "Bishop of Aquila"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7187,
+        "credit_id": "52fe424dc3a36847f8013c53",
+        "department": "Directing",
+        "name": "Richard Donner",
+        "job": "Director",
+        "profile_path": "/hsOQU2mFuAfGrvBMDLPgrWemO5T.jpg"
+      },
+      {
+        "id": 7188,
+        "credit_id": "52fe424dc3a36847f8013c59",
+        "department": "Writing",
+        "name": "Edward Khmara",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7189,
+        "credit_id": "52fe424dc3a36847f8013c5f",
+        "department": "Writing",
+        "name": "Michael Thomas",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7190,
+        "credit_id": "52fe424dc3a36847f8013c65",
+        "department": "Writing",
+        "name": "Tom Mankiewicz",
+        "job": "Screenplay",
+        "profile_path": "/ldYH2f8UPevGExyCzwN7Mn3ZPjZ.jpg"
+      },
+      {
+        "id": 7191,
+        "credit_id": "52fe424dc3a36847f8013c6b",
+        "department": "Writing",
+        "name": "David Webb Peoples",
+        "job": "Screenplay",
+        "profile_path": "/ddlC6ZF4yXHjvj7ZyNeBBxUaH4v.jpg"
+      },
+      {
+        "id": 7199,
+        "credit_id": "52fe424dc3a36847f8013c99",
+        "department": "Production",
+        "name": "Harvey Bernhard",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7187,
+        "credit_id": "52fe424dc3a36847f8013c9f",
+        "department": "Production",
+        "name": "Richard Donner",
+        "job": "Producer",
+        "profile_path": "/hsOQU2mFuAfGrvBMDLPgrWemO5T.jpg"
+      },
+      {
+        "id": 7200,
+        "credit_id": "52fe424dc3a36847f8013ca5",
+        "department": "Production",
+        "name": "Lauren Shuler Donner",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7201,
+        "credit_id": "52fe424dc3a36847f8013cab",
+        "department": "Sound",
+        "name": "Andrew Powell",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7202,
+        "credit_id": "52fe424dc3a36847f8013cb1",
+        "department": "Camera",
+        "name": "Vittorio Storaro",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2523,
+        "credit_id": "52fe424dc3a36847f8013cb7",
+        "department": "Editing",
+        "name": "Stuart Baird",
+        "job": "Editor",
+        "profile_path": "/k7nLNZ0MYsPrKq5T3ZV7m9zwEGY.jpg"
+      },
+      {
+        "id": 3806,
+        "credit_id": "52fe424dc3a36847f8013cbd",
+        "department": "Production",
+        "name": "Marion Dougherty",
+        "job": "Casting",
+        "profile_path": "/vHUj1WzotNrj9PTT6wJ1yhhULbD.jpg"
+      },
+      {
+        "id": 7203,
+        "credit_id": "52fe424dc3a36847f8013cc3",
+        "department": "Art",
+        "name": "Wolf Kroeger",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 7204,
+        "credit_id": "52fe424dc3a36847f8013cc9",
+        "department": "Art",
+        "name": "Ken Court",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7205,
+        "credit_id": "52fe424dc3a36847f8013ccf",
+        "department": "Art",
+        "name": "Giovanni Natalucci",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 7206,
+        "credit_id": "52fe424dc3a36847f8013cd5",
+        "department": "Costume & Make-Up",
+        "name": "Nanà Cecchi",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 121,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 526,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Ladyhawke",
+  "overview": "Captain Etienne Navarre is a man on whose shoulders lies a cruel curse. Punished for loving each other, Navarre must become a wolf by night whilst his lover, Lady Isabeau, takes the form of a hawk by day. Together, with the thief Philippe Gaston, they must try to overthrow the corrupt Bishop and in doing so break the spell.",
+  "production_companies": [{
+    "id": 174,
+    "name": "Warner Bros. Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0089457",
+  "release_date": "1985-08-12",
+  "original_title": "Ladyhawke",
+  "vote_count": 42,
+  "poster_path": "/51RFCKLFuEbvLQsFzXcupQnkoRD.jpg",
+  "tagline": "No force in Heaven will release them. No power on Earth can save them.",
+  "revenue": 0,
+  "popularity": "0.635127073150504"
+}

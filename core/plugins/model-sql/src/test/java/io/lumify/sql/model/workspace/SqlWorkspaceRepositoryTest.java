@@ -1,5 +1,6 @@
 package io.lumify.sql.model.workspace;
 
+import com.google.common.collect.Lists;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
@@ -33,16 +34,14 @@ import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SqlWorkspaceRepositoryTest {
-    private final String HIBERNATE_IN_MEM_CFG_XML = "hibernateInMem.cfg.xml";
+    private static final String HIBERNATE_IN_MEM_CFG_XML = "hibernateInMem.cfg.xml";
     private SqlWorkspaceRepository sqlWorkspaceRepository;
-    private static org.hibernate.cfg.Configuration configuration;
     private SqlUserRepository sqlUserRepository;
 
     private SqlUser testUser;
 
     @Mock
     private AuthorizationRepository authorizationRepository;
-    private InMemoryGraph graph;
 
     @Mock
     private UserListenerUtil userListenerUtil;
@@ -50,8 +49,8 @@ public class SqlWorkspaceRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        graph = new InMemoryGraph();
-        configuration = new org.hibernate.cfg.Configuration();
+        InMemoryGraph graph = InMemoryGraph.create();
+        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionManager = new HibernateSessionManager(configuration.buildSessionFactory(serviceRegistryBuilder));
@@ -120,13 +119,13 @@ public class SqlWorkspaceRepositoryTest {
 
     @Test
     public void testFindAll() throws Exception {
-        Iterable<Workspace> userIterable = sqlWorkspaceRepository.findAll(testUser);
+        Iterable<Workspace> userIterable = sqlWorkspaceRepository.findAllForUser(testUser);
         assertTrue(IterableUtils.count(userIterable) == 0);
 
         sqlWorkspaceRepository.add("test workspace 1", testUser);
         sqlWorkspaceRepository.add("test workspace 2", testUser);
         sqlWorkspaceRepository.add("test workspace 3", testUser);
-        userIterable = sqlWorkspaceRepository.findAll(testUser);
+        userIterable = sqlWorkspaceRepository.findAllForUser(testUser);
         assertTrue(IterableUtils.count(userIterable) == 3);
     }
 
@@ -215,7 +214,7 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertTrue(sqlWorkspaceVertex.isVisible());
 
-        sqlWorkspaceRepository.softDeleteEntityFromWorkspace(sqlWorkspace, "1234", testUser);
+        sqlWorkspaceRepository.softDeleteEntitiesFromWorkspace(sqlWorkspace, Lists.newArrayList("1234"), testUser);
         sqlWorkspaceVertexSet = sqlWorkspaceRepository.getSqlWorkspaceVertices(sqlWorkspace);
 
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
@@ -264,13 +263,13 @@ public class SqlWorkspaceRepositoryTest {
     @Test
     public void testCopy() throws Exception {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
-        assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAll(testUser)) == 1);
+        assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAllForUser(testUser)) == 1);
 
         sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "123", true, new GraphPosition(0, 0), testUser);
         sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById(sqlWorkspace.getWorkspaceId(), testUser);
 
         SqlWorkspace copySqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.copy(sqlWorkspace, testUser);
-        assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAll(testUser)) == 2);
+        assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAllForUser(testUser)) == 2);
         assertEquals("Copy of test", copySqlWorkspace.getDisplayTitle());
         assertTrue(copySqlWorkspace.getSqlWorkspaceVertices().size() == 1);
     }

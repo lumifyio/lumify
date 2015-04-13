@@ -1,0 +1,13 @@
+{
+  "id": 4,
+  "logo_path": "/3S3SJqc58bdZEVeMcbdbsFNyPz5.png",
+  "description": null,
+  "name": "Paramount Pictures",
+  "parent_company": {
+    "id": 5308,
+    "logo_path": null,
+    "name": "Viacom International"
+  },
+  "homepage": "http://www.paramount.com/",
+  "headquarters": "Burbank, California, United States"
+}

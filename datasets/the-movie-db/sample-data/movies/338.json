@@ -1,0 +1,311 @@
+{
+  "budget": 4800000,
+  "vote_average": 7.5,
+  "backdrop_path": "/ihrwADHDVr0gj6FPbHDv8DZJn2I.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3872,
+        "order": 0,
+        "credit_id": "52fe4239c3a36847f800d971",
+        "name": "Daniel Brühl",
+        "cast_id": 4,
+        "profile_path": "/tDAPTmHnCpctMn7Uk3v8YYiA0No.jpg",
+        "character": "Alexander 'Alex' Kerner"
+      },
+      {
+        "id": 4792,
+        "order": 1,
+        "credit_id": "52fe4239c3a36847f800d975",
+        "name": "Katrin Saß",
+        "cast_id": 5,
+        "profile_path": "/xnXEz2KIzZGn0P46LAWYpW2iYdf.jpg",
+        "character": "Christiane Kerner, Alex' Mutter"
+      },
+      {
+        "id": 4793,
+        "order": 2,
+        "credit_id": "52fe4239c3a36847f800d979",
+        "name": "Chulpan Khamatova",
+        "cast_id": 6,
+        "profile_path": "/qbWA35j1WQf0Z2oXDauTqyX1nqC.jpg",
+        "character": "Lara"
+      },
+      {
+        "id": 4794,
+        "order": 3,
+        "credit_id": "52fe4239c3a36847f800d97d",
+        "name": "Maria Simon",
+        "cast_id": 7,
+        "profile_path": "/lm5Ohou4ACQ6O7a6YEZEDRjFrd1.jpg",
+        "character": "Ariane Kerner"
+      },
+      {
+        "id": 4795,
+        "order": 4,
+        "credit_id": "52fe4239c3a36847f800d981",
+        "name": "Florian Lukas",
+        "cast_id": 8,
+        "profile_path": "/g3AW6IIUEjmjCLTnS0Q5SfjcsUd.jpg",
+        "character": "Denis"
+      },
+      {
+        "id": 4796,
+        "order": 5,
+        "credit_id": "52fe4239c3a36847f800d985",
+        "name": "Alexander Beyer",
+        "cast_id": 9,
+        "profile_path": "/krl8hF4VBmbizQuddEoG6KvDW0o.jpg",
+        "character": "Rainer"
+      },
+      {
+        "id": 3934,
+        "order": 6,
+        "credit_id": "52fe4239c3a36847f800d989",
+        "name": "Burghart Klaußner",
+        "cast_id": 10,
+        "profile_path": "/uH3aUfhfgQy4eJvi5otRMKgIbme.jpg",
+        "character": "Robert Kerner, Alex' Vater"
+      },
+      {
+        "id": 697,
+        "order": 7,
+        "credit_id": "52fe4239c3a36847f800d98d",
+        "name": "Michael Gwisdek",
+        "cast_id": 11,
+        "profile_path": "/rjOU3IAEkL7tjrcFjLtKurF5jD0.jpg",
+        "character": "Klapprath"
+      },
+      {
+        "id": 4797,
+        "order": 8,
+        "credit_id": "52fe4239c3a36847f800d991",
+        "name": "Christine Schorn",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Frau Schäfer"
+      },
+      {
+        "id": 4798,
+        "order": 9,
+        "credit_id": "52fe4239c3a36847f800d995",
+        "name": "Jürgen Holtz",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Herr Ganske"
+      },
+      {
+        "id": 210570,
+        "order": 10,
+        "credit_id": "53e13dfcc3a3686c510040cd",
+        "name": "Jochen Stern",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Herr Mehlert"
+      },
+      {
+        "id": 1350135,
+        "order": 11,
+        "credit_id": "53e13e42c3a3686c56004080",
+        "name": "Stefan Walz",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Taxifahrer / Sigmund Jähn"
+      },
+      {
+        "id": 13746,
+        "order": 12,
+        "credit_id": "53e13e60c3a3686c5d0041f7",
+        "name": "Eberhard Kirchberg",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Dr. Wagner"
+      },
+      {
+        "id": 8200,
+        "order": 13,
+        "credit_id": "53e13e77c3a3686c4d00418f",
+        "name": "Hans-Uwe Bauer",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Dr. Mewes"
+      },
+      {
+        "id": 17373,
+        "order": 14,
+        "credit_id": "52fe4239c3a36847f800d9d5",
+        "name": "Jürgen Vogel",
+        "cast_id": 24,
+        "profile_path": "/6YSNLd5gKHqDua5Qm2kCNOoU6GL.jpg",
+        "character": "Das Küken"
+      },
+      {
+        "id": 17411,
+        "order": 15,
+        "credit_id": "52fe4239c3a36847f800d9d9",
+        "name": "Elke Werner",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Verkäuferin HO-Markt"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4780,
+        "credit_id": "52fe4239c3a36847f800d961",
+        "department": "Directing",
+        "name": "Wolfgang Becker",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 4780,
+        "credit_id": "52fe4239c3a36847f800d967",
+        "department": "Writing",
+        "name": "Wolfgang Becker",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4781,
+        "credit_id": "52fe4239c3a36847f800d96d",
+        "department": "Writing",
+        "name": "Bernd Lichtenberg",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1073,
+        "credit_id": "52fe4239c3a36847f800d99b",
+        "department": "Production",
+        "name": "Stefan Arndt",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4799,
+        "credit_id": "52fe4239c3a36847f800d9a1",
+        "department": "Production",
+        "name": "Katja De Bock",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4219,
+        "credit_id": "52fe4239c3a36847f800d9a7",
+        "department": "Production",
+        "name": "Andreas Schreitmüller",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4804,
+        "credit_id": "52fe4239c3a36847f800d9ad",
+        "department": "Production",
+        "name": "Manuela Stehr",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4805,
+        "credit_id": "52fe4239c3a36847f800d9b3",
+        "department": "Production",
+        "name": "Marcos Kantis",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2422,
+        "credit_id": "52fe4239c3a36847f800d9b9",
+        "department": "Sound",
+        "name": "Yann Tiersen",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4807,
+        "credit_id": "52fe4239c3a36847f800d9bf",
+        "department": "Camera",
+        "name": "Martin Kukula",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 703,
+        "credit_id": "52fe4239c3a36847f800d9c5",
+        "department": "Editing",
+        "name": "Peter R. Adam",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4222,
+        "credit_id": "52fe4239c3a36847f800d9cb",
+        "department": "Production",
+        "name": "Simone Bär",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4809,
+        "credit_id": "52fe4239c3a36847f800d9d1",
+        "department": "Art",
+        "name": "Lothar Holler",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 121,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "http://www.good-bye-lenin.de/index2.php",
+  "id": 338,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Goodbye Lenin!",
+  "overview": "Good Bye Lenin was the biggest box-office hit for Germany in 2003. An affectionate and refreshing East/West-Germany comedy about a boy who\u2019s mother was in a coma while the Berlin wall fell and when she wakes up he must try to keep her from learning what happen (since she was an avid communist supporter) to avoid shocking her which could lead to another heart attack.",
+  "production_companies": [
+    {
+      "id": 46,
+      "name": "WDR"
+    },
+    {
+      "id": 96,
+      "name": "X Filme"
+    },
+    {
+      "id": 201,
+      "name": "Arte"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0301357",
+  "release_date": "2003-02-13",
+  "original_title": "Good Bye Lenin!",
+  "vote_count": 86,
+  "poster_path": "/2YTTkqdiuQea07s1nMPGQTR58tt.jpg",
+  "tagline": "The German Democratic Republic lives on -- in 79 square meters!",
+  "revenue": 79384880,
+  "popularity": "0.906669310702522"
+}

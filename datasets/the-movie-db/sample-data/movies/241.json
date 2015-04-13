@@ -1,0 +1,313 @@
+{
+  "budget": 34000000,
+  "vote_average": 6.8,
+  "backdrop_path": "/ozpp9xeOzMz7GglNvcUy841T5pQ.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 57755,
+        "order": 0,
+        "credit_id": "52fe422bc3a36847f800967d",
+        "name": "Woody Harrelson",
+        "cast_id": 49,
+        "profile_path": "/9qm3h0sYJhEIKrhC8DrILQ2THU2.jpg",
+        "character": "Mickey Knox"
+      },
+      {
+        "id": 3196,
+        "order": 1,
+        "credit_id": "52fe422bc3a36847f8009681",
+        "name": "Juliette Lewis",
+        "cast_id": 50,
+        "profile_path": "/mo6YNE53gYEnziEJLux3kudVB4U.jpg",
+        "character": "Mallory Knox"
+      },
+      {
+        "id": 3223,
+        "order": 2,
+        "credit_id": "52fe422bc3a36847f8009685",
+        "name": "Robert Downey Jr.",
+        "cast_id": 51,
+        "profile_path": "/iDtxXJXmJGU7jYRjsvePNQblHV1.jpg",
+        "character": "Wayne Gale"
+      },
+      {
+        "id": 2176,
+        "order": 3,
+        "credit_id": "52fe422bc3a36847f8009689",
+        "name": "Tommy Lee Jones",
+        "cast_id": 52,
+        "profile_path": "/gRXugLFvr1oHZ6alLUxmYDq8cgW.jpg",
+        "character": "Warden Dwight McClusky"
+      },
+      {
+        "id": 3197,
+        "order": 4,
+        "credit_id": "52fe422bc3a36847f800968d",
+        "name": "Tom Sizemore",
+        "cast_id": 53,
+        "profile_path": "/zmmNvyDm2PNOrBEYFtPQ0Kp62Nb.jpg",
+        "character": "Det. Jack Scagnetti"
+      },
+      {
+        "id": 3198,
+        "order": 5,
+        "credit_id": "52fe422bc3a36847f8009691",
+        "name": "Rodney Dangerfield",
+        "cast_id": 54,
+        "profile_path": "/uTBMl5yfiUzFphN7fXeRxCYMXPJ.jpg",
+        "character": "Mallory's Dad"
+      },
+      {
+        "id": 3202,
+        "order": 6,
+        "credit_id": "52fe422bc3a36847f8009695",
+        "name": "Edie McClurg",
+        "cast_id": 55,
+        "profile_path": "/yT6Zb2TpOqhge4xlzsUgx5CO67v.jpg",
+        "character": "Mallory's Mom"
+      },
+      {
+        "id": 3203,
+        "order": 7,
+        "credit_id": "52fe422bc3a36847f8009699",
+        "name": "Russell Means",
+        "cast_id": 56,
+        "profile_path": "/7cmcwlWqZ2iJycikffenrLZnWbg.jpg",
+        "character": "Old Indian"
+      },
+      {
+        "id": 3208,
+        "order": 8,
+        "credit_id": "52fe422bc3a36847f800969d",
+        "name": "Maria Pitillo",
+        "cast_id": 57,
+        "profile_path": "/ihaCNZzuR7P06OFqOf1aHmAIDna.jpg",
+        "character": "Deborah"
+      },
+      {
+        "id": 3210,
+        "order": 9,
+        "credit_id": "52fe422bc3a36847f80096a1",
+        "name": "Sean Stone",
+        "cast_id": 58,
+        "profile_path": "/kSvY7qVOiNilpf13bI3quoNyLKo.jpg",
+        "character": "Kevin"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1152,
+        "credit_id": "52fe422bc3a36847f8009607",
+        "department": "Directing",
+        "name": "Oliver Stone",
+        "job": "Director",
+        "profile_path": "/y3Ernjw1FYo6ZvahEHcoqJ5mzV4.jpg"
+      },
+      {
+        "id": 3180,
+        "credit_id": "52fe422bc3a36847f800960d",
+        "department": "Writing",
+        "name": "David Veloz",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3181,
+        "credit_id": "52fe422bc3a36847f8009613",
+        "department": "Writing",
+        "name": "Richard Rutowski",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1152,
+        "credit_id": "52fe422bc3a36847f8009619",
+        "department": "Writing",
+        "name": "Oliver Stone",
+        "job": "Screenplay",
+        "profile_path": "/y3Ernjw1FYo6ZvahEHcoqJ5mzV4.jpg"
+      },
+      {
+        "id": 3182,
+        "credit_id": "52fe422bc3a36847f800961f",
+        "department": "Production",
+        "name": "Jane Hamsher",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3183,
+        "credit_id": "52fe422bc3a36847f8009625",
+        "department": "Production",
+        "name": "Don Murphy",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3184,
+        "credit_id": "52fe422bc3a36847f800962b",
+        "department": "Production",
+        "name": "Clayton Townsend",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3185,
+        "credit_id": "52fe422bc3a36847f8009631",
+        "department": "Sound",
+        "name": "Leonard Cohen",
+        "job": "Original Music Composer",
+        "profile_path": "/n92k0oKMjlsUDUKyafE4tbI2kPB.jpg"
+      },
+      {
+        "id": 3186,
+        "credit_id": "52fe422bc3a36847f8009637",
+        "department": "Sound",
+        "name": "Trent Reznor",
+        "job": "Original Music Composer",
+        "profile_path": "/aVecBZuztMlT4WXUcZuiXZE41BS.jpg"
+      },
+      {
+        "id": 3187,
+        "credit_id": "52fe422bc3a36847f800963d",
+        "department": "Sound",
+        "name": "Brent Lewis",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 149,
+        "credit_id": "52fe422bc3a36847f8009643",
+        "department": "Camera",
+        "name": "Robert Richardson",
+        "job": "Director of Photography",
+        "profile_path": "/7G3fK147n8EdVMgLcLoO30Nj4Ik.jpg"
+      },
+      {
+        "id": 3188,
+        "credit_id": "52fe422bc3a36847f8009649",
+        "department": "Art",
+        "name": "Victor Kempster",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3190,
+        "credit_id": "52fe422bc3a36847f800964f",
+        "department": "Editing",
+        "name": "Hank Corwin",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3189,
+        "credit_id": "52fe422bc3a36847f8009655",
+        "department": "Editing",
+        "name": "Brian Berdan",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3191,
+        "credit_id": "52fe422bc3a36847f800965b",
+        "department": "Production",
+        "name": "Risa Bramon Garcia",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3192,
+        "credit_id": "52fe422bc3a36847f8009661",
+        "department": "Production",
+        "name": "Billy Hopkins",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2324,
+        "credit_id": "52fe422bc3a36847f8009667",
+        "department": "Production",
+        "name": "Heidi Levitt",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3194,
+        "credit_id": "52fe422bc3a36847f800966d",
+        "department": "Sound",
+        "name": "David Kneupper",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3193,
+        "credit_id": "52fe422bc3a36847f8009673",
+        "department": "Sound",
+        "name": "Scott Martin Gershin",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 138,
+        "credit_id": "52fe422bc3a36847f8009679",
+        "department": "Writing",
+        "name": "Quentin Tarantino",
+        "job": "Story",
+        "profile_path": "/6grjDWpEIPL5QdRbUZFxVEp5TCd.jpg"
+      }
+    ]
+  },
+  "runtime": 119,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "nv",
+      "name": ""
+    },
+    {
+      "iso_639_1": "ja",
+      "name": "日本語"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 241,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Natural Born Killers",
+  "overview": "Two victims of traumatized childhoods become lovers and psychopathic serial murderers irresponsibly glorified by the mass media.",
+  "production_companies": [{
+    "id": 174,
+    "name": "Warner Bros. Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0110632",
+  "release_date": "1994-08-25",
+  "original_title": "Natural Born Killers",
+  "vote_count": 158,
+  "poster_path": "/ih4P75pKiPLkSB8cyCe7ygWskln.jpg",
+  "tagline": "The Media Made Them Superstars.",
+  "revenue": 0,
+  "popularity": "1.39966651451269"
+}

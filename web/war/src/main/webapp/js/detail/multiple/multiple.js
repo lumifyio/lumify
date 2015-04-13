@@ -55,22 +55,14 @@ define([
         } else if (properties.byTitle[propertyName]) {
             if ('dx' in bin) {
                 display =
-                    F.vertex.displayProp({
-                        name: propertyName,
-                        value: bin.x
-                    }) + ' – ' +
-                    F.vertex.displayProp({
-                        name: propertyName,
-                        value: bin.x + bin.dx
-                    });
+                    F.vertex.propDisplay(propertyName, bin.x) +
+                    ' – ' +
+                    F.vertex.propDisplay(propertyName, bin.x + bin.dx);
             } else {
-                display = F.vertex.displayProp({
-                    name: propertyName,
-                    value: propertyValue
-                });
+                display = F.vertex.propDisplay(propertyName, propertyValue);
             }
         }
-        if (display === '') return '[ blank ]';
+        if (display === '') return i18n('detail.multiple.histogram.blank');
         return display;
     }
 
@@ -136,14 +128,16 @@ define([
 
         this.after('initialize', function() {
             var self = this,
-                vertices = _.reject(this.attr.data, F.vertex.isEdge),
-                ids = _.pluck(vertices, 'id');
+                vertices = this.attr.data.vertices || [],
+                edges = this.attr.data.edges || [],
+                vertexIds = _.pluck(vertices, 'id'),
+                edgeIds = _.pluck(edges, 'id');
 
-            this.displayingVertexIds = ids;
+            this.displayingIds = vertexIds.concat(edgeIds);
 
             this.$node.html(template({
-                getClasses: this.classesForVertex,
-                vertices: vertices
+                vertices: vertices,
+                edges: edges
             }));
 
             this.on('click', {
@@ -158,20 +152,24 @@ define([
 
             Promise.all([
                 Promise.require('d3'),
-                this.dataRequest('vertex', 'store', { vertexIds: ids }),
+                vertexIds.length ?
+                    this.dataRequest('vertex', 'store', { vertexIds: vertexIds }) :
+                    this.dataRequest('edge', 'store', { edgeIds: edgeIds }),
                 this.dataRequest('ontology', 'concepts'),
                 this.dataRequest('ontology', 'properties')
             ]).done(function(results) {
                 var _d3 = results.shift(),
-                    vertices = results.shift(),
+                    verticesOrEdges = results.shift(),
                     concepts = results.shift(),
                     properties = results.shift();
 
                 d3 = _d3;
 
-                VertexList.attachTo(self.select('vertexListSelector'), {
-                    vertices: vertices
-                });
+                if (vertexIds.length) {
+                    VertexList.attachTo(self.select('vertexListSelector'), {
+                        vertices: vertices
+                    });
+                }
 
                 Toolbar.attachTo(self.select('toolbarSelector'), {
                     toolbar: [
@@ -186,7 +184,9 @@ define([
 
                 self.drawHistograms = _.partial(self.renderHistograms, _, concepts, properties);
                 self.select('histogramSelector').remove();
-                self.drawHistograms(vertices, { duration: 0 });
+                if (vertexIds.length) {
+                    self.drawHistograms(vertices, { duration: 0 });
+                }
             });
 
         });
@@ -194,10 +194,12 @@ define([
         this.onVerticesUpdated = function(event, data) {
             var self = this;
             if (data && data.vertices) {
-                var intersection = _.intersection(this.displayingVertexIds, _.pluck(data.vertices, 'id'));
+                var intersection = _.intersection(this.displayingIds, _.pluck(data.vertices, 'id'));
                 if (intersection.length) {
-                    appData.refresh(this.displayingVertexIds)
-                        .done(self.drawHistograms.bind(this));
+                    this.dataRequest('vertex', 'store', { vertexIds: this.displayingIds })
+                        .done(function(vertices) {
+                            self.drawHistograms(vertices);
+                        });
                 }
             }
         };
@@ -214,7 +216,21 @@ define([
 
         this.onSelectObjects = function(event, data) {
             event.stopPropagation();
-            this.$node.find('.vertices-list').hide();
+            var $verticesList = this.$node.find('.vertices-list'),
+                max = 200,
+                height = _.reduce(
+                    $verticesList.find('li.vertex-item').toArray(),
+                     function(sum, el) {
+                         if (sum > max) {
+                             return sum;
+                         }
+                         return sum + $(el).height();
+                     }, 0
+                ),
+                calculatedHeight = Math.min(max, height + 4);
+
+            this.$node.find('.details-container').css('bottom', calculatedHeight + 'px');
+            $verticesList.hide().height(calculatedHeight + 'px');
             this.$node.find('.multiple').addClass('viewing-vertex');
 
             var self = this,
@@ -241,10 +257,10 @@ define([
                 }
 
                 var first = vertices[0];
-                if (this._selectedGraphId === first.id) {
-                    this.$node.find('.multiple').removeClass('viewing-vertex');
-                    this.$node.find('.vertices-list').show().find('.active').removeClass('active');
-                    this._selectedGraphId = null;
+                if (self._selectedGraphId === first.id) {
+                    self.$node.find('.multiple').removeClass('viewing-vertex');
+                    self.$node.find('.vertices-list').show().find('.active').removeClass('active');
+                    self._selectedGraphId = null;
                     return;
                 }
 
@@ -259,7 +275,7 @@ define([
                     ) || 'entity').toLowerCase();
                 }
 
-                this._selectedGraphId = first.id;
+                self._selectedGraphId = first.id;
                 require([
                     'detail/' + moduleName + '/' + moduleName,
                 ], function(Module) {
@@ -710,7 +726,7 @@ define([
         this.histogramClick = function(event, object) {
             var vertexIds = $(event.target).closest('g').data('vertexIds');
 
-            this.trigger(document, 'selectObjects', { vertices: appData.vertices(vertexIds) });
+            this.trigger(document, 'selectObjects', { vertexIds: vertexIds });
             this.trigger(document, 'defocusVertices', { vertexIds: vertexIds });
         };
 

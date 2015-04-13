@@ -1,0 +1,263 @@
+{
+  "budget": 0,
+  "vote_average": 5.9,
+  "backdrop_path": "/o5QtsxQpiubbrMuLCttj4afzZJr.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6250,
+        "order": 0,
+        "credit_id": "52fe4246c3a36847f80116cf",
+        "name": "Romy Schneider",
+        "cast_id": 11,
+        "profile_path": "/jBLkVHZFCsjVDJSCffq0ccL11N2.jpg",
+        "character": "Prinzessin Elisabeth"
+      },
+      {
+        "id": 6251,
+        "order": 1,
+        "credit_id": "52fe4246c3a36847f80116d3",
+        "name": "Karlheinz Böhm",
+        "cast_id": 12,
+        "profile_path": "/43NAbwjRntLL1A7ugTHFVrrV6Er.jpg",
+        "character": "Kaiser Franz Joseph"
+      },
+      {
+        "id": 6252,
+        "order": 2,
+        "credit_id": "52fe4246c3a36847f80116d7",
+        "name": "Magda Schneider",
+        "cast_id": 13,
+        "profile_path": "/9YWA8oJl9vJJeOGhf8DCxv21npT.jpg",
+        "character": "Herzogin Ludovika"
+      },
+      {
+        "id": 6253,
+        "order": 3,
+        "credit_id": "52fe4246c3a36847f80116db",
+        "name": "Uta Franz",
+        "cast_id": 14,
+        "profile_path": "/bhxEjaZcFvhSvYclN5d41bvZO9E.jpg",
+        "character": "Prinzessin Helene"
+      },
+      {
+        "id": 6254,
+        "order": 4,
+        "credit_id": "52fe4246c3a36847f80116df",
+        "name": "Gustav Knuth",
+        "cast_id": 15,
+        "profile_path": "/mVaZRIWxkWLWaYNin0lgnT9S14E.jpg",
+        "character": "Herzog Max"
+      },
+      {
+        "id": 6255,
+        "order": 5,
+        "credit_id": "52fe4246c3a36847f80116e3",
+        "name": "Vilma Degischer",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Erzherzogin Sophie"
+      },
+      {
+        "id": 6256,
+        "order": 6,
+        "credit_id": "52fe4246c3a36847f80116e7",
+        "name": "Josef Meinrad",
+        "cast_id": 17,
+        "profile_path": "/u2lozzHlfH3qvcEbQ2Aa35jTqo.jpg",
+        "character": "Gendarmeriemajor Boeckl"
+      },
+      {
+        "id": 6257,
+        "order": 7,
+        "credit_id": "52fe4246c3a36847f80116eb",
+        "name": "Erich Nikowitz",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Erzherzog Franz Karl"
+      },
+      {
+        "id": 6258,
+        "order": 8,
+        "credit_id": "52fe4246c3a36847f80116ef",
+        "name": "Peter Weck",
+        "cast_id": 19,
+        "profile_path": "/pbFlmz262NVKK1Huv8I8rq8KT7q.jpg",
+        "character": "Erzherzog Karl-Ludwig"
+      },
+      {
+        "id": 6259,
+        "order": 9,
+        "credit_id": "52fe4246c3a36847f80116f3",
+        "name": "Hilde Wagener",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Baronin Wulffen"
+      },
+      {
+        "id": 6260,
+        "order": 10,
+        "credit_id": "52fe4246c3a36847f80116f7",
+        "name": "Karl Fochler",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Graf Grünne"
+      },
+      {
+        "id": 6261,
+        "order": 11,
+        "credit_id": "52fe4246c3a36847f80116fb",
+        "name": "Otto Treßler",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Marschall Radetzky"
+      },
+      {
+        "id": 6262,
+        "order": 12,
+        "credit_id": "52fe4246c3a36847f80116ff",
+        "name": "Egon von Jordan",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Minister"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6241,
+        "credit_id": "52fe4246c3a36847f8011695",
+        "department": "Directing",
+        "name": "Ernst Marischka",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 6241,
+        "credit_id": "52fe4246c3a36847f801169b",
+        "department": "Writing",
+        "name": "Ernst Marischka",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6241,
+        "credit_id": "52fe4246c3a36847f80116a1",
+        "department": "Production",
+        "name": "Ernst Marischka",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6243,
+        "credit_id": "52fe4246c3a36847f80116a7",
+        "department": "Sound",
+        "name": "Anton Profes",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6244,
+        "credit_id": "52fe4246c3a36847f80116ad",
+        "department": "Camera",
+        "name": "Bruno Mondi",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6245,
+        "credit_id": "52fe4246c3a36847f80116b3",
+        "department": "Editing",
+        "name": "Alfred Srp",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6242,
+        "credit_id": "52fe4246c3a36847f80116b9",
+        "department": "Production",
+        "name": "Karl Ehrlich",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6247,
+        "credit_id": "52fe4246c3a36847f80116bf",
+        "department": "Costume & Make-Up",
+        "name": "Leo Bei",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6248,
+        "credit_id": "52fe4246c3a36847f80116c5",
+        "department": "Costume & Make-Up",
+        "name": "Gerdago",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6249,
+        "credit_id": "52fe4246c3a36847f80116cb",
+        "department": "Costume & Make-Up",
+        "name": "Franz Szivats",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6813,
+        "credit_id": "52fe4246c3a36847f8011705",
+        "department": "Art",
+        "name": "Fritz Jüptner-Jonstorff",
+        "job": "Art Direction",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 102,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 457,
+  "production_countries": [{
+    "name": "Austria",
+    "iso_3166_1": "AT"
+  }],
+  "title": "Sissi",
+  "overview": "The young Bavarian princess Elisabeth, who all call Sissi, goes with her mother and older sister Néné to Austria where Néné will be wed to an emperor named Franz Joseph, Yet unexpectedly Franz runs into Sissi while out fishing and they fall in love.",
+  "production_companies": [{
+    "id": 241,
+    "name": "Herzog"
+  }],
+  "belongs_to_collection": {
+    "id": 456,
+    "backdrop_path": "/zJU3dyafiEPdH29h7NKJGj7u7cu.jpg",
+    "name": "Sissi Collection",
+    "poster_path": "/leXP2ToG7cTjJTD3lQkRz63YgrO.jpg"
+  },
+  "imdb_id": "tt0048624",
+  "release_date": "1955-12-22",
+  "original_title": "Sissi",
+  "vote_count": 10,
+  "poster_path": "/6XIVzaqfkrPCZpBFwbUzeLS0MSk.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.558238117116459"
+}

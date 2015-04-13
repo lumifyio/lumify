@@ -1,0 +1,303 @@
+{
+  "budget": 29500000,
+  "vote_average": 6.9,
+  "backdrop_path": "/6KXbhaxkgExC5EdDqAzRinhmoZ8.jpg",
+  "genres": [
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 62,
+        "order": 0,
+        "credit_id": "52fe4212c3a36847f8001b31",
+        "name": "Bruce Willis",
+        "cast_id": 41,
+        "profile_path": "/kI1OluWhLJk3pnR19VjOfABpnTY.jpg",
+        "character": "James Cole"
+      },
+      {
+        "id": 289,
+        "order": 1,
+        "credit_id": "52fe4212c3a36847f8001b35",
+        "name": "Madeleine Stowe",
+        "cast_id": 42,
+        "profile_path": "/jqd70MNVUs3nTbxn3B3G6UNV4Oc.jpg",
+        "character": "Dr. Kathryn Railly"
+      },
+      {
+        "id": 287,
+        "order": 2,
+        "credit_id": "52fe4212c3a36847f8001b39",
+        "name": "Brad Pitt",
+        "cast_id": 43,
+        "profile_path": "/kc3M04QQAuZ9woUvH3Ju5T7ZqG5.jpg",
+        "character": "Jeffrey Goines"
+      },
+      {
+        "id": 290,
+        "order": 3,
+        "credit_id": "52fe4212c3a36847f8001b3d",
+        "name": "Christopher Plummer",
+        "cast_id": 44,
+        "profile_path": "/fauMGxa6dc86nHNenQ8X6DlE6YV.jpg",
+        "character": "Dr. Goines"
+      },
+      {
+        "id": 52,
+        "order": 4,
+        "credit_id": "52fe4212c3a36847f8001b41",
+        "name": "David Morse",
+        "cast_id": 45,
+        "profile_path": "/9HbsItGl8Zw4U4SVyA4TfC9t6Am.jpg",
+        "character": "Dr. Peters"
+      },
+      {
+        "id": 288,
+        "order": 5,
+        "credit_id": "52fe4212c3a36847f8001b45",
+        "name": "Jon Seda",
+        "cast_id": 46,
+        "profile_path": "/9fE1k2HIgxDYbWmxQjF9mLcIbvo.jpg",
+        "character": "Jose"
+      },
+      {
+        "id": 291,
+        "order": 6,
+        "credit_id": "52fe4212c3a36847f8001b49",
+        "name": "Frank Gorshin",
+        "cast_id": 47,
+        "profile_path": "/1hfi3gAMouvfXzrnrbJLHqYHHVP.jpg",
+        "character": "Dr. Fletcher"
+      },
+      {
+        "id": 975569,
+        "order": 7,
+        "credit_id": "52fe4212c3a36847f8001b4d",
+        "name": "Joseph Melito",
+        "cast_id": 48,
+        "profile_path": "/rPgGtrcKQsV9wlDW91kgjGm39K5.jpg",
+        "character": "Young Cole"
+      },
+      {
+        "id": 1273540,
+        "order": 8,
+        "credit_id": "52fe4212c3a36847f8001b51",
+        "name": "Aaron Michael Lacey",
+        "cast_id": 49,
+        "profile_path": "/6cBXtAhaqQfT14WLIgGXqmEQ12j.jpg",
+        "character": "WWI Sergeant"
+      },
+      {
+        "id": 22227,
+        "order": 9,
+        "credit_id": "52fe4212c3a36847f8001b55",
+        "name": "Christopher Meloni",
+        "cast_id": 50,
+        "profile_path": "/qUxRtuQxWcuaUitnKoTyKgeIitu.jpg",
+        "character": "Lt. Halperin"
+      }
+    ],
+    "crew": [
+      {
+        "id": 280,
+        "credit_id": "52fe4212c3a36847f8001ac7",
+        "department": "Directing",
+        "name": "Terry Gilliam",
+        "job": "Director",
+        "profile_path": "/cFno5isSPvfPEkSdVoEzOs0pJCh.jpg"
+      },
+      {
+        "id": 7191,
+        "credit_id": "52fe4212c3a36847f8001acd",
+        "department": "Writing",
+        "name": "David Webb Peoples",
+        "job": "Screenplay",
+        "profile_path": "/ddlC6ZF4yXHjvj7ZyNeBBxUaH4v.jpg"
+      },
+      {
+        "id": 281,
+        "credit_id": "52fe4212c3a36847f8001ad3",
+        "department": "Writing",
+        "name": "Janet Peoples",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 282,
+        "credit_id": "52fe4212c3a36847f8001ad9",
+        "department": "Production",
+        "name": "Charles Roven",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 283,
+        "credit_id": "52fe4212c3a36847f8001adf",
+        "department": "Production",
+        "name": "Robert Cavallo",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 284,
+        "credit_id": "52fe4212c3a36847f8001ae5",
+        "department": "Production",
+        "name": "Gary Levinsohn",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 285,
+        "credit_id": "52fe4212c3a36847f8001aeb",
+        "department": "Production",
+        "name": "Robert Kosberg",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 293,
+        "credit_id": "52fe4212c3a36847f8001af1",
+        "department": "Camera",
+        "name": "Roger Pratt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 294,
+        "credit_id": "52fe4212c3a36847f8001af7",
+        "department": "Editing",
+        "name": "Mick Audsley",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 295,
+        "credit_id": "52fe4212c3a36847f8001afd",
+        "department": "Sound",
+        "name": "Imogen Pollard",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 296,
+        "credit_id": "52fe4212c3a36847f8001b03",
+        "department": "Sound",
+        "name": "Robin Clarke",
+        "job": "Music Editor",
+        "profile_path": "/1xIlhDba0tnSX7bvXcOHeVj5NI7.jpg"
+      },
+      {
+        "id": 297,
+        "credit_id": "52fe4212c3a36847f8001b09",
+        "department": "Sound",
+        "name": "Jay Meagher",
+        "job": "Sound mixer",
+        "profile_path": null
+      },
+      {
+        "id": 1020074,
+        "credit_id": "52fe4212c3a36847f8001b0f",
+        "department": "Sound",
+        "name": "Paul Buckmaster",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 945,
+        "credit_id": "52fe4212c3a36847f8001b15",
+        "department": "Art",
+        "name": "Crispian Sallis",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7848,
+        "credit_id": "52fe4212c3a36847f8001b1b",
+        "department": "Art",
+        "name": "Jeffrey Beecroft",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 8848,
+        "credit_id": "52fe4212c3a36847f8001b21",
+        "department": "Art",
+        "name": "William Ladd Skinner",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6347,
+        "credit_id": "52fe4212c3a36847f8001b27",
+        "department": "Production",
+        "name": "Margery Simkin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 8222,
+        "credit_id": "52fe4212c3a36847f8001b2d",
+        "department": "Costume & Make-Up",
+        "name": "Julie Weiss",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 129,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 63,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Twelve Monkeys",
+  "overview": "In the year 2035, convict James Cole (Bruce Willis) reluctantly volunteers to be sent back in time to discover the origin of a deadly virus that wiped out nearly all of the earth's population and forced the survivors into underground communities. But when Cole is mistakenly sent to 1990 instead of 1996, he's arrested and locked up in a mental hospital. There he meets psychiatrist Dr. Kathryn Railly (Madeleine Stowe), and patient Jeffrey Goines (Brad Pitt), the son of a famous virus expert, who may hold the key to the mysterious rogue group, the Army of the 12 Monkeys, thought to be responsible for unleashing the killer disease.",
+  "production_companies": [
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    },
+    {
+      "id": 507,
+      "name": "Atlas Entertainment"
+    },
+    {
+      "id": 17031,
+      "name": "Classico"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0114746",
+  "release_date": "1995-12-27",
+  "original_title": "Twelve Monkeys",
+  "vote_count": 625,
+  "poster_path": "/6Sj9wDu3YugthXsU0Vry5XFAZGg.jpg",
+  "tagline": "The future is history",
+  "revenue": 168840000,
+  "popularity": "2.84301669525449"
+}

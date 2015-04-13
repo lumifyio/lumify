@@ -57,6 +57,8 @@ define([
         })
 
         this.after('initialize', function() {
+            var self = this;
+
             this.initialized = false;
             this.setupAsyncQueue('map');
             this.$node.html(template({})).find('.shortcut').each(function() {
@@ -67,6 +69,8 @@ define([
             this.on(document, 'mapShow', this.onMapShow);
             this.on(document, 'mapCenter', this.onMapCenter);
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+            this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
+            this.on(document, 'updateWorkspace', this.onUpdateWorkspace);
             this.on(document, 'verticesAdded', this.onVerticesAdded);
             this.on(document, 'verticesDropped', this.onVerticesDropped);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
@@ -87,13 +91,6 @@ define([
 
             this.attachToZoomPanControls();
 
-            // TODO: Fix
-            /*
-            var verticesInWorkspace = appData.verticesInWorkspace();
-            if (verticesInWorkspace.length) {
-                this.updateOrAddVertices(verticesInWorkspace, { adding: true, preventShake: true });
-            }
-            */
         });
 
         this.attachToZoomPanControls = function() {
@@ -156,6 +153,28 @@ define([
             return (this.padding = $.extend({}, data.padding));
         };
 
+        this.onUpdateWorkspace = function(event, data) {
+            if (data && data.entityDeletes) {
+                this.removeVertexIds(data.entityDeletes);
+            }
+        };
+
+        this.onWorkspaceUpdated = function(event, data) {
+            var self = this;
+
+            this.mapReady(function(map) {
+                this.removeVertexIds(data.entityDeletes);
+                if (data.entityUpdates.length) {
+                    this.dataRequest('vertex', 'store', { vertexIds: _.pluck(data.entityUpdates, 'vertexId') })
+                        .done(function(vertices) {
+                            if (vertices.length) {
+                                self.updateOrAddVertices(vertices, { adding: true, preventShake: true });
+                            }
+                        });
+                }
+            });
+        };
+
         this.onWorkspaceLoaded = function(evt, workspaceData) {
             var self = this;
             this.isWorkspaceEditable = workspaceData.editable;
@@ -195,23 +214,31 @@ define([
         };
 
         this.onVerticesDeleted = function(evt, data) {
+            if (data.vertexIds) {
+                this.removeVertexIds(data.vertexIds);
+            }
+        };
+
+        this.removeVertexIds = function(ids) {
+            if (!ids || ids.length === 0) {
+                return;
+            }
             this.mapReady(function(map) {
                 var featuresLayer = map.featuresLayer,
-                    toRemove = [],
-                    ids = _.pluck(data.vertices, 'id');
+                    toRemove = [];
 
                 featuresLayer.features.forEach(function removeIfDeleted(feature) {
-                    if (~ids.indexOf(feature.id)) {
-                        toRemove.push(feature);
-                    } else if (feature.cluster) {
+                    if (feature.cluster) {
                         feature.cluster.forEach(removeIfDeleted);
+                    } else if (~ids.indexOf(feature.data.vertex.id)) {
+                        toRemove.push(feature);
                     }
                 });
 
                 featuresLayer.removeFeatures(toRemove);
                 this.clusterStrategy.cluster();
             });
-        };
+        }
 
         this.onObjectsSelected = function(evt, data) {
             var self = this,
@@ -594,7 +621,16 @@ define([
                             self.endRegionSelection();
                             self.trigger('updateWorkspace', {
                                 entityUpdates: data.vertices.map(function(vertex) {
-                                    return { vertexId: vertex.id };
+                                    return {
+                                        vertexId: vertex.id,
+                                        graphLayoutJson: {
+                                            fromMapRegion: {
+                                                lat: lonlat.lat,
+                                                lon: lonlat.lon,
+                                                radius: radius
+                                            }
+                                        }
+                                    };
                                 })
                             });
                         }

@@ -1,0 +1,436 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY lumify "http://lumify.io#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://lumify.io/minimal#"
+     xml:base="http://lumify.io/minimal"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:lumify="http://lumify.io#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io/minimal">
+        <owl:imports rdf:resource="http://lumify.io"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/minimal#entityHasImageRaw -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/minimal#entityHasImageRaw">
+        <rdfs:label xml:lang="en">Has Image</rdfs:label>
+        <lumify:intent>entityHasImage</lumify:intent>
+        <rdfs:range rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/minimal#rawContainsImageOfEntity -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/minimal#rawContainsImageOfEntity">
+        <rdfs:label xml:lang="en">Contains Image of</rdfs:label>
+        <lumify:intent>artifactContainsImage</lumify:intent>
+        <lumify:intent>artifactContainsImageOfEntity</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#raw"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/minimal#rawHasEntity -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/minimal#rawHasEntity">
+        <rdfs:label xml:lang="en">Has Entity</rdfs:label>
+        <lumify:intent>artifactHasEntity</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#raw"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/media#clockwiseRotation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#clockwiseRotation">
+        <rdfs:label xml:lang="en">Clockwise Rotation</rdfs:label>
+        <lumify:intent>media.clockwiseRotation</lumify:intent>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#dateTaken -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#dateTaken">
+        <rdfs:label xml:lang="en">Date Taken</rdfs:label>
+        <lumify:intent>media.dateTaken</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#video"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#deviceMake -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#deviceMake">
+        <rdfs:label xml:lang="en">Device Make</rdfs:label>
+        <lumify:intent>media.deviceMake</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#deviceModel -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#deviceModel">
+        <rdfs:label xml:lang="en">Device Model</rdfs:label>
+        <lumify:intent>media.deviceModel</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#fileSize -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#fileSize">
+        <rdfs:label xml:lang="en">File Size</rdfs:label>
+        <lumify:intent>media.fileSize</lumify:intent>
+        <lumify:displayType xml:lang="en">byte</lumify:displayType>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#audio"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#video"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#height -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#height">
+        <rdfs:label xml:lang="en">Height</rdfs:label>
+        <lumify:intent>media.height</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#video"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#imageHeading -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#imageHeading">
+        <rdfs:label xml:lang="en">Image Heading</rdfs:label>
+        <lumify:displayType xml:lang="en">heading</lumify:displayType>
+        <lumify:intent>media.imageHeading</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#metadata -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#metadata">
+        <rdfs:label xml:lang="en">Metadata</rdfs:label>
+        <lumify:intent>media.metadata</lumify:intent>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#width -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#width">
+        <rdfs:label xml:lang="en">Width</rdfs:label>
+        <lumify:intent>media.width</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#video"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#yAxisFlipped -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#yAxisFlipped">
+        <rdfs:label xml:lang="en">Y Axis Flipped</rdfs:label>
+        <lumify:intent>media.yAxisFlipped</lumify:intent>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/minimal#duration -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/minimal#duration">
+        <rdfs:label xml:lang="en">Duration</rdfs:label>
+        <lumify:intent>media.duration</lumify:intent>
+        <lumify:intent>audioDuration</lumify:intent>
+        <lumify:intent>videoDuration</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#audio"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#video"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/minimal#geolocation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/minimal#geolocation">
+        <rdfs:label xml:lang="en">Geolocation</rdfs:label>
+        <lumify:intent>geoLocation</lumify:intent>
+        <lumify:intent>media.geoLocation</lumify:intent>
+        <rdfs:range rdf:resource="&lumify;geolocation"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#location"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/minimal#sentiment -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/minimal#sentiment">
+        <rdfs:label xml:lang="en">Sentiment</rdfs:label>
+        <lumify:intent>sentiment</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/minimal#document"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/minimal#audio -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#audio">
+        <rdfs:label xml:lang="en">Audio</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#raw"/>
+        <lumify:intent>audio</lumify:intent>
+        <lumify:displayType xml:lang="en">audio</lumify:displayType>
+        <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#city -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#city">
+        <rdfs:label xml:lang="en">City</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#location"/>
+        <lumify:intent>city</lumify:intent>
+        <lumify:glyphIconFileName xml:lang="en">city.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(191, 13, 191)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#contactInformation -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#contactInformation">
+        <rdfs:label xml:lang="en">Contact Information</rdfs:label>
+        <lumify:glyphIconFileName xml:lang="en">contactInformation.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(225, 128, 0)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#country -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#country">
+        <rdfs:label xml:lang="en">Country</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#location"/>
+        <lumify:intent>country</lumify:intent>
+        <lumify:glyphIconFileName xml:lang="en">country.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(112, 0, 112)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#document -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#document">
+        <rdfs:label xml:lang="en">Document</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#raw"/>
+        <lumify:intent>document</lumify:intent>
+        <lumify:displayType xml:lang="en">document</lumify:displayType>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io#author&apos;) || &apos;&apos; </lumify:subtitleFormula>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#emailAddress -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#emailAddress">
+        <rdfs:label xml:lang="en">Email Address</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#contactInformation"/>
+        <lumify:intent>email</lumify:intent>
+        <lumify:glyphIconFileName xml:lang="en">emailAddress.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(203, 130, 4)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#image -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#image">
+        <rdfs:label xml:lang="en">Image</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#raw"/>
+        <lumify:intent>entityImage</lumify:intent>
+        <lumify:intent>image</lumify:intent>
+        <lumify:displayType xml:lang="en">image</lumify:displayType>
+        <lumify:color xml:lang="en">rgb(176, 87, 53)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#location -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#location">
+        <rdfs:label xml:lang="en">Location</rdfs:label>
+        <lumify:intent>location</lumify:intent>
+        <lumify:glyphIconFileName xml:lang="en">location.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(160, 7, 206)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#organization -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#organization">
+        <rdfs:label xml:lang="en">Organization</rdfs:label>
+        <lumify:glyphIconFileName xml:lang="en">organization.png</lumify:glyphIconFileName>
+        <lumify:intent>organization</lumify:intent>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/minimal#abbreviation&apos;) ||
+            &apos;&apos; </lumify:subtitleFormula>
+        <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/minimal#formationDate&apos;) ||
+            &apos;&apos; </lumify:timeFormula>
+        <lumify:color xml:lang="en">rgb(137, 39, 26)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#person -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#person">
+        <rdfs:label xml:lang="en">Person</rdfs:label>
+        <lumify:intent>face</lumify:intent>
+        <lumify:intent>person</lumify:intent>
+        <lumify:glyphIconFileName xml:lang="en">person.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#phoneNumber -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#phoneNumber">
+        <rdfs:label xml:lang="en">Phone Number</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#contactInformation"/>
+        <lumify:intent>phoneNumber</lumify:intent>
+        <lumify:glyphIconFileName xml:lang="en">phoneNumber.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(225, 225, 24)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#raw -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#raw">
+        <rdfs:label xml:lang="en">Raw</rdfs:label>
+        <lumify:glyphIconFileName xml:lang="en">raw.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#state -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#state">
+        <rdfs:label xml:lang="en">State</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#location"/>
+        <lumify:color xml:lang="en">rgb(153, 0, 153)</lumify:color>
+        <lumify:intent>state</lumify:intent>
+        <lumify:glyphIconFileName xml:lang="en">state.png</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#video -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#video">
+        <rdfs:label xml:lang="en">Video</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#raw"/>
+        <lumify:intent>video</lumify:intent>
+        <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
+        <lumify:displayType xml:lang="en">video</lumify:displayType>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/minimal#zipCode -->
+
+    <owl:Class rdf:about="http://lumify.io/minimal#zipCode">
+        <rdfs:label xml:lang="en">Zip Code</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/minimal#location"/>
+        <lumify:glyphIconFileName xml:lang="en">zipCode.png</lumify:glyphIconFileName>
+        <lumify:intent>zipCode</lumify:intent>
+        <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.5.0) http://owlapi.sourceforge.net -->
+

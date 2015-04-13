@@ -1,0 +1,257 @@
+{
+  "budget": 75000000,
+  "vote_average": 4.9,
+  "backdrop_path": "/St6SHtq38JODJRcCN4G3BWvqJt.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4756,
+        "order": 0,
+        "credit_id": "52fe4238c3a36847f800d52d",
+        "name": "Matthew Broderick",
+        "cast_id": 2,
+        "profile_path": "/lgtBvPJGsTNa5cFaluxCFoRg26A.jpg",
+        "character": "Inspector Gadget / Robo Gadget / John Brown"
+      },
+      {
+        "id": 4757,
+        "order": 1,
+        "credit_id": "52fe4238c3a36847f800d531",
+        "name": "Rupert Everett",
+        "cast_id": 3,
+        "profile_path": "/kJ6LEOAwpWifbQbAoR7igjtTttc.jpg",
+        "character": "Sanford Scolex"
+      },
+      {
+        "id": 4758,
+        "order": 2,
+        "credit_id": "52fe4238c3a36847f800d535",
+        "name": "Joely Fisher",
+        "cast_id": 4,
+        "profile_path": "/nMG46tR18T3DErXzFAnfhq4yID8.jpg",
+        "character": "Brenda / Robobrenda"
+      },
+      {
+        "id": 49961,
+        "order": 3,
+        "credit_id": "52fe4239c3a36847f800d539",
+        "name": "Michelle Trachtenberg",
+        "cast_id": 5,
+        "profile_path": "/rvjz8UK6hGg22kOR4Ywcb8RA7dI.jpg",
+        "character": "Penny"
+      },
+      {
+        "id": 43120,
+        "order": 4,
+        "credit_id": "52fe4239c3a36847f800d53d",
+        "name": "Andy Dick",
+        "cast_id": 6,
+        "profile_path": "/ebNRu8oV7Ifv5aoP23UyNnx0lZS.jpg",
+        "character": "Kramer"
+      },
+      {
+        "id": 60252,
+        "order": 5,
+        "credit_id": "52fe4239c3a36847f800d541",
+        "name": "Cheri Oteri",
+        "cast_id": 7,
+        "profile_path": "/gPQaICTx05m4aw1q53B88qtXgFB.jpg",
+        "character": "Mayor Wilson"
+      },
+      {
+        "id": 15105,
+        "order": 6,
+        "credit_id": "52fe4239c3a36847f800d551",
+        "name": "Mike Hagerty",
+        "cast_id": 12,
+        "profile_path": "/xDfY3QdSlvS7UwDr6DP1YjYNgzu.jpg",
+        "character": "Sikes"
+      },
+      {
+        "id": 12850,
+        "order": 7,
+        "credit_id": "52fe4239c3a36847f800d555",
+        "name": "Dabney Coleman",
+        "cast_id": 13,
+        "profile_path": "/92D3w0JA9QBlbns9XKiH9YPagVs.jpg",
+        "character": "Chief Quimby"
+      },
+      {
+        "id": 85931,
+        "order": 8,
+        "credit_id": "52fe4239c3a36847f800d559",
+        "name": "D. L. Hughley",
+        "cast_id": 14,
+        "profile_path": "/72VEmMvVirWPpiPDWcMNIQswEoT.jpg",
+        "character": "Gadgetmobile (voice)"
+      },
+      {
+        "id": 9807,
+        "order": 9,
+        "credit_id": "52fe4239c3a36847f800d55d",
+        "name": "Rene Auberjonois",
+        "cast_id": 15,
+        "profile_path": "/eAF43tqzBqq7Lgi7jG27BBUZ6Bp.jpg",
+        "character": "Artemus Bradford"
+      },
+      {
+        "id": 11794,
+        "order": 10,
+        "credit_id": "52fe4239c3a36847f800d561",
+        "name": "Frances Bay",
+        "cast_id": 16,
+        "profile_path": "/1QrSN7nGkdsvPG5EAZHUu8Ap3RJ.jpg",
+        "character": "Thelma"
+      },
+      {
+        "id": 16619,
+        "order": 11,
+        "credit_id": "52fe4239c3a36847f800d565",
+        "name": "Mr. T",
+        "cast_id": 17,
+        "profile_path": "/qOkwEXmkoSIP65BcJlpv48n0vnP.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 10460,
+        "order": 12,
+        "credit_id": "52fe4239c3a36847f800d569",
+        "name": "Richard Kiel",
+        "cast_id": 18,
+        "profile_path": "/5maNnMNe6DHxanWQ86gqVSihEGn.jpg",
+        "character": "Famous Big Guy with Silver Teeth"
+      },
+      {
+        "id": 61709,
+        "order": 13,
+        "credit_id": "52fe4239c3a36847f800d56d",
+        "name": "Richard Lee-Sung",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Famous Villain with Deadly Hat"
+      },
+      {
+        "id": 81414,
+        "order": 14,
+        "credit_id": "52fe4239c3a36847f800d571",
+        "name": "Bobby Bell",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Famous Identifier of Sea Planes"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4759,
+        "credit_id": "52fe4238c3a36847f800d529",
+        "department": "Directing",
+        "name": "David Kellogg",
+        "job": "Director",
+        "profile_path": "/8CqtSRR1QoLQGD1cbtoA1HwOF2u.jpg"
+      },
+      {
+        "id": 26978,
+        "credit_id": "52fe4239c3a36847f800d547",
+        "department": "Writing",
+        "name": "Dana Olsen",
+        "job": "Story",
+        "profile_path": null
+      },
+      {
+        "id": 11011,
+        "credit_id": "52fe4239c3a36847f800d54d",
+        "department": "Writing",
+        "name": "Zak Penn",
+        "job": "Screenplay",
+        "profile_path": "/mS0ehIWfFPr7f6pWg5x3Yh5cOo3.jpg"
+      },
+      {
+        "id": 1236253,
+        "credit_id": "52fe4239c3a36847f800d577",
+        "department": "Writing",
+        "name": "Kerry Ehrin",
+        "job": "Story",
+        "profile_path": null
+      },
+      {
+        "id": 1236253,
+        "credit_id": "52fe4239c3a36847f800d57d",
+        "department": "Writing",
+        "name": "Kerry Ehrin",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 78,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "no",
+      "name": "Norsk"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 332,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Inspector Gadget",
+  "overview": "Nebbish rent-a-cop John Brown clings to life after he's mangled in an explosion perpetrated by the iniquitous Dr. Claw. But robotics expert Brenda Bradford comes to his rescue and replaces his limbs with a cornucopia of gadgets. Transformed into crime-fighting machine, the newly-created Inspector Gadget vows revenge -- and he'll need all his mettle -- and metal -- to bring down Dr. Claw.",
+  "production_companies": [
+    {
+      "id": 2,
+      "name": "Walt Disney Pictures"
+    },
+    {
+      "id": 175,
+      "name": "Caravan Pictures"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 237445,
+    "backdrop_path": null,
+    "name": "Inspector Gadget Collection",
+    "poster_path": null
+  },
+  "imdb_id": "tt0141369",
+  "release_date": "1999-07-23",
+  "original_title": "Inspector Gadget",
+  "vote_count": 32,
+  "poster_path": "/ii4W1UfRR9o4iBvqVn7xLQhAg3Q.jpg",
+  "tagline": "The greatest hero ever assembled.",
+  "revenue": 0,
+  "popularity": "0.727909282314795"
+}

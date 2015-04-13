@@ -1,0 +1,252 @@
+{
+  "budget": 15000000,
+  "vote_average": 7,
+  "backdrop_path": "/z5J18ByLeOZ68iORfMXmxeFuwyL.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1979,
+        "order": 0,
+        "credit_id": "52fe420ec3a36847f80007db",
+        "name": "Kevin Spacey",
+        "cast_id": 6,
+        "profile_path": "/951TgaxvcgbGE1wWEogePSPanoC.jpg",
+        "character": "Lester Burnham"
+      },
+      {
+        "id": 516,
+        "order": 1,
+        "credit_id": "52fe420ec3a36847f80007cf",
+        "name": "Annette Bening",
+        "cast_id": 3,
+        "profile_path": "/cVgrbhUo7EVWZKIgbJ7oAVMNkqn.jpg",
+        "character": "Carolyn Burnham"
+      },
+      {
+        "id": 2155,
+        "order": 2,
+        "credit_id": "52fe420ec3a36847f80007d7",
+        "name": "Thora Birch",
+        "cast_id": 5,
+        "profile_path": "/jxtp9prkQgFmj0ZRvi1kcnnqaWb.jpg",
+        "character": "Jane Burnham"
+      },
+      {
+        "id": 8210,
+        "order": 3,
+        "credit_id": "52fe420ec3a36847f80007df",
+        "name": "Wes Bentley",
+        "cast_id": 7,
+        "profile_path": "/zQMEswmsafMRXjydPAKQRfvS9YT.jpg",
+        "character": "Ricky Fitts"
+      },
+      {
+        "id": 8211,
+        "order": 4,
+        "credit_id": "52fe420ec3a36847f80007e3",
+        "name": "Mena Suvari",
+        "cast_id": 8,
+        "profile_path": "/lboJv2MtnVOrl6ug9lwUnOBiIPb.jpg",
+        "character": "Angela Hayes"
+      },
+      {
+        "id": 2955,
+        "order": 5,
+        "credit_id": "52fe420ec3a36847f80007e7",
+        "name": "Chris Cooper",
+        "cast_id": 9,
+        "profile_path": "/ytZY7YofdiAZyiyr4NyiB77lwwQ.jpg",
+        "character": "Colonel Frank Fitts"
+      },
+      {
+        "id": 2154,
+        "order": 6,
+        "credit_id": "52fe420ec3a36847f80007d3",
+        "name": "Scott Bakula",
+        "cast_id": 4,
+        "profile_path": "/1gAdxMAAOPPCQvz4tEBQdhrPKSJ.jpg",
+        "character": "Jim Olmeyer"
+      },
+      {
+        "id": 8212,
+        "order": 7,
+        "credit_id": "52fe420ec3a36847f80007eb",
+        "name": "Peter Gallagher",
+        "cast_id": 10,
+        "profile_path": "/6bFDP5nBVx6RymoqPeSPwIvBCEL.jpg",
+        "character": "Buddy Kane"
+      },
+      {
+        "id": 19,
+        "order": 8,
+        "credit_id": "52fe420ec3a36847f80007ef",
+        "name": "Allison Janney",
+        "cast_id": 11,
+        "profile_path": "/qMl84hjDjhfezNhhX7aCC3RtkdI.jpg",
+        "character": "Barbara Fitts"
+      },
+      {
+        "id": 8213,
+        "order": 9,
+        "credit_id": "52fe420ec3a36847f80007f3",
+        "name": "Sam Robards",
+        "cast_id": 12,
+        "profile_path": "/xBfl2c80eQtbjKTH6dOwFBnFlE7.jpg",
+        "character": "Jim Berkley"
+      },
+      {
+        "id": 8214,
+        "order": 10,
+        "credit_id": "52fe420ec3a36847f80007f7",
+        "name": "Barry Del Sherman",
+        "cast_id": 13,
+        "profile_path": "/ef6NhEgc8g6kPUfqumVWvZ0JjVZ.jpg",
+        "character": "Brad Dupree"
+      }
+    ],
+    "crew": [
+      {
+        "id": 39,
+        "credit_id": "52fe420ec3a36847f80007c5",
+        "department": "Directing",
+        "name": "Sam Mendes",
+        "job": "Director",
+        "profile_path": "/9ZHO6I45789LzOGjAV6qRRoZ4X.jpg"
+      },
+      {
+        "id": 2152,
+        "credit_id": "52fe420ec3a36847f80007cb",
+        "department": "Writing",
+        "name": "Alan Ball",
+        "job": "Author",
+        "profile_path": "/o3oUhYzwAshWfqp5viKyRgGkcpD.jpg"
+      },
+      {
+        "id": 8215,
+        "credit_id": "52fe420ec3a36847f80007fd",
+        "department": "Production",
+        "name": "Bruce Cohen",
+        "job": "Producer",
+        "profile_path": "/z9KPUHUx6OmfS6U1QpiCp9BnGt2.jpg"
+      },
+      {
+        "id": 8216,
+        "credit_id": "52fe420ec3a36847f8000803",
+        "department": "Production",
+        "name": "Dan Jinks",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 153,
+        "credit_id": "52fe420ec3a36847f8000809",
+        "department": "Sound",
+        "name": "Thomas Newman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 8217,
+        "credit_id": "52fe420ec3a36847f800080f",
+        "department": "Camera",
+        "name": "Conrad L. Hall",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7414,
+        "credit_id": "52fe420ec3a36847f8000815",
+        "department": "Editing",
+        "name": "Christopher Greenbury",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8219,
+        "credit_id": "52fe420ec3a36847f800081b",
+        "department": "Editing",
+        "name": "Tariq Anwar",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 495,
+        "credit_id": "52fe420ec3a36847f8000821",
+        "department": "Production",
+        "name": "Debra Zane",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 8220,
+        "credit_id": "52fe420ec3a36847f8000827",
+        "department": "Art",
+        "name": "Naomi Shohan",
+        "job": "Set Designer",
+        "profile_path": null
+      },
+      {
+        "id": 8221,
+        "credit_id": "52fe420ec3a36847f800082d",
+        "department": "Art",
+        "name": "David Lazan",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8222,
+        "credit_id": "52fe420ec3a36847f8000833",
+        "department": "Costume & Make-Up",
+        "name": "Julie Weiss",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 2152,
+        "credit_id": "52fe420ec3a36847f8000839",
+        "department": "Writing",
+        "name": "Alan Ball",
+        "job": "Screenplay",
+        "profile_path": "/o3oUhYzwAshWfqp5viKyRgGkcpD.jpg"
+      }
+    ]
+  },
+  "runtime": 122,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.dreamworks.com/ab/",
+  "id": 14,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "American Beauty",
+  "overview": "Lester Burnham, a depressed suburban father in a mid-life crisis, decides to turn his hectic life around after developing an infatuation with his daughter's attractive friend.",
+  "production_companies": [
+    {
+      "id": 7293,
+      "name": "DreamWorks Pictures"
+    },
+    {
+      "id": 2721,
+      "name": "Jinks/Cohen Company"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0169547",
+  "release_date": "1999-09-15",
+  "original_title": "American Beauty",
+  "vote_count": 557,
+  "poster_path": "/3UBQGKS8c1dxRnDiu5kUK6ej3pP.jpg",
+  "tagline": "Look closer.",
+  "revenue": 356296601,
+  "popularity": "2.38576327281203"
+}

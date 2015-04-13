@@ -1,0 +1,151 @@
+{
+  "birthday": "1921-12-26",
+  "adult": false,
+  "biography": "",
+  "homepage": "",
+  "profile_path": null,
+  "id": 252,
+  "also_known_as": [],
+  "deathday": "1985-07-03",
+  "imdb_id": "nm0838340",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 3345,
+        "media_type": "movie",
+        "title": "Dr. Frankenstein on Campus",
+        "credit_id": "52fe4390c3a36847f805decd",
+        "release_date": "1970-04-10",
+        "original_title": "Dr. Frankenstein on Campus",
+        "adult": false,
+        "poster_path": "/xeO761B4C2k3VZzg9W8317WPvH2.jpg",
+        "character": "Prof. Preston"
+      },
+      {
+        "id": 11336,
+        "media_type": "movie",
+        "title": "The Dead Zone",
+        "credit_id": "52fe44299251416c7502ae89",
+        "release_date": "1983-10-20",
+        "original_title": "The Dead Zone",
+        "adult": false,
+        "poster_path": "/3BmnYiBnNyehqZjfK3Py3KEYPVT.jpg",
+        "character": "Herb Smith"
+      },
+      {
+        "id": 23954,
+        "media_type": "movie",
+        "title": "Atlantic City",
+        "credit_id": "52fe4479c3a368484e0253df",
+        "release_date": "1980-04-03",
+        "original_title": "Atlantic City",
+        "adult": false,
+        "poster_path": "/cTGhfa9MZOcVAmYHafOSYQAljfE.jpg",
+        "character": "Buddy"
+      },
+      {
+        "id": 25338,
+        "media_type": "movie",
+        "title": "The Silent Partner",
+        "credit_id": "52fe44c2c3a368484e035595",
+        "release_date": "1978-09-07",
+        "original_title": "The Silent Partner",
+        "adult": false,
+        "poster_path": "/qRJpeodDqWqmGXAkdshJcPWYfxG.jpg",
+        "character": "Frank, Bank Guard"
+      },
+      {
+        "id": 83105,
+        "media_type": "movie",
+        "title": "The Boy in Blue",
+        "credit_id": "52fe488a9251416c9109021d",
+        "release_date": "1986-01-17",
+        "original_title": "The Boy in Blue",
+        "adult": false,
+        "poster_path": "/vetbSwBg42YcP9mLYOaIMFdCftY.jpg",
+        "character": "Walter"
+      },
+      {
+        "id": 92806,
+        "media_type": "movie",
+        "title": "Deadly Harvest",
+        "credit_id": "52fe490f9251416c750bc461",
+        "release_date": "1977-08-21",
+        "original_title": "Deadly Harvest",
+        "adult": false,
+        "poster_path": "/xfoSCf1pAN7E94yhlBpEGPPnr5n.jpg",
+        "character": "Dr. George Abbott"
+      },
+      {
+        "id": 77168,
+        "media_type": "movie",
+        "title": "Heavenly Bodies",
+        "credit_id": "52fe4960c3a368484e128347",
+        "release_date": "1985-02-01",
+        "original_title": "Heavenly Bodies",
+        "adult": false,
+        "poster_path": "/aUeYaxYlAoefpuePAEgHUsiX1xK.jpg",
+        "character": "Real Estate Salesman"
+      },
+      {
+        "id": 86231,
+        "media_type": "movie",
+        "title": "The In Crowd",
+        "credit_id": "52fe49799251416c910ae72b",
+        "release_date": "1988-02-01",
+        "original_title": "The In Crowd",
+        "adult": false,
+        "poster_path": "/kqAfff7pMS0akRsihAwMpVwQxW9.jpg",
+        "character": "Popeye"
+      },
+      {
+        "id": 145648,
+        "media_type": "movie",
+        "title": "Why Rock the Boat?",
+        "credit_id": "52fe4b609251416c75100e35",
+        "release_date": "1974-09-26",
+        "original_title": "Why Rock the Boat?",
+        "adult": false,
+        "poster_path": "/84T2IOrraunIEAVRjemzyBWaYZo.jpg",
+        "character": "Herb Scannell"
+      },
+      {
+        "id": 62,
+        "media_type": "movie",
+        "title": "2001: A Space Odyssey",
+        "credit_id": "52fe4212c3a36847f8001a37",
+        "release_date": "1968-04-05",
+        "original_title": "2001: A Space Odyssey",
+        "adult": false,
+        "poster_path": "/rT9w3tzk25jA8vl7KyvzUP5gHJV.jpg",
+        "character": "Dr. Bill Michaels"
+      },
+      {
+        "id": 221121,
+        "media_type": "movie",
+        "title": "Crossbar",
+        "credit_id": "537c738cc3a36854ee000def",
+        "release_date": "1979-07-21",
+        "original_title": "Crossbar",
+        "adult": false,
+        "poster_path": "/ags3LKnE6evvJP6ftw1OlFPtWTp.jpg",
+        "character": "Wallace"
+      },
+      {
+        "id": 163505,
+        "media_type": "movie",
+        "title": "Adulterous Affair",
+        "credit_id": "538f389ec3a3680d660000b2",
+        "release_date": "1966-03-01",
+        "original_title": "Adulterous Affair",
+        "adult": false,
+        "poster_path": "/rh3Bx8VAo1CkRd9Ma8PDPLuYDDP.jpg",
+        "character": "Frank"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Sean Sullivan",
+  "place_of_birth": " Toronto, Ontario, Canada",
+  "popularity": "1.00005577399028"
+}

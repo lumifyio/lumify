@@ -1,0 +1,316 @@
+{
+  "budget": 18000000,
+  "vote_average": 6.5,
+  "backdrop_path": "/tkdgoNMc0yaQnsCPYZms6zMT8nN.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1748,
+        "order": 0,
+        "credit_id": "52fe4220c3a36847f8005e6d",
+        "name": "William Shatner",
+        "cast_id": 5,
+        "profile_path": "/5hWNPFmnzlFAkGMleBKkeFFcxhY.jpg",
+        "character": "Admiral James T. Kirk"
+      },
+      {
+        "id": 1749,
+        "order": 1,
+        "credit_id": "52fe4220c3a36847f8005e71",
+        "name": "Leonard Nimoy",
+        "cast_id": 6,
+        "profile_path": "/5B5blUXy0PDvToh2nxZk4SVTdyP.jpg",
+        "character": "Capt. Spock/Elevator Voice"
+      },
+      {
+        "id": 1750,
+        "order": 2,
+        "credit_id": "52fe4220c3a36847f8005e75",
+        "name": "DeForest Kelley",
+        "cast_id": 7,
+        "profile_path": "/fUL1BY8XjLsQihueDD1UUAm0Qy6.jpg",
+        "character": "Dr. Leonard McCoy"
+      },
+      {
+        "id": 1751,
+        "order": 3,
+        "credit_id": "52fe4220c3a36847f8005e79",
+        "name": "James Doohan",
+        "cast_id": 8,
+        "profile_path": "/fzPmUR60dIqu9oLiqJe4iLw6XBn.jpg",
+        "character": "Montgomery Scott"
+      },
+      {
+        "id": 1752,
+        "order": 4,
+        "credit_id": "52fe4220c3a36847f8005e7d",
+        "name": "George Takei",
+        "cast_id": 9,
+        "profile_path": "/yXQsJ0ahBXsbxzJUYjwyCxpJHgp.jpg",
+        "character": "Hikaru Sulu"
+      },
+      {
+        "id": 1753,
+        "order": 5,
+        "credit_id": "52fe4220c3a36847f8005e81",
+        "name": "Nichelle Nichols",
+        "cast_id": 10,
+        "profile_path": "/1p5EIwiyFBxjs5e8a6AzPRzy1JL.jpg",
+        "character": "Cmdr. Uhura"
+      },
+      {
+        "id": 1754,
+        "order": 6,
+        "credit_id": "52fe4220c3a36847f8005e85",
+        "name": "Walter Koenig",
+        "cast_id": 11,
+        "profile_path": "/aq4fu8vSQQxMklB7FdXbN6uNQoV.jpg",
+        "character": "Pavel Chekov"
+      },
+      {
+        "id": 1795,
+        "order": 7,
+        "credit_id": "52fe4220c3a36847f8005e89",
+        "name": "Merritt Butrick",
+        "cast_id": 12,
+        "profile_path": "/mczHE9Z15Uo7C1VCiwaB9yP1DBD.jpg",
+        "character": "Dr. David Marcus"
+      },
+      {
+        "id": 1062,
+        "order": 8,
+        "credit_id": "52fe4220c3a36847f8005e8d",
+        "name": "Christopher Lloyd",
+        "cast_id": 13,
+        "profile_path": "/iQzG9apaIsHnn7iGrer3YEDp8Zo.jpg",
+        "character": "Cmdr. Kruge"
+      },
+      {
+        "id": 1819,
+        "order": 9,
+        "credit_id": "52fe4220c3a36847f8005e91",
+        "name": "Robin Curtis",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Lt. Saavik"
+      },
+      {
+        "id": 1820,
+        "order": 10,
+        "credit_id": "52fe4220c3a36847f8005e95",
+        "name": "Mark Lenard",
+        "cast_id": 15,
+        "profile_path": "/sROqIxtLAUlK0BhbmNwRfCyPXrY.jpg",
+        "character": "Ambassador Sarek"
+      },
+      {
+        "id": 1829,
+        "order": 11,
+        "credit_id": "52fe4220c3a36847f8005ecf",
+        "name": "Carl Steven",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Spock...Age 9"
+      },
+      {
+        "id": 1830,
+        "order": 12,
+        "credit_id": "52fe4220c3a36847f8005ed3",
+        "name": "Vadia Potenza",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Spock...Age 13"
+      },
+      {
+        "id": 1831,
+        "order": 13,
+        "credit_id": "52fe4220c3a36847f8005ed7",
+        "name": "Stephen Manley",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Spock...Age 17"
+      },
+      {
+        "id": 1832,
+        "order": 14,
+        "credit_id": "52fe4220c3a36847f8005edb",
+        "name": "Joe W. Davis",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Spock at age 25"
+      },
+      {
+        "id": 3362,
+        "order": 15,
+        "credit_id": "52fe4220c3a36847f8005edf",
+        "name": "Judith Anderson",
+        "cast_id": 29,
+        "profile_path": "/faXuVpoxYspStXPqDaqd52oZW2K.jpg",
+        "character": "Vulcan High Priestess"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1749,
+        "credit_id": "52fe4220c3a36847f8005e57",
+        "department": "Directing",
+        "name": "Leonard Nimoy",
+        "job": "Director",
+        "profile_path": "/5B5blUXy0PDvToh2nxZk4SVTdyP.jpg"
+      },
+      {
+        "id": 1791,
+        "credit_id": "52fe4220c3a36847f8005e5d",
+        "department": "Production",
+        "name": "Harve Bennett",
+        "job": "Producer",
+        "profile_path": "/1bjvMRvtV1UcA2hqAXiDRVLaAwF.jpg"
+      },
+      {
+        "id": 1791,
+        "credit_id": "52fe4220c3a36847f8005e63",
+        "department": "Writing",
+        "name": "Harve Bennett",
+        "job": "Author",
+        "profile_path": "/1bjvMRvtV1UcA2hqAXiDRVLaAwF.jpg"
+      },
+      {
+        "id": 1749,
+        "credit_id": "52fe4220c3a36847f8005e69",
+        "department": "Writing",
+        "name": "Leonard Nimoy",
+        "job": "Author",
+        "profile_path": "/5B5blUXy0PDvToh2nxZk4SVTdyP.jpg"
+      },
+      {
+        "id": 1822,
+        "credit_id": "52fe4220c3a36847f8005e9b",
+        "department": "Camera",
+        "name": "Charles Correll",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1823,
+        "credit_id": "52fe4220c3a36847f8005ea1",
+        "department": "Art",
+        "name": "John E. Chilberg II",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 1824,
+        "credit_id": "52fe4220c3a36847f8005ea7",
+        "department": "Art",
+        "name": "Tom Pedigo",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 1801,
+        "credit_id": "52fe4220c3a36847f8005ead",
+        "department": "Costume & Make-Up",
+        "name": "Robert Fletcher",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 1729,
+        "credit_id": "52fe4220c3a36847f8005eb3",
+        "department": "Sound",
+        "name": "James Horner",
+        "job": "Original Music Composer",
+        "profile_path": "/iEiRtIdTjlwxrh1dF27RFbLl9LD.jpg"
+      },
+      {
+        "id": 1825,
+        "credit_id": "52fe4220c3a36847f8005eb9",
+        "department": "Editing",
+        "name": "Robert F. Shugrue",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1826,
+        "credit_id": "52fe4220c3a36847f8005ebf",
+        "department": "Production",
+        "name": "Mary Ann Barton",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1827,
+        "credit_id": "52fe4220c3a36847f8005ec5",
+        "department": "Production",
+        "name": "Elza Bergeron",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1828,
+        "credit_id": "52fe4220c3a36847f8005ecb",
+        "department": "Production",
+        "name": "Stuart Jensen",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 157,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Star Trek III: The Search for Spock",
+  "overview": "Admiral Kirk and his bridge crew risk their careers stealing the decommissioned Enterprise to return to the restricted Genesis planet to recover Spock's body.",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 151,
+    "backdrop_path": "/9BQj9hq0aK6yM9Tm2NJ28jg572y.jpg",
+    "name": "Star Trek: The Original Series Collection",
+    "poster_path": "/zcB8KxHA4EapOoZZPAvwgmE1iGK.jpg"
+  },
+  "imdb_id": "tt0088170",
+  "release_date": "1984-05-31",
+  "original_title": "Star Trek III: The Search for Spock",
+  "vote_count": 108,
+  "poster_path": "/6uwPD03ASHhJryFY5yp3XTDq4aR.jpg",
+  "tagline": "A dying planet. A fight for life.",
+  "revenue": 87000000,
+  "popularity": "1.86429881794419"
+}

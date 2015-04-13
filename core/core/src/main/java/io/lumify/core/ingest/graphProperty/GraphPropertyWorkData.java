@@ -1,21 +1,22 @@
 package io.lumify.core.ingest.graphProperty;
 
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.web.clientapi.model.VisibilityJson;
 import org.securegraph.*;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GraphPropertyWorkData {
+    private final VisibilityTranslator visibilityTranslator;
     private final Element element;
     private final Property property;
     private final String workspaceId;
     private final String visibilitySource;
     private File localFile;
 
-    public GraphPropertyWorkData(Element element, Property property, String workspaceId, String visibilitySource) {
+    public GraphPropertyWorkData(VisibilityTranslator visibilityTranslator, Element element, Property property, String workspaceId, String visibilitySource) {
+        this.visibilityTranslator = visibilityTranslator;
         this.element = element;
         this.property = property;
         this.workspaceId = workspaceId;
@@ -69,11 +70,11 @@ public class GraphPropertyWorkData {
         return getVisibilitySourceJson();
     }
 
-    public Map<String, Object> createPropertyMetadata() {
-        Map<String, Object> metadata = new HashMap<String, Object>();
+    public Metadata createPropertyMetadata() {
+        Metadata metadata = new Metadata();
         VisibilityJson visibilityJson = getVisibilityJson();
         if (visibilityJson != null) {
-            LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
+            LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
         }
         return metadata;
     }
@@ -81,14 +82,14 @@ public class GraphPropertyWorkData {
     public void setVisibilityJsonOnElement(ElementBuilder builder) {
         VisibilityJson visibilityJson = getVisibilityJson();
         if (visibilityJson != null) {
-            LumifyProperties.VISIBILITY_JSON.setProperty(builder, visibilityJson, getVisibility());
+            LumifyProperties.VISIBILITY_JSON.setProperty(builder, visibilityJson, visibilityTranslator.getDefaultVisibility());
         }
     }
 
     public void setVisibilityJsonOnElement(Element element, Authorizations authorizations) {
         VisibilityJson visibilityJson = getVisibilitySourceJson();
         if (visibilityJson != null) {
-            LumifyProperties.VISIBILITY_JSON.setProperty(element, visibilityJson, getVisibility(), authorizations);
+            LumifyProperties.VISIBILITY_JSON.setProperty(element, visibilityJson, visibilityTranslator.getDefaultVisibility(), authorizations);
         }
     }
 }

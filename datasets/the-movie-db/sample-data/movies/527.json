@@ -1,0 +1,313 @@
+{
+  "budget": 1,
+  "vote_average": 8.2,
+  "backdrop_path": "/9JxvKVOK8ZAvCMrBhBu9mI9iVDI.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 7241,
+        "order": 0,
+        "credit_id": "52fe424dc3a36847f8013d19",
+        "name": "Rena Owen",
+        "cast_id": 1,
+        "profile_path": "/sgJpdxXO6ATawDqzFQak5HSqs9y.jpg",
+        "character": "Beth Heke"
+      },
+      {
+        "id": 7242,
+        "order": 1,
+        "credit_id": "52fe424dc3a36847f8013d1d",
+        "name": "Temuera Morrison",
+        "cast_id": 2,
+        "profile_path": "/6OYIlNgQkmwi09cElhnoFvUCppz.jpg",
+        "character": "Jake Heke"
+      },
+      {
+        "id": 7243,
+        "order": 2,
+        "credit_id": "52fe424dc3a36847f8013d21",
+        "name": "Mamaengaroa Kerr-Bell",
+        "cast_id": 3,
+        "profile_path": "/o26mQxALYyGNtaorw1IZxemC7D0.jpg",
+        "character": "Grace Heke"
+      },
+      {
+        "id": 7244,
+        "order": 3,
+        "credit_id": "52fe424dc3a36847f8013d25",
+        "name": "Julian Arahanga",
+        "cast_id": 4,
+        "profile_path": "/jFNdkOB6UhQEsN5Bo5Q5d2qT9YX.jpg",
+        "character": "Nig Heke"
+      },
+      {
+        "id": 7245,
+        "order": 4,
+        "credit_id": "52fe424dc3a36847f8013d29",
+        "name": "Taungaroa Emile",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Mark 'Boogie' Heke"
+      },
+      {
+        "id": 7246,
+        "order": 5,
+        "credit_id": "52fe424dc3a36847f8013d2d",
+        "name": "Rachael Morris Jr.",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Polly Heke"
+      },
+      {
+        "id": 7247,
+        "order": 6,
+        "credit_id": "52fe424dc3a36847f8013d31",
+        "name": "Joseph Kairau",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Huata Heke"
+      },
+      {
+        "id": 7248,
+        "order": 7,
+        "credit_id": "52fe424ec3a36847f8013d35",
+        "name": "Cliff Curtis",
+        "cast_id": 8,
+        "profile_path": "/cQ1WTTpcLRq9vPzocjGrfI9eipJ.jpg",
+        "character": "Bully"
+      },
+      {
+        "id": 7249,
+        "order": 8,
+        "credit_id": "52fe424ec3a36847f8013d39",
+        "name": "Pete Smith",
+        "cast_id": 9,
+        "profile_path": "/rrx2rRbRRfKf43uYvXwYG1o0a86.jpg",
+        "character": "Dooley"
+      },
+      {
+        "id": 7250,
+        "order": 9,
+        "credit_id": "52fe424ec3a36847f8013d3d",
+        "name": "George Henare",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Bennett"
+      },
+      {
+        "id": 7251,
+        "order": 10,
+        "credit_id": "52fe424ec3a36847f8013d41",
+        "name": "Mere Boynton",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Mavis"
+      },
+      {
+        "id": 7252,
+        "order": 11,
+        "credit_id": "52fe424ec3a36847f8013d45",
+        "name": "Shannon Williams",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Toot"
+      },
+      {
+        "id": 7253,
+        "order": 12,
+        "credit_id": "52fe424ec3a36847f8013d49",
+        "name": "Calvin Tuteao",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Taka"
+      },
+      {
+        "id": 7254,
+        "order": 13,
+        "credit_id": "52fe424ec3a36847f8013d4d",
+        "name": "Ray Bishop",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "King Hitter"
+      },
+      {
+        "id": 7255,
+        "order": 14,
+        "credit_id": "52fe424ec3a36847f8013d51",
+        "name": "Ian Mune",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Judge"
+      },
+      {
+        "id": 129394,
+        "order": 15,
+        "credit_id": "52fe424ec3a36847f8013da3",
+        "name": "Robert Pollock",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Policeman"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7256,
+        "credit_id": "52fe424ec3a36847f8013d57",
+        "department": "Directing",
+        "name": "Lee Tamahori",
+        "job": "Director",
+        "profile_path": "/prKk2YCHZhp9ChoWOPEFRDsJhcv.jpg"
+      },
+      {
+        "id": 7257,
+        "credit_id": "52fe424ec3a36847f8013d5d",
+        "department": "Writing",
+        "name": "Riwia Brown",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7258,
+        "credit_id": "52fe424ec3a36847f8013d63",
+        "department": "Writing",
+        "name": "Alan Duff",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 7259,
+        "credit_id": "52fe424ec3a36847f8013d69",
+        "department": "Production",
+        "name": "Robin Scholes",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 7260,
+        "credit_id": "52fe424ec3a36847f8013d6f",
+        "department": "Sound",
+        "name": "Murray Grindlay",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7261,
+        "credit_id": "52fe424ec3a36847f8013d75",
+        "department": "Sound",
+        "name": "Murray McNabb",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7262,
+        "credit_id": "52fe424ec3a36847f8013d7b",
+        "department": "Camera",
+        "name": "Stuart Dryburgh",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1376,
+        "credit_id": "52fe424ec3a36847f8013d81",
+        "department": "Editing",
+        "name": "Michael Horton",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7263,
+        "credit_id": "52fe424ec3a36847f8013d87",
+        "department": "Production",
+        "name": "Don Selwyn",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 7264,
+        "credit_id": "52fe424ec3a36847f8013d8d",
+        "department": "Art",
+        "name": "Michael Kane",
+        "job": "Set Designer",
+        "profile_path": null
+      },
+      {
+        "id": 7265,
+        "credit_id": "52fe424ec3a36847f8013d93",
+        "department": "Costume & Make-Up",
+        "name": "Debra East",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 7266,
+        "credit_id": "52fe424ec3a36847f8013d99",
+        "department": "Costume & Make-Up",
+        "name": "Deirdre Haworth",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 7267,
+        "credit_id": "52fe424ec3a36847f8013d9f",
+        "department": "Sound",
+        "name": "Ray Beentjes",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 99,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "mi",
+      "name": ""
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.finelinefeatures.com/warriors/",
+  "id": 527,
+  "production_countries": [{
+    "name": "New Zealand",
+    "iso_3166_1": "NZ"
+  }],
+  "title": "Once Were Warriors",
+  "overview": "A drama about a Maori family in a city New Zealand. Lee Tamahori tells the story of Beth Heke\u2019s strong will to keep her family together during times unemployment and abuse from her violent and alcoholic husband.",
+  "production_companies": [
+    {
+      "id": 293,
+      "name": "Avalon Studios"
+    },
+    {
+      "id": 294,
+      "name": "New Zealand Film Commission"
+    },
+    {
+      "id": 295,
+      "name": "New Zealand On Air"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0110729",
+  "release_date": "1994-09-02",
+  "original_title": "Once Were Warriors",
+  "vote_count": 8,
+  "poster_path": "/8QF48QS5lvtrhOclt22RFz3bSQm.jpg",
+  "tagline": "A family in crisis, a life in chaos... Nothing is more powerful than a mother's love.",
+  "revenue": 6,
+  "popularity": "0.379837012483142"
+}

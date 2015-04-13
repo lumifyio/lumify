@@ -1,0 +1,250 @@
+{
+  "budget": 0,
+  "vote_average": 7.4,
+  "backdrop_path": "/kA93JyJKPbS3my9pZVrr9V2jDeV.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1145,
+        "order": 0,
+        "credit_id": "52fe4219c3a36847f8003d17",
+        "name": "Zbigniew Zamachowski",
+        "cast_id": 6,
+        "profile_path": "/rfE2QqqCSRU3EY8cDdQBpULu6os.jpg",
+        "character": "Karol Karol"
+      },
+      {
+        "id": 1146,
+        "order": 1,
+        "credit_id": "52fe4219c3a36847f8003d1b",
+        "name": "Julie Delpy",
+        "cast_id": 7,
+        "profile_path": "/4LfbFCLGHHkHVikRdgxbN6hbatl.jpg",
+        "character": "Dominique"
+      },
+      {
+        "id": 1147,
+        "order": 2,
+        "credit_id": "52fe4219c3a36847f8003d37",
+        "name": "Janusz Gajos",
+        "cast_id": 15,
+        "profile_path": "/j8HQOPCGNXMfTPrk7fJ3wFEuCDP.jpg",
+        "character": "Mikolaj"
+      },
+      {
+        "id": 1148,
+        "order": 3,
+        "credit_id": "52fe4219c3a36847f8003d3b",
+        "name": "Jerzy Stuhr",
+        "cast_id": 16,
+        "profile_path": "/i7xajg5pWYUIjNhx3lCe8RkkLHG.jpg",
+        "character": "Jurek"
+      },
+      {
+        "id": 1149,
+        "order": 4,
+        "credit_id": "52fe4219c3a36847f8003d3f",
+        "name": "Aleksander Bardini",
+        "cast_id": 17,
+        "profile_path": "/eKA1CdsPcekZzlYB9vzZAxDgRPm.jpg",
+        "character": "Le notaire"
+      },
+      {
+        "id": 1138501,
+        "order": 5,
+        "credit_id": "52fe4219c3a36847f8003d43",
+        "name": "Grzegorz Warchol",
+        "cast_id": 18,
+        "profile_path": "/9QN0RgNOitBQMVKEfQjeMz9sXhr.jpg",
+        "character": "L'elegant"
+      },
+      {
+        "id": 6415,
+        "order": 6,
+        "credit_id": "52fe4219c3a36847f8003d47",
+        "name": "Cezary Harasimowicz",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "L'inspecteur"
+      },
+      {
+        "id": 7119,
+        "order": 7,
+        "credit_id": "52fe4219c3a36847f8003d4b",
+        "name": "Jerzy Nowak",
+        "cast_id": 20,
+        "profile_path": "/b1td2cfJhlxEG7QEijf3c6e2mCi.jpg",
+        "character": "La vieux payson"
+      },
+      {
+        "id": 19075,
+        "order": 8,
+        "credit_id": "52fe4219c3a36847f8003d4f",
+        "name": "Philippe Morier-Genoud",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Le juge"
+      },
+      {
+        "id": 1137,
+        "order": 9,
+        "credit_id": "52fe4219c3a36847f8003d53",
+        "name": "Juliette Binoche",
+        "cast_id": 22,
+        "profile_path": "/qlzTpnFyXkrO2ws2ccjaljl1Jlf.jpg",
+        "character": "Julie Vignon"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1132,
+        "credit_id": "52fe4219c3a36847f8003cfb",
+        "department": "Writing",
+        "name": "Krzysztof Piesiewicz",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1134,
+        "credit_id": "52fe4219c3a36847f8003d01",
+        "department": "Production",
+        "name": "Marin Karmitz",
+        "job": "Producer",
+        "profile_path": "/t9KgqeBerwxwnSkvkvlapJ8gcSS.jpg"
+      },
+      {
+        "id": 1135,
+        "credit_id": "52fe4219c3a36847f8003d07",
+        "department": "Sound",
+        "name": "Zbigniew Preisner",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1143,
+        "credit_id": "52fe4219c3a36847f8003d0d",
+        "department": "Camera",
+        "name": "Edward Klosinski",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1144,
+        "credit_id": "52fe4219c3a36847f8003d13",
+        "department": "Editing",
+        "name": "Urszula Lesiak",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1126,
+        "credit_id": "52fe4219c3a36847f8003d21",
+        "department": "Writing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Author",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      },
+      {
+        "id": 1126,
+        "credit_id": "52fe4219c3a36847f8003d27",
+        "department": "Directing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Director",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      },
+      {
+        "id": 1126,
+        "credit_id": "52fe4219c3a36847f8003d2d",
+        "department": "Writing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Screenplay",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      },
+      {
+        "id": 1132,
+        "credit_id": "52fe4219c3a36847f8003d33",
+        "department": "Writing",
+        "name": "Krzysztof Piesiewicz",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 91,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 109,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Poland",
+      "iso_3166_1": "PL"
+    }
+  ],
+  "title": "Three Colors: White",
+  "overview": "White is the second film from the trilogy by Kieślowski. \u201cWhite\u201d meaning equality. Here Kieślowski shows his talent at making comedies. It\u2019s about the relationship between Karol, a polish hair dresser, and the beautiful Dominique, who he\u2019s dependant on.",
+  "production_companies": [
+    {
+      "id": 183,
+      "name": "Le Studio Canal+"
+    },
+    {
+      "id": 591,
+      "name": "France 3 Cinéma"
+    },
+    {
+      "id": 850,
+      "name": "Eurimages"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 131,
+    "backdrop_path": "/AeHExfHIl70SZCea907KfEoSkfJ.jpg",
+    "name": "Three Colors Collection",
+    "poster_path": "/diw724t2rabkmOAmM2Ffv2v4Zes.jpg"
+  },
+  "imdb_id": "tt0111507",
+  "release_date": "1994-01-26",
+  "original_title": "Trois couleurs : Blanc",
+  "vote_count": 27,
+  "poster_path": "/xnpHGk31Ly4USl0KSKSbXg0Ao3t.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.635595560004381"
+}

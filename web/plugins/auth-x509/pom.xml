@@ -6,17 +6,12 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify-web-plugins-group</artifactId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1</version>
     </parent>
 
     <artifactId>lumify-web-auth-x509</artifactId>
     <name>Lumify: Web: Plugin: X509 Authentication</name>
     <packaging>jar</packaging>
-
-    <properties>
-        <!-- Dependency Versions -->
-        <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
-    </properties>
 
     <dependencies>
         <dependency>

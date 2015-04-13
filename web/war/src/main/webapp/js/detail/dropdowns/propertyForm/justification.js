@@ -3,18 +3,20 @@ define([
     'flight/lib/component',
     'tpl!./justification',
     'tpl!./justificationRef',
-    'data',
-    'util/withTeardown'
+    'util/withTeardown',
+    'util/withDataRequest',
+    'util/vertex/formatters'
 ], function(
     defineComponent,
     template,
     templateRef,
-    appData,
-    withTeardown
+    withTeardown,
+    withDataRequest,
+    F
 ) {
     'use strict';
 
-    return defineComponent(Justification, withTeardown);
+    return defineComponent(Justification, withTeardown, withDataRequest);
 
     function Justification() {
 
@@ -28,10 +30,12 @@ define([
         })
 
         this.after('initialize', function() {
-            if (this.attr._sourceMetadata) {
-                this.setValue(this.attr._sourceMetadata)
+            if (this.attr.sourceInfo) {
+                this.setValue(this.attr.sourceInfo)
+            } else if (this.attr.justificationText) {
+                this.setValue(this.attr.justificationText);
             } else {
-                this.setValue(this.attr._justificationMetadata && this.attr._justificationMetadata.justificationText);
+                this.setValue();
             }
 
             this.on('valuepasted', this.onValuePasted);
@@ -74,7 +78,7 @@ define([
         };
 
         this.setReferenceWithValue = function(val) {
-            var clipboard = appData.copiedDocumentText(),
+            var clipboard = lumifyData.copiedDocumentText,
                 normalizeWhiteSpace = function(str) {
                     return str.replace(/\s/g, ' ');
                 };
@@ -148,7 +152,9 @@ define([
             }).html(content);
 
             _.defer(function() {
-                var toHeight = node.find('.animationwrap').outerHeight(true);
+                var animationWrap = node.find('.animationwrap'),
+                    toHeight = animationWrap.outerHeight(true);
+
                 node.on(TRANSITION_END, function(e) {
                     var oe = e.originalEvent || e;
 
@@ -164,12 +170,15 @@ define([
                     }
                     if (self.fromPaste) {
                         self.fromPaste = false;
-                        self.trigger('justificationfrompaste');
+                        animationWrap.removeClass('pop-fast');
+                        requestAnimationFrame(function() {
+                            animationWrap.addClass('pop-fast')
+                        });
                     }
                     self.trigger('justificationanimationend');
                 });
                 node.css({
-                    height: node.find('.animationwrap').outerHeight(true) + 'px'
+                    height: toHeight + 'px'
                 });
             });
 
@@ -182,7 +191,10 @@ define([
                 return deferredTitle.resolve(value.vertexTitle);
             }
 
-            return appData.getVertexTitle(value.vertexId);
+            return this.dataRequest('vertex', 'store', { vertexIds: value.vertexId })
+                .then(function(vertex) {
+                    return F.vertex.title(vertex);
+                });
         };
     }
 });

@@ -1,0 +1,357 @@
+{
+  "budget": 27000000,
+  "vote_average": 6.9,
+  "backdrop_path": "/goPaduRc15lwdAy8Ib6YCAQaZ3C.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2299,
+        "order": 0,
+        "credit_id": "52fe4224c3a36847f80072b5",
+        "name": "Josh Hartnett",
+        "cast_id": 7,
+        "profile_path": "/4c5rLeOe33DXm6ayqX1uGocumsc.jpg",
+        "character": "Slevin"
+      },
+      {
+        "id": 62,
+        "order": 1,
+        "credit_id": "52fe4224c3a36847f80072ab",
+        "name": "Bruce Willis",
+        "cast_id": 5,
+        "profile_path": "/kI1OluWhLJk3pnR19VjOfABpnTY.jpg",
+        "character": "Mr. Goodkat"
+      },
+      {
+        "id": 140,
+        "order": 2,
+        "credit_id": "52fe4224c3a36847f800729f",
+        "name": "Lucy Liu",
+        "cast_id": 2,
+        "profile_path": "/cOSycUPBNi49YcPHo4Rf7ROHqCC.jpg",
+        "character": "Lindsey"
+      },
+      {
+        "id": 192,
+        "order": 3,
+        "credit_id": "52fe4224c3a36847f800729b",
+        "name": "Morgan Freeman",
+        "cast_id": 1,
+        "profile_path": "/oGJQhOpT8S1M56tvSsbEBePV5O1.jpg",
+        "character": "The Boss"
+      },
+      {
+        "id": 2282,
+        "order": 4,
+        "credit_id": "52fe4224c3a36847f80072a3",
+        "name": "Ben Kingsley",
+        "cast_id": 3,
+        "profile_path": "/n0cVP5K2VxlohkAf7LoRwPt4xhu.jpg",
+        "character": "The Rabbi"
+      },
+      {
+        "id": 205104,
+        "order": 5,
+        "credit_id": "52fe4224c3a36847f8007301",
+        "name": "Michael Rubenfeld",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Yitzchok"
+      },
+      {
+        "id": 12978,
+        "order": 6,
+        "credit_id": "52fe4224c3a36847f8007305",
+        "name": "Peter Outerbridge",
+        "cast_id": 21,
+        "profile_path": "/nRGnRHtjtWnowESjTyN7fnOCp6f.jpg",
+        "character": "Dumbrowski"
+      },
+      {
+        "id": 2283,
+        "order": 7,
+        "credit_id": "52fe4224c3a36847f80072a7",
+        "name": "Stanley Tucci",
+        "cast_id": 4,
+        "profile_path": "/omGlTJF2IW5r3L3c5y0qkCt3hFr.jpg",
+        "character": "Det. Brikowski"
+      },
+      {
+        "id": 34395,
+        "order": 8,
+        "credit_id": "52fe4224c3a36847f8007309",
+        "name": "Kevin Chamberlin",
+        "cast_id": 22,
+        "profile_path": "/37FDBOmTdLRwKQMnNmm1MfJ6Dk4.jpg",
+        "character": "Marty"
+      },
+      {
+        "id": 26718,
+        "order": 9,
+        "credit_id": "52fe4224c3a36847f800730d",
+        "name": "Dorian Missick",
+        "cast_id": 23,
+        "profile_path": "/cIVYTMbl5bsUk6wgD6iw7yIkdwX.jpg",
+        "character": "Elvis"
+      },
+      {
+        "id": 34,
+        "order": 10,
+        "credit_id": "52fe4224c3a36847f8007311",
+        "name": "Mykelti Williamson",
+        "cast_id": 24,
+        "profile_path": "/8TTxzpuvvpw2tB8xZBCDslYupNU.jpg",
+        "character": "Sloe"
+      },
+      {
+        "id": 63859,
+        "order": 11,
+        "credit_id": "52fe4224c3a36847f8007315",
+        "name": "Scott Gibson",
+        "cast_id": 25,
+        "profile_path": "/7eyU1bC6wrXs9D1O67HlfufCpfN.jpg",
+        "character": "Max"
+      },
+      {
+        "id": 74541,
+        "order": 12,
+        "credit_id": "52fe4224c3a36847f800731d",
+        "name": "Corey Stoll",
+        "cast_id": 27,
+        "profile_path": "/yhMa3nzOsxQYSLr51OcvCsrovFa.jpg",
+        "character": "Saul"
+      },
+      {
+        "id": 5694,
+        "order": 13,
+        "credit_id": "52fe4224c3a36847f8007319",
+        "name": "Robert Forster",
+        "cast_id": 26,
+        "profile_path": "/82v4FngEiGvtTHQm399t6eaLfXw.jpg",
+        "character": "Murphy"
+      },
+      {
+        "id": 65727,
+        "order": 14,
+        "credit_id": "52fe4224c3a36847f8007321",
+        "name": "Sam Jaeger",
+        "cast_id": 28,
+        "profile_path": "/u1b6eyeGBYOrYGidPBWBxjWI6TX.jpg",
+        "character": "Nick Fisher"
+      },
+      {
+        "id": 1004,
+        "order": 15,
+        "credit_id": "52fe4224c3a36847f8007325",
+        "name": "Danny Aiello",
+        "cast_id": 29,
+        "profile_path": "/phVXIwrAemjCrfvTsQFyIiiPBwH.jpg",
+        "character": "Roth"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3965,
+        "credit_id": "53524dd70e0a265606002b95",
+        "department": "Production",
+        "name": "Deborah Aquila",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1034748,
+        "credit_id": "53524def0e0a265611002d6a",
+        "department": "Production",
+        "name": "Tricia Wood",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 961452,
+        "credit_id": "53524e0a0e0a26560a002d74",
+        "department": "Costume & Make-Up",
+        "name": "Odette Gadoury",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 2291,
+        "credit_id": "52fe4224c3a36847f80072b1",
+        "department": "Directing",
+        "name": "Paul McGuigan",
+        "job": "Director",
+        "profile_path": "/6p6uzaEtKfx7ota7AdQXlantt5W.jpg"
+      },
+      {
+        "id": 168199,
+        "credit_id": "52fe4224c3a36847f80072bb",
+        "department": "Writing",
+        "name": "Jason Smilovic",
+        "job": "Writer",
+        "profile_path": null
+      },
+      {
+        "id": 56171,
+        "credit_id": "52fe4224c3a36847f80072c1",
+        "department": "Production",
+        "name": "Christopher Eberts",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6891,
+        "credit_id": "52fe4224c3a36847f80072c7",
+        "department": "Production",
+        "name": "Andreas Grosch",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 36134,
+        "credit_id": "52fe4224c3a36847f80072cd",
+        "department": "Production",
+        "name": "Kia Jam",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 959883,
+        "credit_id": "52fe4224c3a36847f80072d3",
+        "department": "Production",
+        "name": "Robert Kravis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 207213,
+        "credit_id": "52fe4224c3a36847f80072d9",
+        "department": "Production",
+        "name": "Tyler Mitchell",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 20224,
+        "credit_id": "52fe4224c3a36847f80072df",
+        "department": "Production",
+        "name": "Anthony Rhulen",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 20305,
+        "credit_id": "52fe4224c3a36847f80072e5",
+        "department": "Production",
+        "name": "Chris Roberts",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 20305,
+        "credit_id": "52fe4224c3a36847f80072eb",
+        "department": "Sound",
+        "name": "Chris Roberts",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 11958,
+        "credit_id": "52fe4224c3a36847f80072f1",
+        "department": "Camera",
+        "name": "Peter Sova",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 45055,
+        "credit_id": "52fe4224c3a36847f80072f7",
+        "department": "Editing",
+        "name": "Andrew Hulme",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 38523,
+        "credit_id": "52fe4224c3a36847f80072fd",
+        "department": "Art",
+        "name": "François Séguin",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 110,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.slevin-movie.com/",
+  "id": 186,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Lucky Number Slevin",
+  "overview": "Slevin is mistakenly put in the middle of a personal war between the city\u2019s biggest criminal bosses. Under constant watch, Slevin must try not to get killed by an infamous assassin and come up with an idea of how to get out of his current dilemma. A film with many twists and turns.",
+  "production_companies": [
+    {
+      "id": 308,
+      "name": "The Weinstein Company"
+    },
+    {
+      "id": 816,
+      "name": "FilmEngine"
+    },
+    {
+      "id": 826,
+      "name": "Capitol Films"
+    },
+    {
+      "id": 1204,
+      "name": "Ascendant Pictures"
+    },
+    {
+      "id": 2116,
+      "name": "VIP Medienfonds 4"
+    },
+    {
+      "id": 21962,
+      "name": "The Complex Studio"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0425210",
+  "release_date": "2006-04-07",
+  "original_title": "Lucky Number Slevin",
+  "vote_count": 270,
+  "poster_path": "/jtKq0EtothAzWlnRBBWGCA8uFuu.jpg",
+  "tagline": "Wrong Time. Wrong Place. Wrong Number.",
+  "revenue": 56308881,
+  "popularity": "3.00753372262087"
+}

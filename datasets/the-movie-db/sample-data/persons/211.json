@@ -1,0 +1,41 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/uWqRVvIotKf6MOnkW0qf2AcoVNq.jpg",
+  "id": 211,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0043743",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 38,
+        "media_type": "movie",
+        "title": "Eternal Sunshine of the Spotless Mind",
+        "credit_id": "52fe4211c3a36847f8001693",
+        "release_date": "2004-03-19",
+        "original_title": "Eternal Sunshine of the Spotless Mind",
+        "adult": false,
+        "poster_path": "/gutwXkVChJkpIrclokNESybj0GC.jpg",
+        "character": "Joel's mother"
+      },
+      {
+        "id": 39453,
+        "media_type": "movie",
+        "title": "Death and Cremation",
+        "credit_id": "52fe471a9251416c9106a1d1",
+        "release_date": "2010-06-15",
+        "original_title": "Death and Cremation",
+        "adult": false,
+        "poster_path": "/zhZPhX6uWmDSNicZyGdRBfVvgqo.jpg",
+        "character": "Martha Leary"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Debbon Ayer",
+  "place_of_birth": null,
+  "popularity": "1.00000582618104"
+}

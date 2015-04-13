@@ -1,0 +1,290 @@
+{
+  "budget": 2500000,
+  "vote_average": 6.8,
+  "backdrop_path": "/haHULz59jdG4OVmqHjZ01z7HEit.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1932,
+        "order": 0,
+        "credit_id": "52fe4221c3a36847f8006399",
+        "name": "Audrey Hepburn",
+        "cast_id": 6,
+        "profile_path": "/lNmmbyKxwnMSe0vb4kzZroa8lzr.jpg",
+        "character": "Holly Golightly"
+      },
+      {
+        "id": 1933,
+        "order": 1,
+        "credit_id": "52fe4221c3a36847f800639d",
+        "name": "George Peppard",
+        "cast_id": 7,
+        "profile_path": "/by01dePJ5Q0UXZu5eYvQD1kAwZ4.jpg",
+        "character": "Paul \u201eFred\u201c Varjak"
+      },
+      {
+        "id": 1934,
+        "order": 2,
+        "credit_id": "52fe4221c3a36847f80063a1",
+        "name": "Patricia Neal",
+        "cast_id": 8,
+        "profile_path": "/1VPdXeUnI6RcCzLtKv8uTHNB690.jpg",
+        "character": "2-E (Mrs. Failenson)"
+      },
+      {
+        "id": 1935,
+        "order": 3,
+        "credit_id": "52fe4221c3a36847f80063a5",
+        "name": "Buddy Ebsen",
+        "cast_id": 9,
+        "profile_path": "/7tgVdVH4mXqOgTeazYAZYL2zQMk.jpg",
+        "character": "Doc Golightly"
+      },
+      {
+        "id": 1936,
+        "order": 4,
+        "credit_id": "52fe4221c3a36847f80063a9",
+        "name": "Martin Balsam",
+        "cast_id": 10,
+        "profile_path": "/3lA1XlW9fsBCDYMMlgmvnHaWmOI.jpg",
+        "character": "O. J. Berman"
+      },
+      {
+        "id": 1937,
+        "order": 5,
+        "credit_id": "52fe4221c3a36847f80063ad",
+        "name": "Mickey Rooney",
+        "cast_id": 11,
+        "profile_path": "/bgCm55k2eo2YV5bMn3D0O4NPwU.jpg",
+        "character": "Mr. Yunioshi"
+      },
+      {
+        "id": 1942,
+        "order": 6,
+        "credit_id": "52fe4221c3a36847f80063c9",
+        "name": "José Luis de Villalonga",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "José da Silva Pereira"
+      },
+      {
+        "id": 1943,
+        "order": 7,
+        "credit_id": "52fe4221c3a36847f80063cd",
+        "name": "John McGiver",
+        "cast_id": 17,
+        "profile_path": "/q0YirNjJBOVcXMd7b68FLenMTNb.jpg",
+        "character": "Tiffany's salesman"
+      },
+      {
+        "id": 1944,
+        "order": 8,
+        "credit_id": "52fe4221c3a36847f80063d1",
+        "name": "Alan Reed",
+        "cast_id": 18,
+        "profile_path": "/8s1O9NJNM8kZQCmlvfYdFUiyODt.jpg",
+        "character": "Sally Tomato"
+      },
+      {
+        "id": 1945,
+        "order": 9,
+        "credit_id": "52fe4221c3a36847f80063d5",
+        "name": "Dorothy Whitney",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Mag Wildwood"
+      },
+      {
+        "id": 1946,
+        "order": 10,
+        "credit_id": "52fe4221c3a36847f80063d9",
+        "name": "Beverly Powers",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Dancer at nightclub"
+      },
+      {
+        "id": 1947,
+        "order": 11,
+        "credit_id": "52fe4221c3a36847f80063dd",
+        "name": "Stanley Adams",
+        "cast_id": 21,
+        "profile_path": "/lHMryF9N5VfyLj6fx07haIaD6mH.jpg",
+        "character": "Rusty Trawler"
+      },
+      {
+        "id": 1948,
+        "order": 12,
+        "credit_id": "52fe4221c3a36847f80063e1",
+        "name": "Claude Stroud",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Sid Arbuck"
+      },
+      {
+        "id": 1949,
+        "order": 13,
+        "credit_id": "52fe4221c3a36847f80063e5",
+        "name": "Elvia Allman",
+        "cast_id": 23,
+        "profile_path": "/nHTxHcykh8mjEUq2xv7ce2KIzx.jpg",
+        "character": "Librarian"
+      },
+      {
+        "id": 1950,
+        "order": 14,
+        "credit_id": "52fe4221c3a36847f80063e9",
+        "name": "Orangey",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Cat"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1927,
+        "credit_id": "52fe4221c3a36847f800637d",
+        "department": "Directing",
+        "name": "Blake Edwards",
+        "job": "Director",
+        "profile_path": "/tQ13izDBcErAV2qSz9KGjQbV5p9.jpg"
+      },
+      {
+        "id": 1928,
+        "credit_id": "52fe4221c3a36847f8006383",
+        "department": "Production",
+        "name": "Martin Jurow",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1929,
+        "credit_id": "52fe4221c3a36847f8006389",
+        "department": "Production",
+        "name": "Richard Shepherd",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1930,
+        "credit_id": "52fe4221c3a36847f800638f",
+        "department": "Writing",
+        "name": "Truman Capote",
+        "job": "Author",
+        "profile_path": "/rRrTzbxvYAFCq55UopYDnb2aZw4.jpg"
+      },
+      {
+        "id": 1931,
+        "credit_id": "52fe4221c3a36847f8006395",
+        "department": "Writing",
+        "name": "George Axelrod",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1938,
+        "credit_id": "52fe4221c3a36847f80063b3",
+        "department": "Sound",
+        "name": "Henry Mancini",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1939,
+        "credit_id": "52fe4221c3a36847f80063b9",
+        "department": "Camera",
+        "name": "Philip H. Lathrop",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1940,
+        "credit_id": "52fe4221c3a36847f80063bf",
+        "department": "Camera",
+        "name": "Franz Planer",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1941,
+        "credit_id": "52fe4221c3a36847f80063c5",
+        "department": "Editing",
+        "name": "Howard A. Smith",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3892,
+        "credit_id": "52fe4221c3a36847f80063ef",
+        "department": "Sound",
+        "name": "Johnny Mercer",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4350,
+        "credit_id": "52fe4221c3a36847f80063f5",
+        "department": "Costume & Make-Up",
+        "name": "Edith Head",
+        "job": "Costume Supervisor",
+        "profile_path": "/63ZeXQOh26sGa8nTbYWntieyWrz.jpg"
+      },
+      {
+        "id": 1045774,
+        "credit_id": "52fe4221c3a36847f80063fb",
+        "department": "Costume & Make-Up",
+        "name": "Hubert de Givenchy",
+        "job": "Costume Design",
+        "profile_path": "/nZz8FUtmLdxAi5ynevm76HJBlRC.jpg"
+      }
+    ]
+  },
+  "runtime": 110,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "pt",
+      "name": "Português"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 164,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Breakfast at Tiffany's",
+  "overview": "Fortune hunter Holly Golightly finds herself captivated by aspiring writer Paul Varjak, who's moved into her building on a wealthy woman's dime. As romance blooms between Paul and Holly, Doc Golightly shows up on the scene, revealing Holly's past.",
+  "production_companies": [{
+    "id": 11355,
+    "name": "Jurow-Shepherd"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0054698",
+  "release_date": "1961-10-05",
+  "original_title": "Breakfast at Tiffany's",
+  "vote_count": 162,
+  "poster_path": "/c95lbDwL5WT8PV9DZsdSvRtXKNA.jpg",
+  "tagline": "Audrey Hepburn plays that daring, darling Holly Golightly to a new high in entertainment delight!",
+  "revenue": 9500000,
+  "popularity": "0.863586898908709"
+}

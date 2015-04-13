@@ -1,0 +1,291 @@
+{
+  "budget": 7500000,
+  "vote_average": 7.2,
+  "backdrop_path": "/uK0ihZKox9aatW6KH1yjZh8wkt3.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 192,
+        "order": 0,
+        "credit_id": "52fe423fc3a36847f800f63b",
+        "name": "Morgan Freeman",
+        "cast_id": 4,
+        "profile_path": "/oGJQhOpT8S1M56tvSsbEBePV5O1.jpg",
+        "character": "Hoke Colburn"
+      },
+      {
+        "id": 5698,
+        "order": 1,
+        "credit_id": "52fe423fc3a36847f800f63f",
+        "name": "Jessica Tandy",
+        "cast_id": 5,
+        "profile_path": "/9eaHz5lei5nAyiuH7fszw5zweSl.jpg",
+        "character": "Daisy Werthan"
+      },
+      {
+        "id": 707,
+        "order": 2,
+        "credit_id": "52fe423fc3a36847f800f643",
+        "name": "Dan Aykroyd",
+        "cast_id": 6,
+        "profile_path": "/h2PT9yZYv5ml5hL9jvCpWBTWgU.jpg",
+        "character": "Boolie Werthan"
+      },
+      {
+        "id": 5699,
+        "order": 3,
+        "credit_id": "52fe423fc3a36847f800f647",
+        "name": "Patti LuPone",
+        "cast_id": 7,
+        "profile_path": "/xQUWVKgj5D0ndpPsIoGC3ZBR5lb.jpg",
+        "character": "Florine Werthan"
+      },
+      {
+        "id": 5700,
+        "order": 4,
+        "credit_id": "52fe423fc3a36847f800f64b",
+        "name": "Esther Rolle",
+        "cast_id": 8,
+        "profile_path": "/39JmqLkz2sZrcoGn5drmgxFZXkd.jpg",
+        "character": "Idella"
+      },
+      {
+        "id": 5701,
+        "order": 5,
+        "credit_id": "52fe423fc3a36847f800f64f",
+        "name": "Joann Havrilla",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Miss McClatchey"
+      },
+      {
+        "id": 5702,
+        "order": 6,
+        "credit_id": "52fe423fc3a36847f800f653",
+        "name": "William Hall Jr.",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Oscar"
+      },
+      {
+        "id": 5703,
+        "order": 7,
+        "credit_id": "52fe423fc3a36847f800f657",
+        "name": "Clarice F. Geigerman",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Nonie"
+      },
+      {
+        "id": 5704,
+        "order": 8,
+        "credit_id": "52fe423fc3a36847f800f65b",
+        "name": "Muriel Moore",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Miriam"
+      },
+      {
+        "id": 5705,
+        "order": 9,
+        "credit_id": "52fe423fc3a36847f800f65f",
+        "name": "Sylvia Kaler",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Beulah"
+      }
+    ],
+    "crew": [
+      {
+        "id": 572622,
+        "credit_id": "5370c42ac3a36839c1005ebb",
+        "department": "Sound",
+        "name": "Tom Bellfort",
+        "job": "ADR & Dubbing",
+        "profile_path": null
+      },
+      {
+        "id": 5696,
+        "credit_id": "52fe423fc3a36847f800f62b",
+        "department": "Directing",
+        "name": "Bruce Beresford",
+        "job": "Director",
+        "profile_path": "/2BM92YfwzMpFkk5IlNZfZqPmODy.jpg"
+      },
+      {
+        "id": 5697,
+        "credit_id": "52fe423fc3a36847f800f631",
+        "department": "Writing",
+        "name": "Alfred Uhry",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5697,
+        "credit_id": "52fe423fc3a36847f800f637",
+        "department": "Writing",
+        "name": "Alfred Uhry",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5322,
+        "credit_id": "52fe423fc3a36847f800f665",
+        "department": "Production",
+        "name": "David Brown",
+        "job": "Executive Producer",
+        "profile_path": "/fUWueOqqSkc9yc6svhOKlQr656F.jpg"
+      },
+      {
+        "id": 5706,
+        "credit_id": "52fe423fc3a36847f800f66b",
+        "department": "Production",
+        "name": "Robert Doudell",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5697,
+        "credit_id": "52fe423fc3a36847f800f671",
+        "department": "Production",
+        "name": "Alfred Uhry",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5707,
+        "credit_id": "52fe423fc3a36847f800f677",
+        "department": "Production",
+        "name": "Lili Fini Zanuck",
+        "job": "Producer",
+        "profile_path": "/qowwpTsd4cJAlmdi7Bb4tARL3IP.jpg"
+      },
+      {
+        "id": 1297,
+        "credit_id": "52fe423fc3a36847f800f67d",
+        "department": "Production",
+        "name": "Richard D. Zanuck",
+        "job": "Producer",
+        "profile_path": "/uoPXQ29L8vlphMuojaBlmuwi1Mu.jpg"
+      },
+      {
+        "id": 947,
+        "credit_id": "52fe423fc3a36847f800f683",
+        "department": "Sound",
+        "name": "Hans Zimmer",
+        "job": "Original Music Composer",
+        "profile_path": "/wugKWf9vuqZYuHCk5Wwec6355TM.jpg"
+      },
+      {
+        "id": 5708,
+        "credit_id": "52fe423fc3a36847f800f689",
+        "department": "Camera",
+        "name": "Peter James",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1732,
+        "credit_id": "52fe423fc3a36847f800f68f",
+        "department": "Editing",
+        "name": "Mark Warner",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5709,
+        "credit_id": "52fe423fc3a36847f800f695",
+        "department": "Art",
+        "name": "Bruno Rubeo",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3188,
+        "credit_id": "52fe423fc3a36847f800f69b",
+        "department": "Art",
+        "name": "Victor Kempster",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 945,
+        "credit_id": "52fe423fc3a36847f800f6a1",
+        "department": "Art",
+        "name": "Crispian Sallis",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 5710,
+        "credit_id": "52fe423fc3a36847f800f6a7",
+        "department": "Costume & Make-Up",
+        "name": "Elizabeth McBride",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5712,
+        "credit_id": "52fe423fc3a36847f800f6ad",
+        "department": "Sound",
+        "name": "Laura Perlman",
+        "job": "Music Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 99,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 403,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Driving Miss Daisy",
+  "overview": "The story of an old Jewish widow named Daisy Werthan and her relationship with her colored chauffeur Hoke. From an initial mere work relationship grew in 25 years a strong friendship between the two very different characters in a time when those types of relationships where shunned upon. Oscar winning tragic comedy with a star-studded cast and based on a play of the same name by Alfred Uhry.",
+  "production_companies": [
+    {
+      "id": 80,
+      "name": "The Zanuck Company"
+    },
+    {
+      "id": 2630,
+      "name": "Majestic Films International"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0097239",
+  "release_date": "1989-12-13",
+  "original_title": "Driving Miss Daisy",
+  "vote_count": 41,
+  "poster_path": "/vzdx1rkR0wK8NcdgTAvg6Vp061U.jpg",
+  "tagline": "The funny, touching and totally irresistible story of a working relationship that became a 25-year friendship.",
+  "revenue": 145793296,
+  "popularity": "0.604105295202415"
+}

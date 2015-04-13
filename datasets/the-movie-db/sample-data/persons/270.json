@@ -1,0 +1,239 @@
+{
+  "birthday": "1956-03-05",
+  "adult": false,
+  "biography": "Adriana Barraza (5 de marzo de 1956, Toluca - ) es una actriz mexicana nominada a los Premios de la Academia. Sus dos trabajos más importantes han sido Amores Perros y Babel. Previamente a su nominación al Oscar a la mejor actriz de reparto fue candidata en la misma categoría en los Globos de Oro y Broadcast Film Critics Association Award, y candidata al Premio del Sindicato de Actores como \"Mejor actriz de reparto en una película\". Es una reconocida maestra de actuación en México, Miami y Colombia. Se destacó en el Taller de Perfeccionamiento Actoral de Televisa; donde, junto al reconocido actor, director, productor, escritor y profesor de actuación: Sergio Jiménez, dio clases por más de una década. Junto a este gran teórico de la actuación compiló y diseñó un método de actuación llamado: Actuación Técnica del cual es co-creadora. (de ahí que en el medio artístico sea conocida como la querida \"Maestra Barraza\"). Fue actriz en algunas telenovelas y programas; además, directora de telenovelas infantiles de Televisa por muchos años, pero se ha destacado y ha alcanzado su mayor realización como maestra (de actuación, análisis de textos y neutralización de acento) y como actriz internacional de cine. En 2011 fue recortada de la cinta Thor y se entero por una carta del director que le llego a su representante",
+  "homepage": "http://www.adrianabarraza.com/",
+  "profile_path": "/8g2uMVkzZSTSvmeBbCaYLmByVAS.jpg",
+  "id": 270,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0056770",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 26738,
+        "media_type": "movie",
+        "title": "Rage",
+        "credit_id": "52fe4516c3a368484e047be7",
+        "release_date": "2009-09-24",
+        "original_title": "Rage",
+        "adult": false,
+        "poster_path": "/uOB8zzzXuTcLapJEqkh99paLDgL.jpg",
+        "character": "Anita de Los Angeles"
+      },
+      {
+        "id": 13107,
+        "media_type": "movie",
+        "title": "Henry Poole Is Here",
+        "credit_id": "52fe45409251416c750501b7",
+        "release_date": "2008-08-15",
+        "original_title": "Henry Poole Is Here",
+        "adult": false,
+        "poster_path": "/oDqNuE9SCat4dYR6l2dja7ZQDoR.jpg",
+        "character": "Esperanza"
+      },
+      {
+        "id": 16871,
+        "media_type": "movie",
+        "title": "Drag Me to Hell",
+        "credit_id": "52fe46f29251416c75088d8f",
+        "release_date": "2009-03-15",
+        "original_title": "Drag Me to Hell",
+        "adult": false,
+        "poster_path": "/4trULrbj4AoPLKSiIoQUTm2tPAG.jpg",
+        "character": "Shaun San Dena"
+      },
+      {
+        "id": 50217,
+        "media_type": "movie",
+        "title": "From Prada to Nada",
+        "credit_id": "52fe47bfc3a36847f81461ff",
+        "release_date": "2011-01-28",
+        "original_title": "From Prada to Nada",
+        "adult": false,
+        "poster_path": "/oWC2pKlAz0yK35zq3eRCjq2tqgG.jpg",
+        "character": "Aurelia Dominguez"
+      },
+      {
+        "id": 69357,
+        "media_type": "movie",
+        "title": "Revolución",
+        "credit_id": "52fe47c4c3a368484e0d8623",
+        "release_date": "2011-04-14",
+        "original_title": "Revolución",
+        "adult": false,
+        "poster_path": "/ad7gGBq4HzS8diTtflXkbxXryTM.jpg",
+        "character": "Chayo"
+      },
+      {
+        "id": 70712,
+        "media_type": "movie",
+        "title": "Te presento a Laura",
+        "credit_id": "52fe480dc3a368484e0e6e8d",
+        "release_date": "2010-10-29",
+        "original_title": "Te presento a Laura",
+        "adult": false,
+        "poster_path": "/56NAyPn54qFm5Kpi2CdbPofk84k.jpg",
+        "character": "Conchita"
+      },
+      {
+        "id": 91763,
+        "media_type": "movie",
+        "title": "The First Night",
+        "credit_id": "52fe48e49251416c750b69e5",
+        "release_date": "1998-03-27",
+        "original_title": "La Primera Noche",
+        "adult": false,
+        "poster_path": "/21dPZ4cYJ6G0bRhipzdqkSKx3wj.jpg",
+        "character": ""
+      },
+      {
+        "id": 108321,
+        "media_type": "movie",
+        "title": "Love on a Weekend",
+        "credit_id": "52fe4a97c3a36847f81d6d4b",
+        "release_date": "2010-01-22",
+        "original_title": "Amor en fin",
+        "adult": false,
+        "poster_path": "/J5LIip5gFYUnAzcV9bSWD2BB8b.jpg",
+        "character": "Sofía"
+      },
+      {
+        "id": 1164,
+        "media_type": "movie",
+        "title": "Babel",
+        "credit_id": "52fe42e9c3a36847f802c299",
+        "release_date": "2006-10-27",
+        "original_title": "Babel",
+        "adult": false,
+        "poster_path": "/fxneN0EQZwTfAfhTGUvUuIn6PLi.jpg",
+        "character": "Amelia"
+      },
+      {
+        "id": 55,
+        "media_type": "movie",
+        "title": "Amores Perros",
+        "credit_id": "52fe4211c3a36847f800176d",
+        "release_date": "2000-03-14",
+        "original_title": "Amores perros",
+        "adult": false,
+        "poster_path": "/8gEXmIzw1tDnBfOaCFPimkNIkmm.jpg",
+        "character": "Mama Octavio"
+      },
+      {
+        "id": 133241,
+        "media_type": "movie",
+        "title": "Mariachi Gringo",
+        "credit_id": "52fe4baac3a368484e193dfd",
+        "release_date": "2012-10-03",
+        "original_title": "Mariachi Gringo",
+        "adult": false,
+        "poster_path": "/5Bejsprxzl10sMClvDENJpRyJVY.jpg",
+        "character": "Magdalena"
+      },
+      {
+        "id": 136735,
+        "media_type": "movie",
+        "title": "The Snitch Cartel",
+        "credit_id": "52fe4c1cc3a368484e1a7993",
+        "release_date": "2012-11-11",
+        "original_title": "El Cartel de los Sapos",
+        "adult": false,
+        "poster_path": "/ygNcR1s4gYROTb2g5Fr5au6jZQH.jpg",
+        "character": "La Abuela"
+      },
+      {
+        "id": 160779,
+        "media_type": "movie",
+        "title": "Cerro Bayo",
+        "credit_id": "52fe4c36c3a36847f82232bf",
+        "release_date": "2011-08-17",
+        "original_title": "Cerro Bayo",
+        "adult": false,
+        "poster_path": "/rHtg9tCfj7S5YqGbYQRTti9PXHD.jpg",
+        "character": "Marta"
+      },
+      {
+        "id": 216910,
+        "media_type": "movie",
+        "title": "The Secret of the Jade Medallion",
+        "credit_id": "52fe4e22c3a368484e2103b9",
+        "release_date": "2012-03-02",
+        "original_title": "El secreto del medallón de jade",
+        "adult": false,
+        "poster_path": "/q6GJtyQtKuAsXYMut0QX2h1GccL.jpg",
+        "character": "Cornelia"
+      },
+      {
+        "id": 242575,
+        "media_type": "movie",
+        "title": "Guten Tag, Ramón",
+        "credit_id": "52fe4ed0c3a36847f82a9ab7",
+        "release_date": "2013-10-18",
+        "original_title": "Guten Tag, Ramón",
+        "adult": false,
+        "poster_path": "/gTNlThaybAsFmNrYmDqKSiVahD0.jpg",
+        "character": "Esperanza"
+      },
+      {
+        "id": 269575,
+        "media_type": "movie",
+        "title": "Hágase tu voluntad",
+        "credit_id": "53717561c3a368436e000475",
+        "release_date": null,
+        "original_title": "Hágase tu voluntad",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 284269,
+        "media_type": "movie",
+        "title": "Yefon",
+        "credit_id": "53d7c6f20e0a26034000209c",
+        "release_date": "2015-01-16",
+        "original_title": "Yefon",
+        "adult": false,
+        "poster_path": null,
+        "character": "Jillian Parkman"
+      },
+      {
+        "id": 4588,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257736b760ee36aaa4e153a",
+        "name": "ER",
+        "poster_path": "/7rFKIM1KRZvxfEc92IGVIpQ6W5.jpg",
+        "original_name": "ER",
+        "first_air_date": "1994-09-19",
+        "character": ""
+      },
+      {
+        "id": 1620,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570e30760ee3776a097eac",
+        "name": "CSI: Miami",
+        "poster_path": "/9brFwnnRmnHykxcrvn7ez79dXb6.jpg",
+        "original_name": "CSI: Miami",
+        "first_air_date": "2002-09-23",
+        "character": ""
+      },
+      {
+        "id": 28654,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52588f91760ee34661500021",
+        "name": "Alguna Vez Tendremos Alas",
+        "poster_path": null,
+        "original_name": "Alguna Vez Tendremos Alas",
+        "first_air_date": null,
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Adriana Barraza",
+  "place_of_birth": "",
+  "popularity": "1.00878001360633"
+}

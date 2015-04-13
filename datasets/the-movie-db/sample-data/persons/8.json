@@ -1,0 +1,125 @@
+{
+  "birthday": "1967-08-08",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia.\n\nLee Unkrich (born August 8, 1967) is an American director and film editor. He is a longtime member of the creative team at Pixar, where he started in 1994 as a film editor. He later began directing, first as co-director of Toy Story 2. After co-directing Monsters, Inc., and Finding Nemo, Unkrich made his solo directorial debut with Toy Story 3, for which he won the Academy Award for Best Animated Feature in 2011. Unkrich is the 2011 recipient of University of Southern California's Mary Pickford Distinguished Alumni Award recognizing alumni contributions to the cinematic arts. With the award, Unkrich joins a list of distinguished USC alumni including Robert Zemeckis, Walter Murch, Jon Landau, Gary Rydstrom and Jay Roach.\n\nA native of Chagrin Falls, Ohio, Unkrich spent his youth acting at the Cleveland Playhouse. Unkrich graduated from the University of Southern California School of Cinematic Arts in 1990. Before joining Pixar in 1994, Unkrich worked for several years in television as an editor and director.\n\nDescription above from the Wikipedia article Lee Unkrich, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/plN9zGzLvp5tBPwsH1zfDu2IhD2.jpg",
+  "id": 8,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0881279",
+  "combined_credits": {
+    "cast": [{
+      "id": 585,
+      "media_type": "movie",
+      "title": "Monsters, Inc.",
+      "credit_id": null,
+      "release_date": "2001-11-01",
+      "original_title": "Monsters, Inc.",
+      "adult": false,
+      "poster_path": "/93Y9BGx8blzmZOPSoivkFfaifqU.jpg",
+      "character": "Additional Voices (voice)"
+    }],
+    "crew": [
+      {
+        "id": 12,
+        "media_type": "movie",
+        "title": "Finding Nemo",
+        "credit_id": null,
+        "department": "Directing",
+        "release_date": "2003-05-30",
+        "original_title": "Finding Nemo",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/zjqInUwldOBa0q07fOyohYCWxWX.jpg"
+      },
+      {
+        "id": 585,
+        "media_type": "movie",
+        "title": "Monsters, Inc.",
+        "credit_id": null,
+        "department": "Directing",
+        "release_date": "2001-11-01",
+        "original_title": "Monsters, Inc.",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/93Y9BGx8blzmZOPSoivkFfaifqU.jpg"
+      },
+      {
+        "id": 585,
+        "media_type": "movie",
+        "title": "Monsters, Inc.",
+        "credit_id": null,
+        "department": "Editing",
+        "release_date": "2001-11-01",
+        "original_title": "Monsters, Inc.",
+        "job": "Additional Editing",
+        "adult": false,
+        "poster_path": "/93Y9BGx8blzmZOPSoivkFfaifqU.jpg"
+      },
+      {
+        "id": 862,
+        "media_type": "movie",
+        "title": "Toy Story",
+        "credit_id": null,
+        "department": "Editing",
+        "release_date": "1995-11-21",
+        "original_title": "Toy Story",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/agy8DheVu5zpQFbXfAdvYivF2FU.jpg"
+      },
+      {
+        "id": 863,
+        "media_type": "movie",
+        "title": "Toy Story 2",
+        "credit_id": null,
+        "department": "Editing",
+        "release_date": "1999-11-18",
+        "original_title": "Toy Story 2",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/gd12nM0VnrgbaUmZDjte4oBedGZ.jpg"
+      },
+      {
+        "id": 9487,
+        "media_type": "movie",
+        "title": "A Bug's Life",
+        "credit_id": null,
+        "department": "Editing",
+        "release_date": "1998-11-14",
+        "original_title": "A Bug's Life",
+        "job": "Editor",
+        "adult": false,
+        "poster_path": "/5GaLUp9m37BmJRJdFUFMobB275S.jpg"
+      },
+      {
+        "id": 10193,
+        "media_type": "movie",
+        "title": "Toy Story 3",
+        "credit_id": null,
+        "department": "Directing",
+        "release_date": "2010-06-17",
+        "original_title": "Toy Story 3",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/tOwAAVeL1p3ls9dhOBo45ElodU3.jpg"
+      },
+      {
+        "id": 62211,
+        "media_type": "movie",
+        "title": "Monsters University",
+        "credit_id": null,
+        "department": "Production",
+        "release_date": "2013-06-21",
+        "original_title": "Monsters University",
+        "job": "Executive Producer",
+        "adult": false,
+        "poster_path": "/flXrt9Dh0Tki6zOgX0TOq63KpG8.jpg"
+      }
+    ]
+  },
+  "name": "Lee Unkrich",
+  "place_of_birth": "Cleveland, Ohio, USA",
+  "popularity": "1.85000010552328"
+}

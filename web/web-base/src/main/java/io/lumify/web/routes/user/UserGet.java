@@ -1,14 +1,14 @@
 package io.lumify.web.routes.user;
 
-import io.lumify.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
+import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
-import org.json.JSONObject;
+import io.lumify.web.clientapi.model.ClientApiUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,11 +32,13 @@ public class UserGet extends BaseRequestHandler {
             return;
         }
 
-        JSONObject json = getUserRepository().toJsonWithAuths(user);
+        ClientApiUser clientApiUser = getUserRepository().toClientApiPrivate(user);
 
-        Iterable<Workspace> workspaces = getWorkspaceRepository().findAll(user);
-        json.put("workspaces", getWorkspaceRepository().toJson(workspaces, user, false));
+        Iterable<Workspace> workspaces = getWorkspaceRepository().findAllForUser(user);
+        for (Workspace workspace : workspaces) {
+            clientApiUser.getWorkspaces().add(getWorkspaceRepository().toClientApi(workspace, user, false));
+        }
 
-        respondWithJson(response, json);
+        respondWithClientApiObject(response, clientApiUser);
     }
 }

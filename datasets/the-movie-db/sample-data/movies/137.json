@@ -1,0 +1,364 @@
+{
+  "budget": 14600000,
+  "vote_average": 6.8,
+  "backdrop_path": "/u8GEJ4CoSVDrw1UmOwyaojyHAGl.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1532,
+        "order": 0,
+        "credit_id": "52fe421dc3a36847f8004f01",
+        "name": "Bill Murray",
+        "cast_id": 11,
+        "profile_path": "/eb58HuFIrxS0zUmbmW4d8YXTbje.jpg",
+        "character": "Phil Connors"
+      },
+      {
+        "id": 1533,
+        "order": 1,
+        "credit_id": "52fe421dc3a36847f8004f05",
+        "name": "Andie MacDowell",
+        "cast_id": 12,
+        "profile_path": "/p2u5Rd5wj4RA7wcB0JWh2GYGc3E.jpg",
+        "character": "Rita"
+      },
+      {
+        "id": 1534,
+        "order": 2,
+        "credit_id": "52fe421dc3a36847f8004f09",
+        "name": "Chris Elliott",
+        "cast_id": 13,
+        "profile_path": "/aMZ1rSkAWqnf9QxiSlcgW9IemcU.jpg",
+        "character": "Larry"
+      },
+      {
+        "id": 537,
+        "order": 3,
+        "credit_id": "52fe421dc3a36847f8004f0d",
+        "name": "Stephen Tobolowsky",
+        "cast_id": 14,
+        "profile_path": "/nznn5jQkPtY8JHZPo1Zme7Bn3Ez.jpg",
+        "character": "Ned Ryerson"
+      },
+      {
+        "id": 1535,
+        "order": 4,
+        "credit_id": "52fe421dc3a36847f8004f11",
+        "name": "Brian Doyle-Murray",
+        "cast_id": 15,
+        "profile_path": "/fRLFXdb8UQvJs4euZ2sE6CpjbXn.jpg",
+        "character": "Buster Green"
+      },
+      {
+        "id": 1537,
+        "order": 5,
+        "credit_id": "52fe421dc3a36847f8004f15",
+        "name": "Angela Paton",
+        "cast_id": 17,
+        "profile_path": "/eJZpJyEuMT4mQ8d8tbU0addZ1kD.jpg",
+        "character": "Mrs. Lancaster"
+      },
+      {
+        "id": 1538,
+        "order": 6,
+        "credit_id": "52fe421dc3a36847f8004f19",
+        "name": "Rick Ducommun",
+        "cast_id": 18,
+        "profile_path": "/d1tBYjxG2VuLX6ryj5BrrGQJ0UL.jpg",
+        "character": "Gus"
+      },
+      {
+        "id": 1539,
+        "order": 7,
+        "credit_id": "52fe421dc3a36847f8004f1d",
+        "name": "Rick Overton",
+        "cast_id": 19,
+        "profile_path": "/siD7GffMvlYyEj6lvEOgxxQ2Jci.jpg",
+        "character": "Ralph"
+      },
+      {
+        "id": 1540,
+        "order": 8,
+        "credit_id": "52fe421dc3a36847f8004f21",
+        "name": "Robin Duke",
+        "cast_id": 20,
+        "profile_path": "/41kDKiP5STRZE8jyJhWxSBbFG9R.jpg",
+        "character": "Doris, the Waitress"
+      },
+      {
+        "id": 1542,
+        "order": 9,
+        "credit_id": "52fe421dc3a36847f8004f25",
+        "name": "Willie Garson",
+        "cast_id": 22,
+        "profile_path": "/2KuTzy6hMsTbWLxp1lFjMws8mP6.jpg",
+        "character": "Kenny"
+      },
+      {
+        "id": 236327,
+        "order": 10,
+        "credit_id": "52fe421dc3a36847f8004f5f",
+        "name": "Ken Hudson Campbell",
+        "cast_id": 34,
+        "profile_path": "/lN9e975UkER6sRu9tKpeL2XyU5D.jpg",
+        "character": "Man in Hallway"
+      },
+      {
+        "id": 335,
+        "order": 11,
+        "credit_id": "52fe421dc3a36847f8004f75",
+        "name": "Michael Shannon",
+        "cast_id": 38,
+        "profile_path": "/5yGCJ6znHM96zTfW2LNP6uPPDCZ.jpg",
+        "character": "Fred"
+      },
+      {
+        "id": 1524,
+        "order": 12,
+        "credit_id": "530ce988925141143500140b",
+        "name": "Harold Ramis",
+        "cast_id": 42,
+        "profile_path": "/zLzR2UwzyrR9A6RMarZJV833X9K.jpg",
+        "character": "Neurologist"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1524,
+        "credit_id": "52fe421cc3a36847f8004ec7",
+        "department": "Directing",
+        "name": "Harold Ramis",
+        "job": "Director",
+        "profile_path": "/zLzR2UwzyrR9A6RMarZJV833X9K.jpg"
+      },
+      {
+        "id": 1525,
+        "credit_id": "52fe421cc3a36847f8004ecd",
+        "department": "Production",
+        "name": "Trevor Albert",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1524,
+        "credit_id": "52fe421cc3a36847f8004ed3",
+        "department": "Production",
+        "name": "Harold Ramis",
+        "job": "Producer",
+        "profile_path": "/zLzR2UwzyrR9A6RMarZJV833X9K.jpg"
+      },
+      {
+        "id": 1526,
+        "credit_id": "52fe421cc3a36847f8004ed9",
+        "department": "Writing",
+        "name": "Danny Rubin",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1524,
+        "credit_id": "52fe421cc3a36847f8004edf",
+        "department": "Writing",
+        "name": "Harold Ramis",
+        "job": "Author",
+        "profile_path": "/zLzR2UwzyrR9A6RMarZJV833X9K.jpg"
+      },
+      {
+        "id": 1527,
+        "credit_id": "52fe421cc3a36847f8004ee5",
+        "department": "Camera",
+        "name": "John Bailey",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1528,
+        "credit_id": "52fe421cc3a36847f8004eeb",
+        "department": "Sound",
+        "name": "George Fenton",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1529,
+        "credit_id": "52fe421dc3a36847f8004ef1",
+        "department": "Art",
+        "name": "David Nichols",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1530,
+        "credit_id": "52fe421dc3a36847f8004ef7",
+        "department": "Production",
+        "name": "Howard Feuer",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1531,
+        "credit_id": "52fe421dc3a36847f8004efd",
+        "department": "Editing",
+        "name": "Pembroke J. Herring",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2026,
+        "credit_id": "52fe421dc3a36847f8004f2b",
+        "department": "Art",
+        "name": "Peter Landsdown Smith",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 21729,
+        "credit_id": "52fe421dc3a36847f8004f31",
+        "department": "Art",
+        "name": "Lisa Fischer",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 118941,
+        "credit_id": "52fe421dc3a36847f8004f37",
+        "department": "Costume & Make-Up",
+        "name": "Jennifer Butler",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 118943,
+        "credit_id": "52fe421dc3a36847f8004f3d",
+        "department": "Crew",
+        "name": "Tom Ryba",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 118944,
+        "credit_id": "52fe421dc3a36847f8004f43",
+        "department": "Sound",
+        "name": "Cindy Marty",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 14382,
+        "credit_id": "52fe421dc3a36847f8004f49",
+        "department": "Sound",
+        "name": "George H. Anderson",
+        "job": "Supervising Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 118945,
+        "credit_id": "52fe421dc3a36847f8004f4f",
+        "department": "Sound",
+        "name": "Mary Andrews",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1526,
+        "credit_id": "52fe421dc3a36847f8004f55",
+        "department": "Writing",
+        "name": "Danny Rubin",
+        "job": "Story",
+        "profile_path": null
+      },
+      {
+        "id": 72258,
+        "credit_id": "52fe421dc3a36847f8004f5b",
+        "department": "Crew",
+        "name": "Steve Boyum",
+        "job": "Stunts",
+        "profile_path": "/aCHG7jyYErce8udS8qVEG8EEe2I.jpg"
+      },
+      {
+        "id": 1526,
+        "credit_id": "52fe421dc3a36847f8004f65",
+        "department": "Writing",
+        "name": "Danny Rubin",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1524,
+        "credit_id": "52fe421dc3a36847f8004f6b",
+        "department": "Writing",
+        "name": "Harold Ramis",
+        "job": "Screenplay",
+        "profile_path": "/zLzR2UwzyrR9A6RMarZJV833X9K.jpg"
+      },
+      {
+        "id": 1530,
+        "credit_id": "52fe421dc3a36847f8004f71",
+        "department": "Writing",
+        "name": "Howard Feuer",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 7690,
+        "credit_id": "52fe421dc3a36847f8004f81",
+        "department": "Production",
+        "name": "C.O. Erickson",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 101,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 137,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Groundhog Day",
+  "overview": "A narcissistic TV weatherman, along with his attractive-but-distant producer and mawkish cameraman, is sent to report on Groundhog Day in the small town of Punxsutawney, where he finds himself repeating the same day over and over.",
+  "production_companies": [{
+    "id": 5,
+    "name": "Columbia Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0107048",
+  "release_date": "1993-02-11",
+  "original_title": "Groundhog Day",
+  "vote_count": 398,
+  "poster_path": "/vXjVd0Vu0MXRZnga7wEnHIIhO5B.jpg",
+  "tagline": "He's having the worst day of his life... over, and over...",
+  "revenue": 70906973,
+  "popularity": "4.45875719192803"
+}

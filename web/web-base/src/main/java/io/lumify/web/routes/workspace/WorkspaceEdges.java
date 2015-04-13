@@ -2,20 +2,19 @@ package io.lumify.web.routes.workspace;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.GraphUtil;
+import io.lumify.core.util.ClientApiConverter;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
+import io.lumify.web.clientapi.model.ClientApiEdge;
 import io.lumify.web.clientapi.model.ClientApiWorkspaceEdges;
 import org.securegraph.Authorizations;
-import org.securegraph.Direction;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.util.ConvertingIterable;
@@ -69,13 +68,8 @@ public class WorkspaceEdges extends BaseRequestHandler {
         List<Edge> edges = toList(graph.getEdges(graph.findRelatedEdges(allIds, authorizations), authorizations));
         ClientApiWorkspaceEdges results = new ClientApiWorkspaceEdges();
         for (Edge edge : edges) {
-            ClientApiWorkspaceEdges.Edge e = new ClientApiWorkspaceEdges.Edge();
-            e.setFrom(edge.getVertexId(Direction.OUT));
-            e.setTo(edge.getVertexId(Direction.IN));
-            e.setRelationshipType(edge.getLabel());
-            e.setId(edge.getId());
-            e.setDiffType(GraphUtil.getSandboxStatus(edge, workspaceId));
-            e.setVisibilityJson(LumifyProperties.VISIBILITY_JSON.getPropertyValue(edge));
+            ClientApiEdge e = new ClientApiEdge();
+            ClientApiConverter.populateClientApiEdge(e, edge, workspaceId);
             results.getEdges().add(e);
         }
 

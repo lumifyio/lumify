@@ -5,7 +5,11 @@
     <!ENTITY lumify "http://lumify.io#" >
     <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
     <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY analystsNotebook6 "http://lumify.io/analystsNotebook/v6#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY analystsNotebook7 "http://lumify.io/analystsNotebook/v7#" >
+    <!ENTITY analystsNotebook89 "http://lumify.io/analystsNotebook/v8.9#" >
+    <!ENTITY analystsNotebook851 "http://lumify.io/analystsNotebook/v8.5.1#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
 ]>
 
@@ -14,16 +18,51 @@
      xml:base="http://lumify.io/dev"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:lumify="http://lumify.io#"
-     xmlns:analystsNotebook6="http://lumify.io/analystsNotebook/v6#"
      xmlns:analystsNotebook7="http://lumify.io/analystsNotebook/v7#"
-     xmlns:analystsNotebook851="http://lumify.io/analystsNotebook/v8.5.1#"
-     xmlns:analystsNotebook89="http://lumify.io/analystsNotebook/v8.9#"
+     xmlns:analystsNotebook6="http://lumify.io/analystsNotebook/v6#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:analystsNotebook851="http://lumify.io/analystsNotebook/v8.5.1#"
+     xmlns:analystsNotebook89="http://lumify.io/analystsNotebook/v8.9#">
     <owl:Ontology rdf:about="http://lumify.io/dev">
         <owl:imports rdf:resource="http://lumify.io"/>
     </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/analystsNotebook/v6#iconFile -->
+
+    <owl:AnnotationProperty rdf:about="&analystsNotebook6;iconFile"/>
+    
+
+
+    <!-- http://lumify.io/analystsNotebook/v7#iconFile -->
+
+    <owl:AnnotationProperty rdf:about="&analystsNotebook7;iconFile"/>
+    
+
+
+    <!-- http://lumify.io/analystsNotebook/v8.5.1#iconFile -->
+
+    <owl:AnnotationProperty rdf:about="&analystsNotebook851;iconFile"/>
+    
+
+
+    <!-- http://lumify.io/analystsNotebook/v8.9#iconFile -->
+
+    <owl:AnnotationProperty rdf:about="&analystsNotebook89;iconFile"/>
     
 
 
@@ -52,6 +91,7 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/dev#entityHasImageRaw">
         <rdfs:label xml:lang="en">Has Image</rdfs:label>
+        <lumify:intent>entityHasImage</lumify:intent>
         <rdfs:range rdf:resource="http://lumify.io/dev#image"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
@@ -374,6 +414,8 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/dev#rawContainsImageOfEntity">
         <rdfs:label xml:lang="en">Contains Image of</rdfs:label>
+        <lumify:intent>artifactContainsImageOfEntity</lumify:intent>
+        <lumify:intent>artifactContainsImage</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/dev#raw"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
@@ -384,11 +426,11 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/dev#rawHasEntity">
         <rdfs:label xml:lang="en">Has Entity</rdfs:label>
+        <lumify:intent>artifactHasEntity</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/dev#raw"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
-
-
+    
 
 
     <!-- http://lumify.io/dev#rawHasSourceOrganization -->
@@ -455,6 +497,19 @@
     
 
 
+    <!-- http://lumify.io/dev#birthDateError -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#birthDateError">
+        <rdfs:label xml:lang="en">Birth Date (Error)</rdfs:label>
+        <lumify:searchable rdf:datatype="&xsd;boolean">false</lumify:searchable>
+        <lumify:addable rdf:datatype="&xsd;boolean">false</lumify:addable>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io/dev#boolean -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#boolean">
@@ -464,24 +519,6 @@
     </owl:DatatypeProperty>
     
 
-    <!-- http://lumify.io/dev#link -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#link">
-        <rdfs:label xml:lang="en">Link</rdfs:label>
-        <lumify:displayType xml:lang="en">link</lumify:displayType>
-        <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-
-
-    <!-- http://lumify.io/dev#textarea -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#textarea">
-        <rdfs:label xml:lang="en">Long Text</rdfs:label>
-        <lumify:displayType xml:lang="en">textarea</lumify:displayType>
-        <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
 
     <!-- http://lumify.io/dev#date -->
 
@@ -491,13 +528,8 @@
         <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
+    
 
-    <!-- http://lumify.io/dev#sentiment -->
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#sentiment">
-        <rdfs:label xml:lang="en">Sentiment</rdfs:label>
-        <rdfs:domain rdf:resource="http://lumify.io/dev#document"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
 
     <!-- http://lumify.io/dev#dateAndTime -->
 
@@ -524,10 +556,35 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#duration">
         <rdfs:label xml:lang="en">Duration</rdfs:label>
-        <rdfs:domain rdf:resource="http://lumify.io/dev#phoneCall"/>
+        <lumify:intent>audioDuration</lumify:intent>
+        <lumify:intent>media.duration</lumify:intent>
+        <lumify:intent>videoDuration</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/dev#audio"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#phoneCall"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
         <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#eyecolor -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#eyecolor">
+        <rdfs:label xml:lang="en">Eye Color</rdfs:label>
+        <lumify:propertyGroup xml:lang="en">Physical Characteristics</lumify:propertyGroup>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#firstName -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#firstName">
+        <rdfs:label xml:lang="en">First Name</rdfs:label>
+        <lumify:textIndexHints>FULL_TEXT,EXACT_MATCH</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 
@@ -548,25 +605,45 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#gender">
         <rdfs:label xml:lang="en">Gender</rdfs:label>
         <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
-        <lumify:propertyGroup xml:lang="en">Physical Characteristics</lumify:propertyGroup>
         <lumify:possibleValues xml:lang="en">
         {
-            "M": "Male",
-            "F": "Female"
+            &quot;M&quot;: &quot;Male&quot;,
+            &quot;F&quot;: &quot;Female&quot;
         }
         </lumify:possibleValues>
+        <lumify:propertyGroup xml:lang="en">Physical Characteristics</lumify:propertyGroup>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 
-    <!-- http://lumify.io/dev#nationality -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#nationality">
-        <rdfs:label xml:lang="en">Nationality</rdfs:label>
-        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+    <!-- http://lumify.io/dev#geoLocationAndDate -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geoLocationAndDate">
+        <rdfs:label xml:lang="en">Geolocation And Date</rdfs:label>
+        <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#geoLocationAndDate/date</lumify:dependentPropertyIri>
+        <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#geoLocationAndDate/geolocation</lumify:dependentPropertyIri>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#location"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#geolocation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geolocation">
+        <rdfs:label xml:lang="en">Geolocation</rdfs:label>
+        <lumify:intent>geoLocation</lumify:intent>
+        <lumify:intent>media.geoLocation</lumify:intent>
+        <rdfs:range rdf:resource="&lumify;geolocation"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#location"/>
+    </owl:DatatypeProperty>
+    
 
 
     <!-- http://lumify.io/dev#haircolor -->
@@ -577,25 +654,76 @@
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
+    
 
 
-    <!-- http://lumify.io/dev#eyecolor -->
+    <!-- http://lumify.io/dev#lastModifyDate -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#eyecolor">
-        <rdfs:label xml:lang="en">Eye Color</rdfs:label>
-        <lumify:propertyGroup xml:lang="en">Physical Characteristics</lumify:propertyGroup>
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#lastModifyDate">
+        <rdfs:label xml:lang="en">Last Modify Date</rdfs:label>
+        <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#lastName -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#lastName">
+        <rdfs:label xml:lang="en">Last Name</rdfs:label>
+        <lumify:textIndexHints>FULL_TEXT,EXACT_MATCH</lumify:textIndexHints>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
+    
 
 
-    <!-- http://lumify.io/dev#geolocation -->
+    <!-- http://lumify.io/dev#link -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geolocation">
-        <rdfs:label xml:lang="en">Geolocation</rdfs:label>
-        <rdfs:range rdf:resource="&lumify;geolocation"/>
-        <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
-        <rdfs:domain rdf:resource="http://lumify.io/dev#location"/>
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#link">
+        <rdfs:label xml:lang="en">Link</rdfs:label>
+        <lumify:displayType xml:lang="en">link</lumify:displayType>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#name -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#name">
+        <rdfs:label xml:lang="en">Name</rdfs:label>
+        <lumify:validationFormula> dependentProp(&apos;http://lumify.io/dev#lastName&apos;) &amp;&amp; dependentProp(&apos;http://lumify.io/dev#firstName&apos;) </lumify:validationFormula>
+        <lumify:displayFormula> _.compact([dependentProp(&apos;http://lumify.io/dev#lastName&apos;), dependentProp(&apos;http://lumify.io/dev#firstName&apos;)]).join(&apos;, &apos;) || prop(&apos;http://lumify.io#title&apos;) </lumify:displayFormula>
+        <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#firstName</lumify:dependentPropertyIri>
+        <lumify:dependentPropertyIri xml:lang="en">http://lumify.io/dev#lastName</lumify:dependentPropertyIri>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#nameError -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#nameError">
+        <rdfs:label xml:lang="en">Name (Error)</rdfs:label>
+        <lumify:addable rdf:datatype="&xsd;boolean">false</lumify:addable>
+        <lumify:searchable rdf:datatype="&xsd;boolean">false</lumify:searchable>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#nationality -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#nationality">
+        <rdfs:label xml:lang="en">Nationality</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 
@@ -621,6 +749,28 @@
     
 
 
+    <!-- http://lumify.io/dev#sentiment -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#sentiment">
+        <rdfs:label xml:lang="en">Sentiment</rdfs:label>
+        <lumify:intent>sentiment</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#document"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#textarea -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#textarea">
+        <rdfs:label xml:lang="en">Long Text</rdfs:label>
+        <lumify:displayType xml:lang="en">textarea</lumify:displayType>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io/dev#titleFormulaEntityPropA -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#titleFormulaEntityPropA">
@@ -636,8 +786,8 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#titleFormulaEntityPropB">
         <rdfs:label xml:lang="en">PropB</rdfs:label>
-        <lumify:textIndexHints>FULL_TEXT,EXACT_MATCH</lumify:textIndexHints>
         <lumify:searchable rdf:datatype="&xsd;boolean">false</lumify:searchable>
+        <lumify:textIndexHints>FULL_TEXT,EXACT_MATCH</lumify:textIndexHints>
         <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
@@ -664,18 +814,150 @@
         <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
+    
 
 
+    <!-- http://lumify.io/dev#geoLocationAndDate/date -->
 
-    <!-- http://lumify.io/dev#lastModifyDate -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#lastModifyDate">
-        <rdfs:label xml:lang="en">Last Modify Date</rdfs:label>
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geoLocationAndDate/date">
+        <rdfs:label xml:lang="en">Date</rdfs:label>
         <lumify:displayType xml:lang="en">dateOnly</lumify:displayType>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#geoLocationAndDate/geolocation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geoLocationAndDate/geolocation">
+        <rdfs:label xml:lang="en">Geolocation</rdfs:label>
+        <rdfs:range rdf:resource="&lumify;geolocation"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#clockwiseRotation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#clockwiseRotation">
+        <rdfs:label xml:lang="en">Clockwise Rotation</rdfs:label>
+        <lumify:intent>media.clockwiseRotation</lumify:intent>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#dateTaken -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#dateTaken">
+        <rdfs:label xml:lang="en">Date Taken</rdfs:label>
+        <lumify:intent>media.dateTaken</lumify:intent>
         <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#deviceMake -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#deviceMake">
+        <rdfs:label xml:lang="en">Device Make</rdfs:label>
+        <lumify:intent>media.deviceMake</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#deviceModel -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#deviceModel">
+        <rdfs:label xml:lang="en">Device Model</rdfs:label>
+        <lumify:intent>media.deviceModel</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#fileSize -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#fileSize">
+        <rdfs:label xml:lang="en">File Size</rdfs:label>
+        <lumify:intent>media.fileSize</lumify:intent>
+        <lumify:displayType xml:lang="en">byte</lumify:displayType>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#audio"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#height -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#height">
+        <rdfs:label xml:lang="en">Height</rdfs:label>
+        <lumify:intent>media.height</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#imageHeading -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#imageHeading">
+        <rdfs:label xml:lang="en">Image Heading</rdfs:label>
+        <lumify:displayType xml:lang="en">heading</lumify:displayType>
+        <lumify:intent>media.imageHeading</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#metadata -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#metadata">
+        <rdfs:label xml:lang="en">Metadata</rdfs:label>
+        <lumify:intent>media.metadata</lumify:intent>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#width -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#width">
+        <rdfs:label xml:lang="en">Width</rdfs:label>
+        <lumify:intent>media.width</lumify:intent>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/media#yAxisFlipped -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/media#yAxisFlipped">
+        <rdfs:label xml:lang="en">Y Axis Flipped</rdfs:label>
+        <lumify:intent>media.yAxisFlipped</lumify:intent>
+        <lumify:userVisible>false</lumify:userVisible>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
+    
+
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -704,6 +986,7 @@
     <owl:Class rdf:about="http://lumify.io/dev#audio">
         <rdfs:label xml:lang="en">Audio</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
+        <lumify:intent>audio</lumify:intent>
         <lumify:displayType xml:lang="en">audio</lumify:displayType>
         <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
     </owl:Class>
@@ -715,6 +998,7 @@
     <owl:Class rdf:about="http://lumify.io/dev#city">
         <rdfs:label xml:lang="en">City</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
+        <lumify:intent>city</lumify:intent>
         <lumify:glyphIconFileName xml:lang="en">city.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(191, 13, 191)</lumify:color>
     </owl:Class>
@@ -729,14 +1013,8 @@
         <lumify:glyphIconFileName xml:lang="en">glyphicons_263_bank@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(210, 52, 32)</lumify:color>
     </owl:Class>
+    
 
-    <!-- http://lumify.io/dev#nonprofit -->
-    <owl:Class rdf:about="http://lumify.io/dev#nonprofit">
-        <rdfs:label xml:lang="en">Non Profit</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://lumify.io/dev#company"/>
-        <lumify:glyphIconFileName xml:lang="en">glyphicons_263_bank@2x.png</lumify:glyphIconFileName>
-        <lumify:color xml:lang="en">rgb(210, 52, 32)</lumify:color>
-    </owl:Class>
 
     <!-- http://lumify.io/dev#contactInformation -->
 
@@ -753,6 +1031,7 @@
     <owl:Class rdf:about="http://lumify.io/dev#country">
         <rdfs:label xml:lang="en">Country</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
+        <lumify:intent>country</lumify:intent>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_266_flag@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(112, 0, 112)</lumify:color>
     </owl:Class>
@@ -764,13 +1043,14 @@
     <owl:Class rdf:about="http://lumify.io/dev#document">
         <rdfs:label xml:lang="en">Document</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
-        <lumify:displayType xml:lang="en">document</lumify:displayType>
-        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
-        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io#author&apos;) || &apos;&apos;</lumify:subtitleFormula>
-        <analystsNotebook6:iconFile>Document</analystsNotebook6:iconFile>
+        <lumify:intent>document</lumify:intent>
+        <lumify:subtitleFormula xml:lang="en"> prop(&apos;http://lumify.io#author&apos;) || &apos;&apos; </lumify:subtitleFormula>
         <analystsNotebook7:iconFile>Document</analystsNotebook7:iconFile>
         <analystsNotebook851:iconFile>Document</analystsNotebook851:iconFile>
+        <analystsNotebook6:iconFile>Document</analystsNotebook6:iconFile>
         <analystsNotebook89:iconFile>Document</analystsNotebook89:iconFile>
+        <lumify:displayType xml:lang="en">document</lumify:displayType>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
     
 
@@ -780,6 +1060,7 @@
     <owl:Class rdf:about="http://lumify.io/dev#emailAddress">
         <rdfs:label xml:lang="en">Email Address</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#contactInformation"/>
+        <lumify:intent>email</lumify:intent>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_010_envelope@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(203, 130, 4)</lumify:color>
     </owl:Class>
@@ -801,6 +1082,8 @@
     <owl:Class rdf:about="http://lumify.io/dev#image">
         <rdfs:label xml:lang="en">Image</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
+        <lumify:intent>entityImage</lumify:intent>
+        <lumify:intent>image</lumify:intent>
         <lumify:displayType xml:lang="en">image</lumify:displayType>
         <lumify:color xml:lang="en">rgb(176, 87, 53)</lumify:color>
     </owl:Class>
@@ -811,12 +1094,24 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#location">
         <rdfs:label xml:lang="en">Location</rdfs:label>
-        <lumify:glyphIconFileName xml:lang="en">pin@2x.png</lumify:glyphIconFileName>
-        <lumify:color xml:lang="en">rgb(160, 7, 206)</lumify:color>
-        <analystsNotebook6:iconFile>Place</analystsNotebook6:iconFile>
-        <analystsNotebook7:iconFile>Place</analystsNotebook7:iconFile>
+        <lumify:intent>location</lumify:intent>
         <analystsNotebook851:iconFile>Place</analystsNotebook851:iconFile>
         <analystsNotebook89:iconFile>Place</analystsNotebook89:iconFile>
+        <analystsNotebook7:iconFile>Place</analystsNotebook7:iconFile>
+        <analystsNotebook6:iconFile>Place</analystsNotebook6:iconFile>
+        <lumify:glyphIconFileName xml:lang="en">pin@2x.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(160, 7, 206)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/dev#nonprofit -->
+
+    <owl:Class rdf:about="http://lumify.io/dev#nonprofit">
+        <rdfs:label xml:lang="en">Non Profit</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/dev#company"/>
+        <lumify:glyphIconFileName xml:lang="en">glyphicons_263_bank@2x.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(210, 52, 32)</lumify:color>
     </owl:Class>
     
 
@@ -825,10 +1120,11 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#organization">
         <rdfs:label xml:lang="en">Organization</rdfs:label>
+        <lumify:subtitleFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#abbreviation&apos;) || &apos;&apos; </lumify:subtitleFormula>
+        <lumify:timeFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#formationDate&apos;) || &apos;&apos; </lumify:timeFormula>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_043_group@2x.png</lumify:glyphIconFileName>
+        <lumify:intent>organization</lumify:intent>
         <lumify:color xml:lang="en">rgb(137, 39, 26)</lumify:color>
-        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/dev#abbreviation&apos;) || &apos;&apos;</lumify:subtitleFormula>
-        <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#formationDate&apos;) || &apos;&apos;</lumify:timeFormula>
     </owl:Class>
     
 
@@ -837,13 +1133,16 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#person">
         <rdfs:label xml:lang="en">Person</rdfs:label>
+        <lumify:timeFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#birthDate&apos;) || &apos;&apos; </lumify:timeFormula>
+        <lumify:intent>face</lumify:intent>
+        <lumify:intent>person</lumify:intent>
+        <analystsNotebook851:iconFile>Person</analystsNotebook851:iconFile>
+        <analystsNotebook7:iconFile>Person</analystsNotebook7:iconFile>
+        <analystsNotebook6:iconFile>Person</analystsNotebook6:iconFile>
+        <analystsNotebook89:iconFile>Person</analystsNotebook89:iconFile>
+        <lumify:titleFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#name&apos;) || &apos;&apos; </lumify:titleFormula>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
-        <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#birthDate&apos;) || &apos;&apos;</lumify:timeFormula>
-        <analystsNotebook6:iconFile>Person</analystsNotebook6:iconFile>
-        <analystsNotebook7:iconFile>Person</analystsNotebook7:iconFile>
-        <analystsNotebook851:iconFile>Person</analystsNotebook851:iconFile>
-        <analystsNotebook89:iconFile>Person</analystsNotebook89:iconFile>
     </owl:Class>
     
 
@@ -853,9 +1152,9 @@
     <owl:Class rdf:about="http://lumify.io/dev#phoneCall">
         <rdfs:label xml:lang="en">Phone Call</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#event"/>
+        <lumify:subtitleFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#duration&apos;) || &apos;&apos; </lumify:subtitleFormula>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_164_iphone_transfer@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(225, 225, 24)</lumify:color>
-        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/dev#duration&apos;) || &apos;&apos;</lumify:subtitleFormula>
     </owl:Class>
     
 
@@ -865,6 +1164,7 @@
     <owl:Class rdf:about="http://lumify.io/dev#phoneNumber">
         <rdfs:label xml:lang="en">Phone Number</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#contactInformation"/>
+        <lumify:intent>phoneNumber</lumify:intent>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_139_phone@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(225, 225, 24)</lumify:color>
     </owl:Class>
@@ -887,6 +1187,7 @@
         <rdfs:label xml:lang="en">State</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:color xml:lang="en">rgb(153, 0, 153)</lumify:color>
+        <lumify:intent>state</lumify:intent>
         <lumify:glyphIconFileName xml:lang="en">state.png</lumify:glyphIconFileName>
     </owl:Class>
     
@@ -896,26 +1197,29 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#titleFormulaEntity">
         <rdfs:label xml:lang="en">Title Formula Entity</rdfs:label>
-        <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
-        <lumify:titleFormula xml:lang="en">(prop(&apos;http://lumify.io/dev#titleFormulaEntityPropA&apos;) || &apos;&apos;) + &apos;, &apos; + (prop(&apos;http://lumify.io/dev#titleFormulaEntityPropB&apos;) || &apos;&apos;)</lumify:titleFormula>
-        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/dev#titleFormulaEntityPropC&apos;) || &apos;&apos;</lumify:subtitleFormula>
-        <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#titleFormulaEntityPropD&apos;) || &apos;&apos;</lumify:timeFormula>
-        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
         <lumify:addRelatedConceptWhiteList xml:lang="en">
         [
-            "http://lumify.io/dev#document"
+            &quot;http://lumify.io/dev#document&quot;
         ]
         </lumify:addRelatedConceptWhiteList>
+        <lumify:titleFormula xml:lang="en"> (prop(&apos;http://lumify.io/dev#titleFormulaEntityPropA&apos;) || &apos;&apos;) + &apos;, &apos; + (prop(&apos;http://lumify.io/dev#titleFormulaEntityPropB&apos;) || &apos;&apos;) </lumify:titleFormula>
+        <lumify:subtitleFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#titleFormulaEntityPropC&apos;) || &apos;&apos; </lumify:subtitleFormula>
+        <lumify:timeFormula xml:lang="en"> prop(&apos;http://lumify.io/dev#titleFormulaEntityPropD&apos;) || &apos;&apos; </lumify:timeFormula>
+        <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
+    
+
 
     <!-- http://lumify.io/dev#titleFormulaEntityNoSearch -->
 
     <owl:Class rdf:about="http://lumify.io/dev#titleFormulaEntityNoSearch">
         <rdfs:label xml:lang="en">No Search Title Formula Entity</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
-        <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:searchable rdf:datatype="&xsd;boolean">false</lumify:searchable>
+        <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
     </owl:Class>
+    
 
 
     <!-- http://lumify.io/dev#video -->
@@ -923,6 +1227,7 @@
     <owl:Class rdf:about="http://lumify.io/dev#video">
         <rdfs:label xml:lang="en">Video</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
+        <lumify:intent>video</lumify:intent>
         <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
         <lumify:displayType xml:lang="en">video</lumify:displayType>
     </owl:Class>
@@ -935,11 +1240,12 @@
         <rdfs:label xml:lang="en">Zip Code</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_020_home@2x.png</lumify:glyphIconFileName>
+        <lumify:intent>zipCode</lumify:intent>
         <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>
     </owl:Class>
 </rdf:RDF>
 
 
 
-<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.5.0) http://owlapi.sourceforge.net -->
 

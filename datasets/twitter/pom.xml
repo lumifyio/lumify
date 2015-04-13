@@ -5,17 +5,17 @@
     <parent>
         <groupId>io.lumify</groupId>
         <artifactId>lumify-datasets-group</artifactId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <modules>
-        <module>twitter-storm</module>
-        <module>twitter-graph-property-worker</module>
-        <module>twitter-common</module>
-    </modules>
 
     <artifactId>lumify-twitter</artifactId>
     <name>Lumify: Datasets: Twitter</name>
 
+    <modules>
+        <module>twitter-common</module>
+        <module>twitter-ingestion</module>
+        <module>twitter-graph-property-worker</module>
+    </modules>
 </project>

@@ -1,8 +1,9 @@
 
 define([
     'util/vertex/formatters',
-    'util/withDataRequest'
-], function(F, withDataRequest) {
+    'util/withDataRequest',
+    'require'
+], function(F, withDataRequest, require) {
     'use strict';
 
     return withTypeContent;
@@ -14,7 +15,8 @@ define([
         this._promisesToCancel = [];
 
         this.defaultAttrs({
-            auditSelector: '.audits'
+            auditSelector: '.audits',
+            deleteFormSelector: '.delete-form'
         });
 
         this.after('teardown', function() {
@@ -44,15 +46,21 @@ define([
 
         this.after('initialize', function() {
             var self = this,
-                previousConcept = F.vertex.concept(this.attr.data),
+                previousConcept = this.attr.data.properties && F.vertex.concept(this.attr.data),
                 previousConceptId = previousConcept && previousConcept.id;
 
             this.auditDisplayed = false;
             this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
             this.on('addNewProperty', this.onAddNewProperty);
+            this.on('addNewComment', this.onAddNewComment);
+            this.on('deleteItem', this.onDeleteItem);
             this.on('openFullscreen', this.onOpenFullscreen);
             this.on('toggleAudit', this.onAuditToggle);
             this.on('openSourceUrl', this.onOpenSourceUrl);
+            this.on('maskWithOverlay', this.onMaskWithOverlay);
+
+            this.on('addProperty', this.redirectToPropertiesComponent);
+            this.on('deleteProperty', this.redirectToPropertiesComponent);
 
             this.debouncedConceptTypeChange = _.debounce(this.debouncedConceptTypeChange.bind(this), 500);
             this.on(document, 'verticesUpdated', function(event, data) {
@@ -60,27 +68,89 @@ define([
                     var current = _.findWhere(data.vertices, { id: this.attr.data.id }),
                         concept = current && F.vertex.concept(current);
 
-                    if (concept && concept.id !== previousConceptId) {
+                    if (previousConceptId && concept && concept.id !== previousConceptId) {
                         self.debouncedConceptTypeChange(current);
                     }
                 }
             });
         });
 
+        this.redirectToPropertiesComponent = function(event, data) {
+            if ($(event.target).closest('.comments').length) {
+                return;
+            }
+
+            if ($(event.target).closest('.properties').length === 0) {
+                event.stopPropagation();
+
+                var properties = this.$node.find('.properties');
+                if (properties.length) {
+                    _.defer(function() {
+                        properties.trigger(event.type, data);
+                    })
+                } else {
+                    throw new Error('Unable to redirect properties request', event.type, data);
+                }
+            }
+        };
+
         this.onOpenSourceUrl = function(event, data) {
             window.open(data.sourceUrl);
-        }
+        };
 
         this.onAddNewProperty = function(event) {
             this.trigger(this.select('propertiesSelector'), 'editProperty');
         };
 
-        this.onOpenFullscreen = function(event) {
+        this.onAddNewComment = function(event) {
+            this.trigger(this.select('commentsSelector'), 'editComment');
+        };
+
+        this.onDeleteItem = function(event) {
+            var self = this,
+                $container = this.select('deleteFormSelector');
+
+            if ($container.length === 0) {
+                $container = $('<div class="delete-form"></div>').insertBefore(
+                    this.select('propertiesSelector')
+                );
+            }
+
+            require(['./dropdowns/deleteForm/deleteForm'], function(DeleteForm) {
+                var node = $('<div class="underneath"></div>').appendTo($container);
+                DeleteForm.attachTo(node, {
+                    data: self.attr.data
+                });
+            });
+        };
+
+        this.onOpenFullscreen = function(event, data) {
+            var viewing = this.attr.data;
+                vertices = data && data.vertices ?
+                    data.vertices :
+                    _.isObject(viewing) && viewing.vertices ?
+                    viewing.vertices :
+                    viewing;
+
             var url = F.vertexUrl.url(
-                _.isArray(this.attr.data) ? this.attr.data : [this.attr.data.id],
+                _.isArray(vertices) ? vertices : [vertices],
                 lumifyData.currentWorkspaceId
             );
             window.open(url);
+        };
+
+        this.onMaskWithOverlay = function(event, data) {
+            event.stopPropagation();
+
+            if (data.done) {
+                this.$node.find('.detail-overlay').remove();
+            } else {
+                $('<div>')
+                    .addClass('detail-overlay')
+                    .toggleClass('detail-overlay-loading', data.loading)
+                    .append($('<h1>').text(data.text))
+                    .appendTo(this.$node);
+            }
         };
 
         this.debouncedConceptTypeChange = function(vertex) {
@@ -121,27 +191,6 @@ define([
             this.trigger('toggleAuditDisplay', {
                 displayed: this.auditDisplayed
             });
-        };
-
-        this.classesForVertex = function(vertex) {
-            var cls = [],
-                props = vertex.properties || vertex,
-                concept = F.vertex.concept(vertex);
-
-            if (concept.displayType === 'document' ||
-                concept.displayType === 'image' ||
-                concept.displayType === 'video') {
-                cls.push('artifact entity resolved');
-                if (props['http://lumify.io#conceptType']) cls.push(props['http://lumify.io#conceptType'].value);
-            } else {
-                cls.push('entity resolved');
-                if (props['http://lumify.io#conceptType']) {
-                    cls.push('conceptType-' + props['http://lumify.io#conceptType'].value);
-                }
-            }
-            cls.push('gId-' + (vertex.id || props.graphNodeId));
-
-            return cls.join(' ');
         };
 
         this.cancel = function() {

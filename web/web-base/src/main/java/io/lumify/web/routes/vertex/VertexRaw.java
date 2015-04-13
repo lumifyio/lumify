@@ -1,10 +1,8 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.core.exception.LumifyException;
-import io.lumify.miniweb.HandlerChain;
-import io.lumify.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.user.UserRepository;
@@ -12,6 +10,8 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.miniweb.utils.UrlUtils;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
@@ -67,15 +67,16 @@ public class VertexRaw extends BaseRequestHandler {
         }
 
         if (playback) {
-            handlePartialPlayback(request, response, artifactVertex, fileName, user);
+            handlePartialPlayback(request, response, artifactVertex, fileName);
         } else {
             String mimeType = getMimeType(artifactVertex);
             response.setContentType(mimeType);
             setMaxAge(response, EXPIRES_1_HOUR);
+            String fileNameWithoutQuotes = fileName.replace('"', '\'');
             if (download) {
-                response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+                response.addHeader("Content-Disposition", "attachment; filename=\"" + fileNameWithoutQuotes + "\"");
             } else {
-                response.addHeader("Content-Disposition", "inline; filename=" + fileName);
+                response.addHeader("Content-Disposition", "inline; filename=\"" + fileNameWithoutQuotes + "\"");
             }
 
             StreamingPropertyValue rawValue = LumifyProperties.RAW.getPropertyValue(artifactVertex);
@@ -84,18 +85,15 @@ public class VertexRaw extends BaseRequestHandler {
                 respondWithNotFound(response);
                 return;
             }
-            InputStream in = rawValue.getInputStream();
-            try {
+            try (InputStream in = rawValue.getInputStream()) {
                 IOUtils.copy(in, response.getOutputStream());
-            } finally {
-                in.close();
             }
         }
 
         chain.next(request, response);
     }
 
-    private void handlePartialPlayback(HttpServletRequest request, HttpServletResponse response, Vertex artifactVertex, String fileName, User user) throws IOException {
+    private void handlePartialPlayback(HttpServletRequest request, HttpServletResponse response, Vertex artifactVertex, String fileName) throws IOException {
         String type = getRequiredParameter(request, "type");
 
         InputStream in;
@@ -171,7 +169,7 @@ public class VertexRaw extends BaseRequestHandler {
 
     private void copy(InputStream in, OutputStream out, Long length) throws IOException {
         byte[] buffer = new byte[1024];
-        int read = 0;
+        int read;
         while (length > 0 && (read = in.read(buffer, 0, (int) Math.min(length, buffer.length))) > 0) {
             out.write(buffer, 0, read);
             length -= read;

@@ -49,7 +49,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +77,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     private Counter pagesSkippedCounter;
     private VisibilityJson visibilityJson;
     private VisibilityTranslator visibilityTranslator;
+    private Visibility defaultVisibility;
 
     public ImportMRMapper() {
         this.textXPath = XPathFactory.instance().compile(TEXT_XPATH, Filters.text());
@@ -89,14 +89,15 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
-        this.visibility = new Visibility("");
+        this.visibilityTranslator = new DirectVisibilityTranslator();
+        this.visibility = this.visibilityTranslator.getDefaultVisibility();
+        this.defaultVisibility = this.visibilityTranslator.getDefaultVisibility();
         this.visibilityJson = new VisibilityJson();
         this.authorizations = new AccumuloAuthorizations();
         this.user = new SystemUser(null);
         VersionService versionService = new VersionService();
         Configuration configuration = new HashMapConfigurationLoader(configurationMap).createConfiguration();
         this.auditRepository = new SecureGraphAuditRepository(null, versionService, configuration, null, userRepository);
-        this.visibilityTranslator = new DirectVisibilityTranslator();
         this.sourceFileName = context.getConfiguration().get(CONFIG_SOURCE_FILE_NAME);
 
         try {
@@ -178,27 +179,27 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         LumifyProperties.FILE_NAME.setProperty(pageVertexBuilder, sourceFileName, visibility);
         LumifyProperties.SOURCE.setProperty(pageVertexBuilder, WikipediaConstants.WIKIPEDIA_SOURCE, visibility);
 
-        Map<String, Object> rawMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(rawMetadata, isRedirect ? 0.3 : 0.4);
+        Metadata rawMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(rawMetadata, isRedirect ? 0.3 : 0.4, defaultVisibility);
         LumifyProperties.RAW.addPropertyValue(pageVertexBuilder, multiKey, rawPropertyValue, rawMetadata, visibility);
 
-        Map<String, Object> titleMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, isRedirect ? 0.3 : 0.4);
+        Metadata titleMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, isRedirect ? 0.3 : 0.4, defaultVisibility);
         LumifyProperties.TITLE.addPropertyValue(pageVertexBuilder, multiKey, parsePage.getPageTitle(), titleMetadata, visibility);
 
-        Map<String, Object> sourceUrlMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(sourceUrlMetadata, isRedirect ? 0.3 : 0.4);
+        Metadata sourceUrlMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(sourceUrlMetadata, isRedirect ? 0.3 : 0.4, defaultVisibility);
         LumifyProperties.SOURCE_URL.addPropertyValue(pageVertexBuilder, multiKey, parsePage.getSourceUrl(), sourceUrlMetadata, visibility);
 
         if (parsePage.getRevisionTimestamp() != null) {
-            Map<String, Object> publishedDateMetadata = new HashMap<String, Object>();
-            LumifyProperties.CONFIDENCE.setMetadata(publishedDateMetadata, isRedirect ? 0.3 : 0.4);
+            Metadata publishedDateMetadata = new Metadata();
+            LumifyProperties.CONFIDENCE.setMetadata(publishedDateMetadata, isRedirect ? 0.3 : 0.4, defaultVisibility);
             LumifyProperties.PUBLISHED_DATE.addPropertyValue(pageVertexBuilder, multiKey, parsePage.getRevisionTimestamp(), publishedDateMetadata, visibility);
         }
 
         if (!isRedirect) {
-            Map<String, Object> textMetadata = new HashMap<String, Object>();
-            textMetadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Text");
+            Metadata textMetadata = new Metadata();
+            LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(textMetadata, "Text", defaultVisibility);
             LumifyProperties.TEXT.addPropertyValue(pageVertexBuilder, multiKey, textPropertyValue, textMetadata, visibility);
         }
 
@@ -214,15 +215,15 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         return pageVertex;
     }
 
-    private String getPageText(String wikitext, String wikipediaPageVertexId, TextConverter textConverter) throws LinkTargetException, EngineException {
+    private String getPageText(String wikiText, String wikipediaPageVertexId, TextConverter textConverter) throws LinkTargetException, EngineException {
         String fileTitle = wikipediaPageVertexId;
         PageId pageId = new PageId(PageTitle.make(config, fileTitle), -1);
-        EngProcessedPage compiledPage = compiler.postprocess(pageId, wikitext, null);
+        EngProcessedPage compiledPage = compiler.postprocess(pageId, wikiText, null);
         String text = (String) textConverter.go(compiledPage.getPage());
         if (text.length() > 0) {
-            wikitext = text;
+            wikiText = text;
         }
-        return wikitext;
+        return wikiText;
     }
 
     private void savePageLinks(Context context, Vertex pageVertex, TextConverter textConverter, String pageTextKey) throws IOException, InterruptedException {
@@ -242,8 +243,8 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
         LumifyProperties.SOURCE.setProperty(linkedPageVertexBuilder, WikipediaConstants.WIKIPEDIA_SOURCE, visibility);
         LumifyProperties.FILE_NAME.setProperty(linkedPageVertexBuilder, sourceFileName, visibility);
 
-        Map<String, Object> titleMetadata = new HashMap<String, Object>();
-        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1);
+        Metadata titleMetadata = new Metadata();
+        LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.1, defaultVisibility);
         String linkTargetHash = Base64.encodeBase64String(linkTarget.trim().toLowerCase().getBytes());
         LumifyProperties.TITLE.addPropertyValue(linkedPageVertexBuilder, ImportMR.MULTI_VALUE_KEY + "#" + linkTargetHash, linkTarget, titleMetadata, visibility);
 
@@ -269,7 +270,7 @@ class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
     }
 
     private Iterable<LinkWithOffsets> getLinks(TextConverter textConverter) {
-        return new JoinIterable<LinkWithOffsets>(
+        return new JoinIterable<>(
                 new ConvertingIterable<InternalLinkWithOffsets, LinkWithOffsets>(textConverter.getInternalLinks()) {
                     @Override
                     protected LinkWithOffsets convert(InternalLinkWithOffsets internalLinkWithOffsets) {

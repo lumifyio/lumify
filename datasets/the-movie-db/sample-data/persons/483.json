@@ -1,0 +1,28 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 483,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0085940",
+  "combined_credits": {
+    "cast": [{
+      "id": 71,
+      "media_type": "movie",
+      "title": "Billy Elliot",
+      "credit_id": "52fe4213c3a36847f8002131",
+      "release_date": "2000-10-13",
+      "original_title": "Billy Elliot",
+      "adult": false,
+      "poster_path": "/x0ySHQPAxQYD0D79BeDY2XhPzXg.jpg",
+      "character": "Debbie Wilkinson"
+    }],
+    "crew": []
+  },
+  "name": "Nicola Blackwell",
+  "place_of_birth": null,
+  "popularity": 1.00800541225
+}

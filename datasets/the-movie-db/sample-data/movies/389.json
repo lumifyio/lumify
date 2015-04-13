@@ -1,0 +1,247 @@
+{
+  "budget": 340000,
+  "vote_average": 8,
+  "backdrop_path": "/lH2Ga8OzjU1XlxJ73shOlPx6cRw.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4958,
+        "order": 0,
+        "credit_id": "52fe423dc3a36847f800ec89",
+        "name": "Henry Fonda",
+        "cast_id": 29,
+        "profile_path": "/sn3Fsm6l3xDAPHlO63ck2KOZ1BG.jpg",
+        "character": "Juror 8"
+      },
+      {
+        "id": 5248,
+        "order": 1,
+        "credit_id": "52fe423dc3a36847f800ec8d",
+        "name": "Lee J. Cobb",
+        "cast_id": 30,
+        "profile_path": "/535dOk8eUI97esLMunIXdG58jUu.jpg",
+        "character": "Juror 3"
+      },
+      {
+        "id": 39816,
+        "order": 2,
+        "credit_id": "52fe423dc3a36847f800ec91",
+        "name": "Ed Begley",
+        "cast_id": 31,
+        "profile_path": "/lnIapJ9Qwb2p2ijwXFvQtrE923w.jpg",
+        "character": "Juror 10"
+      },
+      {
+        "id": 5249,
+        "order": 3,
+        "credit_id": "52fe423dc3a36847f800ec95",
+        "name": "E. G. Marshall",
+        "cast_id": 32,
+        "profile_path": "/iQnivIob2OiXuVCepECf72xS2tQ.jpg",
+        "character": "Juror 4"
+      },
+      {
+        "id": 5251,
+        "order": 4,
+        "credit_id": "52fe423dc3a36847f800ec99",
+        "name": "Jack Warden",
+        "cast_id": 33,
+        "profile_path": "/7Pfj27pVjkQIu5HS85MlGdsl7MQ.jpg",
+        "character": "Juror 7"
+      },
+      {
+        "id": 1936,
+        "order": 5,
+        "credit_id": "52fe423dc3a36847f800ec9d",
+        "name": "Martin Balsam",
+        "cast_id": 34,
+        "profile_path": "/3lA1XlW9fsBCDYMMlgmvnHaWmOI.jpg",
+        "character": "Juror 1"
+      },
+      {
+        "id": 5247,
+        "order": 6,
+        "credit_id": "52fe423dc3a36847f800eca1",
+        "name": "John Fiedler",
+        "cast_id": 35,
+        "profile_path": "/wjhOLcxWaum0JIBIRMZaQQjrhQw.jpg",
+        "character": "Juror 2"
+      },
+      {
+        "id": 5250,
+        "order": 7,
+        "credit_id": "52fe423dc3a36847f800eca5",
+        "name": "Jack Klugman",
+        "cast_id": 36,
+        "profile_path": "/7OvZnRbj3DHxieaQpS0ZK5CITiP.jpg",
+        "character": "Juror 5"
+      },
+      {
+        "id": 2651,
+        "order": 8,
+        "credit_id": "52fe423dc3a36847f800eca9",
+        "name": "Edward Binns",
+        "cast_id": 37,
+        "profile_path": "/uTPEszrP1ZgDVo1nkRIYwAeYHnO.jpg",
+        "character": "Juror 6"
+      },
+      {
+        "id": 5252,
+        "order": 9,
+        "credit_id": "52fe423dc3a36847f800ecad",
+        "name": "Joseph Sweeney",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Juror 9"
+      },
+      {
+        "id": 5254,
+        "order": 10,
+        "credit_id": "52fe423dc3a36847f800ecb1",
+        "name": "George Voskovec",
+        "cast_id": 39,
+        "profile_path": "/rlhnKtwOb571yhuyTPtvMRt7fpg.jpg",
+        "character": "Juror 11"
+      },
+      {
+        "id": 5255,
+        "order": 11,
+        "credit_id": "52fe423dc3a36847f800ecb5",
+        "name": "Robert Webber",
+        "cast_id": 40,
+        "profile_path": "/mg6SHDi5bi9C7pUwH14ZXxTnR7M.jpg",
+        "character": "Juror 12"
+      }
+    ],
+    "crew": [
+      {
+        "id": 39996,
+        "credit_id": "52fe423dc3a36847f800ec43",
+        "department": "Directing",
+        "name": "Sidney Lumet",
+        "job": "Director",
+        "profile_path": "/7iG4z9BPCXw46qp8TOcXzEvXBJu.jpg"
+      },
+      {
+        "id": 5246,
+        "credit_id": "52fe423dc3a36847f800ec49",
+        "department": "Writing",
+        "name": "Reginald Rose",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5246,
+        "credit_id": "52fe423dc3a36847f800ec4f",
+        "department": "Writing",
+        "name": "Reginald Rose",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4958,
+        "credit_id": "52fe423dc3a36847f800ec55",
+        "department": "Production",
+        "name": "Henry Fonda",
+        "job": "Producer",
+        "profile_path": "/sn3Fsm6l3xDAPHlO63ck2KOZ1BG.jpg"
+      },
+      {
+        "id": 5259,
+        "credit_id": "52fe423dc3a36847f800ec5b",
+        "department": "Production",
+        "name": "George Justin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5246,
+        "credit_id": "52fe423dc3a36847f800ec61",
+        "department": "Production",
+        "name": "Reginald Rose",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5260,
+        "credit_id": "52fe423dc3a36847f800ec67",
+        "department": "Sound",
+        "name": "Kenyon Hopkins",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5261,
+        "credit_id": "52fe423dc3a36847f800ec6d",
+        "department": "Camera",
+        "name": "Boris Kaufman",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5262,
+        "credit_id": "52fe423dc3a36847f800ec73",
+        "department": "Editing",
+        "name": "Carl Lerner",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5263,
+        "credit_id": "52fe423dc3a36847f800ec79",
+        "department": "Art",
+        "name": "Robert Markel",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5264,
+        "credit_id": "52fe423dc3a36847f800ec7f",
+        "department": "Costume & Make-Up",
+        "name": "Herman Buchman",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 5265,
+        "credit_id": "52fe423dc3a36847f800ec85",
+        "department": "Sound",
+        "name": "James A. Gleason",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 96,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.wilsonsd.org/770240920121611/blank/browse.asp?a=383&BMDRN=2000&BCOB=0&c=63668",
+  "id": 389,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "12 Angry Men",
+  "overview": "The defense and the prosecution have rested and the jury is filing into the jury room to decide if a young Spanish-American is guilty or innocent of murdering his father. What begins as an open and shut case soon becomes a mini-drama of each of the jurors' prejudices and preconceptions about the trial, the accused, and each other.",
+  "production_companies": [{
+    "id": 10212,
+    "name": "Orion-Nova Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0050083",
+  "release_date": "1957-04-09",
+  "original_title": "12 Angry Men",
+  "vote_count": 516,
+  "poster_path": "/wvlFtIwh0GIqHRAz9F5cCch2IJD.jpg",
+  "tagline": "Life is in their hands. Death is on their minds.",
+  "revenue": 0,
+  "popularity": "2.29558672505748"
+}

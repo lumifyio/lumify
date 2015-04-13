@@ -6,6 +6,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.clientapi.model.VisibilityJson;
+import org.apache.commons.io.IOUtils;
 import org.securegraph.Vertex;
 
 import javax.net.ssl.*;
@@ -67,7 +68,7 @@ public class AggregateClassificationClient {
                 throw new LumifyException(responseCode + " (" + responseMessage + ") while accessing: " + aggregateClassificationConfiguration.getServiceUrl());
             }
 
-            String content = (String) httpConnection.getContent();
+            String content = IOUtils.toString(httpConnection.getInputStream(), httpConnection.getContentEncoding());
             LOGGER.debug("aggregate classification response content is: %s", content);
             return content;
         } catch (Exception e) {

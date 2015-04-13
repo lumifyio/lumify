@@ -1,0 +1,6 @@
+dn: cn=admins,ou=groups,dc=lumify,dc=io
+objectclass: groupofuniquenames
+cn: admins
+description: Administrators
+uniqueMember: cn=Alice,ou=people,dc=lumify,dc=io
+uniqueMember: cn=Bob,ou=people,dc=lumify,dc=io

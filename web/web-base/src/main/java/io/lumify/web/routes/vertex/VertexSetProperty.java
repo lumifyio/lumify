@@ -3,10 +3,13 @@ package io.lumify.web.routes.vertex;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -20,15 +23,10 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.miniweb.HandlerChain;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.clientapi.model.ClientApiElement;
-import org.json.JSONObject;
-import org.securegraph.Authorizations;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
@@ -39,6 +37,7 @@ public class VertexSetProperty extends BaseRequestHandler {
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
     private final WorkQueueRepository workQueueRepository;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public VertexSetProperty(
@@ -49,7 +48,9 @@ public class VertexSetProperty extends BaseRequestHandler {
             final UserRepository userRepository,
             final Configuration configuration,
             final WorkspaceRepository workspaceRepository,
-            final WorkQueueRepository workQueueRepository) {
+            final WorkQueueRepository workQueueRepository,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
@@ -57,14 +58,16 @@ public class VertexSetProperty extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
         this.workQueueRepository = workQueueRepository;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
-        String propertyKey = getOptionalParameter(request, "propertyKey");
-        final String valueStr = getRequiredParameter(request, "value");
+        final String propertyKey = getOptionalParameter(request, "propertyKey");
+        final String valueStr = getOptionalParameter(request, "value");
+        final String[] valuesStr = getOptionalParameterArray(request, "value[]");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
@@ -73,6 +76,10 @@ public class VertexSetProperty extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
         Authorizations authorizations = getAuthorizations(request, user);
 
+        if (valueStr == null && valuesStr == null) {
+            throw new LumifyException("Parameter: 'value' or 'value[]' is required in the request");
+        }
+
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
             respondWithBadRequest(response, "visibilitySource", getString(request, "visibility.invalid"));
@@ -80,11 +87,18 @@ public class VertexSetProperty extends BaseRequestHandler {
             return;
         }
 
+        if (propertyName.equals(LumifyProperties.COMMENT.getPropertyName()) && request.getPathInfo().equals("/vertex/property")) {
+            throw new LumifyException("Use /vertex/comment to save comment properties");
+        } else if (request.getPathInfo().equals("/vertex/comment") && !propertyName.equals(LumifyProperties.COMMENT.getPropertyName())) {
+            throw new LumifyException("Use /vertex/property to save non-comment properties");
+        }
+
         respondWithClientApiObject(response, handle(
                 graphVertexId,
                 propertyName,
                 propertyKey,
                 valueStr,
+                valuesStr,
                 justificationText,
                 sourceInfo,
                 metadataString,
@@ -99,40 +113,82 @@ public class VertexSetProperty extends BaseRequestHandler {
             String propertyName,
             String propertyKey,
             String valueStr,
+            String[] valuesStr,
             String justificationText,
-            String sourceInfo,
+            String sourceInfoString,
             String metadataString,
             String visibilitySource,
             User user,
             String workspaceId,
             Authorizations authorizations) {
-        final JSONObject sourceJson;
-        if (sourceInfo != null) {
-            sourceJson = new JSONObject(sourceInfo);
-        } else {
-            sourceJson = new JSONObject();
-        }
-
         if (propertyKey == null) {
             propertyKey = this.graph.getIdGenerator().nextId();
         }
 
-        Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
-
-        OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
-        if (property == null) {
-            throw new RuntimeException("Could not find property: " + propertyName);
+        if (valueStr == null && valuesStr != null && valuesStr.length == 1) {
+            valueStr = valuesStr[0];
+        }
+        if (valuesStr == null && valueStr != null) {
+            valuesStr = new String[1];
+            valuesStr[0] = valueStr;
         }
 
+        Metadata metadata = GraphUtil.metadataStringToMap(metadataString, this.visibilityTranslator.getDefaultVisibility());
+
         Object value;
-        try {
-            value = property.convertString(valueStr);
-        } catch (Exception ex) {
-            LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
-            throw new LumifyException(ex.getMessage(), ex);
+        if (propertyName.equals("http://lumify.io#comment")) {
+            value = valueStr;
+        } else {
+            OntologyProperty property = ontologyRepository.getPropertyByIRI(propertyName);
+            if (property == null) {
+                throw new RuntimeException("Could not find property: " + propertyName);
+            }
+
+            if (property.hasDependentPropertyIris()) {
+                if (valuesStr == null) {
+                    throw new LumifyException("properties with dependent properties must contain a value");
+                }
+                if (property.getDependentPropertyIris().size() != valuesStr.length) {
+                    throw new LumifyException("properties with dependent properties must contain the same number of values. expected " + property.getDependentPropertyIris().size() + " found " + valuesStr.length);
+                }
+
+                ClientApiElement clientApiElement = null;
+                int valuesIndex = 0;
+                for (String dependentPropertyIri : property.getDependentPropertyIris()) {
+                    clientApiElement = handle(
+                            graphVertexId,
+                            dependentPropertyIri,
+                            propertyKey,
+                            valuesStr[valuesIndex++],
+                            null,
+                            justificationText,
+                            sourceInfoString,
+                            metadataString,
+                            visibilitySource,
+                            user,
+                            workspaceId,
+                            authorizations
+                    );
+                }
+                return clientApiElement;
+            } else {
+                if (valuesStr != null && valuesStr.length > 1) {
+                    throw new LumifyException("properties without dependent properties must not contain more than one value.");
+                }
+                if (valueStr == null) {
+                    throw new LumifyException("properties without dependent properties must have a value");
+                }
+                try {
+                    value = property.convertString(valueStr);
+                } catch (Exception ex) {
+                    LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
+                    throw new LumifyException(ex.getMessage(), ex);
+                }
+            }
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
+        SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(
                 graph,
                 graphVertex,
@@ -144,7 +200,8 @@ public class VertexSetProperty extends BaseRequestHandler {
                 workspaceId,
                 this.visibilityTranslator,
                 justificationText,
-                sourceJson,
+                sourceInfo,
+                termMentionRepository,
                 user,
                 authorizations);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
@@ -153,10 +210,13 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), false, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, user);
 
-        // TODO: use property key from client when we implement multi-valued properties
-        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId, visibilitySource);
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, propertyKey, propertyName, workspaceId, visibilitySource);
+
+        if (sourceInfo != null) {
+            this.workQueueRepository.pushTextUpdated(sourceInfo.getVertexId());
+        }
 
         return ClientApiConverter.toClientApi(graphVertex, workspaceId, authorizations);
     }

@@ -53,7 +53,7 @@ define([
             var self = this,
                 vertices = data.vertices,
                 edges = data.edges,
-                moduleName, moduleData;
+                moduleName, moduleData, moduleName2;
 
             if (!vertices.length && !edges.length) {
                 var pane = this.$node.closest('.detail-pane');
@@ -78,7 +78,9 @@ define([
 
             if (vertices.length > 1) {
                 moduleName = 'multiple';
-                moduleData = vertices;
+                moduleData = {
+                    vertices: vertices
+                };
             } else if (vertices.length === 1) {
                 var vertex = vertices[0],
                     concept = F.vertex.concept(vertex),
@@ -95,6 +97,12 @@ define([
                     ) || 'entity').toLowerCase();
                 }
                 moduleData = vertex;
+            } else if (edges.length > 1) {
+                moduleName = 'multiple';
+                moduleName2 = 'edges';
+                moduleData = {
+                    edges: edges
+                };
             } else {
                 moduleName = 'edge';
                 moduleData = edges[0];
@@ -103,7 +111,7 @@ define([
             moduleName = moduleName.toLowerCase();
 
             require([
-                'detail/' + moduleName + '/' + moduleName,
+                'detail/' + moduleName + '/' + (moduleName2 || moduleName),
             ], function(Module) {
                 Module.attachTo(self.select('detailTypeContentSelector'), {
                     data: moduleData,

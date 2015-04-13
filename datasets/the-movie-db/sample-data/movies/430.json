@@ -1,0 +1,341 @@
+{
+  "budget": 3000000,
+  "vote_average": 8.3,
+  "backdrop_path": "/uGaHbilP6RveADyRnL5Qd076GwL.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5788,
+        "order": 0,
+        "credit_id": "52fe4242c3a36847f80106c1",
+        "name": "James Cagney",
+        "cast_id": 5,
+        "profile_path": "/ltNtoIKkh6zjjLxPTkw8EKYiQPi.jpg",
+        "character": "C.R. MacNamara"
+      },
+      {
+        "id": 5789,
+        "order": 1,
+        "credit_id": "52fe4242c3a36847f80106c5",
+        "name": "Horst Buchholz",
+        "cast_id": 6,
+        "profile_path": "/bNyMxUU2aVaqDfoqRhnIjQJe3jo.jpg",
+        "character": "Otto Ludwig Piffl"
+      },
+      {
+        "id": 5790,
+        "order": 2,
+        "credit_id": "52fe4242c3a36847f80106c9",
+        "name": "Pamela Tiffin",
+        "cast_id": 7,
+        "profile_path": "/gOoiqOHot5DckaMCqKOuX4CAj0r.jpg",
+        "character": "Scarlett Hazeltine"
+      },
+      {
+        "id": 5791,
+        "order": 3,
+        "credit_id": "52fe4242c3a36847f80106cd",
+        "name": "Arlene Francis",
+        "cast_id": 8,
+        "profile_path": "/p7VU1dbaIJvlRKfvpIBUbxwd9dF.jpg",
+        "character": "Phyllis MacNamara"
+      },
+      {
+        "id": 5792,
+        "order": 4,
+        "credit_id": "52fe4242c3a36847f80106d1",
+        "name": "Howard St. John",
+        "cast_id": 9,
+        "profile_path": "/1MmHUGc6btitSBRTu5vmYeGuHII.jpg",
+        "character": "Wendell P. Hazeltine"
+      },
+      {
+        "id": 5793,
+        "order": 5,
+        "credit_id": "52fe4242c3a36847f80106d5",
+        "name": "Liselotte Pulver",
+        "cast_id": 10,
+        "profile_path": "/q8W9UJxV0mvJ8SNkbNvgFydcOfk.jpg",
+        "character": "Fräulein Ingeborg"
+      },
+      {
+        "id": 5794,
+        "order": 6,
+        "credit_id": "52fe4242c3a36847f80106d9",
+        "name": "Hanns Lothar",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Schlemmer"
+      },
+      {
+        "id": 5795,
+        "order": 7,
+        "credit_id": "52fe4242c3a36847f80106dd",
+        "name": "Leon Askin",
+        "cast_id": 12,
+        "profile_path": "/ukyjaSKCcI1pfRX7EqxkgFes8Sr.jpg",
+        "character": "Peripetchikoff"
+      },
+      {
+        "id": 5796,
+        "order": 8,
+        "credit_id": "52fe4242c3a36847f80106e1",
+        "name": "Ralf Wolter",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Borodenko"
+      },
+      {
+        "id": 5797,
+        "order": 9,
+        "credit_id": "52fe4242c3a36847f80106e5",
+        "name": "Karl Lieffen",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Fritz"
+      },
+      {
+        "id": 5798,
+        "order": 10,
+        "credit_id": "52fe4242c3a36847f80106e9",
+        "name": "Hubert von Meyerinck",
+        "cast_id": 15,
+        "profile_path": "/ePpgrRe1wWLhBenceXtv90kxFTM.jpg",
+        "character": "Count von Droste Schattenburg"
+      },
+      {
+        "id": 5799,
+        "order": 11,
+        "credit_id": "52fe4242c3a36847f80106ed",
+        "name": "Loïs Bolton",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Melanie Hazeltine"
+      },
+      {
+        "id": 3476,
+        "order": 12,
+        "credit_id": "52fe4242c3a36847f80106f1",
+        "name": "Peter Capell",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Mishkin"
+      },
+      {
+        "id": 5800,
+        "order": 13,
+        "credit_id": "52fe4242c3a36847f80106f5",
+        "name": "Til Kiwe",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Reporter"
+      },
+      {
+        "id": 5801,
+        "order": 14,
+        "credit_id": "52fe4242c3a36847f80106f9",
+        "name": "Henning Schlüter",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Dr. Bauer"
+      },
+      {
+        "id": 5802,
+        "order": 15,
+        "credit_id": "52fe4242c3a36847f80106fd",
+        "name": "Karl Ludwig Lindt",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Zeidlitz"
+      },
+      {
+        "id": 5803,
+        "order": 16,
+        "credit_id": "52fe4242c3a36847f8010701",
+        "name": "Christine Allen",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Cindy MacNamara"
+      },
+      {
+        "id": 5804,
+        "order": 17,
+        "credit_id": "52fe4242c3a36847f8010705",
+        "name": "John Allen",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Tommy MacNamara"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3146,
+        "credit_id": "52fe4242c3a36847f80106ab",
+        "department": "Directing",
+        "name": "Billy Wilder",
+        "job": "Director",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 5787,
+        "credit_id": "52fe4242c3a36847f80106b1",
+        "department": "Writing",
+        "name": "Ferenc Molnár",
+        "job": "Author",
+        "profile_path": "/cwPuSPcy82PnVfvKzkbMF0aWg1O.jpg"
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe4242c3a36847f80106b7",
+        "department": "Writing",
+        "name": "Billy Wilder",
+        "job": "Screenplay",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3147,
+        "credit_id": "52fe4242c3a36847f80106bd",
+        "department": "Writing",
+        "name": "I. A. L. Diamond",
+        "job": "Screenplay",
+        "profile_path": "/lii36e0Ntvq7sL1rA0tVs4FePYT.jpg"
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe4242c3a36847f801070b",
+        "department": "Production",
+        "name": "Billy Wilder",
+        "job": "Producer",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 3159,
+        "credit_id": "52fe4242c3a36847f8010711",
+        "department": "Production",
+        "name": "Doane Harrison",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3147,
+        "credit_id": "52fe4242c3a36847f8010717",
+        "department": "Production",
+        "name": "I. A. L. Diamond",
+        "job": "Producer",
+        "profile_path": "/lii36e0Ntvq7sL1rA0tVs4FePYT.jpg"
+      },
+      {
+        "id": 5805,
+        "credit_id": "52fe4242c3a36847f801071d",
+        "department": "Sound",
+        "name": "André Previn",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5806,
+        "credit_id": "52fe4242c3a36847f8010723",
+        "department": "Camera",
+        "name": "Daniel L. Fapp",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4102,
+        "credit_id": "52fe4242c3a36847f8010729",
+        "department": "Editing",
+        "name": "Daniel Mandell",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5807,
+        "credit_id": "52fe4242c3a36847f801072f",
+        "department": "Art",
+        "name": "Robert Stratil",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5808,
+        "credit_id": "52fe4242c3a36847f8010735",
+        "department": "Art",
+        "name": "Heinrich Weidemann",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4103,
+        "credit_id": "52fe4242c3a36847f801073b",
+        "department": "Art",
+        "name": "Alexandre Trauner",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5809,
+        "credit_id": "52fe4242c3a36847f8010741",
+        "department": "Sound",
+        "name": "Basil Fenton-Smith",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 4107,
+        "credit_id": "52fe4242c3a36847f8010747",
+        "department": "Crew",
+        "name": "Milt Rice",
+        "job": "Special Effects",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 115,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://en.wikipedia.org/wiki/One,_Two,_Three",
+  "id": 430,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "One, Two, Three",
+  "overview": "One, Two, Three \u2013 A scorching business comedy that plays during the Cold War in Berlin, Germany. With it\u2019s political satire director Billy Wilder depicts the fight between capitalism and communism with panic, scrutiny and surprises, filmed during the building of the Berlin Wall.",
+  "production_companies": [{
+    "id": 219,
+    "name": "The Mirisch Corporation"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0055256",
+  "release_date": "1961-12-15",
+  "original_title": "One, Two, Three",
+  "vote_count": 9,
+  "poster_path": "/2BiQKt0e3PwmXNFeKYWfhLQ6pcd.jpg",
+  "tagline": "",
+  "revenue": 4000000,
+  "popularity": "0.412136251823007"
+}

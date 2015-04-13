@@ -1,0 +1,328 @@
+{
+  "budget": 20000000,
+  "vote_average": 6,
+  "backdrop_path": "/mXenFohxCO4jQ0e1bJf4e9gebxL.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 776,
+        "order": 0,
+        "credit_id": "52fe4217c3a36847f80032a9",
+        "name": "Eddie Murphy",
+        "cast_id": 17,
+        "profile_path": "/WlmlpM6YeQwgEmOX0n4bVZ08dc.jpg",
+        "character": "Det. Axel Foley"
+      },
+      {
+        "id": 777,
+        "order": 1,
+        "credit_id": "52fe4217c3a36847f80032ad",
+        "name": "Judge Reinhold",
+        "cast_id": 18,
+        "profile_path": "/oN7TsF0yFJhsoKe9KzxXEOhheci.jpg",
+        "character": "Det. William 'Billy' Rosewood"
+      },
+      {
+        "id": 778,
+        "order": 2,
+        "credit_id": "52fe4217c3a36847f80032b1",
+        "name": "John Ashton",
+        "cast_id": 19,
+        "profile_path": "/omfIdOt1F8LDkb7AMZTtLDiyJ3O.jpg",
+        "character": "Det. Sgt. John Taggart"
+      },
+      {
+        "id": 920,
+        "order": 3,
+        "credit_id": "52fe4217c3a36847f80032b5",
+        "name": "Jürgen Prochnow",
+        "cast_id": 20,
+        "profile_path": "/aar3n9NEQdwWVvPOne3kLLXm75N.jpg",
+        "character": "Maxwell Dent"
+      },
+      {
+        "id": 780,
+        "order": 4,
+        "credit_id": "52fe4217c3a36847f80032b9",
+        "name": "Ronny Cox",
+        "cast_id": 21,
+        "profile_path": "/da980JmsVnK9w9MLZsF240Q8t9k.jpg",
+        "character": "Capt./Chief Andrew Bogomil"
+      },
+      {
+        "id": 921,
+        "order": 5,
+        "credit_id": "52fe4217c3a36847f80032bd",
+        "name": "Brigitte Nielsen",
+        "cast_id": 22,
+        "profile_path": "/sCygCFKnKR3G3yROyfwOIxJf9eM.jpg",
+        "character": "Karla Fry"
+      },
+      {
+        "id": 923,
+        "order": 6,
+        "credit_id": "52fe4217c3a36847f80032c1",
+        "name": "Dean Stockwell",
+        "cast_id": 23,
+        "profile_path": "/7lcbZFt1cVEBlHk9AGDBbCNy8bk.jpg",
+        "character": "Charles 'Chip' Cain"
+      },
+      {
+        "id": 781,
+        "order": 7,
+        "credit_id": "52fe4217c3a36847f80032c5",
+        "name": "Paul Reiser",
+        "cast_id": 24,
+        "profile_path": "/fr53dQQrDGfETgbliCktwKqteRU.jpg",
+        "character": "Det. Jeffrey Friedman"
+      },
+      {
+        "id": 787,
+        "order": 8,
+        "credit_id": "52fe4217c3a36847f80032c9",
+        "name": "Gilbert R. Hill",
+        "cast_id": 25,
+        "profile_path": "/9kgwJTs4hT9oJuRiC4zj4zxwn68.jpg",
+        "character": "Insp. Douglas Todd (as Gil Hill)"
+      },
+      {
+        "id": 925,
+        "order": 9,
+        "credit_id": "52fe4217c3a36847f80032cd",
+        "name": "Paul Guilfoyle",
+        "cast_id": 26,
+        "profile_path": "/vQRNg8D5jeUHGKeFzMuwFaAFnzZ.jpg",
+        "character": "Nikos Thomopolis"
+      },
+      {
+        "id": 926,
+        "order": 10,
+        "credit_id": "52fe4217c3a36847f80032d1",
+        "name": "Ola Ray",
+        "cast_id": 27,
+        "profile_path": "/9GSKZj7Hfg4Wee00etJwd18Zakb.jpg",
+        "character": "Playboy Playmate"
+      },
+      {
+        "id": 928,
+        "order": 11,
+        "credit_id": "52fe4217c3a36847f80032d5",
+        "name": "Rebecca Ferratti",
+        "cast_id": 28,
+        "profile_path": "/jkj9xVFHEftdPfuDTxqLF1WgoZr.jpg",
+        "character": "Playboy Playmate"
+      },
+      {
+        "id": 922,
+        "order": 12,
+        "credit_id": "52fe4217c3a36847f80032d9",
+        "name": "Allen Garfield",
+        "cast_id": 29,
+        "profile_path": "/wa8WAH20QGm1fLPR5Wrbja5C5rx.jpg",
+        "character": "Police Chief Harold Lutz"
+      },
+      {
+        "id": 2632,
+        "order": 13,
+        "credit_id": "52fe4217c3a36847f80032dd",
+        "name": "Chris Rock",
+        "cast_id": 30,
+        "profile_path": "/5JCYKerIL0SdiqygtLUpG9Sw37P.jpg",
+        "character": "Playboy Mansion Valet"
+      }
+    ],
+    "crew": [
+      {
+        "id": 893,
+        "credit_id": "52fe4216c3a36847f800324b",
+        "department": "Directing",
+        "name": "Tony Scott",
+        "job": "Director",
+        "profile_path": "/15pOBMK5i72aLVv6M199xW6p3yr.jpg"
+      },
+      {
+        "id": 770,
+        "credit_id": "52fe4216c3a36847f8003251",
+        "department": "Production",
+        "name": "Jerry Bruckheimer",
+        "job": "Producer",
+        "profile_path": "/p2rd1kgq7GiCx2nQqfXib9PneOu.jpg"
+      },
+      {
+        "id": 771,
+        "credit_id": "52fe4217c3a36847f8003257",
+        "department": "Production",
+        "name": "Don Simpson",
+        "job": "Producer",
+        "profile_path": "/vYpPZLSh4ylzgP5KsEUnjt1UDRh.jpg"
+      },
+      {
+        "id": 799,
+        "credit_id": "52fe4217c3a36847f800325d",
+        "department": "Sound",
+        "name": "Harold Faltermeyer",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 904,
+        "credit_id": "52fe4217c3a36847f8003263",
+        "department": "Camera",
+        "name": "Jeffrey L. Kimball",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 897,
+        "credit_id": "52fe4217c3a36847f8003269",
+        "department": "Production",
+        "name": "Bonnie Timmermann",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 541,
+        "credit_id": "52fe4217c3a36847f800326f",
+        "department": "Editing",
+        "name": "Chris Lebenzon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 909,
+        "credit_id": "52fe4217c3a36847f8003275",
+        "department": "Editing",
+        "name": "Billy Weber",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 908,
+        "credit_id": "52fe4217c3a36847f800327b",
+        "department": "Editing",
+        "name": "Michael Tronick",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 910,
+        "credit_id": "52fe4217c3a36847f8003281",
+        "department": "Visual Effects",
+        "name": "Steve Grumette",
+        "job": "Visual Effects",
+        "profile_path": null
+      },
+      {
+        "id": 776,
+        "credit_id": "52fe4217c3a36847f8003287",
+        "department": "Writing",
+        "name": "Eddie Murphy",
+        "job": "Author",
+        "profile_path": "/WlmlpM6YeQwgEmOX0n4bVZ08dc.jpg"
+      },
+      {
+        "id": 911,
+        "credit_id": "52fe4217c3a36847f800328d",
+        "department": "Writing",
+        "name": "Robert D. Wachs",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 912,
+        "credit_id": "52fe4217c3a36847f8003293",
+        "department": "Writing",
+        "name": "Larry Ferguson",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 913,
+        "credit_id": "52fe4217c3a36847f8003299",
+        "department": "Writing",
+        "name": "Warren Skaaren",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 915,
+        "credit_id": "52fe4217c3a36847f800329f",
+        "department": "Writing",
+        "name": "David Giler",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 916,
+        "credit_id": "52fe4217c3a36847f80032a5",
+        "department": "Writing",
+        "name": "Dennis Klein",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 772,
+        "credit_id": "52fe4217c3a36847f80032e3",
+        "department": "Writing",
+        "name": "Danilo Bach",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 774,
+        "credit_id": "52fe4217c3a36847f80032e9",
+        "department": "Writing",
+        "name": "Daniel Petrie, Jr.",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 96,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Beverly Hills Cop II",
+  "overview": "Axel Foley is back and as funny as ever in this fast-paced sequel to the original smash hit. This time, the Detroit cop heads for the land of sunshine and palm trees to find out who shot police Captain Andrew Bogomil. Thanks to a couple of old friends, Axel's investigation uncovers a series of robberies masterminded by a heartless weapons kingpin, and the chase is on!",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 85861,
+    "backdrop_path": "/lhZQuT76B9YcxZIudXZMhhWCKcl.jpg",
+    "name": "Beverly Hills Cop Collection",
+    "poster_path": "/ty7zsl0xkVDUlibYkFUjRAYUkvE.jpg"
+  },
+  "imdb_id": "tt0092644",
+  "release_date": "1987-05-18",
+  "original_title": "Beverly Hills Cop II",
+  "vote_count": 115,
+  "poster_path": "/2y1z1baxKT0coTTRlnkI6McnR9f.jpg",
+  "tagline": "The Heat's Back On!",
+  "revenue": 299965036,
+  "popularity": 1.0735263987763
+}

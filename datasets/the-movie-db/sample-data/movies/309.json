@@ -1,0 +1,354 @@
+{
+  "budget": 1300000,
+  "vote_average": 8.8,
+  "backdrop_path": "/4ECwuRrJ3YsWY9QnOFrK4IFA3nS.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4455,
+        "order": 0,
+        "credit_id": "52fe4235c3a36847f800c581",
+        "name": "Ulrich Thomsen",
+        "cast_id": 4,
+        "profile_path": "/yXls3Na19WFTtQibdGoQauZvHzL.jpg",
+        "character": "Christian Klingenfeldt"
+      },
+      {
+        "id": 4456,
+        "order": 1,
+        "credit_id": "52fe4235c3a36847f800c585",
+        "name": "Henning Moritzen",
+        "cast_id": 5,
+        "profile_path": "/jkmFrpd3A916sDOzaNTLickRCBJ.jpg",
+        "character": "Faderen Helge Klingenfeldt"
+      },
+      {
+        "id": 4457,
+        "order": 2,
+        "credit_id": "52fe4235c3a36847f800c589",
+        "name": "Thomas Bo Larsen",
+        "cast_id": 6,
+        "profile_path": "/duza8j6FcbmT6J0f4mayUeTlMvS.jpg",
+        "character": "Michael"
+      },
+      {
+        "id": 4458,
+        "order": 3,
+        "credit_id": "52fe4235c3a36847f800c58d",
+        "name": "Paprika Steen",
+        "cast_id": 7,
+        "profile_path": "/7iz6g2gXDCVL9LFjqmVV8KwGvNP.jpg",
+        "character": "Helene"
+      },
+      {
+        "id": 4459,
+        "order": 4,
+        "credit_id": "52fe4235c3a36847f800c591",
+        "name": "Birthe Neumann",
+        "cast_id": 8,
+        "profile_path": "/gTpInxjTPnPCZr0bRyZAQqEQGJQ.jpg",
+        "character": "Moderen"
+      },
+      {
+        "id": 4460,
+        "order": 5,
+        "credit_id": "52fe4235c3a36847f800c595",
+        "name": "Trine Dyrholm",
+        "cast_id": 9,
+        "profile_path": "/ue2dx6F4g7uOR5nZJh8YEFlccJd.jpg",
+        "character": "Pia"
+      },
+      {
+        "id": 4461,
+        "order": 6,
+        "credit_id": "52fe4235c3a36847f800c599",
+        "name": "Helle Dolleris",
+        "cast_id": 10,
+        "profile_path": "/wpXSO5Umc8bjHnGbDxLv8Jwzz2H.jpg",
+        "character": "Mette"
+      },
+      {
+        "id": 4462,
+        "order": 7,
+        "credit_id": "52fe4235c3a36847f800c59d",
+        "name": "Therese Glahn",
+        "cast_id": 11,
+        "profile_path": "/fg5FuEcE7whN8NcGr10htQiyam.jpg",
+        "character": "Michelle"
+      },
+      {
+        "id": 4463,
+        "order": 8,
+        "credit_id": "52fe4235c3a36847f800c5a1",
+        "name": "Klaus Bondam",
+        "cast_id": 12,
+        "profile_path": "/dzfTeZj1Axd42iEdaaz1dHHROlj.jpg",
+        "character": "Toastmasteren"
+      },
+      {
+        "id": 4464,
+        "order": 9,
+        "credit_id": "52fe4235c3a36847f800c5a5",
+        "name": "Bjarne Henriksen",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Kim"
+      },
+      {
+        "id": 4465,
+        "order": 10,
+        "credit_id": "52fe4235c3a36847f800c5a9",
+        "name": "Gbatokai Dakinah",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Gbatokai"
+      },
+      {
+        "id": 4467,
+        "order": 12,
+        "credit_id": "52fe4235c3a36847f800c5ad",
+        "name": "Lars Brygmann",
+        "cast_id": 16,
+        "profile_path": "/6M8ZHAmLSkUCgkW3j5Dtr6IjfzJ.jpg",
+        "character": "Receptionisten"
+      },
+      {
+        "id": 4468,
+        "order": 13,
+        "credit_id": "52fe4235c3a36847f800c5b1",
+        "name": "Lene Laub Oksen",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Linda"
+      },
+      {
+        "id": 4469,
+        "order": 14,
+        "credit_id": "52fe4235c3a36847f800c5b5",
+        "name": "Linda Laursen",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Birthe"
+      },
+      {
+        "id": 4470,
+        "order": 15,
+        "credit_id": "52fe4235c3a36847f800c5b9",
+        "name": "John Boas",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Farfar"
+      },
+      {
+        "id": 4471,
+        "order": 16,
+        "credit_id": "52fe4235c3a36847f800c5bd",
+        "name": "Erna Boas",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Farmor"
+      },
+      {
+        "id": 4453,
+        "order": 17,
+        "credit_id": "52fe4235c3a36847f800c5eb",
+        "name": "Thomas Vinterberg",
+        "cast_id": 30,
+        "profile_path": "/dFev1iqFyoSigPRyCQ7r9NwZXiv.jpg",
+        "character": "Taxidriver"
+      },
+      {
+        "id": 4480,
+        "order": 18,
+        "credit_id": "52fe4235c3a36847f800c5ef",
+        "name": "Kaj Rasmussen",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": ""
+      },
+      {
+        "id": 4481,
+        "order": 19,
+        "credit_id": "52fe4235c3a36847f800c5f3",
+        "name": "Robert Strandgård",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": ""
+      },
+      {
+        "id": 4482,
+        "order": 20,
+        "credit_id": "52fe4235c3a36847f800c5f7",
+        "name": "Gry Worre Hallberg",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": ""
+      },
+      {
+        "id": 3409,
+        "order": 21,
+        "credit_id": "52fe4235c3a36847f800c607",
+        "name": "Lasse Lunderskov",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Onklen"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4453,
+        "credit_id": "52fe4235c3a36847f800c571",
+        "department": "Writing",
+        "name": "Thomas Vinterberg",
+        "job": "Screenplay",
+        "profile_path": "/dFev1iqFyoSigPRyCQ7r9NwZXiv.jpg"
+      },
+      {
+        "id": 4453,
+        "credit_id": "52fe4235c3a36847f800c577",
+        "department": "Directing",
+        "name": "Thomas Vinterberg",
+        "job": "Director",
+        "profile_path": "/dFev1iqFyoSigPRyCQ7r9NwZXiv.jpg"
+      },
+      {
+        "id": 4454,
+        "credit_id": "52fe4235c3a36847f800c57d",
+        "department": "Writing",
+        "name": "Mogens Rukov",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4474,
+        "credit_id": "52fe4235c3a36847f800c5c3",
+        "department": "Sound",
+        "name": "Lars Bo Jensen",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1570,
+        "credit_id": "52fe4235c3a36847f800c5c9",
+        "department": "Camera",
+        "name": "Anthony Dod Mantle",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4475,
+        "credit_id": "52fe4235c3a36847f800c5cf",
+        "department": "Editing",
+        "name": "Valdís Óskarsdóttir",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4476,
+        "credit_id": "52fe4235c3a36847f800c5d5",
+        "department": "Production",
+        "name": "Marie Louise Hedegaard",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4477,
+        "credit_id": "52fe4235c3a36847f800c5db",
+        "department": "Production",
+        "name": "Lene Seested",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4478,
+        "credit_id": "52fe4235c3a36847f800c5e1",
+        "department": "Crew",
+        "name": "Eigil Jacobsen",
+        "job": "Second Unit",
+        "profile_path": null
+      },
+      {
+        "id": 4479,
+        "credit_id": "52fe4235c3a36847f800c5e7",
+        "department": "Sound",
+        "name": "Morten Holm",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 1559,
+        "credit_id": "52fe4235c3a36847f800c5fd",
+        "department": "Production",
+        "name": "Birgitte Hald",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1560,
+        "credit_id": "52fe4235c3a36847f800c603",
+        "department": "Production",
+        "name": "Morten Kaufmann",
+        "job": "Line Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [
+    {
+      "iso_639_1": "da",
+      "name": "Dansk"
+    },
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 309,
+  "production_countries": [
+    {
+      "name": "Denmark",
+      "iso_3166_1": "DK"
+    },
+    {
+      "name": "Sweden",
+      "iso_3166_1": "SE"
+    }
+  ],
+  "title": "The Celebration",
+  "overview": "A Danish film produced in the Dogma style by Thomas Vinterberg that portrays a family having a party for their father when one son makes a toast speech that tells the truth about the murder of their eldest sister possibly involving the father.",
+  "production_companies": [
+    {
+      "id": 155,
+      "name": "Nimbus Film ApS"
+    },
+    {
+      "id": 156,
+      "name": "Nordic Film"
+    },
+    {
+      "id": 3221,
+      "name": "Sveriges Television (SVT)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0154420",
+  "release_date": "1998-05-20",
+  "original_title": "Festen",
+  "vote_count": 18,
+  "poster_path": "/v0JbJq6H4aHiQqOjt4n4SkUk557.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.531862121230929"
+}

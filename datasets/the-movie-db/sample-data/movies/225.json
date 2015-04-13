@@ -1,0 +1,225 @@
+{
+  "budget": 0,
+  "vote_average": 9,
+  "backdrop_path": "/hVLa8BF0dP3GZjOPt3RTARHk71Q.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1386,
+        "order": 0,
+        "credit_id": "52fe4229c3a36847f80089df",
+        "name": "Jerzy Radziwiłowicz",
+        "cast_id": 2,
+        "profile_path": "/fKTbFcO0fkpFVkVjbbQRlaprxsg.jpg",
+        "character": "Maciek Tomczyk, Sohn des Mateusz Birkut (Der Mann aus Marmor)"
+      },
+      {
+        "id": 2807,
+        "order": 1,
+        "credit_id": "52fe4229c3a36847f80089e3",
+        "name": "Krystyna Janda",
+        "cast_id": 3,
+        "profile_path": "/v1WhK7TNvAdw9a2xRuyPLy5sF4u.jpg",
+        "character": "Ehefrau von Maciek Tomczyk, Filmregisseurin in \"Der Mann aus Marmor\""
+      },
+      {
+        "id": 2825,
+        "order": 2,
+        "credit_id": "52fe4229c3a36847f80089e7",
+        "name": "Marian Opania",
+        "cast_id": 4,
+        "profile_path": "/jVOu8gns4V3g5tkWe7rlzjYWI36.jpg",
+        "character": "Redakteur Winkel"
+      },
+      {
+        "id": 2826,
+        "order": 3,
+        "credit_id": "52fe4229c3a36847f80089eb",
+        "name": "Irena Byrska",
+        "cast_id": 5,
+        "profile_path": "/poB4zsSBULKc1bsnwYsc4ruxhtc.jpg",
+        "character": "Mutter Hulewicz"
+      },
+      {
+        "id": 2827,
+        "order": 4,
+        "credit_id": "52fe4229c3a36847f80089ef",
+        "name": "Wiesława Kosmalska",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Wiesława Hulewicz"
+      },
+      {
+        "id": 2828,
+        "order": 5,
+        "credit_id": "52fe4229c3a36847f80089f3",
+        "name": "Franciszek Trzeciak",
+        "cast_id": 8,
+        "profile_path": "/mipbGU9bIArV9qZehjBRQ6Sa9pn.jpg",
+        "character": "Badecki"
+      },
+      {
+        "id": 2829,
+        "order": 6,
+        "credit_id": "52fe4229c3a36847f80089f7",
+        "name": "Andrzej Seweryn",
+        "cast_id": 9,
+        "profile_path": "/aSFdg0xq0qZaFnbuAAg9iGr021d.jpg",
+        "character": "Wirski"
+      },
+      {
+        "id": 2830,
+        "order": 7,
+        "credit_id": "52fe4229c3a36847f80089fb",
+        "name": "Marek Kondrat",
+        "cast_id": 10,
+        "profile_path": "/n8lV5VfSVgEjQaK0aup0rQpBxqT.jpg",
+        "character": "Grzenda"
+      },
+      {
+        "id": 2831,
+        "order": 8,
+        "credit_id": "52fe4229c3a36847f80089ff",
+        "name": "Jerzy Trela",
+        "cast_id": 11,
+        "profile_path": "/tE6SG8uXiC81MRrJfE3ZybXsEGR.jpg",
+        "character": "Antoniak"
+      },
+      {
+        "id": 2832,
+        "order": 9,
+        "credit_id": "52fe4229c3a36847f8008a03",
+        "name": "Maja Komorowska",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Schauspielerin die Miłoszas Gedicht rezitiert"
+      },
+      {
+        "id": 2817,
+        "order": 10,
+        "credit_id": "52fe4229c3a36847f8008a07",
+        "name": "Krystyna Zachwatowicz",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Hanka Tomczyk"
+      },
+      {
+        "id": 2833,
+        "order": 11,
+        "credit_id": "52fe4229c3a36847f8008a0b",
+        "name": "Janusz Zaorski",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Mundek"
+      },
+      {
+        "id": 2834,
+        "order": 12,
+        "credit_id": "52fe4229c3a36847f8008a0f",
+        "name": "Wojciech Alaborski",
+        "cast_id": 15,
+        "profile_path": "/lacX8N9VeU3GDNC6YxESRRfoQX4.jpg",
+        "character": "Personalchef"
+      },
+      {
+        "id": 2835,
+        "order": 13,
+        "credit_id": "52fe4229c3a36847f8008a13",
+        "name": "Tatiana Sosna Sarno",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Sekretärin beim Fernsehen"
+      },
+      {
+        "id": 144972,
+        "order": 14,
+        "credit_id": "52fe4229c3a36847f8008a2f",
+        "name": "Bogusław Linda",
+        "cast_id": 21,
+        "profile_path": "/zTLLj81HETfUo9OrexdIuMVOHjB.jpg",
+        "character": "Dzidek"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2801,
+        "credit_id": "52fe4229c3a36847f80089db",
+        "department": "Directing",
+        "name": "Andrzej Wajda",
+        "job": "Director",
+        "profile_path": "/gCfx35G5HB6FqCvDhx5x365lUEm.jpg"
+      },
+      {
+        "id": 2814,
+        "credit_id": "52fe4229c3a36847f8008a19",
+        "department": "Writing",
+        "name": "Aleksander Scibor-Rylski",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1143,
+        "credit_id": "52fe4229c3a36847f8008a1f",
+        "department": "Camera",
+        "name": "Edward Klosinski",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1143,
+        "credit_id": "52fe4229c3a36847f8008a25",
+        "department": "Sound",
+        "name": "Edward Klosinski",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7096,
+        "credit_id": "52fe4229c3a36847f8008a2b",
+        "department": "Editing",
+        "name": "Halina Prugar-Ketling",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 147,
+  "spoken_languages": [{
+    "iso_639_1": "pl",
+    "name": "Polski"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 225,
+  "production_countries": [{
+    "name": "Poland",
+    "iso_3166_1": "PL"
+  }],
+  "title": "Man of Iron",
+  "overview": "A polish film by director Andrzej Wajda that takes place during Poland\u2019s martial law when solidarity was banned. The sequel to \"Man of Marble\" that won Palme D\u2019Or at the 1981 Cannes film festival.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0082222",
+  "release_date": "1981-07-27",
+  "original_title": "Czlowiek z zelaza",
+  "vote_count": 1,
+  "poster_path": "/gmMcimLedQNLQNbSlLsONXZI1Ct.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.20087566830476"
+}

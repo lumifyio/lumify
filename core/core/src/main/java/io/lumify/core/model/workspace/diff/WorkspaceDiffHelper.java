@@ -2,6 +2,7 @@ package io.lumify.core.model.workspace.diff;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
+import io.lumify.core.formula.FormulaEvaluator;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -23,28 +24,32 @@ import static org.securegraph.util.IterableUtils.toList;
 public class WorkspaceDiffHelper {
     private final Graph graph;
     private final UserRepository userRepository;
+    private final FormulaEvaluator formulaEvaluator;
 
     @Inject
     public WorkspaceDiffHelper(
             final Graph graph,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final FormulaEvaluator formulaEvaluator
+    ) {
         this.graph = graph;
         this.userRepository = userRepository;
+        this.formulaEvaluator = formulaEvaluator;
     }
 
-    public ClientApiWorkspaceDiff diff(Workspace workspace, List<WorkspaceEntity> workspaceEntities, List<Edge> workspaceEdges, User user) {
+    public ClientApiWorkspaceDiff diff(Workspace workspace, List<WorkspaceEntity> workspaceEntities, List<Edge> workspaceEdges, FormulaEvaluator.UserContext userContext, User user) {
         Authorizations authorizations = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspace.getWorkspaceId());
 
         ClientApiWorkspaceDiff result = new ClientApiWorkspaceDiff();
         for (WorkspaceEntity workspaceEntity : workspaceEntities) {
-            List<ClientApiWorkspaceDiff.Item> entityDiffs = diffWorkspaceEntity(workspace, workspaceEntity, authorizations);
+            List<ClientApiWorkspaceDiff.Item> entityDiffs = diffWorkspaceEntity(workspace, workspaceEntity, userContext, authorizations);
             if (entityDiffs != null) {
                 result.addAll(entityDiffs);
             }
         }
 
         for (Edge workspaceEdge : workspaceEdges) {
-            List<ClientApiWorkspaceDiff.Item> entityDiffs = diffEdge(workspace, workspaceEdge);
+            List<ClientApiWorkspaceDiff.Item> entityDiffs = diffEdge(workspace, workspaceEdge, authorizations);
             if (entityDiffs != null) {
                 result.addAll(entityDiffs);
             }
@@ -53,34 +58,51 @@ public class WorkspaceDiffHelper {
         return result;
     }
 
-    private List<ClientApiWorkspaceDiff.Item> diffEdge(Workspace workspace, Edge edge) {
-        List<ClientApiWorkspaceDiff.Item> result = new ArrayList<ClientApiWorkspaceDiff.Item>();
+    private List<ClientApiWorkspaceDiff.Item> diffEdge(Workspace workspace, Edge edge, Authorizations hiddenAuthorizations) {
+        List<ClientApiWorkspaceDiff.Item> result = new ArrayList<>();
 
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspace.getWorkspaceId());
-        if (sandboxStatus != SandboxStatus.PUBLIC) {
-            result.add(createWorkspaceDiffEdgeItem(edge, sandboxStatus));
+        boolean isPrivateChange = sandboxStatus != SandboxStatus.PUBLIC;
+        boolean isPublicDelete = WorkspaceDiffHelper.isPublicDelete(edge, hiddenAuthorizations);
+        if (isPrivateChange || isPublicDelete) {
+            result.add(createWorkspaceDiffEdgeItem(edge, sandboxStatus, isPublicDelete));
         }
 
-        diffProperties(workspace, edge, result);
+        diffProperties(workspace, edge, result, hiddenAuthorizations);
 
         return result;
     }
 
-    private ClientApiWorkspaceDiff.EdgeItem createWorkspaceDiffEdgeItem(Edge edge, SandboxStatus sandboxStatus) {
+    public static boolean isPublicDelete(Edge edge, Authorizations authorizations) {
+        return edge.isHidden(authorizations);
+    }
+
+    public static boolean isPublicDelete(Vertex vertex, Authorizations authorizations) {
+        return vertex.isHidden(authorizations);
+    }
+
+    public static boolean isPublicDelete(Property property, Authorizations authorizations) {
+        return property.isHidden(authorizations);
+    }
+
+    private ClientApiWorkspaceDiff.EdgeItem createWorkspaceDiffEdgeItem(Edge edge, SandboxStatus sandboxStatus, boolean deleted) {
+        Property visibilityJsonProperty = LumifyProperties.VISIBILITY_JSON.getProperty(edge);
+        JsonNode visibilityJson = visibilityJsonProperty == null ? null : JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(visibilityJsonProperty));
         return new ClientApiWorkspaceDiff.EdgeItem(
                 edge.getId(),
                 edge.getLabel(),
                 edge.getVertexId(Direction.OUT),
                 edge.getVertexId(Direction.IN),
-                JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_JSON.getProperty(edge))),
-                sandboxStatus
+                visibilityJson,
+                sandboxStatus,
+                deleted
         );
     }
 
-    public List<ClientApiWorkspaceDiff.Item> diffWorkspaceEntity(Workspace workspace, WorkspaceEntity workspaceEntity, Authorizations authorizations) {
-        List<ClientApiWorkspaceDiff.Item> result = new ArrayList<ClientApiWorkspaceDiff.Item>();
+    public List<ClientApiWorkspaceDiff.Item> diffWorkspaceEntity(Workspace workspace, WorkspaceEntity workspaceEntity, FormulaEvaluator.UserContext userContext, Authorizations authorizations) {
+        List<ClientApiWorkspaceDiff.Item> result = new ArrayList<>();
 
-        Vertex entityVertex = this.graph.getVertex(workspaceEntity.getEntityVertexId(), authorizations);
+        Vertex entityVertex = this.graph.getVertex(workspaceEntity.getEntityVertexId(), FetchHint.ALL_INCLUDING_HIDDEN, authorizations);
 
         // vertex can be null if the user doesn't have access to the entity
         if (entityVertex == null) {
@@ -88,51 +110,66 @@ public class WorkspaceDiffHelper {
         }
 
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(entityVertex, workspace.getWorkspaceId());
-        if (sandboxStatus != SandboxStatus.PUBLIC) {
-            result.add(createWorkspaceDiffVertexItem(entityVertex, sandboxStatus, workspaceEntity.isVisible()));
+        boolean isPrivateChange = sandboxStatus != SandboxStatus.PUBLIC;
+        boolean isPublicDelete = WorkspaceDiffHelper.isPublicDelete(entityVertex, authorizations);
+        if (isPrivateChange || isPublicDelete) {
+            result.add(createWorkspaceDiffVertexItem(entityVertex, sandboxStatus, userContext, workspaceEntity.isVisible(), isPublicDelete));
         }
 
-        diffProperties(workspace, entityVertex, result);
+        diffProperties(workspace, entityVertex, result, authorizations);
 
         return result;
     }
 
-    private ClientApiWorkspaceDiff.VertexItem createWorkspaceDiffVertexItem(Vertex vertex, SandboxStatus sandboxStatus, boolean visible) {
-        String title = LumifyProperties.TITLE.getPropertyValue(vertex);
+    private ClientApiWorkspaceDiff.VertexItem createWorkspaceDiffVertexItem(Vertex vertex, SandboxStatus sandboxStatus, FormulaEvaluator.UserContext userContext, boolean visible, boolean deleted) {
+        String vertexId = vertex.getId();
+        String title = formulaEvaluator.evaluateTitleFormula(vertex, userContext, null);
+        String conceptType = LumifyProperties.CONCEPT_TYPE.getPropertyValue(vertex);
+        Property visibilityJsonProperty = LumifyProperties.VISIBILITY_JSON.getProperty(vertex);
+        JsonNode visibilityJson = visibilityJsonProperty == null ? null : JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(visibilityJsonProperty));
         return new ClientApiWorkspaceDiff.VertexItem(
-                vertex.getId(),
+                vertexId,
                 title,
-                JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(LumifyProperties.VISIBILITY_JSON.getProperty(vertex))),
+                conceptType,
+                visibilityJson,
                 sandboxStatus,
+                deleted,
                 visible
         );
     }
 
-    private void diffProperties(Workspace workspace, Element element, List<ClientApiWorkspaceDiff.Item> result) {
+    private void diffProperties(Workspace workspace, Element element, List<ClientApiWorkspaceDiff.Item> result, Authorizations hiddenAuthorizations) {
         List<Property> properties = toList(element.getProperties());
         SandboxStatus[] propertyStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspace.getWorkspaceId());
         for (int i = 0; i < properties.size(); i++) {
-            if (propertyStatuses[i] != SandboxStatus.PUBLIC) {
-                Property property = properties.get(i);
-                Property existingProperty = findExistingProperty(properties, propertyStatuses, property);
-                result.add(createWorkspaceDiffPropertyItem(element, property, existingProperty, propertyStatuses[i]));
+            Property property = properties.get(i);
+            boolean isPrivateChange = propertyStatuses[i] != SandboxStatus.PUBLIC;
+            boolean isPublicDelete = WorkspaceDiffHelper.isPublicDelete(property, hiddenAuthorizations);
+            if (isPrivateChange || isPublicDelete) {
+                Property existingProperty = null;
+                if (isPrivateChange) {
+                    existingProperty = findExistingProperty(properties, propertyStatuses, property);
+                }
+                result.add(createWorkspaceDiffPropertyItem(element, property, existingProperty, propertyStatuses[i], isPublicDelete));
             }
         }
     }
 
-    private ClientApiWorkspaceDiff.PropertyItem createWorkspaceDiffPropertyItem(Element element, Property workspaceProperty, Property existingProperty, SandboxStatus sandboxStatus) {
+    private ClientApiWorkspaceDiff.PropertyItem createWorkspaceDiffPropertyItem(Element element, Property workspaceProperty, Property existingProperty, SandboxStatus sandboxStatus, boolean deleted) {
         JsonNode oldData = null;
         if (existingProperty != null) {
             oldData = JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(existingProperty));
         }
         JsonNode newData = JSONUtil.toJsonNode(JsonSerializer.toJsonProperty(workspaceProperty));
         return new ClientApiWorkspaceDiff.PropertyItem(
+                element instanceof Edge ? "edge" : "vertex",
                 element.getId(),
                 workspaceProperty.getName(),
                 workspaceProperty.getKey(),
                 oldData,
                 newData,
                 sandboxStatus,
+                deleted,
                 workspaceProperty.getVisibility().getVisibilityString()
         );
     }

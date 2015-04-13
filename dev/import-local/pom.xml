@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lumify-dev</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,19 +16,19 @@
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-import</artifactId>
+            <artifactId>lumify-tools-import</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- file import supporting file handler dependencies -->
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-youtube-transcript</artifactId>
+            <artifactId>lumify-gpw-youtube-transcript</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-subrip-transcript</artifactId>
+            <artifactId>lumify-gpw-subrip-transcript</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

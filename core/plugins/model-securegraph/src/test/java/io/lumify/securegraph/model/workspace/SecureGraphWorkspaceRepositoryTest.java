@@ -1,11 +1,12 @@
 package io.lumify.securegraph.model.workspace;
 
+import com.google.common.collect.Lists;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.lock.LocalLockRepository;
 import io.lumify.core.model.lock.LockRepository;
-import io.lumify.core.model.ontology.ReadOnlyInMemoryOntologyRepository;
+import io.lumify.core.model.ontology.InMemoryOntologyRepository;
 import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.WorkspaceDiffHelper;
@@ -39,8 +40,6 @@ import static org.securegraph.util.IterableUtils.toList;
 public class SecureGraphWorkspaceRepositoryTest {
     private InMemoryGraph graph;
 
-    private ReadOnlyInMemoryOntologyRepository ontologyRepository;
-
     @Mock
     private WorkspaceDiffHelper workspaceDiff;
 
@@ -63,7 +62,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         Authorizations authorizations = new InMemoryAuthorizations();
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
         idGenerator = new QueueIdGenerator();
-        graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
+        graph = InMemoryGraph.create(config, idGenerator, new DefaultSearchIndex(config));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
         Configuration lumifyConfiguration = new HashMapConfigurationLoader(new HashMap()).createConfiguration();
@@ -75,8 +74,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         user2 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
-        ontologyRepository = new ReadOnlyInMemoryOntologyRepository();
-        ontologyRepository.init(lumifyConfiguration);
+        InMemoryOntologyRepository ontologyRepository = new InMemoryOntologyRepository(graph, lumifyConfiguration);
 
         workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff, lockRepository);
 
@@ -133,7 +131,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertEquals(startingVertexCount + 3, graph.getAllVertices().size()); // +3 = the workspace vertices
         assertEquals(startingEdgeCount + 3, graph.getAllEdges().size()); // +3 = the edges between workspaces and users
 
-        List<Workspace> user1Workspaces = toList(workspaceRepository.findAll(user1));
+        List<Workspace> user1Workspaces = toList(workspaceRepository.findAllForUser(user1));
         assertEquals(2, user1Workspaces.size());
         boolean foundWorkspace1 = false;
         boolean foundWorkspace2 = false;
@@ -147,7 +145,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         assertTrue("foundWorkspace1", foundWorkspace1);
         assertTrue("foundWorkspace2", foundWorkspace2);
 
-        List<Workspace> user2Workspaces = toList(workspaceRepository.findAll(user2));
+        List<Workspace> user2Workspaces = toList(workspaceRepository.findAllForUser(user2));
         assertEquals(1, user2Workspaces.size());
         assertEquals(workspace3Title, user2Workspaces.get(0).getDisplayTitle());
 
@@ -254,14 +252,14 @@ public class SecureGraphWorkspaceRepositoryTest {
         }
 
         try {
-            workspaceRepository.softDeleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user2);
+            workspaceRepository.softDeleteEntitiesFromWorkspace(workspace, Lists.newArrayList(entity1Vertex.getId()), user2);
             fail("user2 should not have write access to workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user2, ex.getUser());
             assertEquals(workspace.getWorkspaceId(), ex.getResourceId());
         }
 
-        workspaceRepository.softDeleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user1);
+        workspaceRepository.softDeleteEntitiesFromWorkspace(workspace, Lists.newArrayList(entity1Vertex.getId()), user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         Map<String, InMemoryEdge> edgesAfterDelete = graph.getAllEdges();
         assertEquals(startingEdgeCount + 2, edgesAfterDelete.size()); // +1 = the edges between workspaces, users

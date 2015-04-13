@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lumify-datasets-group</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,8 @@
     <name>Lumify: Datasets: Palantir</name>
 
     <modules>
-        <module>ontology-to-owl</module>
-        <module>data-import</module>
+        <module>core</module>
+        <module>data-to-sequence-file</module>
+        <module>import-mr</module>
     </modules>
 </project>

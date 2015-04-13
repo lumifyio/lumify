@@ -3,6 +3,7 @@ package io.lumify.core.ingest.graphProperty;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionBuilder;
 import io.lumify.core.util.LumifyLogger;
@@ -26,12 +27,12 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
         this.pattern = Pattern.compile(regEx, Pattern.MULTILINE);
     }
 
-    protected abstract String getOntologyClassUri();
+    protected abstract Concept getConcept();
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        LOGGER.debug("Extractor prepared for entity type [%s] with regular expression: %s", getOntologyClassUri(), this.pattern.toString());
+        LOGGER.debug("Extractor prepared for entity type [%s] with regular expression: %s", getConcept().getIRI(), this.pattern.toString());
     }
 
     @Override
@@ -44,7 +45,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
 
         Vertex sourceVertex = (Vertex) data.getElement();
 
-        List<Vertex> termMentions = new ArrayList<Vertex>();
+        List<Vertex> termMentions = new ArrayList<>();
         while (matcher.find()) {
             final String patternGroup = matcher.group();
             int start = matcher.start();
@@ -56,7 +57,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
                     .start(start)
                     .end(end)
                     .title(patternGroup)
-                    .conceptIri(getOntologyClassUri())
+                    .conceptIri(getConcept().getIRI())
                     .visibilityJson(data.getVisibilityJson())
                     .process(getClass().getName())
                     .save(getGraph(), getVisibilityTranslator(), getAuthorizations());
@@ -64,6 +65,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
         }
         applyTermMentionFilters(sourceVertex, termMentions);
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, sourceVertex, getClass().getSimpleName(), getUser(), sourceVertex.getVisibility());
+        pushTextUpdated(data);
     }
 
     @Override
@@ -76,7 +78,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = (String) property.getMetadata().getValue(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 }

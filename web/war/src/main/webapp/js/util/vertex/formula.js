@@ -3,7 +3,10 @@ define([], function() {
 
     return formulaFunction;
 
-    function formulaFunction(formula, vertex, V) {
+    function formulaFunction(formula, vertex, V, optionalKey) {
+        var prop = _.partial(V.prop, vertex, _, optionalKey),
+            propRaw = _.partial(V.propRaw, vertex, _, optionalKey),
+            longestProp = _.partial(V.longestProp, vertex);
 
         try {
 
@@ -14,7 +17,7 @@ define([], function() {
 
             return new Function( // jshint ignore:line
                 // Get property value and converted to string displayValue
-                'prop',
+                'prop', 'dependentProp',
                 // Get actual raw property value
                 'propRaw',
                 // Get the longest property value and converted to string displayValue
@@ -23,9 +26,10 @@ define([], function() {
                 'vertex',
                 // Inner function string
                 formula)(
-                    V.displayProp.bind(undefined, vertex),
-                    V.prop.bind(undefined, vertex),
-                    V.longestProp.bind(undefined, vertex),
+                    prop,
+                    prop,
+                    propRaw,
+                    longestProp,
                     vertex);
 
         } catch(e) {

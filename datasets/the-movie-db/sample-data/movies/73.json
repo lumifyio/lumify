@@ -1,0 +1,602 @@
+{
+  "budget": 10000000,
+  "vote_average": 7.4,
+  "backdrop_path": "/i9A0UMFg1hI2kLyCCwnmSbpT2cd.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 819,
+        "order": 0,
+        "credit_id": "52fe4213c3a36847f8002187",
+        "name": "Edward Norton",
+        "cast_id": 4,
+        "profile_path": "/iUiePUAQKN4GY6jorH9m23cbVli.jpg",
+        "character": "Derek Vinyard"
+      },
+      {
+        "id": 820,
+        "order": 1,
+        "credit_id": "52fe4213c3a36847f800218b",
+        "name": "Edward Furlong",
+        "cast_id": 5,
+        "profile_path": "/yDu1TniKgNz1BHLtKb4eU50dRUw.jpg",
+        "character": "Danny Vinyard"
+      },
+      {
+        "id": 821,
+        "order": 2,
+        "credit_id": "52fe4213c3a36847f800218f",
+        "name": "Beverly D'Angelo",
+        "cast_id": 6,
+        "profile_path": "/92IfwfA8uNCX9tLwKbVXC3ijak0.jpg",
+        "character": "Doris Vinyard"
+      },
+      {
+        "id": 822,
+        "order": 3,
+        "credit_id": "52fe4213c3a36847f8002193",
+        "name": "Avery Brooks",
+        "cast_id": 7,
+        "profile_path": "/K379Wd8DemmrVUkEKNmCGrcDf0.jpg",
+        "character": "Dr. Bob Sweeney"
+      },
+      {
+        "id": 823,
+        "order": 4,
+        "credit_id": "52fe4213c3a36847f8002197",
+        "name": "Jennifer Lien",
+        "cast_id": 8,
+        "profile_path": "/hVJX4jfEjrMY9vgxJlqw3uLSYsV.jpg",
+        "character": "Davina Vinyard"
+      },
+      {
+        "id": 824,
+        "order": 5,
+        "credit_id": "52fe4213c3a36847f800219b",
+        "name": "Ethan Suplee",
+        "cast_id": 9,
+        "profile_path": "/tdfUFBwYm9rjwD2YtVl9LYoyoE2.jpg",
+        "character": "Seth Ryan"
+      },
+      {
+        "id": 825,
+        "order": 6,
+        "credit_id": "52fe4213c3a36847f800219f",
+        "name": "Stacy Keach",
+        "cast_id": 10,
+        "profile_path": "/vNHSP0loQVgdrW4YhxxE9AWWmM9.jpg",
+        "character": "Cameron Alexander"
+      },
+      {
+        "id": 826,
+        "order": 7,
+        "credit_id": "52fe4213c3a36847f80021a3",
+        "name": "Fairuza Balk",
+        "cast_id": 11,
+        "profile_path": "/cpeniV326TyPyzryxgbAWiXmLkz.jpg",
+        "character": "Stacey"
+      },
+      {
+        "id": 827,
+        "order": 8,
+        "credit_id": "52fe4213c3a36847f80021a7",
+        "name": "Elliott Gould",
+        "cast_id": 12,
+        "profile_path": "/bo5jSwWyFRsKVAkELT9n7AKQqMk.jpg",
+        "character": "Murray"
+      },
+      {
+        "id": 828,
+        "order": 9,
+        "credit_id": "52fe4213c3a36847f80021ab",
+        "name": "Guy Torry",
+        "cast_id": 13,
+        "profile_path": "/aNpthnwYd2oHN8KhYBUAhzViNzT.jpg",
+        "character": "Lamont"
+      },
+      {
+        "id": 829,
+        "order": 10,
+        "credit_id": "52fe4213c3a36847f80021af",
+        "name": "William Russ",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Dennis Vinyard"
+      },
+      {
+        "id": 830,
+        "order": 11,
+        "credit_id": "52fe4213c3a36847f80021b3",
+        "name": " Joe Cortese",
+        "cast_id": 15,
+        "profile_path": "/gIE0CB1FVMGP8cG7qEyCYz0nkqY.jpg",
+        "character": "Rasmussen (as Joe Cortese)"
+      },
+      {
+        "id": 831,
+        "order": 12,
+        "credit_id": "52fe4213c3a36847f80021b7",
+        "name": "Jason Bose Smith",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Little Henry (as Jason Bose-Smith)"
+      },
+      {
+        "id": 832,
+        "order": 13,
+        "credit_id": "52fe4213c3a36847f80021bb",
+        "name": "Antonio David Lyons",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Lawrence"
+      },
+      {
+        "id": 833,
+        "order": 14,
+        "credit_id": "52fe4213c3a36847f80021bf",
+        "name": "Alex Sol",
+        "cast_id": 18,
+        "profile_path": "/r5ILaD7d10x3W3f6rhJXeQEgq0i.jpg",
+        "character": "Mitch McCormick"
+      },
+      {
+        "id": 4133,
+        "order": 15,
+        "credit_id": "52fe4213c3a36847f80021e1",
+        "name": "Giuseppe Andrews",
+        "cast_id": 24,
+        "profile_path": "/uzlBCYC4AMcXuB9KGonYTGjfQ08.jpg",
+        "character": "Jason"
+      },
+      {
+        "id": 4134,
+        "order": 16,
+        "credit_id": "52fe4213c3a36847f80021e5",
+        "name": "Keram Malicki-Sánchez",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Chris"
+      },
+      {
+        "id": 1332231,
+        "order": 17,
+        "credit_id": "53a422590e0a2667c6001314",
+        "name": "Jonathan Fowler Jr.",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Jerome"
+      },
+      {
+        "id": 35769,
+        "order": 18,
+        "credit_id": "53a422710e0a2667cd001388",
+        "name": "Christopher Masterson",
+        "cast_id": 29,
+        "profile_path": "/gz0GFQmLLjo6Q9Gvf1rKdZd2XhM.jpg",
+        "character": "Daryl Dawson"
+      },
+      {
+        "id": 1332233,
+        "order": 19,
+        "credit_id": "53a422840e0a2667c200131e",
+        "name": "Nicholas R. Oleson",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Huge Aryan"
+      },
+      {
+        "id": 1332230,
+        "order": 20,
+        "credit_id": "53a422450e0a2667c2001317",
+        "name": "Alaïs Zoë Angélique Adell",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Lizzy"
+      },
+      {
+        "id": 1332234,
+        "order": 21,
+        "credit_id": "53a422af0e0a2667d9001281",
+        "name": "Jordan Marder",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Curtis"
+      },
+      {
+        "id": 12406,
+        "order": 22,
+        "credit_id": "53a422c40e0a2667d000124f",
+        "name": "Paul Le Mat",
+        "cast_id": 32,
+        "profile_path": "/8BGhTfXrpUFm42E19bxHl95XbFE.jpg",
+        "character": "McMahon"
+      },
+      {
+        "id": 1280435,
+        "order": 23,
+        "credit_id": "53a422d80e0a2667d9001289",
+        "name": "Thomas L. Bellissimo",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Cop #2"
+      },
+      {
+        "id": 112997,
+        "order": 24,
+        "credit_id": "53a422ec0e0a2667d0001252",
+        "name": "Cherish Lee",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Kammi"
+      },
+      {
+        "id": 157567,
+        "order": 25,
+        "credit_id": "53a423000e0a2667c90012c6",
+        "name": "Sam Vlahos",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Dr. Aguilar"
+      },
+      {
+        "id": 1332235,
+        "order": 26,
+        "credit_id": "53a423160e0a2667c90012c9",
+        "name": "Tara Blanchard",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Ally Vinyard"
+      },
+      {
+        "id": 40310,
+        "order": 27,
+        "credit_id": "53a423250e0a2667c6001322",
+        "name": "Anne Lambton",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Cassandra"
+      },
+      {
+        "id": 1332236,
+        "order": 28,
+        "credit_id": "53a423360e0a2667c90012cf",
+        "name": "Steve Wolford",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Reporter"
+      },
+      {
+        "id": 1332238,
+        "order": 29,
+        "credit_id": "53a4234c0e0a2667d50012f0",
+        "name": "Richard Noyce",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Desk Sergeant"
+      },
+      {
+        "id": 67453,
+        "order": 30,
+        "credit_id": "53a4235f0e0a2667d50012f6",
+        "name": "Danso Gordon",
+        "cast_id": 40,
+        "profile_path": "/rgASd05kYCFjItn9dNk9Qj99Z5F.jpg",
+        "character": "Buddy #1"
+      },
+      {
+        "id": 170730,
+        "order": 31,
+        "credit_id": "53a4239c0e0a2667d9001299",
+        "name": "David Basulto",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "Guard"
+      },
+      {
+        "id": 1332240,
+        "order": 32,
+        "credit_id": "53a423ae0e0a2667bf00126d",
+        "name": "Alexis Rose Coen",
+        "cast_id": 43,
+        "profile_path": null,
+        "character": "Young Ally Vinyard"
+      },
+      {
+        "id": 1332241,
+        "order": 33,
+        "credit_id": "53a423c20e0a2667d5001303",
+        "name": "Kiante Elam",
+        "cast_id": 44,
+        "profile_path": null,
+        "character": "Lawrence's Partner"
+      },
+      {
+        "id": 102853,
+        "order": 34,
+        "credit_id": "53a423d80e0a2667bf00127f",
+        "name": "Paul Hopkins",
+        "cast_id": 45,
+        "profile_path": "/bETrIuwlbd37J2Ljye4n5yjPjTj.jpg",
+        "character": "Student"
+      },
+      {
+        "id": 1332242,
+        "order": 35,
+        "credit_id": "53a423ee0e0a2667d0001263",
+        "name": "Keith Odett",
+        "cast_id": 46,
+        "profile_path": null,
+        "character": "Random Skinhead"
+      },
+      {
+        "id": 14950,
+        "order": 36,
+        "credit_id": "53a43c84c3a3682a3f001146",
+        "name": "Jim Norton",
+        "cast_id": 64,
+        "profile_path": "/35gUkII4zD82y2JTWVM3W4lRD3Q.jpg",
+        "character": "Randy"
+      },
+      {
+        "id": 1331794,
+        "order": 37,
+        "credit_id": "53a424040e0a2667d0001267",
+        "name": "Paul E. Short",
+        "cast_id": 47,
+        "profile_path": null,
+        "character": "Stocky Buddy"
+      },
+      {
+        "id": 134770,
+        "order": 38,
+        "credit_id": "53a43d59c3a3682a4b001111",
+        "name": "Nigel Miguel",
+        "cast_id": 65,
+        "profile_path": null,
+        "character": "Basketball Player"
+      },
+      {
+        "id": 1332243,
+        "order": 39,
+        "credit_id": "53a424580e0a2667cd0013ae",
+        "name": "Darrell Britt",
+        "cast_id": 49,
+        "profile_path": null,
+        "character": "White Supremicist (uncredited)"
+      },
+      {
+        "id": 1332244,
+        "order": 40,
+        "credit_id": "53a4246a0e0a2667c90012eb",
+        "name": "Robert 'Duckie' Carpenter",
+        "cast_id": 50,
+        "profile_path": null,
+        "character": "Skinhead (uncredited)"
+      },
+      {
+        "id": 202080,
+        "order": 41,
+        "credit_id": "53a4247c0e0a2667c90012ef",
+        "name": "Sydney 'Big Dawg' Colston",
+        "cast_id": 51,
+        "profile_path": null,
+        "character": "Prison Gang Leader (uncredited)"
+      },
+      {
+        "id": 1332246,
+        "order": 42,
+        "credit_id": "53a424920e0a2667d500131a",
+        "name": "Hans Cozzens",
+        "cast_id": 52,
+        "profile_path": null,
+        "character": "Police officer #2 (uncredited)"
+      },
+      {
+        "id": 1332247,
+        "order": 43,
+        "credit_id": "53a424a80e0a2667cd0013ba",
+        "name": "John Embry",
+        "cast_id": 53,
+        "profile_path": null,
+        "character": "Parking Lot Skinhead (uncredited)"
+      },
+      {
+        "id": 1332248,
+        "order": 44,
+        "credit_id": "53a424bc0e0a2667d000127c",
+        "name": "Maximillian Kesmodel",
+        "cast_id": 54,
+        "profile_path": null,
+        "character": "Young Danny Vinyard (uncredited)"
+      },
+      {
+        "id": 40072,
+        "order": 45,
+        "credit_id": "53a424ce0e0a2667c90012f8",
+        "name": "Barbie Marie",
+        "cast_id": 55,
+        "profile_path": null,
+        "character": "Student (uncredited)"
+      },
+      {
+        "id": 104619,
+        "order": 46,
+        "credit_id": "53a424df0e0a2667c90012fb",
+        "name": "Allie Moss",
+        "cast_id": 56,
+        "profile_path": null,
+        "character": "Skinhead Girlfriend (uncredited)"
+      },
+      {
+        "id": 1332249,
+        "order": 47,
+        "credit_id": "53a425280e0a2667d90012bb",
+        "name": "Louis E. Rosas",
+        "cast_id": 59,
+        "profile_path": null,
+        "character": "Jail Inmate (uncredited)"
+      },
+      {
+        "id": 146008,
+        "order": 48,
+        "credit_id": "53a43e92c3a3682a4e000fcd",
+        "name": "Sam Sarpong",
+        "cast_id": 66,
+        "profile_path": "/sTwCo10iZpyOq5SGP7NkGb58b6Y.jpg",
+        "character": "Jail Inmate (uncredited)"
+      },
+      {
+        "id": 1332252,
+        "order": 49,
+        "credit_id": "53a425980e0a2667bf0012aa",
+        "name": "Jeremy Sweet",
+        "cast_id": 62,
+        "profile_path": null,
+        "character": "Skinhead (uncredited)"
+      },
+      {
+        "id": 1229751,
+        "order": 50,
+        "credit_id": "53a425af0e0a2667d90012c7",
+        "name": "Selwyn Ward",
+        "cast_id": 63,
+        "profile_path": null,
+        "character": "High School Student Leaving Bathroom (uncredited)"
+      },
+      {
+        "id": 159264,
+        "order": 51,
+        "credit_id": "53a424f20e0a2667d90012b5",
+        "name": "Denney Pierce",
+        "cast_id": 57,
+        "profile_path": null,
+        "character": "Arresting Officer (uncredited)"
+      },
+      {
+        "id": 1274297,
+        "order": 52,
+        "credit_id": "53a43ed8c3a3682a420011d4",
+        "name": "Glendon Rich",
+        "cast_id": 67,
+        "profile_path": null,
+        "character": "Deputy Sheriff (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 814,
+        "credit_id": "52fe4213c3a36847f8002177",
+        "department": "Directing",
+        "name": "Tony Kaye",
+        "job": "Director",
+        "profile_path": "/JCcF3JbptET0eF44w3sfMJw5E4.jpg"
+      },
+      {
+        "id": 816,
+        "credit_id": "52fe4213c3a36847f800217d",
+        "department": "Production",
+        "name": "John Morrissey",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 818,
+        "credit_id": "52fe4213c3a36847f8002183",
+        "department": "Writing",
+        "name": "David McKenna",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 851,
+        "credit_id": "52fe4213c3a36847f80021c5",
+        "department": "Sound",
+        "name": "Anne Dudley",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 852,
+        "credit_id": "52fe4213c3a36847f80021cb",
+        "department": "Editing",
+        "name": "Gerald B. Greenberg",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 853,
+        "credit_id": "52fe4213c3a36847f80021d1",
+        "department": "Editing",
+        "name": "Alan Heim",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 814,
+        "credit_id": "52fe4213c3a36847f80021d7",
+        "department": "Camera",
+        "name": "Tony Kaye",
+        "job": "Director of Photography",
+        "profile_path": "/JCcF3JbptET0eF44w3sfMJw5E4.jpg"
+      },
+      {
+        "id": 859,
+        "credit_id": "52fe4213c3a36847f80021dd",
+        "department": "Production",
+        "name": "Valerie McCaffrey",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 818,
+        "credit_id": "52fe4213c3a36847f80021eb",
+        "department": "Writing",
+        "name": "David McKenna",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 119,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.historyx.com/",
+  "id": 73,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "American History X",
+  "overview": "Derek Vineyard is paroled after serving 3 years in prison for killing two thugs who tried to break into/steal his truck. Through his brother, Danny Vineyard's narration, we learn that before going to prison, Derek was a skinhead and the leader of a violent white supremacist gang that committed acts of racial crime throughout L.A. and his actions greatly influenced Danny. Reformed and fresh out of prison, Derek severs contact with the gang and becomes determined to keep Danny from going down the same violent path as he did.",
+  "production_companies": [
+    {
+      "id": 12,
+      "name": "New Line Cinema"
+    },
+    {
+      "id": 11308,
+      "name": "Savoy Pictures"
+    },
+    {
+      "id": 924,
+      "name": "The Turman-Morrissey Company"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0120586",
+  "release_date": "1998-10-30",
+  "original_title": "American History X",
+  "vote_count": 512,
+  "poster_path": "/fXepRAYOx1qC3wju7XdDGx60775.jpg",
+  "tagline": "Some Legacies Must End.",
+  "revenue": 23875127,
+  "popularity": "2.40776167698583"
+}

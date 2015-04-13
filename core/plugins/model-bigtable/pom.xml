@@ -6,7 +6,7 @@
     <parent>
         <artifactId>lumify-core-plugins-group</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1</version>
     </parent>
 
     <artifactId>lumify-model-bigtable</artifactId>
@@ -17,11 +17,6 @@
             <groupId>io.lumify</groupId>
             <artifactId>lumify-core</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.storm</groupId>
-            <artifactId>storm-core</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

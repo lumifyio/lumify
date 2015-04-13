@@ -1,0 +1,220 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/uDxIhIqO766H3k1tMdDi6SbqbaB.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5510,
+        "order": 0,
+        "credit_id": "52fe4240c3a36847f800fc0b",
+        "name": "Inka Friedrich",
+        "cast_id": 3,
+        "profile_path": "/b1mZAn6BFEWBDS9nK41gvPgepXa.jpg",
+        "character": "Katrin Engel"
+      },
+      {
+        "id": 5511,
+        "order": 1,
+        "credit_id": "52fe4240c3a36847f800fc0f",
+        "name": "Nadja Uhl",
+        "cast_id": 4,
+        "profile_path": "/xBfF4WkINiZDQg1rpwY7nxvehnD.jpg",
+        "character": "Nike"
+      },
+      {
+        "id": 5512,
+        "order": 2,
+        "credit_id": "52fe4240c3a36847f800fc13",
+        "name": "Andreas Schmidt",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Ronald"
+      },
+      {
+        "id": 5514,
+        "order": 3,
+        "credit_id": "52fe4240c3a36847f800fc1b",
+        "name": "Vincent Redetzki",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Max"
+      },
+      {
+        "id": 5513,
+        "order": 4,
+        "credit_id": "52fe4240c3a36847f800fc17",
+        "name": "Stephanie Schönfeld",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Tina"
+      },
+      {
+        "id": 5515,
+        "order": 5,
+        "credit_id": "52fe4240c3a36847f800fc1f",
+        "name": "Christel Peters",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Helene"
+      },
+      {
+        "id": 5516,
+        "order": 6,
+        "credit_id": "52fe4240c3a36847f800fc23",
+        "name": "Kurt Radeke",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Oskar"
+      },
+      {
+        "id": 5517,
+        "order": 7,
+        "credit_id": "52fe4240c3a36847f800fc27",
+        "name": "Hannes Stelzer",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Herr Neumann"
+      },
+      {
+        "id": 5518,
+        "order": 8,
+        "credit_id": "52fe4240c3a36847f800fc2b",
+        "name": "Barbara Bachmann",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Barbara Bachmann .."
+      },
+      {
+        "id": 5522,
+        "order": 9,
+        "credit_id": "52fe4240c3a36847f800fc59",
+        "name": "Traute Höss",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Chefin Agentur"
+      },
+      {
+        "id": 5523,
+        "order": 10,
+        "credit_id": "52fe4240c3a36847f800fc5d",
+        "name": "Veit Schubert",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Apotheker"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4617,
+        "credit_id": "52fe4240c3a36847f800fc01",
+        "department": "Directing",
+        "name": "Andreas Dresen",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 5509,
+        "credit_id": "52fe4240c3a36847f800fc07",
+        "department": "Writing",
+        "name": "Wolfgang Kohlhaase",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1073,
+        "credit_id": "52fe4240c3a36847f800fc31",
+        "department": "Production",
+        "name": "Stefan Arndt",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5097,
+        "credit_id": "52fe4240c3a36847f800fc37",
+        "department": "Production",
+        "name": "Peter Rommel",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5519,
+        "credit_id": "52fe4240c3a36847f800fc3d",
+        "department": "Sound",
+        "name": "Pascal Comelade",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5520,
+        "credit_id": "52fe4240c3a36847f800fc43",
+        "department": "Camera",
+        "name": "Andreas Höfer",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4631,
+        "credit_id": "52fe4240c3a36847f800fc49",
+        "department": "Editing",
+        "name": "Jörg Hauschild",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4632,
+        "credit_id": "52fe4240c3a36847f800fc4f",
+        "department": "Art",
+        "name": "Susanne Hopf",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5521,
+        "credit_id": "52fe4240c3a36847f800fc55",
+        "department": "Art",
+        "name": "Natalja Meier",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "http://www.sommervormbalkon.de/",
+  "id": 410,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Summer in Berlin",
+  "overview": "When you read the title \u2018Summer on the Balcony\u2019 you probably think it will be a light Berlin summer comedy but it\u2019s not. This film is an intimate study of two women friends who come to each other because of troubles with everyday life and with men and thus try to enjoy a life based on their ideas.",
+  "production_companies": [
+    {
+      "id": 1972,
+      "name": "X-Filme Creative Pool"
+    },
+    {
+      "id": 166,
+      "name": "Peter Rommel Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0477877",
+  "release_date": "2005-10-28",
+  "original_title": "Sommer vorm Balkon",
+  "vote_count": 0,
+  "poster_path": "/hJR2yhAMywVwguGr9JJqZDNGMgH.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.215161052092736"
+}

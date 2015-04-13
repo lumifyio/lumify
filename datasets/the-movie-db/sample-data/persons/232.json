@@ -1,0 +1,239 @@
+{
+  "birthday": "1984-08-03",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia\n\nKyle Schmid (born August 3, 1984 in Mississauga, Ontario) is a Canadian actor who starred as Henry Fitzroy in Lifetime's series Blood Ties. He has also guest starred in a number of television series including Degrassi: The Next Generation, Odyssey 5, The Zack Files and CSI: Miami.\n\nIn addition he has also appeared in a number of films like The Covenant, A History of Violence, The Sisterhood of the Traveling Pants, The Pacifier, and Zerophilia. He also had a recurring role as Evan Frasier in the ABC Family original series Beautiful People and co-starred in the Disney Channel Original Movies Alley Cats Strike and The Cheetah Girls with Raven-Symoné acting as Galleria's love interest, Derek. Currently residing in Los Angeles, CA, Kyle spends some of his free time playing his favorite sport, soccer. Other hobbies include swimming, horseback riding and mountain biking. He played on the Erin Mills soccer team, and attended Port Credit Secondary School in Mississauga, Ontario.\n\nDescription above from the Wikipedia article Kyle Schmid, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/d0BikewdLHSo6gjNMlBU7m7ePdG.jpg",
+  "id": 232,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0772704",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 59,
+        "media_type": "movie",
+        "title": "A History of Violence",
+        "credit_id": "52fe4212c3a36847f800194b",
+        "release_date": "2005-09-23",
+        "original_title": "A History of Violence",
+        "adult": false,
+        "poster_path": "/qhAoUIDin2d9oNZJqLW6XqPY7XQ.jpg",
+        "character": "Bobby"
+      },
+      {
+        "id": 30548,
+        "media_type": "movie",
+        "title": "Zerophillia",
+        "credit_id": "52fe44249251416c91006499",
+        "release_date": "2005-10-13",
+        "original_title": "Zerophillia",
+        "adult": false,
+        "poster_path": "/5b81g5vwrLkvm9LSsJ9CeioqxLH.jpg",
+        "character": "Max"
+      },
+      {
+        "id": 9954,
+        "media_type": "movie",
+        "title": "The Covenant",
+        "credit_id": "52fe454fc3a36847f80c725d",
+        "release_date": "2006-09-08",
+        "original_title": "The Covenant",
+        "adult": false,
+        "poster_path": "/gxpTseXRrHCgL0Igm1CrKD5JQNg.jpg",
+        "character": "Aaron Abbot"
+      },
+      {
+        "id": 42309,
+        "media_type": "movie",
+        "title": "Fear Island",
+        "credit_id": "52fe45fbc3a36847f80e594b",
+        "release_date": "2009-09-08",
+        "original_title": "Fear Island",
+        "adult": false,
+        "poster_path": "/sXd59XYsC3J9gX3zitwosgZQXQI.jpg",
+        "character": "Tyler"
+      },
+      {
+        "id": 16763,
+        "media_type": "movie",
+        "title": "Joy Ride 2: Dead Ahead",
+        "credit_id": "52fe46e99251416c75087975",
+        "release_date": "2008-10-07",
+        "original_title": "Joy Ride 2: Dead Ahead",
+        "adult": false,
+        "poster_path": "/7uLytcSESooRXu4WDvsgPMbUWtm.jpg",
+        "character": "Nik"
+      },
+      {
+        "id": 72753,
+        "media_type": "movie",
+        "title": "Alley Cats Strike",
+        "credit_id": "52fe487cc3a368484e0fae39",
+        "release_date": "2000-03-18",
+        "original_title": "Alley Cats Strike",
+        "adult": false,
+        "poster_path": "/vQfPN3D9TRnbEEBEV0CPVzsOaJA.jpg",
+        "character": "Alex Thompson"
+      },
+      {
+        "id": 127831,
+        "media_type": "movie",
+        "title": "Sex & the Single Mom",
+        "credit_id": "52fe4b09c3a368484e1744e9",
+        "release_date": "2003-09-08",
+        "original_title": "Sex & the Single Mom",
+        "adult": false,
+        "poster_path": "/4DslMJNcIm7VawN7oucKhOd6XJC.jpg",
+        "character": "Chad"
+      },
+      {
+        "id": 135579,
+        "media_type": "movie",
+        "title": "Dead Before Dawn 3D",
+        "credit_id": "52fe4bfcc3a368484e1a15a9",
+        "release_date": "2013-09-06",
+        "original_title": "Dead Before Dawn 3D",
+        "adult": false,
+        "poster_path": "/9B4DWPCS5ClahnLYgafUEEfdAXe.jpg",
+        "character": "Patrick Bishop"
+      },
+      {
+        "id": 23410,
+        "media_type": "movie",
+        "title": "The Thaw",
+        "credit_id": "52fe4468c3a368484e02171d",
+        "release_date": "2009-01-01",
+        "original_title": "The Thaw",
+        "adult": false,
+        "poster_path": "/wU6N1OsQABUY7izoZaSZ54djt3G.jpg",
+        "character": "Federico Fulce"
+      },
+      {
+        "id": 32293,
+        "media_type": "movie",
+        "title": "The Cheetah Girls",
+        "credit_id": "52fe44ca9251416c9101cf11",
+        "release_date": "2003-08-15",
+        "original_title": "The Cheetah Girls",
+        "adult": false,
+        "poster_path": "/V5yNO63vXchzLVdVIDqURZSPF5.jpg",
+        "character": "Derek"
+      },
+      {
+        "id": 9779,
+        "media_type": "movie",
+        "title": "The Sisterhood of the Traveling Pants",
+        "credit_id": "52fe452bc3a36847f80c047f",
+        "release_date": "2005-06-01",
+        "original_title": "The Sisterhood of the Traveling Pants",
+        "adult": false,
+        "poster_path": "/dRNSxq5OqxaBLdQwarG4xMmDLAr.jpg",
+        "character": "Paul Rodman"
+      },
+      {
+        "id": 33826,
+        "media_type": "movie",
+        "title": "Death Row",
+        "credit_id": "52fe453b9251416c9102bb6f",
+        "release_date": "2006-10-14",
+        "original_title": "Death Row",
+        "adult": false,
+        "poster_path": "/3yIBZ1lQgISkbB40VS9nctWvt64.jpg",
+        "character": "Keith"
+      },
+      {
+        "id": 1948,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52571c5719c29571140ec374",
+        "name": "Degrassi: The Next Generation",
+        "poster_path": "/w6aZy3eKTEN97v5gGfHyvRV4FV8.jpg",
+        "original_name": "Degrassi: The Next Generation",
+        "first_air_date": "2001-10-14",
+        "character": ""
+      },
+      {
+        "id": 3482,
+        "media_type": "tv",
+        "episode_count": 22,
+        "credit_id": "525751cb760ee36aaa1cd218",
+        "name": "Beautiful People",
+        "poster_path": "/zbTQzfUeEXplH6DgupFl1NtRxz5.jpg",
+        "original_name": "Beautiful People",
+        "first_air_date": "2005-08-08",
+        "character": ""
+      },
+      {
+        "id": 5100,
+        "media_type": "tv",
+        "episode_count": 22,
+        "credit_id": "52577da019c29531db232316",
+        "name": "Blood Ties",
+        "poster_path": "/wy066FnoqG9MOhMdSqLR8jxsfE9.jpg",
+        "original_name": "Blood Ties",
+        "first_air_date": "2007-03-11",
+        "character": ""
+      },
+      {
+        "id": 17789,
+        "media_type": "tv",
+        "episode_count": 44,
+        "credit_id": "52585340760ee34661076d5a",
+        "name": "I Was a Sixth Grade Alien",
+        "poster_path": null,
+        "original_name": "I Was a Sixth Grade Alien",
+        "first_air_date": "1999-07-13",
+        "character": ""
+      },
+      {
+        "id": 44983,
+        "media_type": "tv",
+        "episode_count": 25,
+        "credit_id": "52596976760ee346619dfeb6",
+        "name": "Copper",
+        "poster_path": "/jDEA4cGjnFDG9FYOqo79UVFeTDN.jpg",
+        "original_name": "Copper",
+        "first_air_date": "2012-08-19",
+        "character": "Robert Morehouse"
+      },
+      {
+        "id": 1620,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52570e86760ee3776a09f70f",
+        "name": "CSI: Miami",
+        "poster_path": "/9brFwnnRmnHykxcrvn7ez79dXb6.jpg",
+        "original_name": "CSI: Miami",
+        "first_air_date": "2002-09-23",
+        "character": ""
+      },
+      {
+        "id": 32022,
+        "media_type": "tv",
+        "episode_count": 26,
+        "credit_id": "5258a1b3760ee3466165c49e",
+        "name": "Being Human",
+        "poster_path": "/4r0R9q6sWR0PTapuFVzEiXhL18C.jpg",
+        "original_name": "Being Human",
+        "first_air_date": "2011-01-17",
+        "character": "Henry"
+      },
+      {
+        "id": 38132,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5258ec70760ee346618b5984",
+        "name": "Three Inches",
+        "poster_path": "/1sWoKxCr3wdq1yaKAyVeEXUAnIe.jpg",
+        "original_name": "Three Inches",
+        "first_air_date": null,
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Kyle Schmid",
+  "place_of_birth": "Mississauga, Ontario, Canada",
+  "popularity": "1.00000004065606"
+}

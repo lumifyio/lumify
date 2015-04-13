@@ -1,0 +1,144 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": null,
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6670,
+        "order": 0,
+        "credit_id": "52fe4249c3a36847f8012875",
+        "name": "Ioannis Tsialas",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Christos Chassanoglou"
+      },
+      {
+        "id": 6671,
+        "order": 1,
+        "credit_id": "52fe4249c3a36847f8012879",
+        "name": "Toni Osmani",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Maikis Chassanoglou"
+      },
+      {
+        "id": 6672,
+        "order": 2,
+        "credit_id": "52fe4249c3a36847f801287d",
+        "name": "Barbara Rudnik",
+        "cast_id": 5,
+        "profile_path": "/sMpZ4qPc3uEfvte1YCzEBUY7Uyz.jpg",
+        "character": "Hanna Solinger"
+      },
+      {
+        "id": 2344,
+        "order": 3,
+        "credit_id": "52fe4249c3a36847f8012881",
+        "name": "Günther Maria Halmer",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Xaver Friedmann"
+      },
+      {
+        "id": 6673,
+        "order": 4,
+        "credit_id": "52fe4249c3a36847f8012885",
+        "name": "Renate Becker",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Erna Solinger"
+      },
+      {
+        "id": 6674,
+        "order": 5,
+        "credit_id": "52fe4249c3a36847f8012889",
+        "name": "Julia Dietze",
+        "cast_id": 8,
+        "profile_path": "/jbR4JueL03RoSX7JlEdCUrDL8k8.jpg",
+        "character": "Kathi Solinger"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6668,
+        "credit_id": "52fe4249c3a36847f801286b",
+        "department": "Directing",
+        "name": "Christian Wagner",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 6669,
+        "credit_id": "52fe4249c3a36847f8012871",
+        "department": "Writing",
+        "name": "Gabriela Sperl",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 6675,
+        "credit_id": "52fe4249c3a36847f801288f",
+        "department": "Production",
+        "name": "Bernd Burgemeister",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6676,
+        "credit_id": "52fe4249c3a36847f8012895",
+        "department": "Sound",
+        "name": "Fabian Römer",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4528,
+        "credit_id": "52fe4249c3a36847f801289b",
+        "department": "Editing",
+        "name": "Patricia Rommel",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 90,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "el",
+      "name": "ελληνικά"
+    },
+    {
+      "iso_639_1": "tr",
+      "name": "Türkçe"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 491,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Brüder ohne Heimat",
+  "overview": "Two trouble-causing brothers, who in the second generation after World War II Germany live, are in the center of this German made for TV movie. The movie makes a subject out of their everyday lives and the helpless attempt for them to build a normal life.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0301343",
+  "release_date": "2002-07-04",
+  "original_title": "Brüder ohne Heimat",
+  "vote_count": 0,
+  "poster_path": null,
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.285182793119043"
+}

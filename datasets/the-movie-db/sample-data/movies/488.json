@@ -1,0 +1,263 @@
+{
+  "budget": 1300000,
+  "vote_average": 6.9,
+  "backdrop_path": "/xIrEPbPrnUD9EtH2i7e7ZCiGnsM.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4110,
+        "order": 0,
+        "credit_id": "52fe4249c3a36847f8012573",
+        "name": "Humphrey Bogart",
+        "cast_id": 5,
+        "profile_path": "/pxJrZluJHhbWRo2QXAG99FvXUi7.jpg",
+        "character": "Charlie Allnut"
+      },
+      {
+        "id": 6598,
+        "order": 1,
+        "credit_id": "52fe4249c3a36847f8012577",
+        "name": "Katharine Hepburn",
+        "cast_id": 6,
+        "profile_path": "/ieGNYekIGc5R16cYmIzzyo59Lfz.jpg",
+        "character": "Rose Sayer"
+      },
+      {
+        "id": 6599,
+        "order": 2,
+        "credit_id": "52fe4249c3a36847f801257b",
+        "name": "Robert Morley",
+        "cast_id": 7,
+        "profile_path": "/7R4jQRl8CTFYCYpiQ1O2AjYtiK6.jpg",
+        "character": "Rev. Samuel Sayer"
+      },
+      {
+        "id": 6600,
+        "order": 3,
+        "credit_id": "52fe4249c3a36847f801257f",
+        "name": "Peter Bull",
+        "cast_id": 8,
+        "profile_path": "/iIh6WkuefTUVrEybz1CXdz86puI.jpg",
+        "character": "Captain of Louisa"
+      },
+      {
+        "id": 6609,
+        "order": 4,
+        "credit_id": "52fe4249c3a36847f80125b3",
+        "name": "Theodore Bikel",
+        "cast_id": 17,
+        "profile_path": "/4HM8869sjfCNKVnOgADBAh4eWU3.jpg",
+        "character": "First Officer"
+      },
+      {
+        "id": 6610,
+        "order": 5,
+        "credit_id": "52fe4249c3a36847f80125b7",
+        "name": "Walter Gotell",
+        "cast_id": 18,
+        "profile_path": "/mZ24RTuEPPCzmbgwV7lcNuVvZ5f.jpg",
+        "character": "Second Officer"
+      },
+      {
+        "id": 6611,
+        "order": 6,
+        "credit_id": "52fe4249c3a36847f80125bb",
+        "name": "Peter Swanwick",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "First Officer of Shona"
+      },
+      {
+        "id": 6612,
+        "order": 7,
+        "credit_id": "52fe4249c3a36847f80125bf",
+        "name": "Richard Marner",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Second Officer of Shona"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6593,
+        "credit_id": "52fe4249c3a36847f801255d",
+        "department": "Directing",
+        "name": "John Huston",
+        "job": "Director",
+        "profile_path": "/x5P9KPVj6i8XnrgeEEWiiYKCSdd.jpg"
+      },
+      {
+        "id": 6594,
+        "credit_id": "52fe4249c3a36847f8012563",
+        "department": "Production",
+        "name": "Sam Spiegel",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6595,
+        "credit_id": "52fe4249c3a36847f8012569",
+        "department": "Writing",
+        "name": "C. S. Forester",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 6596,
+        "credit_id": "52fe4249c3a36847f801256f",
+        "department": "Writing",
+        "name": "James Agee",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6601,
+        "credit_id": "52fe4249c3a36847f8012585",
+        "department": "Production",
+        "name": "John Woolf",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6602,
+        "credit_id": "52fe4249c3a36847f801258b",
+        "department": "Sound",
+        "name": "Allan Gray",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6603,
+        "credit_id": "52fe4249c3a36847f8012591",
+        "department": "Camera",
+        "name": "Jack Cardiff",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6604,
+        "credit_id": "52fe4249c3a36847f8012597",
+        "department": "Editing",
+        "name": "Ralph Kemplen",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6605,
+        "credit_id": "52fe4249c3a36847f801259d",
+        "department": "Art",
+        "name": "Wilfred Shingleton",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6606,
+        "credit_id": "52fe4249c3a36847f80125a3",
+        "department": "Costume & Make-Up",
+        "name": "Connie De Pinna",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6607,
+        "credit_id": "52fe4249c3a36847f80125a9",
+        "department": "Costume & Make-Up",
+        "name": "Doris Langley Moore",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6608,
+        "credit_id": "52fe4249c3a36847f80125af",
+        "department": "Crew",
+        "name": "Cliff Richardson",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 6593,
+        "credit_id": "52fe4249c3a36847f80125c5",
+        "department": "Writing",
+        "name": "John Huston",
+        "job": "Screenplay",
+        "profile_path": "/x5P9KPVj6i8XnrgeEEWiiYKCSdd.jpg"
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "sw",
+      "name": "Kiswahili"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 488,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "The African Queen",
+  "overview": "At the start of the first World War, in the middle of Africa\u2019s nowhere, a gin soaked riverboat captain is persuaded by a strong-willed missionary to go down river and face-off a German warship.",
+  "production_companies": [
+    {
+      "id": 60,
+      "name": "United Artists"
+    },
+    {
+      "id": 262,
+      "name": "Independent Film Distributors"
+    },
+    {
+      "id": 3632,
+      "name": "Romulus Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0043265",
+  "release_date": "1951-12-23",
+  "original_title": "The African Queen",
+  "vote_count": 29,
+  "poster_path": "/9YSGXoJBrEVpPqboxhn5uW5RHVU.jpg",
+  "tagline": "The greatest adventure a man ever lived...with a woman!",
+  "revenue": 10750000,
+  "popularity": "0.688227241478516"
+}

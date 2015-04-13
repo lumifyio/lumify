@@ -1,0 +1,321 @@
+{
+  "budget": 0,
+  "vote_average": 8,
+  "backdrop_path": "/kmFimCpTvcEVo2MOEUsTPcGb11a.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5676,
+        "order": 0,
+        "credit_id": "52fe4244c3a36847f8010cf5",
+        "name": "Marcello Mastroianni",
+        "cast_id": 4,
+        "profile_path": "/lxlTGslplgT3ao3J2whahc7fDZJ.jpg",
+        "character": "Marcello Rubini"
+      },
+      {
+        "id": 5961,
+        "order": 1,
+        "credit_id": "52fe4244c3a36847f8010cf9",
+        "name": "Anita Ekberg",
+        "cast_id": 5,
+        "profile_path": "/6cVesMXxY4dRO4K87Ni7msNdTPh.jpg",
+        "character": "Sylvia"
+      },
+      {
+        "id": 5682,
+        "order": 2,
+        "credit_id": "52fe4244c3a36847f8010cfd",
+        "name": "Anouk Aimée",
+        "cast_id": 6,
+        "profile_path": "/vLGlUZvzffKEJ2zB943Qx0PWgPD.jpg",
+        "character": "Maddalena"
+      },
+      {
+        "id": 5962,
+        "order": 3,
+        "credit_id": "52fe4244c3a36847f8010d01",
+        "name": "Yvonne Furneaux",
+        "cast_id": 7,
+        "profile_path": "/vQf4RRpWExjur6u6rPUxsArWcZW.jpg",
+        "character": "Emma"
+      },
+      {
+        "id": 5963,
+        "order": 4,
+        "credit_id": "52fe4244c3a36847f8010d05",
+        "name": "Magali Noël",
+        "cast_id": 8,
+        "profile_path": "/pazJMT8hqxZUhc3MJ3xsI9oZ8Tp.jpg",
+        "character": "Fanny"
+      },
+      {
+        "id": 5964,
+        "order": 5,
+        "credit_id": "52fe4244c3a36847f8010d09",
+        "name": "Alain Cuny",
+        "cast_id": 9,
+        "profile_path": "/p7fQXfufcazjnA8jVqwWBYal8dO.jpg",
+        "character": "Steiner"
+      },
+      {
+        "id": 5965,
+        "order": 6,
+        "credit_id": "52fe4244c3a36847f8010d0d",
+        "name": "Annibale Ninchi",
+        "cast_id": 10,
+        "profile_path": "/mmfy5usMsIUSqMzCSLEFYAksMS1.jpg",
+        "character": "Marcello's father"
+      },
+      {
+        "id": 5966,
+        "order": 7,
+        "credit_id": "52fe4244c3a36847f8010d11",
+        "name": "Walter Santesso",
+        "cast_id": 11,
+        "profile_path": "/9dPtaOA0JWRKkDlkAYs4fxAwm0z.jpg",
+        "character": "Paparazzo"
+      },
+      {
+        "id": 5967,
+        "order": 8,
+        "credit_id": "52fe4244c3a36847f8010d15",
+        "name": "Valeria Ciangottini",
+        "cast_id": 12,
+        "profile_path": "/4qqGxOzkTuUZhNVfc79UgbjFDhb.jpg",
+        "character": "Paola"
+      },
+      {
+        "id": 5968,
+        "order": 9,
+        "credit_id": "52fe4244c3a36847f8010d19",
+        "name": "Riccardo Garrone",
+        "cast_id": 13,
+        "profile_path": "/a7Bo4IcnZ4qBwQFARhIPJYBUVnY.jpg",
+        "character": "Riccardo, the Villa Owner"
+      },
+      {
+        "id": 5969,
+        "order": 10,
+        "credit_id": "52fe4244c3a36847f8010d1d",
+        "name": "Ida Galli",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Debutante of the Year"
+      },
+      {
+        "id": 6102,
+        "order": 11,
+        "credit_id": "52fe4244c3a36847f8010d63",
+        "name": "Lex Barker",
+        "cast_id": 26,
+        "profile_path": "/zDbNsktl4Wz3chDweYn17v4fUUG.jpg",
+        "character": "Robert"
+      },
+      {
+        "id": 6103,
+        "order": 12,
+        "credit_id": "52fe4244c3a36847f8010d67",
+        "name": "Nadia Gray",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Nadia"
+      },
+      {
+        "id": 67967,
+        "order": 13,
+        "credit_id": "52fe4244c3a36847f8010d6b",
+        "name": "Adriano Celentano",
+        "cast_id": 28,
+        "profile_path": "/hVXjIfQo3tgparjokNJqTS8Ttog.jpg",
+        "character": "Rock'n'roll Singer"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4415,
+        "credit_id": "52fe4244c3a36847f8010ce5",
+        "department": "Directing",
+        "name": "Federico Fellini",
+        "job": "Director",
+        "profile_path": "/z90Xi07Ywtkyp5GTL2ahFZiY0Ru.jpg"
+      },
+      {
+        "id": 4415,
+        "credit_id": "52fe4244c3a36847f8010ceb",
+        "department": "Writing",
+        "name": "Federico Fellini",
+        "job": "Screenplay",
+        "profile_path": "/z90Xi07Ywtkyp5GTL2ahFZiY0Ru.jpg"
+      },
+      {
+        "id": 3098,
+        "credit_id": "52fe4244c3a36847f8010cf1",
+        "department": "Sound",
+        "name": "Nino Rota",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5397,
+        "credit_id": "52fe4244c3a36847f8010d23",
+        "department": "Writing",
+        "name": "Ennio Flaiano",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5970,
+        "credit_id": "52fe4244c3a36847f8010d29",
+        "department": "Writing",
+        "name": "Pier Paolo Pasolini",
+        "job": "Screenplay",
+        "profile_path": "/ldj2uJFRinMwakUnjCeuas54hD6.jpg"
+      },
+      {
+        "id": 5396,
+        "credit_id": "52fe4244c3a36847f8010d2f",
+        "department": "Writing",
+        "name": "Tullio Pinelli",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5678,
+        "credit_id": "52fe4244c3a36847f8010d35",
+        "department": "Writing",
+        "name": "Brunello Rondi",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4411,
+        "credit_id": "52fe4244c3a36847f8010d3b",
+        "department": "Production",
+        "name": "Giuseppe Amato",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5971,
+        "credit_id": "52fe4244c3a36847f8010d41",
+        "department": "Production",
+        "name": "Franco Magli",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5679,
+        "credit_id": "52fe4244c3a36847f8010d47",
+        "department": "Production",
+        "name": "Angelo Rizzoli",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5400,
+        "credit_id": "52fe4244c3a36847f8010d4d",
+        "department": "Editing",
+        "name": "Leo Cattozzo",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5681,
+        "credit_id": "52fe4244c3a36847f8010d53",
+        "department": "Art",
+        "name": "Piero Gherardi",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5681,
+        "credit_id": "52fe4244c3a36847f8010d59",
+        "department": "Costume & Make-Up",
+        "name": "Piero Gherardi",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5399,
+        "credit_id": "52fe4244c3a36847f8010d5f",
+        "department": "Camera",
+        "name": "Otello Martelli",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 174,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 439,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "La dolce vita",
+  "overview": "An episodic romantic film, built up with many stories instead of one main plot, that ponders the voids and decadence of high society. A classic film and upon it\u2019s first night out a scandal. The 1960 film by Federico Fellini is named the film that split up his earlier neo-realist films from the art films he did later in his career.",
+  "production_companies": [
+    {
+      "id": 220,
+      "name": "Pathé Consortium Cinéma"
+    },
+    {
+      "id": 221,
+      "name": "Riama Film"
+    },
+    {
+      "id": 222,
+      "name": "Société Nationale Pathé Cinéma"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0053779",
+  "release_date": "1960-05-11",
+  "original_title": "La dolce vita",
+  "vote_count": 14,
+  "poster_path": "/aU7WLwPVCOoonAPWOPBmZ8X0c3c.jpg",
+  "tagline": "The world's most talked about movie today!",
+  "revenue": 19516000,
+  "popularity": "0.52520425520774"
+}

@@ -28,7 +28,7 @@ define([
                 return toOpen &&
                     toOpen.vertexIds &&
                     toOpen.vertexIds.length &&
-                    toOpen.type === URL_TYPES.FULLSCREEN;
+                    toOpen.type === 'FULLSCREEN';
             },
 
             parametersInUrl: function(url) {

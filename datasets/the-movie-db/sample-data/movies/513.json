@@ -1,0 +1,146 @@
+{
+  "budget": 0,
+  "vote_average": 5.8,
+  "backdrop_path": "/2U3hyiVzzhYzS6j9fcdVW4mO4Uk.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 53372,
+        "order": 0,
+        "credit_id": "52fe424cc3a36847f8013757",
+        "name": "Nandita Das",
+        "cast_id": 3,
+        "profile_path": "/bE8sr4YF4SQHHx67lgsSiqBYCRX.jpg",
+        "character": "Sita"
+      },
+      {
+        "id": 85672,
+        "order": 1,
+        "credit_id": "52fe424cc3a36847f801375b",
+        "name": "Shabana Azmi",
+        "cast_id": 4,
+        "profile_path": "/3AmHfds7bp29mkwiY1PrcdXaLrN.jpg",
+        "character": "Radha"
+      },
+      {
+        "id": 575880,
+        "order": 2,
+        "credit_id": "52fe424cc3a36847f801375f",
+        "name": "Jaaved Jaaferi",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Jatin"
+      },
+      {
+        "id": 53377,
+        "order": 3,
+        "credit_id": "52fe424cc3a36847f8013763",
+        "name": "Kulbhushan Kharbanda",
+        "cast_id": 6,
+        "profile_path": "/1ECYLNlTHjgFzfGxbrzVSFZGDbN.jpg",
+        "character": "Ashok"
+      },
+      {
+        "id": 575881,
+        "order": 4,
+        "credit_id": "52fe424cc3a36847f8013767",
+        "name": "Kushal Rekhi",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Biji"
+      },
+      {
+        "id": 106461,
+        "order": 5,
+        "credit_id": "52fe424cc3a36847f801376b",
+        "name": "Ranjit Chowdhry",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Mundu"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4760,
+        "credit_id": "52fe424cc3a36847f801374d",
+        "department": "Directing",
+        "name": "Deepa Mehta",
+        "job": "Director",
+        "profile_path": "/ngCqGJQOKvimQ1UEkTOv5xLsGvP.jpg"
+      },
+      {
+        "id": 4760,
+        "credit_id": "52fe424cc3a36847f8013753",
+        "department": "Writing",
+        "name": "Deepa Mehta",
+        "job": "Author",
+        "profile_path": "/ngCqGJQOKvimQ1UEkTOv5xLsGvP.jpg"
+      }
+    ]
+  },
+  "runtime": 108,
+  "spoken_languages": [
+    {
+      "iso_639_1": "hi",
+      "name": "हिन्दी"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 513,
+  "production_countries": [
+    {
+      "name": "Canada",
+      "iso_3166_1": "CA"
+    },
+    {
+      "name": "India",
+      "iso_3166_1": "IN"
+    }
+  ],
+  "title": "Fire",
+  "overview": "In a barren, arranged marriage to an amateur swami who seeks enlightenment through celibacy, Radha's life takes an irresistible turn when her beautiful young sister-in-law seeks to free herself from the confines of her own loveless marriage.",
+  "production_companies": [
+    {
+      "id": 2141,
+      "name": "Kaleidoscope Entertainment"
+    },
+    {
+      "id": 2142,
+      "name": "Trial by Fire Films"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 7505,
+    "backdrop_path": "/bY3kpuU5hGHO9AidwvvBpBgkjVZ.jpg",
+    "name": "Elements Trilogy",
+    "poster_path": "/l3PL4nP9wryOOr5feP5SD7Nn9to.jpg"
+  },
+  "imdb_id": "tt0116308",
+  "release_date": "1996-09-06",
+  "original_title": "Fire",
+  "vote_count": 2,
+  "poster_path": "/7qjto5AAM71C1qUZ4PLgAYg33Cv.jpg",
+  "tagline": "",
+  "revenue": 402749,
+  "popularity": "0.379553623013885"
+}

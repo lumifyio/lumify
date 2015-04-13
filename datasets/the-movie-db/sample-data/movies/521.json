@@ -1,0 +1,218 @@
+{
+  "budget": 1400000,
+  "vote_average": 7.1,
+  "backdrop_path": "/slagFJyBrDwJ836lywxnBfKIru0.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 7124,
+        "order": 0,
+        "credit_id": "52fe424cc3a36847f80137ad",
+        "name": "Ray Milland",
+        "cast_id": 6,
+        "profile_path": "/hql4xy8eWInQau8G4K6vyFgX5h5.jpg",
+        "character": "Tony Wendice"
+      },
+      {
+        "id": 4070,
+        "order": 1,
+        "credit_id": "52fe424cc3a36847f80137a9",
+        "name": "Grace Kelly",
+        "cast_id": 5,
+        "profile_path": "/o2fUK9QWzd3OYHPEXFBOWsqTmEc.jpg",
+        "character": "Margot Mary Wendice"
+      },
+      {
+        "id": 7125,
+        "order": 2,
+        "credit_id": "52fe424cc3a36847f80137b1",
+        "name": "Robert Cummings",
+        "cast_id": 7,
+        "profile_path": "/hmqYjsbHm38emGa78H1FjfxXqvw.jpg",
+        "character": "Mark Halliday"
+      },
+      {
+        "id": 5182,
+        "order": 3,
+        "credit_id": "52fe424cc3a36847f80137b5",
+        "name": "John Williams",
+        "cast_id": 8,
+        "profile_path": "/esXPldHaXSEz8dQmahcGz4VWJ8R.jpg",
+        "character": "Chief Insp. Hubbard"
+      },
+      {
+        "id": 7682,
+        "order": 4,
+        "credit_id": "52fe424cc3a36847f80137e3",
+        "name": "Anthony Dawson",
+        "cast_id": 16,
+        "profile_path": "/yzh26eyKJBtORjLlz8nyLQT7C1d.jpg",
+        "character": "Charles Alexander Swann aka Captain Lesgate"
+      },
+      {
+        "id": 933881,
+        "order": 5,
+        "credit_id": "52fe424cc3a36847f80137e7",
+        "name": "Leo Britt",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "The Storyteller"
+      },
+      {
+        "id": 73980,
+        "order": 6,
+        "credit_id": "52fe424cc3a36847f80137eb",
+        "name": "Patrick Allen",
+        "cast_id": 18,
+        "profile_path": "/2E2MnNr0Di5bC4TrhGZpNSyIOle.jpg",
+        "character": "Detective Pearson"
+      },
+      {
+        "id": 933880,
+        "order": 7,
+        "credit_id": "52fe424cc3a36847f80137ef",
+        "name": "George Leigh",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Detective Williams"
+      },
+      {
+        "id": 121323,
+        "order": 8,
+        "credit_id": "52fe424cc3a36847f80137f3",
+        "name": "Bess Flowers",
+        "cast_id": 20,
+        "profile_path": "/akbW8jJl8GSXFpixFaobMOqvNv4.jpg",
+        "character": "Woman exiting airplane"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2636,
+        "credit_id": "52fe424cc3a36847f8013799",
+        "department": "Directing",
+        "name": "Alfred Hitchcock",
+        "job": "Director",
+        "profile_path": "/ezvFh9lBCp9CFNMW6dsTLGhn3Lv.jpg"
+      },
+      {
+        "id": 2636,
+        "credit_id": "52fe424cc3a36847f801379f",
+        "department": "Production",
+        "name": "Alfred Hitchcock",
+        "job": "Producer",
+        "profile_path": "/ezvFh9lBCp9CFNMW6dsTLGhn3Lv.jpg"
+      },
+      {
+        "id": 7123,
+        "credit_id": "52fe424cc3a36847f80137a5",
+        "department": "Writing",
+        "name": "Frederick Knott",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 4082,
+        "credit_id": "52fe424cc3a36847f80137bb",
+        "department": "Sound",
+        "name": "Dimitri Tiomkin",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2654,
+        "credit_id": "52fe424cc3a36847f80137c1",
+        "department": "Camera",
+        "name": "Robert Burks",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 7126,
+        "credit_id": "52fe424cc3a36847f80137c7",
+        "department": "Editing",
+        "name": "Rudi Fehr",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 7127,
+        "credit_id": "52fe424cc3a36847f80137cd",
+        "department": "Art",
+        "name": "Edward Carrere",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 4126,
+        "credit_id": "52fe424cc3a36847f80137d3",
+        "department": "Art",
+        "name": "George James Hopkins",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 4313,
+        "credit_id": "52fe424cc3a36847f80137d9",
+        "department": "Costume & Make-Up",
+        "name": "Gordon Bau",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 7128,
+        "credit_id": "52fe424cc3a36847f80137df",
+        "department": "Sound",
+        "name": "Oliver S. Garretson",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 104,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 521,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Dial M for Murder",
+  "overview": "An ex-tennis pro carries out a plot to have his wife murdered after discovering she is having an affair, and assumes she will soon leave him for the other man anyway. When things go wrong, he improvises a new plan - to frame her for murder instead.",
+  "production_companies": [{
+    "id": 174,
+    "name": "Warner Bros. Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0046912",
+  "release_date": "1954-05-29",
+  "original_title": "Dial M for Murder",
+  "vote_count": 34,
+  "poster_path": "/eC6ppx8zk4wtNmQ5MbU8XY63KDL.jpg",
+  "tagline": "If a woman answers...hang on for dear life!",
+  "revenue": 0,
+  "popularity": "1.37674188070917"
+}

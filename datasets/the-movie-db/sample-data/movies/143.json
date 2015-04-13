@@ -1,0 +1,300 @@
+{
+  "budget": 1250000,
+  "vote_average": 7.6,
+  "backdrop_path": "/e76lBiltL8cOjKxTmzdmheuzUAP.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2007,
+        "order": 0,
+        "credit_id": "52fe421dc3a36847f80053ab",
+        "name": "Lew Ayres",
+        "cast_id": 9,
+        "profile_path": "/yq6zpbcxLq8OEKH5xxx8JgYpJmQ.jpg",
+        "character": "Paul"
+      },
+      {
+        "id": 2008,
+        "order": 1,
+        "credit_id": "52fe421dc3a36847f80053af",
+        "name": "Arnold Lucy",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Kantorek"
+      },
+      {
+        "id": 2009,
+        "order": 2,
+        "credit_id": "52fe421dc3a36847f80053b3",
+        "name": "John Wray",
+        "cast_id": 11,
+        "profile_path": "/le1ogQo0KraHo2ihAOlSHGJ4Exi.jpg",
+        "character": "Himmelstoss"
+      },
+      {
+        "id": 2010,
+        "order": 3,
+        "credit_id": "52fe421dc3a36847f80053b7",
+        "name": "Louis Wolheim",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Stanislas Katczinsky"
+      },
+      {
+        "id": 2011,
+        "order": 4,
+        "credit_id": "52fe421dc3a36847f80053bb",
+        "name": "Ben Alexander",
+        "cast_id": 13,
+        "profile_path": "/3y8UbowFHNIHX5Einz01GuEDMnc.jpg",
+        "character": "Franz Kemmerich"
+      },
+      {
+        "id": 2012,
+        "order": 5,
+        "credit_id": "52fe421dc3a36847f80053bf",
+        "name": "Scott Kolk",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Leer"
+      },
+      {
+        "id": 2013,
+        "order": 6,
+        "credit_id": "52fe421dc3a36847f80053c3",
+        "name": "Owen Davis Jr.",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Peter"
+      },
+      {
+        "id": 2014,
+        "order": 7,
+        "credit_id": "52fe421dc3a36847f80053c7",
+        "name": "Walter Rogers",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Behn"
+      },
+      {
+        "id": 2015,
+        "order": 8,
+        "credit_id": "52fe421dc3a36847f80053cb",
+        "name": "William Bakewell",
+        "cast_id": 17,
+        "profile_path": "/bHFnAPWrWxFycVGFPufC1zyeeA0.jpg",
+        "character": "Albert Kropp"
+      },
+      {
+        "id": 2016,
+        "order": 9,
+        "credit_id": "52fe421ec3a36847f80053cf",
+        "name": "Slim Summerville",
+        "cast_id": 18,
+        "profile_path": "/4EjFLKxKSUUjbRBLewRTXpfTrL1.jpg",
+        "character": "Tjaden"
+      },
+      {
+        "id": 34746,
+        "order": 10,
+        "credit_id": "52fe421ec3a36847f80053d3",
+        "name": "ZaSu Pitts",
+        "cast_id": 19,
+        "profile_path": "/sRrLfvCrM4thChdiWU5q9B17YMi.jpg",
+        "character": "Mrs. Bäumer"
+      },
+      {
+        "id": 2018,
+        "order": 11,
+        "credit_id": "52fe421ec3a36847f80053d7",
+        "name": "Beryl Mercer",
+        "cast_id": 20,
+        "profile_path": "/A3Wc7pQQ3x9Fao6ZoKvPnHc8cSh.jpg",
+        "character": "Paul's Mother"
+      },
+      {
+        "id": 555890,
+        "order": 12,
+        "credit_id": "52fe421ec3a36847f8005405",
+        "name": "Raymond Griffith",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Gérard Duval"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2000,
+        "credit_id": "52fe421dc3a36847f8005383",
+        "department": "Directing",
+        "name": "Lewis Milestone",
+        "job": "Director",
+        "profile_path": "/qBEYKHYyjbMoaJBZtQgVe6fVa5v.jpg"
+      },
+      {
+        "id": 2001,
+        "credit_id": "52fe421dc3a36847f8005389",
+        "department": "Writing",
+        "name": "Erich Maria Remarque",
+        "job": "Novel",
+        "profile_path": "/gpmiYhdRuF9Em2LvZWsmb1Ri9wQ.jpg"
+      },
+      {
+        "id": 2003,
+        "credit_id": "52fe421dc3a36847f800538f",
+        "department": "Writing",
+        "name": "Del Andrews",
+        "job": "Adaptation",
+        "profile_path": null
+      },
+      {
+        "id": 2004,
+        "credit_id": "52fe421dc3a36847f8005395",
+        "department": "Writing",
+        "name": "George Abbott",
+        "job": "Screenplay",
+        "profile_path": "/fFnbYNzHLfQjxl3BH6u7glnXwL1.jpg"
+      },
+      {
+        "id": 1557,
+        "credit_id": "52fe421dc3a36847f800539b",
+        "department": "Production",
+        "name": "Carl Laemmle Jr.",
+        "job": "Producer",
+        "profile_path": "/hxZVAnYE16aGEa3ihIastQQUQWU.jpg"
+      },
+      {
+        "id": 2005,
+        "credit_id": "52fe421dc3a36847f80053a1",
+        "department": "Camera",
+        "name": "Arthur Edeson",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2006,
+        "credit_id": "52fe421dc3a36847f80053a7",
+        "department": "Editing",
+        "name": "Edgar Adams",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2085,
+        "credit_id": "52fe421ec3a36847f80053dd",
+        "department": "Sound",
+        "name": "David Broekman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 67807,
+        "credit_id": "52fe421ec3a36847f80053e3",
+        "department": "Writing",
+        "name": "Maxwell Anderson",
+        "job": "Adaptation",
+        "profile_path": "/fNn8i1ktvg2IKtiImHQlvMBH5wD.jpg"
+      },
+      {
+        "id": 1102214,
+        "credit_id": "52fe421ec3a36847f80053e9",
+        "department": "Sound",
+        "name": "Sam Perry",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 30268,
+        "credit_id": "52fe421ec3a36847f80053ef",
+        "department": "Sound",
+        "name": "Heinz Roemheld",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1552,
+        "credit_id": "52fe421ec3a36847f80053f5",
+        "department": "Editing",
+        "name": "Milton Carruth",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 31764,
+        "credit_id": "52fe421ec3a36847f80053fb",
+        "department": "Editing",
+        "name": "Edward L. Cahn",
+        "job": "Editor",
+        "profile_path": "/zOfioYboYmIccRlwg0kBM7cqCCt.jpg"
+      },
+      {
+        "id": 70,
+        "credit_id": "52fe421ec3a36847f8005401",
+        "department": "Camera",
+        "name": "Karl Freund",
+        "job": "Director of Photography",
+        "profile_path": "/42rm6xS8hreYl7Sbsu6VOuz7vBJ.jpg"
+      }
+    ]
+  },
+  "runtime": 133,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "la",
+      "name": "Latin"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 143,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "All Quiet on the Western Front",
+  "overview": "A young soldier faces profound disillusionment in the soul-destroying horror of World War I. Together with several other young German soldiers, he experiences the horrors of war, such evil of which he had not conceived of when signing up to fight. They eventually become sad, tormented, and confused of their purpose.",
+  "production_companies": [{
+    "id": 42,
+    "name": "Universal Pictures Corporation"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0020629",
+  "release_date": "1930-04-21",
+  "original_title": "All Quiet on the Western Front",
+  "vote_count": 16,
+  "poster_path": "/k9Ju29Y2b6rAQZCSWe35VbBDBXM.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.689947490950974"
+}

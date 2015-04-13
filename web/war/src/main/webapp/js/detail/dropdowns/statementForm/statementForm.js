@@ -96,7 +96,7 @@ define([
 
         this.applyTermClasses = function(el, applyToElement) {
             var classes = el.attr('class').split(/\s+/),
-                ignored = [/^ui-*/, /^term$/, /^entity$/, /^label-info$/, /^detected-object$/];
+                ignored = [/^ui-*/, /^term$/, /^(entity|vertex|property)$/, /^label-info$/, /^detected-object$/];
 
             classes.forEach(function(cls) {
                 var ignore = _.any(ignored, function(regex) {
@@ -141,9 +141,9 @@ define([
         this.onCreateStatement = function(event) {
             var self = this,
                 parameters = {
-                    sourceGraphVertexId: this.attr.sourceTerm.data('info').graphVertexId ||
+                    sourceGraphVertexId: this.attr.sourceTerm.data('info').resolvedToVertexId ||
                         this.attr.sourceTerm.data('vertex-id'),
-                    destGraphVertexId: this.attr.destTerm.data('info').graphVertexId ||
+                    destGraphVertexId: this.attr.destTerm.data('info').resolvedToVertexId ||
                         this.attr.destTerm.data('vertex-id'),
                     predicateLabel: this.select('relationshipSelector').val(),
                     visibilitySource: this.visibilitySource.value

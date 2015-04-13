@@ -16,6 +16,9 @@ define([
     'util/withAsyncQueue',
     'util/withDataRequest',
     'configuration/plugins/exportWorkspace/plugin',
+    'configuration/plugins/graphLayout/plugin',
+    'configuration/plugins/graphSelector/plugin',
+    'configuration/plugins/graphView/plugin',
     'colorjs'
 ], function(
     defineComponent,
@@ -33,7 +36,10 @@ define([
     withContextMenu,
     withAsyncQueue,
     withDataRequest,
-    WorkspaceExporters,
+    WorkspaceExporter,
+    GraphLayout,
+    GraphSelector,
+    GraphView,
     colorjs) {
     'use strict';
 
@@ -41,6 +47,7 @@ define([
     var HOVER_FOCUS_DELAY_SECONDS = 0.25,
         MAX_TITLE_LENGTH = 15,
         SELECTION_THROTTLE = 100,
+        GRAPH_PADDING_BORDER = 20,
         // How many edges are required before we don't show them on zoom/pan
         SHOW_EDGES_ON_ZOOM_THRESHOLD = 50,
         GRID_LAYOUT_X_INCREMENT = 175,
@@ -50,7 +57,8 @@ define([
 
     function Graph() {
 
-        var LAYOUT_OPTIONS = {
+        var edgeIdToGroupedCyEdgeId = {},
+            LAYOUT_OPTIONS = {
                 // Customize layout options
                 random: { padding: 10 },
                 arbor: { friction: 0.6, repulsion: 5000 * retina.devicePixelRatio, targetFps: 60, stiffness: 300 }
@@ -62,28 +70,33 @@ define([
                 var vId = _.isString(v) ? v : v.id;
                 return F.className.to(vId);
             },
-            cyEdgeFromEdge = function(e, sourceNode, destNode) {
-                var source = e.from || (e.source && e.source.id) || e.sourceVertexId,
-                    target = e.to || (e.target && e.target.id) || e.destVertexId;
+            generateCompoundEdgeId = function(edge) {
+                return edge.sourceVertexId + edge.destVertexId + edge.label;
+            },
+            cyEdgeFromEdge = function(e, sourceNode, destNode, ontologyRelationships) {
+                var source = e.sourceId || (e.source && e.source.id),
+                    target = e.targetId || (e.target && e.target.id),
+                    type = e.relationshipType || e.label || e.type,
+                    ontology = ontologyRelationships.byTitle[type],
+                    cyEdgeId = toCyId(e.id);
+
+                e.edges.forEach(function(edge) {
+                    edgeIdToGroupedCyEdgeId[edge.id] = cyEdgeId;
+                });
 
                 return {
                     group: 'edges',
                     data: {
-                        id: toCyId(e.id),
+                        id: cyEdgeId,
+                        type: type,
                         source: sourceNode.id(),
                         target: destNode.id(),
-                        edge: {
-                            id: e.id,
-                            diffType: e.diffType,
-                            source: { id: source },
-                            target: { id: target },
-                            properties: {
-                                'http://lumify.io#conceptType': 'relationship',
-                                relationshipType: e.relationshipType || e.label,
-                                source: source,
-                                target: target
-                            }
-                        }
+                        label: (ontology && ontology.displayName || '') + (
+                            (e.edges.length > 1) ?
+                                (' (' + F.number.pretty(e.edges.length) + ')') :
+                                ''
+                        ),
+                        edges: e.edges
                     }
                 }
             };
@@ -95,6 +108,7 @@ define([
             cytoscapeContainerSelector: '.cytoscape-container',
             emptyGraphSelector: '.empty-graph',
             graphToolsSelector: '.controls',
+            graphViewsSelector: '.graph-views',
             contextMenuSelector: '.graph-context-menu',
             vertexContextMenuSelector: '.vertex-context-menu',
             edgeContextMenuSelector: '.edge-context-menu'
@@ -166,7 +180,7 @@ define([
                             group: 'nodes',
                             classes: classes,
                             data: {
-                                id: tempId,
+                                id: tempId
                             },
                             renderedPosition: renderedPosition,
                             selected: false
@@ -239,7 +253,6 @@ define([
                     self.trigger('updateWorkspace', {
                         entityUpdates: entityUpdates
                     });
-                    cy.container().focus();
                 }
             });
         };
@@ -271,25 +284,15 @@ define([
                     }),
                     xInc = GRID_LAYOUT_X_INCREMENT,
                     yInc = GRID_LAYOUT_Y_INCREMENT,
-                    nextAvailablePosition = _.pick(availableSpaceBox, 'x', 'y');
+                    defaultAvailablePosition = _.pick(availableSpaceBox, 'x', 'y'),
+                    nextAvailablePosition = null;
 
                 if (options.animate) container.removeClass('animateinstart').addClass('animatein');
 
-                if (options.fileDropPosition) {
-                    var projectedPosition = cy.renderer().projectIntoViewport(
-                        options.fileDropPosition.x,
-                        options.fileDropPosition.y
-                    );
-                    nextAvailablePosition = retina.pixelsToPoints({
-                        x: projectedPosition[0],
-                        y: projectedPosition[1]
-                    });
-                } else {
-                    nextAvailablePosition.y += yInc;
-                }
+                defaultAvailablePosition.y += yInc;
 
                 var maxWidth = Math.max(availableSpaceBox.w, xInc * 10),
-                    startX = nextAvailablePosition.x,
+                    startX = null,
                     vertexIds = _.pluck(vertices, 'id'),
                     existingNodes = currentNodes.filter(function(i, n) {
                         var nId = n.id();
@@ -308,40 +311,75 @@ define([
                     });
                 } else customLayout.resolve({});
 
+                if (vertices.length && self.vertexIdsToSelect && self.vertexIdsToSelect.length) {
+                    cy.$(':selected').unselect();
+                }
+
                 customLayout.done(function(layoutPositions) {
 
                     var cyNodes = [];
                     vertices.forEach(function(vertex) {
 
                         var cyNodeData = {
-                            group: 'nodes',
-                            classes: self.classesForVertex(vertex),
-                            data: {
-                                id: toCyId(vertex),
+                                group: 'nodes',
+                                classes: self.classesForVertex(vertex),
+                                data: {
+                                    id: toCyId(vertex)
+                                },
+                                grabbable: self.isWorkspaceEditable,
+                                selected: self.vertexIdsToSelect && ~self.vertexIdsToSelect.indexOf(vertex.id)
                             },
-                            grabbable: self.isWorkspaceEditable,
-                            selected: false // TODO: check selected?
-                        };
+                            workspaceVertex = self.workspaceVertices[vertex.id];
+
                         self.updateCyNodeData(cyNodeData.data, vertex);
 
                         var needsAdding = false,
-                            needsUpdating = false;
-
-                        if (self.workspaceVertices[vertex.id].graphPosition) {
-                            cyNodeData.position = retina.pointsToPixels(
-                                self.workspaceVertices[vertex.id].graphPosition
+                            needsUpdating = false,
+                            hasPosition = workspaceVertex && (
+                                workspaceVertex.graphPosition || workspaceVertex.graphLayoutJson
                             );
-                        } else if (self.workspaceVertices[vertex.id].dropPosition) {
-                            var offset = self.$node.offset();
-                            cyNodeData.renderedPosition = retina.pointsToPixels({
-                                x: self.workspaceVertices[vertex.id].dropPosition.x - offset.left,
-                                y: self.workspaceVertices[vertex.id].dropPosition.y - offset.top
-                            });
-                            needsAdding = true;
-                        } else if (layoutPositions[vertex.id]) {
-                            cyNodeData.position = retina.pointsToPixels(layoutPositions[vertex.id]);
-                            needsUpdating = true;
+
+                        if (!hasPosition) {
+                            console.debug('Vertex added without position info', vertex);
+                            return;
+                        }
+
+                        if (workspaceVertex.graphPosition) {
+                            cyNodeData.position = retina.pointsToPixels(
+                                workspaceVertex.graphPosition
+                            );
                         } else {
+                            if (!nextAvailablePosition) {
+                                var layout = workspaceVertex.graphLayoutJson;
+                                if (layout && layout.pagePosition) {
+                                    var projectedPosition = cy.renderer().projectIntoViewport(
+                                        workspaceVertex.graphLayoutJson.pagePosition.x,
+                                        workspaceVertex.graphLayoutJson.pagePosition.y
+                                    );
+                                    nextAvailablePosition = retina.pixelsToPoints({
+                                        x: projectedPosition[0],
+                                        y: projectedPosition[1]
+                                    });
+                                } else if (layout && layout.relatedToVertexId) {
+                                    var relatedToCyNode = cy.getElementById(toCyId(layout.relatedToVertexId));
+                                    if (relatedToCyNode.length) {
+                                        var relatedToPosition = retina.pixelsToPoints(relatedToCyNode.position());
+                                        nextAvailablePosition = {
+                                            x: Math.max(relatedToPosition.x, defaultAvailablePosition.x),
+                                            y: Math.max(relatedToPosition.y, defaultAvailablePosition.y)
+                                        };
+                                    }
+                                }
+
+                                if (!nextAvailablePosition) {
+                                    nextAvailablePosition = defaultAvailablePosition;
+                                }
+                            }
+
+                            if (startX === null) {
+                                startX = nextAvailablePosition.x;
+                            }
+
                             var position = retina.pointsToPixels(nextAvailablePosition);
                             cyNodeData.position = {
                                 x: Math.round(position.x),
@@ -370,27 +408,28 @@ define([
                         cyNodes.push(cyNodeData);
                     });
 
+                    self.vertexIdsToSelect = null;
+
                     var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
                         v.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v.vertexId)).position());
-                        self.workspaceVertices[v.vertexId] = v;
                     });
 
                     if (options.fit && cy.nodes().length) {
 
                         _.defer(self.fit.bind(self));
 
-                    } else if (isVisible && options.addingVerticesRelatedTo) {
-                        var relatedToCyNode = cy.getElementById(self.toCyId(options.addingVerticesRelatedTo));
-                        if (relatedToCyNode.length) {
-                            var nodes = addedCyNodes.add(relatedToCyNode);
+                    } else if (isVisible && options.fitToVertexIds && options.fitToVertexIds.length) {
+                        var zoomOutToNodes = cy.$(
+                            options.fitToVertexIds.map(function(v) {
+                            return '#' + toCyId(v);
+                        }).join(','));
 
-                            _.defer(function() {
-                                cy.zoomOutToFit(nodes, {
-                                    padding: self.paddingForZoomOut()
-                                });
-                            })
-                        }
+                        _.defer(function() {
+                            cy.zoomOutToFit(zoomOutToNodes, {
+                                padding: self.paddingForZoomOut()
+                            });
+                        })
                     }
 
                     if (options.animate) {
@@ -440,6 +479,7 @@ define([
             var truncatedTitle = F.string.truncate(F.vertex.title(vertex), 3),
                 merged = data;
 
+            merged.previousTruncated = truncatedTitle;
             merged.truncatedTitle = truncatedTitle;
             merged.conceptType = F.vertex.prop(vertex, 'conceptType');
             merged.imageSrc = F.vertex.image(vertex);
@@ -450,11 +490,12 @@ define([
         this.onVerticesDeleted = function(event, data) {
             this.cytoscapeReady(function(cy) {
 
-                if (data.vertices.length) {
+                if (data.vertexIds.length) {
                     cy.$(
-                        data.vertices.map(function(v) {
-                        return '#' + toCyId(v);
-                    }).join(',')).remove();
+                        data.vertexIds.map(function(v) {
+                            return '#' + toCyId(v);
+                        }).join(',')
+                    ).remove();
 
                     this.setWorkspaceDirty();
                     this.updateVertexSelections(cy);
@@ -477,9 +518,26 @@ define([
                     cyNodes;
                 if (vertices.length || edges.length) {
                     cyNodes = cy.$(
-                        vertices.concat(edges).map(function(v) {
-                            return '#' + toCyId(v);
-                        }).join(',')
+                        _.chain(
+                            _.map(vertices, function(v) {
+                                return '#' + toCyId(v);
+                            })
+                            .concat(
+                                _.map(edges, function(e) {
+                                    return [
+                                        '#' + toCyId(e.id),
+                                        '#' + toCyId(
+                                            e.sourceVertexId +
+                                            e.destVertexId +
+                                            e.label
+                                        )
+                                    ];
+                                })
+                            )
+                        )
+                        .flatten()
+                        .value()
+                        .join(',')
                     ).select();
                 }
 
@@ -541,7 +599,7 @@ define([
         };
 
         this.onContextMenuExportWorkspace = function(exporterId) {
-            var exporter = WorkspaceExporters.exportersById[exporterId],
+            var exporter = WorkspaceExporter.exportersById[exporterId],
                 $node = this.$node,
                 workspaceId = this.previousWorkspace;
 
@@ -569,21 +627,84 @@ define([
 
         this.onContextMenuDeleteEdge = function() {
             var menu = this.select('edgeContextMenuSelector'),
-                edge = menu.data('edge').edge;
+                edges = menu.data('edge').edges;
 
-            this.trigger('deleteEdges', { edges: [edge] });
+            this.trigger('deleteEdges', { edges: edges });
+        };
+
+        this.onEdgesLoaded = function(evt, relationshipData) {
+            this.cytoscapeReady(function(cy) {
+                var self = this;
+
+                if (relationshipData.edges) {
+                    var relationshipEdges = [],
+                        collapsedEdges = _.chain(relationshipData.edges)
+                            .groupBy(generateCompoundEdgeId)
+                            .values()
+                            .map(function(e) {
+                                return {
+                                    id: generateCompoundEdgeId(e[0]),
+                                    type: e[0].label,
+                                    sourceId: e[0].sourceVertexId,
+                                    targetId: e[0].destVertexId,
+                                    edges: e
+                                }
+                            })
+                            .value();
+
+                    collapsedEdges.forEach(function(edge) {
+                        var sourceNode = cy.getElementById(toCyId(edge.sourceId)),
+                            destNode = cy.getElementById(toCyId(edge.targetId));
+
+                        if (sourceNode.length && destNode.length) {
+                            relationshipEdges.push(
+                                cyEdgeFromEdge(edge, sourceNode, destNode, self.ontologyRelationships)
+                            );
+                        }
+                    });
+
+                    if (relationshipEdges.length) {
+                        cy.edges().remove();
+                        cy.add(relationshipEdges);
+                    }
+
+                    // Hide edges when zooming if more than threshold
+                    this.updateEdgeOptions(cy);
+                }
+            });
         };
 
         this.onEdgesUpdated = function(event, data) {
             this.cytoscapeReady(function(cy) {
-                var newEdges = _.compact(data.edges.map(function(edge) {
-                        var cyEdge = cy.getElementById(toCyId(edge.id));
-                        if (cyEdge.length === 0) {
-                            var sourceNode = cy.getElementById(toCyId(edge.source.id)),
-                                destNode = cy.getElementById(toCyId(edge.target.id));
+                var self = this,
+                    newEdges = _.compact(data.edges.map(function(edge) {
+                        var cyEdge = cy.getElementById(toCyId(edge.sourceVertexId + edge.destVertexId + edge.label))
+                        if (cyEdge.length) {
+                            var edges = cyEdge.data('edges'),
+                                ontology = self.ontologyRelationships.byTitle[cyEdge.data('type')];
+
+                            edges.push(edge);
+                            edges = _.unique(edges, false, _.property('id'));
+                            cyEdge.data('edges', edges);
+                            cyEdge.data('label',
+                                (ontology && ontology.displayName || '') + (
+                                    (edges.length > 1) ?
+                                        (' (' + F.number.pretty(edges.length) + ')') :
+                                        ''
+                                )
+                            );
+                        } else {
+                            var sourceNode = cy.getElementById(toCyId(edge.sourceVertexId)),
+                                destNode = cy.getElementById(toCyId(edge.destVertexId));
 
                             if (sourceNode.length && destNode.length) {
-                                return cyEdgeFromEdge(edge, sourceNode, destNode);
+                                return cyEdgeFromEdge({
+                                    id: generateCompoundEdgeId(edge),
+                                    type: edge.label,
+                                    sourceId: edge.sourceVertexId,
+                                    targetId: edge.destVertexId,
+                                    edges: [edge]
+                                }, sourceNode, destNode, self.ontologyRelationships);
                             }
                         }
                     }));
@@ -596,9 +717,44 @@ define([
 
         this.onEdgesDeleted = function(event, data) {
             this.cytoscapeReady(function(cy) {
-                var edge = cy.getElementById(this.toCyId(data.edgeId));
-                edge.remove();
+                var self = this;
+                _.each(cy.edges(), function(cyEdge) {
+                    var edges = _.reject(cyEdge.data('edges'), function(e) {
+                            return e.id === data.edgeId
+                        }),
+                        ontology = self.ontologyRelationships.byTitle[cyEdge.data('type')];
+
+                    if (edges.length) {
+                        cyEdge.data('edges', edges);
+                        cyEdge.data('label',
+                            (ontology && ontology.displayName || '') + (
+                                (edges.length > 1) ?
+                                    (' (' + F.number.pretty(edges.length) + ')') :
+                                    ''
+                            )
+                        );
+                    } else {
+                        cyEdge.remove();
+                    }
+                });
             });
+        };
+
+        this.onPromptEdgeDelete = function(event, data) {
+            var self = this,
+                edges = data.edges;
+
+            this.cytoscapeReady(function(cy) {
+                var cyEdge = cy.$('#' + toCyId(generateCompoundEdgeId(edges[0])));
+                require(['util/popovers/deleteEdges/deleteEdges'], function(Popover) {
+                    Popover.attachTo(self.$node, {
+                        edges: edges,
+                        anchorTo: {
+                            vertexId: edges[0].sourceVertexId
+                        }
+                    });
+                })
+            })
         };
 
         this.onContextMenuFitToWindow = function() {
@@ -645,22 +801,37 @@ define([
             }
         };
 
-        this.verticesForGraphIds = function(cy, vertexIds, type) {
+        this.cyNodesForVertexIds = function(cy, vertexIds) {
             var selector = vertexIds.map(function(vId) {
                 return '#' + toCyId(vId);
             }).join(',');
 
-            return cy[type || 'nodes'](selector);
+            return cy.nodes(selector);
+        };
+
+        this.cyEdgesForEdgeIds = function(cy, edgeIds) {
+            var selector = _.compact(edgeIds.map(function(eId) {
+                var cyEdgeId = edgeIdToGroupedCyEdgeId[eId];
+                if (cyEdgeId) {
+                    return '#' + cyEdgeId;
+                }
+            }));
+
+            if (selector.length) {
+                return cy.edges(selector.join(','));
+            }
+
+            return cytoscape.Collection(cy, []);
         };
 
         this.onFocusVertices = function(e, data) {
             this.cytoscapeReady(function(cy) {
                 var vertexIds = data.vertexIds;
                 this.hoverDelay = _.delay(function() {
-                    var nodes = this.verticesForGraphIds(cy, vertexIds, 'nodes')
+                    var nodes = this.cyNodesForVertexIds(cy, vertexIds)
                             .css('borderWidth', 0)
                             .addClass('focus'),
-                        edges = this.verticesForGraphIds(cy, vertexIds, 'edges')
+                        edges = this.cyEdgesForEdgeIds(cy, vertexIds)
                             .css('width', 1.5 * retina.devicePixelRatio)
                             .addClass('focus');
 
@@ -797,18 +968,19 @@ define([
         };
 
         this.onGraphPaddingUpdated = function(e, data) {
-            var self = this,
-                border = 20;
+            var self = this;
 
             this.graphPaddingRight = data.padding.r;
 
             var padding = $.extend({}, data.padding);
 
             padding.r += this.select('graphToolsSelector').outerWidth(true) || 65;
-            padding.l += border;
-            padding.t += border;
-            padding.b += border;
+            padding.l += GRAPH_PADDING_BORDER;
+            padding.t += GRAPH_PADDING_BORDER;
+            padding.b += GRAPH_PADDING_BORDER;
             this.graphPadding = padding;
+
+            this.updateGraphViewsPosition();
 
             if (this.nodesToFitAfterGraphPadding) {
                 this.cytoscapeReady().done(function(cy) {
@@ -818,6 +990,13 @@ define([
                     self.nodesToFitAfterGraphPadding = null;
                 });
             }
+        };
+
+        this.updateGraphViewsPosition = function() {
+            this.select('graphViewsSelector').css({
+                left: (this.graphPadding.l - GRAPH_PADDING_BORDER) + 'px',
+                right: (this.graphPaddingRight) + 'px'
+            });
         };
 
         this.onContextMenuLayout = function(layout, opts) {
@@ -856,12 +1035,29 @@ define([
             });
         };
 
+        this.onContextMenuSelect = function(select) {
+            this.cytoscapeReady(function(cy) {
+                if (select === 'all') {
+                    cy.nodes().filter(':unselected').select();
+                } else if (select === 'none') {
+                    cy.nodes().filter(':selected').unselect();
+                } else if (select === 'invert') {
+                    var selected = cy.nodes().filter(':selected'),
+                        unselected = cy.nodes().filter(':unselected');
+                    selected.unselect();
+                    unselected.select();
+                } else {
+                    var selector = GraphSelector.selectorsById[select];
+                    selector(cy);
+                }
+            });
+        };
+
         this.graphTap = throttle('selection', SELECTION_THROTTLE, function(event) {
             this.trigger('defocusPaths');
 
             if (event.cyTarget === event.cy) {
                 this.trigger('selectObjects');
-                event.cy.container().focus();
             }
         });
 
@@ -878,8 +1074,12 @@ define([
 
                 if (Privileges.canEDIT) {
                     menu = this.select ('edgeContextMenuSelector');
-                    var edgeData = event.cyTarget.data();
-                    if (!(/^public$/i).test(edgeData.edge.diffType)) {
+                    var edgeData = event.cyTarget.data(),
+                        anyDeletable = _.any(edgeData.edges, function(e) {
+                            return !(/^public$/i.test(e.diffType));
+                        });
+
+                    if (anyDeletable) {
                         menu.data('edge', edgeData);
                         if (event.cy.nodes().filter(':selected').length > 1) {
                             return false;
@@ -910,33 +1110,77 @@ define([
             if (menu) {
                 // Show/Hide the layout selection menu item
                 if (event.cy.nodes().filter(':selected').length) {
-                    menu.find('.layout-multi').show();
+                    menu.find('.layouts-multi').show();
                 } else {
-                    menu.find('.layout-multi').hide();
+                    menu.find('.layouts-multi').hide();
                 }
 
-                if (WorkspaceExporters.exporters.length) {
-                    var $exporters = menu.find('.exporters');
+                if (menu.is(self.attr.contextMenuSelector)) {
+                    if (WorkspaceExporter.exporters.length) {
+                        var $exporters = menu.find('.exporters');
 
-                    if ($exporters.length === 0) {
-                        $exporters = $('<li class="dropdown-submenu"><a>' +
-                          i18n('graph.contextmenu.export_workspace') +
-                          '</a>' +
-                          '<ul class="dropdown-menu exporters"></ul></li>'
-                         ).appendTo(menu).find('ul');
-                    }
+                        if ($exporters.length === 0) {
+                            $exporters = $('<li class="dropdown-submenu"><a>' +
+                                i18n('graph.contextmenu.export_workspace') +
+                                '</a>' +
+                                '<ul class="dropdown-menu exporters"></ul></li>'
+                            ).appendTo(menu).before('<li class="divider"></li>').find('ul');
+                        }
 
-                    $exporters.empty();
-                    WorkspaceExporters.exporters.forEach(function(exporter) {
-                        $exporters.append(
-                            $('<li><a href="#"></a></li>')
-                                .find('a')
+                        $exporters.empty();
+                        WorkspaceExporter.exporters.forEach(function(exporter) {
+                            $exporters.append(
+                                $('<li><a href="#"></a></li>')
+                                    .find('a')
                                     .text(exporter.menuItem)
                                     .attr('data-func', 'exportWorkspace')
                                     .attr('data-args', JSON.stringify([exporter._identifier]))
-                                .end()
-                        );
-                    });
+                                    .end()
+                            );
+                        });
+                    }
+
+                    if (GraphSelector.selectors.length) {
+                        var $selectorMenu = menu.find('.selectors .dropdown-menu');
+                        $selectorMenu.find('.plugin').remove();
+                        var selected = event.cy.nodes().filter(':selected').length > 0;
+                        GraphSelector.selectors.forEach(function(selector) {
+                            if ((selected && _.contains(['always', 'selected'], selector.visibility)) ||
+                                (!selected && _.contains(['always', 'none-selected'], selector.visibility))) {
+
+                                $selectorMenu.append(
+                                    $('<li class="plugin"><a href="#" tabindex="-1"></a></li>')
+                                        .find('a')
+                                        .text(selector.displayName)
+                                        .attr('data-func', 'select')
+                                        .attr('data-args', '["' + selector.identifier + '"]')
+                                        .end()
+                                );
+                            }
+                        });
+                    }
+
+                    if (GraphLayout.layouts.length) {
+                        var appendLayoutMenuItems = function($layoutMenu, onlySelected) {
+                            var onlySelectedArg = onlySelected ? ',{"onlySelected":true}' : '';
+
+                            $layoutMenu.find('.plugin').remove();
+
+                            GraphLayout.layouts.forEach(function(layout) {
+                                $layoutMenu.append(
+                                    $('<li class="plugin"><a href="#" tabindex="-1"></a></li>')
+                                        .find('a')
+                                        .text(layout.displayName)
+                                        .attr('data-func', 'layout')
+                                        .attr('data-args', '["' + layout.identifier + '"' + onlySelectedArg + ']')
+                                        .end()
+                                );
+                            });
+                        };
+
+                        appendLayoutMenuItems(menu.find('.layouts .dropdown-menu'), false);
+                        appendLayoutMenuItems(menu.find('.layouts-multi .dropdown-menu'), true);
+                    }
                 }
 
                 this.toggleMenu({positionUsingEvent: event}, menu);
@@ -945,7 +1189,7 @@ define([
 
         this.graphSelect = throttle('selection', SELECTION_THROTTLE, function(event) {
             if (this.ignoreCySelectionEvents) return;
-            this.updateVertexSelections(event.cy);
+            this.updateVertexSelections(event.cy, event.cyTarget);
         });
 
         this.graphUnselect = throttle('selection', SELECTION_THROTTLE, function(event) {
@@ -959,12 +1203,24 @@ define([
             }
         });
 
-        this.updateVertexSelections = function(cy) {
+        this.updateVertexSelections = function(cy, cyTarget) {
             var self = this,
                 nodes = cy.nodes().filter(':selected').not('.temp'),
                 edges = cy.edges().filter(':selected').not('.temp'),
-                edgeIds = [];
+                edgeIds = [],
                 vertexIds = [];
+
+            if (lumifyKeyboard.shiftKey) {
+                nodes = nodes.add(self.previousSelectionNodes)
+                if (cyTarget !== cy && cyTarget.length && self.previousSelectionNodes &&
+                   self.previousSelectionNodes.anySame(cyTarget)) {
+
+                    nodes = nodes.not(cyTarget)
+                }
+            }
+
+            self.previousSelectionNodes = nodes;
+            self.previousSelectionEdges = edges;
 
             nodes.each(function(index, cyNode) {
                 if (!cyNode.hasClass('temp') && !cyNode.hasClass('path-edge')) {
@@ -974,7 +1230,7 @@ define([
 
             edges.each(function(index, cyEdge) {
                 if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
-                    edgeIds.push(fromCyId(cyEdge.id()));
+                    edgeIds = edgeIds.concat(_.pluck(cyEdge.data('edges'), 'id'));
                 }
             });
 
@@ -1076,7 +1332,7 @@ define([
 
                     self.dataRequest('vertex', 'store', { vertexIds: fromCyId(nId) })
                         .done(function(vertex) {
-                            truncatedTitle = cyNode.data('truncatedTitle');
+                            var truncatedTitle = cyNode.data('truncatedTitle');
 
                             if (vertex) {
                                 cyNode.data('previousTruncated', truncatedTitle);
@@ -1148,22 +1404,85 @@ define([
             );
         };
 
+        // Delete entities before saving (faster feeling interface)
+        this.onUpdateWorkspace = function(cy, event, data) {
+            if (data.options && data.options.selectAll && data.entityUpdates) {
+                this.vertexIdsToSelect = _.pluck(data.entityUpdates, 'vertexId');
+            }
+            if (data && data.entityDeletes && data.entityDeletes.length) {
+                cy.$(
+                    data.entityDeletes.map(function(vertexId) {
+                    return '#' + toCyId(vertexId);
+                }).join(',')).remove();
+
+                this.setWorkspaceDirty();
+                this.updateVertexSelections(cy);
+            }
+            if (data && data.entityUpdates && data.entityUpdates.length && this.$node.closest('.visible').length) {
+                data.entityUpdates.forEach(function(entityUpdate) {
+                    if ('graphLayoutJson' in entityUpdate && 'pagePosition' in entityUpdate.graphLayoutJson) {
+                        var projectedPosition = cy.renderer().projectIntoViewport(
+                            entityUpdate.graphLayoutJson.pagePosition.x,
+                            entityUpdate.graphLayoutJson.pagePosition.y
+                        );
+
+                        entityUpdate.graphPosition = retina.pixelsToPoints({
+                            x: projectedPosition[0],
+                            y: projectedPosition[1]
+                        });
+                        delete entityUpdate.graphLayoutJson;
+                    }
+                });
+            }
+        }
+
         this.onWorkspaceUpdated = function(event, data) {
             if (lumifyData.currentWorkspaceId === data.workspace.workspaceId) {
                 this.isWorkspaceEditable = data.workspace.editable;
                 this.cytoscapeReady(function(cy) {
                     var self = this,
+                        fitToIds = [],
                         allNodes = cy.nodes();
 
                     allNodes[data.workspace.editable ? 'grabify' : 'ungrabify']();
 
                     data.entityUpdates.forEach(function(entityUpdate) {
-                        var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId));
-                        if (cyNode.length && !cyNode.grabbed()) {
-                            cyNode.position(retina.pointsToPixels(entityUpdate.graphPosition));
+                        var cyNode = cy.getElementById(toCyId(entityUpdate.vertexId)),
+                            previousWorkspaceVertex = self.workspaceVertices[entityUpdate.vertexId];
+
+                        if (cyNode.length && !cyNode.grabbed() && ('graphPosition' in entityUpdate)) {
+                            cyNode
+                                .stop(true)
+                                .animate(
+                                    {
+                                        position: retina.pointsToPixels(entityUpdate.graphPosition)
+                                    },
+                                    {
+                                        duration: 500,
+                                        easing: 'easeOutBack'
+                                    }
+                                );
                         }
+
+                        var noPreviousGraphPosition = (
+                                !previousWorkspaceVertex ||
+                                !('graphPosition' in previousWorkspaceVertex)
+                            ),
+                            nowHasGraphPosition = 'graphPosition' in entityUpdate,
+                            newVertex = !!(noPreviousGraphPosition && nowHasGraphPosition);
+
+                        if (previousWorkspaceVertex &&
+                            previousWorkspaceVertex.graphLayoutJson &&
+                            previousWorkspaceVertex.graphLayoutJson.relatedToVertexId) {
+                            fitToIds.push(previousWorkspaceVertex.graphLayoutJson.relatedToVertexId)
+                        }
+                        if (newVertex) {
+                            fitToIds.push(entityUpdate.vertexId);
+                        }
+
                         self.workspaceVertices[entityUpdate.vertexId] = entityUpdate;
                     });
+                    self.workspaceVertices = _.omit(self.workspaceVertices, data.entityDeletes);
 
                     this.getNodesByVertexIds(cy, data.entityDeletes).remove();
                     if (data.newVertices) {
@@ -1171,7 +1490,9 @@ define([
                             this.cyNodesToRemoveOnWorkspaceUpdated.remove();
                             this.cyNodesToRemoveOnWorkspaceUpdated = null;
                         }
-                        this.addVertices(data.newVertices)
+                        this.addVertices(data.newVertices, {
+                            fitToVertexIds: _.unique(fitToIds)
+                        })
                     }
                     this.setWorkspaceDirty();
                     this.updateVertexSelections(cy);
@@ -1197,29 +1518,6 @@ define([
             this.previousWorkspace = workspace.workspaceId;
         };
 
-        this.onEdgesLoaded = function(evt, relationshipData) {
-            this.cytoscapeReady(function(cy) {
-                if (relationshipData.edges) {
-                    var relationshipEdges = [];
-                    relationshipData.edges.forEach(function(relationship) {
-                        var sourceNode = cy.getElementById(toCyId(relationship.from)),
-                            destNode = cy.getElementById(toCyId(relationship.to));
-
-                        if (sourceNode.length && destNode.length) {
-                            relationshipEdges.push(cyEdgeFromEdge(relationship, sourceNode, destNode));
-                        }
-                    });
-                    // Hide edges when zooming if more than threshold
-                    if (relationshipEdges.length) {
-                        cy.edges().remove();
-                        cy.add(relationshipEdges);
-                    }
-
-                    this.updateEdgeOptions(cy);
-                }
-            });
-        };
-
         this.onMenubarToggleDisplay = function(e, data) {
             if (data.name === 'graph' && this.$node.is(':visible')) {
                 this.cytoscapeReady(function(cy) {
@@ -1241,8 +1539,6 @@ define([
                 return console.error('Registering for position events requires a vertexId');
             }
 
-            //this.onUnregisterForPositionChanges();
-
             this.cytoscapeReady().done(function(cy) {
 
                 event.stopPropagation();
@@ -1263,7 +1559,7 @@ define([
 
                             position = {
                                 x: positionInNode.x + offset.left,
-                                y: positionInNode.y + offset.top,
+                                y: positionInNode.y + offset.top
                             };
 
                         } else if (anchorTo.page) {
@@ -1377,6 +1673,9 @@ define([
 
             this.$node.html(loadingTemplate({}));
 
+            this.cytoscapeReady(function(cy) {
+                this.on(document, 'updateWorkspace', this.onUpdateWorkspace.bind(this, cy));
+            })
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'workspaceUpdated', this.onWorkspaceUpdated);
             this.on(document, 'verticesHovering', this.onVerticesHovering);
@@ -1385,7 +1684,6 @@ define([
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
-            this.on(document, 'edgesLoaded', this.onEdgesLoaded);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
             this.on(document, 'devicePixelRatioChanged', this.onDevicePixelRatioChanged);
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggleDisplay);
@@ -1393,8 +1691,10 @@ define([
             this.on(document, 'defocusVertices', this.onDefocusVertices);
             this.on(document, 'focusPaths', this.onFocusPaths);
             this.on(document, 'defocusPaths', this.onDefocusPaths);
+            this.on(document, 'edgesLoaded', this.onEdgesLoaded);
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
             this.on(document, 'edgesUpdated', this.onEdgesUpdated);
+            this.on(document, 'promptEdgeDelete', this.onPromptEdgeDelete);
 
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
             this.on('unregisterForPositionChanges', this.onUnregisterForPositionChanges);
@@ -1422,14 +1722,15 @@ define([
                 this.addVertices(self.attr.vertices);
             }
 
-            this.dataRequest('ontology', 'concepts')
-                .done(function(concepts) {
-                    var templateData = {
-                        firstLevelConcepts: concepts.entityConcept.children || [],
-                        pathHopOptions: ['2','3','4']
-                    };
+            this.dataRequest('ontology', 'ontology')
+                .done(function(ontology) {
+                    var concepts = ontology.concepts,
+                        relationships = ontology.relationships,
+                        templateData = {
+                            firstLevelConcepts: concepts.entityConcept.children || [],
+                            pathHopOptions: ['2','3','4']
+                        };
 
-                    // TODO: make context menus work better
                     self.$node.append(template(templateData)).find('.shortcut').each(function() {
                         var $this = $(this), command = $this.text();
                         $this.text(F.string.shortcut($this.text()));
@@ -1437,11 +1738,35 @@ define([
 
                     self.bindContextMenuClickEvent();
 
-                    Controls.attachTo(self.select('graphToolsSelector'));
+                    Controls.attachTo(self.select('graphToolsSelector'), {
+                        optionsComponentPath: 'graph/options/container',
+                        optionsAttributes: {
+                            cy: self.cytoscapeReady()
+                        }
+                    });
 
-                    stylesheet(function(style) {
+                    var $views = $();
+                    self.updateGraphViewsPosition();
+                    GraphView.views.forEach(function(view) {
+                        var $view = $('<div>').addClass(view.className);
+                        require([view.componentPath], function(View) {
+                            View.attachTo($view);
+                        })
+                        $views = $views.add($view);
+                    });
+                    self.select('graphViewsSelector').append($views);
+
+                    self.ontologyRelationships = relationships;
+                    stylesheet(null, function(style) {
                         self.initializeGraph(style);
                     });
+                    self.on(document, 'reapplyGraphStylesheet', function() {
+                        this.cytoscapeReady(function(cy) {
+                            stylesheet(cy.style().resetToDefault(), function(style) {
+                                style.update();
+                            });
+                        })
+                    })
                 });
         });
 
@@ -1449,6 +1774,9 @@ define([
             var self = this;
 
             cytoscape('renderer', 'lumify', Renderer);
+            GraphLayout.layouts.forEach(function(layout) {
+                cytoscape('layout', layout.identifier, layout);
+            });
             cytoscape({
                 showOverlay: false,
                 minZoom: 1 / 4,

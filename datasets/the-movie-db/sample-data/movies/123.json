@@ -1,0 +1,247 @@
+{
+  "budget": 4000000,
+  "vote_average": 6.2,
+  "backdrop_path": "/8HqSxB9VLJkbRXRdlocbLq9wxwY.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 16270,
+        "order": 0,
+        "credit_id": "52fe421bc3a36847f80047df",
+        "name": "Christopher Guard",
+        "cast_id": 1,
+        "profile_path": null,
+        "character": "Frodo Beutlin"
+      },
+      {
+        "id": 16271,
+        "order": 1,
+        "credit_id": "52fe421bc3a36847f80047e3",
+        "name": "William Squire",
+        "cast_id": 2,
+        "profile_path": null,
+        "character": "Gandalf"
+      },
+      {
+        "id": 16272,
+        "order": 2,
+        "credit_id": "52fe421bc3a36847f80047e7",
+        "name": "Michael Scholes",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Sam"
+      },
+      {
+        "id": 5049,
+        "order": 3,
+        "credit_id": "52fe421bc3a36847f80047eb",
+        "name": "John Hurt",
+        "cast_id": 4,
+        "profile_path": "/rpuH2YRLpxJjMxHq4T1QdOSVtlN.jpg",
+        "character": "Aragorn"
+      },
+      {
+        "id": 16273,
+        "order": 4,
+        "credit_id": "52fe421bc3a36847f80047ef",
+        "name": "Simon Chandler",
+        "cast_id": 5,
+        "profile_path": "/j30wLavbX35RxxtjvMvCNK8Exsw.jpg",
+        "character": "Merry"
+      },
+      {
+        "id": 16274,
+        "order": 5,
+        "credit_id": "52fe421bc3a36847f80047f3",
+        "name": "Dominic Guard",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Pippin"
+      },
+      {
+        "id": 16275,
+        "order": 6,
+        "credit_id": "52fe421bc3a36847f80047f7",
+        "name": "Norman Bird",
+        "cast_id": 7,
+        "profile_path": "/coRdiQgwVoS9ArTriaaCV0jyndw.jpg",
+        "character": "Bilbo Beutlin"
+      },
+      {
+        "id": 16380,
+        "order": 7,
+        "credit_id": "52fe421bc3a36847f80047fb",
+        "name": "Michael Graham Cox",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Boromir"
+      },
+      {
+        "id": 6,
+        "order": 8,
+        "credit_id": "52fe421bc3a36847f80047ff",
+        "name": "Anthony Daniels",
+        "cast_id": 9,
+        "profile_path": "/cljvryjb3VwTsNR7fjQKjNPMaBB.jpg",
+        "character": "Legolas"
+      },
+      {
+        "id": 16381,
+        "order": 9,
+        "credit_id": "52fe421bc3a36847f8004803",
+        "name": "David Buck",
+        "cast_id": 10,
+        "profile_path": "/3H40jRDVkwFQBkNKcltURddMXzI.jpg",
+        "character": "Gimli"
+      },
+      {
+        "id": 16382,
+        "order": 10,
+        "credit_id": "52fe421bc3a36847f8004807",
+        "name": "Peter Woodthorpe",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Gollum"
+      },
+      {
+        "id": 16383,
+        "order": 11,
+        "credit_id": "52fe421bc3a36847f800480b",
+        "name": "Fraser Kerr",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Saruman"
+      },
+      {
+        "id": 10029,
+        "order": 12,
+        "credit_id": "52fe421bc3a36847f800480f",
+        "name": "André Morell",
+        "cast_id": 13,
+        "profile_path": "/slGvSoLbXaR1g23Rxj9N2WyKNWi.jpg",
+        "character": "Elrond"
+      }
+    ],
+    "crew": [
+      {
+        "id": 16384,
+        "credit_id": "52fe421bc3a36847f8004815",
+        "department": "Directing",
+        "name": "Ralph Bakshi",
+        "job": "Director",
+        "profile_path": "/ngnV4JLjTktcibQUZBmp3WukBxm.jpg"
+      },
+      {
+        "id": 129,
+        "credit_id": "52fe421bc3a36847f800481b",
+        "department": "Writing",
+        "name": "J.R.R. Tolkien",
+        "job": "Novel",
+        "profile_path": "/z7KBk4TTP1gTXnN01jWNI8FgzkA.jpg"
+      },
+      {
+        "id": 16385,
+        "credit_id": "52fe421bc3a36847f8004821",
+        "department": "Writing",
+        "name": "Chris Conkling",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 16386,
+        "credit_id": "52fe421bc3a36847f8004827",
+        "department": "Writing",
+        "name": "Peter S. Beagle",
+        "job": "Screenplay",
+        "profile_path": "/q3OQYKr5bk8Pmh2ThmneSoktUbi.jpg"
+      },
+      {
+        "id": 16387,
+        "credit_id": "52fe421bc3a36847f800482d",
+        "department": "Production",
+        "name": "Nancy Eichler",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1310,
+        "credit_id": "52fe421bc3a36847f8004833",
+        "department": "Production",
+        "name": "Saul Zaentz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2027,
+        "credit_id": "52fe421bc3a36847f8004839",
+        "department": "Sound",
+        "name": "Leonard Rosenman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 16389,
+        "credit_id": "52fe421bc3a36847f800483f",
+        "department": "Camera",
+        "name": "Timothy Galfas",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 16390,
+        "credit_id": "52fe421bc3a36847f8004845",
+        "department": "Editing",
+        "name": "Donald W. Ernst",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 132,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 123,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Lord of the Rings",
+  "overview": "An animated fantasy film from 1978 based on the first half of J.R.R Tolkien\u2019s Lord of the Rings novel. The film was mainly filmed using rotoscoping, meaning it was filmed in live action sequences with real actors and then each frame was individually animated.",
+  "production_companies": [{
+    "id": 286,
+    "name": "Fantasy Films"
+  }],
+  "belongs_to_collection": {
+    "id": 141290,
+    "backdrop_path": "/uUG532EWfyhtKDzsA0sLb1PsHhL.jpg",
+    "name": "The Lord of the Rings Animated Collection",
+    "poster_path": "/pQuazFOlGRdn2Lb3oWFJYPeASOc.jpg"
+  },
+  "imdb_id": "tt0077869",
+  "release_date": "1978-11-15",
+  "original_title": "The Lord of the Rings",
+  "vote_count": 29,
+  "poster_path": "/1l3WpoF7TX9pOprX4XepCXjQXUV.jpg",
+  "tagline": "J.R.R. Tolkien's The Lord of the Rings",
+  "revenue": 0,
+  "popularity": "1.22119018174798"
+}

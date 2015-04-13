@@ -10,10 +10,7 @@ import org.securegraph.Authorizations;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class InMemoryUserRepository extends UserRepository {
     private UserListenerUtil userListenerUtil;
@@ -122,5 +119,20 @@ public class InMemoryUserRepository extends UserRepository {
     @Override
     public void setPrivileges(User user, Set<Privilege> privileges) {
         ((InMemoryUser) user).setPrivileges(privileges);
+    }
+
+    @Override
+    public User findByPasswordResetToken(String token) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void setPasswordResetTokenAndExpirationDate(User user, String token, Date expirationDate) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void clearPasswordResetTokenAndExpirationDate(User user) {
+        throw new RuntimeException("Not implemented");
     }
 }

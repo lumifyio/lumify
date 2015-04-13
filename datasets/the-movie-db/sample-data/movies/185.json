@@ -1,0 +1,296 @@
+{
+  "budget": 2200000,
+  "vote_average": 7.1,
+  "backdrop_path": "/55b4nvbDoANxPDFbKn6EwIkW7BE.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 56890,
+        "order": 0,
+        "credit_id": "52fe4224c3a36847f80071e5",
+        "name": "Malcolm McDowell",
+        "cast_id": 4,
+        "profile_path": "/AalAO1Do9egUr07klE78PWw6Hyq.jpg",
+        "character": "Alexander de Large"
+      },
+      {
+        "id": 2264,
+        "order": 1,
+        "credit_id": "52fe4224c3a36847f80071e9",
+        "name": "Patrick Magee",
+        "cast_id": 5,
+        "profile_path": "/97RYoo5XQj0R8rr5Fvua9HlB55E.jpg",
+        "character": "Mr. Alexander"
+      },
+      {
+        "id": 2265,
+        "order": 2,
+        "credit_id": "52fe4224c3a36847f80071ed",
+        "name": "Adrienne Corri",
+        "cast_id": 6,
+        "profile_path": "/fEO6V3zvvyWpviIvEdJ8jSLkTL1.jpg",
+        "character": "Mrs. Alexander"
+      },
+      {
+        "id": 2267,
+        "order": 3,
+        "credit_id": "52fe4224c3a36847f80071f1",
+        "name": "Michael Bates",
+        "cast_id": 7,
+        "profile_path": "/ftE2KiyBW8inxUWhJqnv4iPhGik.jpg",
+        "character": "Chief Guard"
+      },
+      {
+        "id": 2268,
+        "order": 4,
+        "credit_id": "52fe4224c3a36847f80071f5",
+        "name": "Warren Clarke",
+        "cast_id": 8,
+        "profile_path": "/zb7YcAIYjHYBSsdfqa5b4QLcneb.jpg",
+        "character": "Dim"
+      },
+      {
+        "id": 2270,
+        "order": 5,
+        "credit_id": "52fe4224c3a36847f80071f9",
+        "name": "James Marcus",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Georgie"
+      },
+      {
+        "id": 2271,
+        "order": 6,
+        "credit_id": "52fe4224c3a36847f80071fd",
+        "name": "Michael Tarn",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Pete"
+      },
+      {
+        "id": 2272,
+        "order": 7,
+        "credit_id": "52fe4224c3a36847f8007201",
+        "name": "Carl Duering",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Dr. Brodsky"
+      },
+      {
+        "id": 2273,
+        "order": 8,
+        "credit_id": "52fe4224c3a36847f8007205",
+        "name": "Paul Farrell",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Tramp"
+      },
+      {
+        "id": 2274,
+        "order": 9,
+        "credit_id": "52fe4224c3a36847f8007209",
+        "name": "Miriam Karlin",
+        "cast_id": 13,
+        "profile_path": "/slCCMP8lPRHl9NDDNNoU4ntbBrU.jpg",
+        "character": "Catlady"
+      },
+      {
+        "id": 2276,
+        "order": 10,
+        "credit_id": "52fe4224c3a36847f800720d",
+        "name": "Sheila Raynor",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Mum"
+      },
+      {
+        "id": 2278,
+        "order": 11,
+        "credit_id": "52fe4224c3a36847f8007211",
+        "name": "Aubrey Morris",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Mr. P. R. Deltoid"
+      },
+      {
+        "id": 2279,
+        "order": 12,
+        "credit_id": "52fe4224c3a36847f8007215",
+        "name": "Godfrey Quigley",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Prison Chaplain"
+      },
+      {
+        "id": 2280,
+        "order": 13,
+        "credit_id": "52fe4224c3a36847f8007219",
+        "name": "Clive Francis",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Lodger"
+      },
+      {
+        "id": 2290,
+        "order": 14,
+        "credit_id": "52fe4224c3a36847f800723b",
+        "name": "Richard Connaught",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Billy Boy (gang leader)"
+      },
+      {
+        "id": 2292,
+        "order": 15,
+        "credit_id": "52fe4224c3a36847f800723f",
+        "name": "Pauline Taylor",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Psychiatrist"
+      },
+      {
+        "id": 694,
+        "order": 16,
+        "credit_id": "52fe4224c3a36847f8007243",
+        "name": "Philip Stone",
+        "cast_id": 27,
+        "profile_path": "/qtaBPJZC7MpoyWfcyXJ1zdEfYwU.jpg",
+        "character": "Dad"
+      }
+    ],
+    "crew": [
+      {
+        "id": 240,
+        "credit_id": "52fe4224c3a36847f80071db",
+        "department": "Directing",
+        "name": "Stanley Kubrick",
+        "job": "Director",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe4224c3a36847f80071e1",
+        "department": "Writing",
+        "name": "Stanley Kubrick",
+        "job": "Screenplay",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 240,
+        "credit_id": "52fe4224c3a36847f800721f",
+        "department": "Production",
+        "name": "Stanley Kubrick",
+        "job": "Producer",
+        "profile_path": "/26PWfKliwIsA2f4sIWeJRNnPgVC.jpg"
+      },
+      {
+        "id": 2284,
+        "credit_id": "52fe4224c3a36847f8007225",
+        "department": "Sound",
+        "name": "Wendy Carlos",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2286,
+        "credit_id": "52fe4224c3a36847f800722b",
+        "department": "Camera",
+        "name": "John Alcott",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 8424,
+        "credit_id": "53807c56c3a368737d00040f",
+        "department": "Editing",
+        "name": "Bill Butler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2288,
+        "credit_id": "52fe4224c3a36847f8007237",
+        "department": "Production",
+        "name": "James Liggat",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 568911,
+        "credit_id": "52fe4224c3a36847f8007249",
+        "department": "Art",
+        "name": "John Barry",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2262,
+        "credit_id": "52fe4224c3a36847f800724f",
+        "department": "Writing",
+        "name": "Anthony Burgess",
+        "job": "Novel",
+        "profile_path": "/5H2axr42f2P3C2F4NHrI0cJ2GtN.jpg"
+      },
+      {
+        "id": 14896,
+        "credit_id": "52fe4224c3a36847f8007255",
+        "department": "Production",
+        "name": "Si Litvinoff",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 976789,
+        "credit_id": "52fe4224c3a36847f800725b",
+        "department": "Production",
+        "name": "Max L. Raab",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 136,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 185,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "A Clockwork Orange",
+  "overview": "The head of a gang of toughs, in an insensitive futuristic society, is conditioned to become physically ill at sex and violence during a prison sentence. When he is released, he's brutally beaten by all of his old adversaries.",
+  "production_companies": [
+    {
+      "id": 88,
+      "name": "Hawk Films"
+    },
+    {
+      "id": 6194,
+      "name": "Warner Bros."
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0066921",
+  "release_date": "1971-12-18",
+  "original_title": "A Clockwork Orange",
+  "vote_count": 646,
+  "poster_path": "/aht74rcbdIhsXJj4oVzPXGtS1jt.jpg",
+  "tagline": "Being the adventures of a young man whose principal interests are rape, ultra-violence and Beethoven. Money isn't everything!",
+  "revenue": 26589000,
+  "popularity": "2.98994839827263"
+}

@@ -66,9 +66,9 @@ public class SecureGraphUserRepository extends UserRepository {
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, USER_CONCEPT_IRI, "lumifyUser", null);
-        userConceptId = userConcept.getTitle();
+        userConceptId = userConcept.getIRI();
 
-        Set<String> authorizationsSet = new HashSet<String>();
+        Set<String> authorizationsSet = new HashSet<>();
         authorizationsSet.add(VISIBILITY_STRING);
         authorizationsSet.add(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
@@ -95,9 +95,11 @@ public class SecureGraphUserRepository extends UserRepository {
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(user);
         JSONObject preferences = UserLumifyProperties.UI_PREFERENCES.getPropertyValue(user);
+        String passwordResetToken = UserLumifyProperties.PASSWORD_RESET_TOKEN.getPropertyValue(user);
+        Date passwordResetTokenExpirationDate = UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.getPropertyValue(user);
 
         LOGGER.debug("Creating user from UserRow. username: %s", username);
-        return new SecureGraphUser(userId, username, displayName, emailAddress, createDate, currentLoginDate, currentLoginRemoteAddr, previousLoginDate, previousLoginRemoteAddr, loginCount, modelUserContext, userStatus, privileges, currentWorkspaceId, preferences);
+        return new SecureGraphUser(userId, username, displayName, emailAddress, createDate, currentLoginDate, currentLoginRemoteAddr, previousLoginDate, previousLoginRemoteAddr, loginCount, modelUserContext, userStatus, privileges, currentWorkspaceId, preferences, passwordResetToken, passwordResetTokenExpirationDate);
     }
 
     @Override
@@ -300,7 +302,7 @@ public class SecureGraphUserRepository extends UserRepository {
     public org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
         Set<String> userAuthorizations;
         if (user instanceof SystemUser) {
-            userAuthorizations = new HashSet<String>();
+            userAuthorizations = new HashSet<>();
             userAuthorizations.add(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
         } else {
             userAuthorizations = userAuthorizationCache.getIfPresent(user.getUserId());
@@ -311,7 +313,7 @@ public class SecureGraphUserRepository extends UserRepository {
             userAuthorizationCache.put(user.getUserId(), userAuthorizations);
         }
 
-        Set<String> authorizationsSet = new HashSet<String>(userAuthorizations);
+        Set<String> authorizationsSet = new HashSet<>(userAuthorizations);
         Collections.addAll(authorizationsSet, additionalAuthorizations);
         return authorizationRepository.createAuthorizations(authorizationsSet);
     }
@@ -319,13 +321,13 @@ public class SecureGraphUserRepository extends UserRepository {
     public static Set<String> getAuthorizations(Vertex userVertex) {
         String authorizationsString = UserLumifyProperties.AUTHORIZATIONS.getPropertyValue(userVertex);
         if (authorizationsString == null) {
-            return new HashSet<String>();
+            return new HashSet<>();
         }
         String[] authorizationsArray = authorizationsString.split(",");
         if (authorizationsArray.length == 1 && authorizationsArray[0].length() == 0) {
             authorizationsArray = new String[0];
         }
-        HashSet<String> authorizations = new HashSet<String>();
+        HashSet<String> authorizations = new HashSet<>();
         for (String s : authorizationsArray) {
             // Accumulo doesn't like zero length strings. they shouldn't be in the auth string to begin with but this just protects from that happening.
             if (s.trim().length() == 0) {
@@ -383,5 +385,29 @@ public class SecureGraphUserRepository extends UserRepository {
 
     private Set<Privilege> getPrivileges(Vertex userVertex) {
         return Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(userVertex));
+    }
+
+    @Override
+    public User findByPasswordResetToken(String token) {
+        return createFromVertex(singleOrDefault(graph.query(authorizations)
+                .has(UserLumifyProperties.PASSWORD_RESET_TOKEN.getPropertyName(), token)
+                .has(LumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
+                .vertices(), null));
+    }
+
+    @Override
+    public void setPasswordResetTokenAndExpirationDate(User user, String token, Date expirationDate) {
+        Vertex userVertex = findByIdUserVertex(user.getUserId());
+        UserLumifyProperties.PASSWORD_RESET_TOKEN.setProperty(userVertex, token, VISIBILITY.getVisibility(), authorizations);
+        UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.setProperty(userVertex, expirationDate, VISIBILITY.getVisibility(), authorizations);
+        graph.flush();
+    }
+
+    @Override
+    public void clearPasswordResetTokenAndExpirationDate(User user) {
+        Vertex userVertex = findByIdUserVertex(user.getUserId());
+        UserLumifyProperties.PASSWORD_RESET_TOKEN.removeProperty(userVertex, authorizations);
+        UserLumifyProperties.PASSWORD_RESET_TOKEN_EXPIRATION_DATE.removeProperty(userVertex, authorizations);
+        graph.flush();
     }
 }

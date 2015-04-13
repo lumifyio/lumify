@@ -82,6 +82,7 @@ define([], function() {
 
         this.workspaceUpdated = function(message) {
             if (lastReloadedState &&
+                lastReloadedState.workspace &&
                 lastReloadedState.workspace.workspaceId === message.workspace.workspaceId) {
                 lastReloadedState.workspace = message.workspace;
             }
@@ -101,6 +102,7 @@ define([], function() {
             };
             this.setPublicApi('currentWorkspaceId', workspace.workspaceId);
             this.setPublicApi('currentWorkspaceEditable', workspace.editable);
+            this.setPublicApi('currentWorkspaceCommentable', workspace.commentable);
             this.trigger('workspaceLoaded', workspace);
             this.trigger('selectObjects');
             this.fireApplicationReadyOnce();

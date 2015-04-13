@@ -7,6 +7,8 @@ define([
     template) {
     'use strict';
 
+    var HIDE_PROPERTIES = ['http://lumify.io/comment#entry'];
+
     return defineComponent(FieldSelection);
 
     function FieldSelection() {
@@ -20,6 +22,7 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            this.updatePropertiesSource();
             this.on('filterProperties', this.onFilterProperties);
 
             this.$node.html(template({placeholder: this.attr.placeholder}));
@@ -29,16 +32,9 @@ define([
                     .attr('placeholder', i18n('field.selection.no_valid'))
                     .attr('disabled', true);
             } else {
-                var properties = self.filteredProperties || self.attr.properties,
-                    displayName = function(p) {
-                        return p.displayName || p.title;
-                    },
-                    groupedByDisplay = _.groupBy(properties, displayName),
-                    displayForTitle = {};
-
                 this.queryPropertyMap = {};
 
-                this.select('findPropertySelection')
+                var typeahead = this.select('findPropertySelection')
                     .on('focus', function(e) {
                         var target = $(e.target);
                         target.attr('placeholder', PLACEHOLDER)
@@ -67,31 +63,54 @@ define([
                         minLength: 0,
                         items: 100,
                         source: function() {
-                            return _.chain(properties)
+                            return _.chain(self.propertiesForSource)
                                     .filter(function(p) {
-                                        var visible = p.userVisible !== false;
+                                        var visible = p.userVisible !== false,
+                                            addable = p.addable !== false;
+
+                                        if (self.attr.unsupportedProperties &&
+                                            ~self.attr.unsupportedProperties.indexOf(p.title)) {
+                                            return false;
+                                        }
+
+                                        if (~HIDE_PROPERTIES.indexOf(p.title)) {
+                                            return false;
+                                        }
+
+                                        if (~self.dependentPropertyIris.indexOf(p.title)) {
+                                            return false;
+                                        }
 
                                         if (self.attr.onlySearchable) {
+                                            if (p.title === 'http://lumify.io#text') {
+                                                return true;
+                                            }
                                             return visible && p.searchable !== false;
                                         }
 
-                                        return visible;
+                                        return visible && addable;
                                     })
                                     .map(function(p) {
                                         var name = displayName(p),
-                                            duplicates = groupedByDisplay[name].length > 1;
+                                            duplicates = self.groupedByDisplay[name].length > 1;
 
                                         self.queryPropertyMap[p.title] = p;
 
                                         return JSON.stringify({
                                             displayName: name,
                                             title: p.title,
+                                            propertyGroup: p.propertyGroup,
                                             duplicates: duplicates
                                         });
                                     })
                                     .sortBy(function(itemJson) {
-                                        var item = JSON.parse(itemJson);
-                                        return item.displayName.toLowerCase();
+                                        var item = JSON.parse(itemJson),
+                                            lower = item.displayName.toLowerCase();
+
+                                        if (item.propertyGroup) {
+                                            return '1' + item.propertyGroup + lower;
+                                        }
+                                        return '0' + lower;
                                     })
                                     .value()
                         },
@@ -120,13 +139,22 @@ define([
                             var query = this.query;
 
                             return _.sortBy(items, function(json) {
-                                var item = JSON.parse(json);
+                                var item = JSON.parse(json),
+                                    displayName = item.displayName,
+                                    group = item.propertyGroup;
 
-                                if (item.displayName === query) {
-                                    return '0';
+                                if (query) {
+                                    if (displayName === query) {
+                                        return '0';
+                                    }
+
+                                    return '1' + displayName;
+                                } else {
+                                    if (group) {
+                                        return '1' + displayName;
+                                    }
+                                    return '0' + displayName;
                                 }
-
-                                return '1' + item.displayName;
                             });
                         },
                         updater: function(itemJson) {
@@ -135,12 +163,37 @@ define([
                             return item;
                         }
                     })
-                    .data('typeahead').lookup = allowEmptyLookup;
+                    .data('typeahead');
+
+                typeahead.lookup = allowEmptyLookup;
+                typeahead.render = function(items) {
+                    var self = this,
+                        $items = $(),
+                        lastGroup;
+
+                    items.forEach(function(item, i) {
+                        var itemJson = JSON.parse(item);
+                        if (itemJson.propertyGroup && lastGroup !== itemJson.propertyGroup) {
+                            lastGroup = itemJson.propertyGroup;
+                            $items = $items.add($('<li class="divider">'));
+                            $items = $items.add($('<li class="nav-header">').text(itemJson.propertyGroup)[0]);
+                        }
+
+                        var $item = $(self.options.item).attr('data-value', item)
+                            .toggleClass('active', i === 0)
+                            .find('a').html(self.highlighter(item))
+                            .end();
+                        $items = $items.add($item);
+                    })
+
+                    this.$menu.empty().append($items)
+                    return this;
+                };
             }
         });
 
         this.onFilterProperties = function(event, data) {
-            this.filteredProperties = data.properties;
+            this.updatePropertiesSource(data.properties);
         };
 
         this.propertySelected = function(item) {
@@ -154,6 +207,22 @@ define([
                 }.bind(this));
             }
         };
+
+        this.updatePropertiesSource = function(filtered) {
+            var properties = filtered || this.attr.properties;
+
+            this.groupedByDisplay = _.groupBy(properties, displayName);
+            this.propertiesForSource = properties;
+            this.dependentPropertyIris = _.chain(properties)
+                .pluck('dependentPropertyIris')
+                .compact()
+                .flatten()
+                .value();
+        }
+    }
+
+    function displayName(p) {
+        return p.displayName || p.title;
     }
 
     function allowEmptyLookup() {

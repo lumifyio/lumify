@@ -1,0 +1,309 @@
+{
+  "budget": 0,
+  "vote_average": 7.8,
+  "backdrop_path": "/4Dt5zyXN4n3QdZLhKJ0OAyqdV55.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 37,
+      "name": "Western"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5563,
+        "order": 0,
+        "credit_id": "52fe4239c3a36847f800d873",
+        "name": "James Coburn",
+        "cast_id": 14,
+        "profile_path": "/4VkbAYRB5FRt3ZpEsOQ5TbuvRz9.jpg",
+        "character": "John H. Mallory"
+      },
+      {
+        "id": 522,
+        "order": 1,
+        "credit_id": "52fe4239c3a36847f800d877",
+        "name": "Rod Steiger",
+        "cast_id": 15,
+        "profile_path": "/cc96tXM1O0PAoyog9hzo1GgSwB5.jpg",
+        "character": "Juan Miranda"
+      },
+      {
+        "id": 5567,
+        "order": 2,
+        "credit_id": "52fe4239c3a36847f800d887",
+        "name": "Romolo Valli",
+        "cast_id": 19,
+        "profile_path": "/nTU1Jfsx0W6koCdMrC5qkgL3tth.jpg",
+        "character": "Dr. Villega"
+      },
+      {
+        "id": 5568,
+        "order": 3,
+        "credit_id": "52fe4239c3a36847f800d88b",
+        "name": "Antoine Saint-John",
+        "cast_id": 20,
+        "profile_path": "/chTK1DFPekF357q8tj0mCUsDtV6.jpg",
+        "character": "Gutierez/ Colonel Günther Reza"
+      },
+      {
+        "id": 5566,
+        "order": 4,
+        "credit_id": "52fe4239c3a36847f800d883",
+        "name": "Franco Graziosi",
+        "cast_id": 18,
+        "profile_path": "/vxjNtPJxFhnY4t89NNKLQO0VZxV.jpg",
+        "character": "Governor Jaime"
+      },
+      {
+        "id": 5565,
+        "order": 5,
+        "credit_id": "52fe4239c3a36847f800d87f",
+        "name": "Rik Battaglia",
+        "cast_id": 17,
+        "profile_path": "/jqrk23h0GWTqj3XD4q4teb88jTe.jpg",
+        "character": "Santerna"
+      },
+      {
+        "id": 5570,
+        "order": 6,
+        "credit_id": "52fe4239c3a36847f800d88f",
+        "name": "David Warbeck",
+        "cast_id": 22,
+        "profile_path": "/rzeNaj7kxQfYiFf76FwhSZcrrMv.jpg",
+        "character": "John's friend Sean Nolan"
+      },
+      {
+        "id": 1291461,
+        "order": 7,
+        "credit_id": "52fe4239c3a36847f800d897",
+        "name": "Vivienne Maya",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "John's girlfriend (flashback)"
+      },
+      {
+        "id": 5564,
+        "order": 8,
+        "credit_id": "52fe4239c3a36847f800d87b",
+        "name": "Maria Monti",
+        "cast_id": 16,
+        "profile_path": "/5o72HHwTojFgAHlwAKkHTuPMfgg.jpg",
+        "character": "Adelita"
+      },
+      {
+        "id": 5571,
+        "order": 9,
+        "credit_id": "52fe4239c3a36847f800d893",
+        "name": "Giulio Battiferri",
+        "cast_id": 23,
+        "profile_path": "/qyVCPy0n0m0jWAQupE8fYotTjYw.jpg",
+        "character": "Miguel"
+      },
+      {
+        "id": 222249,
+        "order": 10,
+        "credit_id": "538b5bf8c3a368713f00128b",
+        "name": "Poldo Bendandi",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Executed Revolutionary"
+      },
+      {
+        "id": 1326585,
+        "order": 11,
+        "credit_id": "538b63ff0e0a26670e002182",
+        "name": "Omar Bonaro",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Adelita's Husband"
+      },
+      {
+        "id": 1044225,
+        "order": 12,
+        "credit_id": "538b64450e0a26671200219d",
+        "name": "Roy Bosier",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Landowner on stagecoach"
+      },
+      {
+        "id": 163326,
+        "order": 13,
+        "credit_id": "538b64890e0a26670e002199",
+        "name": "John Frederick",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "American on stagecoach"
+      },
+      {
+        "id": 550266,
+        "order": 14,
+        "credit_id": "538b64c80e0a2667020020c5",
+        "name": "Jean Rougeul",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Priest"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4385,
+        "credit_id": "52fe4239c3a36847f800d827",
+        "department": "Directing",
+        "name": "Sergio Leone",
+        "job": "Director",
+        "profile_path": "/cRfaWgAxgNsDkaT6WLpgbrtEAJj.jpg"
+      },
+      {
+        "id": 4385,
+        "credit_id": "52fe4239c3a36847f800d82d",
+        "department": "Writing",
+        "name": "Sergio Leone",
+        "job": "Author",
+        "profile_path": "/cRfaWgAxgNsDkaT6WLpgbrtEAJj.jpg"
+      },
+      {
+        "id": 5555,
+        "credit_id": "52fe4239c3a36847f800d833",
+        "department": "Writing",
+        "name": "Sergio Donati",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 4986,
+        "credit_id": "52fe4239c3a36847f800d839",
+        "department": "Production",
+        "name": "Fulvio Morsella",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1259,
+        "credit_id": "52fe4239c3a36847f800d83f",
+        "department": "Sound",
+        "name": "Ennio Morricone",
+        "job": "Original Music Composer",
+        "profile_path": "/dAd3r8QCcmLamoP8Tf8PVIHaGnp.jpg"
+      },
+      {
+        "id": 5556,
+        "credit_id": "52fe4239c3a36847f800d845",
+        "department": "Camera",
+        "name": "Giuseppe Ruzzolini",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4670,
+        "credit_id": "52fe4239c3a36847f800d84b",
+        "department": "Editing",
+        "name": "Nino Baragli",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5557,
+        "credit_id": "52fe4239c3a36847f800d851",
+        "department": "Art",
+        "name": "Andrea Crisanti",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5558,
+        "credit_id": "52fe4239c3a36847f800d857",
+        "department": "Art",
+        "name": "Dario Micheli",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 5559,
+        "credit_id": "52fe4239c3a36847f800d85d",
+        "department": "Costume & Make-Up",
+        "name": "Franco Carretti",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5560,
+        "credit_id": "52fe4239c3a36847f800d863",
+        "department": "Sound",
+        "name": "Michael Billingsley",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5561,
+        "credit_id": "52fe4239c3a36847f800d869",
+        "department": "Crew",
+        "name": "Antonio Margheriti",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 4661,
+        "credit_id": "52fe4239c3a36847f800d86f",
+        "department": "Crew",
+        "name": "Benito Stefanelli",
+        "job": "Stunts",
+        "profile_path": "/5c5ek7iXeJMdx1bEM2mw195zmPD.jpg"
+      }
+    ]
+  },
+  "runtime": 121,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 336,
+  "production_countries": [{
+    "name": "Italy",
+    "iso_3166_1": "IT"
+  }],
+  "title": "Duck, You Sucker",
+  "overview": "Duck, You Sucker! (Italian: Giù la testa), also known as A Fistful of Dynamite and Once Upon a Time\u2026 the Revolution, is a 1971 Zapata Western film directed by Sergio Leone and starring Rod Steiger and James Coburn. It is the second part of a trilogy of epic Leone films including the previous Once Upon a Time in the West and the subsequent Once Upon a Time in America, released thirteen years later. The last western film directed by Leone, it is considered by some to be one of his most overlooked films.",
+  "production_companies": [
+    {
+      "id": 1110,
+      "name": "Euro International Films"
+    },
+    {
+      "id": 218,
+      "name": "Rafran Cinematografica"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 269251,
+    "backdrop_path": null,
+    "name": "Once Upon a Time Collection",
+    "poster_path": "/6sHjSxCMawYpgei7axQQzaFormk.jpg"
+  },
+  "imdb_id": "tt0067140",
+  "release_date": "1971-10-20",
+  "original_title": "Giù la testa",
+  "vote_count": 23,
+  "poster_path": "/9ACC05LGLnjLp1YBlFzOeNrkT9N.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.629832336668559"
+}

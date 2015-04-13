@@ -1,13 +1,14 @@
 package io.lumify.securegraph.model.ontology;
 
+import com.google.common.collect.ImmutableList;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.JSONUtil;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONObject;
 import org.securegraph.Vertex;
+import org.securegraph.util.IterableUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class SecureGraphOntologyProperty extends OntologyProperty {
@@ -29,12 +30,37 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
         return LumifyProperties.PROPERTY_GROUP.getPropertyValue(vertex);
     }
 
+    @Override
+    public String getValidationFormula() {
+        return LumifyProperties.VALIDATION_FORMULA.getPropertyValue(vertex);
+    }
+
+    @Override
+    public String getDisplayFormula() {
+        return LumifyProperties.DISPLAY_FORMULA.getPropertyValue(vertex);
+    }
+
+    @Override
+    public ImmutableList<String> getDependentPropertyIris() {
+        Iterable<String> dependentPropertyIris = LumifyProperties.DEPENDENT_PROPERTY_IRI.getPropertyValues(vertex);
+        return ImmutableList.copyOf(dependentPropertyIris);
+    }
+
+    public String[] getIntents() {
+        return IterableUtils.toArray(LumifyProperties.INTENT.getPropertyValues(vertex), String.class);
+    }
+
     public boolean getUserVisible() {
         return LumifyProperties.USER_VISIBLE.getPropertyValue(vertex);
     }
 
     public boolean getSearchable() {
         return LumifyProperties.SEARCHABLE.getPropertyValue(vertex);
+    }
+
+    @Override
+    public boolean getAddable() {
+        return LumifyProperties.ADDABLE.getPropertyValue(vertex);
     }
 
     public PropertyType getDataType() {

@@ -1,0 +1,231 @@
+{
+  "budget": 5000000,
+  "vote_average": 6.6,
+  "backdrop_path": "/jUfk0M6RQEJngy89afkAqxlASeI.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2090,
+        "order": 0,
+        "credit_id": "52fe4222c3a36847f8006a0b",
+        "name": "Kirk Douglas",
+        "cast_id": 4,
+        "profile_path": "/vIZgu07gJtS2j460jgBlI1IvkAO.jpg",
+        "character": "Ned Land"
+      },
+      {
+        "id": 2091,
+        "order": 1,
+        "credit_id": "52fe4222c3a36847f8006a0f",
+        "name": "James Mason",
+        "cast_id": 5,
+        "profile_path": "/b0ebmboBdaYvk8fn2CFCQl4TaW9.jpg",
+        "character": "Captain Nemo"
+      },
+      {
+        "id": 2092,
+        "order": 2,
+        "credit_id": "52fe4222c3a36847f8006a13",
+        "name": "Paul Lukas",
+        "cast_id": 6,
+        "profile_path": "/7rTjCXdH53IzOnqTxICd8GX5KYj.jpg",
+        "character": "Prof. Pierre Arronax"
+      },
+      {
+        "id": 2094,
+        "order": 3,
+        "credit_id": "52fe4222c3a36847f8006a17",
+        "name": "Peter Lorre",
+        "cast_id": 7,
+        "profile_path": "/yrQcTNmGWNVp871D9fbjNpN6LpV.jpg",
+        "character": "Conseil"
+      },
+      {
+        "id": 2096,
+        "order": 4,
+        "credit_id": "52fe4222c3a36847f8006a1b",
+        "name": "Robert J. Wilke",
+        "cast_id": 8,
+        "profile_path": "/3VL03wavl7fUGuVtayjft9eYAua.jpg",
+        "character": "First Mate of the Nautilus"
+      },
+      {
+        "id": 2097,
+        "order": 5,
+        "credit_id": "52fe4222c3a36847f8006a1f",
+        "name": "Ted de Corsia",
+        "cast_id": 9,
+        "profile_path": "/63mhu9Qa62Viwy9tAdOFL9Spsf.jpg",
+        "character": "Capt. Farragut"
+      },
+      {
+        "id": 2098,
+        "order": 6,
+        "credit_id": "52fe4222c3a36847f8006a23",
+        "name": "Carleton Young",
+        "cast_id": 10,
+        "profile_path": "/lqKVSnYegb7WprJk2bcSuzSqGas.jpg",
+        "character": "John Howard"
+      },
+      {
+        "id": 2099,
+        "order": 7,
+        "credit_id": "52fe4222c3a36847f8006a27",
+        "name": "J. M. Kerrigan",
+        "cast_id": 11,
+        "profile_path": "/2q7u623S3giTrirUaQQMIKGdr5A.jpg",
+        "character": "Billy"
+      },
+      {
+        "id": 2101,
+        "order": 8,
+        "credit_id": "52fe4222c3a36847f8006a2b",
+        "name": "Percy Helton",
+        "cast_id": 12,
+        "profile_path": "/3W5x5qjDr7eSkgKH0x2kQAKCRjI.jpg",
+        "character": "Coach Driver"
+      },
+      {
+        "id": 2102,
+        "order": 9,
+        "credit_id": "52fe4222c3a36847f8006a2f",
+        "name": "Ted Cooper",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Mate on 'Lincoln'"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2087,
+        "credit_id": "52fe4222c3a36847f80069fb",
+        "department": "Directing",
+        "name": "Richard Fleischer",
+        "job": "Director",
+        "profile_path": "/yofiXdiD2AaK2M4RgXQFeO8qQgD.jpg"
+      },
+      {
+        "id": 2088,
+        "credit_id": "52fe4222c3a36847f8006a01",
+        "department": "Writing",
+        "name": "Jules Verne",
+        "job": "Novel",
+        "profile_path": "/cFBorm2GCm2UKHQjg0IlRPnI8wh.jpg"
+      },
+      {
+        "id": 2089,
+        "credit_id": "52fe4222c3a36847f8006a07",
+        "department": "Writing",
+        "name": "Earl Felton",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2106,
+        "credit_id": "52fe4222c3a36847f8006a35",
+        "department": "Production",
+        "name": "Walt Disney",
+        "job": "Producer",
+        "profile_path": "/ku2lp8t3sazCDSWZdDrka3K4KLm.jpg"
+      },
+      {
+        "id": 2107,
+        "credit_id": "52fe4222c3a36847f8006a3b",
+        "department": "Sound",
+        "name": "Paul J. Smith",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1940,
+        "credit_id": "52fe4222c3a36847f8006a41",
+        "department": "Camera",
+        "name": "Franz Planer",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2108,
+        "credit_id": "52fe4222c3a36847f8006a47",
+        "department": "Editing",
+        "name": "Elmo Williams",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2110,
+        "credit_id": "52fe4222c3a36847f8006a4d",
+        "department": "Art",
+        "name": "Harper Goff",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2113,
+        "credit_id": "52fe4222c3a36847f8006a53",
+        "department": "Sound",
+        "name": "C.O. Slyfield",
+        "job": "Sound Director",
+        "profile_path": null
+      },
+      {
+        "id": 2117,
+        "credit_id": "52fe4222c3a36847f8006a59",
+        "department": "Sound",
+        "name": "Robert O. Cook",
+        "job": "Production Sound Mixer",
+        "profile_path": null
+      },
+      {
+        "id": 2114,
+        "credit_id": "52fe4222c3a36847f8006a5f",
+        "department": "Sound",
+        "name": "G.R. Danner",
+        "job": "Boom Operator",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 127,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 173,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "20,000 Leagues Under the Sea",
+  "overview": "A ship sent to investigate a wave of mysterious sinkings encounters the advanced submarine, the Nautilus, commanded by Captain Nemo.",
+  "production_companies": [{
+    "id": 3166,
+    "name": "Walt Disney Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0046672",
+  "release_date": "1954-12-23",
+  "original_title": "20,000 Leagues Under the Sea",
+  "vote_count": 17,
+  "poster_path": "/poYgoz8ARxYuB2Ej2uhAuamAufu.jpg",
+  "tagline": "The mightiest motion picture of them all!",
+  "revenue": 28200000,
+  "popularity": "0.847857649257565"
+}

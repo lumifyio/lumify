@@ -1,0 +1,251 @@
+{
+  "budget": 0,
+  "vote_average": 6.9,
+  "backdrop_path": "/tCibMY9BZvB24frk2jg1YB4f4yT.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 854,
+        "order": 0,
+        "credit_id": "52fe4216c3a36847f8003055",
+        "name": "James Stewart",
+        "cast_id": 2,
+        "profile_path": "/8Obb4uScBA1IvgkX4S90HCT9W1B.jpg",
+        "character": "Paul Biegler"
+      },
+      {
+        "id": 855,
+        "order": 1,
+        "credit_id": "52fe4216c3a36847f8003059",
+        "name": "Lee Remick",
+        "cast_id": 3,
+        "profile_path": "/nxXQhtEeYJW4S7kN2RQmmoGDGIw.jpg",
+        "character": "Laura Manion"
+      },
+      {
+        "id": 856,
+        "order": 2,
+        "credit_id": "52fe4216c3a36847f800305d",
+        "name": "Ben Gazzara",
+        "cast_id": 4,
+        "profile_path": "/eHo1CphAAbwNMQESm3JrOKR5EW1.jpg",
+        "character": "Lt. Frederick Manion"
+      },
+      {
+        "id": 857,
+        "order": 3,
+        "credit_id": "52fe4216c3a36847f8003061",
+        "name": "Arthur O'Connell",
+        "cast_id": 5,
+        "profile_path": "/rWoLpGwQlIZSiPIzJqE1yIMiDxr.jpg",
+        "character": "Parnell Emmett McCarthy"
+      },
+      {
+        "id": 858,
+        "order": 4,
+        "credit_id": "52fe4216c3a36847f8003065",
+        "name": "Duke Ellington",
+        "cast_id": 6,
+        "profile_path": "/1FnAfbtz2bE28j8XgR0WZeU92Dt.jpg",
+        "character": "Pie Eye"
+      },
+      {
+        "id": 860,
+        "order": 5,
+        "credit_id": "52fe4216c3a36847f800306f",
+        "name": "Eve Arden",
+        "cast_id": 8,
+        "profile_path": "/rS1rPs0lu5owJ2BrrE51k7icMnV.jpg",
+        "character": "Maida Rutledge"
+      },
+      {
+        "id": 861,
+        "order": 6,
+        "credit_id": "52fe4216c3a36847f8003073",
+        "name": "Kathryn Grant",
+        "cast_id": 9,
+        "profile_path": "/lJXrVvijSSeXwZXS6f01vGqcXaO.jpg",
+        "character": "Mary Pilant"
+      },
+      {
+        "id": 862,
+        "order": 7,
+        "credit_id": "52fe4216c3a36847f8003077",
+        "name": "George C. Scott",
+        "cast_id": 10,
+        "profile_path": "/mWXDFKbEgb7ID845I1LNeaeoXT4.jpg",
+        "character": "Claude Dancer"
+      },
+      {
+        "id": 863,
+        "order": 8,
+        "credit_id": "52fe4216c3a36847f800307b",
+        "name": "Orson Bean",
+        "cast_id": 11,
+        "profile_path": "/vMG49W2jMiOn1wgAxCeSdtnUNjx.jpg",
+        "character": "Dr. Matthew Smith"
+      },
+      {
+        "id": 866,
+        "order": 9,
+        "credit_id": "52fe4216c3a36847f800307f",
+        "name": "Russ Brown",
+        "cast_id": 12,
+        "profile_path": "/hUfteo0f4VaeWdnDHAqPx5ftgwe.jpg",
+        "character": "George Lemon"
+      }
+    ],
+    "crew": [
+      {
+        "id": 834,
+        "credit_id": "52fe4216c3a36847f8003051",
+        "department": "Directing",
+        "name": "Otto Preminger",
+        "job": "Director",
+        "profile_path": "/alStMSBOhJbl3ZXIdSCfhrman3c.jpg"
+      },
+      {
+        "id": 858,
+        "credit_id": "52fe4216c3a36847f800306b",
+        "department": "Sound",
+        "name": "Duke Ellington",
+        "job": "Original Music Composer",
+        "profile_path": "/1FnAfbtz2bE28j8XgR0WZeU92Dt.jpg"
+      },
+      {
+        "id": 834,
+        "credit_id": "52fe4216c3a36847f8003085",
+        "department": "Production",
+        "name": "Otto Preminger",
+        "job": "Producer",
+        "profile_path": "/alStMSBOhJbl3ZXIdSCfhrman3c.jpg"
+      },
+      {
+        "id": 870,
+        "credit_id": "52fe4216c3a36847f800308b",
+        "department": "Camera",
+        "name": "Sam Leavitt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 871,
+        "credit_id": "52fe4216c3a36847f8003091",
+        "department": "Editing",
+        "name": "Louis R. Loeffler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 874,
+        "credit_id": "52fe4216c3a36847f8003097",
+        "department": "Art",
+        "name": "Boris Leven",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 877,
+        "credit_id": "52fe4216c3a36847f800309d",
+        "department": "Sound",
+        "name": "Richard Carruth",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 878,
+        "credit_id": "52fe4216c3a36847f80030a3",
+        "department": "Sound",
+        "name": "Jack Solomon",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 881,
+        "credit_id": "52fe4216c3a36847f80030a9",
+        "department": "Camera",
+        "name": "Irving Rosenberg",
+        "job": "Camera Operator",
+        "profile_path": null
+      },
+      {
+        "id": 885,
+        "credit_id": "52fe4216c3a36847f80030af",
+        "department": "Lighting",
+        "name": "James Almond",
+        "job": "Lighting Technician",
+        "profile_path": null
+      },
+      {
+        "id": 844,
+        "credit_id": "52fe4216c3a36847f80030b5",
+        "department": "Writing",
+        "name": "Wendell Mayes",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3793,
+        "credit_id": "52fe4216c3a36847f80030bb",
+        "department": "Art",
+        "name": "Max Slater",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 846,
+        "credit_id": "52fe4216c3a36847f80030c1",
+        "department": "Writing",
+        "name": "John D. Voelker",
+        "job": "Author",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 160,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 93,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Anatomy of a Murder",
+  "overview": "The defendant In a murder trial says that he suffered temporary insanity after the victim had raped his wife. What is the truth, is his attorney being played, and will he win his case?",
+  "production_companies": [{
+    "id": 799,
+    "name": "Carlyle Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0052561",
+  "release_date": "1959-07-01",
+  "original_title": "Anatomy of a Murder",
+  "vote_count": 17,
+  "poster_path": "/7mQblEoXnRS1psj3WERIKHKkXQY.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.334185790242931"
+}

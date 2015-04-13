@@ -1,0 +1,240 @@
+{
+  "budget": 0,
+  "vote_average": 6.6,
+  "backdrop_path": "/dWsCeUNbXncX5LmpoaNiE1aZR4l.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3851,
+        "order": 0,
+        "credit_id": "52fe4230c3a36847f800ab7f",
+        "name": "Hanna Zetterberg",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Ronja"
+      },
+      {
+        "id": 3852,
+        "order": 1,
+        "credit_id": "52fe4230c3a36847f800ab83",
+        "name": "Dan Håfström",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Birk"
+      },
+      {
+        "id": 3853,
+        "order": 2,
+        "credit_id": "52fe4230c3a36847f800ab87",
+        "name": "Börje Ahlstedt",
+        "cast_id": 5,
+        "profile_path": "/b2cB320DYO1uacN0pjRdkrAgqYm.jpg",
+        "character": "Mattis"
+      },
+      {
+        "id": 3854,
+        "order": 3,
+        "credit_id": "52fe4230c3a36847f800ab8b",
+        "name": "Lena Nyman",
+        "cast_id": 6,
+        "profile_path": "/lpdxi2oOrzqPXF99aC6HrtUadae.jpg",
+        "character": "Lovis"
+      },
+      {
+        "id": 3855,
+        "order": 4,
+        "credit_id": "52fe4230c3a36847f800ab8f",
+        "name": "Per Oscarsson",
+        "cast_id": 7,
+        "profile_path": "/qCSUP6c7jz8kgJrGEX4tKDf8emr.jpg",
+        "character": "Borka"
+      },
+      {
+        "id": 3856,
+        "order": 5,
+        "credit_id": "52fe4230c3a36847f800ab93",
+        "name": "Med Reventberg",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Undis"
+      },
+      {
+        "id": 3857,
+        "order": 6,
+        "credit_id": "52fe4230c3a36847f800ab97",
+        "name": "Allan Edwall",
+        "cast_id": 9,
+        "profile_path": "/piVVazoJR606qMCcVzsBivqTHug.jpg",
+        "character": "Skalle-Per"
+      },
+      {
+        "id": 3858,
+        "order": 7,
+        "credit_id": "52fe4230c3a36847f800ab9b",
+        "name": "Ulf Isenborg",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Fjosok"
+      },
+      {
+        "id": 3859,
+        "order": 8,
+        "credit_id": "52fe4230c3a36847f800ab9f",
+        "name": "Tommy Körberg",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Lill-Klippen"
+      },
+      {
+        "id": 3860,
+        "order": 9,
+        "credit_id": "52fe4230c3a36847f800aba3",
+        "name": "Björn Wallde",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Sturkas"
+      },
+      {
+        "id": 3867,
+        "order": 10,
+        "credit_id": "52fe4230c3a36847f800abc5",
+        "name": "Henry Ottenby",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Knotas"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3849,
+        "credit_id": "52fe4230c3a36847f800ab75",
+        "department": "Directing",
+        "name": "Tage Danielsson",
+        "job": "Director",
+        "profile_path": "/kl6FMQj4Hxyi5rjlY8Cu30M7ccb.jpg"
+      },
+      {
+        "id": 3850,
+        "credit_id": "52fe4230c3a36847f800ab7b",
+        "department": "Writing",
+        "name": "Astrid Lindgren",
+        "job": "Author",
+        "profile_path": "/dArfGXX1aZnH1ZKXInDkWFLC7db.jpg"
+      },
+      {
+        "id": 3862,
+        "credit_id": "52fe4230c3a36847f800aba9",
+        "department": "Sound",
+        "name": "Björn Isfält",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3863,
+        "credit_id": "52fe4230c3a36847f800abaf",
+        "department": "Camera",
+        "name": "Rune Ericson",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3864,
+        "credit_id": "52fe4230c3a36847f800abb5",
+        "department": "Camera",
+        "name": "Mischa Gavrjusjov",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3865,
+        "credit_id": "52fe4230c3a36847f800abbb",
+        "department": "Camera",
+        "name": "Ole Fredrik Haug",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3866,
+        "credit_id": "52fe4230c3a36847f800abc1",
+        "department": "Editing",
+        "name": "Jan Persson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3868,
+        "credit_id": "52fe4230c3a36847f800abcb",
+        "department": "Production",
+        "name": "Waldemar Bergendahl",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 126,
+  "spoken_languages": [{
+    "iso_639_1": "sv",
+    "name": "svenska"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 271,
+  "production_countries": [
+    {
+      "name": "Norway",
+      "iso_3166_1": "NO"
+    },
+    {
+      "name": "Sweden",
+      "iso_3166_1": "SE"
+    }
+  ],
+  "title": "Ronja Robbersdaughter",
+  "overview": "Ronya lives happily in her father's castle until she comes across a new playmate, Birk, in the nearby dark forest. The two explore the wilderness, braving dangerous Witchbirds and Rump-Gnomes. But when their families find out Birk and Ronja have been playing together, they forbid them to see each other again. Indeed, their fathers are competing robber chieftains and bitter enemies. Now the two spunky children must try to tear down the barriers that have kept their families apart for so long.",
+  "production_companies": [
+    {
+      "id": 113,
+      "name": "AB Svenska Ord"
+    },
+    {
+      "id": 115,
+      "name": "AB Film-Teknik"
+    },
+    {
+      "id": 6416,
+      "name": "Svensk Filmindustri"
+    },
+    {
+      "id": 3221,
+      "name": "Sveriges Television (SVT)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0088015",
+  "release_date": "1984-12-14",
+  "original_title": "Ronja Rövardotter",
+  "vote_count": 8,
+  "poster_path": "/mwETU9ThtUKM79armaXb8s7wlBt.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.310230540782757"
+}

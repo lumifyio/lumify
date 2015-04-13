@@ -3,6 +3,7 @@ define([
     'flight/lib/component',
     'configuration/plugins/visibility/visibilityEditor',
     '../withPopover',
+    'detail/dropdowns/propertyForm/justification',
     'util/formatters',
     'util/withFormFieldErrors',
     'util/ontology/conceptSelect',
@@ -11,6 +12,7 @@ define([
     defineComponent,
     VisibilityEditor,
     withPopover,
+    Justification,
     F,
     withFormFieldErrors,
     ConceptSelect,
@@ -43,17 +45,22 @@ define([
                 this.visibilitySource = null;
 
                 this.on(this.popover, 'visibilitychange', this.onVisibilityChange);
+                this.on(this.popover, 'justificationchange', this.onJustificationChange);
 
-                ConceptSelect.attachTo(this.popover.find('.concept'));
+                this.enterShouldSubmit = 'createSelector';
+
+                ConceptSelect.attachTo(this.popover.find('.concept'), {
+                    focus: true
+                });
+                Justification.attachTo(this.popover.find('.justification'));
                 VisibilityEditor.attachTo(this.popover.find('.visibility'));
+                this.positionDialog();
 
                 this.on(this.popover, 'click', {
                     createSelector: this.onCreate,
                     cancelSelector: this.onCancel
                 });
                 this.on(this.popover, 'conceptSelected', this.onConceptSelected);
-
-                window.focus();
             })
         });
 
@@ -67,9 +74,16 @@ define([
             this.checkValid();
         };
 
+        this.onJustificationChange = function(event, data) {
+            this.justification = data;
+            this.checkValid();
+        };
+
         this.checkValid = function() {
             var isValid = this.visibilitySource &&
                 this.visibilitySource.valid &&
+                this.justification &&
+                this.justification.valid &&
                 this.concept;
 
             if (isValid) {
@@ -95,16 +109,22 @@ define([
                     .text(i18n('popovers.create_vertex.button.creating'))
                     .attr('disabled', true),
                 conceptType = this.concept.id,
+                justification = _.omit(this.justification, 'valid'),
                 visibilityValue = this.visibilitySource.value;
 
-            this.request = this.dataRequest('vertex', 'create', conceptType, visibilityValue);
+            this.request = this.dataRequest('vertex', 'create', conceptType, justification, visibilityValue);
 
             this.request
                 .then(function(result) {
-                    // TODO: fileDropPosition: self.attr.anchorTo.page
                     self.trigger('updateWorkspace', {
+                        options: {
+                            selectAll: true
+                        },
                         entityUpdates: [{
-                            vertexId: result.id
+                            vertexId: result.id,
+                            graphLayoutJson: {
+                                pagePosition: self.attr.anchorTo.page
+                            }
                         }]
                     })
                     self.teardown();

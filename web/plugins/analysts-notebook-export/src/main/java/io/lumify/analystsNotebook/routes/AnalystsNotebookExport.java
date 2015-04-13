@@ -80,23 +80,4 @@ public class AnalystsNotebookExport extends BaseRequestHandler {
         }
         chain.next(request, response);
     }
-
-    private String getBaseUrl(HttpServletRequest request) {
-
-        // TODO: check for proxy
-        // TODO: move to BaseRequestHandler
-
-        String scheme = request.getScheme();
-        String serverName = request.getServerName();
-        int port = request.getServerPort();
-        String contextPath = request.getContextPath();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(scheme).append("://").append(serverName);
-        if (!(scheme.equals("http") && port == 80 || scheme.equals("https") && port == 443)) {
-            sb.append(":").append(port);
-        }
-        sb.append(contextPath);
-        return sb.toString();
-    }
 }

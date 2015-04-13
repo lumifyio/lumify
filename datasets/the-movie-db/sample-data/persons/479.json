@@ -1,0 +1,85 @@
+{
+  "birthday": "1979-05-14",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia\n\nJamie Draven (born Jamie Donnelly on 14 May 1979) is an English actor whose career in films and television began in 1998. One of his early notable parts was as Billy's elder brother, Tony, in the hit 2000 film Billy Elliot and as Jamie Dow in Ultimate Force.\n\nA native of the southern Manchester district of Wythenshawe, he is the youngest of three brothers (his mother is Kath and her other sons are John and Jason). Early in life he thought of becoming a footballer but turned his attention to acting at 16. He later moved to London to fulfill his acting ambitions, although he had no theatrical training and no CV. Changing his name to Jamie Draven, he was 19 with just a few small parts to his credit, when he won a major role in the 1999 Granada Television drama Butterfly Collectors.\n\nHe has worked with actress Alex Reid on several occasions, including Series 1 and 2 of Ultimate Force, Episode 2 of Mobile and in Jetsam.\n\nDescription above from the Wikipedia article Jamie Draven, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/tC1EJV652XHWPDITZfKe1JrH7Ii.jpg",
+  "id": 479,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0237237",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 71,
+        "media_type": "movie",
+        "title": "Billy Elliot",
+        "credit_id": null,
+        "release_date": "2000-10-13",
+        "original_title": "Billy Elliot",
+        "adult": false,
+        "poster_path": "/x0ySHQPAxQYD0D79BeDY2XhPzXg.jpg",
+        "character": "Tony Elliot"
+      },
+      {
+        "id": 8343,
+        "media_type": "movie",
+        "title": "Badland",
+        "credit_id": null,
+        "release_date": "2007-11-30",
+        "original_title": "Badland",
+        "adult": false,
+        "poster_path": "/qnziSm0PIWRssFSy3y4HtFC0kg5.jpg",
+        "character": "Jerry"
+      },
+      {
+        "id": 38835,
+        "media_type": "movie",
+        "title": "Watermelon",
+        "credit_id": null,
+        "release_date": "2003-04-16",
+        "original_title": "Watermelon",
+        "adult": false,
+        "poster_path": "/fayjmjcHNDPFLfoLNyZf5QQMXZj.jpg",
+        "character": "James Wearing"
+      },
+      {
+        "id": 347,
+        "media_type": "tv",
+        "episode_count": 12,
+        "credit_id": "5253507519c2957940119440",
+        "name": "Ultimate Force",
+        "poster_path": "/1iFMP0FMQsFBTdUfZjdPwfFim84.jpg",
+        "original_name": "Ultimate Force",
+        "first_air_date": "2002-09-16",
+        "character": "Jamie Dow"
+      },
+      {
+        "id": 13210,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "52582625760ee36aaa80b84f",
+        "name": "Messiah",
+        "poster_path": "/jI1zOYnzcuO568QTXRK8x5sMcC7.jpg",
+        "original_name": "Messiah",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 3201,
+        "media_type": "tv",
+        "episode_count": 3,
+        "credit_id": "52574dfd19c29531db0cd213",
+        "name": "Mobile",
+        "poster_path": "/85d5G7q2ZtpuwJwdBi8GKyIBSDK.jpg",
+        "original_name": "Mobile",
+        "first_air_date": "2007-03-19",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Jamie Draven",
+  "place_of_birth": "Wythenshawe, Manchester, Lancashire, England",
+  "popularity": "1.85000077870479"
+}

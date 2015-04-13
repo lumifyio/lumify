@@ -1,0 +1,122 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 374,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0571650",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 9080,
+        "media_type": "movie",
+        "title": "Spies Like Us",
+        "credit_id": "52fe44d9c3a36847f80adca3",
+        "release_date": "1985-12-06",
+        "original_title": "Spies Like Us",
+        "adult": false,
+        "poster_path": "/2SHiQBkqRdwt8CH1N24dpBD9RfX.jpg",
+        "character": "Jerry Hadley"
+      },
+      {
+        "id": 14506,
+        "media_type": "movie",
+        "title": "The Adventures of Baron Munchausen",
+        "credit_id": "52fe45fa9251416c75069029",
+        "release_date": "1988-12-07",
+        "original_title": "The Adventures of Baron Munchausen",
+        "adult": false,
+        "poster_path": "/75SlrEn0RCb2Ng18cCE82S00Hi5.jpg",
+        "character": "Rupert / Adolphus"
+      },
+      {
+        "id": 68,
+        "media_type": "movie",
+        "title": "Brazil",
+        "credit_id": "52fe4213c3a36847f8001ee9",
+        "release_date": "1985-12-18",
+        "original_title": "Brazil",
+        "adult": false,
+        "poster_path": "/fbaxxLP6PztGwLrHO0lBDquof0d.jpg",
+        "character": "Harvey Lime"
+      },
+      {
+        "id": 262210,
+        "media_type": "movie",
+        "title": "The Box",
+        "credit_id": "5338b1bf92514113020024af",
+        "release_date": "1981-03-29",
+        "original_title": "The Box",
+        "adult": false,
+        "poster_path": null,
+        "character": "(voice)"
+      },
+      {
+        "id": 583,
+        "media_type": "movie",
+        "title": "Life of Brian",
+        "credit_id": "53c82c520e0a267ff1004c6b",
+        "release_date": "1979-08-16",
+        "original_title": "Life of Brian",
+        "adult": false,
+        "poster_path": "/wEgm6iVOD4afMlEo1VGi3Yz0cmd.jpg",
+        "character": "False Prophet / Blind Man / Giggling Guard / Stig"
+      },
+      {
+        "id": 6207,
+        "media_type": "tv",
+        "episode_count": 37,
+        "credit_id": "52578524760ee36aaa6285eb",
+        "name": "Pipkins",
+        "poster_path": null,
+        "original_name": "Pipkins",
+        "first_air_date": "1973-01-01",
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 8054,
+        "media_type": "movie",
+        "title": "The Imaginarium of Doctor Parnassus",
+        "credit_id": "52fe448ec3a36847f809cd31",
+        "department": "Writing",
+        "release_date": "2009-12-24",
+        "original_title": "The Imaginarium of Doctor Parnassus",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/pAsSX0vSzMXOsC1DtuVq6Gbeb30.jpg"
+      },
+      {
+        "id": 14506,
+        "media_type": "movie",
+        "title": "The Adventures of Baron Munchausen",
+        "credit_id": "52fe45fa9251416c75069043",
+        "department": "Writing",
+        "release_date": "1988-12-07",
+        "original_title": "The Adventures of Baron Munchausen",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/75SlrEn0RCb2Ng18cCE82S00Hi5.jpg"
+      },
+      {
+        "id": 68,
+        "media_type": "movie",
+        "title": "Brazil",
+        "credit_id": "52fe4213c3a36847f8001e7f",
+        "department": "Writing",
+        "release_date": "1985-12-18",
+        "original_title": "Brazil",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/fbaxxLP6PztGwLrHO0lBDquof0d.jpg"
+      }
+    ]
+  },
+  "name": "Charles McKeown",
+  "place_of_birth": null,
+  "popularity": "1.50009708640103"
+}

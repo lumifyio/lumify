@@ -1,0 +1,322 @@
+{
+  "budget": 50000000,
+  "vote_average": 6.1,
+  "backdrop_path": "/qOu7Ukkglea6UFZSR6XV8cJLELE.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3542,
+        "order": 0,
+        "credit_id": "52fe422ec3a36847f800a3a9",
+        "name": "Barney Clark",
+        "cast_id": 1,
+        "profile_path": null,
+        "character": "Oliver Twist"
+      },
+      {
+        "id": 2282,
+        "order": 1,
+        "credit_id": "52fe422ec3a36847f800a3ad",
+        "name": "Ben Kingsley",
+        "cast_id": 2,
+        "profile_path": "/n0cVP5K2VxlohkAf7LoRwPt4xhu.jpg",
+        "character": "Fagin"
+      },
+      {
+        "id": 3543,
+        "order": 2,
+        "credit_id": "52fe422ec3a36847f800a3b1",
+        "name": "Jamie Foreman",
+        "cast_id": 3,
+        "profile_path": "/mhv1ly0lMRQBTte8LPEsa6BYCv5.jpg",
+        "character": "Bill Sikes"
+      },
+      {
+        "id": 3544,
+        "order": 3,
+        "credit_id": "52fe422ec3a36847f800a3b5",
+        "name": "Harry Eden",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "The Artful Dodger"
+      },
+      {
+        "id": 3545,
+        "order": 4,
+        "credit_id": "52fe422ec3a36847f800a3b9",
+        "name": "Edward Hardwicke",
+        "cast_id": 5,
+        "profile_path": "/9cIe4QxtMtiVrhsUAJtjvAKJRTB.jpg",
+        "character": "Mr. Brownlow"
+      },
+      {
+        "id": 3546,
+        "order": 5,
+        "credit_id": "52fe422ec3a36847f800a3bd",
+        "name": "Leanne Rowe",
+        "cast_id": 6,
+        "profile_path": "/dOuBoFD91xixhdcbmRpoEXdoXJI.jpg",
+        "character": "Nancy"
+      },
+      {
+        "id": 3547,
+        "order": 6,
+        "credit_id": "52fe422ec3a36847f800a3c1",
+        "name": "Ian McNeice",
+        "cast_id": 7,
+        "profile_path": "/v217qBNPrwNBvcu9F3BVBPE0AwM.jpg",
+        "character": "Mr. Limbkins"
+      },
+      {
+        "id": 3548,
+        "order": 7,
+        "credit_id": "52fe422ec3a36847f800a3c5",
+        "name": "Timothy Bateson",
+        "cast_id": 8,
+        "profile_path": "/dHSn6dpypXLmNCrCwOy3fJDbPsT.jpg",
+        "character": "Parson"
+      },
+      {
+        "id": 3566,
+        "order": 8,
+        "credit_id": "52fe422ec3a36847f800a42b",
+        "name": "Chris Overton",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Noah Claypole"
+      },
+      {
+        "id": 3549,
+        "order": 9,
+        "credit_id": "52fe422ec3a36847f800a3c9",
+        "name": "Andy Linden",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Mr. Gamfield"
+      },
+      {
+        "id": 3550,
+        "order": 10,
+        "credit_id": "52fe422ec3a36847f800a3cd",
+        "name": "Teresa Churcher",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Charlotte"
+      },
+      {
+        "id": 3551,
+        "order": 11,
+        "credit_id": "52fe422ec3a36847f800a3d1",
+        "name": "Jake Curran",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Barney"
+      },
+      {
+        "id": 3552,
+        "order": 12,
+        "credit_id": "52fe422ec3a36847f800a3d5",
+        "name": "Turbo",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Bullseye (Dog)"
+      },
+      {
+        "id": 3553,
+        "order": 13,
+        "credit_id": "52fe422ec3a36847f800a3d9",
+        "name": "Lewis Chase",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Charley Bates"
+      },
+      {
+        "id": 3554,
+        "order": 14,
+        "credit_id": "52fe422ec3a36847f800a3dd",
+        "name": "Levi Hayes",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Nicky"
+      },
+      {
+        "id": 3555,
+        "order": 15,
+        "credit_id": "52fe422ec3a36847f800a3e1",
+        "name": "Jeremy Swift",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Mr. Bumble"
+      },
+      {
+        "id": 3565,
+        "order": 16,
+        "credit_id": "52fe422ec3a36847f800a427",
+        "name": "Gillian Hanna",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Mrs. Sowerberry"
+      },
+      {
+        "id": 3567,
+        "order": 17,
+        "credit_id": "52fe422ec3a36847f800a42f",
+        "name": "Michael Heath",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Mr. Sowerberry"
+      },
+      {
+        "id": 3568,
+        "order": 18,
+        "credit_id": "52fe422ec3a36847f800a433",
+        "name": "Patrick Godfrey",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Bookseller"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3556,
+        "credit_id": "52fe422ec3a36847f800a3e7",
+        "department": "Directing",
+        "name": "Roman Polanski",
+        "job": "Director",
+        "profile_path": "/qI12N0XzSQanAUv6sTucTLWi3az.jpg"
+      },
+      {
+        "id": 3557,
+        "credit_id": "52fe422ec3a36847f800a3ed",
+        "department": "Writing",
+        "name": "Charles Dickens",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 3558,
+        "credit_id": "52fe422ec3a36847f800a3f3",
+        "department": "Writing",
+        "name": "Ronald Harwood",
+        "job": "Screenplay",
+        "profile_path": "/kFxKyfaXcaWd4E0tOm0B1FLYnBC.jpg"
+      },
+      {
+        "id": 3559,
+        "credit_id": "52fe422ec3a36847f800a3f9",
+        "department": "Production",
+        "name": "Robert Benmussa",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3556,
+        "credit_id": "52fe422ec3a36847f800a3ff",
+        "department": "Production",
+        "name": "Roman Polanski",
+        "job": "Producer",
+        "profile_path": "/qI12N0XzSQanAUv6sTucTLWi3az.jpg"
+      },
+      {
+        "id": 3560,
+        "credit_id": "52fe422ec3a36847f800a405",
+        "department": "Production",
+        "name": "Alain Sarde",
+        "job": "Producer",
+        "profile_path": "/95fgX9tAqahF98DG4FutHpLjbEi.jpg"
+      },
+      {
+        "id": 3561,
+        "credit_id": "52fe422ec3a36847f800a40b",
+        "department": "Camera",
+        "name": "Pawel Edelman",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3562,
+        "credit_id": "52fe422ec3a36847f800a411",
+        "department": "Sound",
+        "name": "Rachel Portman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3563,
+        "credit_id": "52fe422ec3a36847f800a417",
+        "department": "Art",
+        "name": "Allan Starski",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3564,
+        "credit_id": "52fe422ec3a36847f800a41d",
+        "department": "Editing",
+        "name": "Hervé de Luze",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 970,
+        "credit_id": "52fe422ec3a36847f800a423",
+        "department": "Production",
+        "name": "Celestia Fox",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 130,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.olivertwistthemovie.co.uk/",
+  "id": 257,
+  "production_countries": [
+    {
+      "name": "Czech Republic",
+      "iso_3166_1": "CZ"
+    },
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "Oliver Twist",
+  "overview": "Oliver Twist the modern filmed version of Charles Dickens bestseller, a Roman Polanski adaptation. The classic Dickens tale, where an orphan meets a pickpocket on the streets of London. From there, he joins a household of boys who are trained to steal for their master.",
+  "production_companies": [{
+    "id": 559,
+    "name": "TriStar Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0380599",
+  "release_date": "2005-09-23",
+  "original_title": "Oliver Twist",
+  "vote_count": 15,
+  "poster_path": "/ggQoLWChnmYaSdY1anfS6GqATNO.jpg",
+  "tagline": "",
+  "revenue": 42093706,
+  "popularity": "0.257256075071356"
+}

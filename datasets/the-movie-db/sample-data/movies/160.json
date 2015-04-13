@@ -1,0 +1,61 @@
+{
+  "budget": 0,
+  "vote_average": 4,
+  "backdrop_path": null,
+  "genres": [
+    {
+      "id": 99,
+      "name": "Documentary"
+    },
+    {
+      "id": 10755,
+      "name": "Short"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [],
+    "crew": [
+      {
+        "id": 1867,
+        "credit_id": "52fe4220c3a36847f80060eb",
+        "department": "Directing",
+        "name": "Auguste Lumière",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 1868,
+        "credit_id": "52fe4220c3a36847f80060f1",
+        "department": "Directing",
+        "name": "Louis Lumière",
+        "job": "Director",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 1,
+  "spoken_languages": [{
+    "iso_639_1": "fr",
+    "name": "Français"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 160,
+  "production_countries": [{
+    "name": "France",
+    "iso_3166_1": "FR"
+  }],
+  "title": "Arrival of a Train at La Ciotat",
+  "overview": "Film historians agree that the first public exhibition of motion pictures occurred on 28th December 1895 when Auguste Lumière and Louis Lumière (the Lumière Brothers) exhibited a selection of ten of their single-reel films to a paying audience at a Parisian café. Popular legend has it that, when this film was shown, the first-night audience fled the café in terror, fearing being run over by the \"approaching\" train. This legend has since been identified as promotional embellishment, though there is evidence to suggest that people were astounded at the capabilities of the Lumières' cinématographe.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0000012",
+  "release_date": "1896-01-25",
+  "original_title": "L'Arrivée d'un train à la Ciotat",
+  "vote_count": 2,
+  "poster_path": "/sckkGIRoUGUNJyMnMbOb3l4LhlW.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.229686454935701"
+}

@@ -1,0 +1,96 @@
+{
+  "birthday": "1967-12-07",
+  "adult": false,
+  "biography": null,
+  "homepage": "",
+  "profile_path": "/dNKQK7uLrdG1g8ETKF9SxbXHGNQ.jpg",
+  "id": 451,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0726900",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 70,
+        "media_type": "movie",
+        "title": "Million Dollar Baby",
+        "credit_id": "52fe4213c3a36847f8002021",
+        "release_date": "2004-12-14",
+        "original_title": "Million Dollar Baby",
+        "adult": false,
+        "poster_path": "/h4VZKi2Jt4VoBYJmtC4c3bO8KqM.jpg",
+        "character": "Billie 'The Blue Bear'"
+      },
+      {
+        "id": 13475,
+        "media_type": "movie",
+        "title": "Star Trek",
+        "credit_id": "52fe456d9251416c750561ad",
+        "release_date": "2009-05-07",
+        "original_title": "Star Trek",
+        "adult": false,
+        "poster_path": "/fM0LKKgP0dtjNXQnAGA8WC1qr8h.jpg",
+        "character": "Romulan Communications Officer"
+      },
+      {
+        "id": 268674,
+        "media_type": "movie",
+        "title": "Shadow Boxers",
+        "credit_id": "536b289cc3a3683bf900068f",
+        "release_date": "1999-06-02",
+        "original_title": "Shadow Boxers",
+        "adult": false,
+        "poster_path": "/yA9mCGsqCVJKKXYMUjIcD3qBUZz.jpg",
+        "character": "Herself"
+      },
+      {
+        "id": 11535,
+        "media_type": "movie",
+        "title": "Rollerball",
+        "credit_id": "52fe44549251416c75030f0b",
+        "release_date": "2002-02-08",
+        "original_title": "Rollerball",
+        "adult": false,
+        "poster_path": "/etz7yDKmLYFV5AgYmVa4Ty9VBjD.jpg",
+        "character": "Red Team #9"
+      },
+      {
+        "id": 29297,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525892e3760ee3466154a9f4",
+        "name": "Lucia en de liefde",
+        "poster_path": null,
+        "original_name": "Lucia en de liefde",
+        "first_air_date": "2009-07-13",
+        "character": ""
+      },
+      {
+        "id": 3475,
+        "media_type": "tv",
+        "episode_count": 3,
+        "credit_id": "525751b4760ee36aaa1cb137",
+        "name": "The L Word",
+        "poster_path": "/bZmbkIkudFksku3dpgyzJ6nyYe1.jpg",
+        "original_name": "The L Word",
+        "first_air_date": "2004-01-18",
+        "character": ""
+      },
+      {
+        "id": 29381,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52589328760ee3466155068e",
+        "name": "Sterren voor de klas",
+        "poster_path": null,
+        "original_name": "Sterren voor de klas",
+        "first_air_date": "2008-09-21",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Lucia Rijker",
+  "place_of_birth": "Amsterdam, Noord-Holland, Netherlands",
+  "popularity": "1.85367184574289"
+}

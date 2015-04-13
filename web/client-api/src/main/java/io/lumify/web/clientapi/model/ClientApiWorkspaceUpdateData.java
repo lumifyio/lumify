@@ -37,6 +37,16 @@ public class ClientApiWorkspaceUpdateData implements ClientApiObject {
     public static class EntityUpdate {
         private String vertexId;
         private GraphPosition graphPosition;
+        private String graphLayoutJson;
+
+        public EntityUpdate() {
+
+        }
+
+        public EntityUpdate(String vertexId, GraphPosition graphPosition) {
+            this.vertexId = vertexId;
+            this.graphPosition = graphPosition;
+        }
 
         public String getVertexId() {
             return vertexId;
@@ -52,6 +62,14 @@ public class ClientApiWorkspaceUpdateData implements ClientApiObject {
 
         public void setGraphPosition(GraphPosition graphPosition) {
             this.graphPosition = graphPosition;
+        }
+
+        public String getGraphLayoutJson() {
+            return graphLayoutJson;
+        }
+
+        public void setGraphLayoutJson(String graphLayoutJson) {
+            this.graphLayoutJson = graphLayoutJson;
         }
     }
 

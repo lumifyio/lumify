@@ -2,7 +2,6 @@ package io.lumify.securegraph.model.longRunningProcess;
 
 import com.google.inject.Inject;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
-import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.types.JsonLumifyProperty;
@@ -14,7 +13,6 @@ import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.util.ConvertingIterable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -38,17 +36,6 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         this.graph = graph;
 
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
-
-        Concept userConcept = ontologyRepository.getConceptByIRI(UserRepository.USER_CONCEPT_IRI);
-        checkNotNull(userConcept);
-
-        Concept longRunningProcessConcept = ontologyRepository.getOrCreateConcept(null, LONG_RUNNING_PROCESS_CONCEPT_IRI, "workspace", null);
-        checkNotNull(longRunningProcessConcept);
-        List<Concept> userConceptList = new ArrayList<Concept>();
-        userConceptList.add(userConcept);
-        List<Concept> longRunningProcessConceptList = new ArrayList<Concept>();
-        longRunningProcessConceptList.add(longRunningProcessConcept);
-        ontologyRepository.getOrCreateRelationshipType(userConceptList, longRunningProcessConceptList, LONG_RUNNING_PROCESS_TO_USER_EDGE_IRI, "longRunningProcess to user");
     }
 
     @Override
@@ -61,6 +48,8 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
 
         VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility);
         LumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, LONG_RUNNING_PROCESS_CONCEPT_IRI, visibility);
+        longRunningProcessQueueItem.put("enqueueTime", System.currentTimeMillis());
+        longRunningProcessQueueItem.put("userId", user.getUserId());
         QUEUE_ITEM_JSON_PROPERTY.setProperty(vertexBuilder, longRunningProcessQueueItem, visibility);
         Vertex longRunningProcessVertex = vertexBuilder.save(authorizations);
 
@@ -69,7 +58,7 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         this.graph.flush();
 
         longRunningProcessQueueItem.put("id", longRunningProcessVertex.getId());
-        this.workQueueRepository.pushLongRunningProcessQueue(longRunningProcessQueueItem, user.getUserId());
+        this.workQueueRepository.pushLongRunningProcessQueue(longRunningProcessQueueItem);
 
         return longRunningProcessVertex.getId();
     }
@@ -114,7 +103,9 @@ public class SecureGraphLongRunningProcessRepository extends LongRunningProcessR
         return toList(new ConvertingIterable<Vertex, JSONObject>(longRunningProcessVertices) {
             @Override
             protected JSONObject convert(Vertex longRunningProcessVertex) {
-                return QUEUE_ITEM_JSON_PROPERTY.getPropertyValue(longRunningProcessVertex);
+                JSONObject json = QUEUE_ITEM_JSON_PROPERTY.getPropertyValue(longRunningProcessVertex);
+                json.put("id", longRunningProcessVertex.getId());
+                return json;
             }
         });
     }

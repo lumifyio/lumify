@@ -1,0 +1,217 @@
+{
+  "budget": 41000000,
+  "vote_average": 6.4,
+  "backdrop_path": "/4uJZvmEMX6Z6ag3bzym5exLY9wI.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 325,
+        "order": 0,
+        "credit_id": "52fe4212c3a36847f8001c53",
+        "name": "Eminem",
+        "cast_id": 3,
+        "profile_path": "/mKPPGlIZ2EiKb6LSC46cSzK2NEU.jpg",
+        "character": "Jimmy B. \"Rabbit\" Smith"
+      },
+      {
+        "id": 327,
+        "order": 1,
+        "credit_id": "52fe4212c3a36847f8001c57",
+        "name": "Mekhi Phifer",
+        "cast_id": 4,
+        "profile_path": "/xrv9RDMPoTd9NsfpUzL81XglAmk.jpg",
+        "character": "David 'Future' Porter"
+      },
+      {
+        "id": 326,
+        "order": 2,
+        "credit_id": "52fe4212c3a36847f8001c5b",
+        "name": "Kim Basinger",
+        "cast_id": 5,
+        "profile_path": "/xpv6NgpY0mDr5QSWjZLXy5KlFn9.jpg",
+        "character": "Stephanie Smith"
+      },
+      {
+        "id": 328,
+        "order": 3,
+        "credit_id": "52fe4212c3a36847f8001c5f",
+        "name": "Brittany Murphy",
+        "cast_id": 6,
+        "profile_path": "/jktbTmFE3TVaKUqPDWw8VZ5rXqc.jpg",
+        "character": "Alex"
+      },
+      {
+        "id": 335,
+        "order": 4,
+        "credit_id": "52fe4212c3a36847f8001c7b",
+        "name": "Michael Shannon",
+        "cast_id": 13,
+        "profile_path": "/5yGCJ6znHM96zTfW2LNP6uPPDCZ.jpg",
+        "character": "Greg Buehl"
+      },
+      {
+        "id": 343,
+        "order": 5,
+        "credit_id": "52fe4212c3a36847f8001c8b",
+        "name": "Taryn Manning",
+        "cast_id": 21,
+        "profile_path": "/vgLUb0mjZqJsDCnZZ3I9VKeyo9J.jpg",
+        "character": "Janeane"
+      },
+      {
+        "id": 53650,
+        "order": 6,
+        "credit_id": "52fe4212c3a36847f8001c8f",
+        "name": "Anthony Mackie",
+        "cast_id": 22,
+        "profile_path": "/5VGGJ0Co8SC94iiedWb2o3C36T.jpg",
+        "character": "Papa Doc"
+      },
+      {
+        "id": 333,
+        "order": 7,
+        "credit_id": "53615f92c3a368394e00031c",
+        "name": "Evan Jones",
+        "cast_id": 23,
+        "profile_path": "/l3HyrWJQZtb6GMmljTfbDR0Ve65.jpg",
+        "character": "Cheddar Bob"
+      },
+      {
+        "id": 217173,
+        "order": 8,
+        "credit_id": "536161d2c3a368395d000326",
+        "name": "Mike Bell",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Shorty Mike"
+      },
+      {
+        "id": 1069291,
+        "order": 9,
+        "credit_id": "53616364c3a368397600034f",
+        "name": "Proof",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Lil'Tic"
+      }
+    ],
+    "crew": [
+      {
+        "id": 323,
+        "credit_id": "52fe4212c3a36847f8001c49",
+        "department": "Directing",
+        "name": "Curtis Hanson",
+        "job": "Director",
+        "profile_path": "/e8o4pYzVjh4ier1n0bxD78HCbxg.jpg"
+      },
+      {
+        "id": 324,
+        "credit_id": "52fe4212c3a36847f8001c4f",
+        "department": "Writing",
+        "name": "Scott Silver",
+        "job": "Author",
+        "profile_path": "/vRblvymfxaMd7Lsqs4ypVAfnJK.jpg"
+      },
+      {
+        "id": 329,
+        "credit_id": "52fe4212c3a36847f8001c65",
+        "department": "Production",
+        "name": "Carol Fenelon",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 275,
+        "credit_id": "52fe4212c3a36847f8001c6b",
+        "department": "Camera",
+        "name": "Rodrigo Prieto",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 330,
+        "credit_id": "52fe4212c3a36847f8001c71",
+        "department": "Editing",
+        "name": "Jay Rabinowitz",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 331,
+        "credit_id": "52fe4212c3a36847f8001c77",
+        "department": "Editing",
+        "name": "Craig Kitson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 339,
+        "credit_id": "52fe4212c3a36847f8001c81",
+        "department": "Production",
+        "name": "Brian Grazer",
+        "job": "Producer",
+        "profile_path": "/jEar20rOczc6ve2jy8zYxiBkPw5.jpg"
+      },
+      {
+        "id": 340,
+        "credit_id": "52fe4212c3a36847f8001c87",
+        "department": "Production",
+        "name": "Jimmy Iovine",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 110,
+  "spoken_languages": [
+    {
+      "iso_639_1": "cs",
+      "name": "Český"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://movies.uip.de/8mile/",
+  "id": 65,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "8 Mile",
+  "overview": "The setting is Detroit in 1995. The city is divided by 8 Mile, a road that splits the town in half along racial lines. A young white rapper, Jimmy \"B-Rabbit\" Smith Jr summons strength within himself to cross over these arbitrary boundaries to fulfill his dream of success in hip hop. With future and the three one third all he has to do is not choke.",
+  "production_companies": [
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    },
+    {
+      "id": 23,
+      "name": "Imagine Entertainment"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0298203",
+  "release_date": "2002-11-08",
+  "original_title": "8 Mile",
+  "vote_count": 202,
+  "poster_path": "/dXzTrKwpbLpCqn8O70FUUhNbYQT.jpg",
+  "tagline": "Every moment is another chance.",
+  "revenue": 215000000,
+  "popularity": "1.28442194822646"
+}

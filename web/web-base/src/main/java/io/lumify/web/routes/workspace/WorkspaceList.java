@@ -34,7 +34,7 @@ public class WorkspaceList extends BaseRequestHandler {
     }
 
     public ClientApiWorkspaces handle(User user) {
-        Iterable<Workspace> workspaces = workspaceRepository.findAll(user);
+        Iterable<Workspace> workspaces = workspaceRepository.findAllForUser(user);
         String activeWorkspaceId = getUserRepository().getCurrentWorkspaceId(user.getUserId());
         activeWorkspaceId = activeWorkspaceId != null ? activeWorkspaceId : "";
 

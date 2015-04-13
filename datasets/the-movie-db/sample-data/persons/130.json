@@ -1,0 +1,239 @@
+{
+  "birthday": "1934-08-24",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia  Kenneth George \"Kenny\" Baker (born 24 August 1934) is a British actor and musician, best known as the man inside R2-D2 in the popular Star Wars film series.  Description above from the Wikipedia article Kenny Baker, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "http://www.kennybaker.co.uk",
+  "profile_path": "/wnTrBdbJr23GWApnmARg0F7Gpja.jpg",
+  "id": 130,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0048652",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 11,
+        "media_type": "movie",
+        "title": "Star Wars: Episode IV - A New Hope",
+        "credit_id": "52fe420dc3a36847f8000455",
+        "release_date": "1977-05-25",
+        "original_title": "Star Wars: Episode IV - A New Hope",
+        "adult": false,
+        "poster_path": "/tvSlBzAdRE29bZe5yYWrJ2ds137.jpg",
+        "character": "R2-D2"
+      },
+      {
+        "id": 279,
+        "media_type": "movie",
+        "title": "Amadeus",
+        "credit_id": "52fe4231c3a36847f800b221",
+        "release_date": "1984-11-13",
+        "original_title": "Amadeus",
+        "adult": false,
+        "poster_path": "/flnoqdC38mbaulAeptjynOFO7yi.jpg",
+        "character": "Parody Commendatore"
+      },
+      {
+        "id": 1891,
+        "media_type": "movie",
+        "title": "Star Wars: Episode V - The Empire Strikes Back",
+        "credit_id": "52fe431ec3a36847f803bb91",
+        "release_date": "1980-05-21",
+        "original_title": "Star Wars: Episode V - The Empire Strikes Back",
+        "adult": false,
+        "poster_path": "/6u1fYtxG5eqjhtCPDx04pJphQRW.jpg",
+        "character": "R2-D2"
+      },
+      {
+        "id": 1892,
+        "media_type": "movie",
+        "title": "Star Wars: Episode VI - Return of the Jedi",
+        "credit_id": "52fe431ec3a36847f803bc43",
+        "release_date": "1983-05-25",
+        "original_title": "Star Wars: Episode VI - Return of the Jedi",
+        "adult": false,
+        "poster_path": "/jx5p0aHlbPXqe3AH9G15NvmWaqQ.jpg",
+        "character": "R2-D2 / Paploo"
+      },
+      {
+        "id": 1893,
+        "media_type": "movie",
+        "title": "Star Wars: Episode I - The Phantom Menace",
+        "credit_id": "52fe431ec3a36847f803bccd",
+        "release_date": "1999-05-19",
+        "original_title": "Star Wars: Episode I - The Phantom Menace",
+        "adult": false,
+        "poster_path": "/n8V09dDc02KsSN6Q4hC2BX6hN8X.jpg",
+        "character": "R2-D2"
+      },
+      {
+        "id": 1894,
+        "media_type": "movie",
+        "title": "Star Wars: Episode II - Attack of the Clones",
+        "credit_id": "52fe431fc3a36847f803bdd7",
+        "release_date": "2002-05-16",
+        "original_title": "Star Wars: Episode II - Attack of the Clones",
+        "adult": false,
+        "poster_path": "/2vcNFtrZXNwIcBgH5e2xXCmVR8t.jpg",
+        "character": "R2-D2"
+      },
+      {
+        "id": 1895,
+        "media_type": "movie",
+        "title": "Star Wars: Episode III - Revenge of the Sith",
+        "credit_id": "52fe431fc3a36847f803bf0b",
+        "release_date": "2005-05-19",
+        "original_title": "Star Wars: Episode III - Revenge of the Sith",
+        "adult": false,
+        "poster_path": "/tgr5Pdy7ehZYBqBkN2K7Q02xgOb.jpg",
+        "character": "R2-D2"
+      },
+      {
+        "id": 1955,
+        "media_type": "movie",
+        "title": "The Elephant Man",
+        "credit_id": "52fe4326c3a36847f803dfb3",
+        "release_date": "1980-10-09",
+        "original_title": "The Elephant Man",
+        "adult": false,
+        "poster_path": "/lDXJUmLQsViSKLbil2luD91l2kE.jpg",
+        "character": "Plumed Dwarf"
+      },
+      {
+        "id": 36819,
+        "media_type": "movie",
+        "title": "Time Bandits",
+        "credit_id": "52fe460e9251416c910478ef",
+        "release_date": "1981-11-13",
+        "original_title": "Time Bandits",
+        "adult": false,
+        "poster_path": "/25I4Qbx1C1QSGCYMj8tBDQR3rmg.jpg",
+        "character": "Fidgit"
+      },
+      {
+        "id": 76180,
+        "media_type": "movie",
+        "title": "Empire of Dreams: The Story of the Star Wars Trilogy",
+        "credit_id": "5347ba44c3a368671c000f21",
+        "release_date": "2004-09-12",
+        "original_title": "Empire of Dreams: The Story of the Star Wars Trilogy",
+        "adult": false,
+        "poster_path": "/nvYb5G5p94dERKNrALKFNSdHS4O.jpg",
+        "character": "Himself - 'R2-D2'"
+      },
+      {
+        "id": 140607,
+        "media_type": "movie",
+        "title": "Star Wars: Episode VII",
+        "credit_id": "535fd9abc3a368227300303f",
+        "release_date": "2015-12-18",
+        "original_title": "Star Wars: Episode VII",
+        "adult": false,
+        "poster_path": "/rJ5TKeav6JnlO4TUzcx2KIdSHa2.jpg",
+        "character": "R2D2"
+      },
+      {
+        "id": 71750,
+        "media_type": "movie",
+        "title": "Sleeping Beauty",
+        "credit_id": "52fe4846c3a368484e0f0c19",
+        "release_date": "1987-06-12",
+        "original_title": "Sleeping Beauty",
+        "adult": false,
+        "poster_path": "/53At2I6lxPvloR1PW8yLwKaOsFT.jpg",
+        "character": "Elf"
+      },
+      {
+        "id": 72803,
+        "media_type": "movie",
+        "title": "SPFX: The Empire Strikes Back",
+        "credit_id": "52fe487fc3a368484e0fb7c9",
+        "release_date": "1980-09-22",
+        "original_title": "SPFX: The Empire Strikes Back",
+        "adult": false,
+        "poster_path": "/f0sS931i5xq7Xo0YS035OfdYoLN.jpg",
+        "character": "R2D2"
+      },
+      {
+        "id": 74433,
+        "media_type": "movie",
+        "title": "Boobs in the Wood",
+        "credit_id": "5354d7be0e0a265614005cc0",
+        "release_date": "1999-06-14",
+        "original_title": "Boobs in the Wood",
+        "adult": false,
+        "poster_path": "/kbulbFYjyn5kdhfESj5FBWyk9fM.jpg",
+        "character": "Bruce Foreskin"
+      },
+      {
+        "id": 98016,
+        "media_type": "movie",
+        "title": "Star Tours",
+        "credit_id": "52fe49fc9251416c750d9f77",
+        "release_date": "1987-01-09",
+        "original_title": "Star Tours",
+        "adult": false,
+        "poster_path": "/mJhGDyl29ZZle1YpHVhMSsbjB1F.jpg",
+        "character": "R2-D2"
+      },
+      {
+        "id": 239059,
+        "media_type": "movie",
+        "title": "Inside the Labyrinth",
+        "credit_id": "52fe4e8bc3a36847f82977d1",
+        "release_date": "1986-12-13",
+        "original_title": "Inside the Labyrinth",
+        "adult": false,
+        "poster_path": "/wosckxXCAnqGUaAkWLHakfTqVrj.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 27405,
+        "media_type": "movie",
+        "title": "Circus of Horrors",
+        "credit_id": "52fe4547c3a368484e051083",
+        "release_date": "1960-04-01",
+        "original_title": "Circus of Horrors",
+        "adult": false,
+        "poster_path": "/9GC3n3ntXtA8R5UqtQQ9Bfi0TyX.jpg",
+        "character": "Dwarf"
+      },
+      {
+        "id": 2912,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525749ab760ee36aaa113af6",
+        "name": "Jeopardy!",
+        "poster_path": "/gdzdPgTUWRNj28BXT7HAUqZFQHx.jpg",
+        "original_name": "Jeopardy!",
+        "first_air_date": "1964-03-30",
+        "character": ""
+      },
+      {
+        "id": 4587,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "525772b8760ee36aaa4c1dde",
+        "name": "Star Wars Holiday Special",
+        "poster_path": null,
+        "original_name": "Star Wars Holiday Special",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 3501,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257521c760ee36aaa1d2ef9",
+        "name": "The Goodies",
+        "poster_path": "/3ZYCf1O6KFDmgHhhbf6gGNRf45I.jpg",
+        "original_name": "The Goodies",
+        "first_air_date": "1970-11-08",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Kenny Baker",
+  "place_of_birth": "Birmingham, England, UK",
+  "popularity": "1.25849236120604"
+}

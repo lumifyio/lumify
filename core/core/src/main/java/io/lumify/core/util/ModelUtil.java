@@ -18,6 +18,8 @@ public class ModelUtil {
             "lumify_securegraph_d",
             "lumify_securegraph_v",
             "lumify_securegraph_e",
+            "lumify_securegraph_m",
+            "lumify_userNotifications",
             "lumify_systemNotifications");
 
     public static void initializeTables(ModelSession modelSession, User user) {

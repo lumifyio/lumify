@@ -92,8 +92,8 @@ define([
                 var $this = $(this);
                 if ($this.data('userId') === user.id) {
                     $this.find('.user-status')
-                        .removeClass('active idle offline unknown')
-                        .addClass((user.status && user.status.toLowerCase()) || 'unknown');
+                        .removePrefixedClasses('st-')
+                        .addClass('st-' + (user.status && user.status.toLowerCase() || 'unknown'));
                 }
             })
         };
@@ -138,12 +138,17 @@ define([
                 userIds = _.pluck(workspaceUsers, 'userId'),
                 html = $();
 
-            this.dataRequest('user', 'info', userIds)
+            userIds = _.without(userIds, lumifyData.currentUser.id);
+
+            (userIds.length ?
+                this.dataRequest('user', 'search', { userIds: userIds }) :
+                Promise.resolve([]))
                 .done(function(users) {
-                    self.currentUsers = users;
+                    var usersById = _.indexBy(users, 'id');
+                    self.currentUsers = usersById;
 
                     _.sortBy(workspaceUsers, function(userPermission) {
-                        var user = users[userPermission.userId];
+                        var user = usersById[userPermission.userId];
                         return user && user.displayName || 1;
                     }).forEach(function(userPermission) {
                         if (userPermission.userId != lumifyData.currentUser.id) {
@@ -170,6 +175,7 @@ define([
                         access: userPermission.access,
                         permissionLabel: {
                             read: i18n('workspaces.form.sharing.access.view'),
+                            comment: i18n('workspaces.form.sharing.access.comment'),
                             write: i18n('workspaces.form.sharing.access.edit')
                         }[userPermission.access.toLowerCase()],
                         userId: user.id,
@@ -188,13 +194,16 @@ define([
         };
 
         this.makePopover = function(el) {
+            var self = this;
+
             el.popover({
                 html: true,
                 placement: 'bottom',
                 container: this.$node,
                 content: function() {
-                    var row = $(this).closest('.user-row');
-                    return $(permissionsTemplate($(this).data())).data('userRow', row);
+                    var row = $(this).closest('.user-row'),
+                        data = $(this).data();
+                    return $(permissionsTemplate(data)).data('userRow', row);
                 }
             });
         };
@@ -310,6 +319,9 @@ define([
         };
 
         this.onShareWorkspaceWithUser = function(event, data) {
+            if (this.currentUsers) {
+                this.currentUsers[data.user.id] = data.user;
+            }
 
             var self = this,
                 form = this.select('shareFormSelector'),

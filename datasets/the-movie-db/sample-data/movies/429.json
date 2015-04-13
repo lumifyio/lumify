@@ -1,0 +1,364 @@
+{
+  "budget": 1200000,
+  "vote_average": 7.5,
+  "backdrop_path": "/xGC2fY5KFmtuXnsuQwYQKFOLZFy.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 37,
+      "name": "Western"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3265,
+        "order": 0,
+        "credit_id": "52fe4242c3a36847f80105d7",
+        "name": "Eli Wallach",
+        "cast_id": 6,
+        "profile_path": "/s79fK5MSt7xumFuX3nO9RS6CkNp.jpg",
+        "character": "Tuco"
+      },
+      {
+        "id": 190,
+        "order": 1,
+        "credit_id": "52fe4242c3a36847f80105db",
+        "name": "Clint Eastwood",
+        "cast_id": 7,
+        "profile_path": "/n8h4ZHteFFXfmzUW6OEaPWanDnm.jpg",
+        "character": "Blondie"
+      },
+      {
+        "id": 4078,
+        "order": 2,
+        "credit_id": "52fe4242c3a36847f80105df",
+        "name": "Lee Van Cleef",
+        "cast_id": 8,
+        "profile_path": "/paZGeTVO8fAGwEexpXoaoXYUaSW.jpg",
+        "character": "Sentenza/Angel Eyes"
+      },
+      {
+        "id": 5813,
+        "order": 3,
+        "credit_id": "52fe4242c3a36847f80105e3",
+        "name": "Aldo Giuffrè",
+        "cast_id": 9,
+        "profile_path": "/aBp4PnfO43mTgCGg0pjmfhHrfdZ.jpg",
+        "character": "Alcoholic Union Captain"
+      },
+      {
+        "id": 5814,
+        "order": 4,
+        "credit_id": "52fe4242c3a36847f80105e7",
+        "name": "Luigi Pistilli",
+        "cast_id": 10,
+        "profile_path": "/dUgRQX1Ge6JRYZWtFJ2vjAXT8Vi.jpg",
+        "character": "Father Pablo Ramirez"
+      },
+      {
+        "id": 5815,
+        "order": 5,
+        "credit_id": "52fe4242c3a36847f80105eb",
+        "name": "Rada Rassimov",
+        "cast_id": 11,
+        "profile_path": "/beRCYALnzPi2AJwZSHUyTsLjoi.jpg",
+        "character": "Maria"
+      },
+      {
+        "id": 5816,
+        "order": 6,
+        "credit_id": "52fe4242c3a36847f80105ef",
+        "name": "John Bartha",
+        "cast_id": 12,
+        "profile_path": "/6wqlakZTLHovTAqGvMwIUiPrQD8.jpg",
+        "character": "Sheriff"
+      },
+      {
+        "id": 5817,
+        "order": 7,
+        "credit_id": "52fe4242c3a36847f80105f3",
+        "name": "Livio Lorenzon",
+        "cast_id": 13,
+        "profile_path": "/5fdlXj9HuTS5pJnHb0Q4BYosr6c.jpg",
+        "character": "Baker"
+      },
+      {
+        "id": 5818,
+        "order": 8,
+        "credit_id": "52fe4242c3a36847f80105f7",
+        "name": "Antonio Casale",
+        "cast_id": 14,
+        "profile_path": "/iqa0pritPmbuNpRK94IpgsV7l0c.jpg",
+        "character": "Jackson/Bill Carson"
+      },
+      {
+        "id": 5819,
+        "order": 9,
+        "credit_id": "52fe4242c3a36847f80105fb",
+        "name": "Angelo Novi",
+        "cast_id": 15,
+        "profile_path": "/6KgveqDRUbNtwiNNiQ0YSqthBQM.jpg",
+        "character": "Monk"
+      },
+      {
+        "id": 5843,
+        "order": 10,
+        "credit_id": "52fe4242c3a36847f8010629",
+        "name": "José Terrón",
+        "cast_id": 23,
+        "profile_path": "/ndbCL8Cbg2xzTWO3nCmAsGkKegV.jpg",
+        "character": "Thomas 'Shorty' Larson (uncredited)"
+      },
+      {
+        "id": 1077276,
+        "order": 11,
+        "credit_id": "52fe4242c3a36847f8010639",
+        "name": "Enzo Petito",
+        "cast_id": 26,
+        "profile_path": "/yN9lfTfpf3922Ws9M0rknb5Iz2M.jpg",
+        "character": "Storekeeper"
+      },
+      {
+        "id": 1077277,
+        "order": 12,
+        "credit_id": "52fe4242c3a36847f801063d",
+        "name": "Claudio Scarchilli",
+        "cast_id": 27,
+        "profile_path": "/42at3KFYvLiPG0ub14dXuFpoxcy.jpg",
+        "character": "Mexican Peon"
+      },
+      {
+        "id": 1077278,
+        "order": 13,
+        "credit_id": "52fe4242c3a36847f8010641",
+        "name": "Sandro Scarchilli",
+        "cast_id": 28,
+        "profile_path": "/ojDlUTDQm5af57oWxSRdpx44uuW.jpg",
+        "character": "Mexican Peon"
+      },
+      {
+        "id": 4661,
+        "order": 14,
+        "credit_id": "52fe4242c3a36847f8010645",
+        "name": "Benito Stefanelli",
+        "cast_id": 29,
+        "profile_path": "/5c5ek7iXeJMdx1bEM2mw195zmPD.jpg",
+        "character": "Member of Angel Eyes' Gange"
+      },
+      {
+        "id": 103529,
+        "order": 15,
+        "credit_id": "52fe4242c3a36847f8010649",
+        "name": "Antonio Casas",
+        "cast_id": 30,
+        "profile_path": "/epvdBxaktSZlfdqWWivitAZylpC.jpg",
+        "character": "Stevens"
+      },
+      {
+        "id": 49895,
+        "order": 16,
+        "credit_id": "52fe4242c3a36847f801064d",
+        "name": "Aldo Sambrell",
+        "cast_id": 31,
+        "profile_path": "/AuDVbzviUIWEi9PJAeilFWTf5Xq.jpg",
+        "character": "Member of Angel Eyes' Gang"
+      },
+      {
+        "id": 129314,
+        "order": 17,
+        "credit_id": "52fe4242c3a36847f8010651",
+        "name": "Al Mulock",
+        "cast_id": 32,
+        "profile_path": "/80ibJHwEbjS6Wnb9DbkennzKLBL.jpg",
+        "character": "One-Armed Bounty Hunter"
+      },
+      {
+        "id": 37512,
+        "order": 18,
+        "credit_id": "52fe4242c3a36847f8010655",
+        "name": "Sergio Mendizábal",
+        "cast_id": 33,
+        "profile_path": "/4M55zJni66n0652YgyJVG8hCbQY.jpg",
+        "character": "Blonde Bounty Hunter"
+      },
+      {
+        "id": 102096,
+        "order": 19,
+        "credit_id": "52fe4242c3a36847f8010659",
+        "name": "Antonio Molino Rojo",
+        "cast_id": 34,
+        "profile_path": "/afs6pAQlgO9XHUbKTkXCardcUzf.jpg",
+        "character": "Capt. Harper"
+      },
+      {
+        "id": 100930,
+        "order": 20,
+        "credit_id": "52fe4242c3a36847f801065d",
+        "name": "Lorenzo Robledo",
+        "cast_id": 35,
+        "profile_path": "/dcL4hCSPvOoH3ZL0J6dQG7JYoof.jpg",
+        "character": "Member of Angel Eyes' Gang"
+      },
+      {
+        "id": 16318,
+        "order": 21,
+        "credit_id": "52fe4242c3a36847f8010661",
+        "name": "Mario Brega",
+        "cast_id": 36,
+        "profile_path": "/k07gKWh5tQZurRKaw7K6ph7k9ae.jpg",
+        "character": "Cpl. Wallace"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4385,
+        "credit_id": "52fe4242c3a36847f80105d3",
+        "department": "Directing",
+        "name": "Sergio Leone",
+        "job": "Director",
+        "profile_path": "/cRfaWgAxgNsDkaT6WLpgbrtEAJj.jpg"
+      },
+      {
+        "id": 5820,
+        "credit_id": "52fe4242c3a36847f8010601",
+        "department": "Production",
+        "name": "Alberto Grimaldi",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1259,
+        "credit_id": "52fe4242c3a36847f8010607",
+        "department": "Sound",
+        "name": "Ennio Morricone",
+        "job": "Original Music Composer",
+        "profile_path": "/dAd3r8QCcmLamoP8Tf8PVIHaGnp.jpg"
+      },
+      {
+        "id": 2361,
+        "credit_id": "52fe4242c3a36847f801060d",
+        "department": "Camera",
+        "name": "Tonino Delli Colli",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5821,
+        "credit_id": "52fe4242c3a36847f8010613",
+        "department": "Editing",
+        "name": "Eugenio Alabiso",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4670,
+        "credit_id": "52fe4242c3a36847f8010619",
+        "department": "Editing",
+        "name": "Nino Baragli",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5822,
+        "credit_id": "52fe4242c3a36847f801061f",
+        "department": "Editing",
+        "name": "Joe D'Augustine",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4655,
+        "credit_id": "52fe4242c3a36847f8010625",
+        "department": "Costume & Make-Up",
+        "name": "Carlo Simi",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5810,
+        "credit_id": "52fe4242c3a36847f801062f",
+        "department": "Writing",
+        "name": "Luciano Vincenzoni",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4385,
+        "credit_id": "52fe4242c3a36847f8010635",
+        "department": "Writing",
+        "name": "Sergio Leone",
+        "job": "Screenplay",
+        "profile_path": "/cRfaWgAxgNsDkaT6WLpgbrtEAJj.jpg"
+      }
+    ]
+  },
+  "runtime": 161,
+  "spoken_languages": [{
+    "iso_639_1": "it",
+    "name": "Italiano"
+  }],
+  "adult": false,
+  "homepage": "http://www.mgm.com/view/Movie/766/The-Good,-the-Bad-and-the-Ugly/",
+  "id": 429,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "Spain",
+      "iso_3166_1": "ES"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "The Good, the Bad and the Ugly",
+  "overview": "While the Civil War rages between the Union and the Confederacy, three men \u2013 a quiet loner, a ruthless hit man and a Mexican bandit \u2013 comb the American Southwest in search of a strongbox containing $200,000 in stolen gold.",
+  "production_companies": [
+    {
+      "id": 47,
+      "name": "Constantin Film"
+    },
+    {
+      "id": 60,
+      "name": "United Artists"
+    },
+    {
+      "id": 3635,
+      "name": "20th Century Fox Home Entertainment"
+    },
+    {
+      "id": 5755,
+      "name": "Constantin Film Produktion"
+    },
+    {
+      "id": 7508,
+      "name": "Produzioni Europee Associati (PEA)"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 48317,
+    "backdrop_path": "/a4Lqp3QdEWF6zh740VpBg6yvTZA.jpg",
+    "name": "The Man With No Name Collection",
+    "poster_path": "/lzUZptOL6iQqulMvhB2jfT5GepD.jpg"
+  },
+  "imdb_id": "tt0060196",
+  "release_date": "1966-12-23",
+  "original_title": "Il buono, il brutto, il cattivo",
+  "vote_count": 762,
+  "poster_path": "/8PD1dgf0kQHtRawoSxp1jFemI1q.jpg",
+  "tagline": "For three men the Civil War wasn't hell. It was practice.",
+  "revenue": 6000000,
+  "popularity": "2.97972785232023"
+}

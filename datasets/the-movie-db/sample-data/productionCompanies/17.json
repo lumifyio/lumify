@@ -1,0 +1,13 @@
+{
+  "id": 17,
+  "logo_path": "/rU25OVCsksXegdnb6GUFvLYY9Gd.png",
+  "description": null,
+  "name": "Warner Bros. Entertainment",
+  "parent_company": {
+    "id": 128,
+    "logo_path": null,
+    "name": "Time Warner"
+  },
+  "homepage": null,
+  "headquarters": null
+}

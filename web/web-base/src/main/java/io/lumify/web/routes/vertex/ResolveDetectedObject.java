@@ -2,13 +2,14 @@ package io.lumify.web.routes.vertex;
 
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.ArtifactDetectedObject;
+import io.lumify.core.model.SourceInfo;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -29,8 +30,6 @@ import org.securegraph.mutation.ElementMutation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ResolveDetectedObject extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveDetectedObject.class);
@@ -41,7 +40,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
-    private final String artifactContainsImageOfEntityIri;
+    private final TermMentionRepository termMentionRepository;
+    private String artifactContainsImageOfEntityIri;
 
     @Inject
     public ResolveDetectedObject(
@@ -52,7 +52,9 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             final Configuration configuration,
             final WorkQueueRepository workQueueRepository,
             final VisibilityTranslator visibilityTranslator,
-            final WorkspaceRepository workspaceRepository) {
+            final WorkspaceRepository workspaceRepository,
+            final TermMentionRepository termMentionRepository
+    ) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
@@ -60,22 +62,27 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.workQueueRepository = workQueueRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
+        this.termMentionRepository = termMentionRepository;
 
-        this.artifactContainsImageOfEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
+        this.artifactContainsImageOfEntityIri = ontologyRepository.getRelationshipIRIByIntent("artifactContainsImageOfEntity");
         if (this.artifactContainsImageOfEntityIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY);
+            LOGGER.warn("'artifactContainsImageOfEntity' intent has not been defined. Please update your ontology.");
         }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.artifactContainsImageOfEntityIri == null) {
+            this.artifactContainsImageOfEntityIri = ontologyRepository.getRequiredRelationshipIRIByIntent("artifactContainsImageOfEntity");
+        }
+
         final String artifactId = getRequiredParameter(request, "artifactId");
         final String title = getRequiredParameter(request, "title");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
-        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String sourceInfoString = getOptionalParameter(request, "sourceInfo");
         String originalPropertyKey = getOptionalParameter(request, "originalPropertyKey");
         double x1 = Double.parseDouble(getRequiredParameter(request, "x1"));
         double x2 = Double.parseDouble(getRequiredParameter(request, "x2"));
@@ -101,19 +108,20 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         ElementMutation<Vertex> resolvedVertexMutation;
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
+        Metadata metadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
 
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility());
 
-            LumifyProperties.CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), metadata, lumifyVisibility.getVisibility());
+            LumifyProperties.CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getIRI(), metadata, lumifyVisibility.getVisibility());
             LumifyProperties.TITLE.setProperty(resolvedVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
-            GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
+            SourceInfo sourceInfo = SourceInfo.fromString(sourceInfoString);
+            termMentionRepository.addJustification(resolvedVertex, justificationText, sourceInfo, lumifyVisibility, authorizations);
 
             resolvedVertex = resolvedVertexMutation.save(authorizations);
 
@@ -122,7 +130,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
             graph.flush();
 
-            workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, null, user);
+            workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), null, null, user);
         } else {
             resolvedVertex = graph.getVertex(graphVertexId, authorizations);
             resolvedVertexMutation = resolvedVertex.prepareMutation();

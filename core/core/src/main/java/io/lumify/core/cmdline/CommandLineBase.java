@@ -2,18 +2,20 @@ package io.lumify.core.cmdline;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.inject.Inject;
-import org.apache.curator.framework.CuratorFramework;
 import io.lumify.core.FrameworkUtils;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
+import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.cli.*;
+import org.apache.curator.framework.CuratorFramework;
 import org.apache.hadoop.fs.FileSystem;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
@@ -31,6 +33,7 @@ public abstract class CommandLineBase {
     private CuratorFramework curatorFramework;
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
+    private OntologyRepository ontologyRepository;
 
     public int run(String[] args) throws Exception {
         final Thread mainThread = Thread.currentThread();
@@ -63,8 +66,8 @@ public abstract class CommandLineBase {
         }
 
         if (initFramework) {
-            InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(getConfiguration()));
-            if (!getConfiguration().get(Configuration.MODEL_PROVIDER).equals(Configuration.UNKNOWN_STRING)) {
+            InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(getConfiguration()), getConfiguration());
+            if (getConfiguration().get(Configuration.MODEL_PROVIDER, null) != null) {
                 FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
             }
         }
@@ -129,7 +132,10 @@ public abstract class CommandLineBase {
     }
 
     protected FileSystem getFileSystem() throws Exception {
-        String hdfsRootDir = getConfiguration().get(Configuration.HADOOP_URL);
+        String hdfsRootDir = getConfiguration().get(Configuration.HADOOP_URL, null);
+        if (hdfsRootDir == null) {
+            throw new LumifyException("Could not find configuration: " + Configuration.HADOOP_URL);
+        }
         org.apache.hadoop.conf.Configuration hadoopConfiguration = new org.apache.hadoop.conf.Configuration();
         return FileSystem.get(new URI(hdfsRootDir), hadoopConfiguration, "hadoop");
     }
@@ -168,6 +174,11 @@ public abstract class CommandLineBase {
     }
 
     @Inject
+    public final void setOntologyRepository(OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
+    }
+
+    @Inject
     public final void setCuratorFramework(CuratorFramework curatorFramework) {
         this.curatorFramework = curatorFramework;
     }
@@ -182,5 +193,9 @@ public abstract class CommandLineBase {
 
     public UserRepository getUserRepository() {
         return userRepository;
+    }
+
+    public OntologyRepository getOntologyRepository() {
+        return ontologyRepository;
     }
 }

@@ -44,13 +44,13 @@ public class RequestDebugFilter implements Filter {
 
             if (delay != null) {
                 try {
-                    LOGGER.warn("Lumify Debug Header Found {}. Delaying for {}", HEADER_DELAY, delay);
+                    LOGGER.warn("Lumify Debug Header Found %s. Delaying for %s", HEADER_DELAY, delay);
                     Thread.sleep(Integer.parseInt(delay));
                 } catch (InterruptedException e) { }
             }
 
             if (error != null) {
-                LOGGER.warn("Lumify Debug Header Found {}. Sending error instead: {}", HEADER_DELAY, error);
+                LOGGER.warn("Lumify Debug Header Found %s. Sending error instead: %s", HEADER_DELAY, error);
                 Integer code = Integer.parseInt(error);
                 ((HttpServletResponse) response).sendError(code);
                 return true;

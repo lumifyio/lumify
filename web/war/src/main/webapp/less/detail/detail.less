@@ -71,6 +71,38 @@
         margin-top: 16.5em;
     }
 
+    .detail-overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background: rgba(255,255,255,0.6);
+      z-index: 1;
+      text-align: center;
+      background: rgba(255,255,255,0.8) url(../img/loading-large@2x.png) no-repeat center;
+      background-size: 150px auto;
+      .opacity(90);
+      h1 {
+        padding: 0;
+        margin: 0;
+        display: block;
+        font-family: @light-font;
+        font-size: 150%;
+        left: 0;
+        margin-top: 4.5em;
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        width: 100%;
+        text-shadow: none;
+        font-weight: normal;
+        color: #ddd;
+        line-height: normal;
+      }
+    }
+
   }
 
   .entity_audit_events .audit-list {
@@ -78,6 +110,10 @@
     li {
       padding: 0;
     }
+  }
+
+  .delete-form .underneath .form {
+    margin-top: 0;
   }
 
   .audit-list {
@@ -216,6 +252,11 @@
   .vertex-to-vertex-relationship {
     font-size: 90%;   
     line-height: 1.1em;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    padding: 0 1em;
+    .box-sizing(border-box);
     
     &:hover {          
       text-decoration: none;
@@ -326,7 +367,7 @@
     .ui-draggable-dragging { white-space: nowrap; }
 
     // When dropdown is opened
-    &.dropdown .entity { 
+    &.dropdown .vertex, &.dropdown .property { 
       color:@fade-color;
 
       &.focused {
@@ -369,7 +410,7 @@
         display:block; 
         .box-sizing(border-box);
       }
-      .vertices-list {      
+      .vertices-list,.edge-list {      
         position: absolute;
         height: 200px;
         bottom: 0;
@@ -460,7 +501,7 @@
       }
     }
 
-    .vertices-list {
+    .vertices-list, .edge-list {
        border-top: 1px solid #eee;
     }
     .multi-select {
@@ -482,6 +523,77 @@
         padding: 0;
       }
     }
+
+    &.edges {
+      .multiple-container {
+        margin-bottom: 0em;
+      }
+      .comp-toolbar {
+        height: 3px;
+      }
+      &.viewing-vertex {
+        .comp-toolbar {
+          height: 2em;
+        }
+        .edge-list .nav-list {
+          padding: 0;
+        }
+      }
+      .spacer {
+        height: 10em;
+      }
+      .edge-list {
+        margin-top: 3px;
+      }
+      .entity-background {
+        .relationship-header {
+          padding: 0;
+        }
+        .relation {
+          font-size: 85%;
+          color: white;
+          font-variant: small-caps;
+          text-transform: lowercase;
+          margin-bottom: 0.5em;
+          margin-top: 0.2em;
+          position: relative;
+
+          .badge {
+            .opacity(60);
+            float: none;
+            position: absolute;
+            top: 50%;
+            margin-top: -0.55em;
+            margin-right: 1em;
+            margin-left: 0.5em;
+          }
+          /*.relation::after {*/
+            /*content: '';*/
+            /*position: absolute;*/
+            /*width: 0;*/
+            /*height: 0;*/
+            /*left: 50%;*/
+            /*margin-left: -4px;*/
+            /*bottom: -15px;*/
+            /*border-width: 8px 4px;*/
+            /*border-color: #999 transparent transparent transparent;*/
+            /*border-style: solid;*/
+            /*z-index: -1;*/
+          /*}*/
+          /*.relation::before {*/
+            /*content: '';*/
+            /*position: absolute;*/
+            /*background: #999;*/
+            /*width: 2px;*/
+            /*height: 28px;*/
+            /*left: 50%;*/
+            /*margin-left: -1px;*/
+            /*top: 1px;*/
+            /*z-index: -1;*/
+        /*}*/
+        }
+      }
+    }
   }
 
   .image-preview, .background-scrubber {
@@ -496,7 +608,7 @@
     display: inline-block;
     max-width: 100%;
     position: relative;
-    margin: 1em 0 -1.5em 0;
+    margin: 0 0 -1.3em 0;
     width: 100%;
     overflow: hidden;
 
@@ -551,8 +663,29 @@
     }
   }
 
+
   @import "properties";
+  @import "comments";
   @import "toolbar";
+
+  .properties, .comments {
+    button.info {
+      background-color: transparent;
+      background-image: url(../img/glyphicons/glyphicons_195_circle_info@2x.png);
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      border: 0;
+      display: inline-block;
+      height: 16px;
+      margin-left: 0.5em;
+      vertical-align: middle;
+      width: 16px;
+      .opacity(30);
+      &:hover {
+        .opacity(100);
+      }
+    }
+  }
   
   .properties .buttons .underneath {
     margin: 1em 0;       
@@ -565,13 +698,13 @@
   }
   
   .artifact-header {    
-    margin: 1em 0 0 0;
+    margin: 0;
     padding: 0;
   }
 
   .nav-with-background {  
     overflow: auto;    
-    margin: 8.5em 0 0 0;
+    margin: 8em 0 0 0;
     padding: 0;
     position: absolute;
     top: 0;    
@@ -742,9 +875,13 @@
     background-color: red;
   }
 
-  .entity, .artifact {
+  .vertex, .artifact {
     cursor: pointer;
     border-bottom: 1px dotted black;
+  }
+  .property.resolved {
+    cursor: pointer;
+    font-style: italic;
   }
 
   .resolved {

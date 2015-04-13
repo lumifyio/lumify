@@ -1,0 +1,289 @@
+{
+  "budget": 3000000,
+  "vote_average": 7,
+  "backdrop_path": "/89s7u8GkejwHT8Bmk91lj3ZqAvU.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 99,
+      "name": "Documentary"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4169,
+        "order": 0,
+        "credit_id": "52fe4233c3a36847f800bae7",
+        "name": "Dave Chappelle",
+        "cast_id": 14,
+        "profile_path": "/pSdXq3a0lxmwR8Rx7Kz6mXJ0JU7.jpg",
+        "character": "Dave Chappelle"
+      },
+      {
+        "id": 4237,
+        "order": 1,
+        "credit_id": "52fe4233c3a36847f800baeb",
+        "name": "Erykah Badu",
+        "cast_id": 15,
+        "profile_path": "/h2RakwuEAGCFaAkBZStap9xWanJ.jpg",
+        "character": "Erykah Badu"
+      },
+      {
+        "id": 4238,
+        "order": 2,
+        "credit_id": "52fe4233c3a36847f800baef",
+        "name": "Common",
+        "cast_id": 16,
+        "profile_path": "/egsBjXzQiGpAPe5s66XqOHMF0SV.jpg",
+        "character": "Common"
+      },
+      {
+        "id": 4239,
+        "order": 3,
+        "credit_id": "52fe4233c3a36847f800baf3",
+        "name": "Mos Def",
+        "cast_id": 17,
+        "profile_path": "/x51WKi3gxwobt9Sov5HeS5kKHUe.jpg",
+        "character": "Mos Def"
+      },
+      {
+        "id": 4240,
+        "order": 4,
+        "credit_id": "52fe4233c3a36847f800baf7",
+        "name": "Bilal",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Bilal"
+      },
+      {
+        "id": 4241,
+        "order": 5,
+        "credit_id": "52fe4233c3a36847f800bafb",
+        "name": "Lil' Cease",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Lil' Cease"
+      },
+      {
+        "id": 4242,
+        "order": 6,
+        "credit_id": "52fe4233c3a36847f800baff",
+        "name": "Cody ChestnuTT",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Cody Chestnutt"
+      },
+      {
+        "id": 4243,
+        "order": 7,
+        "credit_id": "52fe4233c3a36847f800bb03",
+        "name": "James 'Kamal' Gray",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "James 'Kamal' Gray"
+      },
+      {
+        "id": 4244,
+        "order": 8,
+        "credit_id": "52fe4233c3a36847f800bb07",
+        "name": "Lauryn Hill",
+        "cast_id": 22,
+        "profile_path": "/tFkhG69RvYQQGEbccoyf6DxBdwD.jpg",
+        "character": "Lauryn Hill"
+      },
+      {
+        "id": 4245,
+        "order": 9,
+        "credit_id": "52fe4233c3a36847f800bb0b",
+        "name": "Leonard 'Hub' Hubbard",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Leonard 'Hub' Hubbard"
+      },
+      {
+        "id": 4246,
+        "order": 10,
+        "credit_id": "52fe4233c3a36847f800bb0f",
+        "name": "Wyclef Jean",
+        "cast_id": 24,
+        "profile_path": "/e7ESlpdIQtqGWcEojjdRLSjqc8T.jpg",
+        "character": "Wyclef Jean"
+      },
+      {
+        "id": 4247,
+        "order": 11,
+        "credit_id": "52fe4233c3a36847f800bb13",
+        "name": "Tiffany Limos",
+        "cast_id": 25,
+        "profile_path": "/3DNkoyF58Kex1UErrYa81TrBz58.jpg",
+        "character": "Tiffany Limos"
+      },
+      {
+        "id": 4719,
+        "order": 12,
+        "credit_id": "52fe4233c3a36847f800bb17",
+        "name": "Ahmir-Khalib Thompson",
+        "cast_id": 26,
+        "profile_path": "/j0o8SkwAsSyDbuLBTG8nQnBFdAk.jpg",
+        "character": "Ahmir '?uestlove' Thompson"
+      },
+      {
+        "id": 4720,
+        "order": 13,
+        "credit_id": "52fe4233c3a36847f800bb1b",
+        "name": "Kanye West",
+        "cast_id": 27,
+        "profile_path": "/sMQ2Ei48aMJvTPTkbB5Wx1tD4XN.jpg",
+        "character": "Kanye West"
+      },
+      {
+        "id": 4721,
+        "order": 14,
+        "credit_id": "52fe4233c3a36847f800bb1f",
+        "name": "Jill Scott",
+        "cast_id": 28,
+        "profile_path": "/mbaOzcyh3x98drvKPKKpvupgE7i.jpg",
+        "character": "Jill Scott"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4169,
+        "credit_id": "52fe4233c3a36847f800ba9b",
+        "department": "Writing",
+        "name": "Dave Chappelle",
+        "job": "Author",
+        "profile_path": "/pSdXq3a0lxmwR8Rx7Kz6mXJ0JU7.jpg"
+      },
+      {
+        "id": 4169,
+        "credit_id": "52fe4233c3a36847f800baa1",
+        "department": "Production",
+        "name": "Dave Chappelle",
+        "job": "Producer",
+        "profile_path": "/pSdXq3a0lxmwR8Rx7Kz6mXJ0JU7.jpg"
+      },
+      {
+        "id": 4172,
+        "credit_id": "52fe4233c3a36847f800baa7",
+        "department": "Production",
+        "name": "Mustafa Abuelhija",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 201,
+        "credit_id": "52fe4233c3a36847f800baad",
+        "department": "Directing",
+        "name": "Michel Gondry",
+        "job": "Director",
+        "profile_path": "/45eLOWiKfxUn10oRg1XzszqtSv1.jpg"
+      },
+      {
+        "id": 4231,
+        "credit_id": "52fe4233c3a36847f800bab3",
+        "department": "Production",
+        "name": "Julie Fong",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 201,
+        "credit_id": "52fe4233c3a36847f800bab9",
+        "department": "Production",
+        "name": "Michel Gondry",
+        "job": "Producer",
+        "profile_path": "/45eLOWiKfxUn10oRg1XzszqtSv1.jpg"
+      },
+      {
+        "id": 4232,
+        "credit_id": "52fe4233c3a36847f800babf",
+        "department": "Production",
+        "name": "Bob Yari",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4233,
+        "credit_id": "52fe4233c3a36847f800bac5",
+        "department": "Sound",
+        "name": "Cory Smith",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 313,
+        "credit_id": "52fe4233c3a36847f800bacb",
+        "department": "Camera",
+        "name": "Ellen Kuras",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4234,
+        "credit_id": "52fe4233c3a36847f800bad1",
+        "department": "Editing",
+        "name": "Jeff Buchanan",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1782,
+        "credit_id": "52fe4233c3a36847f800bad7",
+        "department": "Editing",
+        "name": "Sarah Flack",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4235,
+        "credit_id": "52fe4233c3a36847f800badd",
+        "department": "Editing",
+        "name": "Jamie Kirkpatrick",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4236,
+        "credit_id": "52fe4233c3a36847f800bae3",
+        "department": "Art",
+        "name": "Lauri Faggioni",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.chappellesblockparty.com/home.html",
+  "id": 292,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Dave Chappelle's Block Party",
+  "overview": "The American comedian/actor delivers a story about the alternative Hip Hop scene. A small town Ohio man\u2019s moves to Brooklyn, New York, to throw an unprecedented block party. Filmed with inspiration from the 1973 documentary Wattstax.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0425598",
+  "release_date": "2006-03-03",
+  "original_title": "Dave Chappelle's Block Party",
+  "vote_count": 6,
+  "poster_path": "/hemHNgWePU3sYwI9LD7INOJWWBQ.jpg",
+  "tagline": "",
+  "revenue": 11718595,
+  "popularity": "0.146754154202864"
+}

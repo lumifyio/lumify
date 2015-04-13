@@ -1,0 +1,74 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": "\u200bFrom Wikipedia, the free encyclopedia.\n\nJosh Friedman  (born 1967) is an American screenwriter best known as screenwriter of Terminator: The Sarah Connor Chronicles and as the writer of the 2005 film adaptation of H.G. Wells' War of the Worlds.\nFriedman also publishes the blog \"I Find Your Lack of Faith Disturbing\". After being offered an opportunity to work on a script titled Snakes on a Plane, Friedman posted a blog entry that sparked interest in the film on the Internet before the movie entered production. The same entry introduced a profane line that was added to the film when the cast reconvened in March 2006 to shoot additional footage.\n\nDescription above from the Wikipedia article Josh Friedman, licensed under CC-BY-SA, full list of contributors on Wikipedia",
+  "homepage": "",
+  "profile_path": "/sr7fib6UVbIXQXGCSEw8L0IU6o3.jpg",
+  "id": 507,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0295264",
+  "combined_credits": {
+    "cast": [{
+      "id": 38124,
+      "media_type": "movie",
+      "title": "Tales From the Script",
+      "credit_id": "52fe46969251416c91059381",
+      "release_date": "2009-01-10",
+      "original_title": "Tales From the Script",
+      "adult": false,
+      "poster_path": "/j0oZs2vMqWs64v9DrNOn0NiaJO0.jpg",
+      "character": "Himself"
+    }],
+    "crew": [
+      {
+        "id": 74,
+        "media_type": "movie",
+        "title": "War of the Worlds",
+        "credit_id": "52fe4214c3a36847f800228d",
+        "department": "Writing",
+        "release_date": "2005-06-28",
+        "original_title": "War of the Worlds",
+        "job": "Author",
+        "adult": false,
+        "poster_path": "/xXMM9KY2eq1SDOQif9zO91YOBA8.jpg"
+      },
+      {
+        "id": 9676,
+        "media_type": "movie",
+        "title": "The Black Dahlia",
+        "credit_id": "52fe451ac3a36847f80bc81f",
+        "department": "Writing",
+        "release_date": "2006-09-15",
+        "original_title": "The Black Dahlia",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/vXduAuTt5rNoqumHiRWKSvqDz5N.jpg"
+      },
+      {
+        "id": 433,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "5346cc1a8ee39f51b600000a",
+        "department": "Writing",
+        "name": "Terminator: The Sarah Connor Chronicles",
+        "job": "Writer",
+        "poster_path": "/4YnSiRAdkoh1lPrXyso0N8dpB2e.jpg",
+        "original_name": "Terminator: The Sarah Connor Chronicles"
+      },
+      {
+        "id": 433,
+        "media_type": "tv",
+        "credit_id": "5253571819c295794014b69e",
+        "department": "Creator",
+        "name": "Terminator: The Sarah Connor Chronicles",
+        "job": "Creator",
+        "poster_path": "/4YnSiRAdkoh1lPrXyso0N8dpB2e.jpg",
+        "original_name": "Terminator: The Sarah Connor Chronicles"
+      }
+    ]
+  },
+  "name": "Josh Friedman",
+  "place_of_birth": "U.S.",
+  "popularity": "1.07677884250883"
+}

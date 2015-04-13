@@ -1,6 +1,4 @@
-define([
-    'util/clipboardManager'
-], function(ClipboardManager) {
+define([], function() {
     'use strict';
 
     return withObjectSelection;
@@ -23,21 +21,54 @@ define([
     function withObjectSelection() {
 
         var selectedObjects,
-            previousSelectedObjects;
+            previousSelectedObjects,
+            edges,
+            getVertexIdsFromEventOrSelection = function(data) {
+                if (data && data.vertexId) {
+                    return [data.vertexId];
+                }
+
+                if (data && data.vertexIds) {
+                    return data.vertexIds;
+                }
+
+                if (selectedObjects && selectedObjects.vertices.length > 0) {
+                    return _.pluck(selectedObjects.vertices, 'id');
+                }
+
+                return [];
+            };
 
         this.after('initialize', function() {
-            ClipboardManager.attachTo(this.$node);
-
             this.setPublicApi('selectedObjects', defaultNoObjectsOrData());
 
             this.on('selectObjects', this.onSelectObjects);
             this.on('selectAll', this.onSelectAll);
+            this.on('selectConnected', this.onSelectConnected);
 
             this.on('deleteSelected', this.onDeleteSelected);
             this.on('deleteEdges', this.onDeleteEdges);
+            this.on('edgesLoaded', this.onEdgesLoaded);
             this.on('edgesDeleted', function(event, data) {
                 if (selectedObjects && _.findWhere(selectedObjects.edges, { id: data.edgeId })) {
-                    this.trigger('selectObjects');
+                    if (selectedObjects.edges.length === 1) {
+                        this.trigger('selectObjects');
+                    } else {
+                        selectedObjects.edges = _.reject(selectedObjects.edges, function(e) {
+                            return data.edgeId === e.id
+                        })
+                    }
+                }
+            });
+            this.on('verticesDeleted', function(event, data) {
+                if (selectedObjects) {
+                    if (selectedObjects.vertices.length) {
+                        this.trigger('selectObjects', {
+                            vertices: _.reject(selectedObjects.vertices, function(v) {
+                                return ~data.vertexIds.indexOf(v.id)
+                            })
+                        });
+                    }
                 }
             })
 
@@ -46,6 +77,10 @@ define([
             this.on('addRelatedItems', this.onAddRelatedItems);
             this.on('objectsSelected', this.onObjectsSelected);
         });
+
+        this.onEdgesLoaded = function(event, data) {
+            edges = data.edges;
+        };
 
         this.onSelectAll = function(event, data) {
             var self = this;
@@ -58,10 +93,47 @@ define([
             })
         };
 
+        this.onSelectConnected = function(event, data) {
+            var self = this,
+                vertices = selectedObjects.vertices;
+
+            if (vertices.length && edges && edges.length) {
+                this.dataRequestPromise.done(function(dataRequest) {
+                    dataRequest('workspace', 'store')
+                        .done(function(workspaceVertices) {
+                            var selected = _.pluck(vertices, 'id'),
+                                toSelect = _.chain(edges)
+                                    .map(function(e) {
+                                        return selected.map(function(v) {
+                                            return e.sourceVertexId === v ?
+                                                e.destVertexId :
+                                                e.destVertexId === v ?
+                                                e.sourceVertexId :
+                                                null
+                                        })
+                                    })
+                                    .flatten()
+                                    .compact()
+                                    .unique()
+                                    .filter(function(vId) {
+                                        return vId in workspaceVertices;
+                                    })
+                                    .value();
+
+                            self.trigger('selectObjects', { vertexIds: toSelect });
+                        })
+                })
+            }
+        };
+
         this.onDeleteSelected = function(event, data) {
             var self = this;
 
             require(['util/privileges'], function(Privileges) {
+                if (!Privileges.canEDIT) {
+                    return;
+                }
+
                 if (data && data.vertexId) {
                     self.trigger('updateWorkspace', {
                         entityDeletes: [data.vertexId]
@@ -71,7 +143,7 @@ define([
                         self.trigger('updateWorkspace', {
                             entityDeletes: _.pluck(selectedObjects.vertices, 'id')
                         });
-                    } else if (selectedObjects.edges && Privileges.canEDIT) {
+                    } else if (selectedObjects.edges.length) {
                         self.trigger('deleteEdges', { edges: selectedObjects.edges });
                     }
                 }
@@ -83,17 +155,20 @@ define([
 
             if (edge) {
                 this.dataRequestPromise.done(function(dataRequest) {
-                    dataRequest('edge', 'delete',
-                        edge.id,
-                        edge.source.id,
-                        edge.target.id
-                    );
+                    dataRequest('edge', 'delete', edge.id);
                 });
-            } else console.error('Only can delete one edge at a time');
+            } else {
+                this.trigger('promptEdgeDelete', data);
+            }
         };
 
         this.onSelectObjects = function(event, data) {
             var self = this,
+                hasItems = data &&
+                    (
+                        (data.vertexIds || data.vertices || []).length > 0 ||
+                        (data.edgeIds || data.edges || []).length > 0
+                    ),
                 promises = [];
 
             this.dataRequestPromise.done(function(dataRequest) {
@@ -106,25 +181,28 @@ define([
                     );
                 } else if (data && data.vertices) {
                     promises.push(Promise.resolve(data.vertices));
+                } else {
+                    promises.push(Promise.resolve([]));
                 }
 
                 if (data && data.edgeIds && data.edgeIds.length) {
-                    // Only supports one
-                    if (_.isArray(data.edgeIds)) {
-                        data.edgeIds = data.edgeIds[0];
-                    }
                     promises.push(
-                        dataRequest('edge', 'store', { edgeId: data.edgeIds })
+                        dataRequest('edge', 'store', { edgeIds: data.edgeIds })
                     );
                 } else if (data && data.edges) {
                     promises.push(Promise.resolve(data.edges));
+                } else {
+                    promises.push(Promise.resolve([]));
                 }
 
                 Promise.all(promises)
                     .done(function(result) {
-                        var vertices = result[0] || [],
-                            edge = result[1],
-                            edges = edge ? [edge] : [];
+                        var vertices = _.compact(result[0] || []),
+                            edges = _.compact(result[1] || []);
+
+                        if (!edges.length && !vertices.length && hasItems) {
+                            return;
+                        }
 
                         selectedObjects = {
                             vertices: vertices,
@@ -140,7 +218,12 @@ define([
                         previousSelectedObjects = selectedObjects;
 
                         self.setPublicApi('selectedObjects', defaultNoObjectsOrData(selectedObjects));
-                        self.trigger('objectsSelected', _.clone(selectedObjects));
+
+                        var postData = _.clone(selectedObjects);
+                        if (data && 'focus' in data) {
+                            postData.focus = data.focus;
+                        }
+                        self.trigger('objectsSelected', postData);
                     });
             });
         };
@@ -182,57 +265,43 @@ define([
                         vertex = results.shift(),
                         title = F.vertex.title(vertex);
 
-                    self.trigger('searchByEntity', { query: title });
+                    self.trigger('searchForPhrase', { query: title });
                 })
             }
         };
 
         this.onSearchRelated = function(event, data) {
-            var vertexId = data.vertexId || (
-                selectedObjects &&
-                selectedObjects.vertices.length === 1 &&
-                selectedObjects.vertices[0].id
-            );
-
-            if (vertexId) {
-                this.trigger('searchByRelatedEntity', { vertexId: vertexId });
+            var vertexIds = getVertexIdsFromEventOrSelection(data);
+            if (vertexIds.length) {
+                this.trigger('searchByRelatedEntity', { vertexIds: vertexIds });
             }
         };
 
         this.onAddRelatedItems = function(event, data) {
-            var self = this;
+            var vertexIds = getVertexIdsFromEventOrSelection(data);
+            if (vertexIds.length) {
+                Promise.all([
+                    Promise.require('util/popovers/addRelated/addRelated'),
+                    Promise.require('util/vertex/formatters'),
+                    this.dataRequestPromise.then(function(dataRequest) {
+                        return dataRequest('vertex', 'store', { vertexIds: vertexIds })
+                    })
+                ]).done(function(results) {
+                    var RP = results.shift(),
+                        F = results.shift(),
+                        vertex = results.shift();
 
-            if (!data || _.isUndefined(data.vertexId)) {
-                if (selectedObjects && selectedObjects.vertices.length === 1) {
-                    data = {
-                        vertexId: selectedObjects.vertices[0].id
-                    };
-                } else {
-                    return;
-                }
-            }
+                    RP.teardownAll();
 
-            Promise.all([
-                Promise.require('util/popovers/addRelated/addRelated'),
-                Promise.require('util/vertex/formatters'),
-                this.dataRequestPromise.then(function(dataRequest) {
-                    return dataRequest('vertex', 'store', { vertexIds: data.vertexId })
-                })
-            ]).done(function(results) {
-                var RP = results.shift(),
-                    F = results.shift(),
-                    vertex = results.shift();
-
-                RP.teardownAll();
-
-                RP.attachTo(event.target, {
-                    vertex: vertex,
-                    relatedToVertexId: data.vertexId,
-                    anchorTo: {
-                        vertexId: data.vertexId
-                    }
+                    RP.attachTo(event.target, {
+                        vertex: vertex,
+                        relatedToVertexIds: vertexIds,
+                        anchorTo: {
+                            vertexId: vertexIds[0]
+                        }
+                    });
                 });
-            });
+            }
         };
     }
 });

@@ -8,8 +8,10 @@ define([
     '../withTypeContent',
     '../withHighlighting',
     '../toolbar/toolbar',
-    'detail/dropdowns/termForm/termForm',
-    'detail/properties/properties',
+    '../dropdowns/termForm/termForm',
+    '../properties/properties',
+    '../relationships/relationships',
+    '../comments/comments',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
     'hbs!./transcriptEntries',
@@ -27,6 +29,8 @@ define([
     Toolbar,
     TermForm,
     Properties,
+    Relationships,
+    Comments,
     template,
     transcriptEntryTemplate,
     transcriptEntriesTemplate,
@@ -35,6 +39,10 @@ define([
     withDataRequest,
     d3) {
     'use strict';
+
+    var PERCENT_CLOSE_FOR_ROUNDING = 5; // Used for sorting x/y coordinates of detected objects
+                                        // This is the distance (%) at which
+                                        // objects are considered positioned similarly
 
     return defineComponent(Artifact, withTypeContent, withHighlighting, withDataRequest);
 
@@ -52,6 +60,8 @@ define([
             artifactSelector: '.artifact-image',
             toolbarSelector: '.comp-toolbar',
             propertiesSelector: '.properties',
+            relationshipsSelector: '.relationships',
+            commentsSelector: '.comments',
             titleSelector: '.artifact-title',
             timestampAnchorSelector: '.av-times a'
         });
@@ -75,7 +85,7 @@ define([
 
             this.before('teardown', function() {
                 self.$node.off('.detectedObject');
-            })
+            });
 
             // Replace function to handle json transcripts
             this.processArtifactText = this.artifactTextHandler;
@@ -85,15 +95,17 @@ define([
 
         this.before('teardown', function() {
             this.select('propertiesSelector').teardownComponent(Properties);
+            this.select('relationshipsSelector').teardownComponent(Relationships);
         });
 
         this.onOpenOriginal = function(event) {
-            window.open(this.attr.data.imageRawSrc);
+            window.open(F.vertex.raw(this.attr.data));
         };
 
         this.onDownloadOriginal = function(event) {
-            window.open(this.attr.data.imageRawSrc + (
-                /\?/.test(this.attr.data.imageRawSrc) ? '&' : '?'
+            var rawSrc = F.vertex.raw(this.attr.data);
+            window.open(rawSrc + (
+                /\?/.test(rawSrc) ? '&' : '?'
             ) + 'download=true');
         };
 
@@ -127,7 +139,7 @@ define([
 
             if (properties && displayType) {
                 var durationProperty = _.findWhere(properties, {
-                    name: config['ontology.iri.' + displayType + 'Duration']
+                    name: config['ontology.intent.property.' + displayType + 'Duration']
                 });
 
                 if (durationProperty) {
@@ -141,7 +153,18 @@ define([
                 F: F
             }));
 
-            Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
+            Properties.attachTo(this.select('propertiesSelector'), {
+                data: vertex
+            });
+
+            Relationships.attachTo(this.select('relationshipsSelector'), {
+                data: vertex,
+                hasEntityLabel: i18n('detail.entity.relationships.has_entity.artifact')
+            });
+
+            Comments.attachTo(this.select('commentsSelector'), {
+                vertex: vertex
+            });
 
             Toolbar.attachTo(this.select('toolbarSelector'), {
                 toolbar: [
@@ -165,21 +188,31 @@ define([
                     },
                     {
                         title: i18n('detail.toolbar.add'),
-                        cls: 'requires-EDIT',
                         submenu: [
-                            Toolbar.ITEMS.ADD_PROPERTY
+                            Toolbar.ITEMS.ADD_PROPERTY,
+                            Toolbar.ITEMS.ADD_COMMENT
                         ]
                     },
-                    Toolbar.ITEMS.AUDIT
+                    {
+                        icon: 'img/glyphicons/white/glyphicons_157_show_lines@2x.png',
+                        right: true,
+                        submenu: [
+                            Toolbar.ITEMS.AUDIT,
+                            _.extend(Toolbar.ITEMS.DELETE_ITEM, {
+                                title: i18n('detail.toolbar.delete.entity'),
+                                subtitle: i18n('detail.toolbar.delete.entity.subtitle')
+                            })
+                        ]
+                    }
                 ]
             });
-
-            this.update()
-            this.updateText();
 
             if (this[displayType + 'Setup']) {
                 this[displayType + 'Setup'](this.attr.data);
             }
+
+            this.update();
+            this.updateText();
         };
 
         this.update = function() {
@@ -195,6 +228,9 @@ define([
         };
 
         this.updateDetectedObjects = function() {
+            if (this.ignoreDetectedObjects) {
+                return;
+            }
             var self = this,
                 vertex = this.attr.data,
                 wasResolved = {},
@@ -222,6 +258,10 @@ define([
                 var vertices = results[0],
                     concepts = results[1],
                     verticesById = _.indexBy(vertices, 'id'),
+                    roundCoordinate = function(percentFloat) {
+                        return PERCENT_CLOSE_FOR_ROUNDING *
+                            (Math.round(percentFloat * 100 / PERCENT_CLOSE_FOR_ROUNDING));
+                    },
                     detectedObjectKey = _.property('key');
 
                 d3.select(container.get(0))
@@ -231,11 +271,21 @@ define([
                         this.enter()
                             .append('span')
                             .attr('class', 'detected-object-tag')
-                            .append('a')
+                            .append('a');
 
                         this
                             .sort(function(a, b) {
-                                return a.value.x1 - b.value.x1;
+                                var sort =
+                                    roundCoordinate((a.value.y2 - a.value.y1) / 2 + a.value.y1) -
+                                    roundCoordinate((b.value.y2 - b.value.y1) / 2 + b.value.y1)
+
+                                if (sort === 0) {
+                                    sort =
+                                        roundCoordinate((a.value.x2 - a.value.x1) / 2 + a.value.x1) -
+                                        roundCoordinate((b.value.x2 - b.value.x1) / 2 + b.value.x1)
+                                }
+
+                                return sort;
                             })
                             .style('display', function(detectedObject) {
                                 if (wasResolved[detectedObject.key]) {
@@ -250,7 +300,7 @@ define([
                                 .attr('class', function(detectedObject) {
                                     var classes = 'label label-info detected-object opens-dropdown';
                                     if (detectedObject.value.edgeId) {
-                                        return classes + ' resolved entity'
+                                        return classes + ' resolved vertex'
                                     }
                                     return classes;
                                 })
@@ -350,9 +400,13 @@ define([
             var self = this,
                 $target = $(event.target),
                 propertyKey = $target.closest('.label-info').data('propertyKey'),
-                property = F.vertex.propForNameAndKey(this.attr.data, 'http://lumify.io#detectedObject', propertyKey);
+                property = F.vertex.props(this.attr.data, 'http://lumify.io#detectedObject', propertyKey);
 
-            this.$node.find('.focused').removeClass('focused')
+            if (property.length !== 1) {
+                throw new Error('Multiple detected objects with same key found');
+            }
+            property = property[0];
+            this.$node.find('.focused').removeClass('focused');
             $target.closest('.detected-object').parent().addClass('focused');
 
             require(['util/actionbar/actionbar'], function(ActionBar) {
@@ -375,14 +429,16 @@ define([
                         self.trigger('selectObjects', { vertexIds: property.value.resolvedVertexId });
                     });
                     self.on('unresolve.actionbar', function() {
-                        _.defer(
-                            self.showForm.bind(self),
-                            $.extend({}, property.value, {
-                                title: F.vertex.title(appData.cachedVertices[property.value.resolvedVertexId]),
-                                propertyKey: property.key
-                            }),
-                            $target
-                        );
+                        self.dataRequest('vertex', 'store', { vertexIds: property.value.resolvedVertexId })
+                            .done(function(vertex) {
+                                self.showForm(
+                                    $.extend({}, property.value, {
+                                        title: F.vertex.title(vertex),
+                                        propertyKey: property.key
+                                    }),
+                                    $target
+                                );
+                            });
                     });
 
                 } else if (Privileges.canEDIT) {
@@ -408,16 +464,19 @@ define([
 
         this.onCoordsChanged = function(event, data) {
             var self = this,
-                vertex = appData.vertex(this.attr.data.id),
-                detectedObject = F.vertex.propForNameAndKey(vertex, 'http://lumify.io#detectedObject', data.id),
+                vertex = this.attr.data,
+                detectedObject = data.id ?
+                    F.vertex.props(vertex, 'detectedObject', data.id) :
+                    F.vertex.props(vertex, 'detectedObject'),
                 width = parseFloat(data.x2) - parseFloat(data.x1),
                 height = parseFloat(data.y2) - parseFloat(data.y1),
                 newDetectedObject = $.extend(true, {}, detectedObject, { value: data }),
+                artifactImage = this.$node.find('.artifact-image'),
                 dataInfo = $.extend({}, detectedObject && detectedObject.value || {}, data);
 
-            if ((this.$node.width() * width) < 5 ||
-                (this.$node.height() * height) < 5) {
-                this.$node.find('.underneath').teardownComponent(TermForm)
+            if ((artifactImage.width() * width) < 5 ||
+                (artifactImage.height() * height) < 5) {
+                this.$node.find('.underneath').teardownComponent(TermForm);
                 return;
             }
 
@@ -441,7 +500,7 @@ define([
         };
 
         this.onTeardownDropdowns = function() {
-            this.$node.find('.detected-object-labels .focused').removeClass('focused')
+            this.$node.find('.detected-object-labels .focused').removeClass('focused');
             this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectDoneEditing');
         };
 
@@ -454,18 +513,18 @@ define([
             this.trigger(
                 this.select('faceboxContainerSelector'),
                 event.type === 'mouseenter' ? 'DetectedObjectEnter' : 'DetectedObjectLeave',
-                F.vertex.propForNameAndKey(this.attr.data, 'http://lumify.io#detectedObject', propertyKey)
+                F.vertex.props(this.attr.data, 'http://lumify.io#detectedObject', propertyKey)
             );
         };
 
         this.audioSetup = function(vertex) {
             AudioScrubber.attachTo(this.select('audioPreviewSelector'), {
-                rawUrl: vertex.imageRawSrc
+                rawUrl: F.vertex.raw(vertex)
             })
         };
 
         this.videoSetup = function(vertex) {
-            this.select('detectedObjectLabelsSelector').hide();
+            this.ignoreDetectedObjects = true;
             VideoScrubber.attachTo(this.select('previewSelector'), {
                 rawUrl: F.vertex.raw(vertex),
                 posterFrameUrl: F.vertex.image(vertex),
@@ -488,7 +547,7 @@ define([
         };
 
         this.showForm = function(dataInfo, $target) {
-            this.$node.find('.underneath').teardownComponent(TermForm)
+            this.$node.find('.underneath').teardownComponent(TermForm);
             var root = $('<div class="underneath">');
 
             if (dataInfo.isNew) {

@@ -1,0 +1,256 @@
+{
+  "budget": 355000,
+  "vote_average": 7.4,
+  "backdrop_path": "/ouPAQD01ZOsdsZTNgxJ0J3mo6qK.jpg",
+  "genres": [{
+    "id": 27,
+    "name": "Horror"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1547,
+        "order": 0,
+        "credit_id": "52fe421dc3a36847f8004fcd",
+        "name": "Bela Lugosi",
+        "cast_id": 5,
+        "profile_path": "/rQINZ2bo0OmjR3Vs71cE1WKhTJl.jpg",
+        "character": "Dracula"
+      },
+      {
+        "id": 1548,
+        "order": 1,
+        "credit_id": "52fe421dc3a36847f8004fd1",
+        "name": "Helen Chandler",
+        "cast_id": 6,
+        "profile_path": "/duGbpuad1sHllysCdvclmVQiInf.jpg",
+        "character": "Mina Seward"
+      },
+      {
+        "id": 2125,
+        "order": 2,
+        "credit_id": "52fe421dc3a36847f8005001",
+        "name": "David Manners",
+        "cast_id": 15,
+        "profile_path": "/zpFGF3jFR3woiJv3iefIspH3EWw.jpg",
+        "character": "John Harker"
+      },
+      {
+        "id": 1549,
+        "order": 3,
+        "credit_id": "52fe421dc3a36847f8004fd5",
+        "name": "Dwight Frye",
+        "cast_id": 7,
+        "profile_path": "/i7gRWGlb0wE7Ti0TuRBBVIlIrI4.jpg",
+        "character": "Renfield"
+      },
+      {
+        "id": 1550,
+        "order": 4,
+        "credit_id": "52fe421dc3a36847f8004fd9",
+        "name": "Edward Van Sloan",
+        "cast_id": 8,
+        "profile_path": "/z0d0yp39NGqHUVsO81vffOMxPW0.jpg",
+        "character": "Professor Abraham Van Helsing"
+      },
+      {
+        "id": 2126,
+        "order": 5,
+        "credit_id": "52fe421dc3a36847f8005005",
+        "name": "Herbert Bunston",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Dr. Jack Seward"
+      },
+      {
+        "id": 3947,
+        "order": 6,
+        "credit_id": "52fe421dc3a36847f8005021",
+        "name": "Frances Dade",
+        "cast_id": 21,
+        "profile_path": "/pf1UgxNxRzSCMLtmtCodxV6p8qa.jpg",
+        "character": "Lucy"
+      },
+      {
+        "id": 3948,
+        "order": 7,
+        "credit_id": "52fe421dc3a36847f8005025",
+        "name": "Joan Standing",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Maid"
+      },
+      {
+        "id": 3949,
+        "order": 8,
+        "credit_id": "52fe421dc3a36847f8005029",
+        "name": "Charles K. Gerrard",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Martin"
+      },
+      {
+        "id": 99599,
+        "order": 9,
+        "credit_id": "53a80152c3a3687a40005057",
+        "name": "Carla Laemmle",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Coach Passenger"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1496,
+        "credit_id": "52fe421dc3a36847f8004fb7",
+        "department": "Directing",
+        "name": "Tod Browning",
+        "job": "Director",
+        "profile_path": "/a1xXZoQEvikjdzZFqO6v5bwlZxV.jpg"
+      },
+      {
+        "id": 1544,
+        "credit_id": "52fe421dc3a36847f8004fbd",
+        "department": "Writing",
+        "name": "Bram Stoker",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 1545,
+        "credit_id": "52fe421dc3a36847f8004fc3",
+        "department": "Writing",
+        "name": "Hamilton Deane",
+        "job": "Theatre Play",
+        "profile_path": null
+      },
+      {
+        "id": 1546,
+        "credit_id": "52fe421dc3a36847f8004fc9",
+        "department": "Writing",
+        "name": "John L. Balderston",
+        "job": "Theatre Play",
+        "profile_path": null
+      },
+      {
+        "id": 70,
+        "credit_id": "52fe421dc3a36847f8004fdf",
+        "department": "Camera",
+        "name": "Karl Freund",
+        "job": "Director of Photography",
+        "profile_path": "/42rm6xS8hreYl7Sbsu6VOuz7vBJ.jpg"
+      },
+      {
+        "id": 1552,
+        "credit_id": "52fe421dc3a36847f8004fe5",
+        "department": "Editing",
+        "name": "Milton Carruth",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1556,
+        "credit_id": "52fe421dc3a36847f8004feb",
+        "department": "Production",
+        "name": "E.M. Asher",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1496,
+        "credit_id": "52fe421dc3a36847f8004ff1",
+        "department": "Production",
+        "name": "Tod Browning",
+        "job": "Producer",
+        "profile_path": "/a1xXZoQEvikjdzZFqO6v5bwlZxV.jpg"
+      },
+      {
+        "id": 1557,
+        "credit_id": "52fe421dc3a36847f8004ff7",
+        "department": "Production",
+        "name": "Carl Laemmle Jr.",
+        "job": "Producer",
+        "profile_path": "/hxZVAnYE16aGEa3ihIastQQUQWU.jpg"
+      },
+      {
+        "id": 1551,
+        "credit_id": "52fe421dc3a36847f8004ffd",
+        "department": "Sound",
+        "name": "Philip Glass",
+        "job": "Original Music Composer",
+        "profile_path": "/b18IeLoSCB6pJxPtGIUrkeQOAXN.jpg"
+      },
+      {
+        "id": 2156,
+        "credit_id": "52fe421dc3a36847f800500b",
+        "department": "Writing",
+        "name": "Louis Bromfield",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 3945,
+        "credit_id": "52fe421dc3a36847f8005011",
+        "department": "Art",
+        "name": "Charles D. Hall",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 3946,
+        "credit_id": "52fe421dc3a36847f8005017",
+        "department": "Sound",
+        "name": "C. Roy Hunter",
+        "job": "Recording Supervision",
+        "profile_path": null
+      },
+      {
+        "id": 1553,
+        "credit_id": "52fe421dc3a36847f800501d",
+        "department": "Editing",
+        "name": "Maurice Pivar",
+        "job": "Supervising Film Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 72,
+  "spoken_languages": [
+    {
+      "iso_639_1": "hu",
+      "name": "Magyar"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 138,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Dracula",
+  "overview": "The legend of vampire Count Dracula begins here with this original 1931 Dracula film from Bela Lugosi.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 221539,
+    "backdrop_path": "/59BzGYRB30MVDocOeKG9ild40kC.jpg",
+    "name": "Dracula (Universal Series)",
+    "poster_path": "/srgkikGqQD32mhaq8wT6Qz2eLcD.jpg"
+  },
+  "imdb_id": "tt0021814",
+  "release_date": "1931-02-12",
+  "original_title": "Dracula",
+  "vote_count": 18,
+  "poster_path": "/gS9Q2hmiIIWB7rW5HOSpHkGbQi7.jpg",
+  "tagline": "The story of the strangest passion the world has ever known!",
+  "revenue": 1012189,
+  "popularity": "0.641974969902327"
+}

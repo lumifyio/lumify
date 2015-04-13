@@ -11,10 +11,18 @@ define([
     }
 
     function Keyboard() {
+        this.after('teardown', function() {
+            document.removeEventListener('mousedown', this.onDocumentMouseDown);
+        });
+
         this.after('initialize', function() {
             this.shortcutsByScope = {};
             this.shortcuts = {};
             this.focusElementStack = [];
+
+            window.lumifyKeyboard = {};
+            window.lastMousePositionX = this.mousePageX = $(window).width() / 2;
+            window.lastMousePositionY = this.mousePageY = $(window).height() / 2;
 
             this.fireEventMetas = this.fireEvent;
 
@@ -31,7 +39,14 @@ define([
 
             this.on(document, 'requestKeyboardShortcuts', this.onRequestKeyboardShortcuts);
             this.on(document, 'registerKeyboardShortcuts', this.onRegisterKeyboardShortcuts);
+
+            this.onDocumentMouseDown = this.onDocumentMouseDown.bind(this);
+            document.addEventListener('mousedown', this.onDocumentMouseDown, true);
         });
+
+        this.onDocumentMouseDown = function(event) {
+            window.lumifyKeyboard = _.pick(event, 'shiftKey', 'altKey', 'metaKey', 'ctrlKey');
+        };
 
         this.onRequestKeyboardShortcuts = function() {
             this.trigger('keyboardShortcutsRegistered', this.shortcutsByScope);

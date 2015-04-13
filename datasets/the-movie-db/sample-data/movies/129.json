@@ -1,0 +1,328 @@
+{
+  "budget": 15000000,
+  "vote_average": 7.8,
+  "backdrop_path": "/mnpRKVSXBX6jb56nabvmGKA0Wig.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 19587,
+        "order": 0,
+        "credit_id": "52fe421bc3a36847f8004a97",
+        "name": "Rumi Hiiragi",
+        "cast_id": 3,
+        "profile_path": "/gAjyBxRsQKYeZMkYQ6cmEj5DmHD.jpg",
+        "character": "Chihiro"
+      },
+      {
+        "id": 19588,
+        "order": 1,
+        "credit_id": "52fe421bc3a36847f8004a9b",
+        "name": "Miyu Irino",
+        "cast_id": 4,
+        "profile_path": "/ietPOr7aiarxikxZE3772c9aScq.jpg",
+        "character": "Haku"
+      },
+      {
+        "id": 19589,
+        "order": 2,
+        "credit_id": "52fe421bc3a36847f8004a9f",
+        "name": "Mari Natsuki",
+        "cast_id": 5,
+        "profile_path": "/oPCV2XYAJ4D1tK0OdJ2PPQbug5I.jpg",
+        "character": "Yubaba"
+      },
+      {
+        "id": 19590,
+        "order": 3,
+        "credit_id": "52fe421bc3a36847f8004aa3",
+        "name": "Takashi Naitô",
+        "cast_id": 6,
+        "profile_path": "/ljbNlt6v9a7E9uvnph2qAJ6ba55.jpg",
+        "character": "Chihiro's Father"
+      },
+      {
+        "id": 19591,
+        "order": 4,
+        "credit_id": "52fe421bc3a36847f8004aa7",
+        "name": "Yasuko Sawaguchi",
+        "cast_id": 7,
+        "profile_path": "/biQ1OczU65gZDVfH2ItCdjaGn7S.jpg",
+        "character": "Chihiro's Mother"
+      },
+      {
+        "id": 19592,
+        "order": 5,
+        "credit_id": "52fe421bc3a36847f8004aab",
+        "name": "Tatsuya Gashûin",
+        "cast_id": 8,
+        "profile_path": "/dZ5KJLxLmoXIYrG7JcXuphGESIv.jpg",
+        "character": "Aogaeru"
+      },
+      {
+        "id": 19594,
+        "order": 6,
+        "credit_id": "52fe421bc3a36847f8004aaf",
+        "name": "Yumi Tamai",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Lin"
+      },
+      {
+        "id": 40450,
+        "order": 7,
+        "credit_id": "52fe421bc3a36847f8004b07",
+        "name": "Yo Oizumi",
+        "cast_id": 25,
+        "profile_path": "/avSKuYQiEHYY0eJoCFiKCyhGvcL.jpg",
+        "character": "Bandai-gaeru"
+      },
+      {
+        "id": 554423,
+        "order": 8,
+        "credit_id": "52fe421bc3a36847f8004b0b",
+        "name": "Koba Hayashi",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Kawa no Kami"
+      },
+      {
+        "id": 20334,
+        "order": 9,
+        "credit_id": "52fe421bc3a36847f8004b0f",
+        "name": "Tsunehiko Kamijô",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Chichiyaku"
+      },
+      {
+        "id": 544088,
+        "order": 10,
+        "credit_id": "52fe421bc3a36847f8004b13",
+        "name": "Takehiko Ono",
+        "cast_id": 28,
+        "profile_path": "/kqeS1AuvIoDtJo4ZvAlbNBhtNAU.jpg",
+        "character": "Aniyaku"
+      },
+      {
+        "id": 225730,
+        "order": 12,
+        "credit_id": "52fe421bc3a36847f8004b17",
+        "name": "Ryûnosuke Kamiki",
+        "cast_id": 30,
+        "profile_path": "/xtxDDMohS8Do3JzNRVMOMU3cknb.jpg",
+        "character": "Bôh"
+      },
+      {
+        "id": 119243,
+        "order": 13,
+        "credit_id": "52fe421bc3a36847f8004b1b",
+        "name": "Bunta Sugawara",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Kamajî"
+      }
+    ],
+    "crew": [
+      {
+        "id": 608,
+        "credit_id": "52fe421bc3a36847f8004a8d",
+        "department": "Directing",
+        "name": "Hayao Miyazaki",
+        "job": "Director",
+        "profile_path": "/6aaAvZbGdhkyAXBIneyqqN60aa1.jpg"
+      },
+      {
+        "id": 608,
+        "credit_id": "52fe421bc3a36847f8004a93",
+        "department": "Writing",
+        "name": "Hayao Miyazaki",
+        "job": "Screenplay",
+        "profile_path": "/6aaAvZbGdhkyAXBIneyqqN60aa1.jpg"
+      },
+      {
+        "id": 1417,
+        "credit_id": "52fe421bc3a36847f8004ab5",
+        "department": "Production",
+        "name": "Toshio Suzuki",
+        "job": "Producer",
+        "profile_path": "/k5YYt3VYjCEGRP4eCPx9bCLNtE4.jpg"
+      },
+      {
+        "id": 19595,
+        "credit_id": "52fe421bc3a36847f8004abb",
+        "department": "Production",
+        "name": "Yasuyoshi Tokuma",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 636,
+        "credit_id": "52fe421bc3a36847f8004ac1",
+        "department": "Sound",
+        "name": "Joe Hisaishi",
+        "job": "Original Music Composer",
+        "profile_path": "/cmYyWvG0rupbPTsTaCDkCooOFGT.jpg"
+      },
+      {
+        "id": 19596,
+        "credit_id": "52fe421bc3a36847f8004ac7",
+        "department": "Camera",
+        "name": "Atsushi Okui",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1697,
+        "credit_id": "52fe421bc3a36847f8004acd",
+        "department": "Editing",
+        "name": "Takeshi Seyama",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 19597,
+        "credit_id": "52fe421bc3a36847f8004ad3",
+        "department": "Art",
+        "name": "Norobu Yoshida",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 19598,
+        "credit_id": "52fe421bc3a36847f8004ad9",
+        "department": "Art",
+        "name": "Yôji Takeshige",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 19599,
+        "credit_id": "52fe421bc3a36847f8004adf",
+        "department": "Visual Effects",
+        "name": "Kaori Fujii",
+        "job": "Animation",
+        "profile_path": null
+      },
+      {
+        "id": 19600,
+        "credit_id": "52fe421bc3a36847f8004ae5",
+        "department": "Visual Effects",
+        "name": "Naoya Furukawa",
+        "job": "Animation",
+        "profile_path": null
+      },
+      {
+        "id": 19601,
+        "credit_id": "52fe421bc3a36847f8004aeb",
+        "department": "Visual Effects",
+        "name": "Makiko Futaki",
+        "job": "Animation",
+        "profile_path": null
+      },
+      {
+        "id": 19602,
+        "credit_id": "52fe421bc3a36847f8004af1",
+        "department": "Visual Effects",
+        "name": "Hideyoshi Hamatsu",
+        "job": "Animation",
+        "profile_path": null
+      },
+      {
+        "id": 9663,
+        "credit_id": "52fe421bc3a36847f8004af7",
+        "department": "Visual Effects",
+        "name": "Shinji Hashimoto",
+        "job": "Animation",
+        "profile_path": null
+      },
+      {
+        "id": 19603,
+        "credit_id": "52fe421bc3a36847f8004afd",
+        "department": "Visual Effects",
+        "name": "Takeshi Imamura",
+        "job": "Animation",
+        "profile_path": null
+      },
+      {
+        "id": 19604,
+        "credit_id": "52fe421bc3a36847f8004b03",
+        "department": "Visual Effects",
+        "name": "Kuniyuki Ishii",
+        "job": "Animation",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 125,
+  "spoken_languages": [{
+    "iso_639_1": "ja",
+    "name": "日本語"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 129,
+  "production_countries": [{
+    "name": "Japan",
+    "iso_3166_1": "JP"
+  }],
+  "title": "Spirited Away",
+  "overview": "Spirited Away is an Oscar winning Japanese animated film about a ten year old girl who wanders away from her parents along a path that leads to a world ruled by strange and unusual monster-like animals. Her parents have been changed into pigs along with others inside a bathhouse full of these creatures. Will she ever see the world how it once was?",
+  "production_companies": [
+    {
+      "id": 10342,
+      "name": "Studio Ghibli"
+    },
+    {
+      "id": 6755,
+      "name": "Nippon Television Network Corporation (NTV)"
+    },
+    {
+      "id": 2752,
+      "name": "DENTSU Music And Entertainment"
+    },
+    {
+      "id": 1779,
+      "name": "Tokuma Shoten"
+    },
+    {
+      "id": 5892,
+      "name": "Buena Vista International"
+    },
+    {
+      "id": 12387,
+      "name": "Tohokushinsha Film"
+    },
+    {
+      "id": 11847,
+      "name": "Mitsubishi"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0245429",
+  "release_date": "2001-07-20",
+  "original_title": "千と千尋の神隠し",
+  "vote_count": 920,
+  "poster_path": "/dL11DBPcRhWWnJcFXl9A07MrqTI.jpg",
+  "tagline": "The tunnel led Chihiro to a mysterious town...",
+  "revenue": 274925095,
+  "popularity": "2.72011145260266"
+}

@@ -1,5 +1,7 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.collect.ImmutableList;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.web.clientapi.model.ClientApiOntology;
 import io.lumify.web.clientapi.model.PropertyType;
 import org.json.JSONArray;
@@ -11,10 +13,7 @@ import org.securegraph.type.GeoPoint;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +36,8 @@ public abstract class OntologyProperty {
 
     public abstract boolean getSearchable();
 
+    public abstract boolean getAddable();
+
     public abstract PropertyType getDataType();
 
     public abstract Double getBoost();
@@ -46,6 +47,14 @@ public abstract class OntologyProperty {
     public abstract String getDisplayType();
 
     public abstract String getPropertyGroup();
+
+    public abstract String getValidationFormula();
+
+    public abstract String getDisplayFormula();
+
+    public abstract ImmutableList<String> getDependentPropertyIris();
+
+    public abstract String[] getIntents();
 
     public static Collection<ClientApiOntology.Property> toClientApiProperties(Iterable<OntologyProperty> properties) {
         Collection<ClientApiOntology.Property> results = new ArrayList<ClientApiOntology.Property>();
@@ -62,11 +71,18 @@ public abstract class OntologyProperty {
             result.setDisplayName(getDisplayName());
             result.setUserVisible(getUserVisible());
             result.setSearchable(getSearchable());
+            result.setAddable(getAddable());
             result.setDataType(getDataType());
             result.setDisplayType(getDisplayType());
             result.setPropertyGroup(getPropertyGroup());
+            result.setValidationFormula(getValidationFormula());
+            result.setDisplayFormula(getDisplayFormula());
+            result.setDependentPropertyIris(getDependentPropertyIris());
             if (getPossibleValues() != null) {
                 result.getPossibleValues().putAll(getPossibleValues());
+            }
+            if (getIntents() != null) {
+                result.getIntents().addAll(Arrays.asList(getIntents()));
             }
             return result;
         } catch (JSONException e) {
@@ -153,7 +169,11 @@ public abstract class OntologyProperty {
                 double longitude = Double.parseDouble(match.group(2).trim());
                 return new GeoPoint(latitude, longitude);
             }
-            throw new RuntimeException("Could not parse location: " + valueStr);
+            throw new LumifyException("Could not parse location: " + valueStr);
         }
+    }
+
+    public boolean hasDependentPropertyIris() {
+        return getDependentPropertyIris() != null && getDependentPropertyIris().size() > 0;
     }
 }

@@ -1,0 +1,269 @@
+{
+  "budget": 500000,
+  "vote_average": 8,
+  "backdrop_path": "/61vLiK96sbXeHpQiMxI4CuqBA3z.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 7450,
+        "order": 0,
+        "credit_id": "52fe423bc3a36847f800e015",
+        "name": "Toshirō Mifune",
+        "cast_id": 13,
+        "profile_path": "/32nCFJneAfmZxYTQsaF5bcmCB7e.jpg",
+        "character": "Kikuchiyo"
+      },
+      {
+        "id": 7453,
+        "order": 1,
+        "credit_id": "52fe423bc3a36847f800dff3",
+        "name": "Takashi Shimura",
+        "cast_id": 5,
+        "profile_path": "/k8Ff4Nq2peKfiUpd8IILrSBM0ts.jpg",
+        "character": "Kambei Shimada"
+      },
+      {
+        "id": 20828,
+        "order": 2,
+        "credit_id": "52fe423bc3a36847f800dff7",
+        "name": "Yoshio Inaba",
+        "cast_id": 6,
+        "profile_path": "/3q3nR6a0aeBOBi84712ZX04dC1O.jpg",
+        "character": "Gorobei Katayama"
+      },
+      {
+        "id": 20829,
+        "order": 3,
+        "credit_id": "52fe423bc3a36847f800dffb",
+        "name": "Seiji Miyaguchi",
+        "cast_id": 7,
+        "profile_path": "/q2I5eEnqGK1A2AmCvYaPF8pMDtf.jpg",
+        "character": "Kyuzo"
+      },
+      {
+        "id": 7454,
+        "order": 4,
+        "credit_id": "52fe423bc3a36847f800dfff",
+        "name": "Minoru Chiaki",
+        "cast_id": 8,
+        "profile_path": "/yuHeTk3R9XGrPo1i1EbR3kfQibd.jpg",
+        "character": "Heihachi Hayashida"
+      },
+      {
+        "id": 7457,
+        "order": 5,
+        "credit_id": "52fe423bc3a36847f800e003",
+        "name": "Daisuke Katô",
+        "cast_id": 9,
+        "profile_path": "/rZGOg4xRkDTVMdGCzMhswioT4pU.jpg",
+        "character": "Shichiroji"
+      },
+      {
+        "id": 20830,
+        "order": 6,
+        "credit_id": "52fe423bc3a36847f800e007",
+        "name": "Isao Kimura",
+        "cast_id": 10,
+        "profile_path": "/iL2XYnzkEZkXXx9tcoHMBDe9Ymu.jpg",
+        "character": "Katsushiro Okamoto"
+      },
+      {
+        "id": 20831,
+        "order": 7,
+        "credit_id": "52fe423bc3a36847f800e00b",
+        "name": "Keiko Tsushima",
+        "cast_id": 11,
+        "profile_path": "/7IDKNmGI1sPUV2bFsav9uRAM9aF.jpg",
+        "character": "Shino"
+      },
+      {
+        "id": 554250,
+        "order": 8,
+        "credit_id": "52fe423bc3a36847f800e019",
+        "name": "Yukiko Shimazaki",
+        "cast_id": 14,
+        "profile_path": "/3Fh32fFAAIYLnYiRqt7huqQb5iX.jpg",
+        "character": "Rikichi's Wife"
+      },
+      {
+        "id": 96552,
+        "order": 9,
+        "credit_id": "52fe423bc3a36847f800e01d",
+        "name": "Kamatari Fujiwara",
+        "cast_id": 15,
+        "profile_path": "/detxCmyJe9W1WqGCCYJQC7U5Tgq.jpg",
+        "character": "Manzô - Father of Shino"
+      },
+      {
+        "id": 134272,
+        "order": 10,
+        "credit_id": "52fe423bc3a36847f800e021",
+        "name": "Yoshio Kosugi",
+        "cast_id": 16,
+        "profile_path": "/pZrCexgS1ewpgjsEhXijZ2mmuSF.jpg",
+        "character": "Mosuke"
+      },
+      {
+        "id": 34377,
+        "order": 11,
+        "credit_id": "52fe423bc3a36847f800e025",
+        "name": "Bokuzen Hidari",
+        "cast_id": 17,
+        "profile_path": "/pVxDHjejp69DaDqSrDlI6iuT6Mm.jpg",
+        "character": "Yohei"
+      },
+      {
+        "id": 17540,
+        "order": 12,
+        "credit_id": "52fe423bc3a36847f800e029",
+        "name": "Yoshio Tsuchiya",
+        "cast_id": 18,
+        "profile_path": "/d5p1jSAUVJJbtWSJCAEpR3PmMDJ.jpg",
+        "character": "Rikichi"
+      },
+      {
+        "id": 108028,
+        "order": 13,
+        "credit_id": "52fe423bc3a36847f800e02d",
+        "name": "Kokuten Kôdô",
+        "cast_id": 19,
+        "profile_path": "/eoP753m4oPzYrYhwfs983n5d1dr.jpg",
+        "character": "Gisaku, the Old Man"
+      },
+      {
+        "id": 106165,
+        "order": 14,
+        "credit_id": "52fe423bc3a36847f800e031",
+        "name": "Eijirô Tôno",
+        "cast_id": 20,
+        "profile_path": "/5wb61i8W4r9On3FkwUbaTkWqfdb.jpg",
+        "character": "Kidnapper"
+      },
+      {
+        "id": 228547,
+        "order": 16,
+        "credit_id": "52fe423bc3a36847f800e039",
+        "name": "Jun Tatara",
+        "cast_id": 22,
+        "profile_path": "/xzUlQEvQgTDt7939OhQH3Rf7vHN.jpg",
+        "character": "Coolie A"
+      },
+      {
+        "id": 134294,
+        "order": 17,
+        "credit_id": "52fe423bc3a36847f800e03d",
+        "name": "Atsushi Watanabe",
+        "cast_id": 23,
+        "profile_path": "/iInI90DbSCtBj3x9rKD60Jhqx0a.jpg",
+        "character": "Bun Seller"
+      },
+      {
+        "id": 134406,
+        "order": 18,
+        "credit_id": "52fe423bc3a36847f800e041",
+        "name": "Toranosuke Ogawa",
+        "cast_id": 24,
+        "profile_path": "/tMF1gb5bkyvjJVPMP9aDWUpUlOA.jpg",
+        "character": "Grandfather of Kidnapped Girl"
+      },
+      {
+        "id": 134020,
+        "order": 19,
+        "credit_id": "52fe423bc3a36847f800e045",
+        "name": "Isao Yamagata",
+        "cast_id": 25,
+        "profile_path": "/7g9NknyTAluj3G1nYOL5szyI6IS.jpg",
+        "character": "Samurai"
+      },
+      {
+        "id": 7455,
+        "order": 20,
+        "credit_id": "53028093925141218f3d1e9e",
+        "name": "Kichijirô Ueda",
+        "cast_id": 26,
+        "profile_path": "/ieTlJVanMpV2eiYTm3D5kKbYM3T.jpg",
+        "character": "Bandit Scout"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5026,
+        "credit_id": "52fe423bc3a36847f800dfdd",
+        "department": "Directing",
+        "name": "Akira Kurosawa",
+        "job": "Director",
+        "profile_path": "/tSHISWGMP0xBQxWfrsLXPK4a4r7.jpg"
+      },
+      {
+        "id": 7449,
+        "credit_id": "52fe423bc3a36847f800dfe3",
+        "department": "Writing",
+        "name": "Shinobu Hashimoto",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 20827,
+        "credit_id": "52fe423bc3a36847f800dfe9",
+        "department": "Writing",
+        "name": "Hideo Oguni",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5026,
+        "credit_id": "52fe423bc3a36847f800dfef",
+        "department": "Writing",
+        "name": "Akira Kurosawa",
+        "job": "Screenplay",
+        "profile_path": "/tSHISWGMP0xBQxWfrsLXPK4a4r7.jpg"
+      },
+      {
+        "id": 20832,
+        "credit_id": "52fe423bc3a36847f800e011",
+        "department": "Production",
+        "name": "Sôjirô Motoki",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 207,
+  "spoken_languages": [{
+    "iso_639_1": "ja",
+    "name": "日本語"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 346,
+  "production_countries": [{
+    "name": "Japan",
+    "iso_3166_1": "JP"
+  }],
+  "title": "Seven Samurai",
+  "overview": "A veteran samurai, who has fallen on hard times, answers a village's request for protection from bandits. He gathers 6 other samurai to help him, and they teach the townspeople how to defend themselves, and they supply the samurai with three small meals a day. The film culminates in a giant battle when 40 bandits attack the village.",
+  "production_companies": [{
+    "id": 882,
+    "name": "Toho Company"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0047478",
+  "release_date": "1954-04-26",
+  "original_title": "Shichinin no samurai",
+  "vote_count": 186,
+  "poster_path": "/5hqbJSmtAimbaP3XcYshCixuUtk.jpg",
+  "tagline": "Will Take Its Place With the Seven Greatest Films of All Time!",
+  "revenue": 269061,
+  "popularity": "1.73670511789495"
+}

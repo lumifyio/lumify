@@ -1,93 +1,88 @@
 # Lumify-Twitter
 
-Lumify-Twitter is an open source ingest example for the Lumify project. See the [Lumify website](http://lumify.io) for more information about Lumify.
+Lumify-Twitter is an open source data ingestion example for the [Lumify](http://lumify.io) project.  This command-line application will extract recent tweet statuses from the configured Twitter user's "home timeline" and transform tweet data to a graph model.
 
-## Build Requirements
+The default Twitter ontology is capable of representing:
+* Twitter user details
+* Tweet content
+* Hashtags
+* Referenced URLs
+* User Mentions
+* Retweets
 
-* Please ensure that [Lumify] (https://github.com/altamiracorp/lumify/blob/master/README.md) has been installed before building.
+## Prerequisites
 
-## Integrating with [Lumify](https://lumify.io)
+* Please ensure that [Lumify] (../../README.md) has been installed before building.
+* [Twitter API Keys](#generating-twitter-api-keys) have been generated for the Twitter user that tweet data is coming from.
 
-1. Generate Twitter API Keys. 
-   * For instructions, please visit the [Twitter Developers site](https://dev.twitter.com/) or [Generating Twitter API Keys](#generating-twitter-api-keys) below. 
-2. Add the following properties names and corresponding Twitter API keys to your ```/opt/lumify/config/configuration.properties:```
+## Ontology Customization
 
-```
-twitter.consumerKey= 
-twitter.consumerSecret=
-twitter.token=
-twitter.tokenSecret=
-twitter.inputMethod=twitter4j
-twitter.query= # Keywords to search Twitter for, e.g. twitter
-# When searching for multiple phrases it must be a semi-colon separated list, e.g. twitter; face book; instagram
-```
-	
-3. Clone the repository from github using either of the links from the [main page](https://github.com/altamiracorp/lumify-twitter)
-4. cd into your ```lumify-twitter``` directory
-5. <a name="step-5"/>```mvn clean package```
-6. ```cd target```
-7. Copy the jar file to location of where you are running your Storm Topology for Lumify.
-   * In the [Lumify Pre-Built VM](https://github.com/altamiracorp/lumify/blob/master/docs/PREBUILT_VM.md), please run the following command ```/opt/storm/bin/storm jar [location of jar file] com.altamiracorp.lumify.twitter.storm.StormRunner```
+1. If necessary, edit `datasets/twitter/ontology/twitter.owl` to customize different concepts (e.g. person, phone number), properties for each concept, relationships between concepts, and/or glyphIcons associated with concepts.
 
-Proceed if you are not using the Pre-built VM provided by [Lumify](https://lumify.io)
+1. Build the CLI jar:
 
-1. Deploy lumify storm topology.
-2. Deploy lumify-twitter storm topology. 
-3. Deploy web war file.
+        mvn package -pl tools/cli -am
+
+1. Import the dev and twitter ontologies:
+
+        java -jar tools/cli/target/lumify-cli-*-with-dependencies.jar io.lumify.core.cmdline.OwlImport --in=$(pwd)/examples/ontology-dev/dev.owl
+
+        java -jar tools/cli/target/lumify-cli-*-with-dependencies.jar io.lumify.core.cmdline.OwlImport --in=$(pwd)/datasets/twitter/ontology/twitter.owl
+
+## Configuration and Building
+
+1. Add the following properties with the appropriate credential values to a separate configuration file named **lumify-twitter.properties**:
+
+        twitter.consumerKey= 
+        twitter.consumerSecret=
+        twitter.token=
+        twitter.tokenSecret=
+
+This file must be located in one of the areas specified by the [configuration search location](https://github.com/lumifyio/lumify/blob/master/docs/configuration.md#configuration-search-order) instructions. 
+
+1. Package the Twitter Graph Property Worker:
+
+        mvn package -pl datasets/twitter/twitter-graph-property-worker -am
+
+1. Copy `datasets/twitter/twitter-graph-property-worker/target/lumify-twitter-graph-property-worker-*-jar-with-dependencies.jar` to `/opt/lumify/lib` or `hdfs://lumify/libcache`
+
+1. Package the Twitter Ingestion command-line application:
+
+        mvn package -pl datasets/twitter/twitter-ingestion -am
+
+1. Execute the application to ingest data corresponding to the configured Twitter user account:
+
+   ```sh
+   java -jar datasets/twitter/twitter-ingestion/target/lumify-twitter-ingestion-*-jar-with-dependencies.jar
+   ```
+
+1. Restart your web application if using the embedded graph property worker threads, or restart the graph property worker yarn application.
+
+## Example Screenshots
+![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_graph.png)
+
 
 ## Generating Twitter API Keys
+This application requires OAuth authentication credentials for the Twitter account used during tweet data ingestion.  The steps listed below will guide you through the process of creating a consumer key and secret pair along with an access token and secret pair for an existing Twitter account.  These credentials will be used to process user tweet data and may be destroyed immediately afterwards.
 
-1. Sign In to [Twitter Developers site](https://dev.twitter.com/user/login?destination=home) using your Twitter credentials.
-<br/>
-<br/>
+1. **Sign In** to the [Twitter Developers site](https://apps.twitter.com/) using your Twitter account credentials.
+<br />
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_sign_in.png)
-<br/>
-<br/>
-2. In the top right corner hover over your Twitter Handler’s picture and select **My Applications** from the drop-down menu.
-<br/>
-<br/>
-![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_my_app.png)
-<br/>
-<br/>
-3. Select **Create a new application** and fill out the form.
-<br/>
-<br/>
+
+1. Upon signing in, you'll be presented with the applications configured for your Twitter account.  Click on the **Create New App** button located in the upper-right corner.
+<br />
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_create_new_app.png)
-<br/>
-<br/>
-4. Once completed, click on the **API Keys** tab. Scroll down and select **Create my access token**.
-<br/>
-<br/>
+
+1. Fill out the form for a new application.  The application **name** must be globally unique and the application **website** must be a well-formed URL.
+<br />
+<br />
+![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_create_app_form.png)
+
+1. Once completed, click on the **API Keys** tab. Scroll down and select **Create my access token**
+<br />
+<br />
 ![ScreenShot](https://raw.githubusercontent.com/lumifyio/lumify/master/datasets/twitter/docs/screenshots/twitter_access_token.png)
-<br/>
-<br/>
-5. Refresh the page until you see Access Token, Access Token Secret, and Access Level under **Your Access Token**.
 
-
-## Documentation
-
-### Customizing Ontology
-
-From the lumify-twitter directory: 
-
-1. ```cd data/ontology```.
-2. Modify ```twitter.owl```, to customize different concepts (e.g. person, phone number), properties for each concept, relationships between concepts, and/or glyphIcons associated with concepts.
-   * After modifications, ```cd lumify-twitter/bin/importOntology.sh```.
-3. Proceed from step 5 in [Integrating with Lumify](#step-5)
-
-License
-=======
-
-Copyright 2014 Altamira Technologies Corporation
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+1. Refresh the page until you see Access Token, Access Token Secret, and Access Level under **Your Access Token**

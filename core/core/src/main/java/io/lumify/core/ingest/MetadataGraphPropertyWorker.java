@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.Element;
+import org.securegraph.Metadata;
 import org.securegraph.Property;
 import org.securegraph.Visibility;
 import org.securegraph.mutation.ElementMutation;
@@ -15,8 +16,6 @@ import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -73,8 +72,8 @@ public class MetadataGraphPropertyWorker extends GraphPropertyWorker {
             visibility = new Visibility(visibilitySource);
         }
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, GraphUtil.updateVisibilitySource(null, visibilitySource));
+        Metadata metadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, GraphUtil.updateVisibilitySource(null, visibilitySource), getVisibilityTranslator().getDefaultVisibility());
 
         data.getElement().addPropertyValue(propertyKey, propertyName, propertyValue, metadata, visibility, getAuthorizations());
     }

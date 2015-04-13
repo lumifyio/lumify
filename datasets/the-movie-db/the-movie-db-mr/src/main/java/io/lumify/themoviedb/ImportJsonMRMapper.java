@@ -2,9 +2,12 @@ package io.lumify.themoviedb;
 
 import io.lumify.core.mapreduce.LumifyElementMapperBase;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.security.DirectVisibilityTranslator;
+import io.lumify.core.security.VisibilityTranslator;
 import org.apache.hadoop.io.Text;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.securegraph.Metadata;
 import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.Visibility;
@@ -16,8 +19,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey, Text> {
     public static final String MULTI_VALUE_KEY = ImportJsonMR.class.getName();
@@ -26,11 +27,14 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
     private static final SimpleDateFormat DATE_YEAR_FORMAT = new SimpleDateFormat("yyyy");
     private Visibility visibility;
     private AccumuloAuthorizations authorizations;
+    private Visibility defaultVisibility;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-        this.visibility = new Visibility("");
+        VisibilityTranslator visibilityTranslator = new DirectVisibilityTranslator();
+        this.visibility = visibilityTranslator.getDefaultVisibility();
+        this.defaultVisibility = visibilityTranslator.getDefaultVisibility();
         this.authorizations = new AccumuloAuthorizations();
     }
 
@@ -83,9 +87,9 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
 
         String biography = personJson.optString("biography");
         if (biography != null) {
-            Map<String, Object> metadata = new HashMap<String, Object>();
-            metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Biography");
-            metadata.put(LumifyProperties.META_DATA_MIME_TYPE, "text/plain");
+            Metadata metadata = new Metadata();
+            LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(metadata, "Biography", defaultVisibility);
+            LumifyProperties.META_DATA_MIME_TYPE.setMetadata(metadata, "text/plain", defaultVisibility);
             StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(biography.getBytes()), String.class);
             LumifyProperties.TEXT.addPropertyValue(m, MULTI_VALUE_KEY, value, metadata, visibility);
         }
@@ -188,9 +192,9 @@ public class ImportJsonMRMapper extends LumifyElementMapperBase<SequenceFileKey,
 
         String overview = movieJson.optString("overview");
         if (overview != null && overview.length() > 0) {
-            Map<String, Object> metadata = new HashMap<String, Object>();
-            metadata.put(LumifyProperties.META_DATA_TEXT_DESCRIPTION, "Overview");
-            metadata.put(LumifyProperties.META_DATA_MIME_TYPE, "text/plain");
+            Metadata metadata = new Metadata();
+            LumifyProperties.META_DATA_TEXT_DESCRIPTION.setMetadata(metadata, "Overview", defaultVisibility);
+            LumifyProperties.META_DATA_MIME_TYPE.setMetadata(metadata, "text/plain", defaultVisibility);
             StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(overview.getBytes()), String.class);
             LumifyProperties.TEXT.addPropertyValue(m, MULTI_VALUE_KEY, value, metadata, visibility);
         }

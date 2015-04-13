@@ -1,0 +1,413 @@
+{
+  "budget": 63000000,
+  "vote_average": 6.9,
+  "backdrop_path": "/u4F1Ib1CflQ3zxELDPSLfd5QqcI.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4783,
+        "order": 0,
+        "credit_id": "52fe4238c3a36847f800d295",
+        "name": "Sam Neill",
+        "cast_id": 4,
+        "profile_path": "/mrbhjPg0SNCJu6Auj4WMheMg5EC.jpg",
+        "character": "Dr. Alan Grant"
+      },
+      {
+        "id": 4784,
+        "order": 1,
+        "credit_id": "52fe4238c3a36847f800d299",
+        "name": "Laura Dern",
+        "cast_id": 5,
+        "profile_path": "/6UdGooksu7F4qfXkdvsQkhFVuhK.jpg",
+        "character": "Dr. Ellie Sattler"
+      },
+      {
+        "id": 4785,
+        "order": 2,
+        "credit_id": "52fe4238c3a36847f800d29d",
+        "name": "Jeff Goldblum",
+        "cast_id": 6,
+        "profile_path": "/iDW7y4R8cx4SZzWd8nN2gvL7My1.jpg",
+        "character": "Dr. Ian Malcolm"
+      },
+      {
+        "id": 4786,
+        "order": 3,
+        "credit_id": "52fe4238c3a36847f800d2a1",
+        "name": "Richard Attenborough",
+        "cast_id": 7,
+        "profile_path": "/qzedA4XCNjbmR7z3fWiFinGukzx.jpg",
+        "character": "John Hammond"
+      },
+      {
+        "id": 4789,
+        "order": 4,
+        "credit_id": "52fe4238c3a36847f800d2ad",
+        "name": "Bob Peck",
+        "cast_id": 10,
+        "profile_path": "/rZDQGYzVIHr78B86q3rgHffCJFZ.jpg",
+        "character": "Robert Muldoon"
+      },
+      {
+        "id": 4790,
+        "order": 5,
+        "credit_id": "52fe4238c3a36847f800d2b5",
+        "name": "Martin Ferrero",
+        "cast_id": 12,
+        "profile_path": "/gTIclBDE9q6TFmOx7JIn32zTaVk.jpg",
+        "character": "Donald Gennaro"
+      },
+      {
+        "id": 4787,
+        "order": 6,
+        "credit_id": "52fe4238c3a36847f800d2a5",
+        "name": "Joseph Mazzello",
+        "cast_id": 8,
+        "profile_path": "/zsBGvymDqB737PerJTqhS9dPuBd.jpg",
+        "character": "Tim Murphy"
+      },
+      {
+        "id": 4788,
+        "order": 7,
+        "credit_id": "52fe4238c3a36847f800d2a9",
+        "name": "Ariana Richards",
+        "cast_id": 9,
+        "profile_path": "/b4S0q3uSDIophwYcPlBABgJObSX.jpg",
+        "character": "Lex Murphy"
+      },
+      {
+        "id": 2231,
+        "order": 8,
+        "credit_id": "52fe4238c3a36847f800d2b1",
+        "name": "Samuel L. Jackson",
+        "cast_id": 11,
+        "profile_path": "/dlW6prW9HwYDsIRXNoFYtyHpSny.jpg",
+        "character": "Ray Arnold"
+      },
+      {
+        "id": 14592,
+        "order": 9,
+        "credit_id": "52fe4238c3a36847f800d2f7",
+        "name": "BD Wong",
+        "cast_id": 25,
+        "profile_path": "/h23xJvjHYzNVSKyJifZFEtZA5of.jpg",
+        "character": "Henry Wu"
+      },
+      {
+        "id": 4201,
+        "order": 10,
+        "credit_id": "52fe4238c3a36847f800d2b9",
+        "name": "Wayne Knight",
+        "cast_id": 13,
+        "profile_path": "/oW9aeZwkz1S1IMjQGtd9mnvlEax.jpg",
+        "character": "Dennis Nedry"
+      },
+      {
+        "id": 2211,
+        "order": 11,
+        "credit_id": "52fe4238c3a36847f800d2fb",
+        "name": "Gerald R. Molen",
+        "cast_id": 26,
+        "profile_path": "/ih3yLiYixeQuW2Zp545aHtD5nq.jpg",
+        "character": "Gerry Harding"
+      },
+      {
+        "id": 30488,
+        "order": 12,
+        "credit_id": "52fe4238c3a36847f800d2ff",
+        "name": "Miguel Sandoval",
+        "cast_id": 27,
+        "profile_path": "/4Vnbl64PeNlqWozQAmvJ1HmI71B.jpg",
+        "character": "Juanito Rostagno"
+      },
+      {
+        "id": 176312,
+        "order": 13,
+        "credit_id": "52fe4238c3a36847f800d303",
+        "name": "Cameron Thor",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Lewis Dodgson"
+      },
+      {
+        "id": 145531,
+        "order": 14,
+        "credit_id": "52fe4238c3a36847f800d307",
+        "name": "Christopher John Fields",
+        "cast_id": 29,
+        "profile_path": "/jTWw4B74VhrPo8AN6Q9jq31eYDD.jpg",
+        "character": "Volunteer #1"
+      },
+      {
+        "id": 4791,
+        "order": 15,
+        "credit_id": "52fe4238c3a36847f800d2bd",
+        "name": "Greg Burson",
+        "cast_id": 14,
+        "profile_path": "/A8sRcbpxZ5ft9UN8nRTc51DNWxS.jpg",
+        "character": "Mr. D.N.A. (voice)"
+      },
+      {
+        "id": 166298,
+        "order": 16,
+        "credit_id": "52fe4238c3a36847f800d31d",
+        "name": "Whit Hertford",
+        "cast_id": 33,
+        "profile_path": "/8jhUyJUXdXKh4RJPk2T9NMU5bWP.jpg",
+        "character": "Volunteer Boy (as Whitby Hertford)"
+      },
+      {
+        "id": 1060,
+        "order": 17,
+        "credit_id": "52fe4238c3a36847f800d321",
+        "name": "Dean Cundey",
+        "cast_id": 34,
+        "profile_path": "/xunb0FZLZLhca2F5OJcKzV1mjR0.jpg",
+        "character": "Mate"
+      },
+      {
+        "id": 9559,
+        "order": 18,
+        "credit_id": "52fe4238c3a36847f800d325",
+        "name": "Jophery C. Brown",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Worker in Raptor Pen (as Jophery Brown)"
+      },
+      {
+        "id": 1278538,
+        "order": 19,
+        "credit_id": "52fe4238c3a36847f800d329",
+        "name": "Tom Mishler",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Helicopter Pilot"
+      },
+      {
+        "id": 1278539,
+        "order": 20,
+        "credit_id": "52fe4238c3a36847f800d32d",
+        "name": "Adrian Escober",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Worker at Amber Mine"
+      },
+      {
+        "id": 26660,
+        "order": 21,
+        "credit_id": "52fe4238c3a36847f800d331",
+        "name": "Richard Kiley",
+        "cast_id": 38,
+        "profile_path": "/jqyhpE74uT5F2H1Ey8LllbKpdAK.jpg",
+        "character": "Jurassic Park Tour Voice (voice)"
+      },
+      {
+        "id": 1278540,
+        "order": 22,
+        "credit_id": "52fe4238c3a36847f800d335",
+        "name": "Brad M. Bucklin",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Lab Technician (uncredited)"
+      },
+      {
+        "id": 1278541,
+        "order": 23,
+        "credit_id": "52fe4238c3a36847f800d339",
+        "name": "Laura Burnett",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Archeologist (uncredited)"
+      },
+      {
+        "id": 1004156,
+        "order": 24,
+        "credit_id": "52fe4238c3a36847f800d33d",
+        "name": "Gary A. Rodriguez",
+        "cast_id": 41,
+        "profile_path": null,
+        "character": "Miner - Dug Out Mosquito (uncredited)"
+      },
+      {
+        "id": 15335,
+        "order": 25,
+        "credit_id": "52fe4238c3a36847f800d341",
+        "name": "Brian Smrz",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "Driver of Grant, Sattler & Malcolm's Jeep (uncredited)"
+      },
+      {
+        "id": 1278542,
+        "order": 26,
+        "credit_id": "52fe4238c3a36847f800d345",
+        "name": "Robert 'Bobby Z' Zajonc",
+        "cast_id": 43,
+        "profile_path": null,
+        "character": "InGen Helicopter Pilot (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 488,
+        "credit_id": "52fe4238c3a36847f800d291",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 489,
+        "credit_id": "52fe4238c3a36847f800d2c3",
+        "department": "Production",
+        "name": "Kathleen Kennedy",
+        "job": "Producer",
+        "profile_path": "/uHEExgTTzJNDX1Gal9CW5n3QdEJ.jpg"
+      },
+      {
+        "id": 2211,
+        "credit_id": "52fe4238c3a36847f800d2c9",
+        "department": "Production",
+        "name": "Gerald R. Molen",
+        "job": "Producer",
+        "profile_path": "/ih3yLiYixeQuW2Zp545aHtD5nq.jpg"
+      },
+      {
+        "id": 491,
+        "credit_id": "52fe4238c3a36847f800d2cf",
+        "department": "Sound",
+        "name": "John Williams",
+        "job": "Original Music Composer",
+        "profile_path": "/d7NNRZQAIzLBSaoez550QHLpTk.jpg"
+      },
+      {
+        "id": 1060,
+        "credit_id": "52fe4238c3a36847f800d2d5",
+        "department": "Camera",
+        "name": "Dean Cundey",
+        "job": "Director of Photography",
+        "profile_path": "/xunb0FZLZLhca2F5OJcKzV1mjR0.jpg"
+      },
+      {
+        "id": 493,
+        "credit_id": "52fe4238c3a36847f800d2db",
+        "department": "Editing",
+        "name": "Michael Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 496,
+        "credit_id": "52fe4238c3a36847f800d2e1",
+        "department": "Art",
+        "name": "Rick Carter",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2874,
+        "credit_id": "52fe4238c3a36847f800d2e7",
+        "department": "Production",
+        "name": "Janet Hirshenson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3275,
+        "credit_id": "52fe4238c3a36847f800d2ed",
+        "department": "Production",
+        "name": "Jane Jenkins",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 45762,
+        "credit_id": "52fe4238c3a36847f800d2f3",
+        "department": "Production",
+        "name": "Erno Das",
+        "job": "Other",
+        "profile_path": null
+      },
+      {
+        "id": 4782,
+        "credit_id": "52fe4238c3a36847f800d30d",
+        "department": "Writing",
+        "name": "Michael Crichton",
+        "job": "Novel",
+        "profile_path": "/hWEu802x48GlW0vx9Lx1XZO8mTX.jpg"
+      },
+      {
+        "id": 4782,
+        "credit_id": "52fe4238c3a36847f800d313",
+        "department": "Writing",
+        "name": "Michael Crichton",
+        "job": "Screenplay",
+        "profile_path": "/hWEu802x48GlW0vx9Lx1XZO8mTX.jpg"
+      },
+      {
+        "id": 508,
+        "credit_id": "52fe4238c3a36847f800d319",
+        "department": "Writing",
+        "name": "David Koepp",
+        "job": "Screenplay",
+        "profile_path": "/3A7kfyMXaVjGcSbGdRD25msbHcj.jpg"
+      }
+    ]
+  },
+  "runtime": 127,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.jurassicpark.com/",
+  "id": 329,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Jurassic Park",
+  "overview": "A wealthy entrepreneur secretly creates a theme park featuring living dinosaurs drawn from prehistoric DNA. Before opening day, he invites a team of experts and his two eager grandchildren to experience the park and help calm anxious investors. However, the park is anything but amusing as the security systems go off-line and the dinosaurs escape.",
+  "production_companies": [
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    },
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 328,
+    "backdrop_path": "/pJjIH9QN0OkHFV9eue6XfRVnPkr.jpg",
+    "name": "Jurassic Park Collection",
+    "poster_path": "/aQR4VLVxfrTZedr5fml385PFRzI.jpg"
+  },
+  "imdb_id": "tt0107290",
+  "release_date": "1993-06-08",
+  "original_title": "Jurassic Park",
+  "vote_count": 1509,
+  "poster_path": "/msfyV01zy5dxy4JlXCpEVFRXwGO.jpg",
+  "tagline": "An adventure 65 million years in the making.",
+  "revenue": 920100000,
+  "popularity": "4.92804089402453"
+}

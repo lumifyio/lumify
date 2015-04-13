@@ -4,26 +4,15 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.hadoop.io.Text;
-import org.securegraph.GraphFactory;
-import org.securegraph.accumulo.AccumuloGraph;
 import org.securegraph.accumulo.mapreduce.ElementMapper;
-import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
 import org.securegraph.id.IdGenerator;
-import org.securegraph.util.MapUtils;
+import org.securegraph.id.UUIDIdGenerator;
 
 import java.io.IOException;
-import java.util.Map;
 
 public abstract class LumifyElementMapperBase<KEYIN, VALUEIN> extends ElementMapper<KEYIN, VALUEIN, Text, Mutation> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LumifyElementMapperBase.class);
-    private AccumuloGraph graph;
-
-    @Override
-    protected void setup(Context context) throws IOException, InterruptedException {
-        super.setup(context);
-        Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
-        this.graph = (AccumuloGraph) new GraphFactory().createGraph(MapUtils.getAllWithPrefix(configurationMap, "graph"));
-    }
+    private IdGenerator idGenerator = new UUIDIdGenerator(null);
 
     @Override
     protected void map(KEYIN key, VALUEIN line, Context context) {
@@ -57,10 +46,6 @@ public abstract class LumifyElementMapperBase<KEYIN, VALUEIN> extends ElementMap
 
     @Override
     public IdGenerator getIdGenerator() {
-        return this.graph.getIdGenerator();
-    }
-
-    public AccumuloGraph getGraph() {
-        return graph;
+        return idGenerator;
     }
 }

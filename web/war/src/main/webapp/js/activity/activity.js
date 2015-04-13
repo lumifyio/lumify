@@ -19,7 +19,7 @@ define([
     withDataRequest) {
     'use strict';
 
-    var AUTO_UPDATE_INTERVAL_SECONDS = 60;
+    var AUTO_UPDATE_INTERVAL_SECONDS = 60; // For updating relative times
 
     return defineComponent(Activity, withCollapsibleSections, withDataRequest);
 
@@ -111,7 +111,16 @@ define([
                         var task = self.tasksById[processId];
                         delete self.tasksById[processId];
                         self.tasks.splice(self.tasks.indexOf(task), 1);
-                        self.update();
+                        self.update().then(function() {
+                            if (self.currentTaskCount === 0 && name === 'delete') {
+                                _.delay(function() {
+                                    var visible = self.$node.closest('.visible').length > 0;
+                                    if (visible) {
+                                        self.trigger('menubarToggleDisplay', { name: 'activity' });
+                                    }
+                                }, 250)
+                            }
+                        })
                     });
             }
         };
@@ -225,7 +234,8 @@ define([
         }
 
         this.update = function() {
-            var tasks = _.chain(this.tasks)
+            var self = this,
+                tasks = _.chain(this.tasks)
                     .filter(function(p) {
                         if (p.canceled) {
                             return false;
@@ -249,6 +259,7 @@ define([
                     })
                     .value();
 
+            this.currentTaskCount = tasks.length;
             this.notifyActivityMonitors(tasks);
 
             if (!this.isOpen) {
@@ -274,7 +285,10 @@ define([
                 .compact()
                 .value();
 
-            require(uniqueTypes, this.updateWithDependencies.bind(this, data, uniqueTypes));
+            return Promise.require.apply(Promise, uniqueTypes)
+                .then(function(deps) {
+                    self.updateWithDependencies.apply(self, [data, uniqueTypes].concat(deps))
+                })
         };
 
         this.updateWithDependencies = function(data, requirePaths) {

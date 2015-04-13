@@ -1,0 +1,222 @@
+{
+  "budget": 0,
+  "vote_average": 7.3,
+  "backdrop_path": "/zsyeRF96SQO1eup5oYFlzyg3vMc.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2749,
+        "order": 0,
+        "credit_id": "52fe4228c3a36847f80086ad",
+        "name": "James Dean",
+        "cast_id": 4,
+        "profile_path": "/6mwJ4asrsQ8SJqTX4Ar0EQJgTJI.jpg",
+        "character": "Caleb Trask"
+      },
+      {
+        "id": 2750,
+        "order": 1,
+        "credit_id": "52fe4228c3a36847f80086ff",
+        "name": "Julie Harris",
+        "cast_id": 21,
+        "profile_path": "/sTlvY51XN1Tj1Xi6Ni1pjB8w0UT.jpg",
+        "character": "Abra"
+      },
+      {
+        "id": 2669,
+        "order": 2,
+        "credit_id": "52fe4228c3a36847f80086b1",
+        "name": "Raymond Massey",
+        "cast_id": 5,
+        "profile_path": "/hGum9pfA0NOSD1CYXyG4TYc3upQ.jpg",
+        "character": "Adam Trask"
+      },
+      {
+        "id": 2751,
+        "order": 3,
+        "credit_id": "52fe4228c3a36847f80086b5",
+        "name": "Richard Davalos",
+        "cast_id": 6,
+        "profile_path": "/fQxCuObBh1hQ3CyTGerDHfshYFM.jpg",
+        "character": "Aron Trask"
+      },
+      {
+        "id": 2752,
+        "order": 4,
+        "credit_id": "52fe4228c3a36847f80086b9",
+        "name": "Jo Van Fleet",
+        "cast_id": 7,
+        "profile_path": "/ten759vBLpScDUP4FUSMBwQMWeE.jpg",
+        "character": "Kate Trask"
+      },
+      {
+        "id": 2753,
+        "order": 5,
+        "credit_id": "52fe4228c3a36847f80086bd",
+        "name": "Burl Ives",
+        "cast_id": 8,
+        "profile_path": "/yE5nF7tSxzK7nnYQHfsfpDDnk0u.jpg",
+        "character": "Sam the Sheriff"
+      },
+      {
+        "id": 2755,
+        "order": 6,
+        "credit_id": "52fe4228c3a36847f80086c1",
+        "name": "Albert Dekker",
+        "cast_id": 9,
+        "profile_path": "/l6uhlP7tbyb3OVGUi3M6NceagBt.jpg",
+        "character": "Will Hamilton"
+      },
+      {
+        "id": 2207,
+        "order": 7,
+        "credit_id": "52fe4228c3a36847f80086c5",
+        "name": "Lois Smith",
+        "cast_id": 10,
+        "profile_path": "/og1Z7lUdDqisifbDxhqGs7k6irw.jpg",
+        "character": "Anne"
+      },
+      {
+        "id": 2756,
+        "order": 8,
+        "credit_id": "52fe4228c3a36847f80086c9",
+        "name": "Harold Gordon",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Gustav Albrecht"
+      },
+      {
+        "id": 2757,
+        "order": 9,
+        "credit_id": "52fe4228c3a36847f80086cd",
+        "name": "Nick Dennis",
+        "cast_id": 12,
+        "profile_path": "/1iSpJEBq8lIWTBKCvgig08KkPmO.jpg",
+        "character": "Rantani"
+      },
+      {
+        "id": 2758,
+        "order": 10,
+        "credit_id": "52fe4228c3a36847f80086d1",
+        "name": "Timothy Carey",
+        "cast_id": 13,
+        "profile_path": "/6wTL7aAjJflARVwR9giIIQSJhLs.jpg",
+        "character": "Joe"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2746,
+        "credit_id": "52fe4228c3a36847f800869d",
+        "department": "Directing",
+        "name": "Elia Kazan",
+        "job": "Director",
+        "profile_path": "/aS3fMj5NfsKsTZLZmW84VHfX4YS.jpg"
+      },
+      {
+        "id": 2747,
+        "credit_id": "52fe4228c3a36847f80086a3",
+        "department": "Writing",
+        "name": "John Steinbeck",
+        "job": "Author",
+        "profile_path": "/mhzi6DAOsdFcqlED59NV0T2KHAG.jpg"
+      },
+      {
+        "id": 2748,
+        "credit_id": "52fe4228c3a36847f80086a9",
+        "department": "Writing",
+        "name": "Paul Osborn",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2027,
+        "credit_id": "52fe4228c3a36847f80086d7",
+        "department": "Sound",
+        "name": "Leonard Rosenman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2760,
+        "credit_id": "52fe4228c3a36847f80086dd",
+        "department": "Camera",
+        "name": "Ted D. McCord",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2746,
+        "credit_id": "52fe4228c3a36847f80086e3",
+        "department": "Production",
+        "name": "Elia Kazan",
+        "job": "Producer",
+        "profile_path": "/aS3fMj5NfsKsTZLZmW84VHfX4YS.jpg"
+      },
+      {
+        "id": 2761,
+        "credit_id": "52fe4228c3a36847f80086e9",
+        "department": "Editing",
+        "name": "Owen Marks",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2762,
+        "credit_id": "52fe4228c3a36847f80086ef",
+        "department": "Crew",
+        "name": "Mushy Callahan",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 2764,
+        "credit_id": "52fe4228c3a36847f80086f5",
+        "department": "Art",
+        "name": "Malcolm C. Bert",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2763,
+        "credit_id": "52fe4228c3a36847f80086fb",
+        "department": "Art",
+        "name": "James Basevi",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 115,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 220,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "East of Eden",
+  "overview": "Two brothers compete for their father's approval and a woman's love.",
+  "production_companies": [{
+    "id": 174,
+    "name": "Warner Bros. Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0048028",
+  "release_date": "1955-03-09",
+  "original_title": "East of Eden",
+  "vote_count": 13,
+  "poster_path": "/hjH1uLOySpzgBdm1UQYjTV5yLav.jpg",
+  "tagline": "Of what a girl did . . . what a boy did ... of ecstasy and revenge!",
+  "revenue": 0,
+  "popularity": 0.327163081435
+}

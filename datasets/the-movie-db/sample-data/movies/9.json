@@ -1,0 +1,138 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": null,
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 901,
+        "order": 0,
+        "credit_id": "52fe420dc3a36847f8000333",
+        "name": "Rita Lengyel",
+        "cast_id": 7,
+        "profile_path": "/3m59CM46gAXipl77JoQ3b0xOOJT.jpg",
+        "character": "Alexandra"
+      },
+      {
+        "id": 902,
+        "order": 1,
+        "credit_id": "52fe420dc3a36847f8000337",
+        "name": "Milton Welsh",
+        "cast_id": 8,
+        "profile_path": "/n3BYt4bbPey6UwMGRyhlRCaaFkB.jpg",
+        "character": "Er"
+      }
+    ],
+    "crew": [
+      {
+        "id": 867,
+        "credit_id": "52fe420dc3a36847f8000311",
+        "department": "Directing",
+        "name": "Marc Meyer",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 867,
+        "credit_id": "52fe420dc3a36847f8000317",
+        "department": "Writing",
+        "name": "Marc Meyer",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 875,
+        "credit_id": "52fe420dc3a36847f800031d",
+        "department": "Camera",
+        "name": "Peter Polsak-Lohmann",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 867,
+        "credit_id": "52fe420dc3a36847f8000323",
+        "department": "Production",
+        "name": "Marc Meyer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 867,
+        "credit_id": "52fe420dc3a36847f8000329",
+        "department": "Editing",
+        "name": "Marc Meyer",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 891,
+        "credit_id": "52fe420dc3a36847f800032f",
+        "department": "Sound",
+        "name": "Moritz Hoffmeister",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 914,
+        "credit_id": "52fe420dc3a36847f800033d",
+        "department": "Directing",
+        "name": "Anna Haas",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 917,
+        "credit_id": "52fe420dc3a36847f8000343",
+        "department": "Camera",
+        "name": "Jesko Klatt",
+        "job": "Underwater Camera",
+        "profile_path": null
+      },
+      {
+        "id": 919,
+        "credit_id": "52fe420dc3a36847f8000349",
+        "department": "Visual Effects",
+        "name": "Jan Raiber",
+        "job": "Animation",
+        "profile_path": null
+      },
+      {
+        "id": 15360,
+        "credit_id": "52fe420dc3a36847f800034f",
+        "department": "Sound",
+        "name": "Christian Biegai",
+        "job": "Original Music Composer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 15,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 9,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Sunday in August",
+  "overview": "No overview found.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0425473",
+  "release_date": "2004-09-02",
+  "original_title": "Sonntag im August",
+  "vote_count": 0,
+  "poster_path": null,
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.143302497486914"
+}

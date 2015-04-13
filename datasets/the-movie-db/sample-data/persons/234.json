@@ -1,0 +1,63 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 234,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0703499",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 59,
+        "media_type": "movie",
+        "title": "A History of Violence",
+        "credit_id": null,
+        "release_date": "2005-09-23",
+        "original_title": "A History of Violence",
+        "adult": false,
+        "poster_path": "/qhAoUIDin2d9oNZJqLW6XqPY7XQ.jpg",
+        "character": "Mick"
+      },
+      {
+        "id": 1946,
+        "media_type": "movie",
+        "title": "eXistenZ",
+        "credit_id": null,
+        "release_date": "1999-04-14",
+        "original_title": "eXistenZ",
+        "adult": false,
+        "poster_path": "/jvuRnlZvfUnleAZj8g75q4VZedm.jpg",
+        "character": "Trout Farm Worker"
+      },
+      {
+        "id": 45875,
+        "media_type": "movie",
+        "title": "Trilogy of Terror II",
+        "credit_id": null,
+        "release_date": "1996-10-30",
+        "original_title": "Trilogy of Terror II",
+        "adult": false,
+        "poster_path": "/7XrviE7i0SER5axayV2LKrqBI2E.jpg",
+        "character": "Akers"
+      },
+      {
+        "id": 41940,
+        "media_type": "movie",
+        "title": "Roadkill",
+        "credit_id": null,
+        "release_date": "1989-09-16",
+        "original_title": "Roadkill",
+        "adult": false,
+        "poster_path": "/AhounfkD73JySGv7ajIZj33OIWw.jpg",
+        "character": "Roy Seth, the Promoter"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Gerry Quigley",
+  "place_of_birth": null,
+  "popularity": "1.01358376352368"
+}

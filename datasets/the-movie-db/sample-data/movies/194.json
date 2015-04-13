@@ -1,0 +1,355 @@
+{
+  "budget": 11400000,
+  "vote_average": 7.4,
+  "backdrop_path": "/nxhfenC1jb5EcTI5GYxqnjYZMId.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2405,
+        "order": 0,
+        "credit_id": "52fe4225c3a36847f800779b",
+        "name": "Audrey Tautou",
+        "cast_id": 4,
+        "profile_path": "/xNeSqKa00b6BSUGwRVdLTHADRoF.jpg",
+        "character": "Amélie Poulain"
+      },
+      {
+        "id": 2406,
+        "order": 1,
+        "credit_id": "52fe4225c3a36847f8007805",
+        "name": "Mathieu Kassovitz",
+        "cast_id": 28,
+        "profile_path": "/6QeXmtq08zzVN0Ix6SHWpVoV8vn.jpg",
+        "character": "Nino Quincampoix"
+      },
+      {
+        "id": 2407,
+        "order": 2,
+        "credit_id": "52fe4225c3a36847f800779f",
+        "name": "Rufus",
+        "cast_id": 6,
+        "profile_path": "/bbMPwEFZaALc3VqBPZ8od2rmRuv.jpg",
+        "character": "Raphaël Poulain"
+      },
+      {
+        "id": 2408,
+        "order": 3,
+        "credit_id": "52fe4225c3a36847f80077a3",
+        "name": "Jamel Debbouze",
+        "cast_id": 7,
+        "profile_path": "/rnXlFlIAbCnQqQUyTdBCt7B0H5L.jpg",
+        "character": "Lucien"
+      },
+      {
+        "id": 1654,
+        "order": 4,
+        "credit_id": "52fe4225c3a36847f80077b3",
+        "name": "Claire Maurier",
+        "cast_id": 11,
+        "profile_path": "/cP1n7zMsMKr77xJeR3CncomxEZ0.jpg",
+        "character": "Suzanne"
+      },
+      {
+        "id": 2412,
+        "order": 5,
+        "credit_id": "52fe4225c3a36847f80077b7",
+        "name": "Isabelle Nanty",
+        "cast_id": 12,
+        "profile_path": "/mWxM84KXqsL11Zj9Onzn6fwDggX.jpg",
+        "character": "Georgette"
+      },
+      {
+        "id": 2413,
+        "order": 6,
+        "credit_id": "52fe4225c3a36847f80077bb",
+        "name": "Dominique Pinon",
+        "cast_id": 13,
+        "profile_path": "/wPemV26c0rBrJ4nQIFXfsRuLh5q.jpg",
+        "character": "Joseph"
+      },
+      {
+        "id": 2414,
+        "order": 7,
+        "credit_id": "52fe4225c3a36847f80077bf",
+        "name": "Artus de Penguern",
+        "cast_id": 14,
+        "profile_path": "/xDoI1YT3J4hBvJaa9lGxtNUjTKK.jpg",
+        "character": "Hipolito"
+      },
+      {
+        "id": 2415,
+        "order": 8,
+        "credit_id": "52fe4225c3a36847f80077c3",
+        "name": "Yolande Moreau",
+        "cast_id": 15,
+        "profile_path": "/9FTIYqBRisPqgT4HV30EjRg4hkb.jpg",
+        "character": "Madeleine Wallace"
+      },
+      {
+        "id": 2409,
+        "order": 9,
+        "credit_id": "52fe4225c3a36847f80077a7",
+        "name": "Lorella Cravotta",
+        "cast_id": 8,
+        "profile_path": "/ogcgzecaUkJrnSjhXt1GMrOfzvU.jpg",
+        "character": "Amandine Poulain"
+      },
+      {
+        "id": 2410,
+        "order": 10,
+        "credit_id": "52fe4225c3a36847f80077ab",
+        "name": "Serge Merlin",
+        "cast_id": 9,
+        "profile_path": "/w07o6hg3hUxoWtgUBJ87VXilKzu.jpg",
+        "character": "Raymond Dufayel"
+      },
+      {
+        "id": 2411,
+        "order": 11,
+        "credit_id": "52fe4225c3a36847f80077af",
+        "name": "Clotilde Mollet",
+        "cast_id": 10,
+        "profile_path": "/8aXYC2plPTD48hhTnpZSZs3KoSX.jpg",
+        "character": "Gina"
+      },
+      {
+        "id": 2416,
+        "order": 12,
+        "credit_id": "52fe4225c3a36847f80077c7",
+        "name": "Urbain Cancelier",
+        "cast_id": 16,
+        "profile_path": "/lbxlNBsenBuAL4l2p97BBY30HEM.jpg",
+        "character": "Collignon"
+      },
+      {
+        "id": 2417,
+        "order": 13,
+        "credit_id": "52fe4225c3a36847f80077cb",
+        "name": "Maurice Bénichou",
+        "cast_id": 17,
+        "profile_path": "/wHyw6K7H5e1hExFixTrZDmlivC1.jpg",
+        "character": "Dominique Bretodeau"
+      },
+      {
+        "id": 32092,
+        "order": 14,
+        "credit_id": "53b1a9dec3a3682ef1006789",
+        "name": "Michel Robin",
+        "cast_id": 29,
+        "profile_path": "/1eANJ5aDxh3SRYvXtRcO8ugxM5H.jpg",
+        "character": "M. Collignon"
+      },
+      {
+        "id": 231607,
+        "order": 15,
+        "credit_id": "53b1aa37c3a3682eea0068e9",
+        "name": "Andrée Damant",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Mme. Collignon"
+      },
+      {
+        "id": 119199,
+        "order": 16,
+        "credit_id": "53b1aa52c3a3682eea0068eb",
+        "name": "Claude Perron",
+        "cast_id": 31,
+        "profile_path": "/1D6C2zz3bkO6KZBwrfKJwddYGT3.jpg",
+        "character": "Eva"
+      },
+      {
+        "id": 77736,
+        "order": 17,
+        "credit_id": "53b1aa68c3a3682ef1006794",
+        "name": "Armelle",
+        "cast_id": 32,
+        "profile_path": "/wM36ChCOpQ2jTwXGjcw7yKvtTW5.jpg",
+        "character": "Philomène"
+      },
+      {
+        "id": 13689,
+        "order": 18,
+        "credit_id": "53b1aa7cc3a3682eee0068cc",
+        "name": "Ticky Holgado",
+        "cast_id": 33,
+        "profile_path": "/2G0LmyNhNWlR55Zm5nlY6S79rPN.jpg",
+        "character": "L'homme dans la photo"
+      },
+      {
+        "id": 1336073,
+        "order": 19,
+        "credit_id": "53b1aab2c3a3682ee6006899",
+        "name": "Marc Amyot",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "L'inconnu des photomatons"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2401,
+        "credit_id": "52fe4225c3a36847f800778b",
+        "department": "Production",
+        "name": "Jean-Marc Deschamps",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2402,
+        "credit_id": "52fe4225c3a36847f8007791",
+        "department": "Production",
+        "name": "Claudie Ossard",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2404,
+        "credit_id": "52fe4225c3a36847f8007797",
+        "department": "Production",
+        "name": "Arne Meerkamp van Embden",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2420,
+        "credit_id": "52fe4225c3a36847f80077d1",
+        "department": "Writing",
+        "name": "Guillaume Laurant",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2419,
+        "credit_id": "52fe4225c3a36847f80077d7",
+        "department": "Writing",
+        "name": "Jean-Pierre Jeunet",
+        "job": "Author",
+        "profile_path": "/504QzXvAttagp7SvTyzuFXmzt1v.jpg"
+      },
+      {
+        "id": 2421,
+        "credit_id": "52fe4225c3a36847f80077dd",
+        "department": "Production",
+        "name": "Helmut Breuer",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2422,
+        "credit_id": "52fe4225c3a36847f80077e3",
+        "department": "Sound",
+        "name": "Yann Tiersen",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2423,
+        "credit_id": "52fe4225c3a36847f80077e9",
+        "department": "Camera",
+        "name": "Bruno Delbonnel",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2424,
+        "credit_id": "52fe4225c3a36847f80077ef",
+        "department": "Production",
+        "name": "Pierre-Jacques Bénichou",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2425,
+        "credit_id": "52fe4225c3a36847f80077f5",
+        "department": "Editing",
+        "name": "Hervé Schneid",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2420,
+        "credit_id": "52fe4225c3a36847f80077fb",
+        "department": "Writing",
+        "name": "Guillaume Laurant",
+        "job": "Dialogue",
+        "profile_path": null
+      },
+      {
+        "id": 2419,
+        "credit_id": "52fe4225c3a36847f8007801",
+        "department": "Directing",
+        "name": "Jean-Pierre Jeunet",
+        "job": "Director",
+        "profile_path": "/504QzXvAttagp7SvTyzuFXmzt1v.jpg"
+      }
+    ]
+  },
+  "runtime": 122,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.die-fabelhafte-welt-der-amelie.de",
+  "id": 194,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    }
+  ],
+  "title": "Amélie",
+  "overview": "At a tiny Parisian café, the adorable yet painfully shy Amélie (Audrey Tatou) accidentally discovers a gift for helping others. Soon Amelie is spending her days as a matchmaker, guardian angel, and all-around do-gooder. But when she bumps into a handsome stranger, will she find the courage to become the star of her very own love story?",
+  "production_companies": [
+    {
+      "id": 12000,
+      "name": "Tapioca Films"
+    },
+    {
+      "id": 7248,
+      "name": "Union Générale Cinématographique (UGC)"
+    },
+    {
+      "id": 1033,
+      "name": "Victoires International"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0211915",
+  "release_date": "2001-04-25",
+  "original_title": "Le fabuleux destin d'Amélie Poulain",
+  "vote_count": 680,
+  "poster_path": "/2AbFdmpvi6Z8AGrBY79JmnSGSOy.jpg",
+  "tagline": "One person can change your life forever.",
+  "revenue": 174000000,
+  "popularity": "1.82093626171342"
+}

@@ -1,0 +1,369 @@
+{
+  "budget": 2224000,
+  "vote_average": 8,
+  "backdrop_path": "/r7y2UzKUScBPybQ9S4Y2lmfspzC.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5977,
+        "order": 0,
+        "credit_id": "52fe4244c3a36847f8010f19",
+        "name": "Niklas Ulfvarson",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Matti (age 7)"
+      },
+      {
+        "id": 5978,
+        "order": 1,
+        "credit_id": "52fe4244c3a36847f8010f1d",
+        "name": "Max Enderfors",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Matti (age 15)"
+      },
+      {
+        "id": 5979,
+        "order": 2,
+        "credit_id": "52fe4244c3a36847f8010f21",
+        "name": "Tommy Vallikari",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Niila (age 7)"
+      },
+      {
+        "id": 5980,
+        "order": 3,
+        "credit_id": "52fe4244c3a36847f8010f25",
+        "name": "Andreas af Enehjelm",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Niila (age 15)"
+      },
+      {
+        "id": 5998,
+        "order": 4,
+        "credit_id": "52fe4244c3a36847f8010f8f",
+        "name": "Jarmo Mäkinen",
+        "cast_id": 26,
+        "profile_path": "/bAJ3Fy27SBOtErYz5xxDVKX94lS.jpg",
+        "character": "Isak, father of Niila"
+      },
+      {
+        "id": 5999,
+        "order": 5,
+        "credit_id": "52fe4244c3a36847f8010f93",
+        "name": "Kati Outinen",
+        "cast_id": 27,
+        "profile_path": "/cjcuhAXRcg8C0VIDHtfz1BIVE3m.jpg",
+        "character": "Päivi, mother of Niila"
+      },
+      {
+        "id": 6000,
+        "order": 6,
+        "credit_id": "52fe4244c3a36847f8010f97",
+        "name": "Tarja-Tuulikki Tarsala",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Grandmother"
+      },
+      {
+        "id": 6001,
+        "order": 7,
+        "credit_id": "52fe4244c3a36847f8010f9b",
+        "name": "Björn Kjellman",
+        "cast_id": 29,
+        "profile_path": "/yO5JagzQLjtXtgECVSs3Sep1XEX.jpg",
+        "character": "Greger"
+      },
+      {
+        "id": 6002,
+        "order": 8,
+        "credit_id": "52fe4244c3a36847f8010f9f",
+        "name": "Göran Forsmark",
+        "cast_id": 30,
+        "profile_path": "/8LlZA8KNUXBA73jNsYz0UgO5r3p.jpg",
+        "character": "Birger"
+      },
+      {
+        "id": 6003,
+        "order": 9,
+        "credit_id": "52fe4244c3a36847f8010fa3",
+        "name": "Lisa Lindgren",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Signe"
+      },
+      {
+        "id": 6004,
+        "order": 10,
+        "credit_id": "52fe4244c3a36847f8010fa7",
+        "name": "Sten Ljunggren",
+        "cast_id": 32,
+        "profile_path": "/mCPu6daaNMmD8R34NOQ0aF9Jy8r.jpg",
+        "character": "Grandfather"
+      },
+      {
+        "id": 6005,
+        "order": 11,
+        "credit_id": "52fe4244c3a36847f8010fab",
+        "name": "Annika Marklund",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Communist girl"
+      },
+      {
+        "id": 6287,
+        "order": 12,
+        "credit_id": "52fe4244c3a36847f8010faf",
+        "name": "Lennart Jähkel",
+        "cast_id": 34,
+        "profile_path": "/nzyI5PZJWKCg95oRMBXZEKQSk8R.jpg",
+        "character": "Einari"
+      },
+      {
+        "id": 144700,
+        "order": 13,
+        "credit_id": "52fe4244c3a36847f8010fb3",
+        "name": "Fredrik Hammar",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Ville"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5974,
+        "credit_id": "52fe4244c3a36847f8010f03",
+        "department": "Directing",
+        "name": "Reza Bagher",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 5974,
+        "credit_id": "52fe4244c3a36847f8010f09",
+        "department": "Writing",
+        "name": "Reza Bagher",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5975,
+        "credit_id": "52fe4244c3a36847f8010f0f",
+        "department": "Writing",
+        "name": "Mikael Niemi",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5976,
+        "credit_id": "52fe4244c3a36847f8010f15",
+        "department": "Writing",
+        "name": "Erik Norberg",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5981,
+        "credit_id": "52fe4244c3a36847f8010f2b",
+        "department": "Production",
+        "name": "Markus Selin",
+        "job": "Producer",
+        "profile_path": "/mauLJMwzQdehzsnClkyvzMLQjoY.jpg"
+      },
+      {
+        "id": 5982,
+        "credit_id": "52fe4244c3a36847f8010f31",
+        "department": "Production",
+        "name": "Joachim Stridsberg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5983,
+        "credit_id": "52fe4244c3a36847f8010f37",
+        "department": "Production",
+        "name": "Katinka Faragó",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5984,
+        "credit_id": "52fe4244c3a36847f8010f3d",
+        "department": "Production",
+        "name": "Kerstin Bonnier",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5985,
+        "credit_id": "52fe4244c3a36847f8010f43",
+        "department": "Production",
+        "name": "Thomas Gammeltoft",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5986,
+        "credit_id": "52fe4244c3a36847f8010f49",
+        "department": "Production",
+        "name": "Johan Mardell",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5987,
+        "credit_id": "52fe4244c3a36847f8010f4f",
+        "department": "Production",
+        "name": "Per-Erik Svensson",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5988,
+        "credit_id": "52fe4244c3a36847f8010f55",
+        "department": "Production",
+        "name": "Jukka Helle",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5989,
+        "credit_id": "52fe4244c3a36847f8010f5b",
+        "department": "Production",
+        "name": "Jussi Lepistö",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5990,
+        "credit_id": "52fe4244c3a36847f8010f61",
+        "department": "Production",
+        "name": "Nina Sackmann",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5991,
+        "credit_id": "52fe4244c3a36847f8010f67",
+        "department": "Sound",
+        "name": "Halfdan E",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5992,
+        "credit_id": "52fe4244c3a36847f8010f6d",
+        "department": "Sound",
+        "name": "Lars Daniel Terkelsen",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5993,
+        "credit_id": "52fe4244c3a36847f8010f73",
+        "department": "Camera",
+        "name": "Robert Nordström",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5994,
+        "credit_id": "52fe4244c3a36847f8010f79",
+        "department": "Editing",
+        "name": "Fredrik Morheden",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1634,
+        "credit_id": "52fe4244c3a36847f8010f7f",
+        "department": "Editing",
+        "name": "Anders Refn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5996,
+        "credit_id": "52fe4244c3a36847f8010f85",
+        "department": "Art",
+        "name": "Anna Asp",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5997,
+        "credit_id": "52fe4244c3a36847f8010f8b",
+        "department": "Costume & Make-Up",
+        "name": "Karin Sundvall",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fi",
+      "name": "suomi"
+    },
+    {
+      "iso_639_1": "sv",
+      "name": "svenska"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.sf.se/sites/vittula/",
+  "id": 442,
+  "production_countries": [
+    {
+      "name": "Finland",
+      "iso_3166_1": "FI"
+    },
+    {
+      "name": "Sweden",
+      "iso_3166_1": "SE"
+    }
+  ],
+  "title": "Populärmusik från Vittula",
+  "overview": "Populärmusik från Vittula is the filmed version of a best-selling book by the same name from author Mikael Niemi. Full of the comic life, slapstick humor, a friendship between to boys, and a look at life on the northern boarder of Sweden.",
+  "production_companies": [
+    {
+      "id": 227,
+      "name": "Happy End Filmproductions AB"
+    },
+    {
+      "id": 228,
+      "name": "Filmpool Nord"
+    },
+    {
+      "id": 229,
+      "name": "Solar Films"
+    },
+    {
+      "id": 6416,
+      "name": "Svensk Filmindustri"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0314524",
+  "release_date": "2004-09-19",
+  "original_title": "Populärmusik från Vittula",
+  "vote_count": 2,
+  "poster_path": "/a4TdTX2VpuLdGBI8JJQ9oRhJohR.jpg",
+  "tagline": "",
+  "revenue": 28000000,
+  "popularity": "0.217178608873481"
+}

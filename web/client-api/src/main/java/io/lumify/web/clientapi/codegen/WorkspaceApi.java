@@ -18,7 +18,7 @@ import java.io.File;
 import java.util.*;
 
 public class WorkspaceApi {
-  protected String basePath = "http://localhost:8889";
+  protected String basePath = "http://lumify-dev:8889";
   protected ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public ApiInvoker getInvoker() {
@@ -363,8 +363,8 @@ public class WorkspaceApi {
       boolean hasFields = false;
       FormDataMultiPart mp = new FormDataMultiPart();
       hasFields = true;
-      for(String id:ids) { mp.field("ids[]", id, MediaType.MULTIPART_FORM_DATA_TYPE); }
-      if(hasFields)
+      if(ids != null) { for(String id:ids) { mp.field("ids[]", id, MediaType.MULTIPART_FORM_DATA_TYPE); } }
+      if(hasFields && !mp.getFields().isEmpty())
         postBody = mp;
     }
     else {

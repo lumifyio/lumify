@@ -1,0 +1,258 @@
+{
+  "budget": 500000,
+  "vote_average": 0,
+  "backdrop_path": "/pA5VQ1btamVtpCjezAtspqln9mw.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5496,
+        "order": 0,
+        "credit_id": "52fe4240c3a36847f800f95b",
+        "name": "Mehmet Kurtulus",
+        "cast_id": 2,
+        "profile_path": "/mWu2NhYjk6lrdxi2b2WAFzDAIUb.jpg",
+        "character": "Gabriel"
+      },
+      {
+        "id": 5497,
+        "order": 1,
+        "credit_id": "52fe4240c3a36847f800f95f",
+        "name": "Aleksandar Jovanović",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Bobby"
+      },
+      {
+        "id": 5498,
+        "order": 2,
+        "credit_id": "52fe4240c3a36847f800f963",
+        "name": "Adam Bousdoukos",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Costa"
+      },
+      {
+        "id": 5499,
+        "order": 3,
+        "credit_id": "52fe4240c3a36847f800f967",
+        "name": "Regula Grauwiller",
+        "cast_id": 5,
+        "profile_path": "/3biu1wiVqGwD66PDSFPzA7Ve5ep.jpg",
+        "character": "Alice"
+      },
+      {
+        "id": 5500,
+        "order": 4,
+        "credit_id": "52fe4240c3a36847f800f96b",
+        "name": "İdil Üner",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Ceyda"
+      },
+      {
+        "id": 1856,
+        "order": 5,
+        "credit_id": "52fe4240c3a36847f800f96f",
+        "name": "Ralph Herforth",
+        "cast_id": 7,
+        "profile_path": "/3soxWivaOiRS05nP5KfbCTg9nPs.jpg",
+        "character": "Muhamer"
+      },
+      {
+        "id": 5124,
+        "order": 6,
+        "credit_id": "52fe4240c3a36847f800f973",
+        "name": "Cem Akin",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Gabriels Bruder"
+      },
+      {
+        "id": 5554,
+        "order": 7,
+        "credit_id": "52fe4240c3a36847f800f977",
+        "name": "Oscar Ortega Sánchez",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Waffenhändler"
+      },
+      {
+        "id": 5599,
+        "order": 8,
+        "credit_id": "52fe4240c3a36847f800f9c9",
+        "name": "Mustafa Enver Akin",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Gabriels Vater"
+      },
+      {
+        "id": 5600,
+        "order": 9,
+        "credit_id": "52fe4240c3a36847f800f9cd",
+        "name": "Marc Hosemann",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Sven"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5125,
+        "credit_id": "52fe4240c3a36847f800f957",
+        "department": "Directing",
+        "name": "Fatih Akin",
+        "job": "Director",
+        "profile_path": "/wIcm73WeaS6IAA1chaSw5NN2HTQ.jpg"
+      },
+      {
+        "id": 5126,
+        "credit_id": "52fe4240c3a36847f800f97d",
+        "department": "Production",
+        "name": "Stefan Schubert",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5127,
+        "credit_id": "52fe4240c3a36847f800f983",
+        "department": "Production",
+        "name": "Ralph Schwingel",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5591,
+        "credit_id": "52fe4240c3a36847f800f989",
+        "department": "Production",
+        "name": "Daniel Blum",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5592,
+        "credit_id": "52fe4240c3a36847f800f98f",
+        "department": "Sound",
+        "name": "Ulrich Kodjo Wendt",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5593,
+        "credit_id": "52fe4240c3a36847f800f995",
+        "department": "Camera",
+        "name": "Frank Barbian",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5136,
+        "credit_id": "52fe4240c3a36847f800f99b",
+        "department": "Editing",
+        "name": "Andrew Bird",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5594,
+        "credit_id": "52fe4240c3a36847f800f9a1",
+        "department": "Production",
+        "name": "Ingeborg Molitoris",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5595,
+        "credit_id": "52fe4240c3a36847f800f9a7",
+        "department": "Art",
+        "name": "Guido Amin Fahim",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5595,
+        "credit_id": "52fe4240c3a36847f800f9ad",
+        "department": "Art",
+        "name": "Guido Amin Fahim",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5596,
+        "credit_id": "52fe4240c3a36847f800f9b3",
+        "department": "Costume & Make-Up",
+        "name": "Helen Achtermann",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5597,
+        "credit_id": "52fe4240c3a36847f800f9b9",
+        "department": "Costume & Make-Up",
+        "name": "Nicola Faas",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 5598,
+        "credit_id": "52fe4240c3a36847f800f9bf",
+        "department": "Sound",
+        "name": "Kai Lüde",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 5125,
+        "credit_id": "52fe4240c3a36847f800f9c5",
+        "department": "Writing",
+        "name": "Fatih Akin",
+        "job": "Screenplay",
+        "profile_path": "/wIcm73WeaS6IAA1chaSw5NN2HTQ.jpg"
+      }
+    ]
+  },
+  "runtime": 93,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "el",
+      "name": "ελληνικά"
+    },
+    {
+      "iso_639_1": "tr",
+      "name": "Türkçe"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 407,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Short Sharp Shock",
+  "overview": "Three friends get caught in a life of major crime.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0162426",
+  "release_date": "1998-10-15",
+  "original_title": "Kurz und schmerzlos",
+  "vote_count": 0,
+  "poster_path": "/onVAfvszXtUtMM68BtWGAiKZtBa.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.144258148390916"
+}

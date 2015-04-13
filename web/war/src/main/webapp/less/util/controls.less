@@ -13,6 +13,47 @@
 
   @bg: #333;
 
+  .options {
+    .disable-text-selection;
+    position: absolute;
+    right: 100%;
+    margin-right: 8px;
+    width: auto;
+    text-align: right;
+    @active-bg: darken(@bg, 20%);
+    button {
+      margin: 0;
+      background: @bg url(../img/glyphicons/white/glyphicons_157_show_lines@2x.png);
+      background-size: 60%;
+      background-repeat: no-repeat;
+      background-position: center;
+      font-size: 0;
+      width: 20px;
+      height: 23px;
+      &.active {
+        background-color: @active-bg;
+      }
+    }
+    .options-container {
+      white-space: nowrap;
+      padding: 0.5em;
+      padding-bottom: 0.1em;
+      background: @active-bg;
+      text-shadow: 0 -1px 0 darken(@active-bg, 10%);
+      color: white;
+      input {
+        vertical-align: top;
+        margin-left: 0.25em;
+      }
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+
   button {
     width: 100%;
     background: @bg;

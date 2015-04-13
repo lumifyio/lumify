@@ -1,12 +1,13 @@
 
 define([
     'sf',
+    'chrono',
     'jstz',
     'timezone-js',
     'util/messages',
     'jquery',
     'underscore'
-], function(sf, jstz, timezoneJS, i18n) {
+], function(sf, chrono, jstz, timezoneJS, i18n) {
     'use strict';
 
     var BITS_FOR_INDEX = 12,
@@ -36,9 +37,9 @@ define([
             }
         };
 
-    timezoneJS.timezone.zoneFileBasePath = '/tz';
+    timezoneJS.timezone.zoneFileBasePath = 'tz';
     timezoneJS.timezone.defaultZoneFile = ['northamerica'];
-    timezoneJS.timezone.init({ async: false });
+    timezoneJS.timezone.init({ async: true });
 
     function checkIfMac() {
         return ~navigator.userAgent.indexOf('Mac OS X');
@@ -91,17 +92,22 @@ define([
 
         number: {
             pretty: function(number) {
-                if (_.isString) {
+                if (_.isString(number)) {
                     number = parseFloat(number);
                 }
-                if (_.isNumber) {
-                    return sf('{0:#,###,###,###.##}', number);
+                if (_.isNumber(number)) {
+                    return sf('{0:#.##}', number)
+                        .split('').reverse().join('')
+                        .replace(/(\d{3}(?=\d))/g, '$1,')
+                        .split('').reverse().join('');
                 }
 
                 return '';
             },
             prettyApproximate: function(number) {
-                if (number >= 1000000000) {
+                if (number >= 1000000000000) {
+                    return (decimalAdjust('round', number / 1000000000000, -1) + i18n('numbers.trillion_suffix'));
+                } else if (number >= 1000000000) {
                     return (decimalAdjust('round', number / 1000000000, -1) + i18n('numbers.billion_suffix'));
                 } else if (number >= 1000000) {
                     return (decimalAdjust('round', number / 1000000, -1) + i18n('numbers.million_suffix'));
@@ -226,7 +232,7 @@ define([
                     }
                 }
 
-                if (geo && geo.latitude && geo.longitude) {
+                if (geo && ('latitude' in geo) && ('longitude' in geo)) {
                     var latlon = (
                             _.isNumber(geo.latitude) ? geo.latitude : parseFloat(geo.latitude)
                         ).toFixed(3) + ', ' +
@@ -325,9 +331,83 @@ define([
                 }
 
                 return truncated
+            },
+            phoneNumber: function(str) {
+                str = (_.isNumber(str) ? ('' + str) : str) || '';
+                var match = str.match(/^([0-9]{3})?[-. ]?([0-9]{3})?[-. ]?([0-9]{4})$/);
+                if (match) {
+                    match.shift();
+                    return _.compact(match).join('-')
+                }
+                return str;
+            },
+            ssn: function(str) {
+                str = (_.isNumber(str) ? ('' + str) : str) || '';
+                var match = str.match(/^([0-9]{3})?[-. ]?([0-9]{2})?[-. ]?([0-9]{4})$/);
+
+                if (match) {
+                    match.shift();
+                    return _.compact(match).join('-')
+                }
+                return str;
+            },
+            uppercase: function(str) {
+                return (str || '').toUpperCase();
+            },
+            lowercase: function(str) {
+                return (str || '').toLowerCase();
+            },
+            palantirPrettyPrint: function(str) {
+                return (str || '').replace(/\w[^-\s]*/g, function(txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
             }
         },
         date: {
+            looslyParseDate: function(str) {
+                str = $.trim(str);
+                var date = chrono.parseDate(str),
+                    match = null,
+                    fixYear = function(str) {
+                        if (str.length === 4) return str;
+                        if (str.length === 2) {
+                            var year = parseInt(str, 10);
+                            return year < 59 ? '20' + year : '19' + year;
+                        }
+                    };
+
+                if (!date) {
+                    str = str.replace(/^([^\d\w]|_)*/, '');
+                    str = str.replace(/([^\d\w]|_)*$/, '');
+                    if (/^\d{4}$/.test(str)) {
+                        return chrono.parseDate('jan 1 ' + str)
+                    }
+
+                    if (/^\d{2}$/.test(str)) {
+                        return chrono.parseDate('jan 1 ' + fixYear(str));
+                    }
+
+                    // Month and year "feb 2015"
+                    match = str.match(/^([^\d]+)\s*(\d{2,4})$/)
+                    if (match) {
+                        if (match[2].length === 2) {
+                            match[2] = fixYear(match[2]);
+                        }
+                        return chrono.parseDate(match[1] + ' 1 ' + match[2]);
+                    }
+
+                    // Year and month "2015 january"
+                    match = str.match(/^(\d{2,4})\s*([^\d]+)$/)
+                    if (match) {
+                        if (match[1].length === 2) {
+                            match[1] = fixYear(match[1]);
+                        }
+                        return chrono.parseDate(match[2] + ' 1 ' + match[1]);
+                    }
+                }
+
+                return date;
+            },
             local: function(str) {
                 if (_.isUndefined(str)) return '';
                 var millis = _.isString(str) && !isNaN(Number(str)) ? Number(str) : str,
@@ -347,12 +427,18 @@ define([
                 if (_.isUndefined(millisStr)) return '';
                 return sf('{0:yyyy-MM-dd}', FORMATTERS.date.local(millisStr));
             },
-            dateTimeString: function(millisStr) {
+            dateTimeString: function(millisStr, overrideTzInfo) {
                 if (_.isUndefined(millisStr)) return '';
-                var tzInfo = FORMATTERS.timezone.currentTimezone(FORMATTERS.date.local(millisStr));
+                var timezoneAbbreviation = overrideTzInfo;
+                if (!timezoneAbbreviation) {
+                    var tzInfo = FORMATTERS.timezone.currentTimezone(FORMATTERS.date.local(millisStr));
+                    if (tzInfo) {
+                        timezoneAbbreviation = tzInfo.tzAbbr;
+                    }
+                }
                 return sf('{0:yyyy-MM-dd HH:mm}{1}',
                     FORMATTERS.date.local(millisStr),
-                    tzInfo ? (' ' + tzInfo.tzAbbr) : ''
+                    timezoneAbbreviation ? (' ' + timezoneAbbreviation) : ''
                 );
             },
             dateStringUtc: function(millisStr) {
@@ -361,7 +447,7 @@ define([
             },
             dateTimeStringUtc: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
-                return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr));
+                return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr), 'UTC');
             },
             timeString: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
@@ -476,9 +562,12 @@ define([
             lookupTimezone: function(name, withOffsetForDate) {
                 var list = FORMATTERS.timezone.list(),
                     tz = list[name],
-                    region = timezoneJS.timezone.getRegionForTimezone(name);
+                    regions = timezoneJS.timezone.getRegionForTimezone(name);
 
-                timezoneJS.timezone.loadZoneFile(region, { async: false });
+                if (!_.isArray(regions)) {
+                    regions = [regions];
+                }
+                timezoneJS.timezone.loadZoneFiles(regions, { async: false });
 
                 if (withOffsetForDate && withOffsetForDate.getTime) {
                     withOffsetForDate = withOffsetForDate.getTime();

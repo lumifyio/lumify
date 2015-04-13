@@ -1,0 +1,373 @@
+{
+  "budget": 0,
+  "vote_average": 8.2,
+  "backdrop_path": "/sIRsJ0FT5ZNFNKLtQWwX72GqQhK.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6497,
+        "order": 0,
+        "credit_id": "52fe4248c3a36847f8012235",
+        "name": "Naseeruddin Shah",
+        "cast_id": 3,
+        "profile_path": "/qWnNn7RupC0vqwZGWUHHfLuyKMM.jpg",
+        "character": "Lalit Verma"
+      },
+      {
+        "id": 6498,
+        "order": 1,
+        "credit_id": "52fe4248c3a36847f8012239",
+        "name": "Lillete Dubey",
+        "cast_id": 4,
+        "profile_path": "/pO6sx2eb6SREAOGNGtva0J7b6NB.jpg",
+        "character": "Pimmi Verma"
+      },
+      {
+        "id": 6500,
+        "order": 3,
+        "credit_id": "52fe4248c3a36847f801223d",
+        "name": "Vijay Raaz",
+        "cast_id": 6,
+        "profile_path": "/sVDxs8jFTXtTbGZ3QbiqBmTPICp.jpg",
+        "character": "Parabatlal Kanhaiyalal 'P.K.' Dubey"
+      },
+      {
+        "id": 6501,
+        "order": 4,
+        "credit_id": "52fe4248c3a36847f8012241",
+        "name": "Tillotama Shome",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Alice"
+      },
+      {
+        "id": 6502,
+        "order": 5,
+        "credit_id": "52fe4248c3a36847f8012245",
+        "name": "Vasundhara Das",
+        "cast_id": 8,
+        "profile_path": "/4c9hwkQM925C8vU50szzffAeDMu.jpg",
+        "character": "Aditi Verma"
+      },
+      {
+        "id": 6503,
+        "order": 6,
+        "credit_id": "52fe4248c3a36847f8012249",
+        "name": "Parvin Dabas",
+        "cast_id": 9,
+        "profile_path": "/c0x5CtLRQoO91x8NUWurpnCRHrm.jpg",
+        "character": "Hemant Rai"
+      },
+      {
+        "id": 6515,
+        "order": 7,
+        "credit_id": "52fe4248c3a36847f80122ad",
+        "name": "Sameer Arya",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Vikram Mehta"
+      },
+      {
+        "id": 6516,
+        "order": 8,
+        "credit_id": "52fe4248c3a36847f80122b1",
+        "name": "Neha Dubey",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Ayesha Verma"
+      },
+      {
+        "id": 6517,
+        "order": 9,
+        "credit_id": "52fe4248c3a36847f80122b5",
+        "name": "Kemaya Kidwai",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Aliya Verma"
+      },
+      {
+        "id": 6518,
+        "order": 10,
+        "credit_id": "52fe4248c3a36847f80122b9",
+        "name": "Ishaan Nair",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Varun Verma"
+      },
+      {
+        "id": 6519,
+        "order": 11,
+        "credit_id": "52fe4248c3a36847f80122bd",
+        "name": "Randeep Hooda",
+        "cast_id": 30,
+        "profile_path": "/6Pik7WeFHdDUCkLJptMZBqdWonN.jpg",
+        "character": "Rahul Chadha"
+      },
+      {
+        "id": 6520,
+        "order": 12,
+        "credit_id": "52fe4248c3a36847f80122c1",
+        "name": "Soni Razdan",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Saroj Rai"
+      },
+      {
+        "id": 693,
+        "order": 13,
+        "credit_id": "52fe4248c3a36847f80122c5",
+        "name": "Roshan Seth",
+        "cast_id": 32,
+        "profile_path": "/hC4VtvW0lUmzGy54NLqyUeufnQT.jpg",
+        "character": "Mohan Rai"
+      },
+      {
+        "id": 120430,
+        "order": 14,
+        "credit_id": "52fe4248c3a36847f80122cf",
+        "name": "Shefali Shah",
+        "cast_id": 34,
+        "profile_path": "/7FYMoD3iEWIELBjfRt6c87HIoy0.jpg",
+        "character": "Ria Verma"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6495,
+        "credit_id": "52fe4248c3a36847f801222b",
+        "department": "Directing",
+        "name": "Mira Nair",
+        "job": "Director",
+        "profile_path": "/dUcAW2278QXiSmjW1IGxA5hanaE.jpg"
+      },
+      {
+        "id": 6496,
+        "credit_id": "52fe4248c3a36847f8012231",
+        "department": "Writing",
+        "name": "Sabrina Dhawan",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5359,
+        "credit_id": "52fe4248c3a36847f801224f",
+        "department": "Sound",
+        "name": "Mychael Danna",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6117,
+        "credit_id": "52fe4248c3a36847f8012255",
+        "department": "Camera",
+        "name": "Declan Quinn",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6504,
+        "credit_id": "52fe4248c3a36847f801225b",
+        "department": "Editing",
+        "name": "Allyson C. Johnson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4907,
+        "credit_id": "52fe4248c3a36847f8012261",
+        "department": "Art",
+        "name": "Stephanie Carroll",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6505,
+        "credit_id": "52fe4248c3a36847f8012267",
+        "department": "Art",
+        "name": "Sunil Chabra",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6506,
+        "credit_id": "52fe4248c3a36847f801226d",
+        "department": "Costume & Make-Up",
+        "name": "Arjun Bhasin",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6507,
+        "credit_id": "52fe4248c3a36847f8012273",
+        "department": "Production",
+        "name": "Uma Da Cunha",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6508,
+        "credit_id": "52fe4248c3a36847f8012279",
+        "department": "Production",
+        "name": "Loveleen Tandan",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6509,
+        "credit_id": "52fe4248c3a36847f801227f",
+        "department": "Production",
+        "name": "Dilip Shankar",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5356,
+        "credit_id": "52fe4248c3a36847f8012285",
+        "department": "Production",
+        "name": "Caroline Baron",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6495,
+        "credit_id": "52fe4248c3a36847f801228b",
+        "department": "Production",
+        "name": "Mira Nair",
+        "job": "Producer",
+        "profile_path": "/dUcAW2278QXiSmjW1IGxA5hanaE.jpg"
+      },
+      {
+        "id": 6510,
+        "credit_id": "52fe4248c3a36847f8012291",
+        "department": "Production",
+        "name": "Jonathan Sehring",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6511,
+        "credit_id": "52fe4248c3a36847f8012297",
+        "department": "Production",
+        "name": "Caroline Kaplan",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6512,
+        "credit_id": "52fe4248c3a36847f801229d",
+        "department": "Production",
+        "name": "Shernaz Italia",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6513,
+        "credit_id": "52fe4248c3a36847f80122a3",
+        "department": "Production",
+        "name": "Freny Khodaiji",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6514,
+        "credit_id": "52fe4248c3a36847f80122a9",
+        "department": "Production",
+        "name": "Robyn Aronstam",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8311,
+        "credit_id": "52fe4248c3a36847f80122cb",
+        "department": "Crew",
+        "name": "Farah Khan",
+        "job": "Choreographer",
+        "profile_path": "/l0jw1cr6WvpjF2grO1JBqUOBcEx.jpg"
+      }
+    ]
+  },
+  "runtime": 114,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "hi",
+      "name": "हिन्दी"
+    },
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://monsoonwedding.indiatimes.com/",
+  "id": 480,
+  "production_countries": [
+    {
+      "name": "India",
+      "iso_3166_1": "IN"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Monsoon Wedding",
+  "overview": "From an exciting Indian wedding comes a relationship from two different times not only showing the modern but also the traditional. Different characters and stories interact with each other in director Mira Nair film where he used an Indian-American production to illustrate these themes modern day Indians are very familiar with.",
+  "production_companies": [
+    {
+      "id": 252,
+      "name": "Mirabai Films, Inc."
+    },
+    {
+      "id": 253,
+      "name": "Keyfilms Roma"
+    },
+    {
+      "id": 254,
+      "name": "Pandora Filmproduktion"
+    },
+    {
+      "id": 255,
+      "name": "Paradis Films"
+    },
+    {
+      "id": 307,
+      "name": "IFC Films"
+    },
+    {
+      "id": 6235,
+      "name": "Mirabai Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0265343",
+  "release_date": "2001-08-30",
+  "original_title": "Monsoon Wedding",
+  "vote_count": 10,
+  "poster_path": "/aRWp1b8IhmAr12dbermVaqoV2bl.jpg",
+  "tagline": "",
+  "revenue": 30787356,
+  "popularity": "0.424894654122855"
+}

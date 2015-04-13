@@ -1,0 +1,28 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 221,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm1312297",
+  "combined_credits": {
+    "cast": [{
+      "id": 38,
+      "media_type": "movie",
+      "title": "Eternal Sunshine of the Spotless Mind",
+      "credit_id": "52fe4211c3a36847f80016b3",
+      "release_date": "2004-03-19",
+      "original_title": "Eternal Sunshine of the Spotless Mind",
+      "adult": false,
+      "poster_path": "/gutwXkVChJkpIrclokNESybj0GC.jpg",
+      "character": "Rollerblader"
+    }],
+    "crew": []
+  },
+  "name": "Lauren Adler",
+  "place_of_birth": null,
+  "popularity": "1.00691111181365"
+}

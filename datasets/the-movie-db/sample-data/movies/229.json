@@ -1,0 +1,326 @@
+{
+  "budget": 393750,
+  "vote_average": 7.3,
+  "backdrop_path": "/ffHO6uyrvnwa2nzKstHtqMFtJjX.jpg",
+  "genres": [
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2922,
+        "order": 0,
+        "credit_id": "52fe4229c3a36847f8008d41",
+        "name": "Boris Karloff",
+        "cast_id": 6,
+        "profile_path": "/gqaKR7BfXqBds8oLJ1KUGD8Gl6u.jpg",
+        "character": "Frankensteins Monster"
+      },
+      {
+        "id": 2923,
+        "order": 1,
+        "credit_id": "52fe4229c3a36847f8008d45",
+        "name": "Colin Clive",
+        "cast_id": 7,
+        "profile_path": "/vbaOc2pym7cJk894YM3m3loxFn3.jpg",
+        "character": "Dr. Henry Frankenstein"
+      },
+      {
+        "id": 2924,
+        "order": 2,
+        "credit_id": "52fe4229c3a36847f8008d49",
+        "name": "Valerie Hobson",
+        "cast_id": 8,
+        "profile_path": "/jNAXY8Vf3t5TylRtQoIwGDr63eT.jpg",
+        "character": "Elizabeth Frankenstein"
+      },
+      {
+        "id": 2925,
+        "order": 3,
+        "credit_id": "52fe4229c3a36847f8008d4d",
+        "name": "Ernest Thesiger",
+        "cast_id": 9,
+        "profile_path": "/bmgsa81yJ2sYIrFLqiCKLaRDg4t.jpg",
+        "character": "Dr. Septimus Pretorius"
+      },
+      {
+        "id": 2926,
+        "order": 4,
+        "credit_id": "52fe4229c3a36847f8008d51",
+        "name": "Elsa Lanchester",
+        "cast_id": 10,
+        "profile_path": "/2iuHeYDsEEzDScdvYOrIY673Q5N.jpg",
+        "character": "Mary Wollstonecraft Shelley, Frankensteins Braut"
+      },
+      {
+        "id": 2927,
+        "order": 5,
+        "credit_id": "52fe4229c3a36847f8008d55",
+        "name": "Gavin Gordon",
+        "cast_id": 11,
+        "profile_path": "/frAA06Fwx5tEESM0Ly50ziV4NKO.jpg",
+        "character": "Lord Byron"
+      },
+      {
+        "id": 2928,
+        "order": 6,
+        "credit_id": "52fe4229c3a36847f8008d59",
+        "name": "Douglas Walton",
+        "cast_id": 12,
+        "profile_path": "/x2n5QaZM2VUMFCAFyvshYbBgkFh.jpg",
+        "character": "Percy Shelley"
+      },
+      {
+        "id": 2929,
+        "order": 7,
+        "credit_id": "52fe4229c3a36847f8008d5d",
+        "name": "Una O'Connor",
+        "cast_id": 13,
+        "profile_path": "/fJQpwDQNjBDBimdpNi8ZbPGEYEz.jpg",
+        "character": "Minnie"
+      },
+      {
+        "id": 2930,
+        "order": 8,
+        "credit_id": "52fe4229c3a36847f8008d61",
+        "name": "E.E. Clive",
+        "cast_id": 14,
+        "profile_path": "/gbaGFksWoOWER24wO4i7KUdhe0H.jpg",
+        "character": "Bürgermeister"
+      },
+      {
+        "id": 2931,
+        "order": 9,
+        "credit_id": "52fe4229c3a36847f8008d65",
+        "name": "Lucien Prival",
+        "cast_id": 15,
+        "profile_path": "/3AI7FjZVjawUADj9gsrFwHNtg4J.jpg",
+        "character": "Albert, der Butler"
+      },
+      {
+        "id": 2932,
+        "order": 10,
+        "credit_id": "52fe4229c3a36847f8008d69",
+        "name": "O.P. Heggie",
+        "cast_id": 16,
+        "profile_path": "/2E4crZ3AZ8VlQME00j11XuRS97L.jpg",
+        "character": "Eremit"
+      },
+      {
+        "id": 1549,
+        "order": 11,
+        "credit_id": "52fe4229c3a36847f8008d6d",
+        "name": "Dwight Frye",
+        "cast_id": 17,
+        "profile_path": "/i7gRWGlb0wE7Ti0TuRBBVIlIrI4.jpg",
+        "character": "Karl"
+      },
+      {
+        "id": 2933,
+        "order": 12,
+        "credit_id": "52fe4229c3a36847f8008d71",
+        "name": "Reginald Barlow",
+        "cast_id": 18,
+        "profile_path": "/2kuuPRHvnFbirv4X1F5ksHwDXIN.jpg",
+        "character": "Hans"
+      },
+      {
+        "id": 2934,
+        "order": 13,
+        "credit_id": "52fe4229c3a36847f8008d75",
+        "name": "Mary Gordon",
+        "cast_id": 19,
+        "profile_path": "/xrIiodamvDyputr4cTtieugt5RR.jpg",
+        "character": "Hans' Frau"
+      },
+      {
+        "id": 2935,
+        "order": 14,
+        "credit_id": "52fe4229c3a36847f8008d79",
+        "name": "Anne Darling",
+        "cast_id": 20,
+        "profile_path": "/zlHDopERJdWZAPqwHWPTuw7Gq6S.jpg",
+        "character": "Schäferin"
+      },
+      {
+        "id": 2936,
+        "order": 15,
+        "credit_id": "52fe4229c3a36847f8008d7d",
+        "name": "Ted Billings",
+        "cast_id": 21,
+        "profile_path": "/aYZrAL3asHczZlVE2ZXba9LkUcV.jpg",
+        "character": "Ludwig"
+      },
+      {
+        "id": 2941,
+        "order": 16,
+        "credit_id": "52fe4229c3a36847f8008d8d",
+        "name": "Norman Ainsley",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Erzbischof"
+      },
+      {
+        "id": 2942,
+        "order": 17,
+        "credit_id": "52fe4229c3a36847f8008d91",
+        "name": "Peter Shaw",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Teufel"
+      },
+      {
+        "id": 2943,
+        "order": 18,
+        "credit_id": "52fe4229c3a36847f8008d95",
+        "name": "Kansas DeForrest",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Ballerina"
+      },
+      {
+        "id": 2944,
+        "order": 19,
+        "credit_id": "52fe4229c3a36847f8008d99",
+        "name": "Josephine McKim",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Meerjungfrau"
+      },
+      {
+        "id": 30163,
+        "order": 20,
+        "credit_id": "52fe4229c3a36847f8008d9d",
+        "name": "Michael Mark",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Ludwig (Archive Footage)"
+      },
+      {
+        "id": 12659,
+        "order": 21,
+        "credit_id": "52fe4229c3a36847f8008da1",
+        "name": "Billy Barty",
+        "cast_id": 29,
+        "profile_path": "/4tDse78ebbkwAh8mr7BLqY9QMp9.jpg",
+        "character": "Little Baby"
+      },
+      {
+        "id": 8516,
+        "order": 22,
+        "credit_id": "52fe4229c3a36847f8008da5",
+        "name": "John Carradine",
+        "cast_id": 30,
+        "profile_path": "/iWHObxmwHuUS7g4uJFT2SS2hHXu.jpg",
+        "character": "Hunter at Hermit's Cottage"
+      },
+      {
+        "id": 121323,
+        "order": 23,
+        "credit_id": "52fe4229c3a36847f8008da9",
+        "name": "Bess Flowers",
+        "cast_id": 31,
+        "profile_path": "/akbW8jJl8GSXFpixFaobMOqvNv4.jpg",
+        "character": "Member of Wedding Party"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2917,
+        "credit_id": "52fe4229c3a36847f8008d25",
+        "department": "Directing",
+        "name": "James Whale",
+        "job": "Director",
+        "profile_path": "/f3qBaDpjvWku9LpazuZjs8aUEW0.jpg"
+      },
+      {
+        "id": 1557,
+        "credit_id": "52fe4229c3a36847f8008d2b",
+        "department": "Production",
+        "name": "Carl Laemmle Jr.",
+        "job": "Producer",
+        "profile_path": "/hxZVAnYE16aGEa3ihIastQQUQWU.jpg"
+      },
+      {
+        "id": 8619,
+        "credit_id": "52fe4229c3a36847f8008d31",
+        "department": "Sound",
+        "name": "Franz Waxman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2920,
+        "credit_id": "52fe4229c3a36847f8008d37",
+        "department": "Editing",
+        "name": "Ted J. Kent",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2921,
+        "credit_id": "52fe4229c3a36847f8008d3d",
+        "department": "Writing",
+        "name": "William Hurlbut",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1546,
+        "credit_id": "52fe4229c3a36847f8008d83",
+        "department": "Writing",
+        "name": "John L. Balderston",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2940,
+        "credit_id": "52fe4229c3a36847f8008d89",
+        "department": "Camera",
+        "name": "John J. Mescall",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 75,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 229,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Bride of Frankenstein",
+  "overview": "Bride of Frankenstein begins where James Whale's Frankenstein from 1931 ended. Dr. Frankenstein has not been killed as previously portrayed and now he wants to get away from the mad experiments. Yet when his wife is kidnapped by his creation, Frankenstein agrees to help him create a new monster, this time a woman.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 218406,
+    "backdrop_path": "/aP0pbkGzEpBhCYnZDf72LLS2sU5.jpg",
+    "name": "Frankenstein (Universal Series)",
+    "poster_path": "/2PJYpPHOqnVMXelHV1T4t6zra4i.jpg"
+  },
+  "imdb_id": "tt0026138",
+  "release_date": "1935-04-22",
+  "original_title": "The Bride of Frankenstein",
+  "vote_count": 23,
+  "poster_path": "/7YOfYQ6yhpBYWOh8vFQYfo2mm5I.jpg",
+  "tagline": "The monster demands a mate.",
+  "revenue": 0,
+  "popularity": "0.439996690481821"
+}

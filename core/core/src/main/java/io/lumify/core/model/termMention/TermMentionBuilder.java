@@ -22,6 +22,7 @@ public class TermMentionBuilder {
     private String process;
     private Vertex resolvedToVertex;
     private Edge resolvedEdge;
+    private String snippet;
 
     public TermMentionBuilder() {
 
@@ -39,6 +40,7 @@ public class TermMentionBuilder {
         this.start = LumifyProperties.TERM_MENTION_START_OFFSET.getPropertyValue(existingTermMention, 0);
         this.end = LumifyProperties.TERM_MENTION_END_OFFSET.getPropertyValue(existingTermMention, 0);
         this.title = LumifyProperties.TERM_MENTION_TITLE.getPropertyValue(existingTermMention, "");
+        this.snippet = LumifyProperties.TERM_MENTION_SNIPPET.getPropertyValue(existingTermMention);
         this.conceptIri = LumifyProperties.TERM_MENTION_CONCEPT_TYPE.getPropertyValue(existingTermMention, "");
         this.visibilityJson = LumifyProperties.TERM_MENTION_VISIBILITY_JSON.getPropertyValue(existingTermMention, "");
     }
@@ -128,6 +130,11 @@ public class TermMentionBuilder {
         return this;
     }
 
+    public TermMentionBuilder snippet(String snippet) {
+        this.snippet = snippet;
+        return this;
+    }
+
     /**
      * The concept type of this term mention.
      */
@@ -163,7 +170,7 @@ public class TermMentionBuilder {
         checkArgument(end >= 0, "start must be greater than or equal to 0");
 
         String vertexId = createVertexId();
-        Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilityJson).getVisibility(), TermMentionRepository.VISIBILITY);
+        Visibility visibility = LumifyVisibility.and(visibilityTranslator.toVisibility(this.visibilityJson).getVisibility(), TermMentionRepository.VISIBILITY_STRING);
         VertexBuilder vertexBuilder = graph.prepareVertex(vertexId, visibility);
         LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(vertexBuilder, this.visibilityJson, visibility);
         LumifyProperties.TERM_MENTION_CONCEPT_TYPE.setProperty(vertexBuilder, this.conceptIri, visibility);
@@ -179,15 +186,24 @@ public class TermMentionBuilder {
         if (this.resolvedEdge != null) {
             LumifyProperties.TERM_MENTION_RESOLVED_EDGE_ID.setProperty(vertexBuilder, this.resolvedEdge.getId(), visibility);
         }
+        if (this.snippet != null) {
+            LumifyProperties.TERM_MENTION_SNIPPET.setProperty(vertexBuilder, this.snippet, visibility);
+        }
+        if (this.resolvedToVertex != null) {
+            LumifyProperties.TERM_MENTION_FOR_ELEMENT_ID.setProperty(vertexBuilder, resolvedToVertex.getId(), visibility);
+            LumifyProperties.TERM_MENTION_FOR_TYPE.setProperty(vertexBuilder, TermMentionFor.VERTEX, visibility);
+        }
         Vertex termMentionVertex = vertexBuilder.save(authorizations);
 
         String hasTermMentionId = vertexId + "_hasTermMention";
-        Edge termMentionEdge = graph.addEdge(hasTermMentionId, this.sourceVertex, termMentionVertex, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, visibility, authorizations);
-        LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(termMentionEdge, this.visibilityJson, visibility, authorizations);
+        EdgeBuilder termMentionEdgeBuilder = graph.prepareEdge(hasTermMentionId, this.sourceVertex, termMentionVertex, LumifyProperties.TERM_MENTION_LABEL_HAS_TERM_MENTION, visibility);
+        LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(termMentionEdgeBuilder, this.visibilityJson, visibility);
+        termMentionEdgeBuilder.save(authorizations);
         if (this.resolvedToVertex != null) {
             String resolvedToId = vertexId + "_resolvedTo";
-            Edge resolvedToEdge = graph.addEdge(resolvedToId, termMentionVertex, this.resolvedToVertex, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, visibility, authorizations);
-            LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(resolvedToEdge, this.visibilityJson, visibility, authorizations);
+            EdgeBuilder resolvedToEdgeBuilder = graph.prepareEdge(resolvedToId, termMentionVertex, this.resolvedToVertex, LumifyProperties.TERM_MENTION_LABEL_RESOLVED_TO, visibility);
+            LumifyProperties.TERM_MENTION_VISIBILITY_JSON.setProperty(resolvedToEdgeBuilder, this.visibilityJson, visibility);
+            resolvedToEdgeBuilder.save(authorizations);
         }
 
         return termMentionVertex;

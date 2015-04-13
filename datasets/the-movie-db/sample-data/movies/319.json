@@ -1,0 +1,453 @@
+{
+  "budget": 12500000,
+  "vote_average": 6.8,
+  "backdrop_path": "/f7EbIN1bMf8tOtoSmiqd6mO5p4P.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2224,
+        "order": 0,
+        "credit_id": "52fe4237c3a36847f800cdb7",
+        "name": "Christian Slater",
+        "cast_id": 4,
+        "profile_path": "/9CB3uFqhYla5QTzyRbQ2dJBzepJ.jpg",
+        "character": "Clarence Worley"
+      },
+      {
+        "id": 4687,
+        "order": 1,
+        "credit_id": "52fe4237c3a36847f800cdbb",
+        "name": "Patricia Arquette",
+        "cast_id": 5,
+        "profile_path": "/oFjHzvNTidwMuRpuG9drblMzIQu.jpg",
+        "character": "Alabama Whitman"
+      },
+      {
+        "id": 4688,
+        "order": 2,
+        "credit_id": "52fe4237c3a36847f800cdbf",
+        "name": "Michael Rapaport",
+        "cast_id": 6,
+        "profile_path": "/i39bAISjAUWYlXZZA0wmjYWnZGf.jpg",
+        "character": "Dick Ritchie"
+      },
+      {
+        "id": 4689,
+        "order": 3,
+        "credit_id": "52fe4237c3a36847f800cdc3",
+        "name": "Bronson Pinchot",
+        "cast_id": 7,
+        "profile_path": "/hGaFZsohQbRIskmkLtNbwJNgLPN.jpg",
+        "character": "Elliot Blitzer"
+      },
+      {
+        "id": 64,
+        "order": 4,
+        "credit_id": "52fe4237c3a36847f800cdc7",
+        "name": "Gary Oldman",
+        "cast_id": 8,
+        "profile_path": "/kCWUeBkZ2sf8LObSpUFgRngawQb.jpg",
+        "character": "Drexl Spivey"
+      },
+      {
+        "id": 2778,
+        "order": 5,
+        "credit_id": "52fe4237c3a36847f800cdcb",
+        "name": "Dennis Hopper",
+        "cast_id": 9,
+        "profile_path": "/56nj2DfMVU3F9qUagZWMePLbrKF.jpg",
+        "character": "Clifford Worley"
+      },
+      {
+        "id": 4690,
+        "order": 6,
+        "credit_id": "52fe4237c3a36847f800cdcf",
+        "name": "Christopher Walken",
+        "cast_id": 10,
+        "profile_path": "/t0gzpYe6FOWH1yKeRBOIpTKgFsB.jpg",
+        "character": "Vincenzo Coccotti"
+      },
+      {
+        "id": 287,
+        "order": 7,
+        "credit_id": "52fe4237c3a36847f800cdd3",
+        "name": "Brad Pitt",
+        "cast_id": 11,
+        "profile_path": "/kc3M04QQAuZ9woUvH3Ju5T7ZqG5.jpg",
+        "character": "Floyd"
+      },
+      {
+        "id": 3197,
+        "order": 8,
+        "credit_id": "52fe4237c3a36847f800cdd7",
+        "name": "Tom Sizemore",
+        "cast_id": 12,
+        "profile_path": "/zmmNvyDm2PNOrBEYFtPQ0Kp62Nb.jpg",
+        "character": "Cody Nicholson"
+      },
+      {
+        "id": 2231,
+        "order": 9,
+        "credit_id": "52fe4237c3a36847f800cddb",
+        "name": "Samuel L. Jackson",
+        "cast_id": 13,
+        "profile_path": "/dlW6prW9HwYDsIRXNoFYtyHpSny.jpg",
+        "character": "Big Don"
+      },
+      {
+        "id": 3712,
+        "order": 10,
+        "credit_id": "52fe4237c3a36847f800cddf",
+        "name": "Saul Rubinek",
+        "cast_id": 14,
+        "profile_path": "/5bu4l4qSwnXN0yrIIOLHVIRrsn7.jpg",
+        "character": "Lee Donowitz"
+      },
+      {
+        "id": 4691,
+        "order": 11,
+        "credit_id": "52fe4237c3a36847f800cde3",
+        "name": "James Gandolfini",
+        "cast_id": 15,
+        "profile_path": "/19r3knxqTAPUgfItOPXg3ouOcpI.jpg",
+        "character": "Virgil"
+      },
+      {
+        "id": 4692,
+        "order": 12,
+        "credit_id": "52fe4237c3a36847f800cde7",
+        "name": "Frank Adonis",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Frankie"
+      },
+      {
+        "id": 4693,
+        "order": 13,
+        "credit_id": "52fe4237c3a36847f800cdeb",
+        "name": "Paul Bates",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Marty"
+      },
+      {
+        "id": 5576,
+        "order": 14,
+        "credit_id": "52fe4237c3a36847f800ce91",
+        "name": "Val Kilmer",
+        "cast_id": 46,
+        "profile_path": "/AlhPeiH8R4reMNGNQ9ag1FPbuW9.jpg",
+        "character": "Mentor"
+      },
+      {
+        "id": 2969,
+        "order": 15,
+        "credit_id": "52fe4237c3a36847f800ce95",
+        "name": "Chris Penn",
+        "cast_id": 47,
+        "profile_path": "/57imnLRyaOowXElsxNESvhG1UZk.jpg",
+        "character": "Nicky Dimes"
+      }
+    ],
+    "crew": [
+      {
+        "id": 893,
+        "credit_id": "52fe4237c3a36847f800cda7",
+        "department": "Directing",
+        "name": "Tony Scott",
+        "job": "Director",
+        "profile_path": "/15pOBMK5i72aLVv6M199xW6p3yr.jpg"
+      },
+      {
+        "id": 138,
+        "credit_id": "52fe4237c3a36847f800cdad",
+        "department": "Writing",
+        "name": "Quentin Tarantino",
+        "job": "Screenplay",
+        "profile_path": "/6grjDWpEIPL5QdRbUZFxVEp5TCd.jpg"
+      },
+      {
+        "id": 8297,
+        "credit_id": "52fe4237c3a36847f800cdb3",
+        "department": "Writing",
+        "name": "Roger Avary",
+        "job": "Screenplay",
+        "profile_path": "/x9E17YQVlzKoRU8E4SEoEOwRKay.jpg"
+      },
+      {
+        "id": 4507,
+        "credit_id": "52fe4237c3a36847f800cdf1",
+        "department": "Production",
+        "name": "Gary Barber",
+        "job": "Producer",
+        "profile_path": "/gUpO6HVoxTteEx08Bs7zWgCD6bY.jpg"
+      },
+      {
+        "id": 4694,
+        "credit_id": "52fe4237c3a36847f800cdf7",
+        "department": "Production",
+        "name": "Lisa Cogswell",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4695,
+        "credit_id": "52fe4237c3a36847f800cdfd",
+        "department": "Production",
+        "name": "Don Edmonds",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4696,
+        "credit_id": "52fe4237c3a36847f800ce03",
+        "department": "Production",
+        "name": "Spencer Franklin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4697,
+        "credit_id": "52fe4237c3a36847f800ce09",
+        "department": "Production",
+        "name": "Samuel Hadida",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4698,
+        "credit_id": "52fe4237c3a36847f800ce0f",
+        "department": "Production",
+        "name": "Gregory Manson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4699,
+        "credit_id": "52fe4237c3a36847f800ce15",
+        "department": "Production",
+        "name": "Steve Perry",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4700,
+        "credit_id": "52fe4237c3a36847f800ce1b",
+        "department": "Production",
+        "name": "James G. Robinson",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4701,
+        "credit_id": "52fe4237c3a36847f800ce21",
+        "department": "Production",
+        "name": "James W. Skotchdopole",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4702,
+        "credit_id": "52fe4237c3a36847f800ce27",
+        "department": "Production",
+        "name": "Bill Unger",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 947,
+        "credit_id": "52fe4237c3a36847f800ce2d",
+        "department": "Sound",
+        "name": "Hans Zimmer",
+        "job": "Original Music Composer",
+        "profile_path": "/wugKWf9vuqZYuHCk5Wwec6355TM.jpg"
+      },
+      {
+        "id": 904,
+        "credit_id": "52fe4237c3a36847f800ce33",
+        "department": "Camera",
+        "name": "Jeffrey L. Kimball",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 908,
+        "credit_id": "52fe4237c3a36847f800ce39",
+        "department": "Editing",
+        "name": "Michael Tronick",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6668,
+        "credit_id": "52fe4237c3a36847f800ce3f",
+        "department": "Editing",
+        "name": "Christian Wagner",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4710,
+        "credit_id": "52fe4237c3a36847f800ce45",
+        "department": "Art",
+        "name": "Benjamín Fernández",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 795,
+        "credit_id": "52fe4237c3a36847f800ce4b",
+        "department": "Art",
+        "name": "James J. Murakami",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 4712,
+        "credit_id": "52fe4237c3a36847f800ce51",
+        "department": "Art",
+        "name": "Thomas L. Roysden",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 4713,
+        "credit_id": "52fe4237c3a36847f800ce57",
+        "department": "Costume & Make-Up",
+        "name": "Susan Becker",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 4714,
+        "credit_id": "52fe4237c3a36847f800ce5d",
+        "department": "Sound",
+        "name": "Greg Dillon",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4715,
+        "credit_id": "52fe4237c3a36847f800ce63",
+        "department": "Sound",
+        "name": "Samuel C. Crutcher",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4716,
+        "credit_id": "52fe4237c3a36847f800ce69",
+        "department": "Sound",
+        "name": "Virginia Cook-McGowan",
+        "job": "Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4717,
+        "credit_id": "52fe4237c3a36847f800ce6f",
+        "department": "Crew",
+        "name": "Robert S. Henderson",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 4718,
+        "credit_id": "52fe4237c3a36847f800ce75",
+        "department": "Crew",
+        "name": "Larry M. Shorts",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 3191,
+        "credit_id": "52fe4237c3a36847f800ce7b",
+        "department": "Production",
+        "name": "Risa Bramon Garcia",
+        "job": "Other",
+        "profile_path": null
+      },
+      {
+        "id": 3192,
+        "credit_id": "52fe4237c3a36847f800ce81",
+        "department": "Production",
+        "name": "Billy Hopkins",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1307,
+        "credit_id": "52fe4237c3a36847f800ce87",
+        "department": "Production",
+        "name": "Bob Weinstein",
+        "job": "Executive Producer",
+        "profile_path": "/oe5Oxp034UOubnvZqqhurp6a1EP.jpg"
+      },
+      {
+        "id": 59839,
+        "credit_id": "52fe4237c3a36847f800ce8d",
+        "department": "Production",
+        "name": "Harvey Weinstein",
+        "job": "Executive Producer",
+        "profile_path": "/k4UCnh7n0r5CEjq30gAl6QCfF9g.jpg"
+      }
+    ]
+  },
+  "runtime": 120,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 319,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "True Romance",
+  "overview": "Clarence marries hooker Alabama, steals cocaine from her pimp, and tries to sell it in Hollywood, while the owners of the coke try to reclaim it.",
+  "production_companies": [
+    {
+      "id": 342,
+      "name": "Davis-Films"
+    },
+    {
+      "id": 3322,
+      "name": "August Entertainment"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0108399",
+  "release_date": "1993-09-09",
+  "original_title": "True Romance",
+  "vote_count": 126,
+  "poster_path": "/xBO8R3CZfrJ9rrwrZoJ68PgJyAR.jpg",
+  "tagline": "Stealing, Cheating, Killing. Who said romance was dead?",
+  "revenue": 12281551,
+  "popularity": "1.63069263078476"
+}

@@ -1,0 +1,348 @@
+{
+  "budget": 132000000,
+  "vote_average": 5.8,
+  "backdrop_path": "/hozzH6DHXjqSVx9LyipyQiWc7MA.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 500,
+        "order": 0,
+        "credit_id": "52fe4213c3a36847f800226b",
+        "name": "Tom Cruise",
+        "cast_id": 13,
+        "profile_path": "/3oWEuo0e8Nx8JvkqYCDec2iMY6K.jpg",
+        "character": "Ray Ferrier"
+      },
+      {
+        "id": 501,
+        "order": 1,
+        "credit_id": "52fe4213c3a36847f800226f",
+        "name": "Dakota Fanning",
+        "cast_id": 14,
+        "profile_path": "/upEXoCEO9vfVPvGeTJJMuIQahrz.jpg",
+        "character": "Rachel Ferrier"
+      },
+      {
+        "id": 502,
+        "order": 2,
+        "credit_id": "52fe4213c3a36847f8002273",
+        "name": "Miranda Otto",
+        "cast_id": 15,
+        "profile_path": "/l3BzUjJMK3JbqvCiCIFP4beMChS.jpg",
+        "character": "Mary-Ann"
+      },
+      {
+        "id": 503,
+        "order": 3,
+        "credit_id": "52fe4213c3a36847f8002277",
+        "name": "Justin Chatwin",
+        "cast_id": 16,
+        "profile_path": "/rG5aYePsnpDf3H5NS6iH0F63WIy.jpg",
+        "character": "Robbie Ferrier"
+      },
+      {
+        "id": 504,
+        "order": 4,
+        "credit_id": "52fe4213c3a36847f800227b",
+        "name": "Tim Robbins",
+        "cast_id": 17,
+        "profile_path": "/tuZCyZVVbHcpvtCgriSp5RRPwMX.jpg",
+        "character": "Harlan Ogilvy"
+      },
+      {
+        "id": 505,
+        "order": 5,
+        "credit_id": "52fe4213c3a36847f800227f",
+        "name": "Camillia Sanes",
+        "cast_id": 18,
+        "profile_path": "/vXcl0AppqxNOezulogepdhiDos9.jpg",
+        "character": "News Producer"
+      },
+      {
+        "id": 506,
+        "order": 6,
+        "credit_id": "52fe4213c3a36847f8002283",
+        "name": "John Scurti",
+        "cast_id": 19,
+        "profile_path": "/eX86aQIuaZORhGRpf7TiGdZ2K6g.jpg",
+        "character": "Ferry Captain"
+      },
+      {
+        "id": 192,
+        "order": 7,
+        "credit_id": "52fe4213c3a36847f8002287",
+        "name": "Morgan Freeman",
+        "cast_id": 20,
+        "profile_path": "/oGJQhOpT8S1M56tvSsbEBePV5O1.jpg",
+        "character": "Narrator (Voice)"
+      },
+      {
+        "id": 33500,
+        "order": 8,
+        "credit_id": "52fe4214c3a36847f800229d",
+        "name": "Takayo Fischer",
+        "cast_id": 24,
+        "profile_path": "/gNIFc8rWnFzplkisEonefyxjmG1.jpg",
+        "character": "Older Woman"
+      },
+      {
+        "id": 75604,
+        "order": 9,
+        "credit_id": "52fe4214c3a36847f80022a1",
+        "name": "Yul Vazquez",
+        "cast_id": 25,
+        "profile_path": "/d4MEi4pl2YvY7zHniiN6rQ4lQVx.jpg",
+        "character": "Julio"
+      },
+      {
+        "id": 103079,
+        "order": 10,
+        "credit_id": "530a66539251411108003d2a",
+        "name": "Ann Robinson",
+        "cast_id": 27,
+        "profile_path": "/bsA08Ny0XnOvQvW0IVCi0jRo6XV.jpg",
+        "character": "Grandmother"
+      },
+      {
+        "id": 56442,
+        "order": 11,
+        "credit_id": "530a66419251411111003f15",
+        "name": "Gene Barry",
+        "cast_id": 26,
+        "profile_path": "/q2DQGsyA5hxyKDEiLeR3yVGmcqM.jpg",
+        "character": "Grandfather"
+      }
+    ],
+    "crew": [
+      {
+        "id": 961609,
+        "credit_id": "5385b5b3c3a3681add000f54",
+        "department": "Art",
+        "name": "Norman Newberry",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8706,
+        "credit_id": "5385b5c7c3a3681ae3000f4d",
+        "department": "Art",
+        "name": "Anne Kuljian",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 7236,
+        "credit_id": "5385b59fc3a3681af0000fac",
+        "department": "Art",
+        "name": "Andrew Menzies",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8794,
+        "credit_id": "5385b587c3a3681af0000faa",
+        "department": "Crew",
+        "name": "Tony Fanning",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 1249773,
+        "credit_id": "5385b5ddc3a3681af3000fd8",
+        "department": "Costume & Make-Up",
+        "name": "Lois Burwell",
+        "job": "Makeup Department Head",
+        "profile_path": null
+      },
+      {
+        "id": 1323768,
+        "credit_id": "5385b63d0e0a2614410011a0",
+        "department": "Costume & Make-Up",
+        "name": "Pamela Wise",
+        "job": "Costume Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 488,
+        "credit_id": "52fe4213c3a36847f8002225",
+        "department": "Directing",
+        "name": "Steven Spielberg",
+        "job": "Director",
+        "profile_path": "/pOK15UNaw75Bzj7BQO1ulehbPPm.jpg"
+      },
+      {
+        "id": 489,
+        "credit_id": "52fe4213c3a36847f800222b",
+        "department": "Production",
+        "name": "Kathleen Kennedy",
+        "job": "Producer",
+        "profile_path": "/uHEExgTTzJNDX1Gal9CW5n3QdEJ.jpg"
+      },
+      {
+        "id": 490,
+        "credit_id": "52fe4213c3a36847f8002231",
+        "department": "Production",
+        "name": "Colin Wilson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 491,
+        "credit_id": "52fe4213c3a36847f8002237",
+        "department": "Sound",
+        "name": "John Williams",
+        "job": "Original Music Composer",
+        "profile_path": "/d7NNRZQAIzLBSaoez550QHLpTk.jpg"
+      },
+      {
+        "id": 492,
+        "credit_id": "52fe4213c3a36847f800223d",
+        "department": "Camera",
+        "name": "Janusz Kaminski",
+        "job": "Director of Photography",
+        "profile_path": "/5LNGARjEfMDOcEP6fMNtJypAGYx.jpg"
+      },
+      {
+        "id": 493,
+        "credit_id": "52fe4213c3a36847f8002243",
+        "department": "Editing",
+        "name": "Michael Kahn",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 494,
+        "credit_id": "52fe4213c3a36847f8002249",
+        "department": "Production",
+        "name": "Terri Taylor",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 495,
+        "credit_id": "52fe4213c3a36847f800224f",
+        "department": "Production",
+        "name": "Debra Zane",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 496,
+        "credit_id": "52fe4213c3a36847f8002255",
+        "department": "Art",
+        "name": "Rick Carter",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 497,
+        "credit_id": "52fe4213c3a36847f800225b",
+        "department": "Art",
+        "name": "Doug J. Meerdink",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 498,
+        "credit_id": "52fe4213c3a36847f8002261",
+        "department": "Costume & Make-Up",
+        "name": "Joanna Johnston",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 499,
+        "credit_id": "52fe4213c3a36847f8002267",
+        "department": "Crew",
+        "name": "Cari Finken",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 507,
+        "credit_id": "52fe4214c3a36847f800228d",
+        "department": "Writing",
+        "name": "Josh Friedman",
+        "job": "Author",
+        "profile_path": "/sr7fib6UVbIXQXGCSEw8L0IU6o3.jpg"
+      },
+      {
+        "id": 508,
+        "credit_id": "52fe4214c3a36847f8002293",
+        "department": "Writing",
+        "name": "David Koepp",
+        "job": "Author",
+        "profile_path": "/3A7kfyMXaVjGcSbGdRD25msbHcj.jpg"
+      },
+      {
+        "id": 11624,
+        "credit_id": "52fe4214c3a36847f8002299",
+        "department": "Writing",
+        "name": "H.G. Wells",
+        "job": "Novel",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 116,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 74,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "War of the Worlds",
+  "overview": "The extraordinary battle for the future of humankind through the eyes of one American family fighting to survive it. Ray Ferrier is a divorced dockworker and less-than-perfect father. Soon after his ex-wife and her new husband drop of his teenage son Robbie and young daughter Rachel for a rare weekend visit, a strange and powerful lightning storm touches down.",
+  "production_companies": [
+    {
+      "id": 4,
+      "name": "Paramount Pictures"
+    },
+    {
+      "id": 27,
+      "name": "DreamWorks SKG"
+    },
+    {
+      "id": 56,
+      "name": "Amblin Entertainment"
+    },
+    {
+      "id": 44,
+      "name": "Cruise/Wagner Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 201061,
+    "backdrop_path": null,
+    "name": "War of the Worlds",
+    "poster_path": "/rk011rZUj0svd0T3iWLa0uD56Cu.jpg"
+  },
+  "imdb_id": "tt0407304",
+  "release_date": "2005-06-28",
+  "original_title": "War of the Worlds",
+  "vote_count": 383,
+  "poster_path": "/xXMM9KY2eq1SDOQif9zO91YOBA8.jpg",
+  "tagline": "They're already here.",
+  "revenue": 591739379,
+  "popularity": "2.41655357914268"
+}

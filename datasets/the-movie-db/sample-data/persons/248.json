@@ -1,0 +1,52 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 248,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0725220",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 62,
+        "media_type": "movie",
+        "title": "2001: A Space Odyssey",
+        "credit_id": "52fe4212c3a36847f8001a27",
+        "release_date": "1968-04-05",
+        "original_title": "2001: A Space Odyssey",
+        "adult": false,
+        "poster_path": "/rT9w3tzk25jA8vl7KyvzUP5gHJV.jpg",
+        "character": "Moon-Watcher"
+      },
+      {
+        "id": 14201,
+        "media_type": "movie",
+        "title": "The U.S. vs. John Lennon",
+        "credit_id": "52fe45d79251416c75064509",
+        "release_date": "2006-09-15",
+        "original_title": "The U.S. vs. John Lennon",
+        "adult": false,
+        "poster_path": "/ufDaAAIdXff8GCXCv2jfyQAPrlI.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 53164,
+        "media_type": "movie",
+        "title": "2001: The Making of a Myth",
+        "credit_id": "52fe4856c3a36847f8162655",
+        "release_date": "2001-01-13",
+        "original_title": "2001: The Making of a Myth",
+        "adult": false,
+        "poster_path": "/crISRBstMnQEqXecrfbCp8bN2Qg.jpg",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Daniel Richter",
+  "place_of_birth": null,
+  "popularity": "1.00404999998431"
+}

@@ -2,7 +2,7 @@
   "name": "lumify",
   "version": "0.0.1",
   "dependencies": {
-    "PathFinding.js": "0.4.10",
+    "PathFinding.js": "git://github.com/qiao/PathFinding.js.git#0.4.10",
     "atmosphere": "~2.2.5",
     "bootstrap": "git://github.com/twbs/bootstrap.git#2.3.2",
     "bootstrap-datepicker": "~1.2.0",
@@ -32,7 +32,7 @@
     "video.js": "4.5.2",
     "bootstrap-timepicker": "~0.2.6",
     "jstz-detect": "~1.0.5",
-    "timezone-js": "~0.4.12",
+    "timezone-js": "~0.4.13",
     "jscache": "ba01cdcf3e8a426782e0c297832b6c81286c9e8a"
   },
   "devDependencies": {
@@ -40,6 +40,7 @@
     "sinon-chai": "~2.6.0",
     "mocha": "~1.21.5",
     "chai": "~1.9.2",
-    "gremlins.js": "~0.1.0"
+    "gremlins.js": "~0.1.0",
+    "chai-datetime": "~1.3.1"
   }
 }

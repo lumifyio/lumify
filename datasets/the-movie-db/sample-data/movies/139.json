@@ -1,0 +1,242 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/lcM49Au2DtDIigd0G51zOqYqckj.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1184,
+        "order": 0,
+        "credit_id": "52fe421dc3a36847f800507b",
+        "name": "Anders W. Berthelsen",
+        "cast_id": 6,
+        "profile_path": "/y5mBIJnXTavpdHm1zEmHnhcNHaN.jpg",
+        "character": "Kresten"
+      },
+      {
+        "id": 1562,
+        "order": 1,
+        "credit_id": "52fe421dc3a36847f800507f",
+        "name": "Iben Hjejle",
+        "cast_id": 7,
+        "profile_path": "/t0areKrmJIoopPaKzPCY7ILuUze.jpg",
+        "character": "Liva"
+      },
+      {
+        "id": 1563,
+        "order": 2,
+        "credit_id": "52fe421dc3a36847f8005083",
+        "name": "Jesper Asholt",
+        "cast_id": 8,
+        "profile_path": "/lyggJM46Ll7UQdJp7QvdmwEwkRD.jpg",
+        "character": "Rud"
+      },
+      {
+        "id": 1564,
+        "order": 3,
+        "credit_id": "52fe421dc3a36847f8005087",
+        "name": "Sofie Gråbøl",
+        "cast_id": 9,
+        "profile_path": "/zUJSyBHgDjv7yCFLvQneMlEztFr.jpg",
+        "character": "Claire"
+      },
+      {
+        "id": 1565,
+        "order": 4,
+        "credit_id": "52fe421dc3a36847f800508b",
+        "name": "Emil Tarding",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Bjarke"
+      },
+      {
+        "id": 1566,
+        "order": 5,
+        "credit_id": "52fe421dc3a36847f800508f",
+        "name": "Anders Hove",
+        "cast_id": 11,
+        "profile_path": "/m9UAUhR7CzC376jy9dV9HGctqSV.jpg",
+        "character": "Gerner"
+      },
+      {
+        "id": 4458,
+        "order": 6,
+        "credit_id": "52fe421dc3a36847f8005093",
+        "name": "Paprika Steen",
+        "cast_id": 12,
+        "profile_path": "/7iz6g2gXDCVL9LFjqmVV8KwGvNP.jpg",
+        "character": "Pernille"
+      },
+      {
+        "id": 1567,
+        "order": 7,
+        "credit_id": "52fe421dc3a36847f8005097",
+        "name": "Mette Bratlann",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Nina"
+      },
+      {
+        "id": 1568,
+        "order": 8,
+        "credit_id": "52fe421dc3a36847f800509b",
+        "name": "Susanne Storm",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Hanne"
+      },
+      {
+        "id": 1569,
+        "order": 9,
+        "credit_id": "52fe421dc3a36847f800509f",
+        "name": "Ellen Hillingsø",
+        "cast_id": 15,
+        "profile_path": "/8INr42ugNpHwXkUGvHaVvWJ7sb0.jpg",
+        "character": "Lykke"
+      },
+      {
+        "id": 32683,
+        "order": 10,
+        "credit_id": "52fe421dc3a36847f80050c7",
+        "name": "Sidse Babett Knudsen",
+        "cast_id": 22,
+        "profile_path": "/ggz4BTayixBfn85GD37Aa6WJz9S.jpg",
+        "character": "Bibi"
+      },
+      {
+        "id": 206469,
+        "order": 11,
+        "credit_id": "52fe421dc3a36847f80050cb",
+        "name": "Sofie Stougaard",
+        "cast_id": 23,
+        "profile_path": "/8v0pP8WFU3U4euLS0nl89Z2oA0R.jpg",
+        "character": "Lady of bakery"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1558,
+        "credit_id": "52fe421dc3a36847f800505f",
+        "department": "Directing",
+        "name": "Søren Kragh-Jacobsen",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 1559,
+        "credit_id": "52fe421dc3a36847f8005065",
+        "department": "Production",
+        "name": "Birgitte Hald",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1560,
+        "credit_id": "52fe421dc3a36847f800506b",
+        "department": "Production",
+        "name": "Morten Kaufmann",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1558,
+        "credit_id": "52fe421dc3a36847f8005071",
+        "department": "Writing",
+        "name": "Søren Kragh-Jacobsen",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1012,
+        "credit_id": "52fe421dc3a36847f8005077",
+        "department": "Writing",
+        "name": "Anders Thomas Jensen",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1570,
+        "credit_id": "52fe421dc3a36847f80050a5",
+        "department": "Camera",
+        "name": "Anthony Dod Mantle",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4475,
+        "credit_id": "52fe421dc3a36847f80050ab",
+        "department": "Editing",
+        "name": "Valdís Óskarsdóttir",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1572,
+        "credit_id": "52fe421dc3a36847f80050b1",
+        "department": "Sound",
+        "name": "Morten Degnbol",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 1573,
+        "credit_id": "52fe421dc3a36847f80050b7",
+        "department": "Sound",
+        "name": "Hans Møller",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 1574,
+        "credit_id": "52fe421dc3a36847f80050bd",
+        "department": "Production",
+        "name": "Stine Bruel",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1575,
+        "credit_id": "52fe421dc3a36847f80050c3",
+        "department": "Editing",
+        "name": "Vagn Rose",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 98,
+  "spoken_languages": [{
+    "iso_639_1": "da",
+    "name": "Dansk"
+  }],
+  "adult": false,
+  "homepage": "http://www.dogme95.dk/mifune/forside/forside.htm",
+  "id": 139,
+  "production_countries": [{
+    "name": "Denmark",
+    "iso_3166_1": "DK"
+  }],
+  "title": "Mifune's Last Song",
+  "overview": "Mifune's Last Song is a humorous story about a yuppie from Copenhagen who is inconveniently confronted with his represses his past. This film from Kragh-Jacobsen is the third film to be filmed in the Dogma 95 style of filmmaking.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0164756",
+  "release_date": "1999-05-27",
+  "original_title": "Mifunes Sidste Sang",
+  "vote_count": 0,
+  "poster_path": "/o8LzDhNQZqDewrm4Ky53zRFf7fb.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.179642439313138"
+}

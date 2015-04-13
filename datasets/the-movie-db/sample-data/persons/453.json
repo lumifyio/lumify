@@ -1,0 +1,289 @@
+{
+  "birthday": "1979-03-05",
+  "adult": false,
+  "biography": "Riki Lindhome was born in Coudersport, Pennsylvania but grew up primarily in Portville, New York (near Buffalo). Her first break came when Tim Robbins cast her in his hit play, Embedded, which played at the Public Theater in New York City, Riverside Studios in London and The Actor's Gang Theater in Los Angeles. Shortly after, Clint Eastwood cast her in her first film role, as Mardell Fitzgerald in Million Dollar Baby. She also wrote and directed the award-winning short, Life is Short. Since then, she has found work in film, TV and commercials and performs in the LA-based comedy duo, Garfunkel and Oates.",
+  "homepage": "http://www.rikilindhome.com/",
+  "profile_path": "/6JTLAdPdnceC5jGYOOmfG8k4uJy.jpg",
+  "id": 453,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm1641251",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 9682,
+        "media_type": "movie",
+        "title": "Pulse",
+        "credit_id": "52fe451ac3a36847f80bcbc9",
+        "release_date": "2006-08-11",
+        "original_title": "Pulse",
+        "adult": false,
+        "poster_path": "/deMMtuI9noGZr5LRl0N9LYDjIhJ.jpg",
+        "character": "Janelle"
+      },
+      {
+        "id": 13596,
+        "media_type": "movie",
+        "title": "My Best Friend's Girl",
+        "credit_id": "52fe457e9251416c75058827",
+        "release_date": "2008-09-19",
+        "original_title": "My Best Friend's Girl",
+        "adult": false,
+        "poster_path": "/tgkWFgjdpqh8qzZRI9Mzu2PWKwI.jpg",
+        "character": "Hilary"
+      },
+      {
+        "id": 45160,
+        "media_type": "movie",
+        "title": "Imaginary Larry",
+        "credit_id": "52fe46b3c3a36847f810d3eb",
+        "release_date": "2009-01-01",
+        "original_title": "Imaginary Larry",
+        "adult": false,
+        "poster_path": "/qbL9my8O1IT1hwoHMlDbNxyITRX.jpg",
+        "character": "Betsy"
+      },
+      {
+        "id": 45164,
+        "media_type": "movie",
+        "title": "Life is Short",
+        "credit_id": "52fe46b3c3a36847f810d469",
+        "release_date": "2006-09-01",
+        "original_title": "Life is Short",
+        "adult": false,
+        "poster_path": "/8rP56UN1kNvMn3dFlhfdmjIbZB1.jpg",
+        "character": "Lilly"
+      },
+      {
+        "id": 18405,
+        "media_type": "movie",
+        "title": "The Last House on the Left",
+        "credit_id": "52fe47799251416c7509a9df",
+        "release_date": "2009-03-12",
+        "original_title": "The Last House on the Left",
+        "adult": false,
+        "poster_path": "/tpjP9MLDRq6aC1MTpFcJEOYOGtj.jpg",
+        "character": "Sadie"
+      },
+      {
+        "id": 91739,
+        "media_type": "movie",
+        "title": "Much Ado About Nothing",
+        "credit_id": "52fe48e39251416c750b67e1",
+        "release_date": "2012-09-08",
+        "original_title": "Much Ado About Nothing",
+        "adult": false,
+        "poster_path": "/6UrtVVSv4dDOv1cEIbhgsAsBB65.jpg",
+        "character": "Conrade"
+      },
+      {
+        "id": 142008,
+        "media_type": "movie",
+        "title": "A Good Funeral",
+        "credit_id": "52fe4ac99251416c750ee0df",
+        "release_date": "2009-05-08",
+        "original_title": "A Good Funeral",
+        "adult": false,
+        "poster_path": "/rnBG5YP58o3uaQvcbwpNbFbcOaG.jpg",
+        "character": "Polly"
+      },
+      {
+        "id": 70,
+        "media_type": "movie",
+        "title": "Million Dollar Baby",
+        "credit_id": "52fe4213c3a36847f8002029",
+        "release_date": "2004-12-14",
+        "original_title": "Million Dollar Baby",
+        "adult": false,
+        "poster_path": "/h4VZKi2Jt4VoBYJmtC4c3bO8KqM.jpg",
+        "character": "Mardell Fitzgerald"
+      },
+      {
+        "id": 159092,
+        "media_type": "movie",
+        "title": "Hell Baby",
+        "credit_id": "52fe4c039251416c910ecd19",
+        "release_date": "2013-09-06",
+        "original_title": "Hell Baby",
+        "adult": false,
+        "poster_path": "/wUyEk4Q8udCbaTLHGMQWhUqvwfA.jpg",
+        "character": "Marjorie"
+      },
+      {
+        "id": 218284,
+        "media_type": "movie",
+        "title": "Nuthin' But a Glee Thang",
+        "credit_id": "52fe4e49c3a368484e218457",
+        "release_date": "2011-01-01",
+        "original_title": "Nuthin' But a Glee Thang",
+        "adult": false,
+        "poster_path": "/hKmsu4BtjNzyGeLVqJ7lWeKdddD.jpg",
+        "character": "Herself"
+      },
+      {
+        "id": 263629,
+        "media_type": "movie",
+        "title": "Monsters Vs Aliens: Cloning Around",
+        "credit_id": "5343e9620e0a265e4b0009c4",
+        "release_date": "2013-10-15",
+        "original_title": "Monsters Vs Aliens: Cloning Around",
+        "adult": false,
+        "poster_path": "/ygk2MbBffflmDDO2VDwJSH0GlP5.jpg",
+        "character": ""
+      },
+      {
+        "id": 229703,
+        "media_type": "movie",
+        "title": "Escape from Polygamy",
+        "credit_id": "52fe4efd9251416c75169633",
+        "release_date": "2013-08-24",
+        "original_title": "Escape from Polygamy",
+        "adult": false,
+        "poster_path": "/39fZlh76vcTXKPK3YXBPy1XNdC9.jpg",
+        "character": "Kayla"
+      },
+      {
+        "id": 17740,
+        "media_type": "movie",
+        "title": "Powder Blue",
+        "credit_id": "52fe8953c3a3683316001607",
+        "release_date": "2009-05-08",
+        "original_title": "Powder Blue",
+        "adult": false,
+        "poster_path": "/im5BW4Okr3Xxc9k7km0yS5GO7su.jpg",
+        "character": "Nicole"
+      },
+      {
+        "id": 82679,
+        "media_type": "movie",
+        "title": "Fun Size",
+        "credit_id": "52fe48689251416c9108b603",
+        "release_date": "2012-10-26",
+        "original_title": "Fun Size",
+        "adult": false,
+        "poster_path": "/e1msV45Ntp0IqlaZhMZomSR9qQv.jpg",
+        "character": "Galaxy Scout"
+      },
+      {
+        "id": 32298,
+        "media_type": "movie",
+        "title": "Seeing Other People",
+        "credit_id": "5399a7ae0e0a263e39002032",
+        "release_date": "2004-01-01",
+        "original_title": "Seeing Other People",
+        "adult": false,
+        "poster_path": "/65wiBeo8CzCmBb0VHYjIztlpYu.jpg",
+        "character": "Girl Kissing Ed"
+      },
+      {
+        "id": 1418,
+        "media_type": "tv",
+        "episode_count": 2,
+        "credit_id": "5256cfc419c2956ff60a09bb",
+        "name": "The Big Bang Theory",
+        "poster_path": "/mYOWdfjuYqiZC1VS2SPefW3g38Q.jpg",
+        "original_name": "The Big Bang Theory",
+        "first_air_date": "2007-09-24",
+        "character": ""
+      },
+      {
+        "id": 89,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5253371419c295794004629f",
+        "name": "Titus",
+        "poster_path": "/wVjPTHrv6oyRp3gCtsMbXhUFodz.jpg",
+        "original_name": "Titus",
+        "first_air_date": "2000-03-20",
+        "character": ""
+      },
+      {
+        "id": 21708,
+        "media_type": "tv",
+        "episode_count": 11,
+        "credit_id": "52586aed760ee346611b2fee",
+        "name": "Girltrash!",
+        "poster_path": "/4H1dSOIw5lixsy80SQQY9Twj1OQ.jpg",
+        "original_name": "Girltrash!",
+        "first_air_date": "2007-06-10",
+        "character": ""
+      },
+      {
+        "id": 60789,
+        "media_type": "tv",
+        "episode_count": 53,
+        "credit_id": "5380c7a80e0a2624b70083ac",
+        "name": "Monsters vs. Aliens",
+        "poster_path": "/aA3Jcx2RKZSX10Dr0DkFQZaYync.jpg",
+        "original_name": "Monsters vs. Aliens",
+        "first_air_date": "2013-03-23",
+        "character": "Susan Murphy"
+      }
+    ],
+    "crew": [
+      {
+        "id": 218284,
+        "media_type": "movie",
+        "title": "Nuthin' But a Glee Thang",
+        "credit_id": "52fe4e49c3a368484e218481",
+        "department": "Writing",
+        "release_date": "2011-01-01",
+        "original_title": "Nuthin' But a Glee Thang",
+        "job": "Writer",
+        "adult": false,
+        "poster_path": "/hKmsu4BtjNzyGeLVqJ7lWeKdddD.jpg"
+      },
+      {
+        "id": 45160,
+        "media_type": "movie",
+        "title": "Imaginary Larry",
+        "credit_id": "52fe46b2c3a36847f810d3d5",
+        "department": "Directing",
+        "release_date": "2009-01-01",
+        "original_title": "Imaginary Larry",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/qbL9my8O1IT1hwoHMlDbNxyITRX.jpg"
+      },
+      {
+        "id": 45160,
+        "media_type": "movie",
+        "title": "Imaginary Larry",
+        "credit_id": "52fe46b2c3a36847f810d3e1",
+        "department": "Writing",
+        "release_date": "2009-01-01",
+        "original_title": "Imaginary Larry",
+        "job": "Writer",
+        "adult": false,
+        "poster_path": "/qbL9my8O1IT1hwoHMlDbNxyITRX.jpg"
+      },
+      {
+        "id": 45164,
+        "media_type": "movie",
+        "title": "Life is Short",
+        "credit_id": "52fe46b3c3a36847f810d451",
+        "department": "Directing",
+        "release_date": "2006-09-01",
+        "original_title": "Life is Short",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/8rP56UN1kNvMn3dFlhfdmjIbZB1.jpg"
+      },
+      {
+        "id": 45164,
+        "media_type": "movie",
+        "title": "Life is Short",
+        "credit_id": "52fe46b3c3a36847f810d45d",
+        "department": "Writing",
+        "release_date": "2006-09-01",
+        "original_title": "Life is Short",
+        "job": "Writer",
+        "adult": false,
+        "poster_path": "/8rP56UN1kNvMn3dFlhfdmjIbZB1.jpg"
+      }
+    ]
+  },
+  "name": "Riki Lindhome",
+  "place_of_birth": "Portville, New York, USA",
+  "popularity": "1.03375009277038"
+}

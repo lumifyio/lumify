@@ -44,4 +44,8 @@ public interface User extends Serializable {
     public JSONObject getUiPreferences();
 
     public Set<Privilege> getPrivileges();
+
+    public String getPasswordResetToken();
+
+    public Date getPasswordResetTokenExpirationDate();
 }

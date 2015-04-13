@@ -1,0 +1,326 @@
+{
+  "budget": 2135161,
+  "vote_average": 7.7,
+  "backdrop_path": "/bskL6AmfHEOUP1WXWpJR3HUP7aW.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 10748,
+      "name": "Suspense"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6929,
+        "order": 0,
+        "credit_id": "52fe424bc3a36847f80131b1",
+        "name": "Tippi Hedren",
+        "cast_id": 4,
+        "profile_path": "/5piyjLaNRESJZ2Q8comMEjXqZBW.jpg",
+        "character": "Marnie Edgar/Margaret Edgar/Peggy Nicholson/Mary Taylor"
+      },
+      {
+        "id": 738,
+        "order": 1,
+        "credit_id": "52fe424bc3a36847f80131b5",
+        "name": "Sean Connery",
+        "cast_id": 5,
+        "profile_path": "/ce84udJZ9QRSR44jxwK2apM3DM8.jpg",
+        "character": "Mark Rutland"
+      },
+      {
+        "id": 6930,
+        "order": 2,
+        "credit_id": "52fe424bc3a36847f80131b9",
+        "name": "Diane Baker",
+        "cast_id": 6,
+        "profile_path": "/pExT2sv2tCRBxNzGKKNf2cdYI2q.jpg",
+        "character": "Lil Mainwaring"
+      },
+      {
+        "id": 6931,
+        "order": 3,
+        "credit_id": "52fe424bc3a36847f80131bd",
+        "name": "Martin Gabel",
+        "cast_id": 7,
+        "profile_path": "/xIXlyqLPUa7rBGzUGL4HFxpPFrs.jpg",
+        "character": "Sidney Strutt"
+      },
+      {
+        "id": 6932,
+        "order": 4,
+        "credit_id": "52fe424bc3a36847f80131c1",
+        "name": "Louise Latham",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Bernice Edgar"
+      },
+      {
+        "id": 6933,
+        "order": 5,
+        "credit_id": "52fe424bc3a36847f80131c5",
+        "name": "Alan Napier",
+        "cast_id": 9,
+        "profile_path": "/mmOemlQeMp0ViF4cy8QL1bArm4y.jpg",
+        "character": "Mr. Rutland"
+      },
+      {
+        "id": 117049,
+        "order": 6,
+        "credit_id": "52fe424bc3a36847f80131f9",
+        "name": "Bob Sweeney",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Cousin Bob"
+      },
+      {
+        "id": 101901,
+        "order": 7,
+        "credit_id": "52fe424bc3a36847f80131fd",
+        "name": "Milton Selzer",
+        "cast_id": 19,
+        "profile_path": "/104NuoOSNK1pDgCgUjYqP2jsqNF.jpg",
+        "character": "Man at Track"
+      },
+      {
+        "id": 33479,
+        "order": 8,
+        "credit_id": "52fe424bc3a36847f8013201",
+        "name": "Henry Beckman",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "First Detective"
+      },
+      {
+        "id": 17662,
+        "order": 9,
+        "credit_id": "52fe424bc3a36847f8013205",
+        "name": "Edith Evanson",
+        "cast_id": 21,
+        "profile_path": "/nocf7KthPB0tKaip5KGJ5SilfAr.jpg",
+        "character": "Rita - Cleaning Woman"
+      },
+      {
+        "id": 16131,
+        "order": 10,
+        "credit_id": "52fe424bc3a36847f8013209",
+        "name": "Mariette Hartley",
+        "cast_id": 22,
+        "profile_path": "/XYce78iWmgYZMoODTCPQVRcyUt.jpg",
+        "character": "Susan Clabon"
+      },
+      {
+        "id": 6905,
+        "order": 11,
+        "credit_id": "52fe424bc3a36847f801320d",
+        "name": "Bruce Dern",
+        "cast_id": 23,
+        "profile_path": "/fYhCiXGBARWUevnWDkeCEpwi4h4.jpg",
+        "character": "Sailor"
+      },
+      {
+        "id": 131272,
+        "order": 12,
+        "credit_id": "52fe424bc3a36847f8013211",
+        "name": "S. John Launer",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Sam Ward"
+      },
+      {
+        "id": 153336,
+        "order": 13,
+        "credit_id": "52fe424bc3a36847f8013215",
+        "name": "Meg Wyllie",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Mrs. Turpin"
+      },
+      {
+        "id": 2174,
+        "order": 14,
+        "credit_id": "52fe424bc3a36847f8013219",
+        "name": "Kimberly Beck",
+        "cast_id": 26,
+        "profile_path": "/wt7KIBun88QLlxlXnPj7Tp9lwkB.jpg",
+        "character": "Jessie"
+      },
+      {
+        "id": 157211,
+        "order": 15,
+        "credit_id": "52fe424bc3a36847f801321d",
+        "name": "Rupert Crosse",
+        "cast_id": 27,
+        "profile_path": "/FM92sq0eXQHLmxFyG1fmSBBqSi.jpg",
+        "character": "Office worker teasing the cleaning lady"
+      },
+      {
+        "id": 102448,
+        "order": 16,
+        "credit_id": "52fe424bc3a36847f8013221",
+        "name": "Melody Thomas Scott",
+        "cast_id": 28,
+        "profile_path": "/xcNH7S2qq9y3W1sF0nMRh9on0vY.jpg",
+        "character": "Marnie (as a child)"
+      },
+      {
+        "id": 94114,
+        "order": 17,
+        "credit_id": "52fe424bc3a36847f8013225",
+        "name": "Lillian Bronson",
+        "cast_id": 29,
+        "profile_path": "/uz7DN1AwCjHBsvdt1J8wTVVcL7U.jpg",
+        "character": "Mrs. Maitland"
+      },
+      {
+        "id": 1130451,
+        "order": 18,
+        "credit_id": "52fe424bc3a36847f8013229",
+        "name": "Kenner G. Kemp",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Party Guest"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2636,
+        "credit_id": "52fe424bc3a36847f80131a1",
+        "department": "Directing",
+        "name": "Alfred Hitchcock",
+        "job": "Director",
+        "profile_path": "/ezvFh9lBCp9CFNMW6dsTLGhn3Lv.jpg"
+      },
+      {
+        "id": 6927,
+        "credit_id": "52fe424bc3a36847f80131a7",
+        "department": "Writing",
+        "name": "Winston Graham",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 6928,
+        "credit_id": "52fe424bc3a36847f80131ad",
+        "department": "Writing",
+        "name": "Jay Presson Allen",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 2636,
+        "credit_id": "52fe424bc3a36847f80131cb",
+        "department": "Production",
+        "name": "Alfred Hitchcock",
+        "job": "Producer",
+        "profile_path": "/ezvFh9lBCp9CFNMW6dsTLGhn3Lv.jpg"
+      },
+      {
+        "id": 1045,
+        "credit_id": "52fe424bc3a36847f80131d1",
+        "department": "Sound",
+        "name": "Bernard Herrmann",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2654,
+        "credit_id": "52fe424bc3a36847f80131d7",
+        "department": "Camera",
+        "name": "Robert Burks",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2655,
+        "credit_id": "52fe424bc3a36847f80131dd",
+        "department": "Editing",
+        "name": "George Tomasini",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2657,
+        "credit_id": "52fe424bc3a36847f80131e3",
+        "department": "Art",
+        "name": "Robert F. Boyle",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6934,
+        "credit_id": "52fe424bc3a36847f80131e9",
+        "department": "Art",
+        "name": "George Milo",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 6935,
+        "credit_id": "52fe424bc3a36847f80131ef",
+        "department": "Production",
+        "name": "Hilton A. Green",
+        "job": "Unit Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 7394,
+        "credit_id": "52fe424bc3a36847f80131f5",
+        "department": "Writing",
+        "name": "Evan Hunter",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 130,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 506,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Marnie",
+  "overview": "Marnie is a beautiful kleptomaniac who is in love with businessman Mark Rutland. Marnie who is a compulsive thief is being watched by her new boss Mark who suspects her of stealing from him and thus decides to blackmail her in the most unusual way. A psychological thriller from Alfred Hitchcock based on a novel of the same name by Winston Graham.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0058329",
+  "release_date": "1964-07-22",
+  "original_title": "Marnie",
+  "vote_count": 15,
+  "poster_path": "/qyP5Fq36OLmSSys2gXwUvm3Ezdp.jpg",
+  "tagline": "Thief... Liar... Cheat... she was all of these and he knew it!",
+  "revenue": 7000000,
+  "popularity": "0.917297302371567"
+}

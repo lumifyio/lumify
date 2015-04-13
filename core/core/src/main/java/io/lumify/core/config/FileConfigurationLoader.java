@@ -1,53 +1,106 @@
 package io.lumify.core.config;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.ProcessUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Searches for lumify configuration directories in this order:
+ * - ${ENV_LUMIFY_DIR}
+ * - ${user.home}/.lumify
+ * - ${appdata}/Lumify
+ * - DEFAULT_UNIX_LOCATION or DEFAULT_WINDOWS_LOCATION
+ */
 public class FileConfigurationLoader extends ConfigurationLoader {
     /**
      * !!! DO NOT DEFINE A LOGGER here. This class get loaded very early in the process and we don't want to the logger to be initialized yet **
      */
-    public static final String ENV_CONFIGURATION_LOCATION = "LUMIFY_CONFIGURATION_LOCATION";
-    public static final String DEFAULT_CONFIGURATION_LOCATION = "/opt/lumify/config/";
+    public static final String ENV_LUMIFY_DIR = "LUMIFY_DIR";
+    public static final String DEFAULT_UNIX_LOCATION = "/opt/lumify/";
+    public static final String DEFAULT_WINDOWS_LOCATION = "c:/opt/lumify/";
 
     public FileConfigurationLoader(Map initParameters) {
         super(initParameters);
     }
 
     public Configuration createConfiguration() {
-        File configDirectory = getConfigurationDirectory();
-        return load(configDirectory);
+        final Map<String, String> properties = new HashMap<>();
+        List<File> configDirectories = getLumifyDirectoriesFromLeastPriority("config");
+        if (configDirectories.size() == 0) {
+            throw new LumifyException("Could not find any valid config directories.");
+        }
+        for (File directory : configDirectories) {
+            Map<String, String> directoryProperties = loadDirectory(directory);
+            properties.putAll(directoryProperties);
+        }
+        return new Configuration(this, properties);
     }
 
-    private File getConfigurationDirectory() {
-        String configDirectory = System.getenv(ENV_CONFIGURATION_LOCATION);
-        if (configDirectory == null) {
-            configDirectory = DEFAULT_CONFIGURATION_LOCATION;
-        }
-
-        if (configDirectory.startsWith("file://")) {
-            configDirectory = configDirectory.substring("file://".length());
-        }
-
-        return new File(configDirectory);
+    public static List<File> getLumifyDirectoriesFromMostPriority(String subDirectory) {
+        return Lists.reverse(getLumifyDirectoriesFromLeastPriority(subDirectory));
     }
 
-    public Configuration load(File configDirectory) {
+    public static List<File> getLumifyDirectoriesFromLeastPriority(String subDirectory) {
+        List<File> results = new ArrayList<>();
+
+        if (ProcessUtil.isWindows()) {
+            addLumifySubDirectory(results, DEFAULT_WINDOWS_LOCATION, subDirectory);
+        } else {
+            addLumifySubDirectory(results, DEFAULT_UNIX_LOCATION, subDirectory);
+        }
+
+        String appData = System.getProperty("appdata");
+        if (appData != null && appData.length() > 0) {
+            addLumifySubDirectory(results, new File(new File(appData), "Lumify").getAbsolutePath(), subDirectory);
+        }
+
+        String userHome = System.getProperty("user.home");
+        if (userHome != null && userHome.length() > 0) {
+            addLumifySubDirectory(results, new File(new File(userHome), ".lumify").getAbsolutePath(), subDirectory);
+        }
+
+        addLumifySubDirectory(results, System.getenv(ENV_LUMIFY_DIR), subDirectory);
+
+        return ImmutableList.copyOf(results);
+    }
+
+    private static void addLumifySubDirectory(List<File> results, String location, String subDirectory) {
+        if (location == null || location.trim().length() == 0) {
+            return;
+        }
+
+        location = location.trim();
+        if (location.startsWith("file://")) {
+            location = location.substring("file://".length());
+        }
+
+        File dir = new File(new File(location), subDirectory);
+        if (!dir.exists()) {
+            return;
+        }
+
+        results.add(dir);
+    }
+
+    private static Map<String, String> loadDirectory(File configDirectory) {
         LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileConfigurationLoader.class);
 
         LOGGER.debug("Attempting to load configuration from directory: %s", configDirectory);
         if (!configDirectory.exists()) {
-            throw new RuntimeException("Could not find config directory: " + configDirectory);
+            throw new LumifyException("Could not find config directory: " + configDirectory);
         }
 
         File[] files = configDirectory.listFiles();
         if (files == null) {
-            throw new RuntimeException("Could not parse directory name: " + configDirectory);
+            throw new LumifyException("Could not parse directory name: " + configDirectory);
         }
         Arrays.sort(files, new Comparator<File>() {
             @Override
@@ -55,7 +108,7 @@ public class FileConfigurationLoader extends ConfigurationLoader {
                 return o1.getName().compareTo(o2.getName());
             }
         });
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = new HashMap<>();
         for (File f : files) {
             if (!f.getAbsolutePath().endsWith(".properties")) {
                 continue;
@@ -66,20 +119,19 @@ public class FileConfigurationLoader extends ConfigurationLoader {
                     properties.put(filePropertyEntry.getKey(), filePropertyEntry.getValue());
                 }
             } catch (IOException ex) {
-                throw new RuntimeException("Could not load config file: " + f.getAbsolutePath(), ex);
+                throw new LumifyException("Could not load config file: " + f.getAbsolutePath(), ex);
             }
         }
 
-        return new Configuration(this, properties);
+        return properties;
     }
 
     private static Map<String, String> loadFile(final String fileName) throws IOException {
         LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileConfigurationLoader.class);
 
-        Map<String, String> results = new HashMap<String, String>();
+        Map<String, String> results = new HashMap<>();
         LOGGER.info("Loading config file: %s", fileName);
-        FileInputStream in = new FileInputStream(fileName);
-        try {
+        try (FileInputStream in = new FileInputStream(fileName)) {
             Properties properties = new Properties();
             properties.load(in);
             for (Map.Entry<Object, Object> prop : properties.entrySet()) {
@@ -89,14 +141,22 @@ public class FileConfigurationLoader extends ConfigurationLoader {
             }
         } catch (Exception e) {
             LOGGER.info("Could not load configuration file: %s", fileName);
-        } finally {
-            in.close();
         }
         return results;
     }
 
     @Override
     public File resolveFileName(String fileName) {
-        return new File(getConfigurationDirectory(), fileName);
+        List<File> configDirectories = getLumifyDirectoriesFromMostPriority("config");
+        if (configDirectories.size() == 0) {
+            throw new LumifyException("Could not find any valid config directories.");
+        }
+        for (File directory : configDirectories) {
+            File f = new File(directory, fileName);
+            if (f.exists()) {
+                return f;
+            }
+        }
+        return new File(configDirectories.get(0), fileName);
     }
 }

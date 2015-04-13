@@ -1,0 +1,204 @@
+{
+  "budget": 600000,
+  "vote_average": 7,
+  "backdrop_path": "/44NAeOCZsmH5h5BsoGuRkGZM1IJ.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4618,
+        "order": 0,
+        "credit_id": "52fe4237c3a36847f800cba1",
+        "name": "Steffi Kühnert",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Ellen"
+      },
+      {
+        "id": 4619,
+        "order": 1,
+        "credit_id": "52fe4237c3a36847f800cba5",
+        "name": "Gabriela Maria Schmeide",
+        "cast_id": 4,
+        "profile_path": "/vkWh5WdOqY917xu9GWW8cA3ysln.jpg",
+        "character": "Katrin"
+      },
+      {
+        "id": 4620,
+        "order": 2,
+        "credit_id": "52fe4237c3a36847f800cba9",
+        "name": "Thorsten Merten",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Christian"
+      },
+      {
+        "id": 4621,
+        "order": 3,
+        "credit_id": "52fe4237c3a36847f800cbad",
+        "name": "Axel Prahl",
+        "cast_id": 6,
+        "profile_path": "/llAu0AMON07SiEgWeDJWzpVcpY.jpg",
+        "character": "Uwe"
+      },
+      {
+        "id": 4622,
+        "order": 4,
+        "credit_id": "52fe4237c3a36847f800cbb1",
+        "name": "Janko Brett",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Janko"
+      },
+      {
+        "id": 4623,
+        "order": 5,
+        "credit_id": "52fe4237c3a36847f800cbb5",
+        "name": "Miro De Vittoris",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Bauunternehmer"
+      },
+      {
+        "id": 4624,
+        "order": 6,
+        "credit_id": "52fe4237c3a36847f800cbb9",
+        "name": "Knut Elstermann",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Knut"
+      },
+      {
+        "id": 4625,
+        "order": 7,
+        "credit_id": "52fe4237c3a36847f800cbbd",
+        "name": "Carmen Engler",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Maklerin 2"
+      },
+      {
+        "id": 4626,
+        "order": 8,
+        "credit_id": "52fe4237c3a36847f800cbc1",
+        "name": "Frank Fuhrmann",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Zahnarzt"
+      },
+      {
+        "id": 4627,
+        "order": 9,
+        "credit_id": "52fe4237c3a36847f800cbc5",
+        "name": "Jens Graßmehl",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Jens"
+      },
+      {
+        "id": 4633,
+        "order": 10,
+        "credit_id": "52fe4237c3a36847f800cbe1",
+        "name": "Julia Ziesche",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Julia"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4617,
+        "credit_id": "52fe4237c3a36847f800cb97",
+        "department": "Directing",
+        "name": "Andreas Dresen",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 4617,
+        "credit_id": "52fe4237c3a36847f800cb9d",
+        "department": "Writing",
+        "name": "Andreas Dresen",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4629,
+        "credit_id": "52fe4237c3a36847f800cbcb",
+        "department": "Sound",
+        "name": "17 Hippies",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4630,
+        "credit_id": "52fe4237c3a36847f800cbd1",
+        "department": "Camera",
+        "name": "Michael Hammon",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4631,
+        "credit_id": "52fe4237c3a36847f800cbd7",
+        "department": "Editing",
+        "name": "Jörg Hauschild",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4632,
+        "credit_id": "52fe4237c3a36847f800cbdd",
+        "department": "Art",
+        "name": "Susanne Hopf",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5097,
+        "credit_id": "52fe4237c3a36847f800cbe7",
+        "department": "Production",
+        "name": "Peter Rommel",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 111,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 316,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Grill Point",
+  "overview": "In the style of a documentary this tragic comedy tells the story of a relationship crisis between two married couples and their longing to break out of their miserable daily lives. In this East German post-wall movie Andreas Dresen introduces the sad everyday life of two couples from Frankfurt an der Oder in a honest and tolerable manner.",
+  "production_companies": [{
+    "id": 166,
+    "name": "Peter Rommel Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0304126",
+  "release_date": "2002-10-11",
+  "original_title": "Halbe Treppe",
+  "vote_count": 1,
+  "poster_path": "/lmEVpT6sqx5QKrdF206K3CTsEqx.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.264657671681192"
+}

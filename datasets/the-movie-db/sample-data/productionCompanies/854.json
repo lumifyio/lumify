@@ -1,0 +1,13 @@
+{
+  "id": 854,
+  "logo_path": null,
+  "description": null,
+  "name": "Sofica Europacorp",
+  "parent_company": {
+    "id": 6896,
+    "logo_path": null,
+    "name": "EuropaCorp"
+  },
+  "homepage": "http://www.europacorp.com/",
+  "headquarters": "Paris, Ile-de-France, France"
+}

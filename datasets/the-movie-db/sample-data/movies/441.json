@@ -1,0 +1,249 @@
+{
+  "budget": 6000000,
+  "vote_average": 6.3,
+  "backdrop_path": "/bpz7QxDnR5AjWS8PwUgfUJtF3D.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4687,
+        "order": 0,
+        "credit_id": "52fe4244c3a36847f8010e4b",
+        "name": "Patricia Arquette",
+        "cast_id": 3,
+        "profile_path": "/oFjHzvNTidwMuRpuG9drblMzIQu.jpg",
+        "character": "Lila Jute"
+      },
+      {
+        "id": 504,
+        "order": 2,
+        "credit_id": "52fe4244c3a36847f8010e4f",
+        "name": "Tim Robbins",
+        "cast_id": 5,
+        "profile_path": "/tuZCyZVVbHcpvtCgriSp5RRPwMX.jpg",
+        "character": "Dr. Nathan Bronfman"
+      },
+      {
+        "id": 502,
+        "order": 3,
+        "credit_id": "52fe4244c3a36847f8010e53",
+        "name": "Miranda Otto",
+        "cast_id": 6,
+        "profile_path": "/l3BzUjJMK3JbqvCiCIFP4beMChS.jpg",
+        "character": "Gabrielle"
+      },
+      {
+        "id": 5958,
+        "order": 4,
+        "credit_id": "52fe4244c3a36847f8010ea5",
+        "name": "Hilary Duff",
+        "cast_id": 20,
+        "profile_path": "/tMKrIVHzEHs7l0J0UV2Ue2gzI4x.jpg",
+        "character": "Young Lila Jute"
+      },
+      {
+        "id": 5959,
+        "order": 5,
+        "credit_id": "52fe4244c3a36847f8010ea9",
+        "name": "Bobby Pyle",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Young Puff"
+      },
+      {
+        "id": 5960,
+        "order": 6,
+        "credit_id": "52fe4244c3a36847f8010ead",
+        "name": "Mary Kay Place",
+        "cast_id": 22,
+        "profile_path": "/hWD8EiKv8x0fdiTJVwbrgghBwDE.jpg",
+        "character": "Nathan's Mother"
+      },
+      {
+        "id": 5694,
+        "order": 7,
+        "credit_id": "52fe4244c3a36847f8010eb1",
+        "name": "Robert Forster",
+        "cast_id": 23,
+        "profile_path": "/82v4FngEiGvtTHQm399t6eaLfXw.jpg",
+        "character": "Nathan's Father"
+      },
+      {
+        "id": 7026,
+        "order": 9,
+        "credit_id": "52fe4244c3a36847f8010eb5",
+        "name": "Rhys Ifans",
+        "cast_id": 25,
+        "profile_path": "/p0rbwzc4Yj2oHW0iiln0X0Wx9EK.jpg",
+        "character": "Puff"
+      }
+    ],
+    "crew": [
+      {
+        "id": 202,
+        "credit_id": "52fe4244c3a36847f8010e41",
+        "department": "Writing",
+        "name": "Charlie Kaufman",
+        "job": "Screenplay",
+        "profile_path": "/v5Zc2aplTL0y38Oe91zGnVBUtYi.jpg"
+      },
+      {
+        "id": 201,
+        "credit_id": "52fe4244c3a36847f8010e47",
+        "department": "Directing",
+        "name": "Michel Gondry",
+        "job": "Director",
+        "profile_path": "/45eLOWiKfxUn10oRg1XzszqtSv1.jpg"
+      },
+      {
+        "id": 321,
+        "credit_id": "52fe4244c3a36847f8010e59",
+        "department": "Production",
+        "name": "Anthony Bregman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5952,
+        "credit_id": "52fe4244c3a36847f8010e5f",
+        "department": "Production",
+        "name": "Ted Hope",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5953,
+        "credit_id": "52fe4244c3a36847f8010e65",
+        "department": "Production",
+        "name": "Spike Jonze",
+        "job": "Producer",
+        "profile_path": "/1gsdqWauZctl7h65N1wg4IKNmhl.jpg"
+      },
+      {
+        "id": 202,
+        "credit_id": "52fe4244c3a36847f8010e6b",
+        "department": "Production",
+        "name": "Charlie Kaufman",
+        "job": "Producer",
+        "profile_path": "/v5Zc2aplTL0y38Oe91zGnVBUtYi.jpg"
+      },
+      {
+        "id": 4231,
+        "credit_id": "52fe4244c3a36847f8010e71",
+        "department": "Production",
+        "name": "Julie Fong",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5912,
+        "credit_id": "52fe4244c3a36847f8010e77",
+        "department": "Sound",
+        "name": "Graeme Revell",
+        "job": "Original Music Composer",
+        "profile_path": "/g2Nhv2OCV8ygLYxkeDbhlqnrv7Z.jpg"
+      },
+      {
+        "id": 966,
+        "credit_id": "52fe4244c3a36847f8010e7d",
+        "department": "Camera",
+        "name": "Tim Maurice-Jones",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5955,
+        "credit_id": "52fe4244c3a36847f8010e83",
+        "department": "Editing",
+        "name": "Russell Icke",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 546,
+        "credit_id": "52fe4244c3a36847f8010e89",
+        "department": "Production",
+        "name": "Jeanne McCarthy",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1783,
+        "credit_id": "52fe4244c3a36847f8010e8f",
+        "department": "Art",
+        "name": "K.K. Barrett",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5956,
+        "credit_id": "52fe4244c3a36847f8010e95",
+        "department": "Art",
+        "name": "Peter Andrus",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5957,
+        "credit_id": "52fe4244c3a36847f8010e9b",
+        "department": "Art",
+        "name": "Gene Serdena",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 5215,
+        "credit_id": "52fe4244c3a36847f8010ea1",
+        "department": "Costume & Make-Up",
+        "name": "Nancy Steiner",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 96,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.humannaturemovie.com/",
+  "id": 441,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Human Nature",
+  "overview": "A philosophical burlesque, Human Nature follows the ups and downs of an obsessive scientist, a female naturalist, and the man they discover, born and raised in the wild. As scientist Nathan trains the wild man, Puff, in the ways of the world - starting with table manners - Nathan's lover Lila fights to preserve the man's simian past, which represents a freedom enviable to most.",
+  "production_companies": [{
+    "id": 191,
+    "name": "Senator Film Produktion"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0219822",
+  "release_date": "2001-05-18",
+  "original_title": "Human Nature",
+  "vote_count": 8,
+  "poster_path": "/2NGy7wfkYkbgFHnDJhYhonqHRrA.jpg",
+  "tagline": "In the Interest of Civilization... Conform.",
+  "revenue": 705308,
+  "popularity": "0.283828577114508"
+}

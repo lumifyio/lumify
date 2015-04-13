@@ -2,17 +2,19 @@ define([
     'require',
     'flight/lib/component',
     'hbs!./searchTpl',
-    'tpl!util/alert'
+    'tpl!util/alert',
+    'util/withDataRequest'
 ], function(
     require,
     defineComponent,
     template,
-    alertTemplate) {
+    alertTemplate,
+    withDataRequest) {
     'use strict';
 
     var SEARCH_TYPES = ['Lumify', 'Workspace'];
 
-    return defineComponent(Search);
+    return defineComponent(Search, withDataRequest);
 
     function Search() {
 
@@ -52,7 +54,7 @@ define([
             this.on('clearSearch', this.onClearSearch);
             this.on('searchRequestBegan', this.onSearchResultsBegan);
             this.on('searchRequestCompleted', this.onSearchResultsCompleted);
-            this.on(document, 'searchByEntity', this.onSearchByEntity);
+            this.on(document, 'searchForPhrase', this.onSearchForPhrase);
             this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
             this.on(document, 'searchPaneVisible', this.onSearchPaneVisible);
         });
@@ -85,7 +87,7 @@ define([
             return d;
         };
 
-        this.onSearchByEntity = function(event, data) {
+        this.onSearchForPhrase = function(event, data) {
             var self = this;
 
             this.openSearchType('Lumify')
@@ -93,7 +95,7 @@ define([
                     var node = self.getSearchTypeNode();
                     self.trigger(node, 'clearSearch');
 
-                    self.setQueryVal(data.query).select();
+                    self.setQueryVal('"' + data.query.replace(/"/g, '\\"') + '"').select();
                     self.triggerQuerySubmit();
                 })
         };
@@ -145,27 +147,36 @@ define([
         };
 
         this.onFiltersChange = function(event, data) {
-            var hadFilters = this.hasFilters();
+            var self = this,
+                hadFilters = this.hasFilters();
 
             this.filters = data;
 
             var query = this.getQueryVal(),
                 hasFilters = this.hasFilters();
 
-            if (!query && hasFilters && data.setAsteriskSearchOnEmpty) {
-                this.select('querySelector').val('*');
-            }
+            this.dataRequest('config', 'properties')
+                .done(function(properties) {
+                    if (!query && hasFilters && data.setAsteriskSearchOnEmpty) {
+                        if (properties['search.disableWildcardSearch'] === 'true') {
+                            self.updateClearSearch();
+                            return;
+                        } else {
+                            self.select('querySelector').val('*');
+                        }
+                    }
 
-            if (query || hasFilters || hadFilters) {
-                if (data.options && data.options.isScrubbing) {
-                    this.triggerQueryUpdatedThrottled();
-                } else {
-                    this.triggerQueryUpdated();
-                }
-                this.triggerQuerySubmit();
-            }
+                    if (query || hasFilters || hadFilters) {
+                        if (data.options && data.options.isScrubbing) {
+                            self.triggerQueryUpdatedThrottled();
+                        } else {
+                            self.triggerQueryUpdated();
+                        }
+                        self.triggerQuerySubmit();
+                    }
 
-            this.updateClearSearch();
+                    self.updateClearSearch();
+                });
         };
 
         this.onQueryChange = function(event) {

@@ -5,11 +5,11 @@
     <parent>
         <artifactId>lumify-tools-group</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-rdf-import</artifactId>
+    <artifactId>lumify-tools-rdf-import</artifactId>
     <packaging>jar</packaging>
 
     <name>Lumify: Tools: RDF Import</name>
@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-rdf</artifactId>
+            <artifactId>lumify-gpw-rdf</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -63,6 +63,27 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                    <archive>
+                        <manifest>
+                            <mainClass>io.lumify.tools.RdfImport</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

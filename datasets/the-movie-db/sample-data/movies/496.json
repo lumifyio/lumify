@@ -1,0 +1,267 @@
+{
+  "budget": 18000000,
+  "vote_average": 6.1,
+  "backdrop_path": "/rSUX2EiFYuk2tzGSl5DGWS5olhj.jpg",
+  "genres": [{
+    "id": 35,
+    "name": "Comedy"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6730,
+        "order": 0,
+        "credit_id": "52fe424ac3a36847f8012b0b",
+        "name": "Sacha Baron Cohen",
+        "cast_id": 5,
+        "profile_path": "/9UWxlTsGAfRAcxG2LcUMbfR3FiF.jpg",
+        "character": "Borat Sagdiyev"
+      },
+      {
+        "id": 6734,
+        "order": 1,
+        "credit_id": "52fe424ac3a36847f8012b0f",
+        "name": "Ken Davitian",
+        "cast_id": 6,
+        "profile_path": "/kwZE1CPAHe7n3hxAwAFu7WGWSyD.jpg",
+        "character": "Azamat Bagatov"
+      },
+      {
+        "id": 6735,
+        "order": 2,
+        "credit_id": "52fe424ac3a36847f8012b13",
+        "name": "Luenell",
+        "cast_id": 7,
+        "profile_path": "/qU79UzQhwIgmTCi4HAMj5NOCT4J.jpg",
+        "character": "Luenell"
+      },
+      {
+        "id": 6736,
+        "order": 3,
+        "credit_id": "52fe424ac3a36847f8012b17",
+        "name": "Pamela Anderson",
+        "cast_id": 8,
+        "profile_path": "/vhY6Kag263PwZ3DXrgeTazKTzRw.jpg",
+        "character": "Herself"
+      },
+      {
+        "id": 1082650,
+        "order": 4,
+        "credit_id": "52fe424ac3a36847f8012b69",
+        "name": "Bob Barr",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Himself"
+      },
+      {
+        "id": 104882,
+        "order": 5,
+        "credit_id": "52fe424ac3a36847f8012b6d",
+        "name": "Alan Keyes",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Himself"
+      },
+      {
+        "id": 1123205,
+        "order": 6,
+        "credit_id": "52fe424ac3a36847f8012b71",
+        "name": "Carole De Saram",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Herself"
+      },
+      {
+        "id": 1123206,
+        "order": 7,
+        "credit_id": "52fe424ac3a36847f8012b75",
+        "name": "Mitchell Falk",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Prime Minister of Kazakhstan"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6730,
+        "credit_id": "52fe424ac3a36847f8012af5",
+        "department": "Writing",
+        "name": "Sacha Baron Cohen",
+        "job": "Screenplay",
+        "profile_path": "/9UWxlTsGAfRAcxG2LcUMbfR3FiF.jpg"
+      },
+      {
+        "id": 6731,
+        "credit_id": "52fe424ac3a36847f8012afb",
+        "department": "Writing",
+        "name": "Anthony Hines",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6732,
+        "credit_id": "52fe424ac3a36847f8012b01",
+        "department": "Writing",
+        "name": "Peter Baynham",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6733,
+        "credit_id": "52fe424ac3a36847f8012b07",
+        "department": "Writing",
+        "name": "Dan Mazer",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6730,
+        "credit_id": "52fe424ac3a36847f8012b1d",
+        "department": "Production",
+        "name": "Sacha Baron Cohen",
+        "job": "Producer",
+        "profile_path": "/9UWxlTsGAfRAcxG2LcUMbfR3FiF.jpg"
+      },
+      {
+        "id": 6733,
+        "credit_id": "52fe424ac3a36847f8012b23",
+        "department": "Production",
+        "name": "Dan Mazer",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6737,
+        "credit_id": "52fe424ac3a36847f8012b29",
+        "department": "Production",
+        "name": "Jay Roach",
+        "job": "Producer",
+        "profile_path": "/raDxLyGeh9ODHeCdIuUgVEBjntj.jpg"
+      },
+      {
+        "id": 6738,
+        "credit_id": "52fe424ac3a36847f8012b2f",
+        "department": "Production",
+        "name": "Monica Levinson",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6739,
+        "credit_id": "52fe424ac3a36847f8012b35",
+        "department": "Sound",
+        "name": "Erran Baron Cohen",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6740,
+        "credit_id": "52fe424ac3a36847f8012b3b",
+        "department": "Camera",
+        "name": "Luke Geissbuhler",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6741,
+        "credit_id": "52fe424ac3a36847f8012b41",
+        "department": "Camera",
+        "name": "Anthony Hardwick",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6742,
+        "credit_id": "52fe424ac3a36847f8012b47",
+        "department": "Editing",
+        "name": "Craig Alpert",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6743,
+        "credit_id": "52fe424ac3a36847f8012b4d",
+        "department": "Costume & Make-Up",
+        "name": "Jason Alper",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6744,
+        "credit_id": "52fe424ac3a36847f8012b53",
+        "department": "Art",
+        "name": "David Maturana",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6745,
+        "credit_id": "52fe424ac3a36847f8012b59",
+        "department": "Sound",
+        "name": "Richard Henderson",
+        "job": "Music Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6746,
+        "credit_id": "52fe424ac3a36847f8012b5f",
+        "department": "Sound",
+        "name": "Jon Klein",
+        "job": "Boom Operator",
+        "profile_path": null
+      },
+      {
+        "id": 6767,
+        "credit_id": "52fe424ac3a36847f8012b65",
+        "department": "Directing",
+        "name": "Larry Charles",
+        "job": "Director",
+        "profile_path": "/s1XXpUPgaLzw0A8bPQor7oAh6HS.jpg"
+      }
+    ]
+  },
+  "runtime": 82,
+  "spoken_languages": [
+    {
+      "iso_639_1": "kk",
+      "name": "қазақ"
+    },
+    {
+      "iso_639_1": "he",
+      "name": "עִבְרִית"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.boratmovie.com/",
+  "id": 496,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Borat: Cultural Learnings of America for Make Benefit Glorious Nation of Kazakhstan",
+  "overview": "Kazakh journalist Borat Sagdiyev travels to America to make a documentary. As he zigzags across the nation, Borat meets real people in real situations with hysterical consequences. His backwards behavior generates strong reactions around him exposing prejudices and hypocrisies in American culture.",
+  "production_companies": [
+    {
+      "id": 20567,
+      "name": "Four By Two Productions"
+    },
+    {
+      "id": 306,
+      "name": "Twentieth Century Fox Film Corporation"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0443453",
+  "release_date": "2006-11-02",
+  "original_title": "Borat: Cultural Learnings of America for Make Benefit Glorious Nation of Kazakhstan",
+  "vote_count": 271,
+  "poster_path": "/czn1hU2hJ9ZnDSMvT9lKo261ABH.jpg",
+  "tagline": "Come to Kazakhstan, it's nice!",
+  "revenue": 128505958,
+  "popularity": "1.43166515617695"
+}

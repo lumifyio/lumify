@@ -57,6 +57,8 @@ require([
                 workspaceId: lumifyData.currentWorkspaceId,
                 vertexId: ''
             }));
+
+            this.onObjectsSelected(null, lumifyData.selectedObjects);
         });
 
         this.onEdit = function(event) {
@@ -71,11 +73,11 @@ require([
 
             this.handleSubmitButton(
                 button,
-                this.dataRequest('vertex', 'deleteProperty', {
-                    vertexId: this.$node.find('.vertexId').val(),
-                    property: li.data('property'),
-                    workspaceId: this.$node.find('.workspaceId').val()
-                })
+                this.dataRequest('vertex', 'deleteProperty',
+                    this.$node.find('.vertexId').val(),
+                    li.data('property'),
+                    this.$node.find('.workspaceId').val()
+                )
                     .then(function() {
                         li.removeClass('show-hover-items');
                         self.onLoad();
@@ -95,15 +97,18 @@ require([
             this.handleSubmitButton(
                 button,
 
-                this.dataRequest('vertex', 'setProperty', {
-                    vertexId: this.$node.find('.vertexId').val(),
-                    propertyKey: li.find('input[name=key]').val(),
-                    propertyName: property.name || li.find('input[name=name]').val(),
-                    value: li.find('input[name=value]').val(),
-                    visibilitySource: li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
-                    justificationText: 'admin graph vertex editor',
-                    metadata: JSON.parse(li.find('textarea[name=metadata]').val()),
-                }, this.$node.find('.workspaceId').val())
+                this.dataRequest('vertex', 'setProperty',
+                    this.$node.find('.vertexId').val(),
+                    {
+                        key: li.find('input[name=key]').val(),
+                        name: property.name || li.find('input[name=name]').val(),
+                        value: li.find('input[name=value]').val(),
+                        visibilitySource: li.find('textarea[name="http://lumify.io#visibilityJson"]').val(),
+                        justificationText: 'admin graph vertex editor',
+                        metadata: JSON.parse(li.find('textarea[name=metadata]').val())
+                    },
+                    this.$node.find('.workspaceId').val()
+                )
                     .then(function() {
                         if (li.closest('.collapsible').next('.collapsible').length) {
                             li.removeClass('editing');
@@ -195,6 +200,12 @@ require([
         };
 
         this.update = function(vertex) {
+            if (!vertex) {
+                this.showError('Vertex does not exist');
+                this.$node.find('section').remove();
+                return;
+            }
+
             var newVertex = vertex.id !== this.currentVertexId,
                 addNewText = i18n('admin.vertex.editor.addNewProperty.label');
 
@@ -290,13 +301,18 @@ require([
                                     var notMetadata = ['name', 'key', 'value', 'sandboxStatus',
                                         'http://lumify.io#visibilityJson',
                                         '_sourceMetadata',
-                                        '_justificationMetadata'
+                                        'http://lumify.io#justification'
                                     ];
 
                                     return _.chain(d)
                                         .clone()
                                         .tap(function(property) {
-                                            property.metadata = _.omit(property, notMetadata);
+                                            var vis = property.metadata &&
+                                                property.metadata['http://lumify.io#visibilityJson'];
+
+                                            property.metadata = _.omit(property.metadata, notMetadata);
+
+                                            property['http://lumify.io#visibilityJson'] = vis || { source:'' };
                                         })
                                         .pairs()
                                         .reject(function(pair) {
@@ -332,7 +348,7 @@ require([
                                         var display = {
                                             'http://lumify.io#visibilityJson':
                                                 i18n('admin.vertex.editor.visibility.label'),
-                                            _justificationMetadata:
+                                            'http://lumify.io#justification':
                                                 i18n('admin.vertex.editor.justification.label'),
                                             _sourceMetadata:
                                                 i18n('admin.vertex.editor.justification.label'),
@@ -342,7 +358,7 @@ require([
                                         this.textContent = (display[d[0]] || d[0]) + ' ';
                                         d3.select(this)
                                             .call(function() {
-                                                var isJustification = display[d[0]] === display._justificationMetadata,
+                                                var isJustification = display[d[0]] === display['http://lumify.io#justification'],
                                                     isMetadata = d[0] === 'metadata' || isJustification,
                                                     displayAsJson = _.isObject(d[1]),
                                                     value = d[0] === 'http://lumify.io#visibilityJson' ?

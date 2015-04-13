@@ -1,7 +1,7 @@
 
 var require = {
     baseUrl: 'jsc',
-    waitSeconds: 30,
+    waitSeconds: 0,
     paths: {
         'arbor': '../libs/cytoscape.js/lib/arbor',
         'async' : '../libs/requirejs-plugins/src/async',
@@ -49,6 +49,7 @@ var require = {
         'videojs': '../libs/video.js/dist/video-js/video',
     },
     shim: {
+        'arbor': { deps: ['jquery'] },
         'atmosphere': { init: function() { return $.atmosphere; }, deps:['jquery'] },
         'bootstrap': { exports:'window', deps:['jquery', 'jqueryui'] },
         'bootstrap-datepicker': { exports:'window', deps:['bootstrap'] },

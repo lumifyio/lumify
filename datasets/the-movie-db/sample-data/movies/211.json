@@ -1,0 +1,195 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/wtVSLm5ctFRqb4p0YNMSkdxTags.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 10236,
+        "order": 0,
+        "credit_id": "52fe4227c3a36847f8008097",
+        "name": "Jörg Schüttauf",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Martin"
+      },
+      {
+        "id": 10237,
+        "order": 1,
+        "credit_id": "52fe4227c3a36847f800809b",
+        "name": "Julia Jäger",
+        "cast_id": 8,
+        "profile_path": "/3dq4rPaKU7rUwB7epbR09gILxWs.jpg",
+        "character": "Manuela"
+      },
+      {
+        "id": 6085,
+        "order": 2,
+        "credit_id": "52fe4227c3a36847f800809f",
+        "name": "Tom Jahn",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Peter"
+      },
+      {
+        "id": 10238,
+        "order": 3,
+        "credit_id": "52fe4227c3a36847f80080a3",
+        "name": "Valentin Platareanu",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Victor"
+      },
+      {
+        "id": 10239,
+        "order": 4,
+        "credit_id": "52fe4227c3a36847f80080a7",
+        "name": "Edita Malovcic",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Ludmilla"
+      },
+      {
+        "id": 10240,
+        "order": 5,
+        "credit_id": "52fe4227c3a36847f80080ab",
+        "name": "Robert Lohr",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Wolfgang"
+      },
+      {
+        "id": 10241,
+        "order": 6,
+        "credit_id": "52fe4227c3a36847f80080af",
+        "name": "Robin Becker",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Rokko"
+      },
+      {
+        "id": 10242,
+        "order": 7,
+        "credit_id": "52fe4227c3a36847f80080b3",
+        "name": "Oscar Martinez",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Enrique"
+      },
+      {
+        "id": 10243,
+        "order": 8,
+        "credit_id": "52fe4227c3a36847f80080b7",
+        "name": "Carmen-Maja Antoni",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Bewährungshelferin"
+      },
+      {
+        "id": 10246,
+        "order": 9,
+        "credit_id": "52fe4227c3a36847f80080bb",
+        "name": "Dirk Borchardt",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Kurt Kanz"
+      }
+    ],
+    "crew": [
+      {
+        "id": 10230,
+        "credit_id": "52fe4227c3a36847f800807b",
+        "department": "Directing",
+        "name": "Hannes Stöhr",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 10231,
+        "credit_id": "52fe4227c3a36847f8008081",
+        "department": "Camera",
+        "name": "Florian Hoffmeister",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 10232,
+        "credit_id": "52fe4227c3a36847f8008087",
+        "department": "Sound",
+        "name": "Florian Appl",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 10234,
+        "credit_id": "52fe4227c3a36847f800808d",
+        "department": "Editing",
+        "name": "Anne Fabini",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 10235,
+        "credit_id": "52fe4227c3a36847f8008093",
+        "department": "Production",
+        "name": "Meike Kordes",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 10230,
+        "credit_id": "52fe4227c3a36847f80080c1",
+        "department": "Writing",
+        "name": "Hannes Stöhr",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 13529,
+        "credit_id": "52fe4227c3a36847f80080c7",
+        "department": "Production",
+        "name": "Gudrun Ruzicková-Steiner",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 90,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 211,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Berlin is in Germany",
+  "overview": "Berlin is in Germany is a tragic comedy in which an ex-prisoner from east Berlin must find his place in the newly united city. From Director Hannes Stöhr.",
+  "production_companies": [{
+    "id": 402,
+    "name": "Luna Filmproduktion"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0276820",
+  "release_date": "2001-11-01",
+  "original_title": "Berlin is in Germany",
+  "vote_count": 0,
+  "poster_path": "/4n8wwJ5ta3FWou0HGwwAKv577RN.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.492946659331775"
+}

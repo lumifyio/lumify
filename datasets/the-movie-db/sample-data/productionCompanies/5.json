@@ -1,0 +1,13 @@
+{
+  "id": 5,
+  "logo_path": "/mjUSfXXUhMiLAA1Zq1TfStNSoLR.png",
+  "description": "Columbia Pictures Industries, Inc. (CPII) is an American film production and distribution company. Columbia Pictures now forms part of the Columbia TriStar Motion Picture Group, owned by Sony Pictures Entertainment, a subsidiary of the Japanese conglomerate Sony. It is one of the leading film companies in the world, a member of the so-called Big Six. It was one of the so-called Little Three among the eight major film studios of Hollywood's Golden Age.",
+  "name": "Columbia Pictures",
+  "parent_company": {
+    "id": 5752,
+    "logo_path": "/sFg00KK0vVq3oqvkCxRQWApYB83.png",
+    "name": "Sony Pictures Entertainment"
+  },
+  "homepage": "http://www.sonypictures.com/",
+  "headquarters": "Culver City, California"
+}

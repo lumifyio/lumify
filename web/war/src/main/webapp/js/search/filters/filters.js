@@ -61,13 +61,14 @@ define([
         this.onSearchByRelatedEntity = function(event, data) {
             event.stopPropagation();
             var self = this;
-            this.dataRequest('vertex', 'store', { vertexIds: data.vertexId })
-                .done(function(vertex) {
-                    var title = vertex && F.vertex.title(vertex) || vertex.id;
-
+            this.dataRequest('vertex', 'store', { vertexIds: data.vertexIds })
+                .done(function(vertices) {
+                    var single = vertices[0],
+                        title = vertices.length > 1 ? i18n('search.filters.title_multiple', vertices.length)
+                                                    : single && F.vertex.title(single) || single.id;
                     self.onClearFilters();
 
-                    self.entityFilters.relatedToVertexId = vertex.id;
+                    self.entityFilters.relatedToVertexIds = _.pluck(vertices, 'id');
                     self.conceptFilter = data.conceptId || '';
                     self.trigger(self.select('conceptDropdownSelector'), 'selectConceptId', {
                         conceptId: data.conceptId || ''
@@ -122,16 +123,35 @@ define([
         };
 
         this.notifyOfFilters = function(options) {
+            var ontologyProperties = this.ontologyProperties;
+
             this.trigger('filterschange', {
                 entityFilters: this.entityFilters,
                 conceptFilter: this.conceptFilter,
-                propertyFilters: _.map(this.propertyFilters, function(filter) {
-                    return {
-                        propertyId: filter.propertyId,
-                        predicate: filter.predicate,
-                        values: filter.values
-                    };
-                }),
+                propertyFilters: _.chain(this.propertyFilters)
+                    .map(function(filter) {
+                        var ontologyProperty = ontologyProperties.byTitle[filter.propertyId];
+                        if (ontologyProperty && ontologyProperty.dependentPropertyIris) {
+                            return ontologyProperty.dependentPropertyIris.map(function(iri, i) {
+                                if (!_.isUndefined(filter.values[i])) {
+                                    return {
+                                        propertyId: iri,
+                                        predicate: filter.predicate,
+                                        values: filter.values[i]
+                                    }
+                                }
+                            });
+                        }
+
+                        return {
+                            propertyId: filter.propertyId,
+                            predicate: filter.predicate,
+                            values: filter.values
+                        };
+                    })
+                    .flatten(true)
+                    .compact()
+                    .value(),
                 options: options
             });
         };
@@ -160,7 +180,15 @@ define([
                 target = $(event.target),
                 li = target.closest('li').addClass('fId' + self.filterId),
                 property = data.property,
-                fieldComponent = property.possibleValues ?
+                isCompoundField = property.dependentPropertyIris && property.dependentPropertyIris.length;
+
+            if (property.title === 'http://lumify.io#text') {
+                property.dataType = 'boolean';
+            }
+
+            var fieldComponent = isCompoundField ?
+                'fields/compound/compound' :
+                property.possibleValues ?
                     'fields/restrictValues' :
                     'fields/' + property.dataType;
 
@@ -169,12 +197,22 @@ define([
 
                 self.teardownField(node);
 
-                PropertyFieldItem.attachTo(node, {
-                    property: property,
-                    id: self.filterId++,
-                    predicates: true,
-                    supportsHistogram: self.attr.supportsHistogram
-                });
+                if (isCompoundField) {
+                    PropertyFieldItem.attachTo(node, {
+                        id: self.filterId++,
+                        property: property,
+                        vertex: null,
+                        predicates: true,
+                        supportsHistogram: false
+                    });
+                } else {
+                    PropertyFieldItem.attachTo(node, {
+                        property: property,
+                        id: self.filterId++,
+                        predicates: true,
+                        supportsHistogram: self.attr.supportsHistogram
+                    });
+                }
 
                 li.removeClass('newrow');
 
@@ -193,6 +231,9 @@ define([
         this.createFieldSelection = function() {
             FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
                 properties: this.properties,
+                unsupportedProperties: this.attr.supportsHistogram ?
+                    [] :
+                    ['http://lumify.io#text'],
                 onlySearchable: true,
                 placeholder: i18n('search.filters.add_filter.placeholder')
             });
@@ -245,6 +286,7 @@ define([
 
             this.dataRequest('ontology', 'properties')
                 .done(function(properties) {
+                    self.ontologyProperties = properties;
                     self.properties = properties.list;
                     self.$node.find('.prop-filter-header').after(itemTemplate({}));
                     self.createFieldSelection();

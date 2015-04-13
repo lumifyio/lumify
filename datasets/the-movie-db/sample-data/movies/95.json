@@ -1,0 +1,435 @@
+{
+  "budget": 140000000,
+  "vote_average": 6.2,
+  "backdrop_path": "/ouNshZ43nE4tWdZo3QAFH8525Ps.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 62,
+        "order": 0,
+        "credit_id": "52fe4216c3a36847f800316b",
+        "name": "Bruce Willis",
+        "cast_id": 7,
+        "profile_path": "/kI1OluWhLJk3pnR19VjOfABpnTY.jpg",
+        "character": "Harry S. Stamper"
+      },
+      {
+        "id": 879,
+        "order": 1,
+        "credit_id": "52fe4216c3a36847f800316f",
+        "name": "Billy Bob Thornton",
+        "cast_id": 8,
+        "profile_path": "/sgCqytliDMD19d0VP45YgUmMCqH.jpg",
+        "character": "Dan Truman, NASA Administrator"
+      },
+      {
+        "id": 880,
+        "order": 2,
+        "credit_id": "52fe4216c3a36847f8003173",
+        "name": "Ben Affleck",
+        "cast_id": 9,
+        "profile_path": "/YfbiR0Y9JbKXdUDbAlMUR7XpeS.jpg",
+        "character": "A.J. Frost"
+      },
+      {
+        "id": 882,
+        "order": 3,
+        "credit_id": "52fe4216c3a36847f8003177",
+        "name": "Liv Tyler",
+        "cast_id": 10,
+        "profile_path": "/lD2YnrKdnRUvFDMSiK2pw13ZMIB.jpg",
+        "character": "Grace Stamper"
+      },
+      {
+        "id": 883,
+        "order": 4,
+        "credit_id": "52fe4216c3a36847f800317b",
+        "name": "Will Patton",
+        "cast_id": 11,
+        "profile_path": "/3whlJQheRJiG4mQ2F6T9DwUBrMm.jpg",
+        "character": "Charles 'Chick' Chapple"
+      },
+      {
+        "id": 884,
+        "order": 5,
+        "credit_id": "52fe4216c3a36847f800317f",
+        "name": "Steve Buscemi",
+        "cast_id": 12,
+        "profile_path": "/7sDzFRScCv85usSwPG01BTac7UY.jpg",
+        "character": "Rockhound"
+      },
+      {
+        "id": 886,
+        "order": 6,
+        "credit_id": "52fe4216c3a36847f8003183",
+        "name": "William Fichtner",
+        "cast_id": 13,
+        "profile_path": "/oIGjbztWvTqn4tnolW9rDCjpgxu.jpg",
+        "character": "Colonel William Sharp, Shuttle Freedom Pilot"
+      },
+      {
+        "id": 61981,
+        "order": 7,
+        "credit_id": "52fe4216c3a36847f8003187",
+        "name": "Michael Clarke Duncan",
+        "cast_id": 15,
+        "profile_path": "/oZCFNb0WtfQH9BA6oL4qBWjOH9z.jpg",
+        "character": "Jayotis 'Bear' Kurleenbear"
+      },
+      {
+        "id": 53,
+        "order": 8,
+        "credit_id": "52fe4216c3a36847f800318b",
+        "name": "Peter Stormare",
+        "cast_id": 16,
+        "profile_path": "/dDR0brp5L7fXDyEywrhjQv01LSg.jpg",
+        "character": "Lev Andropov, Russian Cosmonaut"
+      },
+      {
+        "id": 887,
+        "order": 9,
+        "credit_id": "52fe4216c3a36847f80031e3",
+        "name": "Owen Wilson",
+        "cast_id": 31,
+        "profile_path": "/j7oYgvfDiO34VcFdSB7GhM2CSle.jpg",
+        "character": "Oscar Choi"
+      },
+      {
+        "id": 236327,
+        "order": 10,
+        "credit_id": "52fe4216c3a36847f80031e7",
+        "name": "Ken Hudson Campbell",
+        "cast_id": 32,
+        "profile_path": "/lN9e975UkER6sRu9tKpeL2XyU5D.jpg",
+        "character": "Max"
+      },
+      {
+        "id": 42707,
+        "order": 11,
+        "credit_id": "52fe4216c3a36847f80031eb",
+        "name": "Jessica Steen",
+        "cast_id": 33,
+        "profile_path": "/lIchXdmqgn1izXWQk4gm1U9vTrz.jpg",
+        "character": "Co-Pilot Jennifer Watts"
+      },
+      {
+        "id": 8191,
+        "order": 12,
+        "credit_id": "52fe4216c3a36847f80031ef",
+        "name": "Chris Ellis",
+        "cast_id": 34,
+        "profile_path": "/m0Iz8heoqsDJIJl2cqSMiR33o7c.jpg",
+        "character": "Flight Director Clark"
+      },
+      {
+        "id": 65827,
+        "order": 13,
+        "credit_id": "52fe4216c3a36847f80031f3",
+        "name": "Keith David",
+        "cast_id": 35,
+        "profile_path": "/nwAC9TgwRkj0Ritq93O8GeublyL.jpg",
+        "character": "General Kimsey"
+      },
+      {
+        "id": 11355,
+        "order": 14,
+        "credit_id": "52fe4216c3a36847f80031f7",
+        "name": "Jason Isaacs",
+        "cast_id": 36,
+        "profile_path": "/xUlka8zpREdB0xIAiolOSC1t4CB.jpg",
+        "character": "Ronald Quincy"
+      },
+      {
+        "id": 63941,
+        "order": 15,
+        "credit_id": "539824c50e0a266db400c7ec",
+        "name": "Marshall R. Teague",
+        "cast_id": 42,
+        "profile_path": "/gxuG3sjGvd8uZGELExVrg4D0MBa.jpg",
+        "character": "Colonel Davis"
+      },
+      {
+        "id": 93958,
+        "order": 16,
+        "credit_id": "5398251d0e0a266db700c72e",
+        "name": "J. Patrick McCormack",
+        "cast_id": 43,
+        "profile_path": "/m7UeFeNJ6F2bABqi893zJXZLHkO.jpg",
+        "character": "General Boffer"
+      },
+      {
+        "id": 1329760,
+        "order": 17,
+        "credit_id": "539825660e0a266dbf00c5f7",
+        "name": "Ian Quinn",
+        "cast_id": 44,
+        "profile_path": "/emd0IL5L91NIUNwYS98K8DUXFKA.jpg",
+        "character": "Astronaut Pete Shelby"
+      }
+    ],
+    "crew": [
+      {
+        "id": 46082,
+        "credit_id": "5398238bc3a3684f45006183",
+        "department": "Crew",
+        "name": "Geoff Hubbard",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 1323090,
+        "credit_id": "539823a8c3a3684e36004cab",
+        "department": "Costume & Make-Up",
+        "name": "Edouard F. Henriques",
+        "job": "Makeup Department Head",
+        "profile_path": null
+      },
+      {
+        "id": 1329759,
+        "credit_id": "5398243d0e0a266dbf00c5cf",
+        "department": "Costume & Make-Up",
+        "name": "Sue Moore",
+        "job": "Costume Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 865,
+        "credit_id": "52fe4216c3a36847f8003149",
+        "department": "Directing",
+        "name": "Michael Bay",
+        "job": "Director",
+        "profile_path": "/cJNLMOqIkGZDdwkwSq1YpgiMp9P.jpg"
+      },
+      {
+        "id": 865,
+        "credit_id": "52fe4216c3a36847f800314f",
+        "department": "Production",
+        "name": "Michael Bay",
+        "job": "Producer",
+        "profile_path": "/cJNLMOqIkGZDdwkwSq1YpgiMp9P.jpg"
+      },
+      {
+        "id": 770,
+        "credit_id": "52fe4216c3a36847f8003155",
+        "department": "Production",
+        "name": "Jerry Bruckheimer",
+        "job": "Producer",
+        "profile_path": "/p2rd1kgq7GiCx2nQqfXib9PneOu.jpg"
+      },
+      {
+        "id": 869,
+        "credit_id": "52fe4216c3a36847f800315b",
+        "department": "Production",
+        "name": "Gale Anne Hurd",
+        "job": "Producer",
+        "profile_path": "/oRWGpXdIm2lu870aaKpgO3wy19n.jpg"
+      },
+      {
+        "id": 873,
+        "credit_id": "52fe4216c3a36847f8003161",
+        "department": "Writing",
+        "name": "Robert Roy Pool",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 876,
+        "credit_id": "52fe4216c3a36847f8003167",
+        "department": "Writing",
+        "name": "Jonathan Hensleigh",
+        "job": "Author",
+        "profile_path": "/hi3YCs3kiSZ3Oz711r1FqIo4Qat.jpg"
+      },
+      {
+        "id": 892,
+        "credit_id": "52fe4216c3a36847f8003191",
+        "department": "Camera",
+        "name": "John Schwartzman",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 894,
+        "credit_id": "52fe4216c3a36847f8003197",
+        "department": "Sound",
+        "name": "Trevor Rabin",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 895,
+        "credit_id": "52fe4216c3a36847f800319d",
+        "department": "Sound",
+        "name": "Aerosmith",
+        "job": "Additional Soundtrack",
+        "profile_path": null
+      },
+      {
+        "id": 896,
+        "credit_id": "52fe4216c3a36847f80031a3",
+        "department": "Art",
+        "name": "Michael White",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 897,
+        "credit_id": "52fe4216c3a36847f80031a9",
+        "department": "Production",
+        "name": "Bonnie Timmermann",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 898,
+        "credit_id": "52fe4216c3a36847f80031af",
+        "department": "Editing",
+        "name": "Mark Goldblatt",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 541,
+        "credit_id": "52fe4216c3a36847f80031b5",
+        "department": "Editing",
+        "name": "Chris Lebenzon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 899,
+        "credit_id": "52fe4216c3a36847f80031bb",
+        "department": "Editing",
+        "name": "Glen Scantlebury",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 900,
+        "credit_id": "52fe4216c3a36847f80031c1",
+        "department": "Sound",
+        "name": "Christopher Boyes",
+        "job": "Sound Designer",
+        "profile_path": "/qPYrAJif2AYqgUckgE9bEkjrdVw.jpg"
+      },
+      {
+        "id": 903,
+        "credit_id": "52fe4216c3a36847f80031c7",
+        "department": "Art",
+        "name": "Lawrence A. Hubbs",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 905,
+        "credit_id": "52fe4216c3a36847f80031cd",
+        "department": "Art",
+        "name": "Bruton Jones",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 906,
+        "credit_id": "52fe4216c3a36847f80031d3",
+        "department": "Art",
+        "name": "Rick Simpson",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 907,
+        "credit_id": "52fe4216c3a36847f80031d9",
+        "department": "Costume & Make-Up",
+        "name": "Magali Guidasci",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 605,
+        "credit_id": "52fe4216c3a36847f80031df",
+        "department": "Costume & Make-Up",
+        "name": "Michael Kaplan",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 873,
+        "credit_id": "52fe4216c3a36847f80031fd",
+        "department": "Writing",
+        "name": "Robert Roy Pool",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 876,
+        "credit_id": "52fe4216c3a36847f8003203",
+        "department": "Writing",
+        "name": "Jonathan Hensleigh",
+        "job": "Screenplay",
+        "profile_path": "/hi3YCs3kiSZ3Oz711r1FqIo4Qat.jpg"
+      }
+    ]
+  },
+  "runtime": 151,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 95,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Armageddon",
+  "overview": "An asteroid the size of Texas is heading directly toward Earth at 22,000 mph. NASA's executive director, Dan Truman, has only one option - to send up a crew to destroy the asteroid. He enlists the help of Harry S. Stamper - the world's foremost deep core oil driller - and Stamper's roughneck team of drillers to land on the asteroid, drill into its surface, and drop a nuclear device.",
+  "production_companies": [
+    {
+      "id": 9195,
+      "name": "Touchstone Pictures"
+    },
+    {
+      "id": 130,
+      "name": "Jerry Bruckheimer Films"
+    },
+    {
+      "id": 11533,
+      "name": "Valhalla Motion Pictures"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0120591",
+  "release_date": "1998-06-30",
+  "original_title": "Armageddon",
+  "vote_count": 766,
+  "poster_path": "/coINnuCzcw5FMHBty8hcudMOBnO.jpg",
+  "tagline": "Earth. It Was Fun While It Lasted.",
+  "revenue": 553799566,
+  "popularity": "2.01729456056162"
+}

@@ -1,0 +1,317 @@
+{
+  "budget": 7500000,
+  "vote_average": 8.5,
+  "backdrop_path": "/ywULIcnoBJBJxTI9XvMFuDQWbZC.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3635,
+        "order": 0,
+        "credit_id": "52fe423ec3a36847f800f131",
+        "name": "Elizabeth Taylor",
+        "cast_id": 3,
+        "profile_path": "/rPbfZlBX18OIj7H1Bahq7YcJL0v.jpg",
+        "character": "Martha"
+      },
+      {
+        "id": 5341,
+        "order": 1,
+        "credit_id": "52fe423ec3a36847f800f135",
+        "name": "Richard Burton",
+        "cast_id": 4,
+        "profile_path": "/fRoBAQQP9sfnIYuqw546yFs3qKn.jpg",
+        "character": "George"
+      },
+      {
+        "id": 18364,
+        "order": 2,
+        "credit_id": "52fe423ec3a36847f800f139",
+        "name": "George Segal",
+        "cast_id": 5,
+        "profile_path": "/Abj4bNVuiCerQISSQBZd0cfgqx4.jpg",
+        "character": "Nick"
+      },
+      {
+        "id": 18365,
+        "order": 3,
+        "credit_id": "52fe423ec3a36847f800f13d",
+        "name": "Sandy Dennis",
+        "cast_id": 6,
+        "profile_path": "/6GsWw5fJeaYT2RqZtIF60mlVopV.jpg",
+        "character": "Honey"
+      },
+      {
+        "id": 17672,
+        "order": 4,
+        "credit_id": "52fe423ec3a36847f800f1d7",
+        "name": "Agnes Flanagan",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Roadhouse Waitress (uncredited)"
+      },
+      {
+        "id": 18372,
+        "order": 5,
+        "credit_id": "52fe423ec3a36847f800f1db",
+        "name": "Frank Flanagan",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Roadhouse Manager (uncredited)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5342,
+        "credit_id": "52fe423ec3a36847f800f12d",
+        "department": "Directing",
+        "name": "Mike Nichols",
+        "job": "Director",
+        "profile_path": "/9d0W5i6jOlKR3XlWzdV04Lg7fHs.jpg"
+      },
+      {
+        "id": 18366,
+        "credit_id": "52fe423ec3a36847f800f143",
+        "department": "Writing",
+        "name": "Edward Albee",
+        "job": "Theatre Play",
+        "profile_path": null
+      },
+      {
+        "id": 2637,
+        "credit_id": "52fe423ec3a36847f800f149",
+        "department": "Writing",
+        "name": "Ernest Lehman",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 10536,
+        "credit_id": "52fe423ec3a36847f800f14f",
+        "department": "Sound",
+        "name": "Alex North",
+        "job": "Music",
+        "profile_path": null
+      },
+      {
+        "id": 7067,
+        "credit_id": "52fe423ec3a36847f800f155",
+        "department": "Camera",
+        "name": "Haskell Wexler",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 12015,
+        "credit_id": "52fe423ec3a36847f800f15b",
+        "department": "Editing",
+        "name": "Sam O'Steen",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 12017,
+        "credit_id": "52fe423ec3a36847f800f161",
+        "department": "Art",
+        "name": "Richard Sylbert",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 4126,
+        "credit_id": "52fe423ec3a36847f800f167",
+        "department": "Art",
+        "name": "George James Hopkins",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 13574,
+        "credit_id": "52fe423ec3a36847f800f16d",
+        "department": "Costume & Make-Up",
+        "name": "Irene Sharaff",
+        "job": "Costume Design",
+        "profile_path": "/il5sRd5lFHEL5u6z8jVSNGhy4iq.jpg"
+      },
+      {
+        "id": 4313,
+        "credit_id": "52fe423ec3a36847f800f173",
+        "department": "Costume & Make-Up",
+        "name": "Gordon Bau",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 11306,
+        "credit_id": "52fe423ec3a36847f800f179",
+        "department": "Costume & Make-Up",
+        "name": "Ron Berkeley",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 14681,
+        "credit_id": "52fe423ec3a36847f800f17f",
+        "department": "Costume & Make-Up",
+        "name": "Sydney Guilaroff",
+        "job": "Hairstylist",
+        "profile_path": null
+      },
+      {
+        "id": 16538,
+        "credit_id": "52fe423ec3a36847f800f185",
+        "department": "Costume & Make-Up",
+        "name": "Jean Burt Reilly",
+        "job": "Hairstylist",
+        "profile_path": null
+      },
+      {
+        "id": 18369,
+        "credit_id": "52fe423ec3a36847f800f18b",
+        "department": "Costume & Make-Up",
+        "name": "Craig Binkley",
+        "job": "Set Dressing Artist",
+        "profile_path": null
+      },
+      {
+        "id": 1765,
+        "credit_id": "52fe423ec3a36847f800f191",
+        "department": "Writing",
+        "name": "Harold Michelson",
+        "job": "Storyboard",
+        "profile_path": null
+      },
+      {
+        "id": 18370,
+        "credit_id": "52fe423ec3a36847f800f197",
+        "department": "Sound",
+        "name": "M.A. Merrick",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 18371,
+        "credit_id": "52fe423ec3a36847f800f19d",
+        "department": "Crew",
+        "name": "George Groves",
+        "job": "Sound Recordist",
+        "profile_path": null
+      },
+      {
+        "id": 18372,
+        "credit_id": "52fe423ec3a36847f800f1a3",
+        "department": "Lighting",
+        "name": "Frank Flanagan",
+        "job": "Gaffer",
+        "profile_path": null
+      },
+      {
+        "id": 18373,
+        "credit_id": "52fe423ec3a36847f800f1a9",
+        "department": "Camera",
+        "name": "Ralph Gerling",
+        "job": "Camera Operator",
+        "profile_path": null
+      },
+      {
+        "id": 18374,
+        "credit_id": "52fe423ec3a36847f800f1af",
+        "department": "Lighting",
+        "name": "Michael A. Jones",
+        "job": "Rigging Gaffer",
+        "profile_path": null
+      },
+      {
+        "id": 18375,
+        "credit_id": "52fe423ec3a36847f800f1b5",
+        "department": "Camera",
+        "name": "Robert Willoughby",
+        "job": "Still Photographer",
+        "profile_path": null
+      },
+      {
+        "id": 18376,
+        "credit_id": "52fe423ec3a36847f800f1bb",
+        "department": "Directing",
+        "name": "Meta Rebner",
+        "job": "Script Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 18377,
+        "credit_id": "52fe423ec3a36847f800f1c1",
+        "department": "Production",
+        "name": "T.J. Healy II",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 18378,
+        "credit_id": "52fe423ec3a36847f800f1c7",
+        "department": "Crew",
+        "name": "Herbert Ross",
+        "job": "Choreographer",
+        "profile_path": "/7KUacSL1gmx9UkOsqutjeBVJCQ6.jpg"
+      },
+      {
+        "id": 18379,
+        "credit_id": "52fe423ec3a36847f800f1cd",
+        "department": "Production",
+        "name": "Hal W. Polaire",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2637,
+        "credit_id": "52fe423ec3a36847f800f1d3",
+        "department": "Production",
+        "name": "Ernest Lehman",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 131,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "la",
+      "name": "Latin"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 396,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Who's Afraid of Virginia Woolf?",
+  "overview": "Mike Nichols\u2019 film from Edward Albees play brought new themes to the film industry. Elizabeth Taylor and Richard Burton have never been more brilliant together as they portray an experienced married couple who love each other yet verbally attack one another when they see how boring their naïve newlywed guests have made their night.",
+  "production_companies": [{
+    "id": 1684,
+    "name": "Chenault Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0061184",
+  "release_date": "1966-06-21",
+  "original_title": "Who's Afraid of Virginia Woolf?",
+  "vote_count": 12,
+  "poster_path": "/2syIbDWfH1G7cqnBSX94LAkC2Zt.jpg",
+  "tagline": "You are cordially invited to George and Martha's for an evening of fun and games",
+  "revenue": 33736689,
+  "popularity": "0.386089806093246"
+}

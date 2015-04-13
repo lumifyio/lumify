@@ -1,0 +1,307 @@
+{
+  "budget": 2900000,
+  "vote_average": 7,
+  "backdrop_path": "/nyqiCFF3pjcdwG2KmOwvM6CCLKA.jpg",
+  "genres": [
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3460,
+        "order": 0,
+        "credit_id": "52fe422dc3a36847f800a019",
+        "name": "Gene Wilder",
+        "cast_id": 11,
+        "profile_path": "/7xQjm2yrqAVy4yPjGemWseo1Ovi.jpg",
+        "character": "Willy Wonka"
+      },
+      {
+        "id": 3461,
+        "order": 1,
+        "credit_id": "52fe422dc3a36847f800a01d",
+        "name": "Jack Albertson",
+        "cast_id": 12,
+        "profile_path": "/vOj9UnYMXny4l4qq9YTXC6UlhnL.jpg",
+        "character": "Grandpa Joe"
+      },
+      {
+        "id": 3462,
+        "order": 2,
+        "credit_id": "52fe422dc3a36847f800a021",
+        "name": "Peter Ostrum",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Charlie Bucket"
+      },
+      {
+        "id": 3463,
+        "order": 3,
+        "credit_id": "52fe422dc3a36847f800a025",
+        "name": "Roy Kinnear",
+        "cast_id": 14,
+        "profile_path": "/llKNI5XTjF35oy22cdFO4bhkxYG.jpg",
+        "character": "Mr. Henry Salt"
+      },
+      {
+        "id": 3464,
+        "order": 4,
+        "credit_id": "52fe422dc3a36847f800a029",
+        "name": "Julie Dawn Cole",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Veruca Salt"
+      },
+      {
+        "id": 3467,
+        "order": 5,
+        "credit_id": "52fe422dc3a36847f800a02d",
+        "name": "Leonard Stone",
+        "cast_id": 16,
+        "profile_path": "/2tastJvF2MWzj1yhbnEI88ZH9a.jpg",
+        "character": "Mr. Sam Beauregarde"
+      },
+      {
+        "id": 3468,
+        "order": 6,
+        "credit_id": "52fe422dc3a36847f800a031",
+        "name": "Denise Nickerson",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Violet Beauregarde"
+      },
+      {
+        "id": 3469,
+        "order": 7,
+        "credit_id": "52fe422dc3a36847f800a035",
+        "name": "Nora Denney",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Mrs. Teevee"
+      },
+      {
+        "id": 3470,
+        "order": 8,
+        "credit_id": "52fe422dc3a36847f800a039",
+        "name": "Paris Themmen",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Mike Teevee"
+      },
+      {
+        "id": 3471,
+        "order": 9,
+        "credit_id": "52fe422dc3a36847f800a03d",
+        "name": "Ursula Reit",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Mrs. Gloop"
+      },
+      {
+        "id": 3473,
+        "order": 10,
+        "credit_id": "52fe422dc3a36847f800a041",
+        "name": "Diana Sowle",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Mrs. Bucket"
+      },
+      {
+        "id": 3474,
+        "order": 11,
+        "credit_id": "52fe422dc3a36847f800a045",
+        "name": "Aubrey Woods",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Bill, Candy Shop Owner"
+      },
+      {
+        "id": 3475,
+        "order": 12,
+        "credit_id": "52fe422dc3a36847f800a049",
+        "name": "David Battley",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Mr. Turkentine"
+      },
+      {
+        "id": 3476,
+        "order": 13,
+        "credit_id": "52fe422dc3a36847f800a04d",
+        "name": "Peter Capell",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "The Tinker"
+      },
+      {
+        "id": 3478,
+        "order": 14,
+        "credit_id": "52fe422dc3a36847f800a051",
+        "name": "Pat Coombs",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Henrietta Salt"
+      },
+      {
+        "id": 3617,
+        "order": 15,
+        "credit_id": "52fe422dc3a36847f800a067",
+        "name": "Günter Meisner",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Mr. Slugworth"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3451,
+        "credit_id": "52fe422dc3a36847f8009fe5",
+        "department": "Directing",
+        "name": "Mel Stuart",
+        "job": "Director",
+        "profile_path": "/w1R95d86v3YDWDrAtpETSeMGF5X.jpg"
+      },
+      {
+        "id": 3452,
+        "credit_id": "52fe422dc3a36847f8009feb",
+        "department": "Production",
+        "name": "Stan Margulies",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3453,
+        "credit_id": "52fe422dc3a36847f8009ff1",
+        "department": "Production",
+        "name": "David L. Wolper",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3454,
+        "credit_id": "52fe422dc3a36847f8009ff7",
+        "department": "Camera",
+        "name": "Arthur Ibbetson",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3455,
+        "credit_id": "52fe422dc3a36847f8009ffd",
+        "department": "Editing",
+        "name": "David Saxon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3456,
+        "credit_id": "52fe422dc3a36847f800a003",
+        "department": "Costume & Make-Up",
+        "name": "Helen Colvig",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 3457,
+        "credit_id": "52fe422dc3a36847f800a009",
+        "department": "Crew",
+        "name": "Logan Frazee",
+        "job": "Special Effects",
+        "profile_path": null
+      },
+      {
+        "id": 3458,
+        "credit_id": "52fe422dc3a36847f800a00f",
+        "department": "Production",
+        "name": "Pia Arnold",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 3459,
+        "credit_id": "52fe422dc3a36847f800a015",
+        "department": "Production",
+        "name": "Renate Neuchl",
+        "job": "Unit Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 3479,
+        "credit_id": "52fe422dc3a36847f800a057",
+        "department": "Sound",
+        "name": "Karsten Ullrich",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3616,
+        "credit_id": "52fe422dc3a36847f800a05d",
+        "department": "Sound",
+        "name": "Leslie Bricusse",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3375,
+        "credit_id": "52fe422dc3a36847f800a063",
+        "department": "Sound",
+        "name": "Walter Scharf",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1299,
+        "credit_id": "52fe422dc3a36847f800a06d",
+        "department": "Writing",
+        "name": "Roald Dahl",
+        "job": "Screenplay",
+        "profile_path": "/a7G1vjCdLILMAVSGvjDy6iquh1U.jpg"
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 252,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Willy Wonka & the Chocolate Factory",
+  "overview": "Eccentric candy man Willy Wonka prompts a worldwide frenzy when he announces that golden tickets hidden inside five of his delicious candy bars will admit their lucky holders into his top-secret confectionary. But does Wonka have an agenda hidden amid a world of Oompa Loompas and chocolate rivers?",
+  "production_companies": [{
+    "id": 3434,
+    "name": "David L. Wolper Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0067992",
+  "release_date": "1971-06-30",
+  "original_title": "Willy Wonka & the Chocolate Factory",
+  "vote_count": 169,
+  "poster_path": "/b94qXd1FcIwgzv0NYMUe2bjrzJR.jpg",
+  "tagline": "It's Scrumdiddlyumptious!",
+  "revenue": 4000000,
+  "popularity": "0.452338158590888"
+}

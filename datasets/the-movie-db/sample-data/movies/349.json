@@ -1,0 +1,254 @@
+{
+  "budget": 0,
+  "vote_average": 6,
+  "backdrop_path": "/A5jHU0WUhEB2ZaRS3z1XWiYvdV.jpg",
+  "genres": [{
+    "id": 35,
+    "name": "Comedy"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5077,
+        "order": 0,
+        "credit_id": "52fe423bc3a36847f800e24f",
+        "name": "Valeria Bruni Tedeschi",
+        "cast_id": 15,
+        "profile_path": "/n4WmQHkRwOIp1bpN3lbkJ9BK53z.jpg",
+        "character": "Béatrix"
+      },
+      {
+        "id": 5079,
+        "order": 1,
+        "credit_id": "52fe423bc3a36847f800e253",
+        "name": "Gilbert Melki",
+        "cast_id": 16,
+        "profile_path": "/Aoo2xNDipvbQuEH7MI5EPYd9vcD.jpg",
+        "character": "Marc"
+      },
+      {
+        "id": 1642,
+        "order": 2,
+        "credit_id": "52fe423bc3a36847f800e257",
+        "name": "Jean-Marc Barr",
+        "cast_id": 17,
+        "profile_path": "/vlWlQUc3qxNd0fIbv2lqXOv8j7i.jpg",
+        "character": "Didier"
+      },
+      {
+        "id": 5082,
+        "order": 3,
+        "credit_id": "52fe423bc3a36847f800e25b",
+        "name": "Jacques Bonnaffé",
+        "cast_id": 18,
+        "profile_path": "/omETyIWs4pPtiWL6R6c2VQxV7po.jpg",
+        "character": "Mathieu"
+      },
+      {
+        "id": 5083,
+        "order": 4,
+        "credit_id": "52fe423bc3a36847f800e25f",
+        "name": "Edouard Collin",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Martin"
+      },
+      {
+        "id": 5084,
+        "order": 5,
+        "credit_id": "52fe423bc3a36847f800e263",
+        "name": "Romain Torres",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Charly"
+      },
+      {
+        "id": 5085,
+        "order": 6,
+        "credit_id": "52fe423bc3a36847f800e267",
+        "name": "Sabrina Seyvecou",
+        "cast_id": 21,
+        "profile_path": "/4rrvFr5inxsPx37XTeVL2lYMQIU.jpg",
+        "character": "Laura"
+      },
+      {
+        "id": 5086,
+        "order": 7,
+        "credit_id": "52fe423bc3a36847f800e26b",
+        "name": "Yannick Baudin",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Michaël"
+      },
+      {
+        "id": 5087,
+        "order": 8,
+        "credit_id": "52fe423bc3a36847f800e26f",
+        "name": "Julien Weber",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Sylvain"
+      },
+      {
+        "id": 5088,
+        "order": 9,
+        "credit_id": "52fe423bc3a36847f800e273",
+        "name": "Sébastien Cormier",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Laura's New Friend"
+      },
+      {
+        "id": 5089,
+        "order": 10,
+        "credit_id": "52fe423bc3a36847f800e277",
+        "name": "Marion Roux",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Billiard Player"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5066,
+        "credit_id": "52fe423bc3a36847f800e1fd",
+        "department": "Directing",
+        "name": "Olivier Ducastel",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 5067,
+        "credit_id": "52fe423bc3a36847f800e203",
+        "department": "Directing",
+        "name": "Jacques Martineau",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 5066,
+        "credit_id": "52fe423bc3a36847f800e209",
+        "department": "Writing",
+        "name": "Olivier Ducastel",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5067,
+        "credit_id": "52fe423bc3a36847f800e20f",
+        "department": "Writing",
+        "name": "Jacques Martineau",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5068,
+        "credit_id": "52fe423bc3a36847f800e215",
+        "department": "Production",
+        "name": "Nicolas Blanc",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5069,
+        "credit_id": "52fe423bc3a36847f800e21b",
+        "department": "Production",
+        "name": "Robert Guédiguian",
+        "job": "Producer",
+        "profile_path": "/wq9bjPzpjCCyDHkePPwYOjRqtgw.jpg"
+      },
+      {
+        "id": 5070,
+        "credit_id": "52fe423bc3a36847f800e221",
+        "department": "Sound",
+        "name": "Philippe Miller",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5071,
+        "credit_id": "52fe423bc3a36847f800e227",
+        "department": "Camera",
+        "name": "Matthieu Poirot-Delpech",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5072,
+        "credit_id": "52fe423bc3a36847f800e22d",
+        "department": "Editing",
+        "name": "Dominique Galliéni",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5072,
+        "credit_id": "52fe423bc3a36847f800e233",
+        "department": "Production",
+        "name": "Dominique Galliéni",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5073,
+        "credit_id": "52fe423bc3a36847f800e239",
+        "department": "Costume & Make-Up",
+        "name": "Anne-Marie Giacalone",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5074,
+        "credit_id": "52fe423bc3a36847f800e23f",
+        "department": "Costume & Make-Up",
+        "name": "Gill Robillard",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 5075,
+        "credit_id": "52fe423bc3a36847f800e245",
+        "department": "Crew",
+        "name": "Sylvie Giron",
+        "job": "Choreographer",
+        "profile_path": null
+      },
+      {
+        "id": 5076,
+        "credit_id": "52fe423bc3a36847f800e24b",
+        "department": "Sound",
+        "name": "Laurent Lafran",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 93,
+  "spoken_languages": [{
+    "iso_639_1": "fr",
+    "name": "Français"
+  }],
+  "adult": false,
+  "homepage": "http://www.crustaces-lefilm.com/",
+  "id": 349,
+  "production_countries": [{
+    "name": "France",
+    "iso_3166_1": "FR"
+  }],
+  "title": "Cockles and Muscles",
+  "overview": "Crustaces et Coquillages is a fresh French comedy film with numerous surprise turnarounds and about the tolerance of a family of four. The family spend an idealistic summer vacation together where each of the family members gets involved in a new or old relationship.",
+  "production_companies": [{
+    "id": 208,
+    "name": "Bac Films"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0428430",
+  "release_date": "2005-03-30",
+  "original_title": "Crustacés Et Coquillages",
+  "vote_count": 1,
+  "poster_path": "/tvMc243BOhyp9aydGOzt4R98NUN.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.327553851279158"
+}

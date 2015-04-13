@@ -39,6 +39,7 @@
 
     <owl:ObjectProperty rdf:about="http://lumify.io/palantir-import#hasMedia">
         <rdfs:label xml:lang="en">Has Media</rdfs:label>
+        <lumify:intent>hasMedia</lumify:intent>
         <rdfs:range rdf:resource="&owl;Thing"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>

@@ -1,0 +1,270 @@
+{
+  "budget": 2500000,
+  "vote_average": 7.1,
+  "backdrop_path": "/aBm9qVNQHcPxhbVKwoKDK7K5haT.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6352,
+        "order": 0,
+        "credit_id": "52fe4247c3a36847f8011b75",
+        "name": "Jane Fonda",
+        "cast_id": 4,
+        "profile_path": "/t4kIxZrAhxnMyQP8BZFmpPAot0z.jpg",
+        "character": "Bree Daniels"
+      },
+      {
+        "id": 55636,
+        "order": 1,
+        "credit_id": "52fe4247c3a36847f8011b79",
+        "name": "Donald Sutherland",
+        "cast_id": 5,
+        "profile_path": "/tPLVaPjxEscGPKS3ieByloa8Mqj.jpg",
+        "character": "John Klute"
+      },
+      {
+        "id": 6354,
+        "order": 2,
+        "credit_id": "52fe4247c3a36847f8011b7d",
+        "name": "Charles Cioffi",
+        "cast_id": 6,
+        "profile_path": "/1AfKCCW4AJXOjwKbiccYpYvyatL.jpg",
+        "character": "Peter Cable"
+      },
+      {
+        "id": 6355,
+        "order": 3,
+        "credit_id": "52fe4247c3a36847f8011b81",
+        "name": "Roy Scheider",
+        "cast_id": 7,
+        "profile_path": "/t8EE1BdYo6BcGVj8EOz8mt1mw0Q.jpg",
+        "character": "Frank Ligourin"
+      },
+      {
+        "id": 6360,
+        "order": 4,
+        "credit_id": "52fe4247c3a36847f8011bbb",
+        "name": "Dorothy Tristan",
+        "cast_id": 17,
+        "profile_path": "/PusklwvPp6BYC2R5m9pzPXYfLu.jpg",
+        "character": "Arlyn Page"
+      },
+      {
+        "id": 6442,
+        "order": 5,
+        "credit_id": "52fe4247c3a36847f8011bbf",
+        "name": "Vivian Nathan",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Psychiatrist"
+      },
+      {
+        "id": 6443,
+        "order": 6,
+        "credit_id": "52fe4247c3a36847f8011bc3",
+        "name": "Robert Milli",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Tom Gruneman"
+      },
+      {
+        "id": 6447,
+        "order": 7,
+        "credit_id": "52fe4247c3a36847f8011bc7",
+        "name": "Betty Murray",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Holly Gruneman"
+      },
+      {
+        "id": 120391,
+        "order": 8,
+        "credit_id": "52fe4247c3a36847f8011bcb",
+        "name": "Rita Gam",
+        "cast_id": 21,
+        "profile_path": "/A2dsqIvUUAJaqfg6ofo1xfOrasp.jpg",
+        "character": "Trina"
+      },
+      {
+        "id": 28933,
+        "order": 9,
+        "credit_id": "5312dd5cc3a36829a9003971",
+        "name": "Jean Stapleton",
+        "cast_id": 23,
+        "profile_path": "/9TvKmRINHKfm882u5SHWzO8ixRY.jpg",
+        "character": "Strassberg's Secretary"
+      },
+      {
+        "id": 955499,
+        "order": 10,
+        "credit_id": "5312dd7fc3a36829d3003aec",
+        "name": "Morris Strassberg",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Goldfarb Sr."
+      }
+    ],
+    "crew": [
+      {
+        "id": 6349,
+        "credit_id": "52fe4247c3a36847f8011b65",
+        "department": "Directing",
+        "name": "Alan J. Pakula",
+        "job": "Director",
+        "profile_path": "/vzvxrcoFirt0LJb0hG0ezP64mYr.jpg"
+      },
+      {
+        "id": 6350,
+        "credit_id": "52fe4247c3a36847f8011b6b",
+        "department": "Writing",
+        "name": "Andy Lewis",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6351,
+        "credit_id": "52fe4247c3a36847f8011b71",
+        "department": "Writing",
+        "name": "David P. Lewis",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6349,
+        "credit_id": "52fe4247c3a36847f8011b87",
+        "department": "Production",
+        "name": "Alan J. Pakula",
+        "job": "Producer",
+        "profile_path": "/vzvxrcoFirt0LJb0hG0ezP64mYr.jpg"
+      },
+      {
+        "id": 6356,
+        "credit_id": "52fe4247c3a36847f8011b8d",
+        "department": "Production",
+        "name": "David Lange",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3097,
+        "credit_id": "52fe4247c3a36847f8011b93",
+        "department": "Camera",
+        "name": "Gordon Willis",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6357,
+        "credit_id": "52fe4247c3a36847f8011b99",
+        "department": "Sound",
+        "name": "Michael Small",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5262,
+        "credit_id": "52fe4247c3a36847f8011b9f",
+        "department": "Editing",
+        "name": "Carl Lerner",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1156,
+        "credit_id": "52fe4247c3a36847f8011ba5",
+        "department": "Production",
+        "name": "Alixe Gordin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6358,
+        "credit_id": "52fe4247c3a36847f8011bab",
+        "department": "Art",
+        "name": "George Jenkins",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6359,
+        "credit_id": "52fe4247c3a36847f8011bb1",
+        "department": "Art",
+        "name": "John Mortensen",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 5493,
+        "credit_id": "52fe4247c3a36847f8011bb7",
+        "department": "Costume & Make-Up",
+        "name": "Ann Roth",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 95864,
+        "credit_id": "52fe4247c3a36847f8011bd1",
+        "department": "Production",
+        "name": "C. Kenneth Deland",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 114,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 466,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Klute",
+  "overview": "A small-town detective searching for a missing man has only one lead: a connection with a New York prostitute.",
+  "production_companies": [
+    {
+      "id": 6174,
+      "name": "Gus Productions"
+    },
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0067309",
+  "release_date": "1971-06-21",
+  "original_title": "Klute",
+  "vote_count": 9,
+  "poster_path": "/iGDLuobpNav5f279MUY8WGkuGoP.jpg",
+  "tagline": "You'd never take her for a call girl. You'd never take him for a cop.",
+  "revenue": 0,
+  "popularity": "0.187410542023774"
+}

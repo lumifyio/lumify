@@ -1,0 +1,358 @@
+{
+  "budget": 60000000,
+  "vote_average": 6.4,
+  "backdrop_path": "/sIpnn6MpNyKfBaWEnED063pmH9Z.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2387,
+        "order": 0,
+        "credit_id": "52fe4226c3a36847f8007cf1",
+        "name": "Patrick Stewart",
+        "cast_id": 6,
+        "profile_path": "/9APDd4HgEasZemAcSEBETY9DQoL.jpg",
+        "character": "Captain Jean-Luc Picard"
+      },
+      {
+        "id": 2388,
+        "order": 1,
+        "credit_id": "52fe4226c3a36847f8007cf5",
+        "name": "Jonathan Frakes",
+        "cast_id": 7,
+        "profile_path": "/51Z5EbZxtVPm6GiN0Wc9CLP4z3s.jpg",
+        "character": "Captain William T. Riker"
+      },
+      {
+        "id": 2390,
+        "order": 2,
+        "credit_id": "52fe4226c3a36847f8007cf9",
+        "name": "LeVar Burton",
+        "cast_id": 9,
+        "profile_path": "/o9d5sOxvNDLIgBzATfSJWTbmhD7.jpg",
+        "character": "Lt. Commander Geordi La Forge"
+      },
+      {
+        "id": 1213786,
+        "order": 3,
+        "credit_id": "52fe4226c3a36847f8007d75",
+        "name": "Brent Spiner",
+        "cast_id": 35,
+        "profile_path": "/gYaOWwycKcSEPQzUOITt9DA5AcY.jpg",
+        "character": "Lt. Commander Data"
+      },
+      {
+        "id": 2392,
+        "order": 4,
+        "credit_id": "52fe4226c3a36847f8007cfd",
+        "name": "Gates McFadden",
+        "cast_id": 11,
+        "profile_path": "/zPx8IwxNwgCZOhpGad5h0mrLV2q.jpg",
+        "character": "Dr. Beverly Crusher"
+      },
+      {
+        "id": 2393,
+        "order": 5,
+        "credit_id": "52fe4226c3a36847f8007d01",
+        "name": "Marina Sirtis",
+        "cast_id": 12,
+        "profile_path": "/ueHzqv6uN6Mhf1DC3IjTPhNafYq.jpg",
+        "character": "Counselor Deanna Troi-Riker"
+      },
+      {
+        "id": 2524,
+        "order": 6,
+        "credit_id": "52fe4226c3a36847f8007d05",
+        "name": "Tom Hardy",
+        "cast_id": 13,
+        "profile_path": "/aYWIZ7ywOFzyK7B1HHCQj2nq8s4.jpg",
+        "character": "Praetor Shinzon"
+      },
+      {
+        "id": 2372,
+        "order": 7,
+        "credit_id": "52fe4226c3a36847f8007d09",
+        "name": "Ron Perlman",
+        "cast_id": 14,
+        "profile_path": "/xZyrXT2iEmSOokQRc1hedmxrbTi.jpg",
+        "character": "The Reman Viceroy"
+      },
+      {
+        "id": 2525,
+        "order": 8,
+        "credit_id": "52fe4226c3a36847f8007d0d",
+        "name": "Shannon Cochran",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Senator Tal'aura"
+      },
+      {
+        "id": 2133,
+        "order": 9,
+        "credit_id": "52fe4226c3a36847f8007d11",
+        "name": "Dina Meyer",
+        "cast_id": 16,
+        "profile_path": "/qldNOMIWUpwgnQawlCznBwDoTbE.jpg",
+        "character": "Commander Donatra"
+      },
+      {
+        "id": 2391,
+        "order": 10,
+        "credit_id": "52fe4226c3a36847f8007d5d",
+        "name": "Michael Dorn",
+        "cast_id": 29,
+        "profile_path": "/66oVi2UrJSYdyNEaRC5FTS8KlYG.jpg",
+        "character": "Lt. Commander Worf"
+      },
+      {
+        "id": 35317,
+        "order": 11,
+        "credit_id": "52fe4226c3a36847f8007d61",
+        "name": "Kate Mulgrew",
+        "cast_id": 30,
+        "profile_path": "/nrIUmghA3qNm0vvc2vEwC5zhAYg.jpg",
+        "character": "Admiral Janeway"
+      },
+      {
+        "id": 3033,
+        "order": 12,
+        "credit_id": "52fe4226c3a36847f8007d65",
+        "name": "Wil Wheaton",
+        "cast_id": 31,
+        "profile_path": "/1lrCjrsazL3O82DsP7ICfMHWJTU.jpg",
+        "character": "Wesley Crusher"
+      },
+      {
+        "id": 2395,
+        "order": 13,
+        "credit_id": "52fe4226c3a36847f8007d69",
+        "name": "Whoopi Goldberg",
+        "cast_id": 32,
+        "profile_path": "/n3lF8w4X4rDa4J2LMDIxMEcuUeH.jpg",
+        "character": "Guinan"
+      },
+      {
+        "id": 2523,
+        "order": 14,
+        "credit_id": "52fe4226c3a36847f8007d6d",
+        "name": "Stuart Baird",
+        "cast_id": 33,
+        "profile_path": "/k7nLNZ0MYsPrKq5T3ZV7m9zwEGY.jpg",
+        "character": "Scimitar Computer (voice)"
+      },
+      {
+        "id": 52760,
+        "order": 15,
+        "credit_id": "52fe4226c3a36847f8007d71",
+        "name": "Alan Dale",
+        "cast_id": 34,
+        "profile_path": "/n7X2cwMzQpz1JHG4gjr9oBntiSn.jpg",
+        "character": "Praetor Hiren"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2397,
+        "credit_id": "537495680e0a267c6e00362c",
+        "department": "Costume & Make-Up",
+        "name": "Robert Blackman",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 1319749,
+        "credit_id": "537495840e0a267c62003880",
+        "department": "Costume & Make-Up",
+        "name": "Anthony J. Scarano",
+        "job": "Costume Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 2523,
+        "credit_id": "52fe4226c3a36847f8007cd5",
+        "department": "Directing",
+        "name": "Stuart Baird",
+        "job": "Director",
+        "profile_path": "/k7nLNZ0MYsPrKq5T3ZV7m9zwEGY.jpg"
+      },
+      {
+        "id": 2381,
+        "credit_id": "52fe4226c3a36847f8007cdb",
+        "department": "Production",
+        "name": "Rick Berman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2504,
+        "credit_id": "52fe4226c3a36847f8007ce1",
+        "department": "Production",
+        "name": "Marty Hornstein",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2383,
+        "credit_id": "52fe4226c3a36847f8007ce7",
+        "department": "Production",
+        "name": "Peter Lauritson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 932,
+        "credit_id": "52fe4226c3a36847f8007ced",
+        "department": "Writing",
+        "name": "John Logan",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 904,
+        "credit_id": "52fe4226c3a36847f8007d17",
+        "department": "Camera",
+        "name": "Jeffrey L. Kimball",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2527,
+        "credit_id": "52fe4226c3a36847f8007d1d",
+        "department": "Art",
+        "name": "Cherie Baker",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 2528,
+        "credit_id": "52fe4226c3a36847f8007d23",
+        "department": "Art",
+        "name": "Donald B. Woodruff",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 796,
+        "credit_id": "52fe4226c3a36847f8007d29",
+        "department": "Art",
+        "name": "John M. Dwyer",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 2529,
+        "credit_id": "52fe4226c3a36847f8007d2f",
+        "department": "Art",
+        "name": "Ronald R. Reiss",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 2530,
+        "credit_id": "52fe4226c3a36847f8007d35",
+        "department": "Costume & Make-Up",
+        "name": "Bob Ringwood",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 1760,
+        "credit_id": "52fe4226c3a36847f8007d3b",
+        "department": "Sound",
+        "name": "Jerry Goldsmith",
+        "job": "Original Music Composer",
+        "profile_path": "/uQdaeP2awJgDc0ps9dohHw5quQ2.jpg"
+      },
+      {
+        "id": 2083,
+        "credit_id": "52fe4226c3a36847f8007d41",
+        "department": "Art",
+        "name": "Herman F. Zimmerman",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 2399,
+        "credit_id": "52fe4226c3a36847f8007d47",
+        "department": "Production",
+        "name": "Junie Lowry-Johnson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2031,
+        "credit_id": "52fe4226c3a36847f8007d4d",
+        "department": "Production",
+        "name": "Amanda Mackey Johnson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2532,
+        "credit_id": "52fe4226c3a36847f8007d53",
+        "department": "Production",
+        "name": "Cathy Sandrich",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2533,
+        "credit_id": "52fe4226c3a36847f8007d59",
+        "department": "Editing",
+        "name": "Dallas Puett",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 117,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 201,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Star Trek: Nemesis",
+  "overview": "En route to the honeymoon of William Riker to Deanna Troi on her home planet of Betazed, Captain Jean-Luc Picard and the crew of the U.S.S. Enterprise receives word from Starfleet that a coup has resulted in the installation of a new Romulan political leader, Shinzon, who claims to seek peace with the human-backed United Federation of Planets. Once in enemy territory, the captain and his crew make a startling discovery: Shinzon is human, a slave from the Romulan sister planet of Remus, and has a secret, shocking relationship to Picard himself.",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": {
+    "id": 115570,
+    "backdrop_path": "/r7MMQenUURHhAVHFymtOb8AX4Bm.jpg",
+    "name": "Star Trek: The Next Generation Collection",
+    "poster_path": "/5HOcAfSfFxmpUouyLOo6Si9F7fo.jpg"
+  },
+  "imdb_id": "tt0253754",
+  "release_date": "2002-12-12",
+  "original_title": "Star Trek: Nemesis",
+  "vote_count": 124,
+  "poster_path": "/n4TpLWPi062AofIq4kwmaPNBSvA.jpg",
+  "tagline": "A generation's final journey... begins.",
+  "revenue": 67312826,
+  "popularity": "2.63525461041615"
+}

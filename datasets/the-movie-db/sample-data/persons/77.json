@@ -1,0 +1,184 @@
+{
+  "birthday": "1888-11-24",
+  "adult": false,
+  "biography": "From Wikipedia, the free encyclopedia\n\nFriedrich Rudolf Klein-Rogge (November 24, 1885 - May 29, 1955) was a German film actor. Klein-Rogge is known for playing sinister figures in films in the 1920s and 1930s as well as being a main-stay in director Fritz Lang's Weimar-era films.\n\nDescription above from the Wikipedia article Rudolf Klein-Rogge, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/dz2NKTrM06vyg4iQN9vHQ3a7bDR.jpg",
+  "id": 77,
+  "also_known_as": [],
+  "deathday": "1955-04-30",
+  "imdb_id": "nm0459030",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 5998,
+        "media_type": "movie",
+        "title": "Dr. Mabuse: The Gambler",
+        "credit_id": "52fe4434c3a36847f8088741",
+        "release_date": "1922-04-27",
+        "original_title": "Dr. Mabuse, der Spieler",
+        "adult": false,
+        "poster_path": "/7iikEYuNMGrTDdxQ0M8L8TDTiP3.jpg",
+        "character": "Dr. Mabuse"
+      },
+      {
+        "id": 31506,
+        "media_type": "movie",
+        "title": "Siegfried",
+        "credit_id": "52fe44829251416c9101329f",
+        "release_date": "1924-02-13",
+        "original_title": "Die Nibelungen: Siegfried",
+        "adult": false,
+        "poster_path": "/47QQ0YVqvJvjqBIQjhPkV1piNEJ.jpg",
+        "character": "Etzel"
+      },
+      {
+        "id": 12206,
+        "media_type": "movie",
+        "title": "The Testament of Dr. Mabuse",
+        "credit_id": "52fe44c99251416c75040f0f",
+        "release_date": "1933-05-11",
+        "original_title": "Das Testament des Dr. Mabuse",
+        "adult": false,
+        "poster_path": "/t36E1zyw8ikLJGr3pYUxcomJbDc.jpg",
+        "character": "Dr. Mabuse"
+      },
+      {
+        "id": 29267,
+        "media_type": "movie",
+        "title": "Destiny",
+        "credit_id": "52fe45d4c3a368484e0713b5",
+        "release_date": "1921-10-06",
+        "original_title": "Der müde Tod",
+        "adult": false,
+        "poster_path": "/7T2XTQ7noRdZ1OYWGdkzYCnFp49.jpg",
+        "character": "Derwisch / Girolamo"
+      },
+      {
+        "id": 42512,
+        "media_type": "movie",
+        "title": "Kriemhild's Revenge",
+        "credit_id": "52fe4607c3a36847f80e80e9",
+        "release_date": "1924-04-25",
+        "original_title": "Die Nibelungen: Kriemhilds Rache",
+        "adult": false,
+        "poster_path": "/7dLf8Oj4qQLatgE8xv7TdMMnFLb.jpg",
+        "character": "Etzel"
+      },
+      {
+        "id": 81406,
+        "media_type": "movie",
+        "title": "Menschen vom Varieté",
+        "credit_id": "52fe48119251416c9107f0a1",
+        "release_date": "1939-04-14",
+        "original_title": "Menschen vom Varieté",
+        "adult": false,
+        "poster_path": null,
+        "character": "Kommissar Wiedemann"
+      },
+      {
+        "id": 84956,
+        "media_type": "movie",
+        "title": "Warning Shadows",
+        "credit_id": "52fe491a9251416c910a2c1d",
+        "release_date": "1923-10-16",
+        "original_title": "Schatten \u2013 Eine nächtliche Halluzination",
+        "adult": false,
+        "poster_path": "/eoom0gxUwef45idhRMSmAuIlBJ2.jpg",
+        "character": ""
+      },
+      {
+        "id": 78507,
+        "media_type": "movie",
+        "title": "Spies",
+        "credit_id": "52fe49a4c3a368484e135efd",
+        "release_date": "1928-03-22",
+        "original_title": "Spione",
+        "adult": false,
+        "poster_path": "/w9IIVqSn9RIUuCbEbNCAEGa7sjn.jpg",
+        "character": "Haghi"
+      },
+      {
+        "id": 115515,
+        "media_type": "movie",
+        "title": "The Wandering Image",
+        "credit_id": "52fe4b6fc3a36847f82039fb",
+        "release_date": "1920-12-25",
+        "original_title": "Das wandernde Bild",
+        "adult": false,
+        "poster_path": "/w8p8cCNYDGsXb991SwAN4Zzxcyv.jpg",
+        "character": "Georgs Vetter Wil Brand"
+      },
+      {
+        "id": 234,
+        "media_type": "movie",
+        "title": "The Cabinet of Dr. Caligari",
+        "credit_id": "52fe422ac3a36847f80090db",
+        "release_date": "1920-02-25",
+        "original_title": "Das Cabinet des Dr. Caligari",
+        "adult": false,
+        "poster_path": "/q87xY7fB3euh7Fer2cH7Hfxmk58.jpg",
+        "character": "ein Verbrecher (a criminal)"
+      },
+      {
+        "id": 19,
+        "media_type": "movie",
+        "title": "Metropolis",
+        "credit_id": "52fe420fc3a36847f8000c8b",
+        "release_date": "1927-01-10",
+        "original_title": "Metropolis",
+        "adult": false,
+        "poster_path": "/hnj1AptUFmYYZNjrbIHgNjgt3ZX.jpg",
+        "character": "C.A. Rotwang, the inventor"
+      },
+      {
+        "id": 259182,
+        "media_type": "movie",
+        "title": "Tarakanova",
+        "credit_id": "53230aee9251411f7e004a86",
+        "release_date": "1930-09-26",
+        "original_title": "Tarakanova",
+        "adult": false,
+        "poster_path": "/pTv9GSKDhsJhlSi160IV19o4KhS.jpg",
+        "character": "Le Comte Chouvalof"
+      },
+      {
+        "id": 265386,
+        "media_type": "movie",
+        "title": "Das Hofkonzert",
+        "credit_id": "53c0537fc3a3684cef005ab9",
+        "release_date": "1936-12-18",
+        "original_title": "Das Hofkonzert",
+        "adult": false,
+        "poster_path": null,
+        "character": "Oberst Flumms"
+      },
+      {
+        "id": 241786,
+        "media_type": "movie",
+        "title": "Die Welt ohne Maske",
+        "credit_id": "53e6b1140e0a266f9a00000b",
+        "release_date": null,
+        "original_title": "Die Welt ohne Maske",
+        "adult": false,
+        "poster_path": "/fJ4zElal1AoH2NwxQZr5XXp0vEs.jpg",
+        "character": "Merker"
+      },
+      {
+        "id": 286045,
+        "media_type": "movie",
+        "title": "Der Ammenkönig",
+        "credit_id": "53e6b77a0e0a266fa50000b6",
+        "release_date": "1935-12-05",
+        "original_title": "Der Ammenkönig",
+        "adult": false,
+        "poster_path": null,
+        "character": "Herr von Roden"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Rudolf Klein-Rogge",
+  "place_of_birth": "Cologne, Germany",
+  "popularity": "1.00000000004959"
+}

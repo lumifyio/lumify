@@ -1,0 +1,225 @@
+{
+  "budget": 900000,
+  "vote_average": 8.4,
+  "backdrop_path": "/4SuBbOYqJaP3dH74oHU3HPWzWWU.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3783,
+        "order": 0,
+        "credit_id": "52fe422fc3a36847f800a8c5",
+        "name": "Brigitte Bardot",
+        "cast_id": 11,
+        "profile_path": "/2p1LwYEpHnS7Qr9gOReIQzno9FM.jpg",
+        "character": "Camille Javal"
+      },
+      {
+        "id": 3784,
+        "order": 1,
+        "credit_id": "52fe422fc3a36847f800a8c9",
+        "name": "Michel Piccoli",
+        "cast_id": 12,
+        "profile_path": "/gz91b4tVn6yYsKemek2YkUdjlSH.jpg",
+        "character": "Paul Javal"
+      },
+      {
+        "id": 3785,
+        "order": 2,
+        "credit_id": "52fe422fc3a36847f800a8cd",
+        "name": "Jack Palance",
+        "cast_id": 13,
+        "profile_path": "/RKqKZ2rRDNkv0jaQscDARfRh9D.jpg",
+        "character": "Jeremy Prokosch"
+      },
+      {
+        "id": 3786,
+        "order": 3,
+        "credit_id": "52fe422fc3a36847f800a8d1",
+        "name": "Giorgia Moll",
+        "cast_id": 14,
+        "profile_path": "/qSL8iXqDzquKxEzewhLK207L9yQ.jpg",
+        "character": "Francesca Vanini"
+      },
+      {
+        "id": 68,
+        "order": 4,
+        "credit_id": "52fe422fc3a36847f800a8d5",
+        "name": "Fritz Lang",
+        "cast_id": 15,
+        "profile_path": "/iq0KqfkJzEGGHx9MupllyJoCush.jpg",
+        "character": "Fritz Lang"
+      },
+      {
+        "id": 3540,
+        "order": 5,
+        "credit_id": "52fe422fc3a36847f800a8d9",
+        "name": "Raoul Coutard",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Cameraman"
+      },
+      {
+        "id": 3776,
+        "order": 6,
+        "credit_id": "52fe422fc3a36847f800a8dd",
+        "name": "Jean-Luc Godard",
+        "cast_id": 17,
+        "profile_path": "/62hFTewheAyYmumeDkVkrP5jqPc.jpg",
+        "character": "Langs Assistant Director"
+      },
+      {
+        "id": 3787,
+        "order": 7,
+        "credit_id": "52fe422fc3a36847f800a8e1",
+        "name": "Linda Veras",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Sirene"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3777,
+        "credit_id": "52fe422fc3a36847f800a891",
+        "department": "Production",
+        "name": "Joseph E. Levine",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3778,
+        "credit_id": "52fe422fc3a36847f800a897",
+        "department": "Production",
+        "name": "Carlo Ponti",
+        "job": "Producer",
+        "profile_path": "/zgCkHXt5HdXjaiIk8kOcZyQJlZh.jpg"
+      },
+      {
+        "id": 3779,
+        "credit_id": "52fe422fc3a36847f800a89d",
+        "department": "Production",
+        "name": "Georges de Beauregard",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3776,
+        "credit_id": "52fe422fc3a36847f800a8a3",
+        "department": "Writing",
+        "name": "Jean-Luc Godard",
+        "job": "Screenplay",
+        "profile_path": "/62hFTewheAyYmumeDkVkrP5jqPc.jpg"
+      },
+      {
+        "id": 3780,
+        "credit_id": "52fe422fc3a36847f800a8a9",
+        "department": "Writing",
+        "name": "Alberto Moravia",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 3540,
+        "credit_id": "52fe422fc3a36847f800a8af",
+        "department": "Camera",
+        "name": "Raoul Coutard",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3535,
+        "credit_id": "52fe422fc3a36847f800a8b5",
+        "department": "Sound",
+        "name": "Georges Delerue",
+        "job": "Original Music Composer",
+        "profile_path": "/yAlgcnY7fXUQLrxfknp0Jv4dUTv.jpg"
+      },
+      {
+        "id": 3526,
+        "credit_id": "52fe422fc3a36847f800a8bb",
+        "department": "Editing",
+        "name": "Agnès Guillemot",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3782,
+        "credit_id": "52fe422fc3a36847f800a8c1",
+        "department": "Editing",
+        "name": "Lila Lakshmanan",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3776,
+        "credit_id": "52fe422fc3a36847f800a8e7",
+        "department": "Directing",
+        "name": "Jean-Luc Godard",
+        "job": "Director",
+        "profile_path": "/62hFTewheAyYmumeDkVkrP5jqPc.jpg"
+      }
+    ]
+  },
+  "runtime": 103,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 266,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "Contempt",
+  "overview": "Paul Javal is a writer who is hired to make a script for a new movie about Ulysses more commercial, which is to be directed by Fritz Lang and produced by Jeremy Prokosch. But because he let his wife Camille drive with Prokosch and he is late, she believes, he uses her as a sort of present for Prokosch to get get a better payment.",
+  "production_companies": [
+    {
+      "id": 109,
+      "name": "Rome Paris Films"
+    },
+    {
+      "id": 1714,
+      "name": "Les Films Concordia"
+    },
+    {
+      "id": 10000,
+      "name": "Compagnia Cinematografica Champion"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0057345",
+  "release_date": "1963-10-29",
+  "original_title": "Le Mépris",
+  "vote_count": 9,
+  "poster_path": "/e8AFmkWiY6MS7Em4GmLuqjEDc1v.jpg",
+  "tagline": "More Bold! More Brazen! And Much, Much More Bardot!",
+  "revenue": 528428,
+  "popularity": "0.502385899691603"
+}

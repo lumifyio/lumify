@@ -1,0 +1,393 @@
+{
+  "budget": 27000000,
+  "vote_average": 7,
+  "backdrop_path": "/cD7lPdjFyf5dQIlc6ToehqFrIZU.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5469,
+        "order": 0,
+        "credit_id": "52fe4240c3a36847f800fb1b",
+        "name": "Ralph Fiennes",
+        "cast_id": 1,
+        "profile_path": "/aCWuFbc9AXVy2owUnqFX2IXf97.jpg",
+        "character": "Count László de Almásy"
+      },
+      {
+        "id": 1137,
+        "order": 1,
+        "credit_id": "52fe4240c3a36847f800fb1f",
+        "name": "Juliette Binoche",
+        "cast_id": 2,
+        "profile_path": "/qlzTpnFyXkrO2ws2ccjaljl1Jlf.jpg",
+        "character": "Hana"
+      },
+      {
+        "id": 5293,
+        "order": 2,
+        "credit_id": "52fe4240c3a36847f800fb23",
+        "name": "Willem Dafoe",
+        "cast_id": 3,
+        "profile_path": "/4Wuww8ORt6nrHyBSUBLTHWt24EZ.jpg",
+        "character": "David Caravaggio"
+      },
+      {
+        "id": 5470,
+        "order": 3,
+        "credit_id": "52fe4240c3a36847f800fb27",
+        "name": "Kristin Scott Thomas",
+        "cast_id": 4,
+        "profile_path": "/9NuZGaPn3Z1svlbF9ZkdtjgrHZo.jpg",
+        "character": "Katharine Clifton"
+      },
+      {
+        "id": 5471,
+        "order": 4,
+        "credit_id": "52fe4240c3a36847f800fb2b",
+        "name": "Naveen Andrews",
+        "cast_id": 5,
+        "profile_path": "/8Y6GvOC52mnLyiAg8Oz0IIuuW4m.jpg",
+        "character": "Sikh Kip"
+      },
+      {
+        "id": 5472,
+        "order": 5,
+        "credit_id": "52fe4240c3a36847f800fb2f",
+        "name": "Colin Firth",
+        "cast_id": 6,
+        "profile_path": "/4pj31PUxqpuJZrHChinub4gr2ul.jpg",
+        "character": "Geoffrey Clifton"
+      },
+      {
+        "id": 5473,
+        "order": 6,
+        "credit_id": "52fe4240c3a36847f800fb33",
+        "name": "Julian Wadham",
+        "cast_id": 7,
+        "profile_path": "/oDfxeUerYXpcZJXmoZPbSbfQy2A.jpg",
+        "character": "Madox"
+      },
+      {
+        "id": 5480,
+        "order": 7,
+        "credit_id": "52fe4240c3a36847f800fb53",
+        "name": "Torri Higginson",
+        "cast_id": 15,
+        "profile_path": "/oT1K9IiPoL46elHN6zmE8BUcvy6.jpg",
+        "character": "Mary"
+      },
+      {
+        "id": 920,
+        "order": 8,
+        "credit_id": "52fe4240c3a36847f800fb37",
+        "name": "Jürgen Prochnow",
+        "cast_id": 8,
+        "profile_path": "/aar3n9NEQdwWVvPOne3kLLXm75N.jpg",
+        "character": "Major Muller"
+      },
+      {
+        "id": 5474,
+        "order": 9,
+        "credit_id": "52fe4240c3a36847f800fb3b",
+        "name": "Kevin Whately",
+        "cast_id": 9,
+        "profile_path": "/bW6z8nxcuDkEJ04TnN4pnKygNAw.jpg",
+        "character": "Hardy"
+      },
+      {
+        "id": 5475,
+        "order": 10,
+        "credit_id": "52fe4240c3a36847f800fb3f",
+        "name": "Clive Merrison",
+        "cast_id": 10,
+        "profile_path": "/xaVOsuG0Slbwly5laYw98ZUq0co.jpg",
+        "character": "Fenelon-Barnes"
+      },
+      {
+        "id": 5476,
+        "order": 11,
+        "credit_id": "52fe4240c3a36847f800fb43",
+        "name": "Nino Castelnuovo",
+        "cast_id": 11,
+        "profile_path": "/snBgTgj1yr1hAXAwVrIl5HByyRY.jpg",
+        "character": "D'Agostino"
+      },
+      {
+        "id": 5477,
+        "order": 12,
+        "credit_id": "52fe4240c3a36847f800fb47",
+        "name": "Hichem Rostom",
+        "cast_id": 12,
+        "profile_path": "/2UUNuUdcyVL91i1ZZ0FUj3BBv7m.jpg",
+        "character": "Fouad"
+      },
+      {
+        "id": 5478,
+        "order": 13,
+        "credit_id": "52fe4240c3a36847f800fb4b",
+        "name": "Peter Rühring",
+        "cast_id": 13,
+        "profile_path": "/wA5xpXiyE2LQ3lhKOl0mNvSThNI.jpg",
+        "character": "Bermann"
+      },
+      {
+        "id": 5479,
+        "order": 14,
+        "credit_id": "52fe4240c3a36847f800fb4f",
+        "name": "Geordie Johnson",
+        "cast_id": 14,
+        "profile_path": "/3ipQU3hUWj4wvFzrY4UCnUs1CpE.jpg",
+        "character": "Oliver"
+      },
+      {
+        "id": 5481,
+        "order": 15,
+        "credit_id": "52fe4240c3a36847f800fb57",
+        "name": "Liisa Repo-Martell",
+        "cast_id": 16,
+        "profile_path": "/lwjWInRTj9ZkDuMziQNywhbOKzw.jpg",
+        "character": "Jan"
+      },
+      {
+        "id": 5482,
+        "order": 16,
+        "credit_id": "52fe4240c3a36847f800fb5b",
+        "name": "Ray Coulthard",
+        "cast_id": 17,
+        "profile_path": "/7yn47hVgaNv4m23dYmqvqZd94ob.jpg",
+        "character": "Rupert Douglas"
+      },
+      {
+        "id": 5483,
+        "order": 17,
+        "credit_id": "52fe4240c3a36847f800fb5f",
+        "name": "Philip Whitchurch",
+        "cast_id": 18,
+        "profile_path": "/mQDrOvX4sM3Pjz4JEj44AyHBSM6.jpg",
+        "character": "Corporal Dade"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2239,
+        "credit_id": "52fe4240c3a36847f800fb65",
+        "department": "Directing",
+        "name": "Anthony Minghella",
+        "job": "Director",
+        "profile_path": "/2BVhY29rW1HeyyMcVOttcZaDK15.jpg"
+      },
+      {
+        "id": 1310,
+        "credit_id": "52fe4240c3a36847f800fb6b",
+        "department": "Production",
+        "name": "Saul Zaentz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 59839,
+        "credit_id": "52fe4240c3a36847f800fb71",
+        "department": "Production",
+        "name": "Harvey Weinstein",
+        "job": "Executive Producer",
+        "profile_path": "/k4UCnh7n0r5CEjq30gAl6QCfF9g.jpg"
+      },
+      {
+        "id": 1307,
+        "credit_id": "52fe4240c3a36847f800fb77",
+        "department": "Production",
+        "name": "Bob Weinstein",
+        "job": "Executive Producer",
+        "profile_path": "/oe5Oxp034UOubnvZqqhurp6a1EP.jpg"
+      },
+      {
+        "id": 5484,
+        "credit_id": "52fe4240c3a36847f800fb7d",
+        "department": "Production",
+        "name": "Scott Greenstein",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5485,
+        "credit_id": "52fe4240c3a36847f800fb83",
+        "department": "Production",
+        "name": "Paul Zaentz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5486,
+        "credit_id": "52fe4240c3a36847f800fb89",
+        "department": "Production",
+        "name": "Steve E. Andrews",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5487,
+        "credit_id": "52fe4240c3a36847f800fb8f",
+        "department": "Production",
+        "name": "Alessandro von Norman",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5488,
+        "credit_id": "52fe4240c3a36847f800fb95",
+        "department": "Sound",
+        "name": "Gabriel Yared",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2702,
+        "credit_id": "52fe4240c3a36847f800fb9b",
+        "department": "Camera",
+        "name": "John Seale",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 154,
+        "credit_id": "52fe4240c3a36847f800fba1",
+        "department": "Editing",
+        "name": "Walter Murch",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5489,
+        "credit_id": "52fe4240c3a36847f800fba7",
+        "department": "Production",
+        "name": "Michelle Guish",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5490,
+        "credit_id": "52fe4240c3a36847f800fbad",
+        "department": "Production",
+        "name": "David Rubin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5491,
+        "credit_id": "52fe4240c3a36847f800fbb3",
+        "department": "Art",
+        "name": "Stuart Craig",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5492,
+        "credit_id": "52fe4240c3a36847f800fbb9",
+        "department": "Art",
+        "name": "Aurelio Crugnola",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5493,
+        "credit_id": "52fe4240c3a36847f800fbbf",
+        "department": "Costume & Make-Up",
+        "name": "Ann Roth",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5494,
+        "credit_id": "52fe4240c3a36847f800fbc5",
+        "department": "Costume & Make-Up",
+        "name": "Gary Jones",
+        "job": "Costume Design",
+        "profile_path": "/f9Y1MNXZyaPLoWNxhuIiVlUpTtu.jpg"
+      },
+      {
+        "id": 2239,
+        "credit_id": "52fe4240c3a36847f800fbcb",
+        "department": "Writing",
+        "name": "Anthony Minghella",
+        "job": "Screenplay",
+        "profile_path": "/2BVhY29rW1HeyyMcVOttcZaDK15.jpg"
+      },
+      {
+        "id": 5495,
+        "credit_id": "52fe4240c3a36847f800fbd1",
+        "department": "Writing",
+        "name": "Michael Ondaatje",
+        "job": "Novel",
+        "profile_path": "/j11RQCDqqEg5Dkeb4KE81OTyUNb.jpg"
+      }
+    ]
+  },
+  "runtime": 162,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    },
+    {
+      "iso_639_1": "ar",
+      "name": "العربية"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 409,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "The English Patient",
+  "overview": "The filmed version of the novel by Michael Ondaatje of the same name. This film tells of love stories during the turbulent times of World War 2. Director Anthony Minghella films the biography of Ladislaus Almasy.",
+  "production_companies": [
+    {
+      "id": 14,
+      "name": "Miramax Films"
+    },
+    {
+      "id": 12204,
+      "name": "Tiger Moth Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0116209",
+  "release_date": "1996-11-14",
+  "original_title": "The English Patient",
+  "vote_count": 62,
+  "poster_path": "/niqc0v3Lclh99Mmmxm49qZTIo2e.jpg",
+  "tagline": "In love, there are no boundaries.",
+  "revenue": 231700000,
+  "popularity": "1.04768328544283"
+}

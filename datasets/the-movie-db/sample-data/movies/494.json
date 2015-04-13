@@ -1,0 +1,233 @@
+{
+  "budget": 2142000,
+  "vote_average": 4.5,
+  "backdrop_path": "/bPdbRB38Ebmuca8EGa8lQ5z5nh8.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6487,
+        "order": 0,
+        "credit_id": "52fe424ac3a36847f8012a6d",
+        "name": "Richard Roundtree",
+        "cast_id": 4,
+        "profile_path": "/3OyAx3Vrv1mQLOvl7YHaIaFwDuW.jpg",
+        "character": "John Shaft"
+      },
+      {
+        "id": 6637,
+        "order": 1,
+        "credit_id": "52fe424ac3a36847f8012a71",
+        "name": "Frank Finlay",
+        "cast_id": 5,
+        "profile_path": "/rnWMfVFu1XQ5WS9hRr24jeZ9Ni1.jpg",
+        "character": "Vincent Amafi"
+      },
+      {
+        "id": 6780,
+        "order": 2,
+        "credit_id": "52fe424ac3a36847f8012a75",
+        "name": "Vonetta McGee",
+        "cast_id": 6,
+        "profile_path": "/JwwvVvwTy8zEBy1prx82pzkgmR.jpg",
+        "character": "Aleme"
+      },
+      {
+        "id": 6781,
+        "order": 3,
+        "credit_id": "52fe424ac3a36847f8012a79",
+        "name": "Neda Arnerić",
+        "cast_id": 7,
+        "profile_path": "/co7HNvtp8l0YN0pJ08OCaumTvnB.jpg",
+        "character": "Jazar"
+      },
+      {
+        "id": 6782,
+        "order": 4,
+        "credit_id": "52fe424ac3a36847f8012a7d",
+        "name": "Debebe Eshetu",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Wassa"
+      },
+      {
+        "id": 6783,
+        "order": 5,
+        "credit_id": "52fe424ac3a36847f8012a81",
+        "name": "Spiros Focás",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Marco Sassari"
+      },
+      {
+        "id": 6784,
+        "order": 6,
+        "credit_id": "52fe424ac3a36847f8012a85",
+        "name": "Jacques Herlin",
+        "cast_id": 10,
+        "profile_path": "/wwgVnt3jtrJFEgSxFQr91KzfsWc.jpg",
+        "character": "Perreau"
+      },
+      {
+        "id": 6785,
+        "order": 7,
+        "credit_id": "52fe424ac3a36847f8012a89",
+        "name": "Jho Jhenkins",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Ziba"
+      },
+      {
+        "id": 6786,
+        "order": 8,
+        "credit_id": "52fe424ac3a36847f8012a8d",
+        "name": "Willie Jonah",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Oyo"
+      },
+      {
+        "id": 6787,
+        "order": 9,
+        "credit_id": "52fe424ac3a36847f8012a91",
+        "name": "Adolfo Lastretti",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Pino"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6778,
+        "credit_id": "52fe4249c3a36847f8012a5d",
+        "department": "Directing",
+        "name": "John Guillermin",
+        "job": "Director",
+        "profile_path": "/qm7qruXJwrzNLvrTXl42vRBoMer.jpg"
+      },
+      {
+        "id": 6483,
+        "credit_id": "52fe424ac3a36847f8012a63",
+        "department": "Writing",
+        "name": "Ernest Tidyman",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 6779,
+        "credit_id": "52fe424ac3a36847f8012a69",
+        "department": "Writing",
+        "name": "Stirling Silliphant",
+        "job": "Author",
+        "profile_path": "/rU0rdr05rqlBotVaSoYPUnDxAB.jpg"
+      },
+      {
+        "id": 6776,
+        "credit_id": "52fe424ac3a36847f8012a97",
+        "department": "Production",
+        "name": "Roger Lewis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6788,
+        "credit_id": "52fe424ac3a36847f8012a9d",
+        "department": "Sound",
+        "name": "Johnny Pate",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6789,
+        "credit_id": "52fe424ac3a36847f8012aa3",
+        "department": "Camera",
+        "name": "Marcel Grignon",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6790,
+        "credit_id": "52fe424ac3a36847f8012aa9",
+        "department": "Editing",
+        "name": "Max Benedict",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6791,
+        "credit_id": "52fe424ac3a36847f8012aaf",
+        "department": "Production",
+        "name": "Irene Howard",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6792,
+        "credit_id": "52fe424ac3a36847f8012ab5",
+        "department": "Production",
+        "name": "Jose Villaverde",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6793,
+        "credit_id": "52fe424ac3a36847f8012abb",
+        "department": "Art",
+        "name": "John Stoll",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 112,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 494,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Shaft in Africa",
+  "overview": "The third instalment of in the Shaft film trilogy starring the loveable black bad-ass detective John Shaft. This time Shaft heads to Africa to help shut down people selling immigrants to Europe.",
+  "production_companies": [],
+  "belongs_to_collection": {
+    "id": 495,
+    "backdrop_path": "/muZrPdBs937VAx03Giw66x1XGus.jpg",
+    "name": "Shaft Collection",
+    "poster_path": "/8ljhkrxlVzNFzKLwRpsgAtwk7oJ.jpg"
+  },
+  "imdb_id": "tt0070679",
+  "release_date": "1973-06-14",
+  "original_title": "Shaft in Africa",
+  "vote_count": 1,
+  "poster_path": "/fY5SLWGJTd50f2TsHokvXBOywQG.jpg",
+  "tagline": "Shaft is stickin' it...all the way.",
+  "revenue": 1458000,
+  "popularity": "0.187426693375581"
+}

@@ -1,0 +1,28 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 82,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0832605",
+  "combined_credits": {
+    "cast": [{
+      "id": 19,
+      "media_type": "movie",
+      "title": "Metropolis",
+      "credit_id": "52fe420fc3a36847f8000c9f",
+      "release_date": "1927-01-10",
+      "original_title": "Metropolis",
+      "adult": false,
+      "poster_path": "/hnj1AptUFmYYZNjrbIHgNjgt3ZX.jpg",
+      "character": "Jan"
+    }],
+    "crew": []
+  },
+  "name": "Olaf Storm",
+  "place_of_birth": null,
+  "popularity": "1.00688492825546"
+}

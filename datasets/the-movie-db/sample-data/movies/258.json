@@ -1,0 +1,284 @@
+{
+  "budget": 0,
+  "vote_average": 6,
+  "backdrop_path": "/3Y1QLdgsKh4YH5M70vurPizZoat.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1653,
+        "order": 0,
+        "credit_id": "52fe422ec3a36847f800a4b5",
+        "name": "Jean-Pierre Léaud",
+        "cast_id": 13,
+        "profile_path": "/8t7gc9AAHGBipgz2mKZyhWLB8zL.jpg",
+        "character": "Antoine Doinel"
+      },
+      {
+        "id": 3507,
+        "order": 1,
+        "credit_id": "52fe422ec3a36847f800a4b9",
+        "name": "Claude Jade",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Christine Doinel"
+      },
+      {
+        "id": 3509,
+        "order": 2,
+        "credit_id": "52fe422ec3a36847f800a4bd",
+        "name": "Daniel Ceccaldi",
+        "cast_id": 15,
+        "profile_path": "/mog9FrCetK1a6MKqWFl0pWXyr6X.jpg",
+        "character": "Monsieur Darbon"
+      },
+      {
+        "id": 3510,
+        "order": 3,
+        "credit_id": "52fe422ec3a36847f800a4c1",
+        "name": "Claire Duhamel",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Madame Darbon"
+      },
+      {
+        "id": 3572,
+        "order": 4,
+        "credit_id": "52fe422ec3a36847f800a4c5",
+        "name": "Hiroko Berghauer",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Kyoko"
+      },
+      {
+        "id": 3573,
+        "order": 5,
+        "credit_id": "52fe422ec3a36847f800a4c9",
+        "name": "Daniel Boulanger",
+        "cast_id": 18,
+        "profile_path": "/3Egd9oziYQQjO686lDQ8Z1DWCLr.jpg",
+        "character": "Ténor"
+      },
+      {
+        "id": 3574,
+        "order": 6,
+        "credit_id": "52fe422ec3a36847f800a4cd",
+        "name": "Silvana Blasi",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Silvana"
+      },
+      {
+        "id": 3575,
+        "order": 7,
+        "credit_id": "52fe422ec3a36847f800a4d1",
+        "name": "Barbara Laage",
+        "cast_id": 20,
+        "profile_path": "/a9sFHGRfWfCDfBry47GcLjrttdv.jpg",
+        "character": "Monique"
+      },
+      {
+        "id": 3577,
+        "order": 8,
+        "credit_id": "52fe422ec3a36847f800a4d5",
+        "name": "Claude Véga",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "L'étrangleur"
+      },
+      {
+        "id": 3579,
+        "order": 9,
+        "credit_id": "52fe422ec3a36847f800a4d9",
+        "name": "Danièle Girard",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Ginette"
+      },
+      {
+        "id": 3580,
+        "order": 10,
+        "credit_id": "52fe422ec3a36847f800a4dd",
+        "name": "Marie Irakane",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Madame Martin"
+      },
+      {
+        "id": 3581,
+        "order": 11,
+        "credit_id": "52fe422ec3a36847f800a4e1",
+        "name": "Philippe Léotard",
+        "cast_id": 24,
+        "profile_path": "/jt1rdhDyvZDeznSms4d6UlYkV0R.jpg",
+        "character": "Drunken Man"
+      },
+      {
+        "id": 1650,
+        "order": 12,
+        "credit_id": "52fe422ec3a36847f800a4e5",
+        "name": "François Truffaut",
+        "cast_id": 25,
+        "profile_path": "/fPu5ctdDUqGxQiZM7ARNaNPQtFS.jpg",
+        "character": "Newspaper Seller"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1650,
+        "credit_id": "52fe422ec3a36847f800a46f",
+        "department": "Directing",
+        "name": "François Truffaut",
+        "job": "Director",
+        "profile_path": "/fPu5ctdDUqGxQiZM7ARNaNPQtFS.jpg"
+      },
+      {
+        "id": 1650,
+        "credit_id": "52fe422ec3a36847f800a475",
+        "department": "Writing",
+        "name": "François Truffaut",
+        "job": "Author",
+        "profile_path": "/fPu5ctdDUqGxQiZM7ARNaNPQtFS.jpg"
+      },
+      {
+        "id": 3531,
+        "credit_id": "52fe422ec3a36847f800a47b",
+        "department": "Writing",
+        "name": "Claude de Givray",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 3532,
+        "credit_id": "52fe422ec3a36847f800a481",
+        "department": "Writing",
+        "name": "Bernard Revon",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1650,
+        "credit_id": "52fe422ec3a36847f800a487",
+        "department": "Production",
+        "name": "François Truffaut",
+        "job": "Producer",
+        "profile_path": "/fPu5ctdDUqGxQiZM7ARNaNPQtFS.jpg"
+      },
+      {
+        "id": 3524,
+        "credit_id": "52fe422ec3a36847f800a48d",
+        "department": "Production",
+        "name": "Marcel Berbert",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3529,
+        "credit_id": "52fe422ec3a36847f800a493",
+        "department": "Sound",
+        "name": "Antoine Duhamel",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3569,
+        "credit_id": "52fe422ec3a36847f800a499",
+        "department": "Camera",
+        "name": "Néstor Almendros",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3526,
+        "credit_id": "52fe422ec3a36847f800a49f",
+        "department": "Editing",
+        "name": "Agnès Guillemot",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3570,
+        "credit_id": "52fe422ec3a36847f800a4a5",
+        "department": "Art",
+        "name": "Jean Mandaroux",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3528,
+        "credit_id": "52fe422ec3a36847f800a4ab",
+        "department": "Sound",
+        "name": "René Levert",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3571,
+        "credit_id": "52fe422ec3a36847f800a4b1",
+        "department": "Sound",
+        "name": "Jacques Maumont",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 18209,
+        "credit_id": "52fe422ec3a36847f800a4eb",
+        "department": "Production",
+        "name": "Claude Miller",
+        "job": "Production Manager",
+        "profile_path": "/s3zRKECzjam2SrhRIHmr3vBcjlL.jpg"
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [{
+    "iso_639_1": "fr",
+    "name": "Français"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 258,
+  "production_countries": [{
+    "name": "France",
+    "iso_3166_1": "FR"
+  }],
+  "title": "Bed and Board",
+  "overview": "Bed and Board depicts Christine and Antoine having just gotten married yet things fall apart as they are unfaithful.",
+  "production_companies": [
+    {
+      "id": 72,
+      "name": "Valoria Films"
+    },
+    {
+      "id": 73,
+      "name": "Fida cinematografica"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0065651",
+  "release_date": "1970-09-09",
+  "original_title": "Domicile Conjugal",
+  "vote_count": 9,
+  "poster_path": "/waZGQ54VICYW6L3JV4GeDbe8LPQ.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.214285851026048"
+}

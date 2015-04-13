@@ -1,13 +1,14 @@
 package io.lumify.web.clientapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.*;
 
 public class ClientApiOntology implements ClientApiObject {
-    private List<Concept> concepts = new ArrayList<Concept>();
-    private List<Property> properties = new ArrayList<Property>();
-    private List<Relationship> relationships = new ArrayList<Relationship>();
+    private List<Concept> concepts = new ArrayList<>();
+    private List<Property> properties = new ArrayList<>();
+    private List<Relationship> relationships = new ArrayList<>();
 
     public List<Concept> getConcepts() {
         return concepts;
@@ -47,9 +48,10 @@ public class ClientApiOntology implements ClientApiObject {
         private Boolean searchable;
         private String glyphIconHref;
         private String color;
-        private List<String> addRelatedConceptWhiteList = new ArrayList<String>();
-        private List<String> properties = new ArrayList<String>();
-        private Map<String, String> metadata = new HashMap<String, String>();
+        private List<String> intents = new ArrayList<>();
+        private List<String> addRelatedConceptWhiteList = new ArrayList<>();
+        private List<String> properties = new ArrayList<>();
+        private Map<String, String> metadata = new HashMap<>();
 
         public String getId() {
             return id;
@@ -168,6 +170,11 @@ public class ClientApiOntology implements ClientApiObject {
         public List<String> getProperties() {
             return properties;
         }
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public List<String> getIntents() {
+            return intents;
+        }
     }
 
     public static class Property {
@@ -175,10 +182,15 @@ public class ClientApiOntology implements ClientApiObject {
         private String displayName;
         private boolean userVisible;
         private boolean searchable;
+        private boolean addable;
         private PropertyType dataType;
         private String displayType;
         private String propertyGroup;
-        private Map<String, String> possibleValues = new HashMap<String, String>();
+        private Map<String, String> possibleValues = new HashMap<>();
+        private String validationFormula;
+        private String displayFormula;
+        private String[] dependentPropertyIris;
+        private List<String> intents = new ArrayList<>();
 
         public String getTitle() {
             return title;
@@ -212,6 +224,14 @@ public class ClientApiOntology implements ClientApiObject {
             this.searchable = searchable;
         }
 
+        public boolean isAddable() {
+            return addable;
+        }
+
+        public void setAddable(boolean addable) {
+            this.addable = addable;
+        }
+
         public PropertyType getDataType() {
             return dataType;
         }
@@ -240,14 +260,54 @@ public class ClientApiOntology implements ClientApiObject {
         public Map<String, String> getPossibleValues() {
             return possibleValues;
         }
+
+        public void setValidationFormula(String validationFormula) {
+            this.validationFormula = validationFormula;
+        }
+
+        public String getValidationFormula() {
+            return validationFormula;
+        }
+
+        public void setDisplayFormula(String displayFormula) {
+            this.displayFormula = displayFormula;
+        }
+
+        public String getDisplayFormula() {
+            return displayFormula;
+        }
+
+        public void setDependentPropertyIris(String[] dependentPropertyIris) {
+            this.dependentPropertyIris = dependentPropertyIris;
+        }
+
+        @JsonIgnore
+        public void setDependentPropertyIris(Collection<String> dependentPropertyIris) {
+            if (dependentPropertyIris == null || dependentPropertyIris.size() == 0) {
+                this.dependentPropertyIris = null;
+            } else {
+                this.dependentPropertyIris = dependentPropertyIris.toArray(new String[dependentPropertyIris.size()]);
+            }
+        }
+
+        public String[] getDependentPropertyIris() {
+            return dependentPropertyIris;
+        }
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public List<String> getIntents() {
+            return intents;
+        }
     }
 
     public static class Relationship {
         private String title;
         private String displayName;
-        private List<String> domainConceptIris = new ArrayList<String>();
-        private List<String> rangeConceptIris = new ArrayList<String>();
-        private List<InverseOf> inverseOfs = new ArrayList<InverseOf>();
+        private Boolean userVisible;
+        private List<String> domainConceptIris = new ArrayList<>();
+        private List<String> rangeConceptIris = new ArrayList<>();
+        private List<InverseOf> inverseOfs = new ArrayList<>();
+        private List<String> intents = new ArrayList<>();
 
         public String getTitle() {
             return title;
@@ -281,9 +341,22 @@ public class ClientApiOntology implements ClientApiObject {
             this.rangeConceptIris = rangeConceptIris;
         }
 
+        public Boolean getUserVisible() {
+            return userVisible;
+        }
+
+        public void setUserVisible(Boolean userVisible) {
+            this.userVisible = userVisible;
+        }
+
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         public List<InverseOf> getInverseOfs() {
             return inverseOfs;
+        }
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        public List<String> getIntents() {
+            return intents;
         }
 
         public static class InverseOf {

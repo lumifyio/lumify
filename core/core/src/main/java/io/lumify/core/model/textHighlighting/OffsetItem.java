@@ -1,5 +1,6 @@
 package io.lumify.core.model.textHighlighting;
 
+import io.lumify.core.model.termMention.TermMentionFor;
 import io.lumify.web.clientapi.model.SandboxStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +39,8 @@ public abstract class OffsetItem implements Comparable {
         return null;
     }
 
+    public abstract TermMentionFor getTermMentionFor();
+
     public abstract SandboxStatus getSandboxStatus();
 
     public JSONObject getInfoJson() {
@@ -55,6 +58,9 @@ public abstract class OffsetItem implements Comparable {
                 infoJson.put("resolvedToEdgeId", getResolvedToEdgeId());
             }
             infoJson.put("type", getType());
+            if (getTermMentionFor() != null) {
+                infoJson.put("termMentionFor", getTermMentionFor().toString());
+            }
             infoJson.put("process", getProcess());
             return infoJson;
         } catch (JSONException e) {
@@ -63,7 +69,7 @@ public abstract class OffsetItem implements Comparable {
     }
 
     public List<String> getCssClasses() {
-        ArrayList<String> classes = new ArrayList<String>();
+        ArrayList<String> classes = new ArrayList<>();
         if (getResolvedToVertexId() != null) {
             classes.add("resolved");
         }
@@ -113,6 +119,11 @@ public abstract class OffsetItem implements Comparable {
 
         if (getOffset(getEnd()) != getOffset(other.getEnd())) {
             return getOffset(getEnd()) < getOffset(other.getEnd()) ? -1 : 1;
+        }
+
+        int termMentionForCompare = TermMentionFor.compare(getTermMentionFor(), other.getTermMentionFor());
+        if (termMentionForCompare != 0) {
+            return termMentionForCompare;
         }
 
         if (getResolvedToVertexId() == null && other.getResolvedToVertexId() == null) {

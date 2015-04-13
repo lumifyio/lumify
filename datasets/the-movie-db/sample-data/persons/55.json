@@ -1,0 +1,28 @@
+{
+  "birthday": "1992-06-02",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 55,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm1659629",
+  "combined_credits": {
+    "cast": [{
+      "id": 17,
+      "media_type": "movie",
+      "title": "The Dark",
+      "credit_id": "52fe420fc3a36847f8000a9f",
+      "release_date": "2006-04-11",
+      "original_title": "The Dark",
+      "adult": false,
+      "poster_path": "/spMYhC9Fom3QHiirsaf8nRS6Edd.jpg",
+      "character": "Ebrill"
+    }],
+    "crew": []
+  },
+  "name": "Abigail Stone",
+  "place_of_birth": null,
+  "popularity": "1.00000000005341"
+}

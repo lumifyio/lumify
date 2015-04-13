@@ -24,8 +24,8 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
     public static void main(String[] args) {
         try {
             ClientOpts opts = new ClientOpts();
-            opts.setUri("https://localhost:8889");
-            Map<String, String> properties = new HashMap<String, String>();
+            opts.setUri("https://lumify-dev:8889");
+            Map<String, String> properties = new HashMap<>();
             properties.put("fileMap", System.getProperty("fileMap"));
             opts.setProperties(properties);
             JavaCodeGenerator generator = new JavaCodeGenerator();
@@ -42,7 +42,9 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
     }
 
     private void fixFiles(File destDir) throws IOException {
-        for (File f : destDir.listFiles()) {
+        File[] files = destDir.listFiles();
+        if (files == null) return;
+        for (File f : files) {
             if (f.isDirectory()) {
                 fixFiles(f);
             } else {
@@ -62,11 +64,9 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
 
                 fileContents = fileContents.replaceAll("TResult\\.class", "resultType");
 
-                fileContents = fileContents.replaceAll("mp.field\\(\"vertexIds\\[\\]\", vertexIds, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String vertexId:vertexIds) { mp.field(\"vertexIds[]\", vertexId, MediaType.MULTIPART_FORM_DATA_TYPE); }");
-                fileContents = fileContents.replaceAll("formParams\\.put\\(\"vertexIds\\[\\]\", vertexIds\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");
-
-                fileContents = fileContents.replaceAll("mp.field\\(\"ids\\[\\]\", ids, MediaType.MULTIPART_FORM_DATA_TYPE\\);", "for(String id:ids) { mp.field(\"ids[]\", id, MediaType.MULTIPART_FORM_DATA_TYPE); }");
-                fileContents = fileContents.replaceAll("formParams\\.put\\(\"ids\\[\\]\", ids\\);", "throw new java.lang.RuntimeException(\"invalid content type\");");
+                for (String param : new String[] { "id", "userId", "vertexId", "edgeId", "graphVertexId", "relatedToVertexId" }) {
+                    fileContents = fixMultipartFormListFields(fileContents, param);
+                }
 
                 fileContents = fileContents.replaceAll("mp\\.field\\(\"file\", file, MediaType\\.MULTIPART_FORM_DATA_TYPE\\);",
                         "com.sun.jersey.core.header.FormDataContentDisposition dispo = com.sun.jersey.core.header.FormDataContentDisposition\n"
@@ -85,6 +85,29 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
         }
     }
 
+    private static final String HAS_FIELDS_REPLACE_MARKER = "//ifHasFieldsReplace";
+
+    private String fixMultipartFormListFields(String fileContents, String singularParamName) {
+        String pluralParamName = singularParamName + "s";
+
+        fileContents = fileContents.replaceAll(
+                String.format("mp.field\\(\"%s\\[\\]\", %s, MediaType.MULTIPART_FORM_DATA_TYPE\\);",
+                        pluralParamName, pluralParamName),
+                String.format("if(%s != null) { for(String %s:%s) { mp.field(\"%s[]\", %s, MediaType.MULTIPART_FORM_DATA_TYPE); } }\n%s",
+                        pluralParamName, singularParamName, pluralParamName, pluralParamName, singularParamName,
+                        HAS_FIELDS_REPLACE_MARKER));
+
+        fileContents = fileContents.replaceAll(
+                String.format("(?m)%s\\n\\s+if\\(hasFields\\)", HAS_FIELDS_REPLACE_MARKER),
+                "      if\\(hasFields && !mp.getFields\\(\\).isEmpty\\(\\)\\)");
+
+        fileContents = fileContents.replaceAll(
+                String.format("formParams\\.put\\(\"%s\\[\\]\", %s\\);", pluralParamName, pluralParamName),
+                "throw new java.lang.RuntimeException(\"invalid content type\");");
+
+        return fileContents;
+    }
+
     @Override
     public String destinationDir() {
         return "../client-api/src/main/java";
@@ -92,20 +115,21 @@ public class JavaCodeGenerator extends BasicJavaGenerator {
 
     @Override
     public Some<String> apiPackage() {
-        return new Some(BASE_CODEGEN_PACKAGE);
+        return new Some<>(BASE_CODEGEN_PACKAGE);
     }
 
     @Override
     public Some<String> invokerPackage() {
-        return new Some(BASE_CODEGEN_PACKAGE);
+        return new Some<>(BASE_CODEGEN_PACKAGE);
     }
 
     @Override
     public Some<String> modelPackage() {
-        return new Some(BASE_PACKAGE + ".model");
+        return new Some<>(BASE_PACKAGE + ".model");
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Tuple3<String, String, String>> supportingFiles() {
         return (List<Tuple3<String, String, String>>) super.supportingFiles().filterNot(new AbstractFunction1<Tuple3<String, String, String>, Object>() {
             @Override

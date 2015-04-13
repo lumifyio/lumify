@@ -1,0 +1,329 @@
+{
+  "budget": 2700000,
+  "vote_average": 7.6,
+  "backdrop_path": "/1EeGCNwUPvSq4Z2AuI1Yu0QZZ3s.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5201,
+        "order": 0,
+        "credit_id": "52fe423ac3a36847f800dd67",
+        "name": "Robert Stadlober",
+        "cast_id": 18,
+        "profile_path": "/ieQzMWF4yS5Gn8TNUeSNODE9iTT.jpg",
+        "character": "Tobi"
+      },
+      {
+        "id": 5202,
+        "order": 1,
+        "credit_id": "52fe423ac3a36847f800dd6b",
+        "name": "Kostja Ullmann",
+        "cast_id": 19,
+        "profile_path": "/zGlasppmZ86jmBfWXEvI77eGgaF.jpg",
+        "character": "Achim"
+      },
+      {
+        "id": 5203,
+        "order": 2,
+        "credit_id": "52fe423ac3a36847f800dd6f",
+        "name": "Alicja Bachleda-Curuś",
+        "cast_id": 20,
+        "profile_path": "/o4XqQkJQUSHBK9uiYNaBx3CDme9.jpg",
+        "character": "Anke"
+      },
+      {
+        "id": 5204,
+        "order": 3,
+        "credit_id": "52fe423ac3a36847f800dd73",
+        "name": "Jürgen Tonkel",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Hansi"
+      },
+      {
+        "id": 5205,
+        "order": 4,
+        "credit_id": "52fe423ac3a36847f800dd77",
+        "name": "Tristano Casanova",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Georg \"Schorsi\""
+      },
+      {
+        "id": 5206,
+        "order": 5,
+        "credit_id": "52fe423ac3a36847f800dd7b",
+        "name": "Miriam Morgenstern",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Sandra"
+      },
+      {
+        "id": 5207,
+        "order": 6,
+        "credit_id": "52fe423ac3a36847f800dd7f",
+        "name": "Marlon Kittel",
+        "cast_id": 24,
+        "profile_path": "/3Yo7gRRdDOXdMyZHL1kkrLo5G8x.jpg",
+        "character": "Leo"
+      },
+      {
+        "id": 5208,
+        "order": 7,
+        "credit_id": "52fe423ac3a36847f800dd83",
+        "name": "Hanno Koffler",
+        "cast_id": 25,
+        "profile_path": "/mXHaEdSVP7H7FzAo4wvsHECgSuF.jpg",
+        "character": "Malte"
+      },
+      {
+        "id": 5209,
+        "order": 8,
+        "credit_id": "52fe423ac3a36847f800dd87",
+        "name": "Joseph M'Barek",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Ferdl"
+      },
+      {
+        "id": 5210,
+        "order": 9,
+        "credit_id": "52fe423ac3a36847f800dd8b",
+        "name": "Alexa Maria Surholt",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Susanne"
+      },
+      {
+        "id": 5211,
+        "order": 10,
+        "credit_id": "52fe423ac3a36847f800dd8f",
+        "name": "Jeff Fischer",
+        "cast_id": 28,
+        "profile_path": "/oISpkOCxzWzQy0FLoH3ziHJQ0Cn.jpg",
+        "character": "Flasche"
+      },
+      {
+        "id": 5212,
+        "order": 11,
+        "credit_id": "52fe423ac3a36847f800dd93",
+        "name": "Michael Wiesner",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Nils"
+      },
+      {
+        "id": 5213,
+        "order": 12,
+        "credit_id": "52fe423ac3a36847f800dd97",
+        "name": "Benjamin Vilzmann",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Niels"
+      },
+      {
+        "id": 5214,
+        "order": 13,
+        "credit_id": "52fe423ac3a36847f800dd9b",
+        "name": "Ludwig Blochberger",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Oli"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5191,
+        "credit_id": "52fe423ac3a36847f800dd03",
+        "department": "Writing",
+        "name": "Thomas Bahmann",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5192,
+        "credit_id": "52fe423ac3a36847f800dd09",
+        "department": "Directing",
+        "name": "Marco Kreuzpaintner",
+        "job": "Director",
+        "profile_path": "/83LDn0sQxm4AQ7lP6y3bAIGluBp.jpg"
+      },
+      {
+        "id": 4525,
+        "credit_id": "52fe423ac3a36847f800dd0f",
+        "department": "Production",
+        "name": "Jakob Claussen",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4557,
+        "credit_id": "52fe423ac3a36847f800dd15",
+        "department": "Production",
+        "name": "Ulrike Putz",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4526,
+        "credit_id": "52fe423ac3a36847f800dd1b",
+        "department": "Production",
+        "name": "Thomas Wöbke",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5193,
+        "credit_id": "52fe423ac3a36847f800dd21",
+        "department": "Sound",
+        "name": "Matthew Caws",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4524,
+        "credit_id": "52fe423ac3a36847f800dd27",
+        "department": "Sound",
+        "name": "Niki Reiser",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5194,
+        "credit_id": "52fe423ac3a36847f800dd2d",
+        "department": "Camera",
+        "name": "Daniel Gottschalk",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5195,
+        "credit_id": "52fe423ac3a36847f800dd33",
+        "department": "Editing",
+        "name": "Hansjörg Weißbrich",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4222,
+        "credit_id": "52fe423ac3a36847f800dd39",
+        "department": "Production",
+        "name": "Simone Bär",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5196,
+        "credit_id": "52fe423ac3a36847f800dd3f",
+        "department": "Art",
+        "name": "Heike Lange",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 5197,
+        "credit_id": "52fe423ac3a36847f800dd45",
+        "department": "Costume & Make-Up",
+        "name": "Anke Winckler",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5198,
+        "credit_id": "52fe423ac3a36847f800dd4b",
+        "department": "Production",
+        "name": "Jens Oberwetter",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 5199,
+        "credit_id": "52fe423ac3a36847f800dd51",
+        "department": "Directing",
+        "name": "Benedict Hoermann",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 3700,
+        "credit_id": "52fe423ac3a36847f800dd57",
+        "department": "Sound",
+        "name": "Dirk Jacob",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 5200,
+        "credit_id": "52fe423ac3a36847f800dd5d",
+        "department": "Sound",
+        "name": "Florian Niederleithinger",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 5192,
+        "credit_id": "52fe423ac3a36847f800dd63",
+        "department": "Writing",
+        "name": "Marco Kreuzpaintner",
+        "job": "Author",
+        "profile_path": "/83LDn0sQxm4AQ7lP6y3bAIGluBp.jpg"
+      },
+      {
+        "id": 52875,
+        "credit_id": "52fe423ac3a36847f800dda1",
+        "department": "Art",
+        "name": "Oliver Klein",
+        "job": "Assistant Art Director",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 98,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.sommersturm.de/main.html",
+  "id": 342,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Summer Storm",
+  "overview": "Tobi and Achim, the pride of the local crew club, have been the best of friends for years and are convinced that nothing will ever stand in the way of their friendship. They look forward to the upcoming summer camp and the crew competition. Then the gay team from Berlin arrives and Tobi is totally confused. The evening before the races begin, the storm that breaks out is more than meteorlogical...",
+  "production_companies": [{
+    "id": 161,
+    "name": "Claussen + Wöbke Filmproduktion GmbH"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0420206",
+  "release_date": "2004-09-02",
+  "original_title": "Sommersturm",
+  "vote_count": 12,
+  "poster_path": "/icfGUZBHBe83eMVay7mMZcFOjnP.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.297684698211881"
+}

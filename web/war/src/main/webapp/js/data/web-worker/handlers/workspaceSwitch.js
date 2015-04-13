@@ -8,8 +8,9 @@ define(['../services/workspace'], function(Workspace) {
             })
             .catch(function(xhr) {
                 return Workspace.all().then(function(workspaces) {
-                    if (workspaces.length) {
-                        return workspaces[0];
+                    var workspace = _.findWhere(workspaces, { sharedToUser: false });
+                    if (workspace) {
+                        return Workspace.get(workspace.workspaceId);
                     }
                     return Workspace.create();
                 });
@@ -24,6 +25,8 @@ define(['../services/workspace'], function(Workspace) {
                         vertices = results.shift().vertices,
                         store = results.shift();
 
+                    store.setWorkspace(workspace);
+
                     pushSocketMessage({
                         type: 'setActiveWorkspace',
                         data: {
@@ -37,7 +40,7 @@ define(['../services/workspace'], function(Workspace) {
                     });
                     dispatchMain('edgesLoaded', {
                         edges: edges
-                    })
+                    });
                 })
             });
     };

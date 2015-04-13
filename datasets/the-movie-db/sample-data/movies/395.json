@@ -1,0 +1,392 @@
+{
+  "budget": 70000000,
+  "vote_average": 5.5,
+  "backdrop_path": "/1vRCFWKPydH82T1wsPMYkRjcZXY.jpg",
+  "genres": [{
+    "id": 878,
+    "name": "Science Fiction"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5411,
+        "order": 0,
+        "credit_id": "52fe423ec3a36847f800f085",
+        "name": "Sanaa Lathan",
+        "cast_id": 7,
+        "profile_path": "/hNGPCe0q8prMkBebLzpi2vBwEWr.jpg",
+        "character": "Alexa Woods"
+      },
+      {
+        "id": 5412,
+        "order": 1,
+        "credit_id": "52fe423ec3a36847f800f089",
+        "name": "Raoul Bova",
+        "cast_id": 8,
+        "profile_path": "/dDOHEiLRJs50xSUnNACRxOAFCyw.jpg",
+        "character": "Sebastian de Rosa"
+      },
+      {
+        "id": 1125,
+        "order": 2,
+        "credit_id": "52fe423ec3a36847f800f08d",
+        "name": "Ewen Bremner",
+        "cast_id": 9,
+        "profile_path": "/7CQBnBHSNDcbY2LucqWqEpKWsCH.jpg",
+        "character": "Graeme Miller"
+      },
+      {
+        "id": 5414,
+        "order": 3,
+        "credit_id": "52fe423ec3a36847f800f091",
+        "name": "Colin Salmon",
+        "cast_id": 10,
+        "profile_path": "/65NLTMVHkjLIMjxasspMjwa6dLu.jpg",
+        "character": "Maxwell Stafford"
+      },
+      {
+        "id": 2478,
+        "order": 4,
+        "credit_id": "52fe423ec3a36847f800f095",
+        "name": "Tommy Flanagan",
+        "cast_id": 11,
+        "profile_path": "/gA3pxOdlMJxLci5UnpkfLYNF17C.jpg",
+        "character": "Mark Verheiden"
+      },
+      {
+        "id": 5415,
+        "order": 5,
+        "credit_id": "52fe423ec3a36847f800f099",
+        "name": "Joseph Rye",
+        "cast_id": 12,
+        "profile_path": "/oPqpgbXaAKQkbVqh3eBlJ6Mu8QJ.jpg",
+        "character": "Joe Connors"
+      },
+      {
+        "id": 5416,
+        "order": 6,
+        "credit_id": "52fe423ec3a36847f800f09d",
+        "name": "Agathe de La Boulaye",
+        "cast_id": 13,
+        "profile_path": "/qM8M1ZFp1kmn1IFTwPghxH2spYB.jpg",
+        "character": "Adele Rousseau"
+      },
+      {
+        "id": 5417,
+        "order": 7,
+        "credit_id": "52fe423ec3a36847f800f0a1",
+        "name": "Carsten Norgaard",
+        "cast_id": 14,
+        "profile_path": "/aAbBoUqBS5d8vngGj6KsVzW0p64.jpg",
+        "character": "Rusten Quinn"
+      },
+      {
+        "id": 5421,
+        "order": 8,
+        "credit_id": "52fe423ec3a36847f800f0a5",
+        "name": "Sam Troughton",
+        "cast_id": 15,
+        "profile_path": "/yGSOUqTaeRwZ8A2Kh5Xy79NdXkM.jpg",
+        "character": "Thomas Parks"
+      },
+      {
+        "id": 2714,
+        "order": 9,
+        "credit_id": "52fe423ec3a36847f800f0df",
+        "name": "Lance Henriksen",
+        "cast_id": 25,
+        "profile_path": "/5XY7XCtoqEAXeNHmLQU1CLPQa52.jpg",
+        "character": "Charles Bishop Weyland"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1104780,
+        "credit_id": "53948242c3a368641d002f4f",
+        "department": "Art",
+        "name": "Ray Chan",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 1324126,
+        "credit_id": "53948255c3a36842520010ac",
+        "department": "Art",
+        "name": "Stephen Dobric",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11457,
+        "credit_id": "53948266c3a368642b002f26",
+        "department": "Art",
+        "name": "Jindrich Kocí",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 1328822,
+        "credit_id": "5394827ac3a3686415002d8d",
+        "department": "Art",
+        "name": "Milena Koubkova",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 9822,
+        "credit_id": "53948296c3a3686434002f18",
+        "department": "Crew",
+        "name": "Adam O'Neill",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 1328823,
+        "credit_id": "539482aac3a3686446002e41",
+        "department": "Art",
+        "name": "Justin Warburton-Brown",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 11270,
+        "credit_id": "539482bdc3a3686415002d94",
+        "department": "Art",
+        "name": "Peter Walpole",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 907,
+        "credit_id": "539482ddc3a3686415002d9a",
+        "department": "Costume & Make-Up",
+        "name": "Magali Guidasci",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 4014,
+        "credit_id": "52fe423ec3a36847f800f063",
+        "department": "Directing",
+        "name": "Paul W.S. Anderson",
+        "job": "Director",
+        "profile_path": "/s0JuUAQtfBha5gqGWto2JcGBtbG.jpg"
+      },
+      {
+        "id": 5045,
+        "credit_id": "52fe423ec3a36847f800f069",
+        "department": "Writing",
+        "name": "Dan O'Bannon",
+        "job": "Screenplay",
+        "profile_path": "/slLZWXZ1lmdF763166ATRRI200n.jpg"
+      },
+      {
+        "id": 5046,
+        "credit_id": "52fe423ec3a36847f800f06f",
+        "department": "Writing",
+        "name": "Ronald Shusett",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1092,
+        "credit_id": "52fe423ec3a36847f800f075",
+        "department": "Writing",
+        "name": "Jim Thomas",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1094,
+        "credit_id": "52fe423ec3a36847f800f07b",
+        "department": "Writing",
+        "name": "John Thomas",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 4014,
+        "credit_id": "52fe423ec3a36847f800f081",
+        "department": "Writing",
+        "name": "Paul W.S. Anderson",
+        "job": "Screenplay",
+        "profile_path": "/s0JuUAQtfBha5gqGWto2JcGBtbG.jpg"
+      },
+      {
+        "id": 5053,
+        "credit_id": "52fe423ec3a36847f800f0ab",
+        "department": "Production",
+        "name": "Gordon Carroll",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2043,
+        "credit_id": "52fe423ec3a36847f800f0b1",
+        "department": "Production",
+        "name": "John Davis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 915,
+        "credit_id": "52fe423ec3a36847f800f0b7",
+        "department": "Production",
+        "name": "David Giler",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1723,
+        "credit_id": "52fe423ec3a36847f800f0bd",
+        "department": "Production",
+        "name": "Walter Hill",
+        "job": "Producer",
+        "profile_path": "/wpNPqW1oPi2GMYEgykHYBTDdGmJ.jpg"
+      },
+      {
+        "id": 5430,
+        "credit_id": "52fe423ec3a36847f800f0c3",
+        "department": "Sound",
+        "name": "Harald Kloser",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5432,
+        "credit_id": "52fe423ec3a36847f800f0c9",
+        "department": "Camera",
+        "name": "David Johnson",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1851,
+        "credit_id": "52fe423ec3a36847f800f0cf",
+        "department": "Editing",
+        "name": "Alexander Berner",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4023,
+        "credit_id": "52fe423ec3a36847f800f0d5",
+        "department": "Production",
+        "name": "Suzanne Smith",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5438,
+        "credit_id": "52fe423ec3a36847f800f0db",
+        "department": "Art",
+        "name": "Richard Bridgland",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 25729,
+        "credit_id": "52fe423ec3a36847f800f0e5",
+        "department": "Production",
+        "name": "Nancy Bishop",
+        "job": "Casting",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 101,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.avp-movie.com/",
+  "id": 395,
+  "production_countries": [
+    {
+      "name": "Canada",
+      "iso_3166_1": "CA"
+    },
+    {
+      "name": "Czech Republic",
+      "iso_3166_1": "CZ"
+    },
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "AVP: Alien vs. Predator",
+  "overview": "When scientists discover something in the Arctic that appears to be a buried Pyramid, they send a research team out to investigate. Little do they know that they are about to step into a hunting ground where Aliens are grown as sport for the Predator race. The films sees two of the largest comic and movie franchises collide in an all out war.",
+  "production_companies": [
+    {
+      "id": 19828,
+      "name": "Lonlink Productions"
+    },
+    {
+      "id": 306,
+      "name": "Twentieth Century Fox Film Corporation"
+    },
+    {
+      "id": 1302,
+      "name": "Davis Entertainment"
+    },
+    {
+      "id": 19747,
+      "name": "Brandywine Productions"
+    },
+    {
+      "id": 11345,
+      "name": "Stillking Films"
+    },
+    {
+      "id": 19834,
+      "name": "Inside Track Films"
+    },
+    {
+      "id": 19835,
+      "name": "Charenton Productions Limited"
+    },
+    {
+      "id": 248,
+      "name": "Impact Pictures"
+    },
+    {
+      "id": 19830,
+      "name": "Zweite Babelsberg Film GmbH"
+    },
+    {
+      "id": 19829,
+      "name": "Kut Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 115762,
+    "backdrop_path": "/c5ccDw4lcTUnYGdCxc2yEl8PjTk.jpg",
+    "name": "AVP Collection",
+    "poster_path": "/zrApSsUX9i0qVntcCD0Pp55TdCy.jpg"
+  },
+  "imdb_id": "tt0370263",
+  "release_date": "2004-08-13",
+  "original_title": "AVP: Alien vs. Predator",
+  "vote_count": 292,
+  "poster_path": "/9xzRKUBIqLwhhOYtcE7P1BbWXP9.jpg",
+  "tagline": "Whoever wins... We lose",
+  "revenue": 171183863,
+  "popularity": 1.910337180513
+}

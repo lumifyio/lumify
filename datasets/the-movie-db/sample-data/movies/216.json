@@ -1,0 +1,276 @@
+{
+  "budget": 130000,
+  "vote_average": 8.5,
+  "backdrop_path": "/1ZKDZry6b7cVlzuIJe9PB5Url16.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2726,
+        "order": 0,
+        "credit_id": "52fe4227c3a36847f80083df",
+        "name": "Brigitte Mira",
+        "cast_id": 4,
+        "profile_path": "/yyimLXxKudp9Kq1PeXdn236oexv.jpg",
+        "character": "Emmi Kurowski (Emanuela ben Salem M'Barek Mohammed Mustapha)"
+      },
+      {
+        "id": 2727,
+        "order": 1,
+        "credit_id": "52fe4227c3a36847f80083e3",
+        "name": "El Hedi ben Salem",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Ali (El Hedi ben Salem M'Barek Mohammed Mustapha)"
+      },
+      {
+        "id": 2728,
+        "order": 2,
+        "credit_id": "52fe4227c3a36847f80083e7",
+        "name": "Barbara Valentin",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Barbara"
+      },
+      {
+        "id": 2729,
+        "order": 3,
+        "credit_id": "52fe4227c3a36847f80083eb",
+        "name": "Irm Hermann",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Krista"
+      },
+      {
+        "id": 2730,
+        "order": 4,
+        "credit_id": "52fe4227c3a36847f80083ef",
+        "name": "Elma Karlowa",
+        "cast_id": 8,
+        "profile_path": "/iqNGFFGs8CPMyPKz4wccKOhoi5z.jpg",
+        "character": "Frau Kargus"
+      },
+      {
+        "id": 2731,
+        "order": 5,
+        "credit_id": "52fe4227c3a36847f80083f3",
+        "name": "Anita Bucher",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Frau Ellis"
+      },
+      {
+        "id": 2732,
+        "order": 6,
+        "credit_id": "52fe4227c3a36847f80083f7",
+        "name": "Gusti Kreissl",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Paula"
+      },
+      {
+        "id": 2733,
+        "order": 7,
+        "credit_id": "52fe4227c3a36847f80083fb",
+        "name": "Doris Mattes",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Frau Angermayer"
+      },
+      {
+        "id": 2734,
+        "order": 8,
+        "credit_id": "52fe4227c3a36847f80083ff",
+        "name": "Margit Symo",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Hedwig"
+      },
+      {
+        "id": 2735,
+        "order": 9,
+        "credit_id": "52fe4227c3a36847f8008403",
+        "name": "Katharina Herberg",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Bardame"
+      },
+      {
+        "id": 2740,
+        "order": 10,
+        "credit_id": "52fe4227c3a36847f8008425",
+        "name": "Lilo Pempeit",
+        "cast_id": 19,
+        "profile_path": "/6x2TXUeJvyiaVuKuvUCSdscDF3Z.jpg",
+        "character": "Frau Munchmeyer"
+      },
+      {
+        "id": 2741,
+        "order": 11,
+        "credit_id": "52fe4227c3a36847f8008429",
+        "name": "Walter Sedlmayr",
+        "cast_id": 20,
+        "profile_path": "/2wEhEfcyjOLiutlKrcn6XWS49i4.jpg",
+        "character": "Herr Angermayer"
+      },
+      {
+        "id": 2725,
+        "order": 12,
+        "credit_id": "52fe4227c3a36847f800842d",
+        "name": "Rainer Werner Fassbinder",
+        "cast_id": 21,
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg",
+        "character": "Eugen"
+      },
+      {
+        "id": 2742,
+        "order": 13,
+        "credit_id": "52fe4227c3a36847f8008431",
+        "name": "Karl Scheydt",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Albert"
+      },
+      {
+        "id": 2743,
+        "order": 14,
+        "credit_id": "52fe4227c3a36847f8008435",
+        "name": "Peter Gauhe",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Bruno"
+      },
+      {
+        "id": 130913,
+        "order": 15,
+        "credit_id": "53404ae0c3a36814ff00039a",
+        "name": "Marquard Bohm",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Gruber, Sohn des Vermieters"
+      },
+      {
+        "id": 1865,
+        "order": 16,
+        "credit_id": "53404b23c3a36814f900038b",
+        "name": "Hark Bohm",
+        "cast_id": 25,
+        "profile_path": "/ptmIE7lSIiCS6mlXHOz3WgT7D43.jpg",
+        "character": "Arzt"
+      },
+      {
+        "id": 21997,
+        "order": 17,
+        "credit_id": "53404b43c3a368152f000426",
+        "name": "Kurt Raab",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Automechaniker"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2725,
+        "credit_id": "52fe4227c3a36847f80083cf",
+        "department": "Directing",
+        "name": "Rainer Werner Fassbinder",
+        "job": "Director",
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg"
+      },
+      {
+        "id": 2725,
+        "credit_id": "52fe4227c3a36847f80083d5",
+        "department": "Production",
+        "name": "Rainer Werner Fassbinder",
+        "job": "Producer",
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg"
+      },
+      {
+        "id": 2725,
+        "credit_id": "52fe4227c3a36847f80083db",
+        "department": "Writing",
+        "name": "Rainer Werner Fassbinder",
+        "job": "Author",
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg"
+      },
+      {
+        "id": 2725,
+        "credit_id": "52fe4227c3a36847f8008409",
+        "department": "Sound",
+        "name": "Rainer Werner Fassbinder",
+        "job": "Original Music Composer",
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg"
+      },
+      {
+        "id": 5639,
+        "credit_id": "52fe4227c3a36847f800840f",
+        "department": "Camera",
+        "name": "Jürgen Jürges",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 2738,
+        "credit_id": "52fe4227c3a36847f8008415",
+        "department": "Sound",
+        "name": "Fritz Müller-Scherz",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 2737,
+        "credit_id": "52fe4227c3a36847f800841b",
+        "department": "Editing",
+        "name": "Thea Eymèsz",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2725,
+        "credit_id": "52fe4227c3a36847f8008421",
+        "department": "Art",
+        "name": "Rainer Werner Fassbinder",
+        "job": "Production Design",
+        "profile_path": "/tNqSA3DGpCTSDtcqjjh5Phkcmm0.jpg"
+      }
+    ]
+  },
+  "runtime": 93,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 216,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Ali: Fear Eats the Soul",
+  "overview": "A simple, delicate, melodramatic German film about a loneliness. With a double moral story about the tainted love between an old woman and a younger Moroccan immigrant worker.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0071141",
+  "release_date": "1974-03-05",
+  "original_title": "Angst essen Seele auf",
+  "vote_count": 3,
+  "poster_path": "/w7QSyXa4dBatCU4MtElEovE6lqG.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.380697967999559"
+}

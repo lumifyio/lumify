@@ -152,8 +152,8 @@ define([
         this.onVerticesDeleted = function(event, data) {
             var self = this;
 
-            data.vertices.forEach(function(v) {
-                self.graph.removeNode(v.id);
+            data.vertexIds.forEach(function(v) {
+                self.graph.removeNode(v);
             });
 
             self.graph.needsUpdate = true;
@@ -178,8 +178,8 @@ define([
 
             edges.length = 0;
             relationships.forEach(function(r) {
-                var source = graph.node(r.from),
-                    target = graph.node(r.to);
+                var source = graph.node(r.sourceVertexId),
+                    target = graph.node(r.destVertexId);
 
                 if (source && target) {
                     edges.push({

@@ -99,11 +99,10 @@ define([
         });
 
         var self = this,
-            extensionCount = 0,
             extensions = {};
 
         menubarPlugin.items.forEach(function(data) {
-            var cls = 'extension-' + extensionCount++,
+            var cls = data.identifier,
                 type = data.action.type;
 
             if (type in ACTION_TYPES) {

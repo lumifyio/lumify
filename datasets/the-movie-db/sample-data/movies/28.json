@@ -1,0 +1,396 @@
+{
+  "budget": 31500000,
+  "vote_average": 7.2,
+  "backdrop_path": "/k91Dag8AZbhjIJqrtf7F1bQnGPg.jpg",
+  "genres": [{
+    "id": 10752,
+    "name": "War"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 8349,
+        "order": 0,
+        "credit_id": "52fe4210c3a36847f800135b",
+        "name": "Martin Sheen",
+        "cast_id": 29,
+        "profile_path": "/mityfK8XVZ76Vse6h5oPECl9nGw.jpg",
+        "character": "Captain Benjamin L. Willard"
+      },
+      {
+        "id": 3084,
+        "order": 1,
+        "credit_id": "52fe4210c3a36847f800135f",
+        "name": "Marlon Brando",
+        "cast_id": 30,
+        "profile_path": "/75oQj2KPCa0V1SFuGrueeTzDK3B.jpg",
+        "character": "Colonel Walter E. Kurtz"
+      },
+      {
+        "id": 3087,
+        "order": 2,
+        "credit_id": "52fe4210c3a36847f8001363",
+        "name": "Robert Duvall",
+        "cast_id": 31,
+        "profile_path": "/1aBC7NxPy10ofng6HsJBecJ1vMZ.jpg",
+        "character": "Lieutenant Colonel Bill Kilgore"
+      },
+      {
+        "id": 2975,
+        "order": 3,
+        "credit_id": "52fe4210c3a36847f8001367",
+        "name": "Laurence Fishburne",
+        "cast_id": 32,
+        "profile_path": "/mh0lZ1XsT84FayMNiT6Erh91mVu.jpg",
+        "character": "Tyrone 'Clean' Miller"
+      },
+      {
+        "id": 8350,
+        "order": 4,
+        "credit_id": "52fe4210c3a36847f800136b",
+        "name": "Sam Bottoms",
+        "cast_id": 33,
+        "profile_path": "/4J8AQtnLV8OFIyTl3p0YnxZoPsi.jpg",
+        "character": "Lance B. Johnson"
+      },
+      {
+        "id": 8351,
+        "order": 5,
+        "credit_id": "52fe4210c3a36847f800136f",
+        "name": "Frederic Forrest",
+        "cast_id": 34,
+        "profile_path": "/fCHsWrGcgfREM7e9POq6FCFGvR9.jpg",
+        "character": "Jay 'Chef' Hicks"
+      },
+      {
+        "id": 8354,
+        "order": 6,
+        "credit_id": "52fe4210c3a36847f8001373",
+        "name": "Albert Hall",
+        "cast_id": 35,
+        "profile_path": "/yHGN2pIdBcBk19sAu0EchOxfYMY.jpg",
+        "character": "Chief Phillips"
+      },
+      {
+        "id": 3,
+        "order": 7,
+        "credit_id": "52fe4210c3a36847f8001377",
+        "name": "Harrison Ford",
+        "cast_id": 36,
+        "profile_path": "/7CcoVFTogQgex2kJkXKMe8qHZrC.jpg",
+        "character": "Colonel Lucas"
+      },
+      {
+        "id": 2778,
+        "order": 8,
+        "credit_id": "52fe4210c3a36847f800137b",
+        "name": "Dennis Hopper",
+        "cast_id": 38,
+        "profile_path": "/56nj2DfMVU3F9qUagZWMePLbrKF.jpg",
+        "character": "Photojournalist"
+      },
+      {
+        "id": 3173,
+        "order": 9,
+        "credit_id": "52fe4210c3a36847f800137f",
+        "name": "G. D. Spradlin",
+        "cast_id": 39,
+        "profile_path": "/lyk0Fo343PJJ5gItBqGGl7oG112.jpg",
+        "character": "General Corman"
+      },
+      {
+        "id": 8346,
+        "order": 10,
+        "credit_id": "52fe4210c3a36847f8001383",
+        "name": "Jerry Ziesmer",
+        "cast_id": 40,
+        "profile_path": "/TCrODTVTktmyXk4PrD5fWvMJye.jpg",
+        "character": "Jerry, Civilian"
+      },
+      {
+        "id": 1776,
+        "order": 11,
+        "credit_id": "52fe4210c3a36847f800138d",
+        "name": "Francis Ford Coppola",
+        "cast_id": 42,
+        "profile_path": "/z60KH0VzNO071wagvzMxMKNj9ZQ.jpg",
+        "character": "Director (cameo)"
+      },
+      {
+        "id": 80874,
+        "order": 12,
+        "credit_id": "52fe4210c3a36847f8001391",
+        "name": "Tom Mason",
+        "cast_id": 43,
+        "profile_path": "/lWPITFNNJOoJprOoatAgfVRV9pH.jpg",
+        "character": "Supply Sergeant"
+      },
+      {
+        "id": 349,
+        "order": 13,
+        "credit_id": "52fe4210c3a36847f8001395",
+        "name": "Scott Glenn",
+        "cast_id": 44,
+        "profile_path": "/5dRSvuksyw4tRlV81QTjsQtOW3S.jpg",
+        "character": "Lieutenant Richard M. Colby"
+      },
+      {
+        "id": 13023,
+        "order": 14,
+        "credit_id": "52fe4211c3a36847f800139f",
+        "name": "Colleen Camp",
+        "cast_id": 46,
+        "profile_path": "/baASQgWewWYG7lnYjgjZXe2t5MM.jpg",
+        "character": "Miss May"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1776,
+        "credit_id": "52fe4210c3a36847f80012c7",
+        "department": "Directing",
+        "name": "Francis Ford Coppola",
+        "job": "Director",
+        "profile_path": "/z60KH0VzNO071wagvzMxMKNj9ZQ.jpg"
+      },
+      {
+        "id": 8328,
+        "credit_id": "52fe4210c3a36847f80012cd",
+        "department": "Writing",
+        "name": "John Milius",
+        "job": "Screenplay",
+        "profile_path": "/uBNb69DEc84IZxKD1bdo8Ex2j6j.jpg"
+      },
+      {
+        "id": 1776,
+        "credit_id": "52fe4210c3a36847f80012d3",
+        "department": "Writing",
+        "name": "Francis Ford Coppola",
+        "job": "Screenplay",
+        "profile_path": "/z60KH0VzNO071wagvzMxMKNj9ZQ.jpg"
+      },
+      {
+        "id": 1776,
+        "credit_id": "52fe4210c3a36847f80012d9",
+        "department": "Production",
+        "name": "Francis Ford Coppola",
+        "job": "Producer",
+        "profile_path": "/z60KH0VzNO071wagvzMxMKNj9ZQ.jpg"
+      },
+      {
+        "id": 2870,
+        "credit_id": "52fe4210c3a36847f80012df",
+        "department": "Production",
+        "name": "Gray Frederickson",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2871,
+        "credit_id": "52fe4210c3a36847f80012e5",
+        "department": "Production",
+        "name": "Fred Roos",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8330,
+        "credit_id": "52fe4210c3a36847f80012eb",
+        "department": "Production",
+        "name": "Tom Sternberg",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 8331,
+        "credit_id": "52fe4210c3a36847f80012f1",
+        "department": "Production",
+        "name": "John Ashley",
+        "job": "Producer",
+        "profile_path": "/zICZ6S10MdwPtgrhD8A2M2MZja4.jpg"
+      },
+      {
+        "id": 8333,
+        "credit_id": "52fe4210c3a36847f80012f7",
+        "department": "Production",
+        "name": "Eddie Romero",
+        "job": "Producer",
+        "profile_path": "/vA2pxMuZO6BnOS4IhZCRLnI5i6H.jpg"
+      },
+      {
+        "id": 3170,
+        "credit_id": "52fe4210c3a36847f80012fd",
+        "department": "Production",
+        "name": "Mona Skager",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2872,
+        "credit_id": "52fe4210c3a36847f8001303",
+        "department": "Sound",
+        "name": "Carmine Coppola",
+        "job": "Original Music Composer",
+        "profile_path": "/kMTbFLKb8wzgRMCUx6aVy8GxIoq.jpg"
+      },
+      {
+        "id": 7202,
+        "credit_id": "52fe4210c3a36847f8001309",
+        "department": "Camera",
+        "name": "Vittorio Storaro",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3274,
+        "credit_id": "52fe4210c3a36847f800130f",
+        "department": "Editing",
+        "name": "Lisa Fruchtman",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 852,
+        "credit_id": "52fe4210c3a36847f8001315",
+        "department": "Editing",
+        "name": "Gerald B. Greenberg",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 154,
+        "credit_id": "52fe4210c3a36847f800131b",
+        "department": "Editing",
+        "name": "Walter Murch",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 8337,
+        "credit_id": "52fe4210c3a36847f8001321",
+        "department": "Production",
+        "name": "Terry Liebling",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3176,
+        "credit_id": "52fe4210c3a36847f8001327",
+        "department": "Production",
+        "name": "Vic Ramos",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2875,
+        "credit_id": "52fe4210c3a36847f800132d",
+        "department": "Art",
+        "name": "Dean Tavoularis",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 794,
+        "credit_id": "52fe4210c3a36847f8001333",
+        "department": "Art",
+        "name": "Angelo P. Graham",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 8339,
+        "credit_id": "52fe4210c3a36847f800133f",
+        "department": "Art",
+        "name": "George R. Nelson",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 8340,
+        "credit_id": "52fe4210c3a36847f8001345",
+        "department": "Costume & Make-Up",
+        "name": "Fred C. Blau Jr.",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 8342,
+        "credit_id": "52fe4210c3a36847f800134b",
+        "department": "Costume & Make-Up",
+        "name": "Jack H. Young",
+        "job": "Makeup Artist",
+        "profile_path": null
+      },
+      {
+        "id": 8344,
+        "credit_id": "52fe4210c3a36847f8001351",
+        "department": "Production",
+        "name": "Leon Chooluck",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 123,
+        "credit_id": "52fe4210c3a36847f8001357",
+        "department": "Production",
+        "name": "Barrie M. Osborne",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 154,
+        "credit_id": "52fe4210c3a36847f8001389",
+        "department": "Sound",
+        "name": "Walter Murch",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 8327,
+        "credit_id": "52fe4211c3a36847f800139b",
+        "department": "Writing",
+        "name": "Joseph Conrad",
+        "job": "Novel",
+        "profile_path": "/e9K1LVshKNQUziyAgSrB3uCjMOZ.jpg"
+      }
+    ]
+  },
+  "runtime": 153,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "vi",
+      "name": "Tiếng Việt"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.apocalypsenow.com",
+  "id": 28,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Apocalypse Now",
+  "overview": "At the height of the Vietnam war, Captain Benjamin Willard is sent on a dangerous mission that, officially, \"does not exist, nor will it ever exist.\" His goal is to locate - and eliminate - a mysterious Green Beret Colonel named Walter Kurtz, who has been leading his personal army on illegal guerrilla missions into enemy territory.",
+  "production_companies": [{
+    "id": 26663,
+    "name": "Zoetrope Studios"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0078788",
+  "release_date": "1979-08-15",
+  "original_title": "Apocalypse Now",
+  "vote_count": 329,
+  "poster_path": "/l8dn7rKbjP36PtHsViHGpzf5ey7.jpg",
+  "tagline": "This is the end...",
+  "revenue": 83471511,
+  "popularity": "2.36152184606364"
+}

@@ -1,0 +1,88 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": null,
+  "genres": [{
+    "id": 99,
+    "name": "Documentary"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 21111,
+        "order": 0,
+        "credit_id": "52fe421cc3a36847f8004c65",
+        "name": "John F. Kennedy",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "John F. Kennedy"
+      },
+      {
+        "id": 21112,
+        "order": 1,
+        "credit_id": "52fe421cc3a36847f8004c69",
+        "name": "Hubert Humphrey",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Hubert Humphrey"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1420,
+        "credit_id": "52fe421cc3a36847f8004c5b",
+        "department": "Directing",
+        "name": "Robert Drew",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 21110,
+        "credit_id": "52fe421cc3a36847f8004c61",
+        "department": "Camera",
+        "name": "Richard Leacock",
+        "job": "Director of Photography",
+        "profile_path": "/w2qCef4mlrZKI4k1ghaMbqWy7Zv.jpg"
+      },
+      {
+        "id": 21113,
+        "credit_id": "52fe421cc3a36847f8004c6f",
+        "department": "Editing",
+        "name": "D.A. Pennebaker",
+        "job": "Editor",
+        "profile_path": "/468TyM9kTQhIaIWfXy0x3W5JlSk.jpg"
+      }
+    ]
+  },
+  "runtime": 60,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 133,
+  "production_countries": [],
+  "title": "Primary",
+  "overview": "Primary is a documentary film about the primary elections between John F. Kennedy and Hubert Humphrey in 1960. Primary is the first documentary to use light equipment in order to follow their subjects in a more intimate filmmaking style. This unconventional way of filming created a new look for documentary films where the camera\u2019s lens was right in the middle of what ever drama was occuring.",
+  "production_companies": [
+    {
+      "id": 2401,
+      "name": "Drew Associates"
+    },
+    {
+      "id": 2402,
+      "name": "Time"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0054205",
+  "release_date": "1960-01-01",
+  "original_title": "Primary",
+  "vote_count": 0,
+  "poster_path": "/2DusXjVP1jqBoegG9leHFGklp4f.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.221768867081411"
+}

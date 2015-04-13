@@ -1,7 +1,7 @@
-
 define([
     'flight/lib/component',
     'util/ontology/conceptSelect',
+    'util/ontology/relationshipSelect',
     'util/withFormFieldErrors',
     'util/withDataRequest',
     'util/vertex/formatters',
@@ -9,6 +9,7 @@ define([
 ], function(
     defineComponent,
     ConceptSelector,
+    RelationshipSelector,
     withFormFieldErrors,
     withDataRequest,
     F,
@@ -23,12 +24,16 @@ define([
             addButtonSelector: '.add',
             searchButtonSelector: '.search',
             cancelButtonSelector: '.cancel',
-            promptAddButtonSelector: '.prompt-add',
+            promptAddButtonSelector: '.prompt-add'
         });
 
         this.before('initialize', function(node, config) {
             if (config.vertex) {
-                config.title = F.vertex.title(config.vertex);
+                if (config.vertex.length  > 1) {
+                    config.title = i18n('popovers.add_related.title_multiple', config.vertex.length);
+                } else {
+                    config.title = '"' + F.vertex.title(config.vertex[0]) + '"';
+                }
             } else {
                 console.warn('vertex attribute required');
                 config.title = i18n('popovers.add_related.title_unknown');
@@ -41,25 +46,47 @@ define([
 
             this.after('setupWithTemplate', function() {
                 this.on(this.popover, 'conceptSelected', this.onConceptSelected);
+                this.on(this.popover, 'relationshipSelected', this.onRelationshipSelected);
                 this.on(this.popover, 'click', {
                     addButtonSelector: this.onAdd,
                     cancelButtonSelector: this.onCancel,
                     searchButtonSelector: this.onSearch,
                     promptAddButtonSelector: this.onPromptAdd
-                })
+                });
+
+                this.enterShouldSubmit = 'addButtonSelector';
 
                 ConceptSelector.attachTo(self.popover.find('.concept'), {
+                    focus: true,
                     defaultText: i18n('popovers.add_related.concept.default_text'),
-                    limitRelatedToConceptId: F.vertex.prop(this.attr.vertex, 'conceptType')
+                    limitRelatedToConceptId: F.vertex.prop(
+                        _.isArray(this.attr.vertex) ? this.attr.vertex[0] : this.attr.vertex,
+                        'conceptType'
+                    )
+                });
+
+                RelationshipSelector.attachTo(self.popover.find('.relationship'), {
+                    defaultText: i18n('popovers.add_related.relationship.default_text'),
                 });
 
                 this.positionDialog();
             });
         });
 
+        this.onRelationshipSelected = function(event, data) {
+            this.relationshipId = data.relationship && data.relationship.title;
+            this.checkValid();
+        };
+
         this.onConceptSelected = function(event, data) {
             this.conceptId = data.concept && data.concept.id;
+            this.checkValid();
+            this.trigger(this.popover.find('.relationship'), 'limitParentConceptId', {
+                conceptId: this.conceptId
+            });
+        };
 
+        this.checkValid = function() {
             var searchButton = this.popover.find('.search').hide(),
                 promptAdd = this.popover.find('.prompt-add').hide(),
                 cancelButton = this.popover.find('.cancel').show(),
@@ -73,23 +100,31 @@ define([
             promptAdd.hide();
             cancelButton.hide();
             addButton.show();
-        }
+        };
 
         this.onSearch = function(event) {
             this.trigger(document, 'searchByRelatedEntity', {
-                vertexId: this.attr.relatedToVertexId,
-                conceptId: this.conceptId
+                vertexIds: this.attr.relatedToVertexIds,
+                conceptId: this.conceptId,
+                relationshipId: this.relationshipId
             });
             this.teardown();
         };
 
         this.onPromptAdd = function(event) {
+            var self = this;
+
             this.trigger('updateWorkspace', {
-                //layoutOptions: {
-                    //addingVerticesRelatedTo: this.attr.relatedToVertexId
-                //},
+                options: {
+                    selectAll: true
+                },
                 entityUpdates: this.promptAddVertices.map(function(vertex) {
-                    return { vertexId: vertex.id };
+                    return {
+                        vertexId: vertex.id,
+                        graphLayoutJson: {
+                            relatedToVertexId: self.attr.relatedToVertexIds[0]
+                        }
+                    };
                 })
             });
             this.teardown();
@@ -99,7 +134,7 @@ define([
             if (this.relatedRequest) {
                 this.relatedRequest.abort();
             }
-        }
+        };
 
         this.onAdd = function(event) {
             var self = this,
@@ -111,7 +146,8 @@ define([
             Promise.all([
                 this.dataRequest('config', 'properties'),
                 (
-                    this.relatedRequest = this.dataRequest('vertex', 'related', this.attr.relatedToVertexId, {
+                    this.relatedRequest = this.dataRequest('vertex', 'related', this.attr.relatedToVertexIds, {
+                        limitEdgeLabel: this.relationshipId,
                         limitParentConceptId: this.conceptId
                     })
                 )
@@ -143,13 +179,20 @@ define([
                         self.promptAddVertices = vertices;
                         promptAdd.text(i18n('popovers.add_related.button.prompt_add', count)).show();
                     } else {
-                        self.trigger('updateWorkspace', {
-                            //layoutOptions: {
-                                //addingVerticesRelatedTo: self.attr.relatedToVertexId
-                            //},
-                            entityUpdates: vertices.map(function(vertex) {
-                                return { vertexId: vertex.id };
-                            })
+                        _.defer(function() {
+                            self.trigger('updateWorkspace', {
+                                options: {
+                                    selectAll: true
+                                },
+                                entityUpdates: vertices.map(function(vertex) {
+                                    return {
+                                        vertexId: vertex.id,
+                                        graphLayoutJson: {
+                                            relatedToVertexId: self.attr.relatedToVertexIds[0]
+                                        }
+                                    };
+                                })
+                            });
                         });
                         self.teardown();
                     }

@@ -2,7 +2,7 @@
 define(['../util/ajax'], function(ajax) {
     'use strict';
 
-    return {
+    var api = {
         me: function(options) {
             return ajax('GET', '/user/me')
                 .then(function(user) {
@@ -25,35 +25,57 @@ define(['../util/ajax'], function(ajax) {
             });
         },
 
-        search: function(query, optionalWorkspaceId) {
-            var data = {};
-            if (query) {
-                data.q = query;
-            }
-            if (optionalWorkspaceId) {
-                data.workspaceId = optionalWorkspaceId;
-            }
-            return ajax('GET', '/user/all', data)
-                .then(function(response) {
-                    return response.users;
-                })
-        },
+        getUserNames: (function() {
+            var cachedNames = {};
+            return function getUserNames(userIds) {
+                var notCached = _.reject(userIds, function(userId) {
+                    return userId in cachedNames || (
+                        publicData.currentUser.id === userId
+                    );
+                });
 
-        info: function(userIds) {
-            var returnSingular = false;
-            if (!_.isArray(userIds)) {
-                returnSingular = true;
-                userIds = [userIds];
-            }
-
-            return ajax(userIds.length > 1 ? 'POST' : 'GET', '/user/info', {
-                userIds: userIds
-            }).then(function(result) {
-                if (returnSingular) {
-                    return result.users[userIds[0]];
+                if (notCached.length) {
+                    return api.search({ userIds: notCached })
+                        .then(function(users) {
+                            var usersById = _.indexBy(users, 'id');
+                            return userIds.map(function(userId) {
+                                return cachedNames[userId] || (
+                                    cachedNames[userId] = (usersById[userId] || publicData.currentUser).displayName
+                                );
+                            });
+                        });
+                } else {
+                    return Promise.resolve(
+                        userIds.map(function(userId) {
+                            return cachedNames[userId] || publicData.currentUser.displayName;
+                        })
+                    );
                 }
-                return result.users;
-            });
+            };
+        })(),
+
+        search: function(options) {
+            var data = {},
+                returnSingular = false;
+
+            if (options.query) {
+                data.q = options.query;
+            }
+            if (options.userIds) {
+                if (!_.isArray(options.userIds)) {
+                    returnSingular = true;
+                    data.userIds = [options.userIds];
+                } else {
+                    data.userIds = _.unique(options.userIds);
+                }
+            }
+            return ajax(
+                (data.userIds && data.userIds.length > 2) ? 'POST' : 'GET',
+                '/user/all', data)
+                .then(function(response) {
+                    var users = response.users;
+                    return returnSingular ? users[0] : users;
+                })
         },
 
         logout: function(options) {
@@ -61,4 +83,6 @@ define(['../util/ajax'], function(ajax) {
         }
 
     };
+
+    return api;
 });

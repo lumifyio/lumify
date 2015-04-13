@@ -3,7 +3,6 @@ package io.lumify.web.routes.vertex;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -33,9 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
@@ -54,8 +51,8 @@ public class VertexUploadImage extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
-    private final String conceptIri;
-    private final String entityHasImageIri;
+    private String conceptIri;
+    private String entityHasImageIri;
 
     @Inject
     public VertexUploadImage(
@@ -75,20 +72,26 @@ public class VertexUploadImage extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        this.conceptIri = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
-        Concept concept = ontologyRepository.getConceptByIRI(conceptIri);
-        if (concept == null) {
-            LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIri, Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
+        this.conceptIri = ontologyRepository.getConceptIRIByIntent("entityImage");
+        if (this.conceptIri == null) {
+            LOGGER.warn("'entityImage' intent has not been defined. Please update your ontology.");
         }
 
-        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        this.entityHasImageIri = ontologyRepository.getRelationshipIRIByIntent("entityHasImage");
         if (this.entityHasImageIri == null) {
-            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+            LOGGER.warn("'entityHasImage' intent has not been defined. Please update your ontology.");
         }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        if (this.conceptIri == null) {
+            this.conceptIri = ontologyRepository.getRequiredConceptIRIByIntent("entityImage");
+        }
+        if (this.entityHasImageIri == null) {
+            this.entityHasImageIri = ontologyRepository.getRequiredConceptIRIByIntent("entityHasImage");
+        }
+
         final String graphVertexId = getAttributeString(request, ATTR_GRAPH_VERTEX_ID);
         final List<Part> files = Lists.newArrayList(request.getParts());
 
@@ -116,8 +119,8 @@ public class VertexUploadImage extends BaseRequestHandler {
         VisibilityJson visibilityJson = getLumifyVisibility(entityVertex, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson);
+        Metadata metadata = new Metadata();
+        LumifyProperties.VISIBILITY_JSON.setMetadata(metadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
 
         String title = String.format("Image of %s", LumifyProperties.TITLE.getPropertyValue(entityVertex));
         ElementBuilder<Vertex> artifactVertexBuilder = convertToArtifact(file, title, visibilityJson, metadata, lumifyVisibility, authorizations);
@@ -139,11 +142,12 @@ public class VertexUploadImage extends BaseRequestHandler {
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, artifactVertex.getId(), false, null, user);
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), false, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, artifactVertex.getId(), null, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, user);
 
         graph.flush();
         workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, LumifyProperties.RAW.getPropertyName(), workspaceId, visibilityJson.getSource());
+        workQueueRepository.pushElementImageQueue(entityVertex, null, LumifyProperties.ENTITY_IMAGE_VERTEX_ID.getPropertyName());
 
         respondWithClientApiObject(response, ClientApiConverter.toClientApi(entityVertex, workspaceId, authorizations));
     }
@@ -160,7 +164,7 @@ public class VertexUploadImage extends BaseRequestHandler {
         return GraphUtil.updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
     }
 
-    private ElementBuilder<Vertex> convertToArtifact(final Part file, String title, VisibilityJson visibilityJson, Map<String, Object> metadata, LumifyVisibility lumifyVisibility, Authorizations authorizations) throws IOException {
+    private ElementBuilder<Vertex> convertToArtifact(final Part file, String title, VisibilityJson visibilityJson, Metadata metadata, LumifyVisibility lumifyVisibility, Authorizations authorizations) throws IOException {
         final InputStream fileInputStream = file.getInputStream();
         final byte[] rawContent = IOUtils.toByteArray(fileInputStream);
         LOGGER.debug("Uploaded file raw content byte length: %d", rawContent.length);

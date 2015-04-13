@@ -1,0 +1,217 @@
+{
+  "birthday": "1972-08-31",
+  "adult": false,
+  "biography": "Christopher \"Chris\" Tucker (born August 31, 1972) is an American actor and comedian, best known for his roles as Detective James Carter in the Rush Hour trilogy and Smokey in the 1995 film Friday.  Tucker was born in Atlanta, Georgia, the youngest son of Mary Louise and Norris Tucker. Tucker was raised in Decatur, Georgia. After graduating from Columbia High School, he moved to Los Angeles to pursue a career in comedy and movies. In 1992, Tucker was a frequent performer on Def Comedy Jam. He made his cinematic debut in House Party 3, and gained greater film recognition alongside rapper Ice Cube in the 1995 film Friday. In 1997, he co-starred with Charlie Sheen in Money Talks, and alongside Bruce Willis in The Fifth Element. Tucker did not reprise his role of Smokey in Next Friday (2000) because he had become a born-again Christian after filming Money Talks (1997).He later starred in the 1998 martial arts action comedy Rush Hour and its sequels, Rush Hour 2 and Rush Hour 3, in which he played James Carter, an abrasive wise-cracking detective.  Tucker is good friends with fellow Rush Hour star Jackie Chan, and was also close friends with the late singer Michael Jackson, introducing and dancing with him at his 30th Anniversary Special, appearing in Jackson's video \"You Rock My World\" from his 2001 album Invincible and attending Jackson's memorial service. A friend of Bill Clinton, Tucker has traveled with the former President overseas, though he endorsed Barack Obama rather than Hillary Clinton in the 2008 primaries. On February 13, 2009, Tucker participated in the NBA All-Star Weekend's Celebrity Game.",
+  "homepage": "",
+  "profile_path": "/1ePd2AOg8YYlvVT7HxXkqFFEk83.jpg",
+  "id": 66,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0000676",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 18,
+        "media_type": "movie",
+        "title": "The Fifth Element",
+        "credit_id": "52fe420fc3a36847f8000bcf",
+        "release_date": "1997-05-09",
+        "original_title": "The Fifth Element",
+        "adult": false,
+        "poster_path": "/zaFa1NRZEnFgRTv5OVXkNIZO78O.jpg",
+        "character": "Ruby Rhod"
+      },
+      {
+        "id": 184,
+        "media_type": "movie",
+        "title": "Jackie Brown",
+        "credit_id": "52fe4223c3a36847f80070ff",
+        "release_date": "1997-12-24",
+        "original_title": "Jackie Brown",
+        "adult": false,
+        "poster_path": "/5AiK0vIBuhC6sXlDMLEyHOc8Laj.jpg",
+        "character": "Beaumont Livingston"
+      },
+      {
+        "id": 2109,
+        "media_type": "movie",
+        "title": "Rush Hour",
+        "credit_id": "52fe4336c3a36847f8042f2d",
+        "release_date": "1998-09-18",
+        "original_title": "Rush Hour",
+        "adult": false,
+        "poster_path": "/jdfxpW5LF36sHsHjyH8CMBEG4TF.jpg",
+        "character": "Detec. James Carter"
+      },
+      {
+        "id": 10634,
+        "media_type": "movie",
+        "title": "Friday",
+        "credit_id": "52fe43999251416c75016ac7",
+        "release_date": "1995-04-26",
+        "original_title": "Friday",
+        "adult": false,
+        "poster_path": "/A66Lze4KZb1fgBkB2blv1a4XwDP.jpg",
+        "character": "Smokey"
+      },
+      {
+        "id": 5174,
+        "media_type": "movie",
+        "title": "Rush Hour 3",
+        "credit_id": "52fe43fac3a36847f807b565",
+        "release_date": "2007-08-10",
+        "original_title": "Rush Hour 3",
+        "adult": false,
+        "poster_path": "/qgaDWYLrnEPJpc5Lp35WbgX7GfS.jpg",
+        "character": "Det. James Carter"
+      },
+      {
+        "id": 5175,
+        "media_type": "movie",
+        "title": "Rush Hour 2",
+        "credit_id": "52fe43fac3a36847f807b66d",
+        "release_date": "2001-08-03",
+        "original_title": "Rush Hour 2",
+        "adult": false,
+        "poster_path": "/xG43wsvHpOp2QIj2JGQEvmK8dgC.jpg",
+        "character": "Det. James Carter"
+      },
+      {
+        "id": 16097,
+        "media_type": "movie",
+        "title": "House Party 3",
+        "credit_id": "52fe46a39251416c7507e97b",
+        "release_date": "1994-01-01",
+        "original_title": "House Party 3",
+        "adult": false,
+        "poster_path": "/b6yh57uYZUvpYkH3RKL3ZIvoszl.jpg",
+        "character": "Johhny Booze"
+      },
+      {
+        "id": 64833,
+        "media_type": "movie",
+        "title": "Jackie Chan: Fast, Funny and Furious",
+        "credit_id": "52fe46ecc3a368484e0ab667",
+        "release_date": "2002-12-10",
+        "original_title": "Jackie Chan: Fast, Funny and Furious",
+        "adult": false,
+        "poster_path": "/xj30rPGZWZOHjliCEOlfmqVu3Hr.jpg",
+        "character": "himself"
+      },
+      {
+        "id": 82693,
+        "media_type": "movie",
+        "title": "Silver Linings Playbook",
+        "credit_id": "52fe486b9251416c9108bdef",
+        "release_date": "2012-12-25",
+        "original_title": "Silver Linings Playbook",
+        "adult": false,
+        "poster_path": "/ilrZAV2klTB0FLxLb01bOp5pzD9.jpg",
+        "character": "Danny"
+      },
+      {
+        "id": 92066,
+        "media_type": "movie",
+        "title": "Michael Jackson - You Rock My World",
+        "credit_id": "52fe48f09251416c750b8269",
+        "release_date": null,
+        "original_title": "Michael Jackson - You Rock My World",
+        "adult": false,
+        "poster_path": null,
+        "character": "Chris Tucker"
+      },
+      {
+        "id": 11443,
+        "media_type": "movie",
+        "title": "Dead Presidents",
+        "credit_id": "52fe44409251416c7502e1a3",
+        "release_date": "1995-07-10",
+        "original_title": "Dead Presidents",
+        "adult": false,
+        "poster_path": "/2dLyvXVvJXUR9otoqERkYpao1bB.jpg",
+        "character": "Skip"
+      },
+      {
+        "id": 9416,
+        "media_type": "movie",
+        "title": "Money Talks",
+        "credit_id": "52fe44f5c3a36847f80b41af",
+        "release_date": "1997-08-22",
+        "original_title": "Money Talks",
+        "adult": false,
+        "poster_path": "/kIcma4NJ3MfO7w88oqUSf1vAhFg.jpg",
+        "character": "Franklin Hatchett"
+      },
+      {
+        "id": 2706,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525741bd760ee36aaa0b2d22",
+        "name": "Roseanne",
+        "poster_path": "/pLTmZbCyyZZu80bzCdiq79hJQD2.jpg",
+        "original_name": "Roseanne",
+        "first_air_date": "1988-10-18",
+        "character": ""
+      },
+      {
+        "id": 4573,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "5257718a760ee36aaa49f9fe",
+        "name": "Late Night with Conan O'Brien",
+        "poster_path": "/v4N5l6JooObhXbjXoFaKbx92wB9.jpg",
+        "original_name": "Late Night with Conan O'Brien",
+        "first_air_date": "1993-09-13",
+        "character": ""
+      },
+      {
+        "id": 16853,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "52584f4d760ee346610332d0",
+        "name": "Michael Jackson: 30th Anniversary Celebration",
+        "poster_path": null,
+        "original_name": "Michael Jackson: 30th Anniversary Celebration",
+        "first_air_date": null,
+        "character": ""
+      },
+      {
+        "id": 1709,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525713bb760ee3776a10fde1",
+        "name": "Today",
+        "poster_path": "/o7bSMUPaIxYbbsgC6VTbrvOVDpN.jpg",
+        "original_name": "Today",
+        "first_air_date": "1952-01-14",
+        "character": ""
+      },
+      {
+        "id": 11091,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52580b8119c29531db409f67",
+        "name": "Diary",
+        "poster_path": null,
+        "original_name": "Diary",
+        "first_air_date": "2000-02-16",
+        "character": ""
+      }
+    ],
+    "crew": [{
+      "id": 9416,
+      "media_type": "movie",
+      "title": "Money Talks",
+      "credit_id": "52fe44f5c3a36847f80b41c5",
+      "department": "Production",
+      "release_date": "1997-08-22",
+      "original_title": "Money Talks",
+      "job": "Executive Producer",
+      "adult": false,
+      "poster_path": "/kIcma4NJ3MfO7w88oqUSf1vAhFg.jpg"
+    }]
+  },
+  "name": "Chris Tucker",
+  "place_of_birth": "Atlanta, Georgia",
+  "popularity": "1.76814301179714"
+}

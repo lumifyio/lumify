@@ -1,0 +1,131 @@
+@import (reference) '../util/constants';
+@import (reference) '../util/selection';
+
+.notifications {
+  @padding: 10px;
+  position: absolute;
+  left: @menubar-width + @padding;
+  top: @padding;
+  cursor: pointer;
+  .above-graph(2);
+  .disable-text-selection;
+  .box-shadow(0 5px 20px fadeout(black, 95%));
+
+  .notification {
+    list-style: none;
+    padding: 0.5em 1em;
+    margin: 0.5em 0;
+    padding-right: 3em;
+    padding-left: 30px;
+    &:first-child {
+      margin-top: 0;
+    }
+    position: relative;
+    border-radius: 2px;
+
+    &.canDismiss {
+      cursor: pointer;
+    }
+
+    h1, h2 {
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+      line-height: 1.5em;
+      .regular-font;
+    }
+
+    h1 {
+      font-size: 100%;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 90%;
+    }
+
+    button {
+      position: absolute;
+      right: 0.5em;
+      top: 50%;
+      background: url(../img/glyphicons/glyphicons_192_circle_remove@2x.png);
+      border: 0;
+      width: 20px;
+      height: 20px;
+      background-size: contain;
+      margin-left: -10px;
+      margin-top: -10px;
+      .opacity(40);
+    }
+    &:hover {
+      button {
+        .opacity(60);
+      }
+    }
+
+    .theme(@color: orange) {
+      background: fade(@color, 95%);
+      @text-color: mix(@color, white, 15%);
+      text-shadow: 0 -1px 0px fade(darken(@color, 10%), 50%);
+      color: @text-color;
+      h2 {
+        color: fadeout(desaturate(@text-color, 20%), 10%);
+      }
+    }
+
+    &.info {
+      .theme(@notification-info);
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: mix(@notification-info, white, 40%);
+        left: 9px;
+        top: 50%;
+        border-radius: 6px;
+        margin-top: -5px;
+      }
+    }
+    &.critical {
+      .theme(@notification-critical);
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-width: 0 7px 12px 7px;
+        border-color: transparent;
+        border-bottom-color: mix(@notification-critical, white, 40%);
+        border-style: solid;
+        left: 8px;
+        top: 50%;
+        margin-top: -8px;
+      }
+    }
+    &.warning {
+      .theme(@notification-warning);
+
+      @text-color: darken(@notification-warning, 40%);
+      text-shadow: 0 1px 0px fade(lighten(@notification-warning, 20%), 50%);
+      color: @text-color;
+      h2 {
+        color: fadeout(desaturate(@text-color, 20%), 10%);
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        background: mix(@notification-warning, white, 40%);
+        left: 10px;
+        top: 50%;
+        margin-top: -6px;
+        .rotate(45deg);
+      }
+    }
+  }
+}

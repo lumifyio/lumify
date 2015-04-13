@@ -1,0 +1,244 @@
+{
+  "budget": 0,
+  "vote_average": 7.3,
+  "backdrop_path": "/ztKuQ5KIUH19HFpsVzeMnzKVgkq.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3000,
+        "order": 0,
+        "credit_id": "52fe422ac3a36847f80090df",
+        "name": "Werner Krauss",
+        "cast_id": 19,
+        "profile_path": "/19sVHvm4FOv90wbK9TyGUWSlh9h.jpg",
+        "character": "Dr. Caligari"
+      },
+      {
+        "id": 3001,
+        "order": 1,
+        "credit_id": "52fe422ac3a36847f80090cb",
+        "name": "Conrad Veidt",
+        "cast_id": 13,
+        "profile_path": "/dfOSkNseKWva6mNItPMvM1RB05E.jpg",
+        "character": "Cesare"
+      },
+      {
+        "id": 590591,
+        "order": 2,
+        "credit_id": "52fe422ac3a36847f80090e3",
+        "name": "Friedrich Fehér",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Franzis"
+      },
+      {
+        "id": 3005,
+        "order": 3,
+        "credit_id": "52fe422ac3a36847f80090cf",
+        "name": "Lil Dagover",
+        "cast_id": 15,
+        "profile_path": "/nYt2Ak0nFWFUIPW6e8WERNnDuTb.jpg",
+        "character": "Jane Olsen"
+      },
+      {
+        "id": 3007,
+        "order": 4,
+        "credit_id": "52fe422ac3a36847f80090d3",
+        "name": "Hans Heinrich von Twardowski",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Alan"
+      },
+      {
+        "id": 98072,
+        "order": 5,
+        "credit_id": "52fe422ac3a36847f80090d7",
+        "name": "Rudolph Lettinger",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Dr. Olsen"
+      },
+      {
+        "id": 77,
+        "order": 6,
+        "credit_id": "52fe422ac3a36847f80090db",
+        "name": "Rudolf Klein-Rogge",
+        "cast_id": 18,
+        "profile_path": "/dz2NKTrM06vyg4iQN9vHQ3a7bDR.jpg",
+        "character": "ein Verbrecher (a criminal)"
+      },
+      {
+        "id": 29568,
+        "order": 7,
+        "credit_id": "52fe422ac3a36847f80090e7",
+        "name": "Hans Lanser-Rudolf",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "ein alter Mann (an old man)"
+      },
+      {
+        "id": 1090550,
+        "order": 8,
+        "credit_id": "52fe422ac3a36847f80090eb",
+        "name": "Henri Peters-Arnolds",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "ein junger Arzt (a young doctor)"
+      },
+      {
+        "id": 1090552,
+        "order": 9,
+        "credit_id": "52fe422ac3a36847f80090ef",
+        "name": "Ludwig Rex",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "ein Mörder (a murderer)"
+      },
+      {
+        "id": 37889,
+        "order": 10,
+        "credit_id": "52fe422ac3a36847f80090f3",
+        "name": "Elsa Wagner",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "die Wirtin (the landlady)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2991,
+        "credit_id": "52fe422ac3a36847f800908b",
+        "department": "Directing",
+        "name": "Robert Wiene",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 2992,
+        "credit_id": "52fe422ac3a36847f8009091",
+        "department": "Writing",
+        "name": "Hans Janowitz",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2792,
+        "credit_id": "52fe422ac3a36847f8009097",
+        "department": "Writing",
+        "name": "Carl Mayer",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2994,
+        "credit_id": "52fe422ac3a36847f800909d",
+        "department": "Production",
+        "name": "Rudolf Meinert",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 67,
+        "credit_id": "52fe422ac3a36847f80090a3",
+        "department": "Production",
+        "name": "Erich Pommer",
+        "job": "Producer",
+        "profile_path": "/oClAs4W1TRc2jtYCU4CdtXlEhPZ.jpg"
+      },
+      {
+        "id": 2996,
+        "credit_id": "52fe422ac3a36847f80090a9",
+        "department": "Sound",
+        "name": "Giuseppe Becce",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 2998,
+        "credit_id": "52fe422ac3a36847f80090af",
+        "department": "Camera",
+        "name": "Willy Hameister",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3022,
+        "credit_id": "52fe422ac3a36847f80090b5",
+        "department": "Sound",
+        "name": "Alfredo Antonini",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3023,
+        "credit_id": "52fe422ac3a36847f80090bb",
+        "department": "Sound",
+        "name": "Timothy Brock",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3024,
+        "credit_id": "52fe422ac3a36847f80090c1",
+        "department": "Sound",
+        "name": "Richard Marriott",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3025,
+        "credit_id": "52fe422ac3a36847f80090c7",
+        "department": "Sound",
+        "name": "Peter Schirmann",
+        "job": "Original Music Composer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 78,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 234,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "The Cabinet of Dr. Caligari",
+  "overview": "An eerie German silent film from 1920. This classic expressionistic film is known as a landmark in film history becoming famous worldwide from it\u2019s exceptional new wave style of well built and painted grotesque scenery with contrasted lighting along with the painted effect of light and shadows. The film tells a surrealistic story with an unusual end that was a result of censorship.",
+  "production_companies": [{
+    "id": 55,
+    "name": "Decla Film Gesellschaft Holz & Co."
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0010323",
+  "release_date": "1920-02-25",
+  "original_title": "Das Cabinet des Dr. Caligari",
+  "vote_count": 22,
+  "poster_path": "/q87xY7fB3euh7Fer2cH7Hfxmk58.jpg",
+  "tagline": "Du musst Caligari werden!",
+  "revenue": 0,
+  "popularity": "0.789044369710023"
+}

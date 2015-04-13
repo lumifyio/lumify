@@ -45,9 +45,15 @@ define([
 
     return defineComponent(App, withFileDrop, withDataRequest);
 
+    function preventPinchToZoom(e) {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
     function App() {
         var Graph3D,
-            MAX_RESIZE_TRIGGER_INTERVAL = 250,
             DATA_MENUBAR_NAME = 'menubar-name';
 
         this.onError = function(evt, err) {
@@ -89,6 +95,7 @@ define([
             }
 
             this.$node.empty();
+            document.removeEventListener('mousewheel', preventPinchToZoom);
         });
 
         this.after('initialize', function() {
@@ -96,6 +103,7 @@ define([
 
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
 
+            document.addEventListener('mousewheel', preventPinchToZoom, true);
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
 
             this.on(document, 'error', this.onError);
@@ -112,13 +120,14 @@ define([
             this.on(document, 'toggleActivityPane', this.toggleActivityPane);
             this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'logout', this.logout);
+            this.on(document, 'sessionExpiration', this.onSessionExpiration);
             this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
             this.on(document, 'hideMenu', this.onHideMenu);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['graph.help.scope', 'map.help.scope'].map(i18n),
                 shortcuts: {
-                    escape: { fire: 'escape', desc: i18n('lumify.help.escape') },
+                    escape: { fire: 'escape', desc: i18n('lumify.help.escape') }
                 }
             });
 
@@ -185,12 +194,9 @@ define([
 
             this.$node.html(content);
 
-            $(document.body).toggleClass('animatelogin', !!this.attr.animateFromLogin)
+            $(document.body).toggleClass('animatelogin', !!this.attr.animateFromLogin);
 
-            // Open Page to Dashboard
             this.trigger(document, 'menubarToggleDisplay', { name: graphPane.data(DATA_MENUBAR_NAME) });
-
-            this.setupWindowResizeTrigger();
 
             this.triggerPaneResized();
 
@@ -199,7 +205,7 @@ define([
                     var oe = e.originalEvent;
                     if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
                         $(document.body).off(TRANSITION_END);
-                        self.trigger('loadCurrentWorkspace');
+                        self.applicationLoaded();
                         graphPane.focus();
                     }
                 });
@@ -207,7 +213,7 @@ define([
                     $(document.body).addClass('animateloginstart');
                 })
             } else {
-                this.trigger('loadCurrentWorkspace');
+                this.applicationLoaded();
             }
 
             _.delay(function() {
@@ -220,6 +226,18 @@ define([
                 }
             }, 500);
         });
+
+        this.applicationLoaded = function() {
+            var self = this;
+
+            this.on(document, 'workspaceLoaded', function handler() {
+                self.off(document, 'workspaceLoaded', handler);
+                require(['notifications/notifications'], function(Notifications) {
+                    Notifications.attachTo(self.$node);
+                });
+            });
+            this.trigger('loadCurrentWorkspace');
+        };
 
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
@@ -328,18 +346,6 @@ define([
             }
         };
 
-        var resizeTimeout;
-        this.setupWindowResizeTrigger = function() {
-            var self = this;
-            this.on(window, 'resize', function(event) {
-                if (event.target !== window) return;
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(function() {
-                    self.trigger(document, 'windowResize');
-                }, MAX_RESIZE_TRIGGER_INTERVAL);
-            });
-        };
-
         this.onShowVertexContextMenu = function(event, data) {
             data.element = event.target;
 
@@ -389,9 +395,18 @@ define([
             });
         };
 
+        this.onSessionExpiration = function(event, data) {
+            if (this.ignoreSessionExpiration) {
+                return;
+            }
+
+            this.trigger('logout', { message: i18n('lumify.session.expired') });
+        };
+
         this.logout = function(event, data) {
             var self = this;
 
+            this.ignoreSessionExpiration = true;
             this.trigger('willLogout');
 
             if (LogoutExtensions.executeHandlers()) {
@@ -400,6 +415,7 @@ define([
                         window.location.reload();
                     })
                     .catch(function() {
+                        self.ignoreSessionExpiration = false;
                         require(['login'], function(Login) {
                             $(document.body)
                                 .removeClass('animatelogin animateloginstart')
@@ -413,11 +429,14 @@ define([
                             });
                         });
                     });
+            } else {
+                this.ignoreSessionExpiration = false;
             }
         };
 
         this.toggleDisplay = function(e, data) {
-            var SLIDE_OUT = 'search workspaces admin',
+            var self = this,
+                SLIDE_OUT = 'search workspaces admin',
                 pane = this.select(data.name + 'Selector');
 
             if (data.action) {
@@ -428,7 +447,9 @@ define([
                         .appendTo(this.$node);
                 }
                 require([data.action.componentPath], function(Component) {
-                    Component.attachTo(pane);
+                    Component.attachTo(pane, {
+                        graphPadding: self.currentGraphPadding
+                    });
                 });
             } else if (pane.length === 0) {
                 pane = this.$node.find('.' + data.name + '-pane');
@@ -445,10 +466,6 @@ define([
             }
 
             if (SLIDE_OUT.indexOf(data.name) >= 0) {
-                var self = this;
-
-                // TODO: NEED TO MOVE FURTHER LEFT TO COLLAPSE!!!!!
-
                 pane.one(TRANSITION_END, function() {
                     pane.off(TRANSITION_END);
                     if (!isVisible) {
@@ -467,14 +484,13 @@ define([
 
             this.trigger('didToggleDisplay', {
                 name: data.name,
-                visible: isVisible
+                visible: !isVisible
             })
         };
 
         this.onObjectsSelected = function(e, data) {
             var detailPane = this.select('detailPaneSelector'),
                 minWidth = 100,
-                width = 0,
                 vertices = data.vertices,
                 edges = data.edges,
                 makeVisible = vertices.length || edges.length;
@@ -484,7 +500,6 @@ define([
                     detailPane[0].style.width = null;
                 }
                 detailPane.removeClass('collapsed').addClass('visible');
-                width = detailPane.width();
             } else {
                 detailPane.removeClass('visible').addClass('collapsed');
             }
@@ -578,7 +593,7 @@ define([
                             var $pane = $(pane),
                                 paneWidth = $pane.width(),
                                 minWidth = $pane.resizable('option', 'minWidth'),
-                                newWidth = Math.max(minWidth, paneWidth - pixelsNeeded);
+                                newWidth = Math.max(minWidth, paneWidth - pixelsNeeded),
                                 pixelsCompressing = paneWidth - newWidth;
 
                             pixelsNeeded -= pixelsCompressing;
@@ -590,6 +605,7 @@ define([
                 }
             }
 
+            this.currentGraphPadding = padding;
             this.trigger(document, 'graphPaddingUpdated', { padding: padding });
         };
 

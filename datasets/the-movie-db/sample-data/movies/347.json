@@ -1,0 +1,210 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/ubbOc7oaVaJ2wc3AAh32mx7jTbH.jpg",
+  "genres": [
+    {
+      "id": 99,
+      "name": "Documentary"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5033,
+        "order": 0,
+        "credit_id": "52fe423bc3a36847f800e0ad",
+        "name": "Erwin Splettstößer",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "himself"
+      },
+      {
+        "id": 5034,
+        "order": 1,
+        "credit_id": "52fe423bc3a36847f800e0b1",
+        "name": "Brigitte Borchert",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "herself"
+      },
+      {
+        "id": 5035,
+        "order": 2,
+        "credit_id": "52fe423bc3a36847f800e0b5",
+        "name": "Wolfgang von Waltershausen",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "himself"
+      },
+      {
+        "id": 5036,
+        "order": 3,
+        "credit_id": "52fe423bc3a36847f800e0b9",
+        "name": "Christl Ehlers",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "herself"
+      },
+      {
+        "id": 5037,
+        "order": 4,
+        "credit_id": "52fe423bc3a36847f800e0bd",
+        "name": "Annie Schreyer",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "herself"
+      },
+      {
+        "id": 2897,
+        "order": 5,
+        "credit_id": "52fe423bc3a36847f800e0c1",
+        "name": "Kurt Gerron",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "himself"
+      },
+      {
+        "id": 5038,
+        "order": 6,
+        "credit_id": "52fe423bc3a36847f800e0c5",
+        "name": "Valeska Gert",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "herself"
+      },
+      {
+        "id": 5039,
+        "order": 7,
+        "credit_id": "52fe423bc3a36847f800e0c9",
+        "name": "Heinrich Gretler",
+        "cast_id": 18,
+        "profile_path": "/qKsRhwqTxi9Arb5mcHAlvHT6idg.jpg",
+        "character": "himself"
+      },
+      {
+        "id": 5040,
+        "order": 8,
+        "credit_id": "52fe423bc3a36847f800e0cd",
+        "name": "Ernö Verebes",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "himself"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5028,
+        "credit_id": "52fe423bc3a36847f800e073",
+        "department": "Directing",
+        "name": "Curt Siodmak",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 5029,
+        "credit_id": "52fe423bc3a36847f800e079",
+        "department": "Directing",
+        "name": "Robert Siodmak",
+        "job": "Director",
+        "profile_path": "/pRfwiaGo8AkeRjKNv1j79WiUEf5.jpg"
+      },
+      {
+        "id": 4065,
+        "credit_id": "52fe423bc3a36847f800e07f",
+        "department": "Directing",
+        "name": "Fred Zinnemann",
+        "job": "Director",
+        "profile_path": "/w29Qt8Jc7pZd6jAX3901Y2V8yxQ.jpg"
+      },
+      {
+        "id": 5028,
+        "credit_id": "52fe423bc3a36847f800e085",
+        "department": "Writing",
+        "name": "Curt Siodmak",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5030,
+        "credit_id": "52fe423bc3a36847f800e08b",
+        "department": "Directing",
+        "name": "Edgar G. Ulmer",
+        "job": "Director",
+        "profile_path": "/nC7Yhewvszl6QMmbTQOqFvGGsv3.jpg"
+      },
+      {
+        "id": 5029,
+        "credit_id": "52fe423bc3a36847f800e091",
+        "department": "Writing",
+        "name": "Robert Siodmak",
+        "job": "Author",
+        "profile_path": "/pRfwiaGo8AkeRjKNv1j79WiUEf5.jpg"
+      },
+      {
+        "id": 3146,
+        "credit_id": "52fe423bc3a36847f800e097",
+        "department": "Writing",
+        "name": "Billy Wilder",
+        "job": "Screenplay",
+        "profile_path": "/dSi2FnzgL50gODQpqABR0ABtHTP.jpg"
+      },
+      {
+        "id": 5030,
+        "credit_id": "52fe423bc3a36847f800e09d",
+        "department": "Production",
+        "name": "Edgar G. Ulmer",
+        "job": "Producer",
+        "profile_path": "/nC7Yhewvszl6QMmbTQOqFvGGsv3.jpg"
+      },
+      {
+        "id": 5032,
+        "credit_id": "52fe423bc3a36847f800e0a3",
+        "department": "Sound",
+        "name": "Otto Stenzeel",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1758,
+        "credit_id": "52fe423bc3a36847f800e0a9",
+        "department": "Camera",
+        "name": "Eugen Schüfftan",
+        "job": "Director of Photography",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 74,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 347,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "People on Sunday",
+  "overview": "A semi-documentary experimental 1930 German silent film created by amateurs with a small budget. With authentic scenes of the metropolis city of Berlin, it's the first film from the later famous screenwriters/directors Billy Wilder and Fred Zinnemann.",
+  "production_companies": [{
+    "id": 196,
+    "name": "Filmstudio Berlin"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0020163",
+  "release_date": "1930-02-04",
+  "original_title": "Menschen am Sonntag",
+  "vote_count": 0,
+  "poster_path": "/mo5oxz0kC3O9pAJIPfbxpcNHY73.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.179959483846702"
+}

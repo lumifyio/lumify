@@ -1,0 +1,184 @@
+{
+  "birthday": "1982-10-31",
+  "adult": false,
+  "biography": "\u200bFrom Wikipedia, the free encyclopedia.\n\nJustin Chatwin  (born October 31, 1982) is a Canadian film actor. He played the son of Tom Cruise's character in the Steven Spielberg-directed War of the Worlds, a leading role in the 2007 Mystery/Thriller The Invisible, and Goku in Dragonball Evolution. In 2011, he began playing Steve in the Showtime series Shameless.\n\nDescription above from the Wikipedia article Justin Chatwin, licensed under CC-BY-SA, full list of contributors on Wikipedia",
+  "homepage": "",
+  "profile_path": "/rG5aYePsnpDf3H5NS6iH0F63WIy.jpg",
+  "id": 503,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0154226",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 31117,
+        "media_type": "movie",
+        "title": "Superbabies: Baby Geniuses 2",
+        "credit_id": "52fe44609251416c9100e7a7",
+        "release_date": "2004-08-27",
+        "original_title": "Superbabies: Baby Geniuses 2",
+        "adult": false,
+        "poster_path": "/6hgyJmeFmoX3cSGbbPaUA7HnpCW.jpg",
+        "character": "Zack"
+      },
+      {
+        "id": 9785,
+        "media_type": "movie",
+        "title": "The Invisible",
+        "credit_id": "52fe452cc3a36847f80c07ff",
+        "release_date": "2007-04-27",
+        "original_title": "The Invisible",
+        "adult": false,
+        "poster_path": "/mcDsVfukVsCbon7qIKcryfCRf64.jpg",
+        "character": "Nick Powell"
+      },
+      {
+        "id": 13919,
+        "media_type": "movie",
+        "title": "The Chumscrubber",
+        "credit_id": "52fe45b49251416c7505f955",
+        "release_date": "2005-06-08",
+        "original_title": "The Chumscrubber",
+        "adult": false,
+        "poster_path": "/2h3AIuMj35bXUADvUiY7Mjcx2G4.jpg",
+        "character": "Billy"
+      },
+      {
+        "id": 14164,
+        "media_type": "movie",
+        "title": "Dragonball Evolution",
+        "credit_id": "52fe45d29251416c75063aff",
+        "release_date": "2009-04-08",
+        "original_title": "Dragonball Evolution",
+        "adult": false,
+        "poster_path": "/cSeAmdIaxPioere8p7wHIZ08l1X.jpg",
+        "character": "Goku"
+      },
+      {
+        "id": 61542,
+        "media_type": "movie",
+        "title": "Funkytown",
+        "credit_id": "52fe4657c3a368484e08b575",
+        "release_date": "2011-03-04",
+        "original_title": "Funkytown",
+        "adult": false,
+        "poster_path": "/qQl9it79dInzDOFQMQy9nLGipcl.jpg",
+        "character": "Tino DeiFiori"
+      },
+      {
+        "id": 19688,
+        "media_type": "movie",
+        "title": "Middle of Nowhere",
+        "credit_id": "52fe47eb9251416c750a9cb1",
+        "release_date": "2008-01-01",
+        "original_title": "Middle of Nowhere",
+        "adult": false,
+        "poster_path": "/nrrV6Yx4VrWJe395CNtk1VYv5ae.jpg",
+        "character": "Ben Pretzler"
+      },
+      {
+        "id": 111147,
+        "media_type": "movie",
+        "title": "The Incredible Mrs. Ritchie",
+        "credit_id": "52fe4af1c3a36847f81e9d57",
+        "release_date": "2004-03-30",
+        "original_title": "The Incredible Mrs. Ritchie",
+        "adult": false,
+        "poster_path": "/gaoD7dDBX2GYCKobJtoYgIr7zBA.jpg",
+        "character": "Lawrence"
+      },
+      {
+        "id": 74,
+        "media_type": "movie",
+        "title": "War of the Worlds",
+        "credit_id": "52fe4213c3a36847f8002277",
+        "release_date": "2005-06-28",
+        "original_title": "War of the Worlds",
+        "adult": false,
+        "poster_path": "/xXMM9KY2eq1SDOQif9zO91YOBA8.jpg",
+        "character": "Robbie Ferrier"
+      },
+      {
+        "id": 190661,
+        "media_type": "movie",
+        "title": "Brink",
+        "credit_id": "52fe4c689251416c910f4021",
+        "release_date": null,
+        "original_title": "Brink",
+        "adult": false,
+        "poster_path": "/21Aeok7exXKq5eh47WtMCCUVpES.jpg",
+        "character": "Jeremy"
+      },
+      {
+        "id": 269057,
+        "media_type": "movie",
+        "title": "Bang Bang Baby",
+        "credit_id": "536d8eb40e0a2647d400e94a",
+        "release_date": null,
+        "original_title": "Bang Bang Baby",
+        "adult": false,
+        "poster_path": null,
+        "character": "Bobby Shore"
+      },
+      {
+        "id": 259225,
+        "media_type": "movie",
+        "title": "Traffic",
+        "credit_id": "5370dfcfc3a3687e6c0030fd",
+        "release_date": "2004-01-26",
+        "original_title": "Traffic",
+        "adult": false,
+        "poster_path": "/rEIEHLGxEP00D2KRUCwCIrjAG22.jpg",
+        "character": "Tyler McKay"
+      },
+      {
+        "id": 13261,
+        "media_type": "tv",
+        "episode_count": 3,
+        "credit_id": "5258269c760ee36aaa814880",
+        "name": "Traffic",
+        "poster_path": null,
+        "original_name": "Traffic",
+        "first_air_date": "2004-01-26",
+        "character": "Tyler McKay"
+      },
+      {
+        "id": 4604,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525774cc760ee36aaa505c56",
+        "name": "Smallville",
+        "poster_path": "/33nstHQLbbLmgDVguBRgleHU7s3.jpg",
+        "original_name": "Smallville",
+        "first_air_date": "2001-10-16",
+        "character": ""
+      },
+      {
+        "id": 4607,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52577593760ee36aaa515bb2",
+        "name": "Lost",
+        "poster_path": "/lMt67Q7H6KTDGQJ0P0dZSRld0OV.jpg",
+        "original_name": "Lost",
+        "first_air_date": "2004-09-22",
+        "character": ""
+      },
+      {
+        "id": 34307,
+        "media_type": "tv",
+        "episode_count": 63,
+        "credit_id": "52b9b183760ee3198c235ed9",
+        "name": "Shameless",
+        "poster_path": "/7pV4s8B0P73p4NKoKt3G4sBQXrW.jpg",
+        "original_name": "Shameless",
+        "first_air_date": "2011-01-09",
+        "character": "Steve Wilton/Jimmy Lishman"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Justin Chatwin",
+  "place_of_birth": "Nanaimo, British Columbia, Canada",
+  "popularity": "6.24391845039335"
+}

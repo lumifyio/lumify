@@ -1,0 +1,325 @@
+{
+  "budget": 28000000,
+  "vote_average": 6.5,
+  "backdrop_path": "/gti33Idw0SqTH6wFzRlGmdjnLxs.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 73421,
+        "order": 0,
+        "credit_id": "52fe4213c3a36847f8001f43",
+        "name": "Joaquin Phoenix",
+        "cast_id": 2,
+        "profile_path": "/3IhxPwyUovZGbsdwhcaU0Kvm37J.jpg",
+        "character": "Johnny Cash"
+      },
+      {
+        "id": 368,
+        "order": 1,
+        "credit_id": "52fe4213c3a36847f8001f47",
+        "name": "Reese Witherspoon",
+        "cast_id": 3,
+        "profile_path": "/r7UH0Dn2aQbQAtAzO01bMzPrGV0.jpg",
+        "character": "June Carter"
+      },
+      {
+        "id": 417,
+        "order": 2,
+        "credit_id": "52fe4213c3a36847f8001f63",
+        "name": "Ginnifer Goodwin",
+        "cast_id": 10,
+        "profile_path": "/1x7h1taW5Esez9RttjmU2GXFu28.jpg",
+        "character": "Vivian"
+      },
+      {
+        "id": 418,
+        "order": 3,
+        "credit_id": "52fe4213c3a36847f8001f67",
+        "name": "Robert Patrick",
+        "cast_id": 11,
+        "profile_path": "/dpUIbzLpExv69faSRyww8A4ydxf.jpg",
+        "character": "Ray Cash"
+      },
+      {
+        "id": 419,
+        "order": 4,
+        "credit_id": "52fe4213c3a36847f8001f6b",
+        "name": "Tyler Hilton",
+        "cast_id": 12,
+        "profile_path": "/f2Go4sCPAnxNtzAiv8knPQYDS3e.jpg",
+        "character": "Elvis Presley"
+      },
+      {
+        "id": 420,
+        "order": 5,
+        "credit_id": "52fe4213c3a36847f8001f6f",
+        "name": "Johnathan Rice",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Roy Orbison"
+      },
+      {
+        "id": 421,
+        "order": 6,
+        "credit_id": "52fe4213c3a36847f8001f73",
+        "name": "Shooter Jennings",
+        "cast_id": 14,
+        "profile_path": "/oWn81H5SLIYQikUkeRFrnVnwL9M.jpg",
+        "character": "Waylon Jennings"
+      },
+      {
+        "id": 422,
+        "order": 7,
+        "credit_id": "52fe4213c3a36847f8001f77",
+        "name": "Waylon Payne",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Jerry Lee Lewis"
+      },
+      {
+        "id": 424,
+        "order": 8,
+        "credit_id": "52fe4213c3a36847f8001f7b",
+        "name": "Dallas Roberts",
+        "cast_id": 16,
+        "profile_path": "/953COYG42TDhGMy9UqdGqLOF4fN.jpg",
+        "character": "Sam Phillips"
+      },
+      {
+        "id": 425,
+        "order": 9,
+        "credit_id": "52fe4213c3a36847f8001f7f",
+        "name": "Dan John Miller",
+        "cast_id": 17,
+        "profile_path": "/vqCkSeRyFK90Y578eSU4zeKMC4I.jpg",
+        "character": "Luther Perkins"
+      },
+      {
+        "id": 426,
+        "order": 10,
+        "credit_id": "52fe4213c3a36847f8001f83",
+        "name": "Larry Bagby",
+        "cast_id": 18,
+        "profile_path": "/zBXOdQkskwkYCK34RnVKTVaI8DR.jpg",
+        "character": "Marshall Grant"
+      },
+      {
+        "id": 427,
+        "order": 11,
+        "credit_id": "52fe4213c3a36847f8001f87",
+        "name": "Sandra Ellis Lafferty",
+        "cast_id": 19,
+        "profile_path": "/x84X0jwGl063wTGSmw7M8J0SxhS.jpg",
+        "character": "Maybelle Carter"
+      },
+      {
+        "id": 428,
+        "order": 12,
+        "credit_id": "52fe4213c3a36847f8001f8b",
+        "name": "Dan Beene",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Ezra Carter"
+      },
+      {
+        "id": 429,
+        "order": 13,
+        "credit_id": "52fe4213c3a36847f8001f8f",
+        "name": "Lucas Till",
+        "cast_id": 21,
+        "profile_path": "/tzRh4clufpcLp7fQSP1nFFMwQi.jpg",
+        "character": "Young Johnny Cash"
+      },
+      {
+        "id": 431,
+        "order": 14,
+        "credit_id": "52fe4213c3a36847f8001f93",
+        "name": "Victoria Hester",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Carlene Carter"
+      },
+      {
+        "id": 430,
+        "order": 15,
+        "credit_id": "52fe4213c3a36847f8001f97",
+        "name": "Hailey Anne Nelson",
+        "cast_id": 23,
+        "profile_path": "/g3P0V4D6g4wYlhTxakTaAQC7DW2.jpg",
+        "character": "Rosanne Cash"
+      }
+    ],
+    "crew": [
+      {
+        "id": 366,
+        "credit_id": "52fe4213c3a36847f8001f3f",
+        "department": "Directing",
+        "name": "James Mangold",
+        "job": "Director",
+        "profile_path": "/1gt0VmCyBHhQLKhaBDCEIwvRWe.jpg"
+      },
+      {
+        "id": 408,
+        "credit_id": "52fe4213c3a36847f8001f4d",
+        "department": "Production",
+        "name": "James Keach",
+        "job": "Producer",
+        "profile_path": "/5k6C8JLApbI52sjaYAHHnIdsrnv.jpg"
+      },
+      {
+        "id": 409,
+        "credit_id": "52fe4213c3a36847f8001f53",
+        "department": "Production",
+        "name": "Cathy Konrad",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 410,
+        "credit_id": "52fe4213c3a36847f8001f59",
+        "department": "Production",
+        "name": "John Carter Cash",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 414,
+        "credit_id": "52fe4213c3a36847f8001f5f",
+        "department": "Production",
+        "name": "Alan C. Blomquist",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 432,
+        "credit_id": "52fe4213c3a36847f8001f9d",
+        "department": "Camera",
+        "name": "Phedon Papamichael",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 433,
+        "credit_id": "52fe4213c3a36847f8001fa3",
+        "department": "Editing",
+        "name": "Michael McCusker",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 434,
+        "credit_id": "52fe4213c3a36847f8001fa9",
+        "department": "Production",
+        "name": "Lisa Beach",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 435,
+        "credit_id": "52fe4213c3a36847f8001faf",
+        "department": "Production",
+        "name": "Shirley Fulton Crumley",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 436,
+        "credit_id": "52fe4213c3a36847f8001fb5",
+        "department": "Production",
+        "name": "Sarah Katzman",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 437,
+        "credit_id": "52fe4213c3a36847f8001fbb",
+        "department": "Art",
+        "name": "David J. Bomba",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 369,
+        "credit_id": "52fe4213c3a36847f8001fc1",
+        "department": "Art",
+        "name": "Henry Bumstead",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 366,
+        "credit_id": "52fe4213c3a36847f8001fc7",
+        "department": "Writing",
+        "name": "James Mangold",
+        "job": "Screenplay",
+        "profile_path": "/1gt0VmCyBHhQLKhaBDCEIwvRWe.jpg"
+      },
+      {
+        "id": 407,
+        "credit_id": "52fe4213c3a36847f8001fcd",
+        "department": "Writing",
+        "name": "Gill Dennis",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 136,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "ru",
+      "name": "Pусский"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 69,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Walk the Line",
+  "overview": "A chronicle of country music legend Johnny Cash's life, from his early days on an Arkansas cotton farm to his rise to fame with Sun Records in Memphis, where he recorded alongside Elvis Presley, Jerry Lee Lewis and Carl Perkins.",
+  "production_companies": [
+    {
+      "id": 84,
+      "name": "Tree Line Films"
+    },
+    {
+      "id": 85,
+      "name": "Konrad Pictures"
+    },
+    {
+      "id": 86,
+      "name": "Catfish Productions"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0358273",
+  "release_date": "2005-11-18",
+  "original_title": "Walk the Line",
+  "vote_count": 144,
+  "poster_path": "/nUsaYt9Wk4fVP8jp1ncfQe7Io7t.jpg",
+  "tagline": "Love is a burning thing.",
+  "revenue": 170000000,
+  "popularity": "1.30964182402485"
+}

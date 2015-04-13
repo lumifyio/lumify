@@ -1,0 +1,226 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/u6ITjrb0iNSQh1q98KbKtQloW8q.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 678,
+        "order": 0,
+        "credit_id": "52fe4242c3a36847f8010569",
+        "name": "Martina Gedeck",
+        "cast_id": 14,
+        "profile_path": "/iluG8YiPJre0YGgdY2eJ8i6yyQW.jpg",
+        "character": "Miriam"
+      },
+      {
+        "id": 5755,
+        "order": 1,
+        "credit_id": "52fe4242c3a36847f801056d",
+        "name": "Robert Seeliger",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Bill"
+      },
+      {
+        "id": 5756,
+        "order": 2,
+        "credit_id": "52fe4242c3a36847f8010571",
+        "name": "Peter Davor",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "André"
+      },
+      {
+        "id": 5757,
+        "order": 3,
+        "credit_id": "52fe4242c3a36847f8010575",
+        "name": "Svea Lohde",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Livia"
+      },
+      {
+        "id": 5758,
+        "order": 4,
+        "credit_id": "52fe4242c3a36847f8010579",
+        "name": "Lucas Kotaranin",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "NIls"
+      },
+      {
+        "id": 5759,
+        "order": 5,
+        "credit_id": "52fe4242c3a36847f801057d",
+        "name": "Nicole Marischka",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Grietje"
+      },
+      {
+        "id": 5760,
+        "order": 6,
+        "credit_id": "52fe4242c3a36847f8010581",
+        "name": "Gábor Altorjay",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Daniel"
+      },
+      {
+        "id": 5761,
+        "order": 7,
+        "credit_id": "52fe4242c3a36847f8010585",
+        "name": "Michael Benthin",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Arzt"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5742,
+        "credit_id": "52fe4242c3a36847f8010523",
+        "department": "Directing",
+        "name": "Stefan Krohmer",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 5743,
+        "credit_id": "52fe4242c3a36847f8010529",
+        "department": "Production",
+        "name": "Katrin Schlösser",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5744,
+        "credit_id": "52fe4242c3a36847f801052f",
+        "department": "Production",
+        "name": "Eva-Marie Martens",
+        "job": "Production Manager",
+        "profile_path": null
+      },
+      {
+        "id": 5745,
+        "credit_id": "52fe4242c3a36847f8010535",
+        "department": "Production",
+        "name": "Silke Fischer",
+        "job": "Location Manager",
+        "profile_path": null
+      },
+      {
+        "id": 5747,
+        "credit_id": "52fe4242c3a36847f801053b",
+        "department": "Production",
+        "name": "Nina Haun",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5748,
+        "credit_id": "52fe4242c3a36847f8010541",
+        "department": "Costume & Make-Up",
+        "name": "Silke Sommer",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5749,
+        "credit_id": "52fe4242c3a36847f8010547",
+        "department": "Directing",
+        "name": "Annette Drees",
+        "job": "Script Supervisor",
+        "profile_path": null
+      },
+      {
+        "id": 5750,
+        "credit_id": "52fe4242c3a36847f801054d",
+        "department": "Directing",
+        "name": "Petra Misovic",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 5751,
+        "credit_id": "52fe4242c3a36847f8010553",
+        "department": "Camera",
+        "name": "Patrick Orth",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5752,
+        "credit_id": "52fe4242c3a36847f8010559",
+        "department": "Camera",
+        "name": "Henrik Sauer",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5753,
+        "credit_id": "52fe4242c3a36847f801055f",
+        "department": "Editing",
+        "name": "Gisela Zick",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5754,
+        "credit_id": "52fe4242c3a36847f8010565",
+        "department": "Sound",
+        "name": "Steffen Graubaum",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 5762,
+        "credit_id": "52fe4242c3a36847f801058b",
+        "department": "Writing",
+        "name": "Daniel Nocke",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 97,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 428,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Summer '04",
+  "overview": "Sommer \u201904 is a character study of a family on vacation. German director Stefan Krohmer examines the emotional abyss and problems behind the seemingly nice facade of an intact family as they experience guilt, love and jealousy.",
+  "production_companies": [],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0806679",
+  "release_date": "2006-10-11",
+  "original_title": "Sommer '04",
+  "vote_count": 0,
+  "poster_path": "/j8Lr0QbUw2v9reJlmXliOaa7v6e.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.224716764748124"
+}

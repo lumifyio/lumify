@@ -1,0 +1,343 @@
+{
+  "budget": 120000000,
+  "vote_average": 5.3,
+  "backdrop_path": "/imJb2MQI9jYXanp11Pxhcc6OfBT.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5576,
+        "order": 0,
+        "credit_id": "52fe4240c3a36847f800fdf5",
+        "name": "Val Kilmer",
+        "cast_id": 6,
+        "profile_path": "/AlhPeiH8R4reMNGNQ9ag1FPbuW9.jpg",
+        "character": "Batman"
+      },
+      {
+        "id": 2176,
+        "order": 1,
+        "credit_id": "52fe4240c3a36847f800fdf9",
+        "name": "Tommy Lee Jones",
+        "cast_id": 7,
+        "profile_path": "/gRXugLFvr1oHZ6alLUxmYDq8cgW.jpg",
+        "character": "Two-Face/Harvey Dent"
+      },
+      {
+        "id": 206,
+        "order": 1,
+        "credit_id": "52fe4241c3a36847f800fdfd",
+        "name": "Jim Carrey",
+        "cast_id": 8,
+        "profile_path": "/o6bOiFNpkmszElC23kwAdn87M32.jpg",
+        "character": "Riddler/Edward Nygma"
+      },
+      {
+        "id": 2227,
+        "order": 1,
+        "credit_id": "52fe4241c3a36847f800fe01",
+        "name": "Nicole Kidman",
+        "cast_id": 9,
+        "profile_path": "/qPgSCfqFHU12KaDeYzkbq8B2uTv.jpg",
+        "character": "Dr. Chase Meridian"
+      },
+      {
+        "id": 5577,
+        "order": 2,
+        "credit_id": "52fe4241c3a36847f800fe05",
+        "name": "Chris O'Donnell",
+        "cast_id": 10,
+        "profile_path": "/pjIwKa4AkgTzDO2Onz9dPn5KZTr.jpg",
+        "character": "Robin/Dick Grayson"
+      },
+      {
+        "id": 3796,
+        "order": 3,
+        "credit_id": "52fe4241c3a36847f800fe09",
+        "name": "Michael Gough",
+        "cast_id": 11,
+        "profile_path": "/lSADK0gjUtcq4B6zKIUwB3SofSP.jpg",
+        "character": "Alfred Pennyworth"
+      },
+      {
+        "id": 3798,
+        "order": 4,
+        "credit_id": "52fe4241c3a36847f800fe0d",
+        "name": "Pat Hingle",
+        "cast_id": 12,
+        "profile_path": "/bW8alHCKEK0UOJjoZwjwwH7T0ga.jpg",
+        "character": "Commissioner Gordon"
+      },
+      {
+        "id": 69597,
+        "order": 5,
+        "credit_id": "52fe4241c3a36847f800fe11",
+        "name": "Drew Barrymore",
+        "cast_id": 13,
+        "profile_path": "/y8GKPHsBXVGIGBdDzdNxjm0IbKF.jpg",
+        "character": "Sugar"
+      },
+      {
+        "id": 5578,
+        "order": 6,
+        "credit_id": "52fe4241c3a36847f800fe15",
+        "name": "Debi Mazar",
+        "cast_id": 14,
+        "profile_path": "/2KvU83RPF1Iswd402LCQasdK6MP.jpg",
+        "character": "Spice"
+      },
+      {
+        "id": 5579,
+        "order": 7,
+        "credit_id": "52fe4241c3a36847f800fe19",
+        "name": "Elizabeth Sanders",
+        "cast_id": 15,
+        "profile_path": "/onWcLrux1SlRuvRhaAtvoVvSpv.jpg",
+        "character": "Gossip Gerty"
+      },
+      {
+        "id": 9807,
+        "order": 8,
+        "credit_id": "52fe4241c3a36847f800fe4d",
+        "name": "Rene Auberjonois",
+        "cast_id": 24,
+        "profile_path": "/eAF43tqzBqq7Lgi7jG27BBUZ6Bp.jpg",
+        "character": "Dr. Burton"
+      },
+      {
+        "id": 4887,
+        "order": 9,
+        "credit_id": "52fe4241c3a36847f800fe51",
+        "name": "Joe Grifasi",
+        "cast_id": 25,
+        "profile_path": "/s6CBiHTCEY0u2PB7UCjkF2hhZME.jpg",
+        "character": "Bank Guard"
+      },
+      {
+        "id": 1235,
+        "order": 10,
+        "credit_id": "52fe4241c3a36847f800fe55",
+        "name": "Philip Moon",
+        "cast_id": 26,
+        "profile_path": "/7IB8OtD4L3k3hxzrPeBSpucODyI.jpg",
+        "character": "Male Newscaster"
+      },
+      {
+        "id": 156689,
+        "order": 11,
+        "credit_id": "52fe4241c3a36847f800fe59",
+        "name": "Jessica Tuck",
+        "cast_id": 27,
+        "profile_path": "/smsznskzjz5c6SbjEFW6kENGhho.jpg",
+        "character": "Female Newscaster"
+      },
+      {
+        "id": 162556,
+        "order": 12,
+        "credit_id": "52fe4241c3a36847f800fe5d",
+        "name": "Dennis Paladino",
+        "cast_id": 28,
+        "profile_path": "/b4KxhVh7ViqAKwzvJiyZlI2J8kl.jpg",
+        "character": "Crime Boss Moroni"
+      },
+      {
+        "id": 106745,
+        "order": 13,
+        "credit_id": "53724abd0e0a2672f40020e7",
+        "name": "Don 'The Dragon' Wilson",
+        "cast_id": 30,
+        "profile_path": "/aIx1PbWOcQnNApHQTQm6mGQNwcI.jpg",
+        "character": "Gang Leader"
+      },
+      {
+        "id": 25336,
+        "order": 14,
+        "credit_id": "53724ad10e0a2672fb00211c",
+        "name": "Bob Zmuda",
+        "cast_id": 31,
+        "profile_path": "/jXC1XpcwRxYdNna5cKNeCZkqaVg.jpg",
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 5572,
+        "credit_id": "52fe4240c3a36847f800fdd9",
+        "department": "Directing",
+        "name": "Joel Schumacher",
+        "job": "Director",
+        "profile_path": "/ijI5sCPqDvT18NRWCeBqw8BJIZx.jpg"
+      },
+      {
+        "id": 3794,
+        "credit_id": "52fe4240c3a36847f800fddf",
+        "department": "Writing",
+        "name": "Bob Kane",
+        "job": "Author",
+        "profile_path": "/uh9ILSkz0iCQ8o1Ljnz6ubYMvOD.jpg"
+      },
+      {
+        "id": 5573,
+        "credit_id": "52fe4240c3a36847f800fde5",
+        "department": "Writing",
+        "name": "Lee Batchler",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5574,
+        "credit_id": "52fe4240c3a36847f800fdeb",
+        "department": "Writing",
+        "name": "Janet Scott Batchler",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5575,
+        "credit_id": "52fe4240c3a36847f800fdf1",
+        "department": "Writing",
+        "name": "Akiva Goldsman",
+        "job": "Author",
+        "profile_path": "/smyKiXX4rAfehztrmg3lxgRAuZF.jpg"
+      },
+      {
+        "id": 510,
+        "credit_id": "52fe4241c3a36847f800fe1f",
+        "department": "Production",
+        "name": "Tim Burton",
+        "job": "Producer",
+        "profile_path": "/z64d13PXggAV5Q2oUqcP9q18qtg.jpg"
+      },
+      {
+        "id": 5580,
+        "credit_id": "52fe4241c3a36847f800fe25",
+        "department": "Production",
+        "name": "Peter Macgregor-Scott",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5581,
+        "credit_id": "52fe4241c3a36847f800fe2b",
+        "department": "Sound",
+        "name": "Elliot Goldenthal",
+        "job": "Original Music Composer",
+        "profile_path": "/5xyNIomgXHO5llLS2Mny0HM89ze.jpg"
+      },
+      {
+        "id": 5582,
+        "credit_id": "52fe4241c3a36847f800fe31",
+        "department": "Camera",
+        "name": "Stephen Goldblatt",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5583,
+        "credit_id": "52fe4241c3a36847f800fe37",
+        "department": "Editing",
+        "name": "Mark Stevens",
+        "job": "Editor",
+        "profile_path": "/rkES4KrYzVPx96lDFHIrjrDvABH.jpg"
+      },
+      {
+        "id": 5584,
+        "credit_id": "52fe4241c3a36847f800fe3d",
+        "department": "Editing",
+        "name": "Dennis Virkler",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1262,
+        "credit_id": "52fe4241c3a36847f800fe43",
+        "department": "Production",
+        "name": "Mali Finn",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5585,
+        "credit_id": "52fe4241c3a36847f800fe49",
+        "department": "Art",
+        "name": "Barbara Ling",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 406204,
+        "credit_id": "52fe4241c3a36847f800fe63",
+        "department": "Costume & Make-Up",
+        "name": "Ve Neill",
+        "job": "Makeup Artist",
+        "profile_path": "/yaAwlGtPlQXcMum3eWL2xbas4BV.jpg"
+      }
+    ]
+  },
+  "runtime": 121,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 414,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Batman Forever",
+  "overview": "The Dark Knight of Gotham City confronts a dastardly duo: Two-Face and the Riddler. Formerly District Attorney Harvey Dent, Two-Face believes Batman caused the courtroom accident which left him disfigured on one side. And Edward Nygma, computer-genius and former employee of millionaire Bruce Wayne, is out to get the philanthropist; as The Riddler. Former circus acrobat Dick Grayson, his family killed by Two-Face, becomes Wayne's ward and Batman's new partner Robin.",
+  "production_companies": [
+    {
+      "id": 429,
+      "name": "DC Comics"
+    },
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 1382,
+      "name": "PolyGram Filmed Entertainment"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 120794,
+    "backdrop_path": "/cLnP8V27ZX44QDz4ZsgHTUAg7f6.jpg",
+    "name": "Batman Collection (Original Series)",
+    "poster_path": "/adQxUvQW8HXNsvMG5aj71pHh9T.jpg"
+  },
+  "imdb_id": "tt0112462",
+  "release_date": "1995-06-15",
+  "original_title": "Batman Forever",
+  "vote_count": 345,
+  "poster_path": "/hnuIc1ZC1jxSNoefaN8Bp6ixgBJ.jpg",
+  "tagline": "Courage now, truth always...",
+  "revenue": 336531112,
+  "popularity": "1.24285035513675"
+}

@@ -1,0 +1,253 @@
+{
+  "birthday": "1972-10-17",
+  "adult": false,
+  "biography": "Marshall Bruce Mathers III, better known by his stage name Eminem and by his alter ego Slim Shady, is an American rapper, record producer, songwriter and actor.",
+  "homepage": "http://www.eminem.com/",
+  "profile_path": "/mKPPGlIZ2EiKb6LSC46cSzK2NEU.jpg",
+  "id": 325,
+  "also_known_as": [
+    "Eminem",
+    "埃米纳姆"
+  ],
+  "deathday": "",
+  "imdb_id": "nm0004896",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 24988,
+        "media_type": "movie",
+        "title": "Eminem - Live from New York City",
+        "credit_id": "52fe44b3c3a368484e031fb7",
+        "release_date": "2005-01-01",
+        "original_title": "Eminem - Live from New York City",
+        "adult": false,
+        "poster_path": "/hC9sMdG6bRW84IGVSGd0LoR4YKY.jpg",
+        "character": "Eminem"
+      },
+      {
+        "id": 13408,
+        "media_type": "movie",
+        "title": "The Wash",
+        "credit_id": "52fe45659251416c75054fc5",
+        "release_date": "2001-11-16",
+        "original_title": "The Wash",
+        "adult": false,
+        "poster_path": "/3h2AKoh6AkzsWtE94QjayVxoLjJ.jpg",
+        "character": "Chris"
+      },
+      {
+        "id": 65772,
+        "media_type": "movie",
+        "title": "Beef IV",
+        "credit_id": "52fe4719c3a368484e0b4fd1",
+        "release_date": "2007-09-18",
+        "original_title": "Beef IV",
+        "adult": false,
+        "poster_path": "/mDJcU6Gmvo02iqcDsUfm70b2mRR.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 19349,
+        "media_type": "movie",
+        "title": "The Up in Smoke Tour",
+        "credit_id": "52fe47d29251416c750a686d",
+        "release_date": "2000-12-02",
+        "original_title": "The Up in Smoke Tour",
+        "adult": false,
+        "poster_path": "/ftczixKYZy4aivvL1dE4SKdTi2X.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 84342,
+        "media_type": "movie",
+        "title": "Something from Nothing: The Art of Rap",
+        "credit_id": "52fe48ee9251416c9109d021",
+        "release_date": "2012-06-15",
+        "original_title": "Something from Nothing: The Art of Rap",
+        "adult": false,
+        "poster_path": "/yQDNYOHDiC3pGhTnTu0A6RXq6dc.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 56736,
+        "media_type": "movie",
+        "title": "DJ Cinema Presents: Masterpiece Theater Blend Dvd",
+        "credit_id": "52fe490fc3a36847f818770b",
+        "release_date": "2009-03-19",
+        "original_title": "DJ Cinema Presents: Masterpiece Theater Blend Dvd",
+        "adult": false,
+        "poster_path": "/1xWU6owfmDOPEr8XB5kgk2oiDMt.jpg",
+        "character": ""
+      },
+      {
+        "id": 76176,
+        "media_type": "movie",
+        "title": "Da Hip Hop Witch",
+        "credit_id": "52fe492bc3a368484e11daf3",
+        "release_date": "2000-10-31",
+        "original_title": "Da Hip Hop Witch",
+        "adult": false,
+        "poster_path": "/fhGyWQ03YJCvERp3a6lfENnQ1lK.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 104780,
+        "media_type": "movie",
+        "title": "Xzibit: Restless Xposed",
+        "credit_id": "52fe4a3cc3a36847f81c2d25",
+        "release_date": "2001-12-11",
+        "original_title": "Xzibit: Restless Xposed",
+        "adult": false,
+        "poster_path": "/lJ4GZQqJ3m9Gpl6QgKw0Q8VLcoX.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 124071,
+        "media_type": "movie",
+        "title": "How to Make Money Selling Drugs",
+        "credit_id": "52fe4aa3c3a368484e15ef6f",
+        "release_date": "2012-09-07",
+        "original_title": "How to Make Money Selling Drugs",
+        "adult": false,
+        "poster_path": "/4nvmCvYOEYjVTlKDyyMCQkibun3.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 154414,
+        "media_type": "movie",
+        "title": "I Need a Doctor",
+        "credit_id": "52fe4b609251416c910d8653",
+        "release_date": "2011-01-01",
+        "original_title": "I Need a Doctor",
+        "adult": false,
+        "poster_path": "/4JwM0n6q12Y6aVn8ocgBIk3OxL1.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 65,
+        "media_type": "movie",
+        "title": "8 Mile",
+        "credit_id": "52fe4212c3a36847f8001c53",
+        "release_date": "2002-11-08",
+        "original_title": "8 Mile",
+        "adult": false,
+        "poster_path": "/dXzTrKwpbLpCqn8O70FUUhNbYQT.jpg",
+        "character": "Jimmy B. \"Rabbit\" Smith"
+      },
+      {
+        "id": 164833,
+        "media_type": "movie",
+        "title": "Eminem E",
+        "credit_id": "52fe4c80c3a36847f8231735",
+        "release_date": "2000-12-18",
+        "original_title": "Eminem E",
+        "adult": false,
+        "poster_path": "/gzzB48mnSEumymH6ULeytMZwUQw.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 253597,
+        "media_type": "movie",
+        "title": "Dr. Dre & Snoop Dogg: Live At Coachella",
+        "credit_id": "52fe4e879251416c91134ad1",
+        "release_date": "2012-04-14",
+        "original_title": "Dr. Dre & Snoop Dogg: Live At Coachella",
+        "adult": false,
+        "poster_path": "/l7y7YPExuDuQQ2lexcRwTGMYcg4.jpg",
+        "character": ""
+      },
+      {
+        "id": 20829,
+        "media_type": "movie",
+        "title": "Funny People",
+        "credit_id": "5304e23892514104b81f5281",
+        "release_date": "2009-07-31",
+        "original_title": "Funny People",
+        "adult": false,
+        "poster_path": "/AgHypTuKWO4k4XXn9I5oXys2LRw.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 273181,
+        "media_type": "movie",
+        "title": "Eminem: All Acces Europe",
+        "credit_id": "538a1abac3a3686fd80002d7",
+        "release_date": "2002-06-18",
+        "original_title": "Eminem: All Acces Europe",
+        "adult": false,
+        "poster_path": "/rPTKuo9HUEuTskQjJoxs64BWGOz.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 2097,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "525721fd760ee3776a216afe",
+        "name": "Crank Yankers",
+        "poster_path": "/jtU36qpj08j7yVmMklwawQFHFyj.jpg",
+        "original_name": "Crank Yankers",
+        "first_air_date": "2002-06-03",
+        "character": ""
+      },
+      {
+        "id": 1940,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52571c1219c29571140e962b",
+        "name": "Entourage",
+        "poster_path": "/bgNnuiABAdg2zdgnnXfo2TIKoAI.jpg",
+        "original_name": "Entourage",
+        "first_air_date": "2004-07-18",
+        "character": ""
+      },
+      {
+        "id": 15884,
+        "media_type": "tv",
+        "episode_count": 10,
+        "credit_id": "52583b8b760ee36aaa99dc12",
+        "name": "The Slim Shady Show",
+        "poster_path": "/2oxRftJ9YBqJYQA834jxfrd3zgo.jpg",
+        "original_name": "The Slim Shady Show",
+        "first_air_date": "2000-09-16",
+        "character": ""
+      },
+      {
+        "id": 1667,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "527bc53119c29568e309e378",
+        "name": "Saturday Night Live",
+        "poster_path": "/aXdHYUXubjdVzdQvUsV5OxpCNeu.jpg",
+        "original_name": "Saturday Night Live",
+        "first_air_date": "1975-10-11",
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 48722,
+        "media_type": "tv",
+        "episode_count": 0,
+        "credit_id": "525978c2760ee34661a6e857",
+        "department": "Production",
+        "name": "Detroit Rubber",
+        "job": "Executive Producer",
+        "poster_path": null,
+        "original_name": "Detroit Rubber"
+      },
+      {
+        "id": 15884,
+        "media_type": "tv",
+        "credit_id": "52583b8b760ee36aaa99dc22",
+        "department": "Creator",
+        "name": "The Slim Shady Show",
+        "job": "Creator",
+        "poster_path": "/2oxRftJ9YBqJYQA834jxfrd3zgo.jpg",
+        "original_name": "The Slim Shady Show"
+      }
+    ]
+  },
+  "name": "Eminem",
+  "place_of_birth": "St. Joseph, Missouri, USA",
+  "popularity": "1.25683217379342"
+}

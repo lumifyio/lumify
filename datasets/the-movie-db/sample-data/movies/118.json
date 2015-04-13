@@ -1,0 +1,325 @@
+{
+  "budget": 150000000,
+  "vote_average": 6,
+  "backdrop_path": "/1za2EfHEdwhYE2MzbpHgmdYRgdA.jpg",
+  "genres": [
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 85,
+        "order": 0,
+        "credit_id": "52fe421ac3a36847f80042ff",
+        "name": "Johnny Depp",
+        "cast_id": 2,
+        "profile_path": "/5sc2pu4YWItxCaXSvrFpg64zN9J.jpg",
+        "character": "Willy Wonka"
+      },
+      {
+        "id": 1281,
+        "order": 1,
+        "credit_id": "52fe421ac3a36847f8004303",
+        "name": "Freddie Highmore",
+        "cast_id": 3,
+        "profile_path": "/5wou22G4dMRcnpMrRyPfLclZ2lD.jpg",
+        "character": "Charlie Bucket"
+      },
+      {
+        "id": 1285,
+        "order": 2,
+        "credit_id": "52fe421ac3a36847f8004313",
+        "name": "AnnaSophia Robb",
+        "cast_id": 7,
+        "profile_path": "/bFUVeM3XfAqb0tzshthI52ZrXip.jpg",
+        "character": "Violet Beauregarde"
+      },
+      {
+        "id": 1286,
+        "order": 3,
+        "credit_id": "52fe421ac3a36847f8004317",
+        "name": "Julia Winter",
+        "cast_id": 8,
+        "profile_path": "/tOmLJwV53aSxRHxidQUQ8MhLtWC.jpg",
+        "character": "Veruca Salt"
+      },
+      {
+        "id": 1282,
+        "order": 4,
+        "credit_id": "52fe421ac3a36847f8004307",
+        "name": "David Kelly",
+        "cast_id": 4,
+        "profile_path": "/jxPBAzbia65yJAsNxoyGQri5Bah.jpg",
+        "character": "Grandpa Joe"
+      },
+      {
+        "id": 1283,
+        "order": 5,
+        "credit_id": "52fe421ac3a36847f800430b",
+        "name": "Helena Bonham Carter",
+        "cast_id": 5,
+        "profile_path": "/rHZMwkumoRvhKV5ZvwBONKENAhG.jpg",
+        "character": "Mrs. Bucket"
+      },
+      {
+        "id": 1284,
+        "order": 6,
+        "credit_id": "52fe421ac3a36847f800430f",
+        "name": "Noah Taylor",
+        "cast_id": 6,
+        "profile_path": "/dSlH0WA09dVqQhgB7LB5xn8WzD.jpg",
+        "character": "Mr. Bucket"
+      },
+      {
+        "id": 1290,
+        "order": 7,
+        "credit_id": "52fe421ac3a36847f800431b",
+        "name": "Jordan Fry",
+        "cast_id": 9,
+        "profile_path": "/9mr4LKxtlSFLFTgQ0eFlD6yHtdI.jpg",
+        "character": "Mike Teavee"
+      },
+      {
+        "id": 1291,
+        "order": 8,
+        "credit_id": "52fe421ac3a36847f800431f",
+        "name": "Philip Wiegratz",
+        "cast_id": 10,
+        "profile_path": "/KXDK5MJ7juz7H1EzEe2pDdljDP.jpg",
+        "character": "Augustus Glupsch"
+      },
+      {
+        "id": 1292,
+        "order": 9,
+        "credit_id": "52fe421ac3a36847f8004323",
+        "name": "James Fox",
+        "cast_id": 11,
+        "profile_path": "/ioQ2RxdK9Th5cONWm0XN3NeedoZ.jpg",
+        "character": "Mr. Salt"
+      },
+      {
+        "id": 1293,
+        "order": 10,
+        "credit_id": "52fe421ac3a36847f8004327",
+        "name": "Franziska Troegner",
+        "cast_id": 12,
+        "profile_path": "/lCuV1knsruWXG3JEsyJPJkFpjII.jpg",
+        "character": "Mrs. Glupsch"
+      },
+      {
+        "id": 1294,
+        "order": 11,
+        "credit_id": "52fe421ac3a36847f800432b",
+        "name": "Missi Pyle",
+        "cast_id": 13,
+        "profile_path": "/rRVORUpcHPO9MqgK26H1JWwMZLn.jpg",
+        "character": "Mrs. Beauregard"
+      },
+      {
+        "id": 113,
+        "order": 12,
+        "credit_id": "52fe421ac3a36847f800432f",
+        "name": "Christopher Lee",
+        "cast_id": 14,
+        "profile_path": "/7YwjaHLmuy1isK6oh3TnBDd6Oml.jpg",
+        "character": "Dr. Wonka"
+      },
+      {
+        "id": 1295,
+        "order": 13,
+        "credit_id": "52fe421ac3a36847f8004333",
+        "name": "Deep Roy",
+        "cast_id": 15,
+        "profile_path": "/rCg84FP1x5tOutHKRB4OKhQeR4N.jpg",
+        "character": "Oompa Loompa"
+      },
+      {
+        "id": 184997,
+        "order": 14,
+        "credit_id": "52fe421ac3a36847f8004385",
+        "name": "Oscar James",
+        "cast_id": 30,
+        "profile_path": "/eHxVJu08olDzW8eYok6U5ETNlBk.jpg",
+        "character": "Shopkeeper"
+      },
+      {
+        "id": 7320,
+        "order": 15,
+        "credit_id": "52fe421ac3a36847f8004389",
+        "name": "Liz Smith",
+        "cast_id": 31,
+        "profile_path": "/rFmFjKTl9Drjv7tA687miEyn1tG.jpg",
+        "character": "Grandma Georgina"
+      }
+    ],
+    "crew": [
+      {
+        "id": 510,
+        "credit_id": "52fe421ac3a36847f80042fb",
+        "department": "Directing",
+        "name": "Tim Burton",
+        "job": "Director",
+        "profile_path": "/z64d13PXggAV5Q2oUqcP9q18qtg.jpg"
+      },
+      {
+        "id": 1296,
+        "credit_id": "52fe421ac3a36847f8004339",
+        "department": "Production",
+        "name": "Bruce Berman",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1297,
+        "credit_id": "52fe421ac3a36847f800433f",
+        "department": "Production",
+        "name": "Richard D. Zanuck",
+        "job": "Producer",
+        "profile_path": "/uoPXQ29L8vlphMuojaBlmuwi1Mu.jpg"
+      },
+      {
+        "id": 1298,
+        "credit_id": "52fe421ac3a36847f8004345",
+        "department": "Production",
+        "name": "Brad Grey",
+        "job": "Producer",
+        "profile_path": "/7PntYF8xh3wqBEn7YvOXeovrk5R.jpg"
+      },
+      {
+        "id": 1299,
+        "credit_id": "52fe421ac3a36847f800434b",
+        "department": "Writing",
+        "name": "Roald Dahl",
+        "job": "Author",
+        "profile_path": "/a7G1vjCdLILMAVSGvjDy6iquh1U.jpg"
+      },
+      {
+        "id": 1300,
+        "credit_id": "52fe421ac3a36847f8004351",
+        "department": "Writing",
+        "name": "John August",
+        "job": "Screenplay",
+        "profile_path": "/t0jbO861bLCaKVC4hDBZ7sic8na.jpg"
+      },
+      {
+        "id": 1301,
+        "credit_id": "52fe421ac3a36847f8004357",
+        "department": "Camera",
+        "name": "Philippe Rousselot",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 541,
+        "credit_id": "52fe421ac3a36847f800435d",
+        "department": "Editing",
+        "name": "Chris Lebenzon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1302,
+        "credit_id": "52fe421ac3a36847f8004363",
+        "department": "Production",
+        "name": "Susie Figgis",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1303,
+        "credit_id": "52fe421ac3a36847f8004369",
+        "department": "Art",
+        "name": "Alex McDowell",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1304,
+        "credit_id": "52fe421ac3a36847f800436f",
+        "department": "Costume & Make-Up",
+        "name": "Gabriella Pescucci",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 1305,
+        "credit_id": "52fe421ac3a36847f8004375",
+        "department": "Sound",
+        "name": "Bill Abbott",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 531,
+        "credit_id": "52fe421ac3a36847f800437b",
+        "department": "Sound",
+        "name": "Danny Elfman",
+        "job": "Original Music Composer",
+        "profile_path": "/nBx84zlelMMlbVvkBQHyfF7eCov.jpg"
+      },
+      {
+        "id": 1299,
+        "credit_id": "52fe421ac3a36847f8004381",
+        "department": "Writing",
+        "name": "Roald Dahl",
+        "job": "Screenplay",
+        "profile_path": "/a7G1vjCdLILMAVSGvjDy6iquh1U.jpg"
+      }
+    ]
+  },
+  "runtime": 115,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://chocolatefactorymovie.warnerbros.com/",
+  "id": 118,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Charlie and the Chocolate Factory",
+  "overview": "A young boy wins a tour through the most magnificent chocolate factory in the world, led by the world's most unusual candy maker.",
+  "production_companies": [
+    {
+      "id": 174,
+      "name": "Warner Bros. Pictures"
+    },
+    {
+      "id": 79,
+      "name": "Village Roadshow Pictures"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0367594",
+  "release_date": "2005-07-09",
+  "original_title": "Charlie and the Chocolate Factory",
+  "vote_count": 426,
+  "poster_path": "/dvHl1dYvaZRhj9Gk0ITcCHr4DIJ.jpg",
+  "tagline": "Willy Wonka is semi-sweet and nuts.",
+  "revenue": 474968763,
+  "popularity": "1.30434611305342"
+}

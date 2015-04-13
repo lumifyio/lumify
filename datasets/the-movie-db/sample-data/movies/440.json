@@ -1,0 +1,353 @@
+{
+  "budget": 40000000,
+  "vote_average": 5.3,
+  "backdrop_path": "/uypAmOWRpjnqIlg1BzXhGgP1uMM.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 56389,
+        "order": 0,
+        "credit_id": "52fe4244c3a36847f8010dfb",
+        "name": "Steven Pasquale",
+        "cast_id": 17,
+        "profile_path": "/6rm9ZpBrc3w7tRvAtyMTOltUUvb.jpg",
+        "character": "Dallas Howard"
+      },
+      {
+        "id": 25869,
+        "order": 1,
+        "credit_id": "52fe4244c3a36847f8010dff",
+        "name": "Reiko Aylesworth",
+        "cast_id": 18,
+        "profile_path": "/59Gu57v2rOtvvBA06rSuYX2w5h2.jpg",
+        "character": "Kelly O'Brien"
+      },
+      {
+        "id": 40543,
+        "order": 2,
+        "credit_id": "52fe4244c3a36847f8010e03",
+        "name": "John Ortiz",
+        "cast_id": 19,
+        "profile_path": "/eLAPF96eGKcnpV837CciBiFsI7C.jpg",
+        "character": "Sheriff Eddie Morales"
+      },
+      {
+        "id": 76414,
+        "order": 3,
+        "credit_id": "52fe4244c3a36847f8010e07",
+        "name": "Ariel Gade",
+        "cast_id": 20,
+        "profile_path": "/axreEq8FBbpww34aBzJo2xM5pkv.jpg",
+        "character": "Molly O'Brien"
+      },
+      {
+        "id": 131006,
+        "order": 4,
+        "credit_id": "52fe4244c3a36847f8010e0b",
+        "name": "Sam Trammell",
+        "cast_id": 21,
+        "profile_path": "/pvf0cmYdw3Fi2F5HjP2QHgxRKoC.jpg",
+        "character": "Tim"
+      },
+      {
+        "id": 73454,
+        "order": 5,
+        "credit_id": "538dfcb6c3a3687146005413",
+        "name": "Kristen Hager",
+        "cast_id": 22,
+        "profile_path": "/mofGrgUP2kXXD8cgkYnzfGb8EOL.jpg",
+        "character": "Jesse"
+      },
+      {
+        "id": 19976,
+        "order": 6,
+        "credit_id": "538dfcc4c3a368714300501f",
+        "name": "Robert Joy",
+        "cast_id": 23,
+        "profile_path": "/xh5eb9p379k9w3NOGRjEyAw2yrP.jpg",
+        "character": "Col. Stevens"
+      },
+      {
+        "id": 33293,
+        "order": 7,
+        "credit_id": "538dfcccc3a36871520051b4",
+        "name": "David Paetkau",
+        "cast_id": 24,
+        "profile_path": "/xOAjc34j0fZlKSb6I3cpTwHStar.jpg",
+        "character": "Dale"
+      },
+      {
+        "id": 109870,
+        "order": 8,
+        "credit_id": "538dfcd4c3a36871550050d3",
+        "name": "Tom Woodruff Jr.",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Alien"
+      },
+      {
+        "id": 946696,
+        "order": 9,
+        "credit_id": "538dfcdfc3a368713c00525a",
+        "name": "Ian Whyte",
+        "cast_id": 26,
+        "profile_path": "/6mRY7hTtHfDTGuTLmZmODOu9buF.jpg",
+        "character": "Predator"
+      },
+      {
+        "id": 70175,
+        "order": 10,
+        "credit_id": "538dfce8c3a368714b0052e9",
+        "name": "Chelah Horsdal",
+        "cast_id": 27,
+        "profile_path": "/e9qFLU8ZLLo4YfJRrWnZCYGb7BR.jpg",
+        "character": "Darcy"
+      },
+      {
+        "id": 202065,
+        "order": 11,
+        "credit_id": "538dfcf1c3a36871520051b8",
+        "name": "Meshach Peters",
+        "cast_id": 28,
+        "profile_path": "/2zqlQS2A0kVzoSabpSVi9Qsfrwf.jpg",
+        "character": "Curtis"
+      },
+      {
+        "id": 210348,
+        "order": 12,
+        "credit_id": "538dfcf9c3a36871550050d6",
+        "name": "Matt Ward",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Mark"
+      }
+    ],
+    "crew": [
+      {
+        "id": 53114,
+        "credit_id": "5395808f0e0a266dca0062c3",
+        "department": "Art",
+        "name": "Shane Vieau",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 1723,
+        "credit_id": "53957f8f0e0a266db7006421",
+        "department": "Production",
+        "name": "Walter Hill",
+        "job": "Producer",
+        "profile_path": "/wpNPqW1oPi2GMYEgykHYBTDdGmJ.jpg"
+      },
+      {
+        "id": 22061,
+        "credit_id": "539580110e0a266dc5006192",
+        "department": "Crew",
+        "name": "Helen Jarvis",
+        "job": "Supervising Art Director",
+        "profile_path": null
+      },
+      {
+        "id": 12205,
+        "credit_id": "539580ac0e0a266dca0062c8",
+        "department": "Costume & Make-Up",
+        "name": "Angus Strathie",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 6037,
+        "credit_id": "52fe4244c3a36847f8010d9d",
+        "department": "Directing",
+        "name": "Colin Strause",
+        "job": "Director",
+        "profile_path": "/mM95v1bWGdz8Ira7K4drueKRT01.jpg"
+      },
+      {
+        "id": 6038,
+        "credit_id": "52fe4244c3a36847f8010da3",
+        "department": "Directing",
+        "name": "Greg Strause",
+        "job": "Director",
+        "profile_path": "/xcEcDFHoTkIuOkLeWRuX3ksJmy1.jpg"
+      },
+      {
+        "id": 5045,
+        "credit_id": "52fe4244c3a36847f8010da9",
+        "department": "Writing",
+        "name": "Dan O'Bannon",
+        "job": "Author",
+        "profile_path": "/slLZWXZ1lmdF763166ATRRI200n.jpg"
+      },
+      {
+        "id": 6039,
+        "credit_id": "52fe4244c3a36847f8010daf",
+        "department": "Writing",
+        "name": "Shane Salerno",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5046,
+        "credit_id": "52fe4244c3a36847f8010db5",
+        "department": "Writing",
+        "name": "Ronald Shusett",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1092,
+        "credit_id": "52fe4244c3a36847f8010dbb",
+        "department": "Writing",
+        "name": "Jim Thomas",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1094,
+        "credit_id": "52fe4244c3a36847f8010dc1",
+        "department": "Writing",
+        "name": "John Thomas",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2043,
+        "credit_id": "52fe4244c3a36847f8010dc7",
+        "department": "Production",
+        "name": "John Davis",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 915,
+        "credit_id": "53957f680e0a266db40063f9",
+        "department": "Production",
+        "name": "David Giler",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6041,
+        "credit_id": "52fe4244c3a36847f8010dd3",
+        "department": "Sound",
+        "name": "Brian Tyler",
+        "job": "Original Music Composer",
+        "profile_path": "/22QWiNJj03amY6GT1QPUs7dbdcB.jpg"
+      },
+      {
+        "id": 6042,
+        "credit_id": "52fe4244c3a36847f8010dd9",
+        "department": "Camera",
+        "name": "Daniel Pearl",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6043,
+        "credit_id": "52fe4244c3a36847f8010ddf",
+        "department": "Editing",
+        "name": "Dan Zimmerman",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5362,
+        "credit_id": "52fe4244c3a36847f8010de5",
+        "department": "Production",
+        "name": "Heike Brandstatter",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6044,
+        "credit_id": "52fe4244c3a36847f8010deb",
+        "department": "Production",
+        "name": "Mindy Marin",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5363,
+        "credit_id": "52fe4244c3a36847f8010df1",
+        "department": "Production",
+        "name": "Coreen Mayrs",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6045,
+        "credit_id": "52fe4244c3a36847f8010df7",
+        "department": "Art",
+        "name": "Andrew Neskoromny",
+        "job": "Production Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 94,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.avp-r.com/",
+  "id": 440,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Aliens vs Predator: Requiem",
+  "overview": "A sequel to 2004's Alien vs. Predator, the iconic creatures from two of the scariest film franchises in movie history wage their most brutal battle ever - in our own backyard. The small town of Gunnison, Colorado becomes a war zone between two of the deadliest extra-terrestrial life forms - the Alien and the Predator. When a Predator scout ship crash-lands in the hills outside the town, Alien Facehuggers and a hybrid Alien/Predator are released and begin to terrorize the town.",
+  "production_companies": [
+    {
+      "id": 444,
+      "name": "Dune Entertainment"
+    },
+    {
+      "id": 25,
+      "name": "20th Century Fox"
+    },
+    {
+      "id": 401,
+      "name": "Brandywine Productions Ltd."
+    },
+    {
+      "id": 1302,
+      "name": "Davis Entertainment"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 115762,
+    "backdrop_path": "/c5ccDw4lcTUnYGdCxc2yEl8PjTk.jpg",
+    "name": "AVP Collection",
+    "poster_path": "/zrApSsUX9i0qVntcCD0Pp55TdCy.jpg"
+  },
+  "imdb_id": "tt0758730",
+  "release_date": "2007-12-25",
+  "original_title": "Aliens vs Predator: Requiem",
+  "vote_count": 135,
+  "poster_path": "/xR4Mslyum7bjzAF1rlUX2HrlwhZ.jpg",
+  "tagline": "The Last Place On Earth We Want To Be Is In The Middle",
+  "revenue": 41797066,
+  "popularity": "1.77212348451048"
+}

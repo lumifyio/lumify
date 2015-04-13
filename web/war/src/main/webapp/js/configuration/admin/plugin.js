@@ -48,17 +48,20 @@ define([
                     this.$node.prepend(alertTemplate({ error: message || i18n('admin.plugin.error') }));
                 };
                 this.handleSubmitButton = function(button, promise) {
-                    var text = button.text();
+                    var $button = $(button),
+                        text = $button.text();
 
-                    button.attr('disabled', true);
+                    $button.attr('disabled', true);
 
-                    return promise
-                        .progress(function(v) {
-                            button.text(F.number.percent(v) + ' ' + text);
+                    if (promise.progress) {
+                        promise.progress(function(v) {
+                            $button.text(F.number.percent(v) + ' ' + text);
                         })
-                        .finally(function() {
-                            button.removeAttr('disabled').text(text);
-                        });
+                    }
+
+                    return promise.finally(function() {
+                        $button.removeAttr('disabled').text(text);
+                    });
                 };
                 return init.apply(this, Array.prototype.slice.call(arguments, 1));
             });

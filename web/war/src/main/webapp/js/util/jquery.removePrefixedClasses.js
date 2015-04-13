@@ -7,15 +7,17 @@ define(['jquery'], function() {
         return this.each(function() {
             var el = $(this),
                 classes = el[0].className.split(/\s+/),
-                prefixes = prefix.split(/\s+/);
+                prefixes = prefix.split(/\s+/),
+                toRemove = [];
 
             classes.forEach(function(cls) {
                 prefixes.forEach(function(prefix) {
                     if (cls.indexOf(prefix) === 0) {
-                        el.removeClass(cls);
+                        toRemove.push(cls);
                     }
                 });
             });
+            el.removeClass(toRemove.join(' '));
         });
     };
 });

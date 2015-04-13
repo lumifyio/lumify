@@ -1,0 +1,134 @@
+{
+  "birthday": "1917-12-16",
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 241,
+  "also_known_as": [],
+  "deathday": "2008-03-19",
+  "imdb_id": "nm0002009",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 44200,
+        "media_type": "movie",
+        "title": "Fractals: The Colors Of Infinity",
+        "credit_id": "52fe467dc3a36847f8101eaf",
+        "release_date": "1995-01-01",
+        "original_title": "Fractals: The Colors Of Infinity",
+        "adult": false,
+        "poster_path": "/y81VlWYyFDY7FKQ5TrX4nIaG4wV.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 53164,
+        "media_type": "movie",
+        "title": "2001: The Making of a Myth",
+        "credit_id": "52fe4856c3a36847f8162627",
+        "release_date": "2001-01-13",
+        "original_title": "2001: The Making of a Myth",
+        "adult": false,
+        "poster_path": "/crISRBstMnQEqXecrfbCp8bN2Qg.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 218838,
+        "media_type": "movie",
+        "title": "Village in the Jungle",
+        "credit_id": "52fe4e57c3a368484e21b76f",
+        "release_date": "1980-01-01",
+        "original_title": "Baddegama",
+        "adult": false,
+        "poster_path": "/wTXfqMJOAmvOYW9gxqzIpZmbd9K.jpg",
+        "character": "Leonard Woolf"
+      },
+      {
+        "id": 32986,
+        "media_type": "movie",
+        "title": "God, the Universe and Everything Else",
+        "credit_id": "52fe44f39251416c910226b7",
+        "release_date": "1988-01-01",
+        "original_title": "God, the Universe and Everything Else",
+        "adult": false,
+        "poster_path": "/nsi9LpAWXpSlLRcOqA7rfuRSr4A.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 17098,
+        "media_type": "tv",
+        "episode_count": 13,
+        "credit_id": "5258503b760ee34661041c54",
+        "name": "Arthur C. Clarke's Mysterious World",
+        "poster_path": "/ma2DwQutTpanWmav9mbLVssPrlV.jpg",
+        "original_name": "Arthur C. Clarke's Mysterious World",
+        "first_air_date": "1980-09-02",
+        "character": ""
+      },
+      {
+        "id": 20477,
+        "media_type": "tv",
+        "episode_count": 1,
+        "credit_id": "52586316760ee34661144071",
+        "name": "Wogan",
+        "poster_path": null,
+        "original_name": "Wogan",
+        "first_air_date": null,
+        "character": ""
+      }
+    ],
+    "crew": [
+      {
+        "id": 4437,
+        "media_type": "movie",
+        "title": "2010",
+        "credit_id": "52fe43c1c3a36847f806d331",
+        "department": "Writing",
+        "release_date": "1984-12-06",
+        "original_title": "2010",
+        "job": "Novel",
+        "adult": false,
+        "poster_path": "/9Rcz2n16HEYRi2EKGliByP6ESYR.jpg"
+      },
+      {
+        "id": 62,
+        "media_type": "movie",
+        "title": "2001: A Space Odyssey",
+        "credit_id": "52fe4212c3a36847f8001a4d",
+        "department": "Writing",
+        "release_date": "1968-04-05",
+        "original_title": "2001: A Space Odyssey",
+        "job": "Novel",
+        "adult": false,
+        "poster_path": "/rT9w3tzk25jA8vl7KyvzUP5gHJV.jpg"
+      },
+      {
+        "id": 62,
+        "media_type": "movie",
+        "title": "2001: A Space Odyssey",
+        "credit_id": "52fe4212c3a36847f8001a53",
+        "department": "Writing",
+        "release_date": "1968-04-05",
+        "original_title": "2001: A Space Odyssey",
+        "job": "Screenplay",
+        "adult": false,
+        "poster_path": "/rT9w3tzk25jA8vl7KyvzUP5gHJV.jpg"
+      },
+      {
+        "id": 47412,
+        "media_type": "movie",
+        "title": "Trapped in Space",
+        "credit_id": "52fe4732c3a36847f8128739",
+        "department": "Writing",
+        "release_date": "1994-02-01",
+        "original_title": "Trapped in Space",
+        "job": "Novel",
+        "adult": false,
+        "poster_path": "/buPTwwQLZbWr4WnxkrF9iEZtaSl.jpg"
+      }
+    ]
+  },
+  "name": "Arthur C. Clarke",
+  "place_of_birth": null,
+  "popularity": "1.00062501116989"
+}

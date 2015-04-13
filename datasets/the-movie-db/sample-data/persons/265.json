@@ -1,0 +1,140 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": "/qNUDwOV5TiEcKnugCBMofIIhgvV.jpg",
+  "id": 265,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0615249",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 55,
+        "media_type": "movie",
+        "title": "Amores Perros",
+        "credit_id": "52fe4211c3a36847f8001759",
+        "release_date": "2000-03-14",
+        "original_title": "Amores perros",
+        "adult": false,
+        "poster_path": "/8gEXmIzw1tDnBfOaCFPimkNIkmm.jpg",
+        "character": "Gustavo"
+      },
+      {
+        "id": 119381,
+        "media_type": "movie",
+        "title": "Las vecinas",
+        "credit_id": "52fe4bfec3a36847f821c671",
+        "release_date": "2006-01-01",
+        "original_title": "Las vecinas",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 210639,
+        "media_type": "movie",
+        "title": "Me late chocolate",
+        "credit_id": "52fe4d81c3a368484e1ecdd1",
+        "release_date": "2013-02-08",
+        "original_title": "Me late chocolate",
+        "adult": false,
+        "poster_path": "/rQQTpJicaeQUgmlPQA2Po1bcOGv.jpg",
+        "character": "Ballesteros"
+      },
+      {
+        "id": 227627,
+        "media_type": "movie",
+        "title": "Nonna's Trip",
+        "credit_id": "52fe4eab9251416c7515e4a3",
+        "release_date": "2008-02-07",
+        "original_title": "El Viaje de la Nonna",
+        "adult": false,
+        "poster_path": "/wuzvUi5L4HuJTKwqWFdxWQT3hnN.jpg",
+        "character": "Luigi"
+      },
+      {
+        "id": 246692,
+        "media_type": "movie",
+        "title": "Lokas",
+        "credit_id": "52fe4f19c3a36847f82bd785",
+        "release_date": "2008-03-07",
+        "original_title": "Lokas",
+        "adult": false,
+        "poster_path": "/41YWdI28Z7sClnvfDWFLQNXTIqn.jpg",
+        "character": "Flavio"
+      },
+      {
+        "id": 62353,
+        "media_type": "movie",
+        "title": "Todo el poder",
+        "credit_id": "539a5ae5c3a3684b8d000748",
+        "release_date": "1999-02-28",
+        "original_title": "Todo el poder",
+        "adult": false,
+        "poster_path": "/mBGs3AZOzJyV0HRBZMpZ3fX837H.jpg",
+        "character": ""
+      },
+      {
+        "id": 269577,
+        "media_type": "movie",
+        "title": "El cumple de la abuela",
+        "credit_id": "5371838fc3a368435f0005f7",
+        "release_date": null,
+        "original_title": "El cumple de la abuela",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 269577,
+        "media_type": "movie",
+        "title": "El cumple de la abuela",
+        "credit_id": "537183e4c3a3684343000608",
+        "release_date": null,
+        "original_title": "El cumple de la abuela",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 270060,
+        "media_type": "movie",
+        "title": "Redención",
+        "credit_id": "5375a43fc3a3681ecd000ae8",
+        "release_date": null,
+        "original_title": "Redención",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 274369,
+        "media_type": "movie",
+        "title": "Chilango Chronicles",
+        "credit_id": "5395413d0e0a266dca005ae9",
+        "release_date": "2010-08-13",
+        "original_title": "Crónicas Chilangas",
+        "adult": false,
+        "poster_path": null,
+        "character": ""
+      },
+      {
+        "id": 275086,
+        "media_type": "movie",
+        "title": "Desafío",
+        "credit_id": "539546b90e0a266dca005b8e",
+        "release_date": null,
+        "original_title": "Desafío",
+        "adult": false,
+        "poster_path": "/abzOvz3pEtycyV3UFCYrlUjYg9r.jpg",
+        "character": ""
+      }
+    ],
+    "crew": []
+  },
+  "name": "Rodrigo Murray",
+  "place_of_birth": null,
+  "popularity": 1
+}

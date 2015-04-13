@@ -1,0 +1,310 @@
+{
+  "budget": 8272296,
+  "vote_average": 7.1,
+  "backdrop_path": "/f9FdbY3pzLCP3sPJB6jqkE9NFs3.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 953,
+        "order": 0,
+        "credit_id": "52fe4217c3a36847f80034ff",
+        "name": "Cecilia Roth",
+        "cast_id": 5,
+        "profile_path": "/oqZ6V4dE5iztjM6bXjqyg7PkYZX.jpg",
+        "character": "Manuela"
+      },
+      {
+        "id": 954,
+        "order": 1,
+        "credit_id": "52fe4217c3a36847f8003503",
+        "name": "Marisa Paredes",
+        "cast_id": 6,
+        "profile_path": "/lxkwchAOdtuwhE6FKmKv7kjhOOn.jpg",
+        "character": "Huma"
+      },
+      {
+        "id": 955,
+        "order": 2,
+        "credit_id": "52fe4217c3a36847f8003507",
+        "name": "Penélope Cruz",
+        "cast_id": 7,
+        "profile_path": "/8gAt6RNH5UHT9TIgbrH9sRLtc2r.jpg",
+        "character": "Rosa"
+      },
+      {
+        "id": 958,
+        "order": 3,
+        "credit_id": "52fe4217c3a36847f800350b",
+        "name": "Candela Peña",
+        "cast_id": 8,
+        "profile_path": "/vXsuroxcILYbOoI4fufchaSrsIP.jpg",
+        "character": "Nina"
+      },
+      {
+        "id": 961,
+        "order": 4,
+        "credit_id": "52fe4217c3a36847f800350f",
+        "name": "Antonia San Juan",
+        "cast_id": 9,
+        "profile_path": "/nnw0i8kkyiYCVCJplsMiE9XlWRj.jpg",
+        "character": "Agrado"
+      },
+      {
+        "id": 962,
+        "order": 5,
+        "credit_id": "52fe4217c3a36847f8003513",
+        "name": "Rosa Maria Sardà",
+        "cast_id": 10,
+        "profile_path": "/glmILdIPfqrNtNHaUrpgpuVFU29.jpg",
+        "character": "Rosa's Mother"
+      },
+      {
+        "id": 963,
+        "order": 6,
+        "credit_id": "52fe4217c3a36847f8003517",
+        "name": "Toni Cantò",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Lola"
+      },
+      {
+        "id": 964,
+        "order": 7,
+        "credit_id": "52fe4217c3a36847f800351b",
+        "name": "Eloy Azorin",
+        "cast_id": 12,
+        "profile_path": "/gMsqCdNbLliRudq6olLZEccmO5t.jpg",
+        "character": "Esteban"
+      },
+      {
+        "id": 965,
+        "order": 8,
+        "credit_id": "52fe4217c3a36847f800351f",
+        "name": "Fernando Fernan Gomez",
+        "cast_id": 13,
+        "profile_path": "/2hUB2uXrQGNowcfKapNZRHZpy4x.jpg",
+        "character": "Rosa's Father"
+      },
+      {
+        "id": 3650,
+        "order": 9,
+        "credit_id": "52fe4217c3a36847f8003541",
+        "name": "Carlos Lozano",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Mario"
+      },
+      {
+        "id": 3651,
+        "order": 10,
+        "credit_id": "52fe4217c3a36847f8003545",
+        "name": "Fernando Guillén",
+        "cast_id": 20,
+        "profile_path": "/mWrkAW2w1m3hWdJrLvYTjqB3wSW.jpg",
+        "character": "Actor \"Doctor\""
+      },
+      {
+        "id": 3652,
+        "order": 11,
+        "credit_id": "52fe4217c3a36847f8003549",
+        "name": "Manuel Morón",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Doctor 1"
+      },
+      {
+        "id": 3653,
+        "order": 12,
+        "credit_id": "52fe4217c3a36847f800354d",
+        "name": "José Luis Torrijo",
+        "cast_id": 22,
+        "profile_path": "/2VtdDBIXVEJFvVA7tR1ns9YK1EE.jpg",
+        "character": "Doctor 2"
+      },
+      {
+        "id": 3654,
+        "order": 13,
+        "credit_id": "52fe4217c3a36847f8003551",
+        "name": "Malena Gutiérrez",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Malena"
+      },
+      {
+        "id": 3655,
+        "order": 14,
+        "credit_id": "52fe4217c3a36847f8003555",
+        "name": "Yael Barnatán",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Yael"
+      }
+    ],
+    "crew": [
+      {
+        "id": 309,
+        "credit_id": "52fe4217c3a36847f80034e9",
+        "department": "Directing",
+        "name": "Pedro Almodóvar",
+        "job": "Director",
+        "profile_path": "/Y32fKy8z0xTRq4LESm2yN6W7NJ.jpg"
+      },
+      {
+        "id": 952,
+        "credit_id": "52fe4217c3a36847f80034ef",
+        "department": "Production",
+        "name": "Agustín Almodóvar",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 311,
+        "credit_id": "52fe4217c3a36847f80034f5",
+        "department": "Production",
+        "name": "Michel Ruben",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 309,
+        "credit_id": "52fe4217c3a36847f80034fb",
+        "department": "Writing",
+        "name": "Pedro Almodóvar",
+        "job": "Author",
+        "profile_path": "/Y32fKy8z0xTRq4LESm2yN6W7NJ.jpg"
+      },
+      {
+        "id": 405,
+        "credit_id": "52fe4217c3a36847f8003525",
+        "department": "Sound",
+        "name": "Alberto Iglesias",
+        "job": "Original Music Composer",
+        "profile_path": "/2PGZyiqdAAyi2S0ZpFw5V0ojCqY.jpg"
+      },
+      {
+        "id": 413,
+        "credit_id": "52fe4217c3a36847f800352b",
+        "department": "Editing",
+        "name": "José Salcedo",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 979,
+        "credit_id": "52fe4217c3a36847f8003531",
+        "department": "Sound",
+        "name": "Miguel Rejas",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 981,
+        "credit_id": "52fe4217c3a36847f8003537",
+        "department": "Sound",
+        "name": "José Antonio Bermúdez",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 983,
+        "credit_id": "52fe4217c3a36847f800353d",
+        "department": "Sound",
+        "name": "Diego Garrido",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3656,
+        "credit_id": "52fe4217c3a36847f800355b",
+        "department": "Camera",
+        "name": "Affonso Beato",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3630,
+        "credit_id": "52fe4217c3a36847f8003561",
+        "department": "Art",
+        "name": "Antxón Gómez",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3629,
+        "credit_id": "52fe4217c3a36847f8003567",
+        "department": "Production",
+        "name": "Sara Bilbatúa",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3657,
+        "credit_id": "52fe4217c3a36847f800356d",
+        "department": "Costume & Make-Up",
+        "name": "Bina Daigeler",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 972,
+        "credit_id": "52fe4217c3a36847f8003573",
+        "department": "Costume & Make-Up",
+        "name": "Humberto Cornejo",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 93,
+        "credit_id": "52fe4217c3a36847f8003579",
+        "department": "Production",
+        "name": "Esther García",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 101,
+  "spoken_languages": [{
+    "iso_639_1": "es",
+    "name": "Español"
+  }],
+  "adult": false,
+  "homepage": "http://www.sonypictures.com/classics/allaboutmymother/",
+  "id": 99,
+  "production_countries": [{
+    "name": "Spain",
+    "iso_3166_1": "ES"
+  }],
+  "title": "All About My Mother",
+  "overview": "Young Esteban want to become a writer and also to discover the identity of his father, carefully concealed by the mother Manuela.",
+  "production_companies": [
+    {
+      "id": 82,
+      "name": "Renn Productions"
+    },
+    {
+      "id": 83,
+      "name": "France 2 Cinéma"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0185125",
+  "release_date": "1999-04-19",
+  "original_title": "Todo sobre mi madre",
+  "vote_count": 22,
+  "poster_path": "/jopVQl2gYGPeSfEfDX9ZktlG0In.jpg",
+  "tagline": "Part of every woman is a mother/actress/saint/sinner. And part of every man is a woman.",
+  "revenue": 67872296,
+  "popularity": "0.530978047880593"
+}

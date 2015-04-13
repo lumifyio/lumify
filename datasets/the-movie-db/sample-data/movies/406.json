@@ -1,0 +1,334 @@
+{
+  "budget": 3000000,
+  "vote_average": 8,
+  "backdrop_path": "/jJnjivw8vAWwjkPZTpH0C8AzPTQ.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1925,
+        "order": 0,
+        "credit_id": "52fe423fc3a36847f800f88f",
+        "name": "Vincent Cassel",
+        "cast_id": 2,
+        "profile_path": "/yTTyX7xziiMibm0nzcH5z6xxLLv.jpg",
+        "character": "Vinz"
+      },
+      {
+        "id": 5418,
+        "order": 1,
+        "credit_id": "52fe423fc3a36847f800f893",
+        "name": "Hubert Koundé",
+        "cast_id": 3,
+        "profile_path": "/vYb6YUZhxatC624pHomaTge1I3N.jpg",
+        "character": "Hubert"
+      },
+      {
+        "id": 5419,
+        "order": 2,
+        "credit_id": "52fe423fc3a36847f800f897",
+        "name": "Saïd Taghmaoui",
+        "cast_id": 4,
+        "profile_path": "/bOh3ZQ64WiGivN6GJrrO8vrw9wU.jpg",
+        "character": "Saïd"
+      },
+      {
+        "id": 5420,
+        "order": 3,
+        "credit_id": "52fe423fc3a36847f800f89b",
+        "name": "Abdel Ahmed Ghili",
+        "cast_id": 5,
+        "profile_path": "/1ZGyOl1Xc007E9tnkLWdcAQdFNw.jpg",
+        "character": "Abdel"
+      },
+      {
+        "id": 5422,
+        "order": 4,
+        "credit_id": "52fe423fc3a36847f800f89f",
+        "name": "Solo",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Santo"
+      },
+      {
+        "id": 5424,
+        "order": 5,
+        "credit_id": "52fe423fc3a36847f800f8a7",
+        "name": "Héloïse Rauth",
+        "cast_id": 8,
+        "profile_path": "/wTrEFOrSiyPzViREYwU56Ch94Zw.jpg",
+        "character": "Sarah"
+      },
+      {
+        "id": 5441,
+        "order": 6,
+        "credit_id": "52fe4240c3a36847f800f8fd",
+        "name": "Édouard Montoute",
+        "cast_id": 23,
+        "profile_path": "/d2e7IBZgvTxAKZnHvb6X1wQIdFa.jpg",
+        "character": "Darty"
+      },
+      {
+        "id": 5442,
+        "order": 7,
+        "credit_id": "52fe4240c3a36847f800f901",
+        "name": "Benoît Magimel",
+        "cast_id": 24,
+        "profile_path": "/9sFOan0Rxp8AI7MfGHwTEKRmn3R.jpg",
+        "character": "Benoît"
+      },
+      {
+        "id": 2170,
+        "order": 8,
+        "credit_id": "52fe4240c3a36847f800f911",
+        "name": "Marc Duret",
+        "cast_id": 28,
+        "profile_path": "/yZu9GrdnBYT0nEwPNPKvbXN9DfE.jpg",
+        "character": "Inspecteur Notre Dame"
+      },
+      {
+        "id": 5423,
+        "order": 9,
+        "credit_id": "52fe423fc3a36847f800f8a3",
+        "name": "Joseph Momo",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Gars ordinaire"
+      },
+      {
+        "id": 5443,
+        "order": 10,
+        "credit_id": "52fe4240c3a36847f800f905",
+        "name": "Vincent Lindon",
+        "cast_id": 25,
+        "profile_path": "/p5TMM0u0c9bdf0hyQksLfq7dDwD.jpg",
+        "character": "L'homme saoul"
+      },
+      {
+        "id": 5425,
+        "order": 11,
+        "credit_id": "52fe4240c3a36847f800f909",
+        "name": "Christophe Rossignon",
+        "cast_id": 26,
+        "profile_path": "/4FIHszvkxQWbxRxAhWCL0MPyfZ3.jpg",
+        "character": "Le chauffeur de taxi"
+      },
+      {
+        "id": 2406,
+        "order": 12,
+        "credit_id": "52fe4240c3a36847f800f90d",
+        "name": "Mathieu Kassovitz",
+        "cast_id": 27,
+        "profile_path": "/6QeXmtq08zzVN0Ix6SHWpVoV8vn.jpg",
+        "character": "Le jeune skinhead"
+      },
+      {
+        "id": 5444,
+        "order": 13,
+        "credit_id": "52fe4240c3a36847f800f915",
+        "name": "Philippe Nahon",
+        "cast_id": 29,
+        "profile_path": "/1ZrnApxh9qZz1EdEB1vKWwoFd5B.jpg",
+        "character": "Le chef de la police"
+      },
+      {
+        "id": 5445,
+        "order": 14,
+        "credit_id": "52fe4240c3a36847f800f919",
+        "name": "Zinedine Soualem",
+        "cast_id": 30,
+        "profile_path": "/fSXaPheMM4e6BUxPMaXrjIi8k4N.jpg",
+        "character": "L'Officier de Police"
+      },
+      {
+        "id": 1347614,
+        "order": 15,
+        "credit_id": "53d7f92ec3a3683a12001afc",
+        "name": "Rywka Wajsbrot",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Grand-mère de Vinz"
+      },
+      {
+        "id": 1347615,
+        "order": 16,
+        "credit_id": "53d7f964c3a3683a0e001a49",
+        "name": "Olga Abrego",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Tante de Vinz"
+      },
+      {
+        "id": 579488,
+        "order": 17,
+        "credit_id": "53d7f9ce0e0a26033d0025f2",
+        "name": "Laurent Labasse",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Cuisinier"
+      },
+      {
+        "id": 64546,
+        "order": 18,
+        "credit_id": "53d7fa0f0e0a26033d0025fc",
+        "name": "Choukri Gabteni",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Frère de Saïd"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2406,
+        "credit_id": "52fe423fc3a36847f800f88b",
+        "department": "Directing",
+        "name": "Mathieu Kassovitz",
+        "job": "Director",
+        "profile_path": "/6QeXmtq08zzVN0Ix6SHWpVoV8vn.jpg"
+      },
+      {
+        "id": 5425,
+        "credit_id": "52fe423fc3a36847f800f8ad",
+        "department": "Production",
+        "name": "Christophe Rossignon",
+        "job": "Producer",
+        "profile_path": "/4FIHszvkxQWbxRxAhWCL0MPyfZ3.jpg"
+      },
+      {
+        "id": 5426,
+        "credit_id": "52fe423fc3a36847f800f8b3",
+        "department": "Production",
+        "name": "Gilles Sacuto",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5427,
+        "credit_id": "52fe423fc3a36847f800f8b9",
+        "department": "Production",
+        "name": "Alain Rocca",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5428,
+        "credit_id": "52fe423fc3a36847f800f8bf",
+        "department": "Production",
+        "name": "Adeline Lecallier",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5429,
+        "credit_id": "52fe423fc3a36847f800f8c5",
+        "department": "Sound",
+        "name": "Assassin",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5431,
+        "credit_id": "52fe423fc3a36847f800f8cb",
+        "department": "Camera",
+        "name": "Pierre Aïm",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5433,
+        "credit_id": "52fe423fc3a36847f800f8d1",
+        "department": "Editing",
+        "name": "Scott Stevenson",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2406,
+        "credit_id": "52fe4240c3a36847f800f8d7",
+        "department": "Editing",
+        "name": "Mathieu Kassovitz",
+        "job": "Editor",
+        "profile_path": "/6QeXmtq08zzVN0Ix6SHWpVoV8vn.jpg"
+      },
+      {
+        "id": 5434,
+        "credit_id": "52fe4240c3a36847f800f8dd",
+        "department": "Art",
+        "name": "Giuseppe Ponturo",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 5435,
+        "credit_id": "52fe4240c3a36847f800f8e3",
+        "department": "Costume & Make-Up",
+        "name": "Virginie Montel",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5436,
+        "credit_id": "52fe4240c3a36847f800f8e9",
+        "department": "Crew",
+        "name": "Gilles Conseil",
+        "job": "Stunts",
+        "profile_path": null
+      },
+      {
+        "id": 5437,
+        "credit_id": "52fe4240c3a36847f800f8ef",
+        "department": "Sound",
+        "name": "Vincent Tulli",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 5439,
+        "credit_id": "52fe4240c3a36847f800f8f5",
+        "department": "Sound",
+        "name": "Dominique Dalmasso",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 2406,
+        "credit_id": "52fe4240c3a36847f800f91f",
+        "department": "Writing",
+        "name": "Mathieu Kassovitz",
+        "job": "Screenplay",
+        "profile_path": "/6QeXmtq08zzVN0Ix6SHWpVoV8vn.jpg"
+      }
+    ]
+  },
+  "runtime": 98,
+  "spoken_languages": [{
+    "iso_639_1": "fr",
+    "name": "Français"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 406,
+  "production_countries": [{
+    "name": "France",
+    "iso_3166_1": "FR"
+  }],
+  "title": "La Haine",
+  "overview": "Abdel, a local hoodlum, is hospitalized after a riot, where a policeman lost his gun. His friend Vinz finds it and claims he will kill a cop if Abdel dies.",
+  "production_companies": [{
+    "id": 183,
+    "name": "Le Studio Canal+"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0113247",
+  "release_date": "1995-05-31",
+  "original_title": "La Haine",
+  "vote_count": 59,
+  "poster_path": "/wPdtu0X4JxFDdtQ9FKR7B9c3eJo.jpg",
+  "tagline": "Three Young Friends... One Last Chance.",
+  "revenue": 0,
+  "popularity": "1.06405199777357"
+}

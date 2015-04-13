@@ -1,0 +1,215 @@
+{
+  "budget": 45000,
+  "vote_average": 7,
+  "backdrop_path": "/yWdNhSV37zHQIqCrufKqizzrNMc.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 10756,
+      "name": "Indie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4592,
+        "order": 0,
+        "credit_id": "52fe4236c3a36847f800cb17",
+        "name": "Tura Satana",
+        "cast_id": 2,
+        "profile_path": "/hapMvOMnsBEuXMUWJCi9RqM3wke.jpg",
+        "character": "Varla"
+      },
+      {
+        "id": 4593,
+        "order": 1,
+        "credit_id": "52fe4236c3a36847f800cb1b",
+        "name": "Haji",
+        "cast_id": 3,
+        "profile_path": "/oOR9LINqRf2WYKLLwWmvGhdIsBs.jpg",
+        "character": "Rosie"
+      },
+      {
+        "id": 4594,
+        "order": 2,
+        "credit_id": "52fe4236c3a36847f800cb1f",
+        "name": "Lori Williams",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Billie"
+      },
+      {
+        "id": 4595,
+        "order": 3,
+        "credit_id": "52fe4236c3a36847f800cb23",
+        "name": "Sue Bernard",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Linda"
+      },
+      {
+        "id": 4596,
+        "order": 4,
+        "credit_id": "52fe4236c3a36847f800cb27",
+        "name": "Stuart Lancaster",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "The Old Man"
+      },
+      {
+        "id": 4597,
+        "order": 5,
+        "credit_id": "52fe4236c3a36847f800cb2b",
+        "name": "Paul Trinka",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Kirk"
+      },
+      {
+        "id": 4598,
+        "order": 6,
+        "credit_id": "52fe4236c3a36847f800cb2f",
+        "name": "Dennis Busch",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "The Vegetable"
+      },
+      {
+        "id": 4599,
+        "order": 7,
+        "credit_id": "52fe4236c3a36847f800cb33",
+        "name": "Ray Barlow",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Tommy"
+      },
+      {
+        "id": 4679,
+        "order": 8,
+        "credit_id": "52fe4236c3a36847f800cb37",
+        "name": "John Furlong",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Narrator"
+      },
+      {
+        "id": 4685,
+        "order": 9,
+        "credit_id": "52fe4237c3a36847f800cb6b",
+        "name": "Michael Finn",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Gas Station Attendant"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4590,
+        "credit_id": "52fe4236c3a36847f800cb13",
+        "department": "Directing",
+        "name": "Russ Meyer",
+        "job": "Director",
+        "profile_path": "/4w6izR5bsjPNTQufl69K7qodcIb.jpg"
+      },
+      {
+        "id": 4680,
+        "credit_id": "52fe4237c3a36847f800cb3d",
+        "department": "Production",
+        "name": "Eve Meyer",
+        "job": "Producer",
+        "profile_path": "/wXIzCHodJ97p3tmp60RJxb4V1Ds.jpg"
+      },
+      {
+        "id": 4590,
+        "credit_id": "52fe4237c3a36847f800cb43",
+        "department": "Production",
+        "name": "Russ Meyer",
+        "job": "Producer",
+        "profile_path": "/4w6izR5bsjPNTQufl69K7qodcIb.jpg"
+      },
+      {
+        "id": 4681,
+        "credit_id": "52fe4237c3a36847f800cb49",
+        "department": "Sound",
+        "name": "Paul Sawtell",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4683,
+        "credit_id": "52fe4237c3a36847f800cb4f",
+        "department": "Sound",
+        "name": "Bert Shefter",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 4684,
+        "credit_id": "52fe4237c3a36847f800cb55",
+        "department": "Camera",
+        "name": "Walter Schenk",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4590,
+        "credit_id": "52fe4237c3a36847f800cb5b",
+        "department": "Editing",
+        "name": "Russ Meyer",
+        "job": "Editor",
+        "profile_path": "/4w6izR5bsjPNTQufl69K7qodcIb.jpg"
+      },
+      {
+        "id": 4590,
+        "credit_id": "52fe4237c3a36847f800cb61",
+        "department": "Writing",
+        "name": "Russ Meyer",
+        "job": "Screenplay",
+        "profile_path": "/4w6izR5bsjPNTQufl69K7qodcIb.jpg"
+      },
+      {
+        "id": 4591,
+        "credit_id": "52fe4237c3a36847f800cb67",
+        "department": "Writing",
+        "name": "Jack Moran",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 83,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 315,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Faster, Pussycat! Kill! Kill!",
+  "overview": "Three strippers seeking thrills encounter a young couple in the desert. After dispatching the boyfriend, they take the girl hostage and begin scheming on a crippled old man living with his two sons in the desert, reputedly hiding a tidy sum of cash. They become house guests of the old man and try and seduce the sons in an attempt to locate the money, not realizing that the old man has a few sinister intentions of his own.",
+  "production_companies": [{
+    "id": 170,
+    "name": "Eve Productions Inc."
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0059170",
+  "release_date": "1965-08-06",
+  "original_title": "Faster, Pussycat! Kill! Kill!",
+  "vote_count": 7,
+  "poster_path": "/7AH0Pb6QsLwOCx6MPwrxEAtveXw.jpg",
+  "tagline": "Go-Go For a Wild Ride With the ACTION GIRLS!",
+  "revenue": 0,
+  "popularity": "0.472852168640852"
+}

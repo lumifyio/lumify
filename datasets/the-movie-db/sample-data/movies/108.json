@@ -1,0 +1,267 @@
+{
+  "budget": 0,
+  "vote_average": 7.9,
+  "backdrop_path": "/dIXPijiNZ9JsMaFWD67bFwUtZdo.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1137,
+        "order": 0,
+        "credit_id": "52fe4219c3a36847f8003c99",
+        "name": "Juliette Binoche",
+        "cast_id": 10,
+        "profile_path": "/qlzTpnFyXkrO2ws2ccjaljl1Jlf.jpg",
+        "character": "Julie Vignon"
+      },
+      {
+        "id": 1138,
+        "order": 1,
+        "credit_id": "52fe4219c3a36847f8003c9d",
+        "name": "Benoît Régent",
+        "cast_id": 11,
+        "profile_path": "/ldEf9BnuCYBdIaH4epXtLeGPT2M.jpg",
+        "character": "Olivier"
+      },
+      {
+        "id": 1139,
+        "order": 2,
+        "credit_id": "52fe4219c3a36847f8003ca1",
+        "name": "Florence Pernel",
+        "cast_id": 12,
+        "profile_path": "/wfDRJJvOpuCoTzbwsKTtSqiIEfB.jpg",
+        "character": "Sandrine"
+      },
+      {
+        "id": 1140,
+        "order": 3,
+        "credit_id": "52fe4219c3a36847f8003cb1",
+        "name": "Charlotte Véry",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Lucille"
+      },
+      {
+        "id": 1141,
+        "order": 4,
+        "credit_id": "52fe4219c3a36847f8003cb5",
+        "name": "Hélène Vincent",
+        "cast_id": 19,
+        "profile_path": "/6hNLe48tHMucffEPGUQyQxR9Zr4.jpg",
+        "character": "La journaliste"
+      },
+      {
+        "id": 1142,
+        "order": 5,
+        "credit_id": "52fe4219c3a36847f8003cb9",
+        "name": "Philippe Volter",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "L'agent immobilier"
+      },
+      {
+        "id": 17894,
+        "order": 6,
+        "credit_id": "52fe4219c3a36847f8003cbd",
+        "name": "Claude Duneton",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Le médecin"
+      },
+      {
+        "id": 38170,
+        "order": 7,
+        "credit_id": "52fe4219c3a36847f8003cc1",
+        "name": "Hugues Quester",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Patrice"
+      },
+      {
+        "id": 267962,
+        "order": 8,
+        "credit_id": "52fe4219c3a36847f8003cc5",
+        "name": "Emmanuelle Riva",
+        "cast_id": 23,
+        "profile_path": "/vxHV2opZSmeP7K0OnrXArSJOiPQ.jpg",
+        "character": "La mère"
+      },
+      {
+        "id": 1146,
+        "order": 9,
+        "credit_id": "52fe4219c3a36847f8003cc9",
+        "name": "Julie Delpy",
+        "cast_id": 24,
+        "profile_path": "/4LfbFCLGHHkHVikRdgxbN6hbatl.jpg",
+        "character": "Dominique"
+      },
+      {
+        "id": 1145,
+        "order": 10,
+        "credit_id": "52fe4219c3a36847f8003ccd",
+        "name": "Zbigniew Zamachowski",
+        "cast_id": 25,
+        "profile_path": "/rfE2QqqCSRU3EY8cDdQBpULu6os.jpg",
+        "character": "Karol Karol"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1129,
+        "credit_id": "52fe4219c3a36847f8003c65",
+        "department": "Camera",
+        "name": "Sławomir Idziak",
+        "job": "Director of Photography",
+        "profile_path": "/vA9WrEK35MyUx6Sb4NtZiouotsg.jpg"
+      },
+      {
+        "id": 1128,
+        "credit_id": "52fe4219c3a36847f8003c6b",
+        "department": "Writing",
+        "name": "Agnieszka Holland",
+        "job": "Author",
+        "profile_path": "/gSwKzY4T6Aoy83SCZPWSI1xD4J5.jpg"
+      },
+      {
+        "id": 1129,
+        "credit_id": "52fe4219c3a36847f8003c71",
+        "department": "Writing",
+        "name": "Sławomir Idziak",
+        "job": "Author",
+        "profile_path": "/vA9WrEK35MyUx6Sb4NtZiouotsg.jpg"
+      },
+      {
+        "id": 1126,
+        "credit_id": "52fe4219c3a36847f8003c77",
+        "department": "Writing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Author",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      },
+      {
+        "id": 1132,
+        "credit_id": "52fe4219c3a36847f8003c7d",
+        "department": "Writing",
+        "name": "Krzysztof Piesiewicz",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1133,
+        "credit_id": "52fe4219c3a36847f8003c83",
+        "department": "Writing",
+        "name": "Edward Zebrowski",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 1134,
+        "credit_id": "52fe4219c3a36847f8003c89",
+        "department": "Production",
+        "name": "Marin Karmitz",
+        "job": "Producer",
+        "profile_path": "/t9KgqeBerwxwnSkvkvlapJ8gcSS.jpg"
+      },
+      {
+        "id": 1135,
+        "credit_id": "52fe4219c3a36847f8003c8f",
+        "department": "Sound",
+        "name": "Zbigniew Preisner",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1136,
+        "credit_id": "52fe4219c3a36847f8003c95",
+        "department": "Editing",
+        "name": "Jacques Witta",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1126,
+        "credit_id": "52fe4219c3a36847f8003ca7",
+        "department": "Directing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Director",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      },
+      {
+        "id": 1126,
+        "credit_id": "52fe4219c3a36847f8003cad",
+        "department": "Writing",
+        "name": "Krzysztof Kieślowski",
+        "job": "Screenplay",
+        "profile_path": "/9m5IdQtM4rfoob7bSFggsgyKYYP.jpg"
+      }
+    ]
+  },
+  "runtime": 98,
+  "spoken_languages": [
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 108,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Poland",
+      "iso_3166_1": "PL"
+    }
+  ],
+  "title": "Three Colors: Blue",
+  "overview": "Three Colors: Blue is the first part of Kieslowski's trilogy on France's national motto: Liberty, Equality, and Fraternity. Blue is the story of Julie who loses her husband, an acclaimed European composer and her young daughter in a car accident. The film's theme of liberty is manifested in Julie's attempt to start life anew free of personal commitments, belongings grief and love. She intends to spiritually commit suicide by withdrawing from the world and live completely independently, anonymously and in solitude in the Parisian metropolis. Despite her intentions, people from her former and present life intrude with their own needs. However, the reality created by the people who need and care about her, a surprising discovery and the music around which the film revolves heals Julie and irresistably draws her back to the land of the living.",
+  "production_companies": [
+    {
+      "id": 591,
+      "name": "France 3 Cinéma"
+    },
+    {
+      "id": 1610,
+      "name": "CED Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 131,
+    "backdrop_path": "/AeHExfHIl70SZCea907KfEoSkfJ.jpg",
+    "name": "Three Colors Collection",
+    "poster_path": "/diw724t2rabkmOAmM2Ffv2v4Zes.jpg"
+  },
+  "imdb_id": "tt0108394",
+  "release_date": "1993-01-10",
+  "original_title": "Trois couleurs : Bleu",
+  "vote_count": 26,
+  "poster_path": "/ogaVtts6CZ7QopO7mrv1EFVPlDK.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.882787752010858"
+}

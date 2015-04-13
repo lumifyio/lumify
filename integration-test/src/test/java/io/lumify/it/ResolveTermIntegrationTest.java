@@ -6,15 +6,12 @@ import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.model.*;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ResolveTermIntegrationTest extends TestBase {
     private String artifactVertexId;
     private ClientApiElement joeFernerVertex;
@@ -30,7 +27,7 @@ public class ResolveTermIntegrationTest extends TestBase {
         lumifyApi.logout();
 
         lumifyApi = login(USERNAME_TEST_USER_2);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_2, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_2, "auth1");
         assertHighlightedTextDoesNotContainResolvedEntityForOtherUser(lumifyApi);
         lumifyApi.logout();
 
@@ -50,7 +47,7 @@ public class ResolveTermIntegrationTest extends TestBase {
 
     public void setupData() throws ApiException, IOException {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
-        addUserAuth(lumifyApi, USERNAME_TEST_USER_1, "auth1");
+        addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFile("auth1", "test.txt", new ByteArrayInputStream("Joe Ferner knows David Singley.".getBytes()));
         assertEquals(1, artifact.getVertexIds().size());
@@ -59,8 +56,8 @@ public class ResolveTermIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        joeFernerVertex = lumifyApi.getVertexApi().create(CONCEPT_TEST_PERSON, "auth1");
-        lumifyApi.getVertexApi().setProperty(joeFernerVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Joe Ferner", "auth1", "test");
+        joeFernerVertex = lumifyApi.getVertexApi().create(TestOntology.CONCEPT_PERSON, "auth1");
+        lumifyApi.getVertexApi().setProperty(joeFernerVertex.getId(), TEST_MULTI_VALUE_KEY, LumifyProperties.TITLE.getPropertyName(), "Joe Ferner", "auth1", "test", null, null);
 
         lumifyTestCluster.processGraphPropertyQueue();
 
@@ -77,7 +74,7 @@ public class ResolveTermIntegrationTest extends TestBase {
                 TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY,
                 entityStartOffset, entityEndOffset,
                 "Joe Ferner",
-                CONCEPT_TEST_PERSON,
+                TestOntology.CONCEPT_PERSON,
                 "auth1",
                 joeFernerVertex.getId(),
                 "test",
@@ -105,7 +102,9 @@ public class ResolveTermIntegrationTest extends TestBase {
             }
         }
         for (ClientApiWorkspaceDiff.Item workspaceDiffItem : diff.getDiffs()) {
-            if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.PropertyItem && ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId)) {
+            if (workspaceDiffItem instanceof ClientApiWorkspaceDiff.PropertyItem &&
+                    ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementId().equals(edgeId) &&
+                    ((ClientApiWorkspaceDiff.PropertyItem) workspaceDiffItem).getElementType().equals("edge")) {
                 foundEdgeVisibilityJsonDiffItem = true;
             }
         }
@@ -134,7 +133,7 @@ public class ResolveTermIntegrationTest extends TestBase {
                 TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY,
                 entityStartOffset, entityEndOffset,
                 sign,
-                CONCEPT_TEST_PERSON,
+                TestOntology.CONCEPT_PERSON,
                 "auth1",
                 joeFernerVertex.getId(),
                 "test",

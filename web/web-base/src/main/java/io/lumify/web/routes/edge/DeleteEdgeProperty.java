@@ -13,10 +13,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Property;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,8 +45,6 @@ public class DeleteEdgeProperty extends BaseRequestHandler {
         LumifyVisibility lumifyVisibility = new LumifyVisibility();
         final String propertyName = getRequiredParameter(request, "propertyName");
         final String propertyKey = getRequiredParameter(request, "propertyKey");
-        final String sourceId = getRequiredParameter(request, "source");
-        final String destId = getRequiredParameter(request, "dest");
         final String edgeId = getRequiredParameter(request, "edgeId");
 
         User user = getUser(request);
@@ -69,7 +64,7 @@ public class DeleteEdgeProperty extends BaseRequestHandler {
             oldValue = oldProperty.getValue();
         }
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyKey, property.getDisplayName(),
+        auditRepository.auditRelationshipProperty(AuditAction.DELETE, edge.getVertexId(Direction.OUT), edge.getVertexId(Direction.IN), propertyKey, property.getTitle(),
                 oldValue, null, edge, "", "", user, lumifyVisibility.getVisibility());
         edge.removeProperty(propertyKey, propertyName, authorizations);
         graph.flush();

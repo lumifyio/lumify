@@ -1,0 +1,426 @@
+{
+  "budget": 4500000,
+  "vote_average": 7.2,
+  "backdrop_path": "/mqMGZIMKg2tGEkcuSduAxWAL7UF.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 131,
+        "order": 0,
+        "credit_id": "52fe421dc3a36847f80051fb",
+        "name": "Jake Gyllenhaal",
+        "cast_id": 3,
+        "profile_path": "/ezjFvLTdSUH8TvoACKmQ1vh78JI.jpg",
+        "character": "Donnie Darko"
+      },
+      {
+        "id": 723,
+        "order": 1,
+        "credit_id": "52fe421dc3a36847f8005217",
+        "name": "Patrick Swayze",
+        "cast_id": 10,
+        "profile_path": "/pPVUEZDu6s4IklouPfzLlLIsB3T.jpg",
+        "character": "Jim Cunningham"
+      },
+      {
+        "id": 69597,
+        "order": 2,
+        "credit_id": "52fe421dc3a36847f800526d",
+        "name": "Drew Barrymore",
+        "cast_id": 27,
+        "profile_path": "/y8GKPHsBXVGIGBdDzdNxjm0IbKF.jpg",
+        "character": "Karen Pomeroy"
+      },
+      {
+        "id": 1579,
+        "order": 3,
+        "credit_id": "52fe421dc3a36847f8005203",
+        "name": "Maggie Gyllenhaal",
+        "cast_id": 5,
+        "profile_path": "/dgFGI8y7QUKkwI1o0pJaZtjR30m.jpg",
+        "character": "Elizabeth Darko"
+      },
+      {
+        "id": 1578,
+        "order": 4,
+        "credit_id": "52fe421dc3a36847f80051ff",
+        "name": "Holmes Osborne",
+        "cast_id": 4,
+        "profile_path": "/gMeHJT6u5VRO8RnAgPuBYrB7Krn.jpg",
+        "character": "Eddie Darko"
+      },
+      {
+        "id": 1580,
+        "order": 5,
+        "credit_id": "52fe421dc3a36847f8005207",
+        "name": "Daveigh Chase",
+        "cast_id": 6,
+        "profile_path": "/xiJf7nTOvVVWIyWG9fyoauU6Ff3.jpg",
+        "character": "Samantha Darko"
+      },
+      {
+        "id": 1581,
+        "order": 6,
+        "credit_id": "52fe421dc3a36847f800520b",
+        "name": "Mary McDonnell",
+        "cast_id": 7,
+        "profile_path": "/juVhJmd33540E9yT8revFlYtl2F.jpg",
+        "character": "Mrs. Rose Darko"
+      },
+      {
+        "id": 1582,
+        "order": 7,
+        "credit_id": "52fe421dc3a36847f800520f",
+        "name": "James Duval",
+        "cast_id": 8,
+        "profile_path": "/ydlb3Rp5vkle9codpcfBWxFmUYr.jpg",
+        "character": "Frank"
+      },
+      {
+        "id": 1583,
+        "order": 8,
+        "credit_id": "52fe421dc3a36847f8005213",
+        "name": "Arthur Taxier",
+        "cast_id": 9,
+        "profile_path": "/35r49niniBCW1h7lYyUYJSgma5t.jpg",
+        "character": "Dr. Fisher"
+      },
+      {
+        "id": 1584,
+        "order": 9,
+        "credit_id": "52fe421dc3a36847f800521b",
+        "name": "Mark Hoffman",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Police Officer"
+      },
+      {
+        "id": 1585,
+        "order": 10,
+        "credit_id": "52fe421dc3a36847f800521f",
+        "name": "Patience Cleveland",
+        "cast_id": 12,
+        "profile_path": "/hPGnL3LRYhlusBDic0M6tpqsW2J.jpg",
+        "character": "Roberty Sparrow / Grandma Death"
+      },
+      {
+        "id": 1598,
+        "order": 11,
+        "credit_id": "52fe421dc3a36847f8005265",
+        "name": "David St. James",
+        "cast_id": 25,
+        "profile_path": "/cOJhnH9pJph2snOgpTMgWcWY5kz.jpg",
+        "character": "Bob Garland"
+      },
+      {
+        "id": 1599,
+        "order": 12,
+        "credit_id": "52fe421dc3a36847f8005269",
+        "name": "Jazzie Mahannah",
+        "cast_id": 26,
+        "profile_path": "/uhw5q0UlGEpaolUUODL8CKNjy8F.jpg",
+        "character": "Joanie James"
+      },
+      {
+        "id": 20088,
+        "order": 13,
+        "credit_id": "52fe421dc3a36847f8005271",
+        "name": "Jolene Purdy",
+        "cast_id": 28,
+        "profile_path": "/iG2VMLlUgQQHSNAqsseApD0AtAO.jpg",
+        "character": "Cherita Chen"
+      },
+      {
+        "id": 5151,
+        "order": 14,
+        "credit_id": "52fe421dc3a36847f8005275",
+        "name": "Beth Grant",
+        "cast_id": 29,
+        "profile_path": "/8WYd8N24jUpwk4nKDGPAdt08ltM.jpg",
+        "character": "Kitty Farmer"
+      },
+      {
+        "id": 20089,
+        "order": 15,
+        "credit_id": "52fe421dc3a36847f8005279",
+        "name": "Jena Malone",
+        "cast_id": 30,
+        "profile_path": "/3engyabuRCoaL3OquSoHgjaNnwW.jpg",
+        "character": "Gretchen Ross"
+      },
+      {
+        "id": 20090,
+        "order": 16,
+        "credit_id": "52fe421dc3a36847f800527d",
+        "name": "David Moreland",
+        "cast_id": 31,
+        "profile_path": "/5vDvT3mBrTLE8PvU6fV4cZcCH4r.jpg",
+        "character": "Principal Cole"
+      },
+      {
+        "id": 13526,
+        "order": 17,
+        "credit_id": "52fe421dc3a36847f8005281",
+        "name": "Noah Wyle",
+        "cast_id": 32,
+        "profile_path": "/m0xbQ1sWZuhZc4fOOUrvGUKNMPu.jpg",
+        "character": "Prof. Kenneth Monnitoff"
+      },
+      {
+        "id": 20091,
+        "order": 18,
+        "credit_id": "52fe421dc3a36847f8005285",
+        "name": "Kristina Malota",
+        "cast_id": 33,
+        "profile_path": "/x8kF5QFvQk5ilD9ll5QDdgmSNjN.jpg",
+        "character": "Susie Bates"
+      },
+      {
+        "id": 20092,
+        "order": 19,
+        "credit_id": "52fe421dc3a36847f8005289",
+        "name": "Marina Malota",
+        "cast_id": 34,
+        "profile_path": "/9RuSfaUoY4lCMise2m2Z5f4Dghv.jpg",
+        "character": "Emily Bates"
+      },
+      {
+        "id": 9594,
+        "order": 20,
+        "credit_id": "52fe421dc3a36847f800528d",
+        "name": "Katharine Ross",
+        "cast_id": 35,
+        "profile_path": "/KtXzfeLdU8NtwjSPOQ9dvBqQeS.jpg",
+        "character": "Dr. Lilian Thurman"
+      },
+      {
+        "id": 20093,
+        "order": 21,
+        "credit_id": "52fe421dc3a36847f8005291",
+        "name": "Scotty Leavenworth",
+        "cast_id": 36,
+        "profile_path": "/fMlu6DxBCqTT2lYJ8WKtNGMhPVG.jpg",
+        "character": "David"
+      },
+      {
+        "id": 10383,
+        "order": 22,
+        "credit_id": "52fe421dc3a36847f8005295",
+        "name": "Phyllis Lyons",
+        "cast_id": 37,
+        "profile_path": "/gShHL20sIsP5AS2w6ZGPvGb10Hz.jpg",
+        "character": "Anne Fisher"
+      },
+      {
+        "id": 20094,
+        "order": 23,
+        "credit_id": "52fe421dc3a36847f8005299",
+        "name": "Gary Lundy",
+        "cast_id": 38,
+        "profile_path": "/oo0Ptsl4R5Bk4PibnIt6w4bTDau.jpg",
+        "character": "Sean Smith"
+      },
+      {
+        "id": 20095,
+        "order": 24,
+        "credit_id": "52fe421dc3a36847f800529d",
+        "name": "Alex Greenwald",
+        "cast_id": 39,
+        "profile_path": "/vQtO9O4obyCEodeJ8zNXBa6TUPJ.jpg",
+        "character": "Seth Devlin"
+      },
+      {
+        "id": 156011,
+        "order": 25,
+        "credit_id": "536558890e0a2647ce001aeb",
+        "name": "Stuart Stone",
+        "cast_id": 42,
+        "profile_path": "/xLAtmUL0GtXMnwCrendFcXSu1Eq.jpg",
+        "character": "Ronald Fisher"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1577,
+        "credit_id": "52fe421dc3a36847f80051f1",
+        "department": "Directing",
+        "name": "Richard Kelly",
+        "job": "Director",
+        "profile_path": "/nHmIALlzcsSu7Uuc4kO34mFb7k2.jpg"
+      },
+      {
+        "id": 1577,
+        "credit_id": "52fe421dc3a36847f80051f7",
+        "department": "Writing",
+        "name": "Richard Kelly",
+        "job": "Screenplay",
+        "profile_path": "/nHmIALlzcsSu7Uuc4kO34mFb7k2.jpg"
+      },
+      {
+        "id": 1586,
+        "credit_id": "52fe421dc3a36847f8005225",
+        "department": "Production",
+        "name": "Adam Fields",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1587,
+        "credit_id": "52fe421dc3a36847f800522b",
+        "department": "Production",
+        "name": "Sean McKittrick",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1588,
+        "credit_id": "52fe421dc3a36847f8005231",
+        "department": "Production",
+        "name": "Nancy Juvonen",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1589,
+        "credit_id": "52fe421dc3a36847f8005237",
+        "department": "Sound",
+        "name": "Michael Andrews",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1590,
+        "credit_id": "52fe421dc3a36847f800523d",
+        "department": "Camera",
+        "name": "Steven Poster",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1591,
+        "credit_id": "52fe421dc3a36847f8005243",
+        "department": "Editing",
+        "name": "Sam Bauer",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1592,
+        "credit_id": "52fe421dc3a36847f8005249",
+        "department": "Editing",
+        "name": "Eric Strand",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1593,
+        "credit_id": "52fe421dc3a36847f800524f",
+        "department": "Production",
+        "name": "Joseph Middleton",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1594,
+        "credit_id": "52fe421dc3a36847f8005255",
+        "department": "Production",
+        "name": "Michelle Morris",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1596,
+        "credit_id": "52fe421dc3a36847f800525b",
+        "department": "Sound",
+        "name": "Jennifer Barak",
+        "job": "Music Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1597,
+        "credit_id": "52fe421dc3a36847f8005261",
+        "department": "Sound",
+        "name": "Michael Payne",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 9648,
+        "credit_id": "52fe421dc3a36847f80052a3",
+        "department": "Art",
+        "name": "Alec Hammond",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 69597,
+        "credit_id": "52fe421dc3a36847f80052a9",
+        "department": "Production",
+        "name": "Drew Barrymore",
+        "job": "Executive Producer",
+        "profile_path": "/y8GKPHsBXVGIGBdDzdNxjm0IbKF.jpg"
+      }
+    ]
+  },
+  "runtime": 113,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 141,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Donnie Darko",
+  "overview": "A troubled teenager is plagued by visions of a large bunny rabbit that manipulates him to commit a series of crimes, after narrowly escaping a bizarre accident.",
+  "production_companies": [
+    {
+      "id": 185,
+      "name": "Pandora Cinema"
+    },
+    {
+      "id": 2214,
+      "name": "Flower Films"
+    },
+    {
+      "id": 3334,
+      "name": "Adam Fields Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 178106,
+    "backdrop_path": "/hja7IzXp6how8eD1WHriI386TGY.jpg",
+    "name": "Darko Collection",
+    "poster_path": "/4Oj6ctBucsLvkbKsQMDaDXXR5cu.jpg"
+  },
+  "imdb_id": "tt0246578",
+  "release_date": "2001-10-26",
+  "original_title": "Donnie Darko",
+  "vote_count": 546,
+  "poster_path": "/dGcIsUfeatHYqgp9gX6KOcYT427.jpg",
+  "tagline": "Dark. Darker. Darko.",
+  "revenue": 1270522,
+  "popularity": "2.39737642269515"
+}

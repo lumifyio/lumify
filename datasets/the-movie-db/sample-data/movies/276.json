@@ -1,0 +1,289 @@
+{
+  "budget": 0,
+  "vote_average": 7.4,
+  "backdrop_path": "/rVivKkJD4HV31zAd9oW3abbGjAu.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3872,
+        "order": 0,
+        "credit_id": "52fe4231c3a36847f800afc3",
+        "name": "Daniel Brühl",
+        "cast_id": 7,
+        "profile_path": "/tDAPTmHnCpctMn7Uk3v8YYiA0No.jpg",
+        "character": "Jan"
+      },
+      {
+        "id": 3932,
+        "order": 1,
+        "credit_id": "52fe4231c3a36847f800afc7",
+        "name": "Julia Jentsch",
+        "cast_id": 8,
+        "profile_path": "/rqjdaNy1CWxex4vZ8oELsaQ566Z.jpg",
+        "character": "Jule"
+      },
+      {
+        "id": 3933,
+        "order": 2,
+        "credit_id": "52fe4231c3a36847f800afcb",
+        "name": "Stipe Erceg",
+        "cast_id": 9,
+        "profile_path": "/s0Lx2gI5PKHXYmIU3kOD0h1PJCG.jpg",
+        "character": "Peter"
+      },
+      {
+        "id": 3934,
+        "order": 3,
+        "credit_id": "52fe4231c3a36847f800afcf",
+        "name": "Burghart Klaußner",
+        "cast_id": 10,
+        "profile_path": "/uH3aUfhfgQy4eJvi5otRMKgIbme.jpg",
+        "character": "Justus Hardenberg"
+      },
+      {
+        "id": 3935,
+        "order": 4,
+        "credit_id": "52fe4231c3a36847f800afd3",
+        "name": "Peer Martiny",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Villenbesitzer"
+      },
+      {
+        "id": 3936,
+        "order": 5,
+        "credit_id": "52fe4231c3a36847f800afd7",
+        "name": "Petra Zieser",
+        "cast_id": 12,
+        "profile_path": "/pS2cEduXaUWqzUX7okBhyCmcEgM.jpg",
+        "character": "Villenbesitzerin"
+      },
+      {
+        "id": 3937,
+        "order": 6,
+        "credit_id": "52fe4231c3a36847f800afdb",
+        "name": "Laura Schmidt",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Tochter"
+      },
+      {
+        "id": 3938,
+        "order": 7,
+        "credit_id": "52fe4231c3a36847f800afdf",
+        "name": "Sebastian Butz",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Sohn"
+      },
+      {
+        "id": 3939,
+        "order": 8,
+        "credit_id": "52fe4231c3a36847f800afe3",
+        "name": "Oliver Bröcker",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Globalisierungsgegner"
+      },
+      {
+        "id": 169,
+        "order": 9,
+        "credit_id": "53deabc5c3a3686c5d0018b7",
+        "name": "Hanns Zischler",
+        "cast_id": 24,
+        "profile_path": "/kcWgn5jTuI3BPVQlqRMGQ27N4yU.jpg",
+        "character": "Vermieter"
+      },
+      {
+        "id": 88442,
+        "order": 10,
+        "credit_id": "53deac320e0a265a83002e69",
+        "name": "Claudio Caiolo",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Paolo"
+      },
+      {
+        "id": 36468,
+        "order": 11,
+        "credit_id": "53deac4c0e0a265a96002e57",
+        "name": "Bernhard Bettermann",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Jules Chef"
+      }
+    ],
+    "crew": [
+      {
+        "id": 3722,
+        "credit_id": "52fe4231c3a36847f800afa1",
+        "department": "Directing",
+        "name": "Hans Weingartner",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 3927,
+        "credit_id": "52fe4231c3a36847f800afa7",
+        "department": "Production",
+        "name": "Sabine Holtgreve",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3928,
+        "credit_id": "52fe4231c3a36847f800afad",
+        "department": "Production",
+        "name": "Georg Steinert",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3929,
+        "credit_id": "52fe4231c3a36847f800afb3",
+        "department": "Production",
+        "name": "Antonin Svoboda",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3722,
+        "credit_id": "52fe4231c3a36847f800afb9",
+        "department": "Writing",
+        "name": "Hans Weingartner",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 3931,
+        "credit_id": "52fe4231c3a36847f800afbf",
+        "department": "Writing",
+        "name": "Katharina Held",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 3871,
+        "credit_id": "52fe4231c3a36847f800afe9",
+        "department": "Camera",
+        "name": "Matthias Schellenberg",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3940,
+        "credit_id": "52fe4231c3a36847f800afef",
+        "department": "Camera",
+        "name": "Daniela Knapp",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3941,
+        "credit_id": "52fe4231c3a36847f800aff5",
+        "department": "Sound",
+        "name": "Andreas Wodraschke",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3879,
+        "credit_id": "52fe4231c3a36847f800affb",
+        "department": "Editing",
+        "name": "Dirk Oetelshoven",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3941,
+        "credit_id": "52fe4231c3a36847f800b001",
+        "department": "Editing",
+        "name": "Andreas Wodraschke",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3943,
+        "credit_id": "52fe4231c3a36847f800b007",
+        "department": "Production",
+        "name": "Silke Koch",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3944,
+        "credit_id": "52fe4231c3a36847f800b00d",
+        "department": "Production",
+        "name": "Suse Marquardt",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3722,
+        "credit_id": "52fe4231c3a36847f800b013",
+        "department": "Production",
+        "name": "Hans Weingartner",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 127,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "http://diefettenjahre.de",
+  "id": 276,
+  "production_countries": [
+    {
+      "name": "Austria",
+      "iso_3166_1": "AT"
+    },
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    }
+  ],
+  "title": "The Edukators",
+  "overview": "Three activists cobble together a kidnapping plot after they encounter a businessman in his home.",
+  "production_companies": [
+    {
+      "id": 121,
+      "name": "Y3 Film"
+    },
+    {
+      "id": 122,
+      "name": "Coop 99"
+    },
+    {
+      "id": 124,
+      "name": "Südwestrundfunk"
+    },
+    {
+      "id": 201,
+      "name": "Arte"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0408777",
+  "release_date": "2004-11-24",
+  "original_title": "Die fetten Jahre sind vorbei",
+  "vote_count": 13,
+  "poster_path": "/jmjX2tV91uU6GBKUAx3otsYgMBG.jpg",
+  "tagline": "Every heart is a revolutionary cell.",
+  "revenue": 0,
+  "popularity": "0.428044222239204"
+}

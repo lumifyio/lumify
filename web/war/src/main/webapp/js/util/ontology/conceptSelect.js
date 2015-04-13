@@ -1,16 +1,18 @@
 define([
     'flight/lib/component',
-    'hbs!./template',
+    'hbs!./concepts',
     'hbs!./concept',
-    'util/withDataRequest'
+    'util/withDataRequest',
+    './withSelect'
 ], function(
     defineComponent,
     template,
     conceptTemplate,
-    withDataRequest) {
+    withDataRequest,
+    withSelect) {
     'use strict';
 
-    return defineComponent(ConceptSelector, withDataRequest);
+    return defineComponent(ConceptSelector, withDataRequest, withSelect);
 
     function ConceptSelector() {
 
@@ -35,7 +37,6 @@ define([
             this.on('enableConcept', this.onEnableConcept);
 
             this.setupTypeahead();
-
         });
 
         this.onSelectConceptId = function(event, data) {
@@ -75,50 +76,54 @@ define([
                 .done(function(concepts) {
                     concepts.splice(0, 0, self.attr.defaultText);
 
-                    self.select('fieldSelector')
-                        .attr('placeholder', self.attr.defaultText)
-                        .typeahead({
-                            minLength: 0,
-                            items: Number.MAX_VALUE,
-                            source: concepts,
-                            matcher: function(concept) {
-                                if ($.trim(this.query) === '') {
-                                    return true;
-                                }
-                                if (concept === self.attr.defaultText) {
-                                    return false;
-                                }
+                    var field = self.select('fieldSelector').attr('placeholder', self.attr.defaultText)
 
-                                return Object.getPrototypeOf(this).matcher.call(this, concept.flattenedDisplayName);
-                            },
-                            sorter: _.identity,
-                            updater: function(conceptId) {
-                                var $element = this.$element,
-                                    concept = self.conceptsById[conceptId];
-
-                                self.trigger('conceptSelected', { concept: concept && concept.rawConcept });
-                                _.defer(function() {
-                                    $element.blur();
-                                });
-                                return concept && concept.displayName || '';
-                            },
-                            highlighter: function(concept) {
-                                return conceptTemplate(concept === self.attr.defaultText ?
-                                {
-                                    concept: {
-                                        displayName: concept,
-                                        rawConcept: { }
-                                    },
-                                    path: null,
-                                    marginLeft: 0
-                                } : {
-                                    concept: concept,
-                                    path: concept.flattenedDisplayName.replace(/\/?[^\/]+$/, ''),
-                                    marginLeft: concept.depth
-                                });
+                    field.typeahead({
+                        minLength: 0,
+                        items: Number.MAX_VALUE,
+                        source: concepts,
+                        matcher: function(concept) {
+                            if ($.trim(this.query) === '') {
+                                return true;
                             }
+                            if (concept === self.attr.defaultText) {
+                                return false;
+                            }
+
+                            return Object.getPrototypeOf(this).matcher.call(this, concept.flattenedDisplayName);
+                        },
+                        sorter: _.identity,
+                        updater: function(conceptId) {
+                            var $element = this.$element,
+                                concept = self.conceptsById[conceptId];
+
+                            self.trigger('conceptSelected', { concept: concept && concept.rawConcept });
+                            return concept && concept.displayName || '';
+                        },
+                        highlighter: function(concept) {
+                            return conceptTemplate(concept === self.attr.defaultText ?
+                            {
+                                concept: {
+                                    displayName: concept,
+                                    rawConcept: { }
+                                },
+                                path: null,
+                                marginLeft: 0
+                            } : {
+                                concept: concept,
+                                path: concept.flattenedDisplayName.replace(/\/?[^\/]+$/, ''),
+                                marginLeft: concept.depth
+                            });
+                        }
+                    })
+
+                    if (self.attr.focus) {
+                        _.defer(function() {
+                            field.focus();
                         })
-                        .data('typeahead').lookup = allowEmptyLookup;
+                    }
+
+                    self.allowEmptyLookup(field);
                 });
         }
 
@@ -138,7 +143,7 @@ define([
                             concepts[self.attr.showAdminConcepts ? 'forAdmin' : 'byTitle']
                         )
                         .filter(function(c) {
-                            if (c.userVisible === false) {
+                            if (c.userVisible === false && self.attr.showAdminConcepts !== true) {
                                 return false;
                             }
 
@@ -167,9 +172,18 @@ define([
                             }
 
                             if (self.attr.limitRelatedToConceptId &&
-                               r && r.groupedBySourceConcept &&
-                               r.groupedBySourceConcept[self.attr.limitRelatedToConceptId]) {
-                                if (r.groupedBySourceConcept[self.attr.limitRelatedToConceptId].indexOf(c.id) === -1) {
+                               r && r.groupedByRelatedConcept &&
+                               r.groupedByRelatedConcept[self.attr.limitRelatedToConceptId]) {
+                                if (r.groupedByRelatedConcept[self.attr.limitRelatedToConceptId].indexOf(c.id) === -1) {
+                                    return false;
+                                }
+                            }
+
+                            if (self.attr.limitRelatedToConceptId) {
+                                var relatedToConcept = concepts.byId[self.attr.limitRelatedToConceptId];
+                                if (relatedToConcept &&
+                                    relatedToConcept.addRelatedConceptWhiteList &&
+                                    relatedToConcept.addRelatedConceptWhiteList.indexOf(c.id) === -1) {
                                     return false;
                                 }
                             }
@@ -198,20 +212,5 @@ define([
                 });
             });
         }
-    }
-
-    function allowEmptyLookup() {
-        var items;
-
-        this.query = this.$element.val();
-
-        // Remove !this.query check to allow empty values to open dropdown
-        if (this.query.length < this.options.minLength) {
-            return this.shown ? this.hide() : this;
-        }
-
-        items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
-
-        return items ? this.process(items) : this;
     }
 });

@@ -1,6 +1,11 @@
 package io.lumify.core.config;
 
+import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.ontology.Concept;
+import io.lumify.core.model.ontology.OntologyProperty;
+import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.ontology.Relationship;
 import io.lumify.core.util.ClassUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -16,10 +21,11 @@ import java.util.*;
  * Responsible for parsing application configuration file and providing
  * configuration values to the application
  */
-public final class Configuration {
+public class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+    public static final String BASE_URL = "base.url";
     public static final String HADOOP_URL = "hadoop.url";
     public static final String HDFS_LIB_CACHE_SOURCE_DIRECTORY = "hdfsLibcache.sourceDirectory";
     public static final String HDFS_LIB_CACHE_TEMP_DIRECTORY = "hdfsLibcache.tempDirectory";
@@ -36,17 +42,16 @@ public final class Configuration {
     public static final String WORK_QUEUE_REPOSITORY = "repository.workQueue";
     public static final String LONG_RUNNING_PROCESS_REPOSITORY = "repository.longRunningProcess";
     public static final String SYSTEM_NOTIFICATION_REPOSITORY = "repository.systemNotification";
-    public static final String LONG_RUNNING_PROCESS_RUNNER_ENABLED = "longRunningProcessRunner.enabled";
-    public static final String LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT = "longRunningProcessRunner.threadCount";
+    public static final String WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED = "webAppEmbedded.longRunningProcessRunner.enabled";
+    public static final boolean WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED_DEFAULT = true;
+    public static final String WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT = "webAppEmbedded.longRunningProcessRunner.threadCount";
+    public static final int WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT_DEFAULT = 1;
+    public static final String WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED = "webAppEmbedded.graphPropertyWorkerRunner.enabled";
+    public static final boolean WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED_DEFAULT = true;
+    public static final String WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT = "webAppEmbedded.graphPropertyWorkerRunner.threadCount";
+    public static final int WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT_DEFAULT = 1;
+    public static final String USER_NOTIFICATION_REPOSITORY = "repository.userNotification";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
-    public static final String ONTOLOGY_IRI_PREFIX = "ontology.iri.";
-    public static final String ONTOLOGY_IRI_ENTITY_IMAGE = ONTOLOGY_IRI_PREFIX + "entityImage";
-    public static final String ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY = ONTOLOGY_IRI_PREFIX + "artifactHasEntity";
-    public static final String ONTOLOGY_IRI_ENTITY_HAS_IMAGE = ONTOLOGY_IRI_PREFIX + "entityHasImage";
-    public static final String ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY = ONTOLOGY_IRI_PREFIX + "artifactContainsImageOfEntity";
-    public static final String ONTOLOGY_IRI_LOCATION = ONTOLOGY_IRI_PREFIX + "location";
-    public static final String ONTOLOGY_IRI_ORGANIZATION = ONTOLOGY_IRI_PREFIX + "organization";
-    public static final String ONTOLOGY_IRI_PERSON = ONTOLOGY_IRI_PREFIX + "person";
     public static final String GRAPH_PROVIDER = "graph";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
@@ -58,17 +63,14 @@ public final class Configuration {
     public static final String LOCK_REPOSITORY_PATH_PREFIX = "lockRepository.pathPrefix";
     public static final String USER_SESSION_COUNTER_PATH_PREFIX = "userSessionCounter.pathPrefix";
     public static final String DEFAULT_TIME_ZONE = "default.timeZone";
+    public static final String RABBITMQ_PREFETCH_COUNT = "rabbitmq.prefetch.count";
+    public static final String QUEUE_PREFIX = "queue.prefix";
     private final ConfigurationLoader configurationLoader;
     private final LumifyResourceBundleManager lumifyResourceBundleManager;
 
-    private Map<String, String> config = new HashMap<String, String>();
+    private Map<String, String> config = new HashMap<>();
 
-    /**
-     * Default value for a {@link String} property that could not be parsed
-     */
-    public static final String UNKNOWN_STRING = "Unknown";
-
-    Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
+    public Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
         this.configurationLoader = configurationLoader;
         this.lumifyResourceBundleManager = new LumifyResourceBundleManager();
         for (Map.Entry entry : config.entrySet()) {
@@ -78,16 +80,12 @@ public final class Configuration {
         }
     }
 
-    public String get(String propertyKey) {
-        return get(propertyKey, UNKNOWN_STRING);
-    }
-
-    public String getOrNull(String propertyKey) {
-        return get(propertyKey, null);
-    }
-
     public String get(String propertyKey, String defaultValue) {
         return config.containsKey(propertyKey) ? config.get(propertyKey) : defaultValue;
+    }
+
+    public boolean getBoolean(String propertyKey, boolean defaultValue) {
+        return Boolean.parseBoolean(get(propertyKey, Boolean.toString(defaultValue)));
     }
 
     public Integer getInt(String propertyKey, Integer defaultValue) {
@@ -112,7 +110,7 @@ public final class Configuration {
     }
 
     public Map<String, String> getSubset(String keyPrefix) {
-        Map<String, String> subset = new HashMap<String, String>();
+        Map<String, String> subset = new HashMap<>();
         for (Map.Entry<String, String> entry : this.config.entrySet()) {
             if (!entry.getKey().startsWith(keyPrefix + ".") && !entry.getKey().equals(keyPrefix)) {
                 continue;
@@ -133,7 +131,7 @@ public final class Configuration {
 
     public void setConfigurables(Object o, Map<String, String> config) {
         ConvertUtilsBean convertUtilsBean = new ConvertUtilsBean();
-        Map<Method, PostConfigurationValidator> validatorMap = new HashMap<Method, PostConfigurationValidator>();
+        Map<Method, PostConfigurationValidator> validatorMap = new HashMap<>();
 
         for (Method m : o.getClass().getMethods()) {
             Configurable configurableAnnotation = m.getAnnotation(Configurable.class);
@@ -142,7 +140,7 @@ public final class Configuration {
                     throw new LumifyException("Invalid method to be configurable. Expected 1 argument. Found " + m.getParameterTypes().length + " arguments");
                 }
 
-                String propName = m.getName().substring("set" .length());
+                String propName = m.getName().substring("set".length());
                 if (propName.length() > 1) {
                     propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
                 }
@@ -214,7 +212,7 @@ public final class Configuration {
 
     public Iterable<String> getKeys(String keyPrefix) {
         getSubset(keyPrefix).keySet();
-        Set<String> keys = new TreeSet<String>();
+        Set<String> keys = new TreeSet<>();
         for (String key : getKeys()) {
             if (key.startsWith(keyPrefix)) {
                 keys.add(key);
@@ -234,7 +232,7 @@ public final class Configuration {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        SortedSet<String> keys = new TreeSet<String>(this.config.keySet());
+        SortedSet<String> keys = new TreeSet<>(this.config.keySet());
 
         boolean first = true;
         for (String key : keys) {
@@ -246,7 +244,7 @@ public final class Configuration {
             if (key.toLowerCase().contains("password")) {
                 sb.append(key).append(": ********");
             } else {
-                sb.append(key).append(": ").append(get(key));
+                sb.append(key).append(": ").append(get(key, null));
             }
         }
 
@@ -285,10 +283,28 @@ public final class Configuration {
 
     public JSONObject toJSON(ResourceBundle resourceBundle) {
         JSONObject properties = new JSONObject();
+
+        OntologyRepository ontologyRepository = InjectHelper.getInstance(OntologyRepository.class);
+        for (Concept concept : ontologyRepository.getConceptsWithProperties()) {
+            for (String intent : concept.getIntents()) {
+                properties.put(OntologyRepository.CONFIG_INTENT_CONCEPT_PREFIX + intent, concept.getIRI());
+            }
+        }
+        for (OntologyProperty property : ontologyRepository.getProperties()) {
+            for (String intent : property.getIntents()) {
+                properties.put(OntologyRepository.CONFIG_INTENT_PROPERTY_PREFIX + intent, property.getTitle());
+            }
+        }
+        for (Relationship relationship : ontologyRepository.getRelationships()) {
+            for (String intent : relationship.getIntents()) {
+                properties.put(OntologyRepository.CONFIG_INTENT_RELATIONSHIP_PREFIX + intent, relationship.getIRI());
+            }
+        }
+
         for (String key : getKeys()) {
             if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
                 properties.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), get(key, ""));
-            } else if (key.startsWith(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PREFIX)) {
+            } else if (key.startsWith("ontology.intent")) {
                 properties.put(key, get(key, ""));
             }
         }
@@ -305,5 +321,57 @@ public final class Configuration {
         configuration.put("messages", messages);
 
         return configuration;
+    }
+
+    public Map<String, Map<String, String>> getMultiValue(String prefix) {
+        return getMultiValue(this.config.entrySet(), prefix);
+    }
+
+    /**
+     * Processing configuration items that looks like this:
+     * <p/>
+     * repository.ontology.owl.dev.iri=http://lumify.io/dev
+     * repository.ontology.owl.dev.dir=examples/ontology-dev/
+     * <p/>
+     * repository.ontology.owl.csv.iri=http://lumify.io/csv
+     * repository.ontology.owl.csv.dir=storm/plugins/csv/ontology/
+     * <p/>
+     * Into a hash like this:
+     * <p/>
+     * - dev
+     * - iri: http://lumify.io/dev
+     * - dir: examples/ontology-dev/
+     * - csv
+     * - iri: http://lumify.io/csv
+     * - dir: storm/plugins/csv/ontology/
+     */
+    public static Map<String, Map<String, String>> getMultiValue(Iterable<Map.Entry<String, String>> config, String prefix) {
+        if (!prefix.endsWith(".")) {
+            prefix = prefix + ".";
+        }
+
+        Map<String, Map<String, String>> results = new HashMap<>();
+        for (Map.Entry<String, String> item : config) {
+            if (item.getKey().startsWith(prefix)) {
+                String rest = item.getKey().substring(prefix.length());
+                int ch = rest.indexOf('.');
+                String key;
+                String subkey;
+                if (ch > 0) {
+                    key = rest.substring(0, ch);
+                    subkey = rest.substring(ch + 1);
+                } else {
+                    key = rest;
+                    subkey = "";
+                }
+                Map<String, String> values = results.get(key);
+                if (values == null) {
+                    values = new HashMap<>();
+                    results.put(key, values);
+                }
+                values.put(subkey, item.getValue());
+            }
+        }
+        return results;
     }
 }

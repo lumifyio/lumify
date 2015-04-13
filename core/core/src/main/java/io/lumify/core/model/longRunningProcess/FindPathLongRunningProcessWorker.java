@@ -39,8 +39,8 @@ public class FindPathLongRunningProcessWorker extends LongRunningProcessWorker {
         ClientApiVertexFindPathResponse results = new ClientApiVertexFindPathResponse();
         ProgressCallback progressCallback = new ProgressCallback() {
             @Override
-            public void progress(double progressPercent, String message) {
-                longRunningProcessRepository.reportProgress(longRunningProcessQueueItem, progressPercent, message);
+            public void progress(double progressPercent, Step step, Integer edgeIndex, Integer vertexCount) {
+                longRunningProcessRepository.reportProgress(longRunningProcessQueueItem, progressPercent, step.formatMessage(edgeIndex, vertexCount));
             }
         };
         Iterable<Path> paths = graph.findPaths(sourceVertex, destVertex, hops, progressCallback, authorizations);

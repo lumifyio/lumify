@@ -1,0 +1,343 @@
+{
+  "budget": 70000000,
+  "vote_average": 6,
+  "backdrop_path": "/bAlizRLmB0yJubWCwtJyofBfY0f.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 514,
+        "order": 0,
+        "credit_id": "52fe4214c3a36847f8002301",
+        "name": "Jack Nicholson",
+        "cast_id": 6,
+        "profile_path": "/z5kVLyn3sxj0wNRlFgVgT6deeRO.jpg",
+        "character": "President James Dale / Art Land"
+      },
+      {
+        "id": 515,
+        "order": 1,
+        "credit_id": "52fe4214c3a36847f8002305",
+        "name": "Glenn Close",
+        "cast_id": 7,
+        "profile_path": "/fF6tCfuvuUhaePm5onUNnIE4FvL.jpg",
+        "character": "First Lady Marsha Dale"
+      },
+      {
+        "id": 516,
+        "order": 2,
+        "credit_id": "52fe4214c3a36847f8002309",
+        "name": "Annette Bening",
+        "cast_id": 8,
+        "profile_path": "/cVgrbhUo7EVWZKIgbJ7oAVMNkqn.jpg",
+        "character": "Barbara Land"
+      },
+      {
+        "id": 517,
+        "order": 3,
+        "credit_id": "52fe4214c3a36847f800230d",
+        "name": "Pierce Brosnan",
+        "cast_id": 9,
+        "profile_path": "/kiBmIxghB6vC4arQX1g1GKkdCXG.jpg",
+        "character": "Professor Donald Kessler"
+      },
+      {
+        "id": 518,
+        "order": 4,
+        "credit_id": "52fe4214c3a36847f8002311",
+        "name": "Danny DeVito",
+        "cast_id": 10,
+        "profile_path": "/zKuyzmKzPLG7RJo7lbbHjx6CCZc.jpg",
+        "character": "Rude Gambler"
+      },
+      {
+        "id": 519,
+        "order": 5,
+        "credit_id": "52fe4214c3a36847f8002315",
+        "name": "Martin Short",
+        "cast_id": 11,
+        "profile_path": "/oZQorXBjTxrdkTJFpoDwOcQ91ji.jpg",
+        "character": "Press Secretary Jerry Ross"
+      },
+      {
+        "id": 520,
+        "order": 6,
+        "credit_id": "52fe4214c3a36847f8002319",
+        "name": "Sarah Jessica Parker",
+        "cast_id": 12,
+        "profile_path": "/u2fVzLtsqtDVUSXCkVpdDdUoy48.jpg",
+        "character": "Nathalie Lake"
+      },
+      {
+        "id": 521,
+        "order": 7,
+        "credit_id": "52fe4214c3a36847f800231d",
+        "name": "Michael J. Fox",
+        "cast_id": 13,
+        "profile_path": "/lYD7RaJqi2aHza5YixWjlprhlSR.jpg",
+        "character": "Jason Stone"
+      },
+      {
+        "id": 522,
+        "order": 8,
+        "credit_id": "52fe4214c3a36847f8002321",
+        "name": "Rod Steiger",
+        "cast_id": 14,
+        "profile_path": "/cc96tXM1O0PAoyog9hzo1GgSwB5.jpg",
+        "character": "General Decker"
+      },
+      {
+        "id": 523,
+        "order": 9,
+        "credit_id": "52fe4214c3a36847f8002325",
+        "name": "Tom Jones",
+        "cast_id": 15,
+        "profile_path": "/tGdzG0YIOmyjhfdTFLPrqDy1w1h.jpg",
+        "character": "Himself"
+      },
+      {
+        "id": 524,
+        "order": 10,
+        "credit_id": "52fe4214c3a36847f8002329",
+        "name": "Natalie Portman",
+        "cast_id": 16,
+        "profile_path": "/a5I22pEXe7Ysn2BDod0C1PobPA8.jpg",
+        "character": "Taffy Dale"
+      },
+      {
+        "id": 526,
+        "order": 11,
+        "credit_id": "52fe4214c3a36847f800232d",
+        "name": "Lukas Haas",
+        "cast_id": 17,
+        "profile_path": "/1J9ca3TFCzK1ywmacqMnVBDU7X2.jpg",
+        "character": "Richie Norris"
+      },
+      {
+        "id": 528,
+        "order": 12,
+        "credit_id": "52fe4214c3a36847f8002331",
+        "name": "Sylvia Sidney",
+        "cast_id": 18,
+        "profile_path": "/A1btt1FKCXFSeLYsfC3i9JL08Op.jpg",
+        "character": "Grandma Florence Norris"
+      },
+      {
+        "id": 4452,
+        "order": 13,
+        "credit_id": "52fe4214c3a36847f8002377",
+        "name": "Lisa Marie",
+        "cast_id": 30,
+        "profile_path": "/2mfDtN2r02eX2Sb317XGYX7nWsx.jpg",
+        "character": "Martian Girl"
+      },
+      {
+        "id": 4774,
+        "order": 14,
+        "credit_id": "52fe4214c3a36847f800237b",
+        "name": "Jim Brown",
+        "cast_id": 31,
+        "profile_path": "/u2woKBMGvouznYELvlPwqj4Y81A.jpg",
+        "character": "Byron Williams"
+      },
+      {
+        "id": 2230,
+        "order": 15,
+        "credit_id": "52fe4214c3a36847f800237f",
+        "name": "Pam Grier",
+        "cast_id": 32,
+        "profile_path": "/8NaNIFhKySQ2fkwSlhoOGFgqtHO.jpg",
+        "character": "Louise Williams"
+      }
+    ],
+    "crew": [
+      {
+        "id": 510,
+        "credit_id": "52fe4214c3a36847f80022eb",
+        "department": "Directing",
+        "name": "Tim Burton",
+        "job": "Director",
+        "profile_path": "/z64d13PXggAV5Q2oUqcP9q18qtg.jpg"
+      },
+      {
+        "id": 510,
+        "credit_id": "52fe4214c3a36847f80022f1",
+        "department": "Production",
+        "name": "Tim Burton",
+        "job": "Producer",
+        "profile_path": "/z64d13PXggAV5Q2oUqcP9q18qtg.jpg"
+      },
+      {
+        "id": 512,
+        "credit_id": "52fe4214c3a36847f80022f7",
+        "department": "Production",
+        "name": "Laurie Parker",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 511,
+        "credit_id": "52fe4214c3a36847f80022fd",
+        "department": "Production",
+        "name": "Larry J. Franco",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 531,
+        "credit_id": "52fe4214c3a36847f8002337",
+        "department": "Sound",
+        "name": "Danny Elfman",
+        "job": "Original Music Composer",
+        "profile_path": "/nBx84zlelMMlbVvkBQHyfF7eCov.jpg"
+      },
+      {
+        "id": 533,
+        "credit_id": "52fe4214c3a36847f800233d",
+        "department": "Sound",
+        "name": "Victor Herbert",
+        "job": "Additional Soundtrack",
+        "profile_path": null
+      },
+      {
+        "id": 307,
+        "credit_id": "52fe4214c3a36847f8002343",
+        "department": "Camera",
+        "name": "Peter Suschitzky",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 541,
+        "credit_id": "52fe4214c3a36847f8002349",
+        "department": "Editing",
+        "name": "Chris Lebenzon",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 545,
+        "credit_id": "52fe4214c3a36847f800234f",
+        "department": "Production",
+        "name": "Matthew Barry",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 546,
+        "credit_id": "52fe4214c3a36847f8002355",
+        "department": "Production",
+        "name": "Jeanne McCarthy",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 547,
+        "credit_id": "52fe4214c3a36847f800235b",
+        "department": "Production",
+        "name": "Victoria Thomas",
+        "job": "Casting",
+        "profile_path": "/9D6wTqQdoiCe8HCmh2Pc1q1bo7l.jpg"
+      },
+      {
+        "id": 548,
+        "credit_id": "52fe4214c3a36847f8002361",
+        "department": "Art",
+        "name": "Wynn Thomas",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 553,
+        "credit_id": "52fe4214c3a36847f8002367",
+        "department": "Art",
+        "name": "John Dexter",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 555,
+        "credit_id": "52fe4214c3a36847f800236d",
+        "department": "Art",
+        "name": "Nancy Haigh",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 557,
+        "credit_id": "52fe4214c3a36847f8002373",
+        "department": "Costume & Make-Up",
+        "name": "Colleen Atwood",
+        "job": "Costume Design",
+        "profile_path": "/oD91okMgAqHT9qpcBuLYaOJtIBE.jpg"
+      },
+      {
+        "id": 513,
+        "credit_id": "52fe4214c3a36847f8002385",
+        "department": "Writing",
+        "name": "Jonathan Gems",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 406204,
+        "credit_id": "52fe4214c3a36847f800238b",
+        "department": "Costume & Make-Up",
+        "name": "Ve Neill",
+        "job": "Makeup Artist",
+        "profile_path": "/yaAwlGtPlQXcMum3eWL2xbas4BV.jpg"
+      }
+    ]
+  },
+  "runtime": 106,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://marsattacks.warnerbros.com/",
+  "id": 75,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Mars Attacks!",
+  "overview": "'We come in peace' is not what those green men from Mars mean when they invade our planet, armed with irresistible weapons and a cruel sense of humor.  This star studded cast must play victim to the alien\u2019s fun and games in this comedy homage to science fiction films of the '50s and '60s.",
+  "production_companies": [{
+    "id": 8601,
+    "name": "Tim Burton Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0116996",
+  "release_date": "1996-12-12",
+  "original_title": "Mars Attacks!",
+  "vote_count": 160,
+  "poster_path": "/sM4VrptBRIFHmN7mLJZ2BaGKYNq.jpg",
+  "tagline": "Nice planet. We'll take it!",
+  "revenue": 101371017,
+  "popularity": "1.50483008167428"
+}

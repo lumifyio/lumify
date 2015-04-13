@@ -1,0 +1,41 @@
+{
+  "birthday": null,
+  "adult": false,
+  "biography": null,
+  "homepage": null,
+  "profile_path": null,
+  "id": 487,
+  "also_known_as": [],
+  "deathday": null,
+  "imdb_id": "nm0083585",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 71,
+        "media_type": "movie",
+        "title": "Billy Elliot",
+        "credit_id": null,
+        "release_date": "2000-10-13",
+        "original_title": "Billy Elliot",
+        "adult": false,
+        "poster_path": "/x0ySHQPAxQYD0D79BeDY2XhPzXg.jpg",
+        "character": "Billy's mother"
+      },
+      {
+        "id": 220695,
+        "media_type": "movie",
+        "title": "Speak Like a Child",
+        "credit_id": null,
+        "release_date": "1998-09-04",
+        "original_title": "Speak Like a Child",
+        "adult": false,
+        "poster_path": "/kyD0fpfVTQeW5f6sRFJpwKpPDgt.jpg",
+        "character": "Sammy's Mother"
+      }
+    ],
+    "crew": []
+  },
+  "name": "Janine Birkett",
+  "place_of_birth": null,
+  "popularity": "0.999999999999915"
+}

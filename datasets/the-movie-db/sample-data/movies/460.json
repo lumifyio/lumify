@@ -1,0 +1,292 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": "/23r2qflXFxzBR9A2194ogIJGVsH.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10769,
+      "name": "Foreign"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 6093,
+        "order": 0,
+        "credit_id": "52fe4246c3a36847f8011889",
+        "name": "Henry Hübchen",
+        "cast_id": 1,
+        "profile_path": "/axSqyWRGCLPFphrZADACH1BTZXQ.jpg",
+        "character": "Jackie Zucker"
+      },
+      {
+        "id": 6263,
+        "order": 1,
+        "credit_id": "52fe4246c3a36847f801188d",
+        "name": "Hannelore Elsner",
+        "cast_id": 2,
+        "profile_path": "/6RQDFM70MeIrGngWSZkug7S5uXv.jpg",
+        "character": "Marlene"
+      },
+      {
+        "id": 6264,
+        "order": 2,
+        "credit_id": "52fe4246c3a36847f8011891",
+        "name": "Udo Samel",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Samuel"
+      },
+      {
+        "id": 6265,
+        "order": 3,
+        "credit_id": "52fe4246c3a36847f8011895",
+        "name": "Golda Tencer",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Golda"
+      },
+      {
+        "id": 6266,
+        "order": 4,
+        "credit_id": "52fe4246c3a36847f8011899",
+        "name": "Steffen Groth",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Thomas"
+      },
+      {
+        "id": 6267,
+        "order": 5,
+        "credit_id": "52fe4246c3a36847f801189d",
+        "name": "Anja Franke",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Jana"
+      },
+      {
+        "id": 6268,
+        "order": 6,
+        "credit_id": "52fe4246c3a36847f80118a1",
+        "name": "Sebastian Blomberg",
+        "cast_id": 7,
+        "profile_path": "/cmWWEr76Yavj6I1mxZvONbiDnal.jpg",
+        "character": "Joshua"
+      },
+      {
+        "id": 6269,
+        "order": 7,
+        "credit_id": "52fe4246c3a36847f80118a5",
+        "name": "Elena Uhlig",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Lilly"
+      },
+      {
+        "id": 6270,
+        "order": 8,
+        "credit_id": "52fe4246c3a36847f80118a9",
+        "name": "Rolf Hoppe",
+        "cast_id": 9,
+        "profile_path": "/uTNYbd1ibnDwrmnb6LTv8aozkt4.jpg",
+        "character": "Rabbi Ginsberg"
+      },
+      {
+        "id": 6271,
+        "order": 9,
+        "credit_id": "52fe4246c3a36847f80118ad",
+        "name": "Inga Busch",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Irene"
+      },
+      {
+        "id": 6272,
+        "order": 10,
+        "credit_id": "52fe4246c3a36847f80118b1",
+        "name": "Antonia Adamik",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Sarah"
+      },
+      {
+        "id": 48613,
+        "order": 11,
+        "credit_id": "533c702c92514176000002d2",
+        "name": "Renate Krößner",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Linda"
+      },
+      {
+        "id": 16720,
+        "order": 12,
+        "credit_id": "533c706292514176000002d9",
+        "name": "Bernd Stegemann",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Gerichtsvollzieher"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6273,
+        "credit_id": "52fe4246c3a36847f80118b7",
+        "department": "Directing",
+        "name": "Dani Levy",
+        "job": "Director",
+        "profile_path": "/iRIwA6Pd1dQ8VYMDdzheIyzGmoV.jpg"
+      },
+      {
+        "id": 6274,
+        "credit_id": "52fe4246c3a36847f80118bd",
+        "department": "Writing",
+        "name": "Holger Franke",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6273,
+        "credit_id": "52fe4246c3a36847f80118c3",
+        "department": "Writing",
+        "name": "Dani Levy",
+        "job": "Screenplay",
+        "profile_path": "/iRIwA6Pd1dQ8VYMDdzheIyzGmoV.jpg"
+      },
+      {
+        "id": 6275,
+        "credit_id": "52fe4246c3a36847f80118c9",
+        "department": "Production",
+        "name": "Barbara Buhl",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4805,
+        "credit_id": "52fe4246c3a36847f80118cf",
+        "department": "Production",
+        "name": "Marcos Kantis",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6276,
+        "credit_id": "52fe4246c3a36847f80118d5",
+        "department": "Production",
+        "name": "Bettina Ricklefs",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4219,
+        "credit_id": "52fe4246c3a36847f80118db",
+        "department": "Production",
+        "name": "Andreas Schreitmüller",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4804,
+        "credit_id": "52fe4246c3a36847f80118e1",
+        "department": "Production",
+        "name": "Manuela Stehr",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4524,
+        "credit_id": "52fe4246c3a36847f80118e7",
+        "department": "Sound",
+        "name": "Niki Reiser",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 700,
+        "credit_id": "52fe4246c3a36847f80118ed",
+        "department": "Camera",
+        "name": "Carl-Friedrich Koschnick",
+        "job": "Director of Photography",
+        "profile_path": "/t7AuWf1FCmbC6I2RTI2Qb6hJdvU.jpg"
+      },
+      {
+        "id": 6277,
+        "credit_id": "52fe4246c3a36847f80118f3",
+        "department": "Editing",
+        "name": "Elena Bromund",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 4562,
+        "credit_id": "52fe4246c3a36847f80118f9",
+        "department": "Production",
+        "name": "Risa Kes",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6097,
+        "credit_id": "52fe4246c3a36847f80118ff",
+        "department": "Art",
+        "name": "Christian M. Goldbeck",
+        "job": "Set Designer",
+        "profile_path": null
+      },
+      {
+        "id": 6282,
+        "credit_id": "52fe4246c3a36847f8011905",
+        "department": "Costume & Make-Up",
+        "name": "Lucie Bates",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 136,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "http://www.zucker-derfilm.de/",
+  "id": 460,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Go for Zucker",
+  "overview": "Germany director Dani Levy filmed this comedy about Jewish life in today\u2019s Germany along side the familiar east-west conflict. With it great success this film is a joyful comedy of humor and knowledge.",
+  "production_companies": [
+    {
+      "id": 46,
+      "name": "WDR"
+    },
+    {
+      "id": 96,
+      "name": "X Filme"
+    },
+    {
+      "id": 162,
+      "name": "Bayerischer Rundfunk"
+    },
+    {
+      "id": 201,
+      "name": "Arte"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0416331",
+  "release_date": "2005-01-06",
+  "original_title": "Alles auf Zucker!",
+  "vote_count": 0,
+  "poster_path": "/vSkpSVJwp2R5DDcGNDmgV83uLO8.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.285242995443457"
+}

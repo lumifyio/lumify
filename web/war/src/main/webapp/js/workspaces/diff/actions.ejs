@@ -3,6 +3,8 @@
     <% if (Privileges.canPUBLISH) { %>
       <button class="btn btn-mini publish requires-PUBLISH"><%= i18n('workspaces.diff.button.publish') %></button>
     <% } %>
-    <button class="btn btn-mini undo"><%= i18n('workspaces.diff.button.undo') %></button>
+    <% if (Privileges.canEDIT) { %>
+    <button class="btn btn-mini undo requires-EDIT"><%= i18n('workspaces.diff.button.undo') %></button>
+    <% } %>
   </div>
 </td>

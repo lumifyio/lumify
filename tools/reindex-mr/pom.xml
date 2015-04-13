@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lumify-tools-group</artifactId>
         <groupId>io.lumify</groupId>
-        <version>0.4.0.20141124</version>
+        <version>0.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -38,7 +38,6 @@
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.2</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -47,7 +46,6 @@
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
-            <version>3.1</version>
         </dependency>
     </dependencies>
 

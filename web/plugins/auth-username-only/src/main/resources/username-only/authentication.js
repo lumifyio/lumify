@@ -80,8 +80,8 @@ define([
                 return;
             }
 
-            this.disabled = true;
             this.enableButton(false, true);
+            this.disabled = true;
             $error.empty();
 
             $.post('login', { username: $username.val() })
@@ -96,6 +96,7 @@ define([
         };
 
         this.enableButton = function(enable, loading) {
+            if (this.disabled) return;
             var button = this.select('loginButtonSelector');
 
             if (enable) {

@@ -1,5 +1,6 @@
 package io.lumify.it;
 
+import com.google.common.base.Throwables;
 import io.lumify.core.config.LumifyTestClusterConfigurationLoader;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -14,7 +15,6 @@ import io.lumify.web.clientapi.model.ClientApiWorkspaceUndoResponse;
 import io.lumify.web.clientapi.model.util.ObjectMapperFactory;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -34,8 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mongodb.util.MyAsserts.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class TestBase {
     protected LumifyLogger LOGGER;
@@ -46,7 +45,6 @@ public class TestBase {
     protected static final String USERNAME_TEST_USER_2 = "testUser2";
     protected static final String USERNAME_TEST_USER_3 = "testUser3";
     public static final String TEST_MULTI_VALUE_KEY = TestBase.class.getName();
-    public static final String CONCEPT_TEST_PERSON = "http://lumify.io/test#person";
 
     @Before
     public void before() throws ApiException, IOException, NoSuchAlgorithmException, KeyManagementException, InterruptedException {
@@ -81,10 +79,7 @@ public class TestBase {
     public void disableSSLCertChecking() throws NoSuchAlgorithmException, KeyManagementException {
         HttpsURLConnection.setDefaultHostnameVerifier(new javax.net.ssl.HostnameVerifier() {
             public boolean verify(String hostname, javax.net.ssl.SSLSession sslSession) {
-                if (hostname.equals("localhost")) {
-                    return true;
-                }
-                return false;
+                return hostname.equals("localhost");
             }
         });
 
@@ -110,11 +105,13 @@ public class TestBase {
         lumifyTestCluster.shutdown();
     }
 
-    public void addUserAuth(LumifyApi lumifyApi, String username, String auth) throws ApiException {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("user-name", username);
-        queryParameters.put("auth", auth);
-        lumifyApi.invokeAPI("/user/auth/add", "POST", queryParameters, null, null, null, null);
+    public void addUserAuths(LumifyApi lumifyApi, String username, String... authorizations) throws ApiException {
+        for (String auth : authorizations) {
+            Map<String, String> queryParameters = new HashMap<>();
+            queryParameters.put("user-name", username);
+            queryParameters.put("auth", auth);
+            lumifyApi.invokeAPI("/user/auth/add", "POST", queryParameters, null, null, null, null);
+        }
     }
 
     LumifyApi login(String username) throws ApiException {
@@ -125,9 +122,7 @@ public class TestBase {
 
     protected void assertHasProperty(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName) {
         ClientApiProperty property = getProperty(properties, propertyKey, propertyName);
-        if (property == null) {
-            assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
-        }
+        assertNotNull("could not find property " + propertyKey + ":" + propertyName, property);
     }
 
     protected ClientApiProperty getProperty(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName) {
@@ -140,7 +135,7 @@ public class TestBase {
     }
 
     protected List<ClientApiProperty> getProperties(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName) {
-        List<ClientApiProperty> propertyList = new ArrayList<ClientApiProperty>();
+        List<ClientApiProperty> propertyList = new ArrayList<>();
         for (ClientApiProperty property : properties) {
             if (propertyKey.equals(property.getKey()) && propertyName.equals(property.getName())) {
                 propertyList.add(property);
@@ -151,20 +146,17 @@ public class TestBase {
 
     protected void assertHasProperty(Iterable<ClientApiProperty> properties, String propertyKey, String propertyName, Object expectedValue) {
         ClientApiProperty property = getProperty(properties, propertyKey, propertyName);
-        if (property != null) {
-            Object value = property.getValue();
-            if (value instanceof Map) {
-                try {
-                    value = ObjectMapperFactory.getInstance().writeValueAsString(value);
-                    expectedValue = ObjectMapperFactory.getInstance().writeValueAsString(expectedValue);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+        assertNotNull("could not find property " + propertyKey + ":" + propertyName, property);
+        Object value = property.getValue();
+        if (value instanceof Map) {
+            try {
+                value = ObjectMapperFactory.getInstance().writeValueAsString(value);
+                expectedValue = ObjectMapperFactory.getInstance().writeValueAsString(expectedValue);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
-            assertEquals("property value does not match for property " + propertyKey + ":" + propertyName, expectedValue, value);
-        } else {
-            assertTrue(false, "could not find property " + propertyKey + ":" + propertyName);
         }
+        assertEquals("property value does not match for property " + propertyKey + ":" + propertyName, expectedValue, value);
     }
 
     protected void assertPublishAll(LumifyApi lumifyApi, int expectedDiffsBeforePublish) throws ApiException {
@@ -173,7 +165,7 @@ public class TestBase {
         assertEquals(expectedDiffsBeforePublish, diff.getDiffs().size());
         ClientApiWorkspacePublishResponse publishAllResult = lumifyApi.getWorkspaceApi().publishAll(diff.getDiffs());
         LOGGER.info("publish all results: %s", publishAllResult.toString());
-        Assert.assertTrue("publish all failed: " + publishAllResult, publishAllResult.isSuccess());
+        assertTrue("publish all failed: " + publishAllResult, publishAllResult.isSuccess());
         assertEquals("publish all expected 0 failures: " + publishAllResult, 0, publishAllResult.getFailures().size());
 
         diff = lumifyApi.getWorkspaceApi().getDiff();
@@ -187,7 +179,7 @@ public class TestBase {
         assertEquals(expectedDiffsBeforeUndo, diff.getDiffs().size());
         ClientApiWorkspaceUndoResponse undoAllResult = lumifyApi.getWorkspaceApi().undoAll(diff.getDiffs());
         LOGGER.info("undo all results: %s", undoAllResult.toString());
-        Assert.assertTrue("undo all failed: " + undoAllResult, undoAllResult.isSuccess());
+        assertTrue("undo all failed: " + undoAllResult, undoAllResult.isSuccess());
         assertEquals("undo all expected 0 failures: " + undoAllResult, 0, undoAllResult.getFailures().size());
 
         diff = lumifyApi.getWorkspaceApi().getDiff();
@@ -196,22 +188,15 @@ public class TestBase {
     }
 
     protected static String getResourceString(String resourceName) {
-        InputStream resource = TestBase.class.getResourceAsStream(resourceName);
-        if (resource == null) {
-            throw new RuntimeException("Could not find resource: " + resourceName);
-        }
         try {
-            try {
+            try (InputStream resource = TestBase.class.getResourceAsStream(resourceName)) {
+                if (resource == null) {
+                    throw new RuntimeException("Could not find resource: " + resourceName);
+                }
                 return IOUtils.toString(resource);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not convert resource " + resourceName + " to string");
             }
-        } finally {
-            try {
-                resource.close();
-            } catch (IOException e) {
-                throw new RuntimeException("Could not close resource " + resourceName);
-            }
+        } catch (IOException e) {
+            throw Throwables.propagate(e);
         }
     }
 }

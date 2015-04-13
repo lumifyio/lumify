@@ -42,7 +42,19 @@ define([
                         return {
                             list: _.sortBy(ontology.properties, 'displayName'),
                             byTitle: _.indexBy(ontology.properties, 'title'),
-                            byDataType: _.groupBy(ontology.properties, 'dataType')
+                            byDataType: _.groupBy(ontology.properties, 'dataType'),
+                            byDependentToCompound: _.chain(ontology.properties)
+                                .filter(function(p) {
+                                    return 'dependentPropertyIris' in p;
+                                })
+                                .map(function(p) {
+                                    return p.dependentPropertyIris.map(function(iri) {
+                                        return [iri, p.title];
+                                    })
+                                })
+                                .flatten(true)
+                                .object()
+                                .value()
                         };
                     });
             }),
@@ -123,7 +135,9 @@ define([
                                     } else if (
                                         [
                                             'http://lumify.io/user#user',
-                                            'http://lumify.io/workspace#workspace'
+                                            'http://lumify.io/workspace#workspace',
+                                            'http://lumify.io/longRunningProcess#longRunningProcess',
+                                            'http://lumify.io/termMention#termMention'
                                         ].indexOf(child.id) === -1
                                     ) {
                                         console.warn(
@@ -199,21 +213,21 @@ define([
                         var concepts = results[0],
                             ontology = results[1],
                             list = _.sortBy(ontology.relationships, 'displayName'),
-                            groupedBySource = {};
+                            groupedByRelated = {};
 
                         return {
                             list: list,
                             byId: _.indexBy(ontology.relationships, 'id'),
                             byTitle: _.indexBy(ontology.relationships, 'title'),
-                            groupedBySourceDestConcepts: conceptGrouping(concepts, list, groupedBySource),
-                            groupedBySourceConcept: groupedBySource
+                            groupedBySourceDestConcepts: conceptGrouping(concepts, list, groupedByRelated),
+                            groupedByRelatedConcept: groupedByRelated
                         };
                     });
 
                 // Calculates cache with all possible mappings from source->dest
                 // including all possible combinations of source->children and
                 // dest->children
-                function conceptGrouping(concepts, relationships, groupedBySource) {
+                function conceptGrouping(concepts, relationships, groupedByRelated) {
                     var groups = {},
                         addToAllSourceDestChildrenGroups = function(r, source, dest) {
                             var key = genSourceDestKey(source, dest);
@@ -221,13 +235,19 @@ define([
                             if (!groups[key]) {
                                 groups[key] = [];
                             }
-                            if (!groupedBySource[source]) {
-                                groupedBySource[source] = [];
+                            if (!groupedByRelated[source]) {
+                                groupedByRelated[source] = [];
+                            }
+                            if (!groupedByRelated[dest]) {
+                                groupedByRelated[dest] = [];
                             }
 
                             groups[key].push(r);
-                            if (groupedBySource[source].indexOf(dest) === -1) {
-                                groupedBySource[source].push(dest);
+                            if (groupedByRelated[source].indexOf(dest) === -1) {
+                                groupedByRelated[source].push(dest);
+                            }
+                            if (groupedByRelated[dest].indexOf(source) === -1) {
+                                groupedByRelated[dest].push(source);
                             }
 
                             var destConcept = concepts.byId[dest]

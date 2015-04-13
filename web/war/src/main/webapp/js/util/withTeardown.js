@@ -23,14 +23,18 @@ define([], function() {
             event.stopPropagation();
 
             if (event.target !== this.node) {
-                this.childComponents.push(event.target);
+                if (this.childComponents) {
+                    this.childComponents.push(event.target);
+                }
             }
         };
 
         this.before('teardown', function() {
-            this.childComponents.forEach(function(c) {
-                $(c).teardownAllComponents();
-            });
+            if (this.childComponents) {
+                this.childComponents.forEach(function(c) {
+                    $(c).teardownAllComponents();
+                });
+            }
         });
     }
 

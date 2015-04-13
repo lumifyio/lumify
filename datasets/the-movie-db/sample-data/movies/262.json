@@ -1,0 +1,231 @@
+{
+  "budget": 20000000,
+  "vote_average": 7.3,
+  "backdrop_path": "/rlWOOdefsyVMbWDYVMsiIb9c47E.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 380,
+        "order": 0,
+        "credit_id": "52fe422fc3a36847f800a781",
+        "name": "Robert De Niro",
+        "cast_id": 10,
+        "profile_path": "/8Bgdfv1oN9Mw0YuMHP6fw8KzDkc.jpg",
+        "character": "Rupert Pupkin"
+      },
+      {
+        "id": 3663,
+        "order": 1,
+        "credit_id": "52fe422fc3a36847f800a785",
+        "name": "Jerry Lewis",
+        "cast_id": 11,
+        "profile_path": "/6suY6N0DncWynPHHTT9EWsrxgwJ.jpg",
+        "character": "Jerry Langford"
+      },
+      {
+        "id": 1041,
+        "order": 2,
+        "credit_id": "52fe422fc3a36847f800a789",
+        "name": "Diahnne Abbott",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Rita Keane"
+      },
+      {
+        "id": 3664,
+        "order": 3,
+        "credit_id": "52fe422fc3a36847f800a78d",
+        "name": "Sandra Bernhard",
+        "cast_id": 13,
+        "profile_path": "/nYCnCtbbWjrMsmbanQLGhRM3FXh.jpg",
+        "character": "Masha"
+      },
+      {
+        "id": 3665,
+        "order": 4,
+        "credit_id": "52fe422fc3a36847f800a791",
+        "name": "Shelley Hack",
+        "cast_id": 14,
+        "profile_path": "/1FdYlo8W29NyYEqy1KDESo8EqoO.jpg",
+        "character": "Cathy Long"
+      },
+      {
+        "id": 3666,
+        "order": 5,
+        "credit_id": "52fe422fc3a36847f800a795",
+        "name": "Ed Herlihy",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Ed Herlihy"
+      },
+      {
+        "id": 3667,
+        "order": 6,
+        "credit_id": "52fe422fc3a36847f800a799",
+        "name": "Lou Brown",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Band leader"
+      },
+      {
+        "id": 3668,
+        "order": 7,
+        "credit_id": "52fe422fc3a36847f800a79d",
+        "name": "Loretta Tupper",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Stage Door Fan"
+      },
+      {
+        "id": 3669,
+        "order": 8,
+        "credit_id": "52fe422fc3a36847f800a7a1",
+        "name": "Peter Potulski",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Stage Door Fan"
+      },
+      {
+        "id": 3670,
+        "order": 9,
+        "credit_id": "52fe422fc3a36847f800a7a5",
+        "name": "Vinnie Gonzales",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Stage Door Fan"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1032,
+        "credit_id": "52fe422fc3a36847f800a74d",
+        "department": "Directing",
+        "name": "Martin Scorsese",
+        "job": "Director",
+        "profile_path": "/yGs4PPDPTJV687P1NdydeEFzYRK.jpg"
+      },
+      {
+        "id": 1994,
+        "credit_id": "52fe422fc3a36847f800a753",
+        "department": "Production",
+        "name": "Robert F. Colesberry",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3658,
+        "credit_id": "52fe422fc3a36847f800a759",
+        "department": "Production",
+        "name": "Robert Greenhut",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 376,
+        "credit_id": "52fe422fc3a36847f800a75f",
+        "department": "Production",
+        "name": "Arnon Milchan",
+        "job": "Producer",
+        "profile_path": "/5crR5twLRcIdvRR06dB1O0EQ8x0.jpg"
+      },
+      {
+        "id": 3659,
+        "credit_id": "52fe422fc3a36847f800a765",
+        "department": "Camera",
+        "name": "Fred Schuler",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 3660,
+        "credit_id": "52fe422fc3a36847f800a76b",
+        "department": "Writing",
+        "name": "Paul D. Zimmerman",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 3661,
+        "credit_id": "52fe422fc3a36847f800a771",
+        "department": "Editing",
+        "name": "Thelma Schoonmaker",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3662,
+        "credit_id": "52fe422fc3a36847f800a777",
+        "department": "Production",
+        "name": "Cis Corman",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 874,
+        "credit_id": "52fe422fc3a36847f800a77d",
+        "department": "Art",
+        "name": "Boris Leven",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 72861,
+        "credit_id": "52fe422fc3a36847f800a7ab",
+        "department": "Sound",
+        "name": "Robbie Robertson",
+        "job": "Original Music Composer",
+        "profile_path": "/wR0MkHUYG7YMY6ZDeG78R12IWdN.jpg"
+      },
+      {
+        "id": 3660,
+        "credit_id": "52fe422fc3a36847f800a7b1",
+        "department": "Writing",
+        "name": "Paul D. Zimmerman",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 109,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 262,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The King of Comedy",
+  "overview": "The King of Comedy is a bitterly evil satire of show business. Rupert Pupkins is obsessed with becoming famous so he aims at kidnapping one of the best in the business, Jerry Langford.",
+  "production_companies": [{
+    "id": 87,
+    "name": "Embassy International"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0085794",
+  "release_date": "1983-02-18",
+  "original_title": "The King of Comedy",
+  "vote_count": 14,
+  "poster_path": "/yDRNNsCuNM6ABIh8X1Aw4SJ7izM.jpg",
+  "tagline": "It's No Laughing Matter.",
+  "revenue": 0,
+  "popularity": "0.364964343356092"
+}

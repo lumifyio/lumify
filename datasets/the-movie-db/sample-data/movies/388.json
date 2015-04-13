@@ -1,0 +1,347 @@
+{
+  "budget": 45000000,
+  "vote_average": 6.7,
+  "backdrop_path": "/6sLQFh6VFxU8nIkVaYg2yyJ6FL.jpg",
+  "genres": [
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5292,
+        "order": 0,
+        "credit_id": "52fe423dc3a36847f800ebc1",
+        "name": "Denzel Washington",
+        "cast_id": 15,
+        "profile_path": "/khMf8LLTtppUwuZqqnigD2nAy26.jpg",
+        "character": "Detective Keith Frazier"
+      },
+      {
+        "id": 1038,
+        "order": 1,
+        "credit_id": "52fe423dc3a36847f800ebc5",
+        "name": "Jodie Foster",
+        "cast_id": 16,
+        "profile_path": "/eAIE6bnOQ8rm0f933gyeAQdIwrP.jpg",
+        "character": "Madeleine White"
+      },
+      {
+        "id": 2296,
+        "order": 2,
+        "credit_id": "52fe423dc3a36847f800ebc9",
+        "name": "Clive Owen",
+        "cast_id": 17,
+        "profile_path": "/jm2as6tLcvHCYQvmMYM4VK6JEnr.jpg",
+        "character": "Dalton Russell"
+      },
+      {
+        "id": 290,
+        "order": 3,
+        "credit_id": "52fe423dc3a36847f800ebcd",
+        "name": "Christopher Plummer",
+        "cast_id": 18,
+        "profile_path": "/fauMGxa6dc86nHNenQ8X6DlE6YV.jpg",
+        "character": "Arthur Case"
+      },
+      {
+        "id": 5294,
+        "order": 4,
+        "credit_id": "52fe423dc3a36847f800ebd1",
+        "name": "Chiwetel Ejiofor",
+        "cast_id": 19,
+        "profile_path": "/fwaEgwYJdzGyBmGcHiH13vobQii.jpg",
+        "character": "Detective Bill Mitchell"
+      },
+      {
+        "id": 5295,
+        "order": 5,
+        "credit_id": "52fe423dc3a36847f800ebd5",
+        "name": "Carlos Andrés Gómez",
+        "cast_id": 20,
+        "profile_path": "/fJrzxb24agdScxqXbTWs90mQN0x.jpg",
+        "character": "Steve"
+      },
+      {
+        "id": 4889,
+        "order": 6,
+        "credit_id": "52fe423dc3a36847f800ebd9",
+        "name": "Kim Director",
+        "cast_id": 21,
+        "profile_path": "/vYrxv5U3ejpRzBxnmQvaGGDWJva.jpg",
+        "character": "Stevie"
+      },
+      {
+        "id": 5296,
+        "order": 7,
+        "credit_id": "52fe423dc3a36847f800ebdd",
+        "name": "James Ransone",
+        "cast_id": 22,
+        "profile_path": "/7E37MLGVDnuzfEvF8TBOqaL232m.jpg",
+        "character": "Steve-O"
+      },
+      {
+        "id": 5297,
+        "order": 8,
+        "credit_id": "52fe423dc3a36847f800ebe1",
+        "name": "Bernie Rachelle",
+        "cast_id": 23,
+        "profile_path": "/lWUR45ip1TJDJHwrq62Np7AGGxD.jpg",
+        "character": "Chaim"
+      },
+      {
+        "id": 1986,
+        "order": 9,
+        "credit_id": "52fe423dc3a36847f800ebe5",
+        "name": "Peter Gerety",
+        "cast_id": 24,
+        "profile_path": "/A85NDAU7XbvOtddm3ihmmnnwhYs.jpg",
+        "character": "Captain Coughlin"
+      },
+      {
+        "id": 5298,
+        "order": 10,
+        "credit_id": "52fe423dc3a36847f800ebe9",
+        "name": "Victor Colicchio",
+        "cast_id": 25,
+        "profile_path": "/4qzVfLml5Jmzn20QpJF5qlfJJaA.jpg",
+        "character": "Sergeant Collins"
+      },
+      {
+        "id": 5299,
+        "order": 11,
+        "credit_id": "52fe423dc3a36847f800ebed",
+        "name": "Cassandra Freeman",
+        "cast_id": 26,
+        "profile_path": "/dwIqYfdeOaUUEjcEKuPf5LkBSFE.jpg",
+        "character": "Sylvia"
+      },
+      {
+        "id": 5300,
+        "order": 12,
+        "credit_id": "52fe423dc3a36847f800ebf1",
+        "name": "Peter Frechette",
+        "cast_id": 27,
+        "profile_path": "/Aat9wnvCBql56V9axa5lZ0QvPP1.jpg",
+        "character": "Peter Hammond"
+      },
+      {
+        "id": 5301,
+        "order": 13,
+        "credit_id": "52fe423dc3a36847f800ebf5",
+        "name": "Waris Ahluwalia",
+        "cast_id": 28,
+        "profile_path": "/608mxzVDmbQtWt3IedJyQ72FNg5.jpg",
+        "character": "Vikram Walia"
+      },
+      {
+        "id": 5302,
+        "order": 14,
+        "credit_id": "52fe423dc3a36847f800ebf9",
+        "name": "Gerry Vichi",
+        "cast_id": 29,
+        "profile_path": "/kVPmf696NjAqWzyEIVlPi7HlR5l.jpg",
+        "character": "Herman Gluck"
+      },
+      {
+        "id": 5303,
+        "order": 15,
+        "credit_id": "52fe423dc3a36847f800ebfd",
+        "name": "Rafael Osorio",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Bank Guard#1"
+      },
+      {
+        "id": 5304,
+        "order": 16,
+        "credit_id": "52fe423dc3a36847f800ec01",
+        "name": "Rodney 'Bear' Jackson",
+        "cast_id": 31,
+        "profile_path": "/qi6H0wVTcWoaj0V6c0YfP9O17Pt.jpg",
+        "character": "Bank Guard#2"
+      },
+      {
+        "id": 5293,
+        "order": 17,
+        "credit_id": "52fe423dc3a36847f800ec0b",
+        "name": "Willem Dafoe",
+        "cast_id": 33,
+        "profile_path": "/4Wuww8ORt6nrHyBSUBLTHWt24EZ.jpg",
+        "character": "Captain Darius"
+      }
+    ],
+    "crew": [
+      {
+        "id": 5281,
+        "credit_id": "52fe423dc3a36847f800eb6f",
+        "department": "Directing",
+        "name": "Spike Lee",
+        "job": "Director",
+        "profile_path": "/BRq4UHdeI6QUd17vcD9Hnxf0ch.jpg"
+      },
+      {
+        "id": 5282,
+        "credit_id": "52fe423dc3a36847f800eb75",
+        "department": "Writing",
+        "name": "Russell Gewirtz",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 339,
+        "credit_id": "52fe423dc3a36847f800eb7b",
+        "department": "Production",
+        "name": "Brian Grazer",
+        "job": "Producer",
+        "profile_path": "/jEar20rOczc6ve2jy8zYxiBkPw5.jpg"
+      },
+      {
+        "id": 5283,
+        "credit_id": "52fe423dc3a36847f800eb81",
+        "department": "Production",
+        "name": "Karen Kehela",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4446,
+        "credit_id": "52fe423dc3a36847f800eb87",
+        "department": "Production",
+        "name": "Jon Kilik",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5284,
+        "credit_id": "52fe423dc3a36847f800eb8d",
+        "department": "Production",
+        "name": "Kim Roth",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5285,
+        "credit_id": "52fe423dc3a36847f800eb93",
+        "department": "Production",
+        "name": "Daniel M. Rosenberg",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5286,
+        "credit_id": "52fe423dc3a36847f800eb99",
+        "department": "Production",
+        "name": "Jonathan Filley",
+        "job": "Producer",
+        "profile_path": "/esRuadwQz5Hx3hMML2DuIalUnsW.jpg"
+      },
+      {
+        "id": 5287,
+        "credit_id": "52fe423dc3a36847f800eb9f",
+        "department": "Sound",
+        "name": "Terence Blanchard",
+        "job": "Original Music Composer",
+        "profile_path": "/vwmLEwopuomO3avDEYlDQ1QN9sh.jpg"
+      },
+      {
+        "id": 5288,
+        "credit_id": "52fe423dc3a36847f800eba5",
+        "department": "Sound",
+        "name": "A. R. Rahman",
+        "job": "Original Music Composer",
+        "profile_path": "/gx0l2IBkXAL60NVfYZYHVl79aVb.jpg"
+      },
+      {
+        "id": 4867,
+        "credit_id": "52fe423dc3a36847f800ebab",
+        "department": "Camera",
+        "name": "Matthew Libatique",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5289,
+        "credit_id": "52fe423dc3a36847f800ebb1",
+        "department": "Editing",
+        "name": "Barry Alexander Brown",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5290,
+        "credit_id": "52fe423dc3a36847f800ebb7",
+        "department": "Production",
+        "name": "Kim Coleman",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5291,
+        "credit_id": "52fe423dc3a36847f800ebbd",
+        "department": "Costume & Make-Up",
+        "name": "Donna Berwick",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 5305,
+        "credit_id": "52fe423dc3a36847f800ec07",
+        "department": "Editing",
+        "name": "Adam Erbacher",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 129,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "sq",
+      "name": "shqip"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.universalstudiosentertainment.com/inside-man/",
+  "id": 388,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Inside Man",
+  "overview": "An efficient gang enters a Manhattan bank, locks the doors, and takes hostages. They work deliberately, without haste. Detective Frazier is assigned to negotiate, but his mind is occupied with the corruption charges he is facing. With an army of police surrounding the bank, the thief, the cop, and the plutocrat's fixer enter high-stakes negotiations. Why are the robbers asking for a plane, if they are so competent and they know they won't get one? Why aren't they in more of a hurry?",
+  "production_companies": [
+    {
+      "id": 23,
+      "name": "Imagine Entertainment"
+    },
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0454848",
+  "release_date": "2006-03-24",
+  "original_title": "Inside Man",
+  "vote_count": 273,
+  "poster_path": "/z6wYRuvk1lf60R4SmWETfdUvGsm.jpg",
+  "tagline": "It looked like the perfect bank robbery. But you can't judge a crime by its cover.",
+  "revenue": 184376254,
+  "popularity": "2.64948162714891"
+}

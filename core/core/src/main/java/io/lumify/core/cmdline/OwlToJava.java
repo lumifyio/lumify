@@ -13,8 +13,6 @@ import org.semanticweb.owlapi.model.*;
 import static org.securegraph.util.IterableUtils.toList;
 
 public class OwlToJava extends CommandLineBase {
-    private OntologyRepository ontologyRepository;
-
     public static void main(String[] args) throws Exception {
         int res = new OwlToJava().run(args);
         if (res != 0) {
@@ -44,7 +42,7 @@ public class OwlToJava extends CommandLineBase {
         IRI iri = IRI.create(cmd.getOptionValue("iri"));
 
         OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
-        OWLOntologyManager m = ontologyRepository.createOwlOntologyManager(config, null);
+        OWLOntologyManager m = getOntologyRepository().createOwlOntologyManager(config, null);
 
         OWLOntology o = m.getOntology(iri);
         if (o == null) {
@@ -123,10 +121,5 @@ public class OwlToJava extends CommandLineBase {
 
     private String toJavaConst(String label) {
         return label.toUpperCase().replaceAll(" ", "_");
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 }

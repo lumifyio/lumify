@@ -1,0 +1,390 @@
+{
+  "budget": 94000000,
+  "vote_average": 7,
+  "backdrop_path": "/n2vIGWw4ezslXjlP0VNxkp9wqwU.jpg",
+  "genres": [
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 13,
+        "order": 0,
+        "credit_id": "52fe420ec3a36847f8000679",
+        "name": "Albert Brooks",
+        "cast_id": 8,
+        "profile_path": "/kahlMTdygrPJ28VYRhKPavYD9hs.jpg",
+        "character": "Marlin"
+      },
+      {
+        "id": 14,
+        "order": 1,
+        "credit_id": "52fe420ec3a36847f800067d",
+        "name": "Ellen DeGeneres",
+        "cast_id": 9,
+        "profile_path": "/b6XNecDpyRZQAuBDYTMsW6McFSp.jpg",
+        "character": "Dory"
+      },
+      {
+        "id": 12,
+        "order": 2,
+        "credit_id": "52fe420ec3a36847f8000675",
+        "name": "Alexander Gould",
+        "cast_id": 7,
+        "profile_path": "/evb64XHfArM54GZC6bAmjTSBXlG.jpg",
+        "character": "Nemo"
+      },
+      {
+        "id": 5293,
+        "order": 3,
+        "credit_id": "52fe420ec3a36847f8000699",
+        "name": "Willem Dafoe",
+        "cast_id": 16,
+        "profile_path": "/4Wuww8ORt6nrHyBSUBLTHWt24EZ.jpg",
+        "character": "Gill"
+      },
+      {
+        "id": 18,
+        "order": 4,
+        "credit_id": "52fe420ec3a36847f8000681",
+        "name": "Brad Garrett",
+        "cast_id": 10,
+        "profile_path": "/mVIo16Ms5jwNs1u4z1Ot1ilmCwa.jpg",
+        "character": "Bloat"
+      },
+      {
+        "id": 19,
+        "order": 5,
+        "credit_id": "52fe420ec3a36847f8000685",
+        "name": "Allison Janney",
+        "cast_id": 11,
+        "profile_path": "/qMl84hjDjhfezNhhX7aCC3RtkdI.jpg",
+        "character": "Peach"
+      },
+      {
+        "id": 6168,
+        "order": 6,
+        "credit_id": "52fe420ec3a36847f80006c1",
+        "name": "Austin Pendleton",
+        "cast_id": 23,
+        "profile_path": "/5zCfkpsDFAilHv1nMFWiz5lx6ZH.jpg",
+        "character": "Gurgle"
+      },
+      {
+        "id": 17401,
+        "order": 7,
+        "credit_id": "52fe420ec3a36847f80006c5",
+        "name": "Stephen Root",
+        "cast_id": 24,
+        "profile_path": "/sceCvLiv8xe2jQzrVn39wvosVHG.jpg",
+        "character": "Bubbles"
+      },
+      {
+        "id": 14723,
+        "order": 8,
+        "credit_id": "52fe420ec3a36847f80006c9",
+        "name": "Vicki Lewis",
+        "cast_id": 25,
+        "profile_path": "/4IYuDOZKW9XxSahF1QsxwU4a0p4.jpg",
+        "character": "Deb / Flo"
+      },
+      {
+        "id": 7911,
+        "order": 9,
+        "credit_id": "52fe420ec3a36847f80006cd",
+        "name": "Joe Ranft",
+        "cast_id": 26,
+        "profile_path": "/4BMTIalaXLfb2PZXqBTBvM5ks8Z.jpg",
+        "character": "Jacques"
+      },
+      {
+        "id": 118,
+        "order": 10,
+        "credit_id": "52fe420ec3a36847f80006d1",
+        "name": "Geoffrey Rush",
+        "cast_id": 27,
+        "profile_path": "/c0jbNjWb9DHm5xfBIeEtHZdZJmI.jpg",
+        "character": "Nigel"
+      },
+      {
+        "id": 7,
+        "order": 11,
+        "credit_id": "52fe420ec3a36847f8000689",
+        "name": "Andrew Stanton",
+        "cast_id": 12,
+        "profile_path": "/hMbbkReZWtuC7yNcX6v0ytOicMD.jpg",
+        "character": "Crush"
+      },
+      {
+        "id": 20,
+        "order": 12,
+        "credit_id": "52fe420ec3a36847f800068d",
+        "name": "Elizabeth Perkins",
+        "cast_id": 13,
+        "profile_path": "/nVI0CWJoVtB0ycDCF6YtYmEbtZq.jpg",
+        "character": "Coral"
+      },
+      {
+        "id": 981048,
+        "order": 13,
+        "credit_id": "52fe420ec3a36847f80006d5",
+        "name": "Nicholas Bird",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Squirt"
+      },
+      {
+        "id": 10,
+        "order": 14,
+        "credit_id": "52fe420ec3a36847f80006d9",
+        "name": "Bob Peterson",
+        "cast_id": 29,
+        "profile_path": "/13YNM8lBKnK26MYd2Lp3OpU6JdI.jpg",
+        "character": "Mr. Ray"
+      },
+      {
+        "id": 22,
+        "order": 15,
+        "credit_id": "52fe420ec3a36847f8000691",
+        "name": "Barry Humphries",
+        "cast_id": 14,
+        "profile_path": "/bBXWmZtFbKy6Wzk1fHOCE8j6KfS.jpg",
+        "character": "Bruce"
+      },
+      {
+        "id": 8783,
+        "order": 16,
+        "credit_id": "52fe420ec3a36847f80006e9",
+        "name": "Eric Bana",
+        "cast_id": 33,
+        "profile_path": "/36As49OkTNvT96CzzjXNuKMeuyx.jpg",
+        "character": "Anchor (voice)"
+      },
+      {
+        "id": 23,
+        "order": 17,
+        "credit_id": "52fe420ec3a36847f8000695",
+        "name": "Bill Hunter",
+        "cast_id": 15,
+        "profile_path": "/fDYf8bxLtyy3vnSFX27QBe3mG8d.jpg",
+        "character": "Phillip Sherman"
+      },
+      {
+        "id": 945094,
+        "order": 18,
+        "credit_id": "52fe420ec3a36847f80006dd",
+        "name": "Joanna Trzepiecinska",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Dory (polski dubbing)"
+      },
+      {
+        "id": 1155638,
+        "order": 19,
+        "credit_id": "52fe420ec3a36847f80006e1",
+        "name": "Kajetan Lewandowski",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Nemo (polski dubbing)"
+      },
+      {
+        "id": 107571,
+        "order": 20,
+        "credit_id": "52fe420ec3a36847f80006e5",
+        "name": "Olaf Lubaszenko",
+        "cast_id": 32,
+        "profile_path": "/vJuOsnOG8CzNdrZ1kEWAfrfcGCW.jpg",
+        "character": "Idol (polski dubbing)"
+      },
+      {
+        "id": 27752,
+        "order": 21,
+        "credit_id": "52fe420ec3a36847f80006ed",
+        "name": "Bruce Spence",
+        "cast_id": 34,
+        "profile_path": "/pwJJBmO9MG3OxVX9efGrB6BTFyw.jpg",
+        "character": "Chum (voice)"
+      },
+      {
+        "id": 981049,
+        "order": 22,
+        "credit_id": "52fe420ec3a36847f80006f1",
+        "name": "LuLu Ebeling",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Darla (voice)"
+      },
+      {
+        "id": 1211731,
+        "order": 23,
+        "credit_id": "52fe420ec3a36847f80006f5",
+        "name": "Jordan Ranft",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Tad (voice)"
+      },
+      {
+        "id": 17190,
+        "order": 24,
+        "credit_id": "52fe420ec3a36847f80006f9",
+        "name": "Erik Per Sullivan",
+        "cast_id": 37,
+        "profile_path": "/7CQPZk51iKpYUhzybPA10yUte2.jpg",
+        "character": "Sheldon (voice)"
+      },
+      {
+        "id": 7907,
+        "order": 25,
+        "credit_id": "52fe420ec3a36847f80006fd",
+        "name": "John Ratzenberger",
+        "cast_id": 38,
+        "profile_path": "/yGechiKWL6TJDfVE2KPSJYqdMsY.jpg",
+        "character": "Fish School (voice)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 7,
+        "credit_id": "52fe420ec3a36847f8000653",
+        "department": "Directing",
+        "name": "Andrew Stanton",
+        "job": "Director",
+        "profile_path": "/hMbbkReZWtuC7yNcX6v0ytOicMD.jpg"
+      },
+      {
+        "id": 8,
+        "credit_id": "52fe420ec3a36847f8000659",
+        "department": "Directing",
+        "name": "Lee Unkrich",
+        "job": "Director",
+        "profile_path": "/plN9zGzLvp5tBPwsH1zfDu2IhD2.jpg"
+      },
+      {
+        "id": 9,
+        "credit_id": "52fe420ec3a36847f800065f",
+        "department": "Production",
+        "name": "Graham Walters",
+        "job": "Producer",
+        "profile_path": "/kdiS9atzqHdD8WZhpsYMHPCOzi1.jpg"
+      },
+      {
+        "id": 7,
+        "credit_id": "52fe420ec3a36847f8000665",
+        "department": "Writing",
+        "name": "Andrew Stanton",
+        "job": "Author",
+        "profile_path": "/hMbbkReZWtuC7yNcX6v0ytOicMD.jpg"
+      },
+      {
+        "id": 10,
+        "credit_id": "52fe420ec3a36847f800066b",
+        "department": "Writing",
+        "name": "Bob Peterson",
+        "job": "Author",
+        "profile_path": "/13YNM8lBKnK26MYd2Lp3OpU6JdI.jpg"
+      },
+      {
+        "id": 11,
+        "credit_id": "52fe420ec3a36847f8000671",
+        "department": "Writing",
+        "name": "David Reynolds",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 7879,
+        "credit_id": "52fe420ec3a36847f800069f",
+        "department": "Production",
+        "name": "John Lasseter",
+        "job": "Executive Producer",
+        "profile_path": "/nTL3Hi4Fxc5iMNULXgCbRVADBXG.jpg"
+      },
+      {
+        "id": 12914,
+        "credit_id": "52fe420ec3a36847f80006a5",
+        "department": "Editing",
+        "name": "David Ian Salter",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 153,
+        "credit_id": "52fe420ec3a36847f80006ab",
+        "department": "Sound",
+        "name": "Thomas Newman",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 7,
+        "credit_id": "52fe420ec3a36847f80006b1",
+        "department": "Writing",
+        "name": "Andrew Stanton",
+        "job": "Screenplay",
+        "profile_path": "/hMbbkReZWtuC7yNcX6v0ytOicMD.jpg"
+      },
+      {
+        "id": 10,
+        "credit_id": "52fe420ec3a36847f80006b7",
+        "department": "Writing",
+        "name": "Bob Peterson",
+        "job": "Screenplay",
+        "profile_path": "/13YNM8lBKnK26MYd2Lp3OpU6JdI.jpg"
+      },
+      {
+        "id": 11,
+        "credit_id": "52fe420ec3a36847f80006bd",
+        "department": "Writing",
+        "name": "David Reynolds",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 100,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 12,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Finding Nemo",
+  "overview": "A tale which follows the comedic and eventful journeys of two fish, the fretful Marlin and his young son Nemo, who are separated from each other in the Great Barrier Reef when Nemo is unexpectedly taken from his home and thrust into a fish tank in a dentist's office overlooking Sydney Harbor. Buoyed by the companionship of a friendly but forgetful fish named Dory, the overly cautious Marlin embarks on a dangerous trek and finds himself the unlikely hero of an epic journey to rescue his son.",
+  "production_companies": [
+    {
+      "id": 2,
+      "name": "Walt Disney Pictures"
+    },
+    {
+      "id": 3,
+      "name": "Pixar Animation Studios"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 137697,
+    "backdrop_path": "/2hC8HHRUvwRljYKIcQDMyMbLlxz.jpg",
+    "name": "Finding Nemo Collection",
+    "poster_path": "/qv6s1DfFHHXOVxBHvvEgzBfcdHY.jpg"
+  },
+  "imdb_id": "tt0266543",
+  "release_date": "2003-05-30",
+  "original_title": "Finding Nemo",
+  "vote_count": 1926,
+  "poster_path": "/zjqInUwldOBa0q07fOyohYCWxWX.jpg",
+  "tagline": "There are 3.7 trillion fish in the ocean, they're looking for one.",
+  "revenue": 864625978,
+  "popularity": "3.51565021804482"
+}

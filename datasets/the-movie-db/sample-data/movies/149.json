@@ -1,0 +1,341 @@
+{
+  "budget": 10000000,
+  "vote_average": 7.7,
+  "backdrop_path": "/wtwn4pSFZhm665cQIHFmBjmgMEC.jpg",
+  "genres": [{
+    "id": 16,
+    "name": "Animation"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1678,
+        "order": 0,
+        "credit_id": "52fe421ec3a36847f80057b3",
+        "name": "Mitsuo Iwata",
+        "cast_id": 4,
+        "profile_path": "/uiCp6G7TR3kHtxQQNNLiVEiXadU.jpg",
+        "character": "Shôtarô Kaneda (voice)"
+      },
+      {
+        "id": 1679,
+        "order": 1,
+        "credit_id": "52fe421ec3a36847f80057b7",
+        "name": "Nozomu Sasaki",
+        "cast_id": 5,
+        "profile_path": "/8U9bbTScsKpicR2piN4GsLfbOsh.jpg",
+        "character": "Tetsuo Shima (voice)"
+      },
+      {
+        "id": 1680,
+        "order": 2,
+        "credit_id": "52fe421ec3a36847f80057bb",
+        "name": "Mami Koyama",
+        "cast_id": 6,
+        "profile_path": "/u0JP47Wy8xnEmgzNO2UXa7tuCP7.jpg",
+        "character": "Kei (voice)"
+      },
+      {
+        "id": 1681,
+        "order": 3,
+        "credit_id": "52fe421ec3a36847f80057bf",
+        "name": "Tesshō Genda",
+        "cast_id": 7,
+        "profile_path": "/ahCru7z0zyaV6RV1uCP0HBNLRoC.jpg",
+        "character": "Ryûsaku (voice)"
+      },
+      {
+        "id": 1682,
+        "order": 4,
+        "credit_id": "52fe421ec3a36847f80057c3",
+        "name": "Hiroshi Ohtake",
+        "cast_id": 8,
+        "profile_path": "/kjPYDilt85Zcuhrg89nhyaQoXv5.jpg",
+        "character": "Nezu (voice)"
+      },
+      {
+        "id": 1683,
+        "order": 5,
+        "credit_id": "52fe421ec3a36847f80057c7",
+        "name": "Kōichi Kitamura",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Priestess Miyako, Council A (voice)"
+      },
+      {
+        "id": 1314101,
+        "order": 7,
+        "credit_id": "535ceed8c3a36830a9003d65",
+        "name": "Yuriko Fuchizaki",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Kaori (voice)"
+      },
+      {
+        "id": 1685,
+        "order": 8,
+        "credit_id": "52fe421ec3a36847f80057cf",
+        "name": "Masaaki Ōkura",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Yamagata (voice)"
+      },
+      {
+        "id": 1686,
+        "order": 9,
+        "credit_id": "52fe421ec3a36847f80057d3",
+        "name": "Takeshi Kusao",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Kai (voice)"
+      },
+      {
+        "id": 1687,
+        "order": 10,
+        "credit_id": "52fe421ec3a36847f80057d7",
+        "name": "Kazuhiro Kamifuji",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Masaru (No. 27) (voice)"
+      },
+      {
+        "id": 1688,
+        "order": 11,
+        "credit_id": "52fe421ec3a36847f80057db",
+        "name": "Tatsuhiko Nakamura",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Takashi (No. 26) (voice)"
+      },
+      {
+        "id": 1689,
+        "order": 12,
+        "credit_id": "52fe421ec3a36847f80057df",
+        "name": "Fukue Itô",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Kiyoko (No. 25) (voice)"
+      }
+    ],
+    "crew": [
+      {
+        "id": 185,
+        "credit_id": "52fe421ec3a36847f80057a3",
+        "department": "Directing",
+        "name": "Katsuhiro Ōtomo",
+        "job": "Director",
+        "profile_path": "/d3TPHQkTqAe3NeZZ280TqBa2x43.jpg"
+      },
+      {
+        "id": 185,
+        "credit_id": "52fe421ec3a36847f80057a9",
+        "department": "Writing",
+        "name": "Katsuhiro Ōtomo",
+        "job": "Screenplay",
+        "profile_path": "/d3TPHQkTqAe3NeZZ280TqBa2x43.jpg"
+      },
+      {
+        "id": 1677,
+        "credit_id": "52fe421ec3a36847f80057af",
+        "department": "Writing",
+        "name": "Izo Hashimoto",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1690,
+        "credit_id": "52fe421ec3a36847f80057e5",
+        "department": "Production",
+        "name": "Haruyo Kanesaku",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1691,
+        "credit_id": "52fe421ec3a36847f80057eb",
+        "department": "Production",
+        "name": "Shunzo Kato",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1692,
+        "credit_id": "52fe421ec3a36847f80057f1",
+        "department": "Production",
+        "name": "Yutaka Maseba",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1693,
+        "credit_id": "52fe421ec3a36847f80057f7",
+        "department": "Production",
+        "name": "Ryohei Suzuki",
+        "job": "Producer",
+        "profile_path": "/7VNCDtAC8dtcuzORlIxwSMq60KF.jpg"
+      },
+      {
+        "id": 1694,
+        "credit_id": "52fe421ec3a36847f80057fd",
+        "department": "Production",
+        "name": "Hiroe Tsukamoto",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1695,
+        "credit_id": "52fe421ec3a36847f8005803",
+        "department": "Sound",
+        "name": "Shoji Yamashiro",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1696,
+        "credit_id": "52fe421ec3a36847f8005809",
+        "department": "Camera",
+        "name": "Katsuji Misawa",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1697,
+        "credit_id": "52fe421ec3a36847f800580f",
+        "department": "Editing",
+        "name": "Takeshi Seyama",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1698,
+        "credit_id": "52fe421ec3a36847f8005815",
+        "department": "Art",
+        "name": "Kazuo Ebisawa",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1699,
+        "credit_id": "52fe421ec3a36847f800581b",
+        "department": "Art",
+        "name": "Yuji Ikehata",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1700,
+        "credit_id": "52fe421ec3a36847f8005821",
+        "department": "Art",
+        "name": "Koji Ono",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1701,
+        "credit_id": "52fe421ec3a36847f8005827",
+        "department": "Sound",
+        "name": "Keiji Muraki",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 1702,
+        "credit_id": "52fe421ec3a36847f800582d",
+        "department": "Sound",
+        "name": "Hiruhiko Ono",
+        "job": "Music Editor",
+        "profile_path": null
+      },
+      {
+        "id": 185,
+        "credit_id": "52fe421ec3a36847f8005833",
+        "department": "Writing",
+        "name": "Katsuhiro Ōtomo",
+        "job": "Author",
+        "profile_path": "/d3TPHQkTqAe3NeZZ280TqBa2x43.jpg"
+      },
+      {
+        "id": 1102166,
+        "credit_id": "52fe421ec3a36847f8005839",
+        "department": "Production",
+        "name": "Yoshimasa Mizuo",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 929975,
+        "credit_id": "52fe421ec3a36847f800583f",
+        "department": "Production",
+        "name": "James Yosuke Kobayashi\t",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1065197,
+        "credit_id": "52fe421ec3a36847f8005845",
+        "department": "Production",
+        "name": "Sawako Noma",
+        "job": "Executive Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 124,
+  "spoken_languages": [{
+    "iso_639_1": "ja",
+    "name": "日本語"
+  }],
+  "adult": false,
+  "homepage": "http://www.bandaivisual.co.jp/akira/",
+  "id": 149,
+  "production_countries": [{
+    "name": "Japan",
+    "iso_3166_1": "JP"
+  }],
+  "title": "Akira",
+  "overview": "Childhood friends Tetsuo and Kaneda are pulled into the post-apocalyptic underworld of Neo-Tokyo and forced to fight for their very survival. Kaneda is a bike gang leader, and Tetsuo is a member of a tough motorcycle crew who becomes involved in a covert government project called Akira. But a bloody battle ensues when Kaneda sets out to save his friend.",
+  "production_companies": [
+    {
+      "id": 528,
+      "name": "Bandai Visual Company"
+    },
+    {
+      "id": 10919,
+      "name": "TMS Entertainment"
+    },
+    {
+      "id": 10920,
+      "name": "Akira Committee Company Ltd."
+    },
+    {
+      "id": 6999,
+      "name": "Kodansha"
+    },
+    {
+      "id": 3363,
+      "name": "Mainichi Broadcasting System (MBS)"
+    },
+    {
+      "id": 10921,
+      "name": "Sumitomo Corporation"
+    },
+    {
+      "id": 882,
+      "name": "Toho Company"
+    },
+    {
+      "id": 9155,
+      "name": "Tokyo Movie Shinsha (TMS)"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0094625",
+  "release_date": "1988-07-16",
+  "original_title": "Akira",
+  "vote_count": 187,
+  "poster_path": "/8Pt7hlu7fkc5IIR0VZ2kNGY8sT4.jpg",
+  "tagline": "Neo-Tokyo is about to E.X.P.L.O.D.E.",
+  "revenue": 0,
+  "popularity": "1.58109331509506"
+}

@@ -1,0 +1,341 @@
+{
+  "budget": 15000000,
+  "vote_average": 7.4,
+  "backdrop_path": "/uY93JtLsAXLnd38b19dIVRv5L1X.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1229,
+        "order": 0,
+        "credit_id": "52fe421ac3a36847f8004131",
+        "name": "Jeff Bridges",
+        "cast_id": 12,
+        "profile_path": "/eronr4zagxsKCBkGsFBDBCOqyma.jpg",
+        "character": "Jeffrey Lebowski"
+      },
+      {
+        "id": 1230,
+        "order": 1,
+        "credit_id": "52fe421ac3a36847f8004135",
+        "name": "John Goodman",
+        "cast_id": 13,
+        "profile_path": "/mLJC7sRO3JnGkySJlwCJblvhBHm.jpg",
+        "character": "Walter Sobchak"
+      },
+      {
+        "id": 884,
+        "order": 2,
+        "credit_id": "52fe421ac3a36847f800413d",
+        "name": "Steve Buscemi",
+        "cast_id": 15,
+        "profile_path": "/7sDzFRScCv85usSwPG01BTac7UY.jpg",
+        "character": "Theodore Donald Kerabatsos"
+      },
+      {
+        "id": 1231,
+        "order": 3,
+        "credit_id": "52fe421ac3a36847f8004139",
+        "name": "Julianne Moore",
+        "cast_id": 14,
+        "profile_path": "/5TP6PXUMfVlckGfDAmAk8ijVpLX.jpg",
+        "character": "Maude Lebowski"
+      },
+      {
+        "id": 1232,
+        "order": 4,
+        "credit_id": "52fe421ac3a36847f8004141",
+        "name": "David Huddleston",
+        "cast_id": 16,
+        "profile_path": "/6cXqGzHB0zJautJVPCtbEsCtsCQ.jpg",
+        "character": "Jeffrey Lebowski - The Big Lebowski"
+      },
+      {
+        "id": 1233,
+        "order": 5,
+        "credit_id": "52fe421ac3a36847f8004145",
+        "name": "Philip Seymour Hoffman",
+        "cast_id": 17,
+        "profile_path": "/de37JbzZ80KP1LOhzIkVe5XfSwe.jpg",
+        "character": "Brandt"
+      },
+      {
+        "id": 1234,
+        "order": 6,
+        "credit_id": "52fe421ac3a36847f8004149",
+        "name": "Tara Reid",
+        "cast_id": 18,
+        "profile_path": "/tnK1AaA3Xt6cjy621s6B3TeIrYV.jpg",
+        "character": "Bunny Lebowski"
+      },
+      {
+        "id": 1235,
+        "order": 7,
+        "credit_id": "52fe421ac3a36847f800414d",
+        "name": "Philip Moon",
+        "cast_id": 19,
+        "profile_path": "/7IB8OtD4L3k3hxzrPeBSpucODyI.jpg",
+        "character": "Woo, Treehorn Thug"
+      },
+      {
+        "id": 1236,
+        "order": 8,
+        "credit_id": "52fe421ac3a36847f8004151",
+        "name": "Mark Pellegrino",
+        "cast_id": 20,
+        "profile_path": "/ozVIcRFFWyceqjJ69N9oHWYGBBG.jpg",
+        "character": "Blond Treehorn Thug"
+      },
+      {
+        "id": 53,
+        "order": 9,
+        "credit_id": "52fe421ac3a36847f8004155",
+        "name": "Peter Stormare",
+        "cast_id": 21,
+        "profile_path": "/dDR0brp5L7fXDyEywrhjQv01LSg.jpg",
+        "character": "Nihilist #1, Uli Kunkel/'Karl Hungus'"
+      },
+      {
+        "id": 1237,
+        "order": 10,
+        "credit_id": "52fe421ac3a36847f8004159",
+        "name": "Michael Peter Balzary",
+        "cast_id": 22,
+        "profile_path": "/sKZq4DWMszQiSYUmNho1Y6ORhIw.jpg",
+        "character": "Nihilist #2, Kieffer"
+      },
+      {
+        "id": 1238,
+        "order": 11,
+        "credit_id": "52fe421ac3a36847f800415d",
+        "name": "Torsten Voges",
+        "cast_id": 23,
+        "profile_path": "/qsqyjQCNuoQdRDF57Q9hzngIRci.jpg",
+        "character": "Nihilist #3, Franz"
+      },
+      {
+        "id": 1239,
+        "order": 12,
+        "credit_id": "52fe421ac3a36847f8004161",
+        "name": "Jimmie Dale Gilmore",
+        "cast_id": 24,
+        "profile_path": "/ylyEf3lESzWWYZMMCIoaWzfaSmY.jpg",
+        "character": "Smokey"
+      },
+      {
+        "id": 1240,
+        "order": 13,
+        "credit_id": "52fe421ac3a36847f8004165",
+        "name": "Jack Kehler",
+        "cast_id": 25,
+        "profile_path": "/huxiFLWgthatgaEIT4u36muUJMg.jpg",
+        "character": "Marty"
+      },
+      {
+        "id": 1241,
+        "order": 14,
+        "credit_id": "52fe421ac3a36847f8004169",
+        "name": "John Turturro",
+        "cast_id": 26,
+        "profile_path": "/yyvj3z2IC9AG1sv6kuk5d7oQFJs.jpg",
+        "character": "Jesus Quintana"
+      },
+      {
+        "id": 1242,
+        "order": 15,
+        "credit_id": "52fe421ac3a36847f800416d",
+        "name": "James G. Hoosier",
+        "cast_id": 27,
+        "profile_path": "/onaoCjwtPZF7W0pIXQV2SEQcvJP.jpg",
+        "character": "Liam O'Brien, Quintana's Partner"
+      },
+      {
+        "id": 856,
+        "order": 16,
+        "credit_id": "52fe421ac3a36847f8004171",
+        "name": "Ben Gazzara",
+        "cast_id": 28,
+        "profile_path": "/eHo1CphAAbwNMQESm3JrOKR5EW1.jpg",
+        "character": "Jackie Treehorn"
+      },
+      {
+        "id": 16431,
+        "order": 17,
+        "credit_id": "52fe421ac3a36847f800417b",
+        "name": "Sam Elliott",
+        "cast_id": 30,
+        "profile_path": "/td95IbYZf4LMA2wiEjktAsQvzhW.jpg",
+        "character": "The Stranger"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1223,
+        "credit_id": "52fe4219c3a36847f80040f1",
+        "department": "Directing",
+        "name": "Joel Coen",
+        "job": "Director",
+        "profile_path": "/wUUNwsgOGtelsU8yJI64s8r7XiY.jpg"
+      },
+      {
+        "id": 1224,
+        "credit_id": "52fe4219c3a36847f80040f7",
+        "department": "Production",
+        "name": "Ethan Coen",
+        "job": "Producer",
+        "profile_path": "/knZuxatmyGpb1M8vWoprAmhv4WQ.jpg"
+      },
+      {
+        "id": 151,
+        "credit_id": "52fe4219c3a36847f8004109",
+        "department": "Camera",
+        "name": "Roger Deakins",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 1225,
+        "credit_id": "52fe4219c3a36847f800410f",
+        "department": "Sound",
+        "name": "Carter Burwell",
+        "job": "Original Music Composer",
+        "profile_path": "/am1CQyFSFTsNpMFtFv1oFhaWsJm.jpg"
+      },
+      {
+        "id": 1226,
+        "credit_id": "52fe4219c3a36847f8004115",
+        "department": "Art",
+        "name": "Rick Heinrichs",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1227,
+        "credit_id": "52fe4219c3a36847f800411b",
+        "department": "Production",
+        "name": "John S. Lyons",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1224,
+        "credit_id": "52fe4219c3a36847f8004121",
+        "department": "Editing",
+        "name": "Ethan Coen",
+        "job": "Editor",
+        "profile_path": "/knZuxatmyGpb1M8vWoprAmhv4WQ.jpg"
+      },
+      {
+        "id": 1223,
+        "credit_id": "52fe4219c3a36847f8004127",
+        "department": "Editing",
+        "name": "Joel Coen",
+        "job": "Editor",
+        "profile_path": "/wUUNwsgOGtelsU8yJI64s8r7XiY.jpg"
+      },
+      {
+        "id": 1228,
+        "credit_id": "52fe421ac3a36847f800412d",
+        "department": "Editing",
+        "name": "Tricia Cooke",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2236,
+        "credit_id": "52fe421ac3a36847f800418d",
+        "department": "Production",
+        "name": "Tim Bevan",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2238,
+        "credit_id": "52fe421ac3a36847f8004193",
+        "department": "Production",
+        "name": "Eric Fellner",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1224,
+        "credit_id": "53083847c3a3684213001dac",
+        "department": "Writing",
+        "name": "Ethan Coen",
+        "job": "Writer",
+        "profile_path": "/knZuxatmyGpb1M8vWoprAmhv4WQ.jpg"
+      },
+      {
+        "id": 1223,
+        "credit_id": "53083877c3a3684208001de3",
+        "department": "Writing",
+        "name": "Joel Coen",
+        "job": "Writer",
+        "profile_path": "/wUUNwsgOGtelsU8yJI64s8r7XiY.jpg"
+      }
+    ]
+  },
+  "runtime": 117,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "he",
+      "name": "עִבְרִית"
+    },
+    {
+      "iso_639_1": "es",
+      "name": "Español"
+    },
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www.biglebowskibluray.com/splash.php",
+  "id": 115,
+  "production_countries": [
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "The Big Lebowski",
+  "overview": "Jeffrey \"The Dude\" Lebowski is the ultimate LA slacker, until one day his house is broken into and his rug is peed on by two angry gangsters who have mistaken him for Jeffrey Lebowski, the LA millionaire, whose wife owes some bad people some big money. The Dude becomes entangled in the plot when he goes to visit the real Lebowski in order to get some retribution for his soiled rug, and is recruited to be the liason between Lebowski and the captors of his now \"kidnapped\" wife.",
+  "production_companies": [
+    {
+      "id": 1382,
+      "name": "PolyGram Filmed Entertainment"
+    },
+    {
+      "id": 10163,
+      "name": "Working Title Films"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0118715",
+  "release_date": "1998-03-06",
+  "original_title": "The Big Lebowski",
+  "vote_count": 696,
+  "poster_path": "/aHaVjVoXeNanfwUwQ92SG7tosFM.jpg",
+  "tagline": "They figured he was a lazy time wasting slacker. They were right.",
+  "revenue": 27739163,
+  "popularity": "2.59235872698094"
+}

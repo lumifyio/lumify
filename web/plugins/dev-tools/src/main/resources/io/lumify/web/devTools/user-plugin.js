@@ -110,6 +110,7 @@ require([
                 adding = $(event.target).is(':checked'),
                 deps = {
                     READ: [],
+                    COMMENT: ['READ'],
                     EDIT: ['READ'],
                     PUBLISH: ['READ', 'EDIT'],
                     ADMIN: ['READ', 'EDIT', 'PUBLISH']
@@ -193,7 +194,7 @@ require([
                     .clone()
                     .tap(function(user) {
                         user.privileges = _.sortBy(user.privileges, function(p) {
-                            return ['READ', 'EDIT', 'PUBLISH', 'ADMIN'].indexOf(p);
+                            return ['READ', 'COMMENT', 'EDIT', 'PUBLISH', 'ADMIN'].indexOf(p);
                         })
 
                         var w = _.findWhere(user.workspaces, { workspaceId: user.currentWorkspaceId });
@@ -203,7 +204,7 @@ require([
                         user.authorizations = _.sortBy(user.authorizations, function(s) {
                             return s.toLowerCase();
                         });
-                        user.priv = 'READ EDIT PUBLISH ADMIN'.split(' ').map(function(p) {
+                        user.priv = 'READ COMMENT EDIT PUBLISH ADMIN'.split(' ').map(function(p) {
                             return {
                                 name: p,
                                 lower: p.toLowerCase(),
@@ -211,6 +212,7 @@ require([
                                 has: user.privileges.indexOf(p) >= 0
                             };
                         });
+                        user.canDelete = user.id !== lumifyData.currentUser.id;
                     })
                     .value()
                 ));

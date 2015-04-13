@@ -1,58 +1,42 @@
 package io.lumify.model.rabbitmq;
 
-import backtype.storm.spout.SpoutOutputCollector;
-import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.topology.base.BaseRichSpout;
-import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Values;
-import backtype.storm.utils.Utils;
 import com.google.inject.Inject;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
-import io.lumify.core.bootstrap.InjectHelper;
-import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.ingest.WorkerSpout;
+import io.lumify.core.ingest.WorkerTuple;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerTuple;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Map;
 
-public class RabbitMQWorkQueueSpout extends BaseRichSpout {
-    private static final long serialVersionUID = -7022068682287675679L;
+public class RabbitMQWorkQueueSpout extends WorkerSpout {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RabbitMQWorkQueueSpout.class);
+    public static final int DEFAULT_RABBITMQ_PREFETCH_COUNT = 10;
     private final String queueName;
-    private Configuration configuration;
     private Channel channel;
-    private SpoutOutputCollector collector;
     private QueueingConsumer consumer;
     private Connection connection;
+    private Configuration configuration;
 
     public RabbitMQWorkQueueSpout(String queueName) {
         this.queueName = queueName;
     }
 
     @Override
-    public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declare(new Fields("json"));
-    }
-
-    @Override
-    public void open(Map conf, TopologyContext topologyContext, SpoutOutputCollector collector) {
-        configuration = ConfigurationLoader.load();
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(configuration));
-
+    public void open() {
         try {
             this.connection = RabbitMQUtils.openConnection(configuration);
             this.channel = RabbitMQUtils.openChannel(this.connection);
-            this.collector = collector;
             this.channel.queueDeclare(queueName, true, false, false, null);
             this.consumer = new QueueingConsumer(channel);
+            Integer prefetchCount = configuration.getInt(Configuration.RABBITMQ_PREFETCH_COUNT, DEFAULT_RABBITMQ_PREFETCH_COUNT);
+            this.channel.basicQos(prefetchCount, false);
             this.channel.basicConsume(this.queueName, false, consumer);
         } catch (IOException ex) {
             throw new LumifyException("Could not startup RabbitMQ", ex);
@@ -73,20 +57,14 @@ public class RabbitMQWorkQueueSpout extends BaseRichSpout {
     }
 
     @Override
-    public void nextTuple() {
-        try {
-            QueueingConsumer.Delivery delivery = this.consumer.nextDelivery(100);
-            if (delivery == null) {
-                Utils.sleep(1000);
-                return;
-            }
-            JSONObject json = new JSONObject(new String(delivery.getBody()));
-            LOGGER.debug("emit (%s): %s", this.queueName, json.toString());
-            this.collector.emit(new Values(json.toString()), delivery.getEnvelope().getDeliveryTag());
-        } catch (InterruptedException ex) {
-            LOGGER.error("Could not consume", ex);
-            this.collector.reportError(ex);
+    public WorkerTuple nextTuple() throws InterruptedException {
+        QueueingConsumer.Delivery delivery = this.consumer.nextDelivery(100);
+        if (delivery == null) {
+            return null;
         }
+        JSONObject json = new JSONObject(new String(delivery.getBody()));
+        LOGGER.debug("emit (%s): %s", this.queueName, json.toString());
+        return new GraphPropertyWorkerTuple(delivery.getEnvelope().getDeliveryTag(), json);
     }
 
     @Override
@@ -109,6 +87,10 @@ public class RabbitMQWorkQueueSpout extends BaseRichSpout {
         } catch (IOException ex) {
             LOGGER.error("Could not ack: %d", deliveryTag, ex);
         }
+    }
+
+    protected QueueingConsumer getConsumer() {
+        return this.consumer;
     }
 
     @Inject

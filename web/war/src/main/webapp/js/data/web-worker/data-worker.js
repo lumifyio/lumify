@@ -1,12 +1,15 @@
 var BASE_URL = '../../..',
     self = this,
+    cacheBreaker = null,
     publicData = {};
 
-setupConsole();
-setupWebsocket();
-setupRequireJs();
-
 onmessage = function(event) {
+    if (!cacheBreaker) {
+        cacheBreaker = event.data;
+        setupAll();
+        return;
+    }
+
     require([
         'underscore',
         'util/promise',
@@ -17,7 +20,15 @@ onmessage = function(event) {
     })
 };
 
+function setupAll() {
+    setupConsole();
+    setupWebsocket();
+    setupRequireJs();
+}
+
 function setupConsole() {
+    var noop = function() {};
+
     if (typeof console === 'undefined') {
         console = {
             log: log('log'),
@@ -25,6 +36,9 @@ function setupConsole() {
             debug: log('debug'),
             error: log('error'),
             warn: log('warn'),
+            group: noop,
+            groupCollapsed: noop,
+            groupEnd: noop
         };
     }
     function log(type) {
@@ -44,9 +58,11 @@ function setupWebsocket() {
 
     if (supportedInWorker) {
         self.window = self;
-        importScripts('/libs/atmosphere/atmosphere.js')
+        importScripts(BASE_URL + '/libs/atmosphere/atmosphere.js?' + cacheBreaker);
         atmosphere.util.getAbsoluteURL = function() {
-            return location.origin + '/messaging';
+            return location.origin +
+                location.pathname.replace(/\/jsc.*$/, '') +
+                '/messaging';
         }
         self.pushSocketMessage = function(message) {
             Promise.all([
@@ -75,11 +91,12 @@ function setupWebsocket() {
 
 function setupRequireJs() {
     if (typeof FormData === 'undefined') {
-        importScripts('./util/formDataPolyfill.js');
+        importScripts('./util/formDataPolyfill.js?' + cacheBreaker);
     }
-    importScripts(BASE_URL + '/jsc/require.config.js');
+    importScripts(BASE_URL + '/jsc/require.config.js?' + cacheBreaker);
     require.baseUrl = BASE_URL + '/jsc/';
-    importScripts(BASE_URL + '/libs/requirejs/require.js');
+    require.urlArgs = cacheBreaker;
+    importScripts(BASE_URL + '/libs/requirejs/require.js?' + cacheBreaker);
 }
 
 function onMessageHandler(event) {
@@ -104,10 +121,11 @@ function dispatchMain(type, message) {
     try {
         postMessage(message);
     } catch(e) {
+        var jsonString = JSON.stringify(message);
         postMessage({
             type:'brokenWorkerConsole',
             logType: 'error',
-            messages: ['error posting', e.message, JSON.stringify(message).substring(0, 100)]
+            messages: ['error posting', e.message, jsonString]
         });
     }
 }

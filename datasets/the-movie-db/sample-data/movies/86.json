@@ -1,0 +1,446 @@
+{
+  "budget": 6000000,
+  "vote_average": 6.2,
+  "backdrop_path": "/fCk9jkrvLyRSlnW6Wyn8F1z9mFu.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 675,
+        "order": 0,
+        "credit_id": "52fe4215c3a36847f8002b0d",
+        "name": "Christian Ulmen",
+        "cast_id": 5,
+        "profile_path": "/8vjLh0wKx1Rs0e8MlHs01zpTryd.jpg",
+        "character": "Michael Djerzinski"
+      },
+      {
+        "id": 677,
+        "order": 1,
+        "credit_id": "52fe4215c3a36847f8002b11",
+        "name": "Moritz Bleibtreu",
+        "cast_id": 6,
+        "profile_path": "/1b6TCGecTnKDw3HW5bQzHSeIsW1.jpg",
+        "character": "Bruno Klement"
+      },
+      {
+        "id": 678,
+        "order": 2,
+        "credit_id": "52fe4215c3a36847f8002b15",
+        "name": "Martina Gedeck",
+        "cast_id": 7,
+        "profile_path": "/a6eR9unTwZk4xqsVKZvJySnVt5A.jpg",
+        "character": "Christiane"
+      },
+      {
+        "id": 679,
+        "order": 3,
+        "credit_id": "52fe4215c3a36847f8002b19",
+        "name": "Franka Potente",
+        "cast_id": 8,
+        "profile_path": "/9PaVLDG7jTA0PWqzfE8rvFPNrKh.jpg",
+        "character": "Annabelle"
+      },
+      {
+        "id": 681,
+        "order": 4,
+        "credit_id": "52fe4215c3a36847f8002b21",
+        "name": "Nina Hoss",
+        "cast_id": 10,
+        "profile_path": "/5D6DH6PjSldIf3LkPGFSLAkMRIC.jpg",
+        "character": "Jane"
+      },
+      {
+        "id": 680,
+        "order": 5,
+        "credit_id": "52fe4215c3a36847f8002b1d",
+        "name": "Corinna Harfouch",
+        "cast_id": 9,
+        "profile_path": "/nRRwCDeVvKcGtixGadGw8I43eB.jpg",
+        "character": "Dr. Schäfer"
+      },
+      {
+        "id": 682,
+        "order": 6,
+        "credit_id": "52fe4215c3a36847f8002b25",
+        "name": "Uwe Ochsenknecht",
+        "cast_id": 11,
+        "profile_path": "/nPaQx2K0UodicKPlrAXQjjkilF7.jpg",
+        "character": "Bruno's Father"
+      },
+      {
+        "id": 683,
+        "order": 7,
+        "credit_id": "52fe4215c3a36847f8002b29",
+        "name": "Jasmin Tabatabai",
+        "cast_id": 12,
+        "profile_path": "/g5tw24xOVxTTq2AueeykYc4zkym.jpg",
+        "character": "Yogini"
+      },
+      {
+        "id": 684,
+        "order": 8,
+        "credit_id": "52fe4215c3a36847f8002b2d",
+        "name": "Tom Schilling",
+        "cast_id": 13,
+        "profile_path": "/8bukspHuL4rRoYISukmL2OgLgnh.jpg",
+        "character": "Michael (young)"
+      },
+      {
+        "id": 574408,
+        "order": 9,
+        "credit_id": "53d3f1a0c3a3686b8800173f",
+        "name": "Thomas Drechsel",
+        "cast_id": 44,
+        "profile_path": null,
+        "character": "Bruno (young)"
+      },
+      {
+        "id": 685,
+        "order": 10,
+        "credit_id": "52fe4215c3a36847f8002b31",
+        "name": "Nina Kronjäger",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Katja"
+      },
+      {
+        "id": 688,
+        "order": 11,
+        "credit_id": "52fe4215c3a36847f8002b35",
+        "name": "Hermann Beyer",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Annabelle's Father"
+      },
+      {
+        "id": 714,
+        "order": 12,
+        "credit_id": "52fe4215c3a36847f8002b5f",
+        "name": "Ulrike Kriener",
+        "cast_id": 23,
+        "profile_path": "/qCrFcIaxA3N2hICbAmsi2c52cE4.jpg",
+        "character": "Annabelle's Mother"
+      },
+      {
+        "id": 692,
+        "order": 13,
+        "credit_id": "52fe4215c3a36847f8002b39",
+        "name": "Jennifer Ulrich",
+        "cast_id": 16,
+        "profile_path": "/zMoYwvJhf5CPr1D0kecFyuEjCmo.jpg",
+        "character": "Johanna"
+      },
+      {
+        "id": 697,
+        "order": 14,
+        "credit_id": "52fe4215c3a36847f8002b3d",
+        "name": "Michael Gwisdek",
+        "cast_id": 17,
+        "profile_path": "/rjOU3IAEkL7tjrcFjLtKurF5jD0.jpg",
+        "character": "Professor Fleisser"
+      },
+      {
+        "id": 1081,
+        "order": 15,
+        "credit_id": "52fe4215c3a36847f8002b6f",
+        "name": "Herbert Knaup",
+        "cast_id": 26,
+        "profile_path": "/cH0TG69o6Sc6of7ZaZP9BwQ3tHX.jpg",
+        "character": "Sollers"
+      },
+      {
+        "id": 43156,
+        "order": 16,
+        "credit_id": "52fe4215c3a36847f8002b73",
+        "name": "Deborah Kaufmann",
+        "cast_id": 27,
+        "profile_path": null,
+        "character": "Hannelore"
+      },
+      {
+        "id": 23530,
+        "order": 17,
+        "credit_id": "52fe4215c3a36847f8002b77",
+        "name": "Rüdiger Klink",
+        "cast_id": 28,
+        "profile_path": null,
+        "character": "Uwe"
+      },
+      {
+        "id": 4620,
+        "order": 18,
+        "credit_id": "52fe4215c3a36847f8002b7b",
+        "name": "Thorsten Merten",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Hubert"
+      },
+      {
+        "id": 36462,
+        "order": 19,
+        "credit_id": "52fe4215c3a36847f8002b7f",
+        "name": "Franziska Schlattner",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Ellen"
+      },
+      {
+        "id": 36442,
+        "order": 20,
+        "credit_id": "52fe4215c3a36847f8002b83",
+        "name": "Ingeborg Westphal",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Hippiefrau"
+      },
+      {
+        "id": 43163,
+        "order": 21,
+        "credit_id": "52fe4215c3a36847f8002b87",
+        "name": "Ursula Karusseit",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Großmutter"
+      },
+      {
+        "id": 43164,
+        "order": 22,
+        "credit_id": "52fe4215c3a36847f8002b8b",
+        "name": "Dieter Bach",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Kates Lover"
+      },
+      {
+        "id": 20021,
+        "order": 23,
+        "credit_id": "52fe4215c3a36847f8002b8f",
+        "name": "Wilfried Hochholdinger",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Krankenhausarzt"
+      },
+      {
+        "id": 39296,
+        "order": 24,
+        "credit_id": "52fe4215c3a36847f8002b93",
+        "name": "Simon Licht",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Kursleiter"
+      },
+      {
+        "id": 43165,
+        "order": 25,
+        "credit_id": "52fe4215c3a36847f8002b97",
+        "name": "Michael Zühlke",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Swingerclub-Kerl"
+      },
+      {
+        "id": 43166,
+        "order": 26,
+        "credit_id": "52fe4215c3a36847f8002b9b",
+        "name": "Tyra Misoux",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Swingerclub-Frau"
+      },
+      {
+        "id": 43167,
+        "order": 27,
+        "credit_id": "52fe4215c3a36847f8002b9f",
+        "name": "Bernd Stempel",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Mann in Plattenbausiedlung"
+      },
+      {
+        "id": 39863,
+        "order": 28,
+        "credit_id": "52fe4215c3a36847f8002ba3",
+        "name": "Joachim Kretzer",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Christoffersen"
+      },
+      {
+        "id": 43168,
+        "order": 29,
+        "credit_id": "52fe4215c3a36847f8002ba7",
+        "name": "Rainer Heise",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Forscher 1"
+      },
+      {
+        "id": 43169,
+        "order": 30,
+        "credit_id": "52fe4215c3a36847f8002bab",
+        "name": "Christian Schmidt",
+        "cast_id": 41,
+        "profile_path": null,
+        "character": "Forscher 2"
+      },
+      {
+        "id": 4215,
+        "order": 31,
+        "credit_id": "52fe4215c3a36847f8002baf",
+        "name": "Manfred Möck",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "Forscher 3"
+      },
+      {
+        "id": 43170,
+        "order": 32,
+        "credit_id": "52fe4215c3a36847f8002bb3",
+        "name": "Thomas Huber",
+        "cast_id": 43,
+        "profile_path": "/4R09DYiilcDylGjTcCCxtgikhHL.jpg",
+        "character": "Forscher 4"
+      }
+    ],
+    "crew": [
+      {
+        "id": 672,
+        "credit_id": "52fe4215c3a36847f8002af7",
+        "department": "Directing",
+        "name": "Oskar Roehler",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 673,
+        "credit_id": "52fe4215c3a36847f8002afd",
+        "department": "Production",
+        "name": "Bernd Eichinger",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 674,
+        "credit_id": "52fe4215c3a36847f8002b03",
+        "department": "Production",
+        "name": "Oliver Berben",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 672,
+        "credit_id": "52fe4215c3a36847f8002b09",
+        "department": "Writing",
+        "name": "Oskar Roehler",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 700,
+        "credit_id": "52fe4215c3a36847f8002b43",
+        "department": "Camera",
+        "name": "Carl-Friedrich Koschnick",
+        "job": "Director of Photography",
+        "profile_path": "/t7AuWf1FCmbC6I2RTI2Qb6hJdvU.jpg"
+      },
+      {
+        "id": 708,
+        "credit_id": "52fe4215c3a36847f8002b49",
+        "department": "Sound",
+        "name": "Martin Todsharow",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 709,
+        "credit_id": "52fe4215c3a36847f8002b4f",
+        "department": "Art",
+        "name": "Ingrid Henn",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 710,
+        "credit_id": "52fe4215c3a36847f8002b55",
+        "department": "Production",
+        "name": "An Dorthe Braker",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 703,
+        "credit_id": "52fe4215c3a36847f8002b5b",
+        "department": "Editing",
+        "name": "Peter R. Adam",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 3614,
+        "credit_id": "52fe4215c3a36847f8002b65",
+        "department": "Writing",
+        "name": "Michel Houellebecq",
+        "job": "Novel",
+        "profile_path": null
+      },
+      {
+        "id": 3615,
+        "credit_id": "52fe4215c3a36847f8002b6b",
+        "department": "Sound",
+        "name": "Manfred Banach",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "http://www.elementarteilchen.film.de/",
+  "id": 86,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "Ireland",
+      "iso_3166_1": "IE"
+    }
+  ],
+  "title": "The Elementary Particles",
+  "overview": "The Elementary Particles / Elementarteilichen, is a film based off of the controversial novel by Michel Houellebecq about two very different half brothers; one who finds pleasure in his sexual cravings and the other who\u2019s more interested in molecular biology than women.",
+  "production_companies": [
+    {
+      "id": 74,
+      "name": "MOOVIE - the art of entertainment GmbH"
+    },
+    {
+      "id": 75,
+      "name": "Medienfonds German Film Productions GmbH & Co. KG"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0430051",
+  "release_date": "2006-02-10",
+  "original_title": "Elementarteilchen",
+  "vote_count": 6,
+  "poster_path": "/6IgQZl06sNRSBZE1Te74ENb6mhx.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.428287472353835"
+}

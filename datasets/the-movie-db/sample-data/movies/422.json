@@ -1,0 +1,245 @@
+{
+  "budget": 0,
+  "vote_average": 7.8,
+  "backdrop_path": "/4v3TyHFbKY42g9bFiEZXUIQHpAR.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 5676,
+        "order": 0,
+        "credit_id": "52fe4241c3a36847f80100f7",
+        "name": "Marcello Mastroianni",
+        "cast_id": 1,
+        "profile_path": "/lxlTGslplgT3ao3J2whahc7fDZJ.jpg",
+        "character": "Guido Anselmi"
+      },
+      {
+        "id": 4959,
+        "order": 1,
+        "credit_id": "52fe4241c3a36847f80100fb",
+        "name": "Claudia Cardinale",
+        "cast_id": 2,
+        "profile_path": "/tV3oboOm0Iix0AEtQKGPnPE2hbF.jpg",
+        "character": "Claudia"
+      },
+      {
+        "id": 5682,
+        "order": 2,
+        "credit_id": "52fe4241c3a36847f801013b",
+        "name": "Anouk Aimée",
+        "cast_id": 13,
+        "profile_path": "/vLGlUZvzffKEJ2zB943Qx0PWgPD.jpg",
+        "character": "Luisa Anselmi"
+      },
+      {
+        "id": 5683,
+        "order": 3,
+        "credit_id": "52fe4241c3a36847f801013f",
+        "name": "Sandra Milo",
+        "cast_id": 14,
+        "profile_path": "/xMsgxhrNX27Hot5FJ5aaqvGYTKU.jpg",
+        "character": "Carla"
+      },
+      {
+        "id": 5684,
+        "order": 4,
+        "credit_id": "52fe4241c3a36847f8010143",
+        "name": "Rossella Falk",
+        "cast_id": 15,
+        "profile_path": "/acyIHzPCYELbC9coAXYzgsoNRYN.jpg",
+        "character": "Rossella"
+      },
+      {
+        "id": 5685,
+        "order": 5,
+        "credit_id": "52fe4241c3a36847f8010147",
+        "name": "Barbara Steele",
+        "cast_id": 16,
+        "profile_path": "/jrxCN9GxreD5W3Xv0OGofkidNm3.jpg",
+        "character": "Gloria Morin"
+      },
+      {
+        "id": 4116,
+        "order": 6,
+        "credit_id": "52fe4241c3a36847f801014b",
+        "name": "Madeleine Lebeau",
+        "cast_id": 17,
+        "profile_path": "/tYUnGiQEBJLG1OfeqHvdcANgm2I.jpg",
+        "character": "Madeleine, l'attrice francese"
+      },
+      {
+        "id": 5686,
+        "order": 7,
+        "credit_id": "52fe4241c3a36847f801014f",
+        "name": "Caterina Boratto",
+        "cast_id": 18,
+        "profile_path": "/1Wh2iwtM4cnZcvWx1WERc5plA8M.jpg",
+        "character": "La signora misteriosa"
+      },
+      {
+        "id": 5687,
+        "order": 8,
+        "credit_id": "52fe4241c3a36847f8010153",
+        "name": "Eddra Gale",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "La Saraghina"
+      },
+      {
+        "id": 5688,
+        "order": 9,
+        "credit_id": "52fe4241c3a36847f8010157",
+        "name": "Guido Alberti",
+        "cast_id": 20,
+        "profile_path": "/nJ1noc5YGOMdrfSaSha5NnvCMbF.jpg",
+        "character": "Pace, il produttore"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4415,
+        "credit_id": "52fe4241c3a36847f8010101",
+        "department": "Directing",
+        "name": "Federico Fellini",
+        "job": "Director",
+        "profile_path": "/7t3sWBVdenUbZnoFAPRpBAGngQ7.jpg"
+      },
+      {
+        "id": 4415,
+        "credit_id": "52fe4241c3a36847f8010107",
+        "department": "Writing",
+        "name": "Federico Fellini",
+        "job": "Screenplay",
+        "profile_path": "/7t3sWBVdenUbZnoFAPRpBAGngQ7.jpg"
+      },
+      {
+        "id": 5397,
+        "credit_id": "52fe4241c3a36847f801010d",
+        "department": "Writing",
+        "name": "Ennio Flaiano",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5396,
+        "credit_id": "52fe4241c3a36847f8010113",
+        "department": "Writing",
+        "name": "Tullio Pinelli",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5678,
+        "credit_id": "52fe4241c3a36847f8010119",
+        "department": "Writing",
+        "name": "Brunello Rondi",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5679,
+        "credit_id": "52fe4241c3a36847f801011f",
+        "department": "Production",
+        "name": "Angelo Rizzoli",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3098,
+        "credit_id": "52fe4241c3a36847f8010125",
+        "department": "Sound",
+        "name": "Nino Rota",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 5680,
+        "credit_id": "52fe4241c3a36847f801012b",
+        "department": "Camera",
+        "name": "Gianni Di Venanzo",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5400,
+        "credit_id": "52fe4241c3a36847f8010131",
+        "department": "Editing",
+        "name": "Leo Cattozzo",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 5681,
+        "credit_id": "52fe4241c3a36847f8010137",
+        "department": "Art",
+        "name": "Piero Gherardi",
+        "job": "Art Direction",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 138,
+  "spoken_languages": [
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 422,
+  "production_countries": [
+    {
+      "name": "France",
+      "iso_3166_1": "FR"
+    },
+    {
+      "name": "Italy",
+      "iso_3166_1": "IT"
+    }
+  ],
+  "title": "8½",
+  "overview": "With 8 ½ Frederico Fellini leaves a self-portrait where dreams and reality are a mix. With help from a most excellent cast and unique scenery this self reflecting film is one of his master works.",
+  "production_companies": [
+    {
+      "id": 9387,
+      "name": "Cineriz"
+    },
+    {
+      "id": 10882,
+      "name": "Francinex"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0056801",
+  "release_date": "1963-02-14",
+  "original_title": "8½",
+  "vote_count": 43,
+  "poster_path": "/uXuF9z9SrM2aPUKKJoVJRi952gy.jpg",
+  "tagline": "A picture that goes beyond what men think about - because no man ever thought about it in quite this way!",
+  "revenue": 0,
+  "popularity": "0.979660571145705"
+}

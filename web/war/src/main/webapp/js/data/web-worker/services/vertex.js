@@ -28,12 +28,13 @@ define([
             if (q) {
                 params.q = q;
             }
-            if (options.query && options.query.relatedToVertexId) {
-                params.relatedToVertexId = options.query.relatedToVertexId;
+
+            if (options.query && options.query.relatedToVertexIds) {
+                params.relatedToVertexIds = options.query.relatedToVertexIds;
             }
             params.filter = JSON.stringify(options.propertyFilters || []);
 
-            return ajax('GET', '/vertex/search', params);
+            return ajax('POST', '/vertex/search', params);
         },
 
         'geo-search': function(lat, lon, radius) {
@@ -52,6 +53,21 @@ define([
             return ajax('POST', '/vertex/multiple', options);
         },
 
+        properties: function(vertexId) {
+            return ajax('GET', '/vertex/properties', {
+                graphVertexId: vertexId
+            });
+        },
+
+        propertySourceInfo: function(vertexId, name, key, visibility) {
+            return ajax('GET', '/vertex/property/source-info', {
+                vertexId: vertexId,
+                propertyName: name,
+                propertyKey: key,
+                visibilitySource: visibility
+            });
+        },
+
         edges: function(vertexId, options) {
             var parameters = {
                 graphVertexId: vertexId
@@ -63,6 +79,12 @@ define([
             }
 
             return ajax('GET', '/vertex/edges', parameters);
+        },
+
+        'delete': function(vertexId) {
+            return ajax('DELETE', '/vertex', {
+                graphVertexId: vertexId
+            })
         },
 
         deleteProperty: function(vertexId, property) {
@@ -80,9 +102,10 @@ define([
             });
         },
 
-        related: function(vertexId, options) {
-            return ajax('GET', '/vertex/find-related', {
-                graphVertexId: vertexId,
+        related: function(vertexIds, options) {
+            return ajax('POST', '/vertex/find-related', {
+                graphVertexIds: vertexIds,
+                limitEdgeLabel: options.limitEdgeLabel,
                 limitParentConceptId: options.limitParentConceptId
             });
         },
@@ -101,11 +124,17 @@ define([
                 'graphVertexId=' + encodeURIComponent(vertexId), file);
         },
 
-        create: function(conceptType, visibilitySource) {
-            return ajax('POST', '/vertex/new', {
+        create: function(conceptType, justification, visibilitySource) {
+            return ajax('POST', '/vertex/new', _.tap({
                 conceptType: conceptType,
                 visibilitySource: visibilitySource
-            });
+            }, function(data) {
+                if (justification.justificationText) {
+                    data.justificationText = justification.justificationText;
+                } else if (justification.sourceInfo) {
+                    data.sourceInfo = JSON.stringify(justification.sourceInfo);
+                }
+            }));
         },
 
         importFiles: function(files, visibilitySource) {
@@ -135,7 +164,12 @@ define([
         },
 
         setProperty: function(vertexId, property, optionalWorkspaceId) {
-            return ajax('POST', '/vertex/property', _.tap({
+            var url = '/vertex/' + (
+                property.name === 'http://lumify.io/comment#entry' ?
+                'comment' : 'property'
+            );
+
+            return ajax('POST', url, _.tap({
                  graphVertexId: vertexId,
                  propertyName: property.name,
                  value: property.value,
@@ -145,7 +179,7 @@ define([
                 if (property.sourceInfo) {
                     params.sourceInfo = JSON.stringify(property.sourceInfo);
                 }
-                if (property.key) {
+                if (!_.isUndefined(property.key)) {
                     params.propertyKey = property.key;
                 }
                 if (property.metadata) {
@@ -159,6 +193,18 @@ define([
 
         resolveTerm: function(params) {
             return ajax('POST', '/vertex/resolve-term', params);
+        },
+
+        unresolveTerm: function(params) {
+            return ajax('POST', '/vertex/unresolve-term', params);
+        },
+
+        resolveDetectedObject: function(params) {
+            return ajax('POST', '/vertex/resolve-detected-object', params);
+        },
+
+        unresolveDetectedObject: function(params) {
+            return ajax('POST', '/vertex/unresolve-detected-object', params);
         }
     };
 

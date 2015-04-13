@@ -8,16 +8,26 @@ import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.config.ConfigurationLoader;
+import io.lumify.core.ingest.graphProperty.GraphPropertyRunner;
+import io.lumify.core.ingest.video.VideoFrameInfo;
+import io.lumify.core.model.longRunningProcess.LongRunningProcessRepository;
 import io.lumify.core.model.longRunningProcess.LongRunningProcessRunner;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.user.User;
+import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereInterceptor;
 import org.atmosphere.cpr.AtmosphereServlet;
+import org.atmosphere.cpr.SessionSupport;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
 import org.securegraph.Graph;
 
@@ -28,7 +38,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class ApplicationBootstrap implements ServletContextListener {
+public class ApplicationBootstrap implements ServletContextListener {
     public static final String CONFIG_HTTP_TRANSPORT_GUARANTEE = "http.transportGuarantee";
     private static LumifyLogger LOGGER;
     public static final String APP_CONFIG_LOADER = "application.config.loader";
@@ -37,6 +47,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     public static final String DEBUG_FILTER_NAME = "debug";
     public static final String CACHE_FILTER_NAME = "cache";
     private UserRepository userRepository;
+    private boolean shouldContinueToRunLongRunningProcess;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -49,11 +60,19 @@ public final class ApplicationBootstrap implements ServletContextListener {
             LOGGER.info("Running application with configuration:\n%s", config);
 
             setupInjector(context, config);
+            verifyGraphVersion();
+            setupGraphAuthorizations();
             setupWebApp(context, config);
-            setupLongRunningProcessRunner(context, config);
+            setupLongRunningProcessRunner(config);
+            setupGraphPropertyWorkerRunner(config);
         } else {
             throw new RuntimeException("Failed to initialize context. Lumify is not running.");
         }
+    }
+
+    private void verifyGraphVersion() {
+        Graph graph = InjectHelper.getInstance(Graph.class);
+        GraphUtil.verifyVersion(graph);
     }
 
     @Override
@@ -89,18 +108,34 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private void setupInjector(ServletContext context, Configuration config) {
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(config));
+        LOGGER.debug("setupInjector");
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(config), config);
 
         // Store the injector in the context for a servlet to access later
         context.setAttribute(Injector.class.getName(), InjectHelper.getInjector());
-        if (!config.get(Configuration.MODEL_PROVIDER).equals(Configuration.UNKNOWN_STRING)) {
+        if (config.get(Configuration.MODEL_PROVIDER, null) != null) {
             FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
         }
 
-        InjectHelper.getInjector().getInstance(OntologyRepository.class);
+        InjectHelper.getInstance(OntologyRepository.class); // verify we are up
+    }
+
+    private void setupGraphAuthorizations() {
+        LOGGER.debug("setupGraphAuthorizations");
+        AuthorizationRepository authorizationRepository = InjectHelper.getInstance(AuthorizationRepository.class);
+        authorizationRepository.addAuthorizationToGraph(
+                LumifyVisibility.SUPER_USER_VISIBILITY_STRING,
+                UserRepository.VISIBILITY_STRING,
+                TermMentionRepository.VISIBILITY_STRING,
+                LongRunningProcessRepository.VISIBILITY_STRING,
+                OntologyRepository.VISIBILITY_STRING,
+                WorkspaceRepository.VISIBILITY_STRING,
+                VideoFrameInfo.VISIBILITY_STRING
+        );
     }
 
     private void setupWebApp(ServletContext context, Configuration config) {
+        LOGGER.debug("setupWebApp");
         Router router = new Router(context);
         ServletRegistration.Dynamic servlet = context.addServlet(LUMIFY_SERVLET_NAME, router);
         servlet.addMapping("/*");
@@ -114,6 +149,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
     private void addAtmosphereServlet(ServletContext context, Configuration config) {
         ServletRegistration.Dynamic servlet = context.addServlet(ATMOSPHERE_SERVLET_NAME, AtmosphereServlet.class);
+        context.addListener(SessionSupport.class);
         servlet.addMapping("/messaging/*");
         servlet.setAsyncSupported(true);
         servlet.setLoadOnStartup(0);
@@ -157,7 +193,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     private Map<String, String> getInitParametersAsMap(ServletContext context) {
-        Map<String, String> initParameters = new HashMap<String, String>();
+        Map<String, String> initParameters = new HashMap<>();
         Enumeration<String> e = context.getInitParameterNames();
         while (e.hasMoreElements()) {
             String initParameterName = e.nextElement();
@@ -166,23 +202,29 @@ public final class ApplicationBootstrap implements ServletContextListener {
         return initParameters;
     }
 
-    private void setupLongRunningProcessRunner(ServletContext context, final Configuration config) {
-        boolean enabled = Boolean.parseBoolean(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_ENABLED, "true"));
+    private void setupLongRunningProcessRunner(final Configuration config) {
+        LOGGER.debug("setupLongRunningProcessRunner");
+
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED, Boolean.toString(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_ENABLED_DEFAULT)));
         if (!enabled) {
+            LOGGER.debug("skipping embedded long running process runners");
             return;
         }
 
-        int threadCount = Integer.parseInt(config.get(Configuration.LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT, "4"));
+        int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT, Integer.toString(Configuration.WEB_APP_EMBEDDED_LONG_RUNNING_PROCESS_RUNNER_THREAD_COUNT_DEFAULT)));
 
         final LongRunningProcessRunner longRunningProcessRunner = InjectHelper.getInstance(LongRunningProcessRunner.class);
         longRunningProcessRunner.prepare(config.toMap());
         final WorkQueueRepository workQueueRepository = InjectHelper.getInstance(WorkQueueRepository.class);
 
+        LOGGER.debug("long running process runners: %d", threadCount);
+        shouldContinueToRunLongRunningProcess = true;
         for (int i = 0; i < threadCount; i++) {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
+                    delayStart();
+                    while (shouldContinueToRunLongRunningProcess) {
                         WorkQueueRepository.LongRunningProcessMessage longRunningProcessMessage = workQueueRepository.getNextLongRunningProcessMessage();
                         if (longRunningProcessMessage == null) {
                             continue;
@@ -199,7 +241,53 @@ public final class ApplicationBootstrap implements ServletContextListener {
             });
             t.setName("long-running-process-runner-" + t.getId());
             t.setDaemon(true);
+            LOGGER.debug("starting long running process runner thread: %s", t.getName());
             t.start();
+        }
+    }
+
+    private void setupGraphPropertyWorkerRunner(Configuration config) {
+        LOGGER.debug("setupGraphPropertyWorkerRunner");
+
+        boolean enabled = Boolean.parseBoolean(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED, Boolean.toString(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_ENABLED_DEFAULT)));
+        if (!enabled) {
+            LOGGER.debug("skipping embedded graph property worker");
+            return;
+        }
+
+        int threadCount = Integer.parseInt(config.get(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT, Integer.toString(Configuration.WEB_APP_EMBEDDED_GRAPH_PROPERTY_WORKER_RUNNER_THREAD_COUNT_DEFAULT)));
+        final User user = userRepository.getSystemUser();
+
+        LOGGER.debug("starting graph property worker runners: %d", threadCount);
+        for (int i = 0; i < threadCount; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    delayStart();
+                    GraphPropertyRunner graphPropertyRunner = InjectHelper.getInstance(GraphPropertyRunner.class);
+                    graphPropertyRunner.prepare(user);
+                    try {
+                        graphPropertyRunner.run();
+                    } catch (Exception ex) {
+                        LOGGER.error("Failed running graph property runner", ex);
+                    }
+                }
+            });
+            t.setName("graph-property-worker-runner-" + t.getId());
+            t.setDaemon(true);
+            LOGGER.debug("starting graph property worker runner thread: %s", t.getName());
+            t.start();
+        }
+    }
+
+    /**
+     * Delay the start of GPW and long running processes so the web app comes up faster
+     */
+    private void delayStart() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            LOGGER.error("Could not sleep", e);
         }
     }
 }

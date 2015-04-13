@@ -1,0 +1,371 @@
+{
+  "budget": 207000000,
+  "vote_average": 6.2,
+  "backdrop_path": "/lWnPz1EvXUWMvXK1plZMA1I2XMV.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 3489,
+        "order": 0,
+        "credit_id": "52fe422ec3a36847f800a19f",
+        "name": "Naomi Watts",
+        "cast_id": 5,
+        "profile_path": "/6GIHYUKqhUvQrQn1L0S2u9Cbo00.jpg",
+        "character": "Ann Darrow"
+      },
+      {
+        "id": 70851,
+        "order": 1,
+        "credit_id": "52fe422ec3a36847f800a1a3",
+        "name": "Jack Black",
+        "cast_id": 6,
+        "profile_path": "/vMXgtzMdt2jSAjOECFQ5F53blbr.jpg",
+        "character": "Carl Denham"
+      },
+      {
+        "id": 3490,
+        "order": 2,
+        "credit_id": "52fe422ec3a36847f800a1a7",
+        "name": "Adrien Brody",
+        "cast_id": 7,
+        "profile_path": "/zvMslH1C8xmEBpGgDsdzL797Rv.jpg",
+        "character": "Jack Driscoll"
+      },
+      {
+        "id": 3491,
+        "order": 3,
+        "credit_id": "52fe422ec3a36847f800a1ab",
+        "name": "Thomas Kretschmann",
+        "cast_id": 8,
+        "profile_path": "/allahLWNWLQpeY46nUg1d6zSO7T.jpg",
+        "character": "Captain Englehorn"
+      },
+      {
+        "id": 3492,
+        "order": 4,
+        "credit_id": "52fe422ec3a36847f800a1af",
+        "name": "Colin Hanks",
+        "cast_id": 9,
+        "profile_path": "/dzpMYvr5mc28EHyZTWlZhPdzeN5.jpg",
+        "character": "Preston"
+      },
+      {
+        "id": 1333,
+        "order": 5,
+        "credit_id": "52fe422ec3a36847f800a1b3",
+        "name": "Andy Serkis",
+        "cast_id": 10,
+        "profile_path": "/nQRsxFveJaUIlZ4GYWDe9uJ6u2f.jpg",
+        "character": "Kong/Lumpy"
+      },
+      {
+        "id": 3493,
+        "order": 6,
+        "credit_id": "52fe422ec3a36847f800a1b7",
+        "name": "Evan Parke",
+        "cast_id": 11,
+        "profile_path": "/kHzILtL1BS7bGFuoTTufqt78sOD.jpg",
+        "character": "Hayes"
+      },
+      {
+        "id": 478,
+        "order": 7,
+        "credit_id": "52fe422ec3a36847f800a1bb",
+        "name": "Jamie Bell",
+        "cast_id": 12,
+        "profile_path": "/7HgepK5YE8u0xrv3lJZjaEoENwl.jpg",
+        "character": "Jimmy"
+      },
+      {
+        "id": 3494,
+        "order": 8,
+        "credit_id": "52fe422ec3a36847f800a1bf",
+        "name": "Lobo Chan",
+        "cast_id": 13,
+        "profile_path": "/hxZPJaRW6SGhc5MFXuPd3LQlaMz.jpg",
+        "character": "Choy"
+      },
+      {
+        "id": 3495,
+        "order": 9,
+        "credit_id": "52fe422ec3a36847f800a1c3",
+        "name": "John Sumner",
+        "cast_id": 14,
+        "profile_path": "/9b3RL7HRtPeqUrnCkO12bevK85a.jpg",
+        "character": "Herb"
+      },
+      {
+        "id": 3496,
+        "order": 10,
+        "credit_id": "52fe422ec3a36847f800a1c7",
+        "name": "Craig Hall",
+        "cast_id": 15,
+        "profile_path": "/e18KUAquVXJcEl9uPC0InR9BLyu.jpg",
+        "character": "Mike"
+      },
+      {
+        "id": 3497,
+        "order": 11,
+        "credit_id": "52fe422ec3a36847f800a1cb",
+        "name": "Kyle Chandler",
+        "cast_id": 16,
+        "profile_path": "/1un1X4SxxcSVUYEgQ0HXPPRhKcv.jpg",
+        "character": "Bruce Baxter"
+      },
+      {
+        "id": 1166385,
+        "order": 12,
+        "credit_id": "52fe422ec3a36847f800a239",
+        "name": "William Johnson",
+        "cast_id": 36,
+        "profile_path": "/b5cYHL0BJ8DlMML18ZlrSF6ZlMp.jpg",
+        "character": "Manny"
+      },
+      {
+        "id": 3541,
+        "order": 13,
+        "credit_id": "52fe422ec3a36847f800a235",
+        "name": "David Pittu",
+        "cast_id": 35,
+        "profile_path": "/8LIOzw0A9K3D0XKdtuamQZx1bES.jpg",
+        "character": "Weston"
+      }
+    ],
+    "crew": [
+      {
+        "id": 108,
+        "credit_id": "52fe422ec3a36847f800a189",
+        "department": "Directing",
+        "name": "Peter Jackson",
+        "job": "Director",
+        "profile_path": "/hTUqZAjH7SHXb0EXEA1I9EoJFnF.jpg"
+      },
+      {
+        "id": 126,
+        "credit_id": "52fe422ec3a36847f800a18f",
+        "department": "Writing",
+        "name": "Fran Walsh",
+        "job": "Author",
+        "profile_path": "/hLihP60zpszrowcMLpWoJ4wvtuy.jpg"
+      },
+      {
+        "id": 128,
+        "credit_id": "52fe422ec3a36847f800a195",
+        "department": "Writing",
+        "name": "Philippa Boyens",
+        "job": "Author",
+        "profile_path": "/keVPZy02zLh2BEUPkZivJrh6o6U.jpg"
+      },
+      {
+        "id": 108,
+        "credit_id": "52fe422ec3a36847f800a19b",
+        "department": "Writing",
+        "name": "Peter Jackson",
+        "job": "Author",
+        "profile_path": "/hTUqZAjH7SHXb0EXEA1I9EoJFnF.jpg"
+      },
+      {
+        "id": 1313,
+        "credit_id": "52fe422ec3a36847f800a1d1",
+        "department": "Camera",
+        "name": "Andrew Lesnie",
+        "job": "Director of Photography",
+        "profile_path": "/Atq58m4GpAKefFZxDXmzgT9t7jm.jpg"
+      },
+      {
+        "id": 1213,
+        "credit_id": "52fe422ec3a36847f800a1d7",
+        "department": "Sound",
+        "name": "James Newton Howard",
+        "job": "Original Music Composer",
+        "profile_path": "/kLWSRXYjwKSVosgepYVq4XxU6SS.jpg"
+      },
+      {
+        "id": 3499,
+        "credit_id": "52fe422ec3a36847f800a1dd",
+        "department": "Sound",
+        "name": "David Long",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 3500,
+        "credit_id": "52fe422ec3a36847f800a1e3",
+        "department": "Sound",
+        "name": "Mel Wesson",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 1390,
+        "credit_id": "52fe422ec3a36847f800a1e9",
+        "department": "Editing",
+        "name": "Jamie Selkirk",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1324,
+        "credit_id": "52fe422ec3a36847f800a1ef",
+        "department": "Production",
+        "name": "Victoria Burrows",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1325,
+        "credit_id": "52fe422ec3a36847f800a1f5",
+        "department": "Production",
+        "name": "John Hubbard",
+        "job": "Casting",
+        "profile_path": "/rUqBa3w5i6vjN6qtTdm3I2AEUu1.jpg"
+      },
+      {
+        "id": 1326,
+        "credit_id": "52fe422ec3a36847f800a1fb",
+        "department": "Production",
+        "name": "Liz Mullane",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3501,
+        "credit_id": "52fe422ec3a36847f800a201",
+        "department": "Production",
+        "name": "Daniel Hubbard",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 1314,
+        "credit_id": "52fe422ec3a36847f800a207",
+        "department": "Art",
+        "name": "Grant Major",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3502,
+        "credit_id": "52fe422ec3a36847f800a20d",
+        "department": "Costume & Make-Up",
+        "name": "Terry Ryan",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 3503,
+        "credit_id": "52fe422ec3a36847f800a213",
+        "department": "Sound",
+        "name": "Brent Burge",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3504,
+        "credit_id": "52fe422ec3a36847f800a219",
+        "department": "Sound",
+        "name": "David Farmer",
+        "job": "Sound Designer",
+        "profile_path": null
+      },
+      {
+        "id": 3505,
+        "credit_id": "52fe422ec3a36847f800a21f",
+        "department": "Production",
+        "name": "Jan Blenkin",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3506,
+        "credit_id": "52fe422ec3a36847f800a225",
+        "department": "Production",
+        "name": "Carolynne Cunningham",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 108,
+        "credit_id": "52fe422ec3a36847f800a22b",
+        "department": "Production",
+        "name": "Peter Jackson",
+        "job": "Producer",
+        "profile_path": "/hTUqZAjH7SHXb0EXEA1I9EoJFnF.jpg"
+      },
+      {
+        "id": 126,
+        "credit_id": "52fe422ec3a36847f800a231",
+        "department": "Production",
+        "name": "Fran Walsh",
+        "job": "Producer",
+        "profile_path": "/hLihP60zpszrowcMLpWoJ4wvtuy.jpg"
+      }
+    ]
+  },
+  "runtime": 187,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://movies.uip.de/kingkong/",
+  "id": 254,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "New Zealand",
+      "iso_3166_1": "NZ"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "King Kong",
+  "overview": "In 1933 New York, an overly ambitious movie producer coerces his cast and hired ship crew to travel to mysterious Skull Island, where they encounter Kong, a giant ape who is immediately smitten with leading lady Ann Darrow.",
+  "production_companies": [
+    {
+      "id": 33,
+      "name": "Universal Pictures"
+    },
+    {
+      "id": 11,
+      "name": "WingNut Films"
+    },
+    {
+      "id": 68,
+      "name": "Big Primate Pictures"
+    },
+    {
+      "id": 69,
+      "name": "MFPV Film"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0360717",
+  "release_date": "2005-12-14",
+  "original_title": "King Kong",
+  "vote_count": 422,
+  "poster_path": "/iQYMVoI9QE2wQCOSrxhiBYd4v0w.jpg",
+  "tagline": "The eighth wonder of the world.",
+  "revenue": 550000000,
+  "popularity": "1.44648253823905"
+}

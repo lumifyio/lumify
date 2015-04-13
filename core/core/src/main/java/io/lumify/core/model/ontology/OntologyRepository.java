@@ -20,6 +20,9 @@ public interface OntologyRepository {
     public static final String TYPE_CONCEPT = "concept";
     public static final String TYPE_PROPERTY = "property";
     public static final String VISIBILITY_STRING = "ontology";
+    public static final String CONFIG_INTENT_CONCEPT_PREFIX = "ontology.intent.concept.";
+    public static final String CONFIG_INTENT_RELATIONSHIP_PREFIX = "ontology.intent.relationship.";
+    public static final String CONFIG_INTENT_PROPERTY_PREFIX = "ontology.intent.property.";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
 
     void clearCache();
@@ -48,7 +51,7 @@ public interface OntologyRepository {
 
     Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName, File inDir);
 
-    Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName);
+    Relationship getOrCreateRelationshipType(Iterable<Concept> domainConcepts, Iterable<Concept> rangeConcepts, String relationshipIRI, String displayName, String[] intents, boolean userVisible);
 
     OWLOntologyManager createOwlOntologyManager(OWLOntologyLoaderConfiguration config, IRI excludeDocumentIRI) throws Exception;
 
@@ -63,4 +66,28 @@ public interface OntologyRepository {
     ClientApiOntology getClientApiObject();
 
     String guessDocumentIRIFromPackage(File inFile) throws Exception;
+
+    Concept getConceptByIntent(String intent);
+
+    String getConceptIRIByIntent(String intent);
+
+    Concept getRequiredConceptByIntent(String intent);
+
+    String getRequiredConceptIRIByIntent(String intent);
+
+    Relationship getRelationshipByIntent(String intent);
+
+    String getRelationshipIRIByIntent(String intent);
+
+    Relationship getRequiredRelationshipByIntent(String intent);
+
+    String getRequiredRelationshipIRIByIntent(String intent);
+
+    OntologyProperty getPropertyByIntent(String intent);
+
+    String getPropertyIRIByIntent(String intent);
+
+    OntologyProperty getRequiredPropertyByIntent(String intent);
+
+    String getRequiredPropertyIRIByIntent(String intent);
 }

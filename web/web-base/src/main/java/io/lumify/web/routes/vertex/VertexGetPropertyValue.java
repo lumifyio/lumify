@@ -1,15 +1,13 @@
 package io.lumify.web.routes.vertex;
 
-import io.lumify.miniweb.HandlerChain;
-import io.lumify.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
-import io.lumify.core.util.LumifyLogger;
-import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.miniweb.HandlerChain;
+import io.lumify.miniweb.utils.UrlUtils;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
@@ -28,9 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VertexGetPropertyValue extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexGetPropertyValue.class);
     private static final Pattern RANGE_PATTERN = Pattern.compile("bytes=([0-9]*)-([0-9]*)");
-
     private Graph graph;
 
     @Inject
@@ -171,7 +167,7 @@ public class VertexGetPropertyValue extends BaseRequestHandler {
     }
 
     private String getMimeType(Property property) {
-        String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
+        String mimeType = LumifyProperties.MIME_TYPE.getMetadataValue(property.getMetadata(), null);
         if (mimeType != null) {
             return mimeType;
         }

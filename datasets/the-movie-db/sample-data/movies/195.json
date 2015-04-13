@@ -1,0 +1,184 @@
+{
+  "budget": 0,
+  "vote_average": 8,
+  "backdrop_path": "/tsLh21gnbEk66GQ0xWgyrlWxtm3.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2433,
+        "order": 0,
+        "credit_id": "52fe4225c3a36847f800783b",
+        "name": "Miriam Hopkins",
+        "cast_id": 5,
+        "profile_path": "/vXBacathBpMny1neBlZt9fvOUDc.jpg",
+        "character": "Lily"
+      },
+      {
+        "id": 2434,
+        "order": 1,
+        "credit_id": "52fe4225c3a36847f800783f",
+        "name": "Kay Francis",
+        "cast_id": 6,
+        "profile_path": "/g1jkxUQpjucwWczcFRMX8Km8OmV.jpg",
+        "character": "Mariette Colet"
+      },
+      {
+        "id": 2435,
+        "order": 2,
+        "credit_id": "52fe4225c3a36847f8007843",
+        "name": "Herbert Marshall",
+        "cast_id": 7,
+        "profile_path": "/jLi1edH2FEV3Hrmoa3j7QwYcaDx.jpg",
+        "character": "Gaton Monescu"
+      },
+      {
+        "id": 2436,
+        "order": 3,
+        "credit_id": "52fe4225c3a36847f8007847",
+        "name": "Charles Ruggles",
+        "cast_id": 8,
+        "profile_path": "/anfXZJgK4FoBhNoz31nktfHW2Ef.jpg",
+        "character": "Major"
+      },
+      {
+        "id": 2437,
+        "order": 4,
+        "credit_id": "52fe4225c3a36847f800784b",
+        "name": "Edward Everett Horton",
+        "cast_id": 9,
+        "profile_path": "/yf4MoiK7wnb2dafruUvnVgtuxSN.jpg",
+        "character": "François Filiba"
+      },
+      {
+        "id": 2438,
+        "order": 5,
+        "credit_id": "52fe4225c3a36847f8007855",
+        "name": "C. Aubrey Smith",
+        "cast_id": 11,
+        "profile_path": "/u00cKiTSCbCeFLaTPL6ykgqB5AB.jpg",
+        "character": "Adolphe J. Giron"
+      },
+      {
+        "id": 30262,
+        "order": 6,
+        "credit_id": "53cc0303c3a36877750018e1",
+        "name": "Robert Greig",
+        "cast_id": 13,
+        "profile_path": "/ze6PfVLC0AaaoKkwtrJtOLuZkWa.jpg",
+        "character": "Jacques, Mariette's Butler"
+      },
+      {
+        "id": 4120,
+        "order": 7,
+        "credit_id": "53cc032cc3a36877750018e6",
+        "name": "Leonid Kinskey",
+        "cast_id": 14,
+        "profile_path": "/fM1pWZWlFdJZjyEOKSILNjbTYFn.jpg",
+        "character": "The Communist"
+      },
+      {
+        "id": 106091,
+        "order": 8,
+        "credit_id": "53cc0359c3a368776d0018d5",
+        "name": "George Humbert",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Waiter"
+      }
+    ],
+    "crew": [
+      {
+        "id": 2428,
+        "credit_id": "52fe4225c3a36847f8007825",
+        "department": "Directing",
+        "name": "Ernst Lubitsch",
+        "job": "Director",
+        "profile_path": "/jJgCqxRpWkZdewc78jEi0QZGNl7.jpg"
+      },
+      {
+        "id": 2429,
+        "credit_id": "52fe4225c3a36847f800782b",
+        "department": "Writing",
+        "name": "Aladar Laszlo",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2430,
+        "credit_id": "52fe4225c3a36847f8007831",
+        "department": "Writing",
+        "name": "Grover Jones",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2432,
+        "credit_id": "52fe4225c3a36847f8007837",
+        "department": "Writing",
+        "name": "Samson Raphaelson",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 2428,
+        "credit_id": "52fe4225c3a36847f8007851",
+        "department": "Production",
+        "name": "Ernst Lubitsch",
+        "job": "Producer",
+        "profile_path": "/jJgCqxRpWkZdewc78jEi0QZGNl7.jpg"
+      },
+      {
+        "id": 2439,
+        "credit_id": "52fe4225c3a36847f800785b",
+        "department": "Production",
+        "name": "Louis D. Lighton",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 83,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 195,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Trouble in Paradise",
+  "overview": "Trouble in Paradise is one of the most important films of Actor, Producer, and Director Ernst Lubitisch, and his personal favorite of all the films he\u2019s made. A story of two thieves who fall in love and begin doing jobs together under the employment of a beautiful woman who stirs up the relationship.",
+  "production_companies": [{
+    "id": 4,
+    "name": "Paramount Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0023622",
+  "release_date": "1932-10-21",
+  "original_title": "Trouble in Paradise",
+  "vote_count": 1,
+  "poster_path": "/ryD4JeSYCix4rEfpmQRM8rJXSFm.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.149437725874734"
+}

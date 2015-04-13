@@ -1,0 +1,413 @@
+{
+  "budget": 2500000,
+  "vote_average": 7.3,
+  "backdrop_path": "/ebUFKuBssx20rpNcismrXt7nPn6.jpg",
+  "genres": [
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 569,
+        "order": 0,
+        "credit_id": "52fe4214c3a36847f80023e5",
+        "name": "Ethan Hawke",
+        "cast_id": 4,
+        "profile_path": "/kcby6VYk6Gb0036nUyh8chY5ZAJ.jpg",
+        "character": "Jesse"
+      },
+      {
+        "id": 1146,
+        "order": 1,
+        "credit_id": "52fe4214c3a36847f800241b",
+        "name": "Julie Delpy",
+        "cast_id": 16,
+        "profile_path": "/4LfbFCLGHHkHVikRdgxbN6hbatl.jpg",
+        "character": "Céline"
+      },
+      {
+        "id": 571,
+        "order": 2,
+        "credit_id": "52fe4214c3a36847f80023e9",
+        "name": "Andrea Eckert",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Wife on Train"
+      },
+      {
+        "id": 572,
+        "order": 3,
+        "credit_id": "52fe4214c3a36847f80023ed",
+        "name": "Hanno Pöschl",
+        "cast_id": 6,
+        "profile_path": null,
+        "character": "Husband on Train"
+      },
+      {
+        "id": 573,
+        "order": 4,
+        "credit_id": "52fe4214c3a36847f80023f1",
+        "name": "Karl Bruckschwaiger",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Guy on Bridge"
+      },
+      {
+        "id": 574,
+        "order": 5,
+        "credit_id": "52fe4214c3a36847f80023f5",
+        "name": "Tex Rubinowitz",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "Guy on Bridge"
+      },
+      {
+        "id": 146859,
+        "order": 6,
+        "credit_id": "52fe4214c3a36847f8002457",
+        "name": "Erni Mangold",
+        "cast_id": 28,
+        "profile_path": "/rPeOwfbWBeuNWHvc2UoMPrHyOQl.jpg",
+        "character": "Palm Reader"
+      },
+      {
+        "id": 3735,
+        "order": 7,
+        "credit_id": "52fe4214c3a36847f8002437",
+        "name": "Dominik Castell",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Street Poet"
+      },
+      {
+        "id": 3738,
+        "order": 8,
+        "credit_id": "52fe4214c3a36847f8002443",
+        "name": "Haymon Maria Buttinger",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Bartender"
+      },
+      {
+        "id": 3737,
+        "order": 9,
+        "credit_id": "52fe4214c3a36847f800243f",
+        "name": "Harold Waiglein",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Guitar Player in Club"
+      },
+      {
+        "id": 3736,
+        "order": 10,
+        "credit_id": "52fe4214c3a36847f800243b",
+        "name": "Bilge Jeschim",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Belly Dancer"
+      },
+      {
+        "id": 3739,
+        "order": 11,
+        "credit_id": "52fe4214c3a36847f8002447",
+        "name": "Kurti",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Percussionist"
+      },
+      {
+        "id": 3722,
+        "order": 12,
+        "credit_id": "52fe4214c3a36847f8002417",
+        "name": "Hans Weingartner",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265413,
+        "order": 13,
+        "credit_id": "52fe4214c3a36847f800245b",
+        "name": "Liese Lyon",
+        "cast_id": 29,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265414,
+        "order": 14,
+        "credit_id": "52fe4214c3a36847f800245f",
+        "name": "Peter Ily Huemer",
+        "cast_id": 30,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265415,
+        "order": 15,
+        "credit_id": "52fe4214c3a36847f8002463",
+        "name": "Otto Reiter",
+        "cast_id": 31,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265416,
+        "order": 16,
+        "credit_id": "52fe4214c3a36847f8002467",
+        "name": "Hubert Fabian Kulterer",
+        "cast_id": 32,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265417,
+        "order": 17,
+        "credit_id": "52fe4214c3a36847f800246b",
+        "name": "Branko Andric",
+        "cast_id": 33,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265418,
+        "order": 18,
+        "credit_id": "52fe4214c3a36847f800246f",
+        "name": "Constanze Schweiger",
+        "cast_id": 34,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 3727,
+        "order": 19,
+        "credit_id": "52fe4214c3a36847f8002473",
+        "name": "John Sloss",
+        "cast_id": 35,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265419,
+        "order": 20,
+        "credit_id": "52fe4214c3a36847f8002477",
+        "name": "Alexandra Seibel",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265420,
+        "order": 21,
+        "credit_id": "52fe4214c3a36847f800247b",
+        "name": "Georg Schöllhammer",
+        "cast_id": 37,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265421,
+        "order": 22,
+        "credit_id": "52fe4214c3a36847f800247f",
+        "name": "Christian Ankowitsch",
+        "cast_id": 38,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265422,
+        "order": 23,
+        "credit_id": "52fe4214c3a36847f8002483",
+        "name": "Wilbirg Reiter",
+        "cast_id": 39,
+        "profile_path": null,
+        "character": "Cafe Patron"
+      },
+      {
+        "id": 1265423,
+        "order": 24,
+        "credit_id": "52fe4214c3a36847f8002487",
+        "name": "Barbara Klebel",
+        "cast_id": 40,
+        "profile_path": null,
+        "character": "Musician on Boat"
+      },
+      {
+        "id": 1265424,
+        "order": 25,
+        "credit_id": "52fe4214c3a36847f800248b",
+        "name": "Wolfgang Staribacher",
+        "cast_id": 41,
+        "profile_path": null,
+        "character": "Musician on Boat"
+      },
+      {
+        "id": 1265425,
+        "order": 26,
+        "credit_id": "52fe4214c3a36847f800248f",
+        "name": "Wolfgang Glüxam",
+        "cast_id": 42,
+        "profile_path": null,
+        "character": "Harpsichord Player"
+      }
+    ],
+    "crew": [
+      {
+        "id": 564,
+        "credit_id": "52fe4214c3a36847f80023e1",
+        "department": "Directing",
+        "name": "Richard Linklater",
+        "job": "Director",
+        "profile_path": "/ypiAch9og80uE5hnVBAyXXtY4B1.jpg"
+      },
+      {
+        "id": 576,
+        "credit_id": "52fe4214c3a36847f80023fb",
+        "department": "Camera",
+        "name": "Lee Daniel",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 577,
+        "credit_id": "52fe4214c3a36847f8002401",
+        "department": "Sound",
+        "name": "Fred Frith",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 580,
+        "credit_id": "52fe4214c3a36847f8002407",
+        "department": "Editing",
+        "name": "Sandra Adair",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 582,
+        "credit_id": "52fe4214c3a36847f800240d",
+        "department": "Editing",
+        "name": "Sheri Galloway",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 566,
+        "credit_id": "52fe4214c3a36847f8002413",
+        "department": "Production",
+        "name": "Anne Walker-McBay",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 3723,
+        "credit_id": "52fe4214c3a36847f8002421",
+        "department": "Production",
+        "name": "Alycia Aumuller",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3724,
+        "credit_id": "52fe4214c3a36847f8002427",
+        "department": "Production",
+        "name": "Judy Henderson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 3725,
+        "credit_id": "52fe4214c3a36847f800242d",
+        "department": "Art",
+        "name": "Florian Reichmann",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 3726,
+        "credit_id": "52fe4214c3a36847f8002433",
+        "department": "Costume & Make-Up",
+        "name": "Florentina Welley",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 564,
+        "credit_id": "52fe4214c3a36847f800244d",
+        "department": "Writing",
+        "name": "Richard Linklater",
+        "job": "Screenplay",
+        "profile_path": "/ypiAch9og80uE5hnVBAyXXtY4B1.jpg"
+      },
+      {
+        "id": 568,
+        "credit_id": "52fe4214c3a36847f8002453",
+        "department": "Writing",
+        "name": "Kim Krizan",
+        "job": "Screenplay",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 105,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "de",
+      "name": "Deutsch"
+    },
+    {
+      "iso_639_1": "fr",
+      "name": "Français"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 76,
+  "production_countries": [
+    {
+      "name": "Austria",
+      "iso_3166_1": "AT"
+    },
+    {
+      "name": "Switzerland",
+      "iso_3166_1": "CH"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Before Sunrise",
+  "overview": "A dialogue marathon of a film, this fairytale love story of an American boy and French girl. During a day and a night together in Vienna their two hearts collide.",
+  "production_companies": [{
+    "id": 98,
+    "name": "Detour Film Production"
+  }],
+  "belongs_to_collection": {
+    "id": 123800,
+    "backdrop_path": null,
+    "name": "Before... Collection",
+    "poster_path": "/fYSKN1tV1gdiTMfzRpZpKspGAHp.jpg"
+  },
+  "imdb_id": "tt0112471",
+  "release_date": "1995-01-27",
+  "original_title": "Before Sunrise",
+  "vote_count": 218,
+  "poster_path": "/9NBjDNPHA6SkThIweOs8iCfsA8a.jpg",
+  "tagline": "Can the greatest moment of your life last only one night?",
+  "revenue": 0,
+  "popularity": "0.882251749859289"
+}

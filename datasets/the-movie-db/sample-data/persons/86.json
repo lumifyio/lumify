@@ -1,0 +1,114 @@
+{
+  "birthday": "1937-12-01",
+  "adult": false,
+  "biography": "\u200bFrom Wikipedia, the free encyclopedia.  \n\nBruce Brown (born December 1, 1937 in San Francisco, California) is an American documentary film director, known as an early pioneer of the surf film. He is the father of filmmaker Dana Brown.\nHis surfing films were Slippery When Wet (1958), Surf Crazy (1959), Barefoot Adventure (1960), Surfing Hollow Days (1961), Waterlogged (1962), and his most well known film, The Endless Summer (1964) which received a nationwide theatrical release in 1966. Considered among the most influential in the genre, The Endless Summer follows surfers Mike Hynson and Robert August around the world. Thirty years later Brown would film The Endless Summer II with his son in 1994.\nHe has also made a number of short films including The Wet Set, featuring the Hobie-MacGregor Sportswear Surf Team and one of the earliest skateboarding films, America's Newest Sport, presenting the Hobie Super Surfer Skateboard Team. These short films along with some unused footage from The Endless Summer were included in the DVD Surfin' Shorts, as part of the Golden Years of Surf collection. Brown has gone beyond surfing a few times with the ski film, The Incredible Pair of Skis (1967), a film about motorcycle sport, On Any Sunday (1971) which is held in high regard as one of the best motorcycle documentaries of all time, and a documentary about extreme sports, The Edge (1975), On Any Sunday II (1981) Baja 1000 Classic (1991), and On Any Sunday, revisited (2000) He made a guest appearance in the SpongeBob SquarePants episode SpongeBob vs. The Big One.\nBrown is a 2009 inductee into the Surfers' Hall of Fame in Huntington Beach, California.\n\nDescription above from the Wikipedia article Bruce Brown, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+  "homepage": "",
+  "profile_path": "/t2yDx3OLqFNzCjIOWIjEHbzrRcb.jpg",
+  "id": 86,
+  "also_known_as": [],
+  "deathday": "",
+  "imdb_id": "nm0113164",
+  "combined_credits": {
+    "cast": [
+      {
+        "id": 29251,
+        "media_type": "movie",
+        "title": "On Any Sunday",
+        "credit_id": "52fe45d3c3a368484e070f27",
+        "release_date": "1971-07-28",
+        "original_title": "On Any Sunday",
+        "adult": false,
+        "poster_path": "/mBwgpQ0mdwfEaCQg9NDghXSOkgM.jpg",
+        "character": "Narrator"
+      },
+      {
+        "id": 15292,
+        "media_type": "movie",
+        "title": "Step Into Liquid",
+        "credit_id": "52fe464b9251416c75073c41",
+        "release_date": "2003-08-08",
+        "original_title": "Step Into Liquid",
+        "adult": false,
+        "poster_path": "/nymvCM2hiOjMM9ICYcfX7Tpc9qq.jpg",
+        "character": "Himself"
+      }
+    ],
+    "crew": [
+      {
+        "id": 21,
+        "media_type": "movie",
+        "title": "The Endless Summer",
+        "credit_id": "52fe420fc3a36847f8000dc1",
+        "department": "Directing",
+        "release_date": "1966-06-15",
+        "original_title": "The Endless Summer",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/6OH862nH4XkzaB23MukLYftyn4d.jpg"
+      },
+      {
+        "id": 21,
+        "media_type": "movie",
+        "title": "The Endless Summer",
+        "credit_id": "52fe420fc3a36847f8000dc7",
+        "department": "Production",
+        "release_date": "1966-06-15",
+        "original_title": "The Endless Summer",
+        "job": "Producer",
+        "adult": false,
+        "poster_path": "/6OH862nH4XkzaB23MukLYftyn4d.jpg"
+      },
+      {
+        "id": 21,
+        "media_type": "movie",
+        "title": "The Endless Summer",
+        "credit_id": "52fe420fc3a36847f8000dcd",
+        "department": "Writing",
+        "release_date": "1966-06-15",
+        "original_title": "The Endless Summer",
+        "job": "Author",
+        "adult": false,
+        "poster_path": "/6OH862nH4XkzaB23MukLYftyn4d.jpg"
+      },
+      {
+        "id": 24257,
+        "media_type": "movie",
+        "title": "The Endless Summer 2",
+        "credit_id": "52fe448dc3a368484e029383",
+        "department": "Directing",
+        "release_date": "1994-06-03",
+        "original_title": "The Endless Summer 2",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/uNWiRuJWa4yRd4DsjonnWn7gEQG.jpg"
+      },
+      {
+        "id": 113984,
+        "media_type": "movie",
+        "title": "Lizard Boy",
+        "credit_id": "52fe4b42c3a36847f81faa9d",
+        "department": "Writing",
+        "release_date": "2011-08-16",
+        "original_title": "Lizard Boy",
+        "job": "Writer",
+        "adult": false,
+        "poster_path": "/4DlocZMO4ZCmj9AepvEhQd0e3xV.jpg"
+      },
+      {
+        "id": 29251,
+        "media_type": "movie",
+        "title": "On Any Sunday",
+        "credit_id": "52fe45d3c3a368484e070f23",
+        "department": "Directing",
+        "release_date": "1971-07-28",
+        "original_title": "On Any Sunday",
+        "job": "Director",
+        "adult": false,
+        "poster_path": "/mBwgpQ0mdwfEaCQg9NDghXSOkgM.jpg"
+      }
+    ]
+  },
+  "name": "Bruce Brown",
+  "place_of_birth": "San Francisco, California, U.S.",
+  "popularity": "1.07650000015773"
+}

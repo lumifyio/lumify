@@ -1,0 +1,101 @@
+{
+  "budget": 0,
+  "vote_average": 0,
+  "backdrop_path": null,
+  "genres": [{
+    "id": 35,
+    "name": "Comedy"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 847,
+        "order": 0,
+        "credit_id": "52fe4216c3a36847f80030ed",
+        "name": "Ursula Buschhorn",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Taschendiebin"
+      },
+      {
+        "id": 848,
+        "order": 1,
+        "credit_id": "52fe4216c3a36847f80030f1",
+        "name": "Hans Werner Meyer",
+        "cast_id": 6,
+        "profile_path": "/fz211JlJ6QrWPVZTj8x817NBiow.jpg",
+        "character": "Taschendieb"
+      }
+    ],
+    "crew": [
+      {
+        "id": 836,
+        "credit_id": "52fe4216c3a36847f80030d7",
+        "department": "Directing",
+        "name": "André F. Nebe",
+        "job": "Director",
+        "profile_path": null
+      },
+      {
+        "id": 841,
+        "credit_id": "52fe4216c3a36847f80030dd",
+        "department": "Production",
+        "name": "Raoul B. Reinert",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 843,
+        "credit_id": "52fe4216c3a36847f80030e3",
+        "department": "Writing",
+        "name": "Katrin Lehnert",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 845,
+        "credit_id": "52fe4216c3a36847f80030e9",
+        "department": "Camera",
+        "name": "Sven O. Hill",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 850,
+        "credit_id": "52fe4216c3a36847f80030f7",
+        "department": "Editing",
+        "name": "Diana Karsten",
+        "job": "Editor",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 6,
+  "spoken_languages": [{
+    "iso_639_1": "de",
+    "name": "Deutsch"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 94,
+  "production_countries": [{
+    "name": "Germany",
+    "iso_3166_1": "DE"
+  }],
+  "title": "Kunstgriff",
+  "overview": "Kunstgriff is a brilliantly filmed black and white short film. Andre F. Nebe gives proof of his storytelling abilities in this 6 minute film.",
+  "production_companies": [{
+    "id": 31,
+    "name": "Hamburger Filmschule"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0436488",
+  "release_date": "2002-05-18",
+  "original_title": "Kunstgriff",
+  "vote_count": 0,
+  "poster_path": null,
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.154089947295316"
+}

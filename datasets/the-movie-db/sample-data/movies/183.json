@@ -1,0 +1,159 @@
+{
+  "budget": 6000000,
+  "vote_average": 6.8,
+  "backdrop_path": "/kmfteu4gCDKKSBr97ddmNfOxw8i.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    },
+    {
+      "id": 1115,
+      "name": "Road Movie"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 2223,
+        "order": 0,
+        "credit_id": "52fe4223c3a36847f8007085",
+        "name": "Fred Savage",
+        "cast_id": 8,
+        "profile_path": "/wVXaCHx8wy1uFY3rNT5enphSFz4.jpg",
+        "character": "Corey Woods"
+      },
+      {
+        "id": 33052,
+        "order": 1,
+        "credit_id": "52fe4223c3a36847f800706d",
+        "name": "Luke Edwards",
+        "cast_id": 2,
+        "profile_path": "/8YbS5L9hSnkmmYY1Izk1ok80BXL.jpg",
+        "character": "Jimmy Woods"
+      },
+      {
+        "id": 2222,
+        "order": 2,
+        "credit_id": "52fe4223c3a36847f8007081",
+        "name": "Beau Bridges",
+        "cast_id": 7,
+        "profile_path": "/xv6sDCHxHvBgCK4y96H32kxgcdr.jpg",
+        "character": "Sam Woods"
+      },
+      {
+        "id": 2224,
+        "order": 3,
+        "credit_id": "52fe4223c3a36847f8007089",
+        "name": "Christian Slater",
+        "cast_id": 9,
+        "profile_path": "/9CB3uFqhYla5QTzyRbQ2dJBzepJ.jpg",
+        "character": "Nick Woods"
+      },
+      {
+        "id": 91415,
+        "order": 4,
+        "credit_id": "52fe4223c3a36847f8007091",
+        "name": "Jenny Lewis",
+        "cast_id": 11,
+        "profile_path": "/gAsEK7zcS8PUJxdakQLwN8iaXy3.jpg",
+        "character": "Haley"
+      },
+      {
+        "id": 91412,
+        "order": 5,
+        "credit_id": "52fe4223c3a36847f8007071",
+        "name": "Vince Trankina",
+        "cast_id": 3,
+        "profile_path": null,
+        "character": "Tate"
+      },
+      {
+        "id": 64857,
+        "order": 6,
+        "credit_id": "52fe4223c3a36847f8007075",
+        "name": "Wendy Phillips",
+        "cast_id": 4,
+        "profile_path": "/9nT9XpqAZVx2rhpBpqrcvuUWmT4.jpg",
+        "character": "Christine Bateman"
+      },
+      {
+        "id": 5176,
+        "order": 7,
+        "credit_id": "52fe4223c3a36847f800707d",
+        "name": "Sam McMurray",
+        "cast_id": 6,
+        "profile_path": "/5NgEWVYgGWCj4N6bzEzU5a7c0wN.jpg",
+        "character": "Bateman"
+      },
+      {
+        "id": 91414,
+        "order": 8,
+        "credit_id": "52fe4223c3a36847f800708d",
+        "name": "Will Seltzer",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Putnam"
+      },
+      {
+        "id": 91413,
+        "order": 9,
+        "credit_id": "52fe4223c3a36847f8007079",
+        "name": "Dea McAllister",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Councelor"
+      }
+    ],
+    "crew": [{
+      "id": 2225,
+      "credit_id": "52fe4223c3a36847f8007069",
+      "department": "Directing",
+      "name": "Todd Holland",
+      "job": "Director",
+      "profile_path": null
+    }]
+  },
+  "runtime": 100,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "it",
+      "name": "Italiano"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 183,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "The Wizard",
+  "overview": "Corey (Fred Savage) refuses to let his emotionally disturbed younger brother Jimmy (Luke Edwards) be institutionalized, and the two run away together. They soon join forces with a resourceful girl (Jenny Lewis), who notices that Jimmy has a special talent: he is a \"wizard\" at video games and can achieve the high score on absolutely everything he plays. Evading their parents and a sinister bounty hunter, the trio head for a climactic showdown at the national video game championships in California.",
+  "production_companies": [{
+    "id": 33,
+    "name": "Universal Pictures"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0098663",
+  "release_date": "1989-12-15",
+  "original_title": "The Wizard",
+  "vote_count": 15,
+  "poster_path": "/1mjZTSIucAexxopVkkHMx5MHxXb.jpg",
+  "tagline": "They're on a cross-country adventure to the world's greatest video championship. It's more than a game...it's the chance of a lifetime.",
+  "revenue": 14278900,
+  "popularity": "0.20220339263867"
+}

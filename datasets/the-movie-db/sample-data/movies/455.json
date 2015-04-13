@@ -1,0 +1,363 @@
+{
+  "budget": 5000000,
+  "vote_average": 5.9,
+  "backdrop_path": "/gLFYabYISrrpixzNREl3TlLEJ2v.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 231610,
+        "order": 0,
+        "credit_id": "52fe4246c3a36847f8011651",
+        "name": "Parminder Nagra",
+        "cast_id": 33,
+        "profile_path": "/dwOh7WvwhcK8qXzGuMLhueiy1C.jpg",
+        "character": "Jesminder 'Jess' Kaur Bhamra"
+      },
+      {
+        "id": 116,
+        "order": 1,
+        "credit_id": "52fe4245c3a36847f80115ad",
+        "name": "Keira Knightley",
+        "cast_id": 2,
+        "profile_path": "/qioijC362oaHsRhup9WJi3MoARO.jpg",
+        "character": "Juliette 'Jules' Paxton"
+      },
+      {
+        "id": 1244,
+        "order": 2,
+        "credit_id": "52fe4245c3a36847f80115b1",
+        "name": "Jonathan Rhys Meyers",
+        "cast_id": 3,
+        "profile_path": "/qfTasmEsZaYfC0hq8a2QXk9NLLd.jpg",
+        "character": "Joe"
+      },
+      {
+        "id": 6217,
+        "order": 3,
+        "credit_id": "52fe4245c3a36847f80115b5",
+        "name": "Anupam Kher",
+        "cast_id": 4,
+        "profile_path": "/a58ePX45hBpzDANzdki86Ny9VFu.jpg",
+        "character": "Mr. Bhamra"
+      },
+      {
+        "id": 6218,
+        "order": 4,
+        "credit_id": "52fe4245c3a36847f80115b9",
+        "name": "Shaheen Khan",
+        "cast_id": 5,
+        "profile_path": null,
+        "character": "Mrs. Bhamra"
+      },
+      {
+        "id": 990,
+        "order": 5,
+        "credit_id": "52fe4246c3a36847f8011641",
+        "name": "Frank Harper",
+        "cast_id": 29,
+        "profile_path": "/6MaOt1Q6Js7jiA3qsHIcSGY1bbf.jpg",
+        "character": "Alan Paxton"
+      },
+      {
+        "id": 6238,
+        "order": 6,
+        "credit_id": "52fe4246c3a36847f8011645",
+        "name": "Juliet Stevenson",
+        "cast_id": 30,
+        "profile_path": "/1EQOm5rIfnxEVqhNeqmQKpTtEBB.jpg",
+        "character": "Paula Paxton"
+      },
+      {
+        "id": 6239,
+        "order": 7,
+        "credit_id": "52fe4246c3a36847f8011649",
+        "name": "Ameet Chana",
+        "cast_id": 31,
+        "profile_path": "/yS2siAYTSMqUBwtPpVQ7ONrJbrC.jpg",
+        "character": "Tony"
+      },
+      {
+        "id": 128645,
+        "order": 8,
+        "credit_id": "52fe4246c3a36847f801164d",
+        "name": "Archie Panjabi",
+        "cast_id": 32,
+        "profile_path": "/4pOYge0nGwYdrj6tNbrPUA60BF7.jpg",
+        "character": "Pinky Bhamra"
+      },
+      {
+        "id": 1227682,
+        "order": 9,
+        "credit_id": "52fe4246c3a36847f8011655",
+        "name": "Pooja Shah",
+        "cast_id": 34,
+        "profile_path": "/sfIqXN8AxH7mVGEMmI7Jt8vakgU.jpg",
+        "character": "Meena"
+      },
+      {
+        "id": 117795,
+        "order": 10,
+        "credit_id": "52fe4246c3a36847f8011659",
+        "name": "Preeya Kalidas",
+        "cast_id": 35,
+        "profile_path": "/4toEBtcEY0lIKqEoliz5T0bEtMj.jpg",
+        "character": "Monica"
+      },
+      {
+        "id": 1227784,
+        "order": 11,
+        "credit_id": "52fe4246c3a36847f801165d",
+        "name": "Ace Bhatti",
+        "cast_id": 36,
+        "profile_path": null,
+        "character": "Nairobi Grandson"
+      }
+    ],
+    "crew": [
+      {
+        "id": 6220,
+        "credit_id": "52fe4245c3a36847f80115bf",
+        "department": "Directing",
+        "name": "Gurinder Chadha",
+        "job": "Director",
+        "profile_path": "/AbUt77nmapBzaXMq9EvNNjK0ZMm.jpg"
+      },
+      {
+        "id": 6220,
+        "credit_id": "52fe4245c3a36847f80115c5",
+        "department": "Writing",
+        "name": "Gurinder Chadha",
+        "job": "Screenplay",
+        "profile_path": "/AbUt77nmapBzaXMq9EvNNjK0ZMm.jpg"
+      },
+      {
+        "id": 6220,
+        "credit_id": "52fe4245c3a36847f80115cb",
+        "department": "Production",
+        "name": "Gurinder Chadha",
+        "job": "Producer",
+        "profile_path": "/AbUt77nmapBzaXMq9EvNNjK0ZMm.jpg"
+      },
+      {
+        "id": 6221,
+        "credit_id": "52fe4245c3a36847f80115d1",
+        "department": "Writing",
+        "name": "Guljit Bindra",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6222,
+        "credit_id": "52fe4245c3a36847f80115d7",
+        "department": "Writing",
+        "name": "Paul Mayeda Berges",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 6223,
+        "credit_id": "52fe4245c3a36847f80115dd",
+        "department": "Production",
+        "name": "Deepak Nayar",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6222,
+        "credit_id": "52fe4245c3a36847f80115e3",
+        "department": "Production",
+        "name": "Paul Mayeda Berges",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5267,
+        "credit_id": "52fe4245c3a36847f80115e9",
+        "department": "Production",
+        "name": "Ulrich Felsberg",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6224,
+        "credit_id": "52fe4245c3a36847f80115ef",
+        "department": "Production",
+        "name": "Russel Fischer",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6225,
+        "credit_id": "52fe4245c3a36847f80115f5",
+        "department": "Production",
+        "name": "Simon Franks",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6226,
+        "credit_id": "52fe4245c3a36847f80115fb",
+        "department": "Production",
+        "name": "Zygi Kamasa",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6227,
+        "credit_id": "52fe4245c3a36847f8011601",
+        "department": "Production",
+        "name": "Paul Ritchie",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6228,
+        "credit_id": "52fe4245c3a36847f8011607",
+        "department": "Production",
+        "name": "Barbara von Wrangell",
+        "job": "Line Producer",
+        "profile_path": null
+      },
+      {
+        "id": 6229,
+        "credit_id": "52fe4245c3a36847f801160d",
+        "department": "Sound",
+        "name": "Craig Pruess",
+        "job": "Original Music Composer",
+        "profile_path": null
+      },
+      {
+        "id": 6230,
+        "credit_id": "52fe4245c3a36847f8011613",
+        "department": "Camera",
+        "name": "Jong Lin",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 6231,
+        "credit_id": "52fe4245c3a36847f8011619",
+        "department": "Editing",
+        "name": "Justin Krish",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 6232,
+        "credit_id": "52fe4245c3a36847f801161f",
+        "department": "Production",
+        "name": "Carrie Hilton",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6233,
+        "credit_id": "52fe4245c3a36847f8011625",
+        "department": "Production",
+        "name": "Liora Reich",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 6234,
+        "credit_id": "52fe4245c3a36847f801162b",
+        "department": "Art",
+        "name": "Nick Ellis",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 6235,
+        "credit_id": "52fe4245c3a36847f8011631",
+        "department": "Art",
+        "name": "Mark Scruton",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 6236,
+        "credit_id": "52fe4245c3a36847f8011637",
+        "department": "Art",
+        "name": "Sara Neighbour",
+        "job": "Set Decoration",
+        "profile_path": null
+      },
+      {
+        "id": 6237,
+        "credit_id": "52fe4245c3a36847f801163d",
+        "department": "Costume & Make-Up",
+        "name": "Ralph Holes",
+        "job": "Costume Design",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 112,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "pa",
+      "name": "ਪੰਜਾਬੀ"
+    }
+  ],
+  "adult": false,
+  "homepage": "http://www2.foxsearchlight.com/benditlikebeckham/",
+  "id": 455,
+  "production_countries": [
+    {
+      "name": "Germany",
+      "iso_3166_1": "DE"
+    },
+    {
+      "name": "United Kingdom",
+      "iso_3166_1": "GB"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Bend It Like Beckham",
+  "overview": "Indian director Gurinder Chadha creates a coming-of-age story of a young Indian girl who is torn between adhering to family traditions and attaining super-stardom on the soccer field.",
+  "production_companies": [
+    {
+      "id": 1490,
+      "name": "Kintop Pictures"
+    },
+    {
+      "id": 2406,
+      "name": "Filmförderung Hamburg"
+    },
+    {
+      "id": 2452,
+      "name": "UK Film Council"
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0286499",
+  "release_date": "2003-08-01",
+  "original_title": "Bend It Like Beckham",
+  "vote_count": 54,
+  "poster_path": "/vb3AtMPnFCh5wLKNoowe2bbos8Y.jpg",
+  "tagline": "Who wants to cook Aloo Gobi when you can bend a ball like Beckham?",
+  "revenue": 76578641,
+  "popularity": "0.532924570446749"
+}

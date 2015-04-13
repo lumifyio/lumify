@@ -1,0 +1,296 @@
+{
+  "budget": 15000000,
+  "vote_average": 6.7,
+  "backdrop_path": "/kgUVeWLZnBTmHwXORqOSVW5btTv.jpg",
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 1620,
+        "order": 0,
+        "credit_id": "52fe421ec3a36847f80055c3",
+        "name": "Michelle Yeoh",
+        "cast_id": 7,
+        "profile_path": "/tx0fVLAFKbNMpqvdi7ywdZaoIMl.jpg",
+        "character": "Yu Shu Lien"
+      },
+      {
+        "id": 1339,
+        "order": 1,
+        "credit_id": "52fe421ec3a36847f80055c7",
+        "name": "Zhang Ziyi",
+        "cast_id": 8,
+        "profile_path": "/xrmbGcVtVAZtZ1OCm6T2IEfXSe1.jpg",
+        "character": "Jen Yu (Mandarin) / Jiao Long (English)"
+      },
+      {
+        "id": 1622,
+        "order": 2,
+        "credit_id": "52fe421ec3a36847f80055cb",
+        "name": "Chang Chen",
+        "cast_id": 9,
+        "profile_path": "/AtXgPAuXjIprBOoUNZS50tCOAmj.jpg",
+        "character": "Lo 'Dark Cloud' / Luo Xiao Hu"
+      },
+      {
+        "id": 1623,
+        "order": 3,
+        "credit_id": "52fe421ec3a36847f80055cf",
+        "name": "Sihung Lung",
+        "cast_id": 10,
+        "profile_path": "/aBb0V4IUGhu477uMS2dSONC4fHW.jpg",
+        "character": "Sir Te"
+      },
+      {
+        "id": 1624,
+        "order": 4,
+        "credit_id": "52fe421ec3a36847f80055d3",
+        "name": "Cheng Pei-pei",
+        "cast_id": 11,
+        "profile_path": "/yWcvqlfh6I340oAJsGTo3oS65yN.jpg",
+        "character": "Jade Fox"
+      },
+      {
+        "id": 1625,
+        "order": 5,
+        "credit_id": "52fe421ec3a36847f80055d7",
+        "name": "Fa Zeng Li",
+        "cast_id": 12,
+        "profile_path": "/rxUXIO3JdmLeDq1JTxAsc4xRdRp.jpg",
+        "character": "Governor Yu"
+      },
+      {
+        "id": 1626,
+        "order": 6,
+        "credit_id": "52fe421ec3a36847f80055db",
+        "name": "Xian Gao",
+        "cast_id": 13,
+        "profile_path": "/7MLWYmR9HWEJhzihA1b9ZxLJqNV.jpg",
+        "character": "Bo"
+      },
+      {
+        "id": 1627,
+        "order": 7,
+        "credit_id": "52fe421ec3a36847f80055df",
+        "name": "Yan Hai",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Madame Yu"
+      },
+      {
+        "id": 1628,
+        "order": 8,
+        "credit_id": "52fe421ec3a36847f80055e3",
+        "name": "De Ming Wang",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Police Inspector Tsai"
+      },
+      {
+        "id": 1629,
+        "order": 9,
+        "credit_id": "52fe421ec3a36847f80055e7",
+        "name": "Li Li",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "May"
+      },
+      {
+        "id": 1619,
+        "order": 10,
+        "credit_id": "52fe421ec3a36847f8005615",
+        "name": "Chow Yun-Fat",
+        "cast_id": 25,
+        "profile_path": "/c9QcWUSfHjNrH5dQQobqCKfHzUj.jpg",
+        "character": "Master Li Mu Bai"
+      }
+    ],
+    "crew": [
+      {
+        "id": 1614,
+        "credit_id": "52fe421ec3a36847f80055a7",
+        "department": "Directing",
+        "name": "Ang Lee",
+        "job": "Director",
+        "profile_path": "/yNygfTGsGaaRMBy6ya1gThOahCl.jpg"
+      },
+      {
+        "id": 1615,
+        "credit_id": "52fe421ec3a36847f80055ad",
+        "department": "Writing",
+        "name": "Du Lu Wang",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 28642,
+        "credit_id": "52fe421ec3a36847f80055b3",
+        "department": "Writing",
+        "name": "Hui-Ling Wang",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1617,
+        "credit_id": "52fe421ec3a36847f80055b9",
+        "department": "Writing",
+        "name": "James Schamus",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1618,
+        "credit_id": "52fe421ec3a36847f80055bf",
+        "department": "Writing",
+        "name": "Kuo Jung Tsai",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 1351,
+        "credit_id": "52fe421ec3a36847f80055ed",
+        "department": "Production",
+        "name": "William Kong",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 1614,
+        "credit_id": "52fe421ec3a36847f80055f3",
+        "department": "Production",
+        "name": "Ang Lee",
+        "job": "Producer",
+        "profile_path": "/yNygfTGsGaaRMBy6ya1gThOahCl.jpg"
+      },
+      {
+        "id": 1633,
+        "credit_id": "52fe421ec3a36847f80055f9",
+        "department": "Camera",
+        "name": "Peter Pau",
+        "job": "Director of Photography",
+        "profile_path": "/pWDiUIJB2OpROUNgcMvcX4pZOwu.jpg"
+      },
+      {
+        "id": 1635,
+        "credit_id": "52fe421ec3a36847f80055ff",
+        "department": "Editing",
+        "name": "Tim Squyres",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 1636,
+        "credit_id": "52fe421ec3a36847f8005605",
+        "department": "Art",
+        "name": "Timmy Yip",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1638,
+        "credit_id": "52fe421ec3a36847f800560b",
+        "department": "Sound",
+        "name": "Eugene Gearty",
+        "job": "Supervising Sound Editor",
+        "profile_path": null
+      },
+      {
+        "id": 65357,
+        "credit_id": "52fe421ec3a36847f8005611",
+        "department": "Production",
+        "name": "Li-Kong Hsu",
+        "job": "Producer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 120,
+  "spoken_languages": [{
+    "iso_639_1": "zh",
+    "name": "中国"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 146,
+  "production_countries": [
+    {
+      "name": "China",
+      "iso_3166_1": "CN"
+    },
+    {
+      "name": "Hong Kong",
+      "iso_3166_1": "HK"
+    },
+    {
+      "name": "Taiwan",
+      "iso_3166_1": "TW"
+    },
+    {
+      "name": "United States of America",
+      "iso_3166_1": "US"
+    }
+  ],
+  "title": "Crouching Tiger, Hidden Dragon",
+  "overview": "Two warriors in pursuit of a stolen sword and a notorious fugitive are led to an impetuous, physically-skilled, teenage nobleman's daughter, who is at a crossroads in her life.",
+  "production_companies": [
+    {
+      "id": 20289,
+      "name": "Asia Union Film & Entertainment Ltd."
+    },
+    {
+      "id": 2269,
+      "name": "China Film Co-Production Corporation"
+    },
+    {
+      "id": 2798,
+      "name": "Columbia Pictures Film Production Asia"
+    },
+    {
+      "id": 12205,
+      "name": "EDKO Film"
+    },
+    {
+      "id": 10565,
+      "name": "Good Machine"
+    },
+    {
+      "id": 58,
+      "name": "Sony Pictures Classics"
+    },
+    {
+      "id": 20290,
+      "name": "United China Vision"
+    },
+    {
+      "id": 20291,
+      "name": "Zoom Hunt International Productions Company Ltd."
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0190332",
+  "release_date": "2000-10-09",
+  "original_title": "Wo hu cang long",
+  "vote_count": 250,
+  "poster_path": "/zooZQuDBqRpIoDjghEnNoIPFmyc.jpg",
+  "tagline": "A timeless story of strength, secrets and two warriors who would never surrender.",
+  "revenue": 209000000,
+  "popularity": "1.46699966942984"
+}

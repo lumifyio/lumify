@@ -1,0 +1,371 @@
+{
+  "budget": 25000000,
+  "vote_average": 6.9,
+  "backdrop_path": "/si2eYu8vpfb2Gu9jHnnbBtSXnNJ.jpg",
+  "genres": [{
+    "id": 18,
+    "name": "Drama"
+  }],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 4483,
+        "order": 0,
+        "credit_id": "52fe423cc3a36847f800e8b7",
+        "name": "Dustin Hoffman",
+        "cast_id": 4,
+        "profile_path": "/ffKPo8ATHVXME6cgA5BDyvy2df1.jpg",
+        "character": "Raymond Babbitt"
+      },
+      {
+        "id": 500,
+        "order": 1,
+        "credit_id": "52fe423cc3a36847f800e8bb",
+        "name": "Tom Cruise",
+        "cast_id": 5,
+        "profile_path": "/3oWEuo0e8Nx8JvkqYCDec2iMY6K.jpg",
+        "character": "Charlie Babbitt"
+      },
+      {
+        "id": 3124,
+        "order": 2,
+        "credit_id": "52fe423cc3a36847f800e8bf",
+        "name": "Valeria Golino",
+        "cast_id": 6,
+        "profile_path": "/kK13NzfxGQBJ8Th9SiPbu0FFJq7.jpg",
+        "character": "Susanna"
+      },
+      {
+        "id": 2211,
+        "order": 3,
+        "credit_id": "52fe423cc3a36847f800e8c3",
+        "name": "Gerald R. Molen",
+        "cast_id": 7,
+        "profile_path": "/ih3yLiYixeQuW2Zp545aHtD5nq.jpg",
+        "character": "Dr. Bruner"
+      },
+      {
+        "id": 5145,
+        "order": 4,
+        "credit_id": "52fe423cc3a36847f800e8c7",
+        "name": "Jack Murdock",
+        "cast_id": 8,
+        "profile_path": null,
+        "character": "John Mooney"
+      },
+      {
+        "id": 5146,
+        "order": 5,
+        "credit_id": "52fe423cc3a36847f800e8cb",
+        "name": "Michael D. Roberts",
+        "cast_id": 9,
+        "profile_path": "/lljqOALpsg8lkOiXedHgWmOA5bY.jpg",
+        "character": "Vern"
+      },
+      {
+        "id": 5147,
+        "order": 6,
+        "credit_id": "52fe423cc3a36847f800e8cf",
+        "name": "Ralph Seymour",
+        "cast_id": 10,
+        "profile_path": "/7lu95loRqfN0TTWZGM1QfI5hX8W.jpg",
+        "character": "Lenny"
+      },
+      {
+        "id": 5148,
+        "order": 7,
+        "credit_id": "52fe423cc3a36847f800e8d3",
+        "name": "Lucinda Jenney",
+        "cast_id": 11,
+        "profile_path": "/ucvaRviBWE1IR4YPGA8VYVMSand.jpg",
+        "character": "Iris"
+      },
+      {
+        "id": 5149,
+        "order": 8,
+        "credit_id": "52fe423cc3a36847f800e8d7",
+        "name": "Bonnie Hunt",
+        "cast_id": 12,
+        "profile_path": "/lwEvPd4SXprCLBnPzXUaH5pm33w.jpg",
+        "character": "Sally Dibbs"
+      },
+      {
+        "id": 5150,
+        "order": 9,
+        "credit_id": "52fe423cc3a36847f800e8db",
+        "name": "Kim Robillard",
+        "cast_id": 13,
+        "profile_path": "/vhmpyqkhpIv1NjB4rfDBLsxfybu.jpg",
+        "character": "Township Doctor"
+      },
+      {
+        "id": 5151,
+        "order": 10,
+        "credit_id": "52fe423cc3a36847f800e8df",
+        "name": "Beth Grant",
+        "cast_id": 14,
+        "profile_path": "/8WYd8N24jUpwk4nKDGPAdt08ltM.jpg",
+        "character": "Mother at Farm House"
+      },
+      {
+        "id": 5152,
+        "order": 11,
+        "credit_id": "52fe423cc3a36847f800e8e3",
+        "name": "Dolan Dougherty",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Farm Kid#1"
+      },
+      {
+        "id": 5153,
+        "order": 12,
+        "credit_id": "52fe423cc3a36847f800e8e7",
+        "name": "Marshall Dougherty",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Farm Kid#2"
+      },
+      {
+        "id": 5154,
+        "order": 13,
+        "credit_id": "52fe423cc3a36847f800e8eb",
+        "name": "Patrick Dougherty",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Farm Kid#3"
+      },
+      {
+        "id": 5156,
+        "order": 14,
+        "credit_id": "52fe423cc3a36847f800e8ef",
+        "name": "Peter Dougherty",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Farm Kid#5"
+      },
+      {
+        "id": 5157,
+        "order": 15,
+        "credit_id": "52fe423cc3a36847f800e8f3",
+        "name": "Andrew Dougherty",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Farm Kid#6"
+      },
+      {
+        "id": 5158,
+        "order": 16,
+        "credit_id": "52fe423cc3a36847f800e8f7",
+        "name": "Loretta Wendt Jolivette",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Secretary Dr. Bruner"
+      },
+      {
+        "id": 5159,
+        "order": 17,
+        "credit_id": "52fe423cc3a36847f800e8fb",
+        "name": "Donald E. Jones",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Minister at Funeral"
+      },
+      {
+        "id": 5160,
+        "order": 18,
+        "credit_id": "52fe423cc3a36847f800e8ff",
+        "name": "Bryon P. Caunar",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Patient in Waiting Room"
+      },
+      {
+        "id": 5161,
+        "order": 19,
+        "credit_id": "52fe423cc3a36847f800e903",
+        "name": "Donna J. Dickson",
+        "cast_id": 23,
+        "profile_path": null,
+        "character": "Nurse"
+      }
+    ],
+    "crew": [
+      {
+        "id": 8246,
+        "credit_id": "52fe423cc3a36847f800e8a7",
+        "department": "Directing",
+        "name": "Barry Levinson",
+        "job": "Director",
+        "profile_path": "/2GuJ17voadJUYg0MiQd91dg35Qh.jpg"
+      },
+      {
+        "id": 5143,
+        "credit_id": "52fe423cc3a36847f800e8ad",
+        "department": "Writing",
+        "name": "Barry Morrow",
+        "job": "Author",
+        "profile_path": null
+      },
+      {
+        "id": 5144,
+        "credit_id": "52fe423cc3a36847f800e8b3",
+        "department": "Writing",
+        "name": "Ronald Bass",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 5162,
+        "credit_id": "52fe423cc3a36847f800e909",
+        "department": "Production",
+        "name": "Mark Johnson",
+        "job": "Producer",
+        "profile_path": "/yKGF6cbzyP03Gl1QhVLCu1gWSW6.jpg"
+      },
+      {
+        "id": 3804,
+        "credit_id": "52fe423cc3a36847f800e90f",
+        "department": "Production",
+        "name": "Peter Guber",
+        "job": "Executive Producer",
+        "profile_path": "/ndfEiDJFkjAHojchBDjOshZIxwz.jpg"
+      },
+      {
+        "id": 3805,
+        "credit_id": "52fe423cc3a36847f800e915",
+        "department": "Production",
+        "name": "Jon Peters",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 2211,
+        "credit_id": "52fe423cc3a36847f800e91b",
+        "department": "Production",
+        "name": "Gerald R. Molen",
+        "job": "Producer",
+        "profile_path": "/ih3yLiYixeQuW2Zp545aHtD5nq.jpg"
+      },
+      {
+        "id": 5163,
+        "credit_id": "52fe423cc3a36847f800e921",
+        "department": "Production",
+        "name": "David McGiffert",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 5164,
+        "credit_id": "52fe423cc3a36847f800e927",
+        "department": "Production",
+        "name": "Gail Mutrux",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 947,
+        "credit_id": "52fe423cc3a36847f800e92d",
+        "department": "Sound",
+        "name": "Hans Zimmer",
+        "job": "Original Music Composer",
+        "profile_path": "/wugKWf9vuqZYuHCk5Wwec6355TM.jpg"
+      },
+      {
+        "id": 2702,
+        "credit_id": "52fe423cc3a36847f800e933",
+        "department": "Camera",
+        "name": "John Seale",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 5166,
+        "credit_id": "52fe423cc3a36847f800e939",
+        "department": "Editing",
+        "name": "Stu Linder",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 949,
+        "credit_id": "52fe423cc3a36847f800e93f",
+        "department": "Production",
+        "name": "Louis DiGiaimo",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 5167,
+        "credit_id": "52fe423cc3a36847f800e945",
+        "department": "Art",
+        "name": "Ida Random",
+        "job": "Production Design",
+        "profile_path": null
+      },
+      {
+        "id": 1260,
+        "credit_id": "52fe423cc3a36847f800e94b",
+        "department": "Art",
+        "name": "William A. Elliott",
+        "job": "Art Direction",
+        "profile_path": null
+      },
+      {
+        "id": 4150,
+        "credit_id": "52fe423cc3a36847f800e951",
+        "department": "Costume & Make-Up",
+        "name": "Bernie Pollack",
+        "job": "Costume Design",
+        "profile_path": null
+      },
+      {
+        "id": 2889,
+        "credit_id": "52fe423cc3a36847f800e957",
+        "department": "Sound",
+        "name": "Richard Beggs",
+        "job": "Sound Designer",
+        "profile_path": null
+      }
+    ]
+  },
+  "runtime": 133,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "iso_639_1": "pl",
+      "name": "Polski"
+    }
+  ],
+  "adult": false,
+  "homepage": "",
+  "id": 380,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Rain Man",
+  "overview": "Selfish yuppie Charlie Babbitt's father left a fortune to his savant brother Raymond and a pittance to Charlie; they travel cross-country.",
+  "production_companies": [
+    {
+      "id": 60,
+      "name": "United Artists"
+    },
+    {
+      "id": 206,
+      "name": "Star Partners II Ltd."
+    }
+  ],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0095953",
+  "release_date": "1988-12-11",
+  "original_title": "Rain Man",
+  "vote_count": 298,
+  "poster_path": "/mTCpNdDTMGEyrkETRkVqRVkHpx1.jpg",
+  "tagline": "A journey through understanding and fellowship.",
+  "revenue": 354825435,
+  "popularity": "1.05728492460122"
+}

@@ -1,0 +1,297 @@
+{
+  "budget": 0,
+  "vote_average": 10,
+  "backdrop_path": null,
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 86213,
+        "order": 0,
+        "credit_id": "52fe4239c3a36847f800d5bf",
+        "name": "Rahul Khanna",
+        "cast_id": 2,
+        "profile_path": "/ocOi3GrLsdc4bTzKkvoqCYeMp0S.jpg",
+        "character": "Rahul Seth"
+      },
+      {
+        "id": 52969,
+        "order": 1,
+        "credit_id": "52fe4239c3a36847f800d5c3",
+        "name": "Lisa Ray",
+        "cast_id": 3,
+        "profile_path": "/dQ8wm5CSCQofP18MYjOVm2jKiks.jpg",
+        "character": "Sue (Sunita) Singh"
+      },
+      {
+        "id": 111808,
+        "order": 2,
+        "credit_id": "52fe4239c3a36847f800d5c7",
+        "name": "Moushumi Chatterjee",
+        "cast_id": 4,
+        "profile_path": null,
+        "character": "Mummy ji"
+      },
+      {
+        "id": 105652,
+        "order": 3,
+        "credit_id": "52fe4239c3a36847f800d5cb",
+        "name": "Dina Pathak",
+        "cast_id": 5,
+        "profile_path": "/4FfwSIy1TGtYpmC8HKGyNvu3Nd4.jpg",
+        "character": "Grandma ji"
+      },
+      {
+        "id": 53377,
+        "order": 4,
+        "credit_id": "52fe4239c3a36847f800d5cf",
+        "name": "Kulbhushan Kharbanda",
+        "cast_id": 6,
+        "profile_path": "/1ECYLNlTHjgFzfGxbrzVSFZGDbN.jpg",
+        "character": "Mr. Singh"
+      },
+      {
+        "id": 106461,
+        "order": 5,
+        "credit_id": "52fe4239c3a36847f800d5d3",
+        "name": "Ranjit Chowdhry",
+        "cast_id": 7,
+        "profile_path": null,
+        "character": "Rocky"
+      },
+      {
+        "id": 82096,
+        "order": 6,
+        "credit_id": "52fe4239c3a36847f800d5d7",
+        "name": "Jessica Paré",
+        "cast_id": 8,
+        "profile_path": "/ftiTjqe8sQ7lvG5R2IjLOfodamP.jpg",
+        "character": "Kimberly"
+      },
+      {
+        "id": 52975,
+        "order": 7,
+        "credit_id": "52fe4239c3a36847f800d5db",
+        "name": "Rishma Malik",
+        "cast_id": 9,
+        "profile_path": null,
+        "character": "Twinky"
+      },
+      {
+        "id": 111809,
+        "order": 8,
+        "credit_id": "52fe4239c3a36847f800d5df",
+        "name": "Jazz Mann",
+        "cast_id": 10,
+        "profile_path": null,
+        "character": "Bobby"
+      },
+      {
+        "id": 111810,
+        "order": 9,
+        "credit_id": "52fe4239c3a36847f800d5e3",
+        "name": "Arjun Lombardi-Singh",
+        "cast_id": 11,
+        "profile_path": null,
+        "character": "Go (Govind)"
+      },
+      {
+        "id": 111811,
+        "order": 10,
+        "credit_id": "52fe4239c3a36847f800d5e7",
+        "name": "Leesa Gaspari",
+        "cast_id": 12,
+        "profile_path": null,
+        "character": "Lucy"
+      },
+      {
+        "id": 111812,
+        "order": 11,
+        "credit_id": "52fe4239c3a36847f800d5eb",
+        "name": "Neelam Mansingh",
+        "cast_id": 13,
+        "profile_path": null,
+        "character": "Mrs. Singh"
+      },
+      {
+        "id": 111813,
+        "order": 12,
+        "credit_id": "52fe4239c3a36847f800d5ef",
+        "name": "Mike Deol",
+        "cast_id": 14,
+        "profile_path": null,
+        "character": "Killer Khalsa (as Killer Khalsa)"
+      },
+      {
+        "id": 111814,
+        "order": 13,
+        "credit_id": "52fe4239c3a36847f800d5f3",
+        "name": "Jolly Bader",
+        "cast_id": 15,
+        "profile_path": null,
+        "character": "Daddy ji"
+      },
+      {
+        "id": 111815,
+        "order": 14,
+        "credit_id": "52fe4239c3a36847f800d5f7",
+        "name": "Ronica Sajnani",
+        "cast_id": 16,
+        "profile_path": null,
+        "character": "Ronica"
+      },
+      {
+        "id": 111816,
+        "order": 15,
+        "credit_id": "52fe4239c3a36847f800d5fb",
+        "name": "Jeremy Chow",
+        "cast_id": 17,
+        "profile_path": null,
+        "character": "Brian"
+      },
+      {
+        "id": 111817,
+        "order": 16,
+        "credit_id": "52fe4239c3a36847f800d5ff",
+        "name": "Damon D'Oliveira",
+        "cast_id": 18,
+        "profile_path": null,
+        "character": "Stevie Sood (as Damon D'Olivera)"
+      },
+      {
+        "id": 111818,
+        "order": 17,
+        "credit_id": "52fe4239c3a36847f800d603",
+        "name": "Nicky Gill",
+        "cast_id": 19,
+        "profile_path": null,
+        "character": "Bobby's Mom"
+      },
+      {
+        "id": 111819,
+        "order": 18,
+        "credit_id": "52fe4239c3a36847f800d607",
+        "name": "Nicole Innis",
+        "cast_id": 20,
+        "profile_path": null,
+        "character": "Nicole"
+      },
+      {
+        "id": 111820,
+        "order": 19,
+        "credit_id": "52fe4239c3a36847f800d60b",
+        "name": "Rohan Bader",
+        "cast_id": 21,
+        "profile_path": null,
+        "character": "Young Rahul"
+      },
+      {
+        "id": 111821,
+        "order": 20,
+        "credit_id": "52fe4239c3a36847f800d60f",
+        "name": "Terry Stevens",
+        "cast_id": 22,
+        "profile_path": null,
+        "character": "Veronica"
+      },
+      {
+        "id": 111822,
+        "order": 21,
+        "credit_id": "52fe4239c3a36847f800d613",
+        "name": "Rupinder Nagra",
+        "cast_id": 23,
+        "profile_path": "/gLwY1Ux9NhfIAlCZVLJOgVWAhuP.jpg",
+        "character": "Rahul's Friend at Wedding"
+      },
+      {
+        "id": 111823,
+        "order": 22,
+        "credit_id": "52fe4239c3a36847f800d617",
+        "name": "Anne Mroczkowski",
+        "cast_id": 24,
+        "profile_path": null,
+        "character": "Reporter"
+      },
+      {
+        "id": 111824,
+        "order": 23,
+        "credit_id": "52fe4239c3a36847f800d61b",
+        "name": "Monisha Randhawa",
+        "cast_id": 25,
+        "profile_path": null,
+        "character": "Bobby's Sister"
+      },
+      {
+        "id": 111825,
+        "order": 24,
+        "credit_id": "52fe4239c3a36847f800d61f",
+        "name": "Pragna Desai",
+        "cast_id": 26,
+        "profile_path": null,
+        "character": "Pauline"
+      },
+      {
+        "id": 87328,
+        "order": 25,
+        "credit_id": "52fe4239c3a36847f800d623",
+        "name": "Akshaye Khanna",
+        "cast_id": 27,
+        "profile_path": "/mxCbAWgi3PO4PPIsyTlv5CE5FkF.jpg",
+        "character": "Himself"
+      }
+    ],
+    "crew": [{
+      "id": 4760,
+      "credit_id": "52fe4239c3a36847f800d5bb",
+      "department": "Directing",
+      "name": "Deepa Mehta",
+      "job": "Director",
+      "profile_path": "/ngCqGJQOKvimQ1UEkTOv5xLsGvP.jpg"
+    }]
+  },
+  "runtime": 101,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "",
+  "id": 333,
+  "production_countries": [{
+    "name": "Canada",
+    "iso_3166_1": "CA"
+  }],
+  "title": "Bollywood/Hollywood",
+  "overview": "The Seth family reside in Canada. While Mr. Seth has passed away, his mom is still alive, living with her daughter-in-law, her son, Rahul, and daughter, Twinky. Both Rahul and Twinky are of marriageable age. Rahul shocks them all when he brings home a gorgeous Kimberly, who he wants to marry, and does get reluctant blessings from his mom and grandma. Before the marriage does take place, Kimberly p",
+  "production_companies": [{
+    "id": 176,
+    "name": "Different Tree Same Wood Productions"
+  }],
+  "belongs_to_collection": null,
+  "imdb_id": "tt0303785",
+  "release_date": "2002-01-01",
+  "original_title": "Bollywood/Hollywood",
+  "vote_count": 1,
+  "poster_path": "/n8J2PfCcgErDWSMhjdmJBBmQIDY.jpg",
+  "tagline": "",
+  "revenue": 0,
+  "popularity": "0.26461514113335"
+}

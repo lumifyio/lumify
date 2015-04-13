@@ -2,6 +2,7 @@ package io.lumify.core.ingest;
 
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -20,7 +21,10 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.securegraph.util.IterableUtils.toList;
 
@@ -28,25 +32,34 @@ public class FileImport {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileImport.class);
     public static final String MULTI_VALUE_KEY = FileImport.class.getName();
     private final VisibilityTranslator visibilityTranslator;
+    private final Graph graph;
+    private final WorkQueueRepository workQueueRepository;
+    private final WorkspaceRepository workspaceRepository;
+    private final Configuration configuration;
     private List<FileImportSupportingFileHandler> fileImportSupportingFileHandlers;
-    private Graph graph;
-    private WorkQueueRepository workQueueRepository;
-    private WorkspaceRepository workspaceRepository;
 
     @Inject
-    public FileImport(VisibilityTranslator visibilityTranslator) {
+    public FileImport(
+            VisibilityTranslator visibilityTranslator,
+            Graph graph,
+            WorkQueueRepository workQueueRepository,
+            WorkspaceRepository workspaceRepository,
+            Configuration configuration
+    ) {
         this.visibilityTranslator = visibilityTranslator;
+        this.graph = graph;
+        this.workQueueRepository = workQueueRepository;
+        this.workspaceRepository = workspaceRepository;
+        this.configuration = configuration;
     }
 
-    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
+    public void importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
         ensureInitialized();
-
-        ArrayList<Vertex> results = new ArrayList<Vertex>();
 
         LOGGER.debug("Importing files from %s", dataDir);
         File[] files = dataDir.listFiles();
         if (files == null || files.length == 0) {
-            return results;
+            return;
         }
 
         int totalFileCount = files.length;
@@ -63,8 +76,7 @@ public class FileImport {
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 try {
-                    Vertex vertex = importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
-                    results.add(vertex);
+                    importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
                     importedFileCount++;
                 } catch (Exception ex) {
                     LOGGER.error("Could not import %s", f.getAbsolutePath(), ex);
@@ -76,7 +88,6 @@ public class FileImport {
         }
 
         LOGGER.debug(String.format("Imported %d, skipped %d files from %s", importedFileCount, fileCount - importedFileCount, dataDir));
-        return results;
     }
 
     private boolean isSupportingFile(File f) {
@@ -102,10 +113,9 @@ public class FileImport {
             return vertex;
         }
 
-        List<FileImportSupportingFileHandler.AddSupportingFilesResult> addSupportingFilesResults = new ArrayList<FileImportSupportingFileHandler.AddSupportingFilesResult>();
+        List<FileImportSupportingFileHandler.AddSupportingFilesResult> addSupportingFilesResults = new ArrayList<>();
 
-        FileInputStream fileInputStream = new FileInputStream(f);
-        try {
+        try (FileInputStream fileInputStream = new FileInputStream(f)) {
             JSONObject metadataJson = loadMetadataJson(f);
             String predefinedId = null;
             if (metadataJson != null) {
@@ -122,9 +132,9 @@ public class FileImport {
             VisibilityJson visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getWorkspaceId());
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
-            Map<String, Object> propertyMetadata = new HashMap<String, Object>();
-            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1);
-            LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson);
+            Metadata propertyMetadata = new Metadata();
+            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1, visibilityTranslator.getDefaultVisibility());
+            LumifyProperties.VISIBILITY_JSON.setMetadata(propertyMetadata, visibilityJson, visibilityTranslator.getDefaultVisibility());
 
             VertexBuilder vertexBuilder;
             if (predefinedId == null) {
@@ -151,14 +161,13 @@ public class FileImport {
             graph.flush();
 
             if (workspace != null) {
-                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, user);
+                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, user);
             }
 
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId());
             pushOnQueue(vertex, workspace, visibilitySource);
             return vertex;
         } finally {
-            fileInputStream.close();
             for (FileImportSupportingFileHandler.AddSupportingFilesResult addSupportingFilesResult : addSupportingFilesResults) {
                 addSupportingFilesResult.close();
             }
@@ -168,7 +177,7 @@ public class FileImport {
     public List<Vertex> importVertices(Workspace workspace, List<FileAndVisibility> files, User user, Authorizations authorizations) throws Exception {
         ensureInitialized();
 
-        List<Vertex> vertices = new ArrayList<Vertex>();
+        List<Vertex> vertices = new ArrayList<>();
         for (FileAndVisibility file : files) {
             if (isSupportingFile(file.getFile())) {
                 LOGGER.debug("Skipping file: %s (supporting file)", file.getFile().getAbsolutePath());
@@ -183,12 +192,9 @@ public class FileImport {
     private JSONObject loadMetadataJson(File f) throws IOException {
         File metadataFile = MetadataFileImportSupportingFileHandler.getMetadataFile(f);
         if (metadataFile.exists()) {
-            FileInputStream in = new FileInputStream(metadataFile);
-            try {
+            try (FileInputStream in = new FileInputStream(metadataFile)) {
                 String fileContents = IOUtils.toString(in);
                 return new JSONObject(fileContents);
-            } finally {
-                in.close();
             }
         }
         return null;
@@ -196,7 +202,7 @@ public class FileImport {
 
     private void ensureInitialized() {
         if (fileImportSupportingFileHandlers == null) {
-            fileImportSupportingFileHandlers = toList(ServiceLoaderUtil.load(FileImportSupportingFileHandler.class));
+            fileImportSupportingFileHandlers = toList(ServiceLoaderUtil.load(FileImportSupportingFileHandler.class, this.configuration));
             for (FileImportSupportingFileHandler fileImportSupportingFileHandler : fileImportSupportingFileHandlers) {
                 InjectHelper.inject(fileImportSupportingFileHandler);
             }
@@ -226,27 +232,9 @@ public class FileImport {
     }
 
     private String calculateFileHash(File f) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(f);
-        try {
+        try (FileInputStream fileInputStream = new FileInputStream(f)) {
             return RowKeyHelper.buildSHA256KeyString(fileInputStream);
-        } finally {
-            fileInputStream.close();
         }
-    }
-
-    @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
-
-    @Inject
-    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
-        this.workQueueRepository = workQueueRepository;
-    }
-
-    @Inject
-    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
-        this.workspaceRepository = workspaceRepository;
     }
 
     public static class FileAndVisibility {

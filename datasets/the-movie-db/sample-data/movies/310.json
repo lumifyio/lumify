@@ -1,0 +1,294 @@
+{
+  "budget": 80000000,
+  "vote_average": 6,
+  "backdrop_path": "/bhEudqWbWsiEBdnl0kCIwFp5Hay.jpg",
+  "genres": [
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    }
+  ],
+  "status": "Released",
+  "credits": {
+    "cast": [
+      {
+        "id": 206,
+        "order": 0,
+        "credit_id": "52fe4235c3a36847f800c645",
+        "name": "Jim Carrey",
+        "cast_id": 1,
+        "profile_path": "/o6bOiFNpkmszElC23kwAdn87M32.jpg",
+        "character": "Bruce Nolan"
+      },
+      {
+        "id": 4491,
+        "order": 1,
+        "credit_id": "52fe4235c3a36847f800c64f",
+        "name": "Jennifer Aniston",
+        "cast_id": 3,
+        "profile_path": "/krBgjfhaRfhYUz7e9NvPLzV85Eg.jpg",
+        "character": "Grace Connelly"
+      },
+      {
+        "id": 4492,
+        "order": 2,
+        "credit_id": "52fe4236c3a36847f800c653",
+        "name": "Philip Baker Hall",
+        "cast_id": 4,
+        "profile_path": "/eH7GrivSuLEvhJL85qPkhNvg3E7.jpg",
+        "character": "Jack Baylor"
+      },
+      {
+        "id": 4493,
+        "order": 3,
+        "credit_id": "52fe4236c3a36847f800c657",
+        "name": "Catherine Bell",
+        "cast_id": 5,
+        "profile_path": "/xh9DGpvd3Zkr9kd2ZekOuxy0Pre.jpg",
+        "character": "Susan Ortega"
+      },
+      {
+        "id": 4494,
+        "order": 4,
+        "credit_id": "52fe4236c3a36847f800c65b",
+        "name": "Lisa Ann Walter",
+        "cast_id": 6,
+        "profile_path": "/xo2yfPjdxos0b0R9DRdY6BA12kr.jpg",
+        "character": "Debbie"
+      },
+      {
+        "id": 4495,
+        "order": 5,
+        "credit_id": "52fe4236c3a36847f800c65f",
+        "name": "Steve Carell",
+        "cast_id": 7,
+        "profile_path": "/70BJ9xbfkRtEWBeuMcAH8C9lhpA.jpg",
+        "character": "Evan Baxter"
+      },
+      {
+        "id": 4496,
+        "order": 6,
+        "credit_id": "52fe4236c3a36847f800c663",
+        "name": "Nora Dunn",
+        "cast_id": 8,
+        "profile_path": "/MOkX8tcOBljXqpTA88KCv09QgI.jpg",
+        "character": "Ally Loman"
+      },
+      {
+        "id": 4498,
+        "order": 8,
+        "credit_id": "52fe4236c3a36847f800c667",
+        "name": "Paul Satterfield",
+        "cast_id": 10,
+        "profile_path": "/cpGi1KJVDAcG4eVN4yWCPurKeZe.jpg",
+        "character": "Dallas Coleman"
+      },
+      {
+        "id": 192,
+        "order": 9,
+        "credit_id": "52fe4236c3a36847f800c6d1",
+        "name": "Morgan Freeman",
+        "cast_id": 28,
+        "profile_path": "/oGJQhOpT8S1M56tvSsbEBePV5O1.jpg",
+        "character": "God"
+      },
+      {
+        "id": 1898,
+        "order": 10,
+        "credit_id": "52fe4236c3a36847f800c6d5",
+        "name": "Eddie Jemison",
+        "cast_id": 29,
+        "profile_path": "/zRrs9hAJcKNdWkCPWJ3XRkoFGAm.jpg",
+        "character": "Bobby"
+      }
+    ],
+    "crew": [
+      {
+        "id": 4489,
+        "credit_id": "52fe4235c3a36847f800c64b",
+        "department": "Writing",
+        "name": "Steve Oedekerk",
+        "job": "Screenplay",
+        "profile_path": "/qUkJ4GbyAdloVjVxCUlxLT23wIe.jpg"
+      },
+      {
+        "id": 4499,
+        "credit_id": "52fe4236c3a36847f800c66d",
+        "department": "Directing",
+        "name": "Tom Shadyac",
+        "job": "Director",
+        "profile_path": "/8CtwYIVmCSDQ9F1SXFpifKW0N3v.jpg"
+      },
+      {
+        "id": 4500,
+        "credit_id": "52fe4236c3a36847f800c673",
+        "department": "Sound",
+        "name": "John Debney",
+        "job": "Original Music Composer",
+        "profile_path": "/hTrlvZlDXQk49nfc2BM9sjKfJv.jpg"
+      },
+      {
+        "id": 4501,
+        "credit_id": "52fe4236c3a36847f800c679",
+        "department": "Camera",
+        "name": "Dean Semler",
+        "job": "Director of Photography",
+        "profile_path": null
+      },
+      {
+        "id": 4502,
+        "credit_id": "52fe4236c3a36847f800c67f",
+        "department": "Editing",
+        "name": "Scott Hill",
+        "job": "Editor",
+        "profile_path": null
+      },
+      {
+        "id": 2399,
+        "credit_id": "52fe4236c3a36847f800c685",
+        "department": "Production",
+        "name": "Junie Lowry-Johnson",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 2400,
+        "credit_id": "52fe4236c3a36847f800c68b",
+        "department": "Production",
+        "name": "Ron Surma",
+        "job": "Casting",
+        "profile_path": null
+      },
+      {
+        "id": 4504,
+        "credit_id": "52fe4236c3a36847f800c691",
+        "department": "Production",
+        "name": "Roger Birnbaum",
+        "job": "Executive Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4505,
+        "credit_id": "52fe4236c3a36847f800c697",
+        "department": "Production",
+        "name": "Michael Bostick",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4506,
+        "credit_id": "52fe4236c3a36847f800c69d",
+        "department": "Production",
+        "name": "James D. Brubaker",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 206,
+        "credit_id": "52fe4236c3a36847f800c6a3",
+        "department": "Production",
+        "name": "Jim Carrey",
+        "job": "Producer",
+        "profile_path": "/o6bOiFNpkmszElC23kwAdn87M32.jpg"
+      },
+      {
+        "id": 4485,
+        "credit_id": "52fe4236c3a36847f800c6a9",
+        "department": "Production",
+        "name": "Steve Koren",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4485,
+        "credit_id": "52fe4236c3a36847f800c6af",
+        "department": "Writing",
+        "name": "Steve Koren",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4486,
+        "credit_id": "52fe4236c3a36847f800c6b5",
+        "department": "Writing",
+        "name": "Mark O'Keefe",
+        "job": "Screenplay",
+        "profile_path": null
+      },
+      {
+        "id": 4486,
+        "credit_id": "52fe4236c3a36847f800c6bb",
+        "department": "Production",
+        "name": "Mark O'Keefe",
+        "job": "Producer",
+        "profile_path": null
+      },
+      {
+        "id": 4499,
+        "credit_id": "52fe4236c3a36847f800c6c1",
+        "department": "Production",
+        "name": "Tom Shadyac",
+        "job": "Producer",
+        "profile_path": "/8CtwYIVmCSDQ9F1SXFpifKW0N3v.jpg"
+      },
+      {
+        "id": 4507,
+        "credit_id": "52fe4236c3a36847f800c6c7",
+        "department": "Production",
+        "name": "Gary Barber",
+        "job": "Executive Producer",
+        "profile_path": "/gUpO6HVoxTteEx08Bs7zWgCD6bY.jpg"
+      },
+      {
+        "id": 4489,
+        "credit_id": "52fe4236c3a36847f800c6cd",
+        "department": "Production",
+        "name": "Steve Oedekerk",
+        "job": "Executive Producer",
+        "profile_path": "/qUkJ4GbyAdloVjVxCUlxLT23wIe.jpg"
+      }
+    ]
+  },
+  "runtime": 101,
+  "spoken_languages": [{
+    "iso_639_1": "en",
+    "name": "English"
+  }],
+  "adult": false,
+  "homepage": "http://www.brucealmighty.com/",
+  "id": 310,
+  "production_countries": [{
+    "name": "United States of America",
+    "iso_3166_1": "US"
+  }],
+  "title": "Bruce Almighty",
+  "overview": "Bruce Nolan toils as a \"human interest\" television reporter in Buffalo, N.Y. Despite his high ratings and the love of his beautiful girlfriend, Grace, Bruce remains unfulfilled. At the end of the worst day in his life, he angrily ridicules God -- and the Almighty responds, endowing Bruce with all of His divine powers.",
+  "production_companies": [
+    {
+      "id": 158,
+      "name": "Spyglass Entertainment"
+    },
+    {
+      "id": 160,
+      "name": "Pit Bull Productions"
+    }
+  ],
+  "belongs_to_collection": {
+    "id": 124949,
+    "backdrop_path": null,
+    "name": "Almighty Collection",
+    "poster_path": "/8DWF5nzKeZvwC4Fi7iacobtMlbU.jpg"
+  },
+  "imdb_id": "tt0315327",
+  "release_date": "2003-05-21",
+  "original_title": "Bruce Almighty",
+  "vote_count": 668,
+  "poster_path": "/lgYKHifMMLT8OxYObMKa8b4STsr.jpg",
+  "tagline": "In Bruce we trust",
+  "revenue": 484572835,
+  "popularity": "2.83499973570245"
+}
