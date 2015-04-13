@@ -5,7 +5,7 @@
 
     <groupId>io.lumify</groupId>
     <artifactId>lumify-build-tools</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.4.1</version>
 
     <name>Lumify Root: Build Tools</name>
     <description>Common build tools and configurations for Lumify projects.</description>
@@ -13,11 +13,11 @@
     <distributionManagement>
         <repository>
             <id>bits.lumify.io.releases</id>
-            <url>file:///var/www/maven/releases/</url>
+            <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
             <id>bits.lumify.io.snapshots</id>
-            <url>file:///var/www/maven/snapshots/</url>
+            <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </snapshotRepository>
         <site>
             <id>temp-site</id>

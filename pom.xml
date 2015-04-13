@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lumify</artifactId>
     <groupId>io.lumify</groupId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.4.1</version>
     <packaging>pom</packaging>
     <name>Lumify</name>
 
@@ -86,7 +86,7 @@
         <log4j.version>1.2.17</log4j.version>
         <lucene.version>4.7.0</lucene.version>
         <metrics.version>3.0.1</metrics.version>
-        <securegraph.version>0.9.1-SNAPSHOT</securegraph.version>
+        <securegraph.version>0.9.1</securegraph.version>
         <groovy.version>2.3.7</groovy.version>
         <zip4j.version>1.3.1</zip4j.version>
         <zookeeper.version>3.4.6</zookeeper.version>
@@ -137,11 +137,11 @@
     <distributionManagement>
         <repository>
             <id>bits.lumify.io.releases</id>
-            <url>file:///var/www/maven/releases/</url>
+            <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
             <id>bits.lumify.io.snapshots</id>
-            <url>file:///var/www/maven/snapshots/</url>
+            <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </snapshotRepository>
         <site>
             <id>temp-site</id>
@@ -152,8 +152,6 @@
     <repositories>
         <repository>
             <id>lumify-releases</id>
-            <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
-                 To test clear your local m2 repo of the lumify root pom, then maven compile. -->
             <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </repository>
         <repository>
@@ -162,8 +160,6 @@
                 <updatePolicy>interval:60</updatePolicy>
             </snapshots>
             <id>lumify-snapshots</id>
-            <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
-                 To test clear your local m2 repo of the lumify root pom, then maven compile. -->
             <url>https://bits.lumify.io/nexus/content/repositories/snapshots/</url>
         </repository>
 
