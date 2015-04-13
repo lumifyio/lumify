@@ -137,11 +137,11 @@
     <distributionManagement>
         <repository>
             <id>bits.lumify.io.releases</id>
-            <url>file:///var/www/maven/releases/</url>
+            <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
             <id>bits.lumify.io.snapshots</id>
-            <url>file:///var/www/maven/snapshots/</url>
+            <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </snapshotRepository>
         <site>
             <id>temp-site</id>
@@ -152,8 +152,6 @@
     <repositories>
         <repository>
             <id>lumify-releases</id>
-            <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
-                 To test clear your local m2 repo of the lumify root pom, then maven compile. -->
             <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </repository>
         <repository>
@@ -162,8 +160,6 @@
                 <updatePolicy>interval:60</updatePolicy>
             </snapshots>
             <id>lumify-snapshots</id>
-            <!-- The url needs to be hardcoded here because maven processes the parent pom before injecting local properties.
-                 To test clear your local m2 repo of the lumify root pom, then maven compile. -->
             <url>https://bits.lumify.io/nexus/content/repositories/snapshots/</url>
         </repository>
 
