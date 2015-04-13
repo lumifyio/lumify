@@ -1,3 +1,20 @@
+## Running inside an IDE
+
+1. Have lumify set up via [instructions](../../docs/developer.md).
+
+1. Have the dev.owl imported via [instructions](../../docs/ontology.md).
+
+1. Compress wikipedia owl folder and import the same way as the dev.owl
+        
+        <lumify working dir>/datasets/wikipedia/data/ontology
+
+1. Run within your IDE
+
+        Main class:                 io.lumify.wikipedia.mapreduce.ImportMR
+        Program arguments:          enwiki-20140102-pages-articles-lines-10.xml
+        Working directory:          <lumify working dir>/datasets/wikipedia/data
+        Use classpath of module:    lumify-wikipedia-mr
+
 ## Wikipedia Import via Map Reduce
 
 1. Build the jar:
@@ -32,15 +49,3 @@
 1. Wait for the MR job to complete
 
 1. [Re-index the data](https://github.com/lumifyio/lumify/tree/master/tools/reindex-mr)
-
-## Running inside an IDE
-
-1. Run format
-
-1. [Import the dev.owl](../../docs/ontology.md)
-
-1. [Import the wikipedia.owl](../../docs/ontology.md)
-
-1. Run `io.lumify.wikipedia.mapreduce.ImportMR enwiki-20140102-pages-articles-lines-10.xml`
-
-1. [Re-index the data](../../tools/reindex-mr)
