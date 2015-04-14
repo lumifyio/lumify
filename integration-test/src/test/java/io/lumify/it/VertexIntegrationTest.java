@@ -49,7 +49,7 @@ public class VertexIntegrationTest extends VertextTestBase {
         List<ClientApiVertex> vertices;
 
         // matches all visible
-        vertices = helper.vertexApi.vertexSearch(PROPERTY_QUERY_STRING, EMPTY_FILTER, null, null, null, null,
+        vertices = helper.vertexApi.vertexSearch(PROPERTY_QUERY_STRING + "*", EMPTY_FILTER, null, null, null, null,
                 null).getVertices();
 
         assertVertexIds(helper.visibleVertexIds, vertices);
