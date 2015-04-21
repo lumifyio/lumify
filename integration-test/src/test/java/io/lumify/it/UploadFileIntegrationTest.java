@@ -75,7 +75,7 @@ public class UploadFileIntegrationTest extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        assertArtifactCorrect(lumifyApi, true, "auth1");
+        assertArtifactCorrectWithUnresolvedTermMentions(lumifyApi, true, "auth1");
 
         lumifyApi.logout();
     }
@@ -157,7 +157,13 @@ public class UploadFileIntegrationTest extends TestBase {
         lumifyApi.logout();
     }
 
-    public void assertArtifactCorrect(LumifyApi lumifyApi, boolean hasWorkspaceIdInVisibilityJson, String expectedVisibilitySource) throws ApiException {
+    public void assertArtifactCorrectWithUnresolvedTermMentions(LumifyApi lumifyApi, boolean hasWorkspaceIdInVisibilityJson, String expectedVisibilitySource) throws ApiException {
+        String highlightedText = assertArtifactCorrect(lumifyApi, hasWorkspaceIdInVisibilityJson, expectedVisibilitySource);
+        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("class=\"vertex\""));
+        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains(TestOntology.CONCEPT_PERSON));
+    }
+
+    public String assertArtifactCorrect(LumifyApi lumifyApi, boolean hasWorkspaceIdInVisibilityJson, String expectedVisibilitySource) throws ApiException {
         ClientApiElement artifactVertex = lumifyApi.getVertexApi().getByVertexId(artifactVertexId);
         assertNotNull("could not get vertex: " + artifactVertexId, artifactVertex);
         assertEquals(expectedVisibilitySource, artifactVertex.getVisibilitySource());
@@ -186,9 +192,10 @@ public class UploadFileIntegrationTest extends TestBase {
         String highlightedText = lumifyApi.getVertexApi().getHighlightedText(artifactVertexId, TikaTextExtractorGraphPropertyWorker.MULTI_VALUE_KEY);
         assertNotNull(highlightedText);
         LOGGER.info("highlightedText: %s", highlightedText);
-        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains("class=\"entity\""));
-        assertTrue("highlightedText did not contain string: " + highlightedText, highlightedText.contains(TestOntology.CONCEPT_PERSON));
+
+        return highlightedText;
     }
+
 
     private void assertRawRoute() throws ApiException, IOException {
         byte[] expected = FILE_CONTENTS.getBytes();
@@ -205,7 +212,7 @@ public class UploadFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
         lumifyApi.getVertexApi().setVisibility(artifactVertexId, "auth2");
-        assertArtifactCorrect(lumifyApi, false, "auth2");
+        assertArtifactCorrectWithUnresolvedTermMentions(lumifyApi, false, "auth2");
 
         lumifyApi.logout();
     }
