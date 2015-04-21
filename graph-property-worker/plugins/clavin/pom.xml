@@ -12,10 +12,6 @@
     <artifactId>lumify-gpw-clavin</artifactId>
     <name>Lumify: GraphPropertyWorker: Plugin: Clavin</name>
 
-    <properties>
-        <clavin.version>1.1.0-Altamira</clavin.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
