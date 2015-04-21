@@ -96,6 +96,7 @@
         <guava.version>13.0</guava.version>
         <xerces.version>2.9.1</xerces.version>
         <xalan.version>2.7.1</xalan.version>
+        <clavin.version>2.0.0</clavin.version>
 
         <!-- update monthly -->
         <uadetector.resources.version>2014.06</uadetector.resources.version>

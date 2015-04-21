@@ -178,11 +178,11 @@
             <artifactId>lumify-gpw-subrip-transcript</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>io.lumify</groupId>-->
-        <!--<artifactId>lumify-gpw-clavin</artifactId>-->
-        <!--<version>${project.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-gpw-clavin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-zipcode-resolver</artifactId>
