@@ -57,13 +57,13 @@ public class UploadVideoFileIntegrationTest extends TestBase {
                 LOGGER.info("highlightedText: %s: %s: %s", prop.getName(), prop.getKey(), highlightedText);
                 if (prop.getKey().equals(TesseractGraphPropertyWorker.TEXT_PROPERTY_KEY)) {
                     foundTesseractVideoTranscript = true;
-                    assertTrue("invalid highlighted text for tesseract", highlightedText.contains("Test") && highlightedText.contains("12000"));
+                    assertTrue("invalid highlighted text for tesseract", highlightedText.contains("Test") && highlightedText.contains("11000"));
                 }
             }
         }
         assertTrue("foundTesseractVideoTranscript", foundTesseractVideoTranscript);
 
-        assertPublishAll(lumifyApi, 25);
+        assertPublishAll(lumifyApi, 31);
 
         lumifyApi.logout();
     }
@@ -97,7 +97,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         InputStream in = lumifyApi.getVertexApi().getPosterFrame(artifactVertexId, 100);
         BufferedImage img = ImageIO.read(in);
         assertEquals(100, img.getWidth());
-        assertEquals(66, img.getHeight());
+        assertEquals(56, img.getHeight());
 
         lumifyApi.logout();
     }
