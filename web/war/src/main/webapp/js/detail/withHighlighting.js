@@ -913,7 +913,6 @@ define([
             return this.openTextRequest.then(function(artifactText) {
                     var html = self.processArtifactText(artifactText);
                     if (expand) {
-                        text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
                         $section.find('.text').html(html);
                         $section.addClass('expanded');
                         $badge.removeClass('loading');
