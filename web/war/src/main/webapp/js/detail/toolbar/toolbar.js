@@ -71,9 +71,9 @@ define([
                 this.$node.html(template(this.attr));
                 this.$node.find('.has-submenu').each(function() {
                     var $this = $(this);
-                        displayValues = $this.find('li').map(function() {
-                            return $(this).css('display') === 'none';
-                        }).toArray();
+                    var displayValues = $this.find('li').map(function() {
+                        return $(this).css('display') === 'none';
+                    }).toArray();
 
                     if (_.all(displayValues)) {
                         $this.hide();
