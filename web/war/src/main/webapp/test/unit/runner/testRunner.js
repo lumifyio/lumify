@@ -27,6 +27,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             //'util/service/ontology.json': '../test/unit/mocks/ontology.json',
             'util/messages': '../test/unit/mocks/messages',
             'data/web-worker/util/ajax': '../test/unit/mocks/ajax',
+            'dataRequestHandler':'../test/unit/mocks/dataRequestHandler',
             testutils: '../test/unit/utils'
         },
 
