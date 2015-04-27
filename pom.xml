@@ -725,14 +725,6 @@
             <id>coverage</id>
             <build>
                 <plugins>
-                    <!--<plugin>-->
-                        <!--<groupId>org.apache.maven.plugins</groupId>-->
-                        <!--<artifactId>maven-surefire-plugin</artifactId>-->
-                        <!--<version>${plugin.maven.surefire.version}</version>-->
-                        <!--<configuration>-->
-                            <!--<skipTests>true</skipTests>-->
-                        <!--</configuration>-->
-                    <!--</plugin>-->
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
@@ -775,24 +767,6 @@
                             -->
                         </executions>
                     </plugin>
-                    <!--<plugin>-->
-                        <!--<groupId>org.codehaus.mojo</groupId>-->
-                        <!--<artifactId>exec-maven-plugin</artifactId>-->
-                        <!--<version>${plugin.maven.exec.version}</version>-->
-                        <!--<inherited>false</inherited>-->
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<id>test-coverage</id>-->
-                                <!--<phase>test</phase>-->
-                                <!--<goals>-->
-                                    <!--<goal>exec</goal>-->
-                                <!--</goals>-->
-                                <!--<configuration>-->
-                                    <!--<executable>bin/testCoverage.sh</executable>-->
-                                <!--</configuration>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                    <!--</plugin>-->
                 </plugins>
             </build>
         </profile>
