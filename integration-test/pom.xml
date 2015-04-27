@@ -219,12 +219,27 @@
                         <version>${plugin.maven.surefire.version}</version>
                         <configuration>
                             <reuseForks>false</reuseForks>
-                            <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
+                            <argLine>-Xmx4096m -XX:MaxPermSize=1024m ${argLine}</argLine>
                             <excludes>
                                 <exclude>**/*$*</exclude>
                             </excludes>
                             <excludedGroups>io.lumify.it.BenchmarkCategory</excludedGroups>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prep-integration-tests</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <destFile>${project.build.directory}/jacoco-it.exec</destFile>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
