@@ -47,3 +47,38 @@ git checkout -b feature/LUM-123
 ```
 
 Once you've completed your patch, push the feature to your private copy.
+
+```
+git push -u $username feature/LUM-123
+```
+
+Then submit a pull request on GitHub to merge your feature branch into the public `develop` branch.
+
+## Keeping Up to Date
+
+You can keep your local `develop` and/or `master` branches synchronized with the public
+repository with simple `pull` commands since they are tracking the corresponding branches
+on `lumifyio/lumify`.
+
+```
+git checkout develop
+git pull
+
+git checkout master
+git pull
+```
+
+This is also the recommended way to integrate your changes in the local repository once your
+pull request has been accepted.
+
+If you want to synchronize the develop and master branches in your fork, you can use the following commands:
+
+```
+git checkout develop
+git push $username develop
+
+git checkout master
+git push $username master
+```
+
+**Note there is no `-u` parameter in the push because we don't want to change the upstream tracking.**
