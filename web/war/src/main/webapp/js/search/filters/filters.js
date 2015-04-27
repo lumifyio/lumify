@@ -125,6 +125,10 @@ define([
         this.notifyOfFilters = function(options) {
             var ontologyProperties = this.ontologyProperties;
 
+            if(ontologyProperties === null || ontologyProperties === undefined) {
+                return;
+            }
+
             this.trigger('filterschange', {
                 entityFilters: this.entityFilters,
                 conceptFilter: this.conceptFilter,
