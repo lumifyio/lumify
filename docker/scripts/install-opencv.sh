@@ -7,12 +7,12 @@ opencv_version=2.4.9
 opencv_zip=opencv-${opencv_version}.zip
 
 cd /tmp
-curl -L -O http://www.us.apache.org/dist/ant/binaries/${ant_tgz}
+curl -L -O https://bits.lumify.io/extra/${ant_tgz}
 tar -xvf ${ant_tgz}
 
 cd /tmp
 
-curl -L -o opencv-${opencv_version}.zip -O http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/${opencv_version}/${opencv_zip}/download?use_mirror=hivelocity
+curl -L -O https://bits.lumify.io/extra/${opencv_zip}
 unzip ${opencv_zip}
 
 cd /tmp/opencv-${opencv_version}

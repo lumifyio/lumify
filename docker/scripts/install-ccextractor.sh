@@ -3,7 +3,7 @@
 ccextractor_version=0.76
 ccextractor_zip=ccextractor.src.${ccextractor_version}.zip
 
-wget --progress=dot -e dotbytes=1M -O /opt/${ccextractor_zip} http://sourceforge.net/projects/ccextractor/files/ccextractor/${ccextractor_version}/${ccextractor_zip}/download
+curl -L -o /opt/${ccextractor_zip} https://bits.lumify.io/extra/${ccextractor_zip}
 
 unzip /opt/${ccextractor_zip} -d /opt
 rm /opt/${ccextractor_zip}

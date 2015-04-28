@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-wget -O /opt/hadoop-2.3.0.tar.gz https://archive.apache.org/dist/hadoop/core/hadoop-2.3.0/hadoop-2.3.0.tar.gz
+curl -L -o /opt/hadoop-2.3.0.tar.gz https://bits.lumify.io/extra/hadoop-2.3.0.tar.gz
 tar -xzf /opt/hadoop-2.3.0.tar.gz -C /opt/
 rm /opt/hadoop-2.3.0.tar.gz
 ln -s /opt/hadoop-2.3.0 /opt/hadoop

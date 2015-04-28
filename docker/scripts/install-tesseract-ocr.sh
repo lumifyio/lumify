@@ -55,7 +55,7 @@ then
 
         if [ ! -f "$ARCHIVE_DIR/zlib-$ZLIB_VERSION.tar.gz" ]; then
                 #Download the file
-                curl -o $ARCHIVE_DIR/zlib-$ZLIB_VERSION.tar.gz http://zlib.net/zlib-$ZLIB_VERSION.tar.gz
+                curl -L -o $ARCHIVE_DIR/zlib-$ZLIB_VERSION.tar.gz https://bits.lumify.io/extra/zlib-$ZLIB_VERSION.tar.gz
         fi
 
         echo "Extracting archive"
@@ -93,7 +93,7 @@ then
 
         if [ ! -f "$ARCHIVE_DIR/jpegsrc.v$LIBJPEG_VERSION.tar.gz" ]; then
                 #Download the file
-                curl -o $ARCHIVE_DIR/jpeg.v$LIBJPEG_VERSION.tar.gz http://www.ijg.org/files/jpegsrc.v$LIBJPEG_VERSION.tar.gz
+                curl -o $ARCHIVE_DIR/jpeg.v$LIBJPEG_VERSION.tar.gz https://bits.lumify.io/extra/jpegsrc.v$LIBJPEG_VERSION.tar.gz
         fi
 
         echo "Extracting archive"
@@ -130,7 +130,7 @@ then
 
         if [ ! -f "$ARCHIVE_DIR/libpng-$LIBPNG_VERSION.tar.gz" ]; then
                 #Download the file
-                curl -L -o $ARCHIVE_DIR/libpng-$LIBPNG_VERSION.tar.gz http://sourceforge.net/projects/libpng/files/libpng16/older-releases/1.6.13/libpng-1.6.13.tar.gz/download
+                curl -L -o $ARCHIVE_DIR/libpng-$LIBPNG_VERSION.tar.gz https://bits.lumify.io/extra/libpng-1.6.13.tar.gz
         fi
 
         echo "Extracting archive"
@@ -172,7 +172,7 @@ then
 
         if [ ! -f "$ARCHIVE_DIR/leptonica-$LEPTONICA_VERSION.tar.gz" ]; then
                 #Download the file
-                curl -o $ARCHIVE_DIR/leptonica-$LEPTONICA_VERSION.tar.gz http://www.leptonica.com/source/leptonica-$LEPTONICA_VERSION.tar.gz
+                curl -o $ARCHIVE_DIR/leptonica-$LEPTONICA_VERSION.tar.gz https://bits.lumify.io/extra/leptonica-$LEPTONICA_VERSION.tar.gz
         fi
 
         echo "Extracting archive"
@@ -231,7 +231,7 @@ then
 
         if [ ! -f "$ARCHIVE_DIR/tesseract-ocr-$TESSERACT_VERSION.tar.gz" ]; then
                 #Download the file
-                curl -L -o $ARCHIVE_DIR/tesseract-ocr-$TESSERACT_VERSION.tar.gz https://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.02.02.tar.gz
+                curl -L -o $ARCHIVE_DIR/tesseract-ocr-$TESSERACT_VERSION.tar.gz https://bits.lumify.io/extra/tesseract-ocr-3.02.02.tar.gz
         fi
 
         echo "Extracting archive"
@@ -256,13 +256,13 @@ then
         echo "Checking the language files"
         if [ ! -f "$ARCHIVE_DIR/tesseract-ocr-3.02.eng.tar.gz" ]; then
                 #Download the file
-                curl -L -o $ARCHIVE_DIR/tesseract-ocr-3.02.eng.tar.gz https://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.02.eng.tar.gz
+                curl -L -o $ARCHIVE_DIR/tesseract-ocr-3.02.eng.tar.gz https://bits.lumify.io/extra/tesseract-ocr-3.02.eng.tar.gz
         fi
 
         echo "Checking OSD (Optical Script Detection) models"
         if [ ! -f "$ARCHIVE_DIR/tesseract-ocr-3.01.osd.tar.gz" ]; then
                 #Download the file
-                curl -L -o $ARCHIVE_DIR/tesseract-ocr-3.01.osd.tar.gz https://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.01.osd.tar.gz
+                curl -L -o $ARCHIVE_DIR/tesseract-ocr-3.01.osd.tar.gz https://bits.lumify.io/extra/tesseract-ocr-3.01.osd.tar.gz
         fi
 
         echo "Installing Languages and OSD"

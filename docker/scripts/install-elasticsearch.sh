@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-wget -O /opt/elasticsearch-1.4.4.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.4.tar.gz
+curl -L -o /opt/elasticsearch-1.4.4.tar.gz https://bits.lumify.io/extra/elasticsearch-1.4.4.tar.gz
 tar -xzf /opt/elasticsearch-1.4.4.tar.gz -C /opt
 rm /opt/elasticsearch-1.4.4.tar.gz
 ln -s /opt/elasticsearch-1.4.4 /opt/elasticsearch

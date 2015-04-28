@@ -7,7 +7,7 @@ yum install libpng-devel
 yum install libtiff-devel
 
 
-wget --progress=dot -e dotbytes=1M -O /opt/${leptonica_tgz} http://www.leptonica.org/source/${leptonica_tgz}
+curl -L -o /opt/${leptonica_tgz} https://bits.lumify.io/extra/${leptonica_tgz}
 tar -xzf /opt/${leptonica_tgz} -C /opt
 rm /opt/${leptonica_tgz}
 
