@@ -93,7 +93,7 @@ then
 
         if [ ! -f "$ARCHIVE_DIR/jpegsrc.v$LIBJPEG_VERSION.tar.gz" ]; then
                 #Download the file
-                curl -o $ARCHIVE_DIR/jpeg.v$LIBJPEG_VERSION.tar.gz https://bits.lumify.io/extra/jpegsrc.v$LIBJPEG_VERSION.tar.gz
+                curl -L -o $ARCHIVE_DIR/jpeg.v$LIBJPEG_VERSION.tar.gz https://bits.lumify.io/extra/jpeg.v$LIBJPEG_VERSION.tar.gz
         fi
 
         echo "Extracting archive"
@@ -172,7 +172,7 @@ then
 
         if [ ! -f "$ARCHIVE_DIR/leptonica-$LEPTONICA_VERSION.tar.gz" ]; then
                 #Download the file
-                curl -o $ARCHIVE_DIR/leptonica-$LEPTONICA_VERSION.tar.gz https://bits.lumify.io/extra/leptonica-$LEPTONICA_VERSION.tar.gz
+                curl -L -o $ARCHIVE_DIR/leptonica-$LEPTONICA_VERSION.tar.gz https://bits.lumify.io/extra/leptonica-$LEPTONICA_VERSION.tar.gz
         fi
 
         echo "Extracting archive"
