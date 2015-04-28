@@ -22,10 +22,10 @@ mkdir /tmp/opencv-${opencv_version}/build
 cd /tmp/opencv-${opencv_version}/build
 ANT_DIR=/tmp/apache-ant-{$ant_version} cmake -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF ..
 make
-sudo make install
+make install
 
-sudo ln -s /usr/local/share/OpenCV/java/libopencv_java249.so /usr/local/lib/libopencv_java249.so
-sudo ldconfig
+ln -s /usr/local/share/OpenCV/java/libopencv_java249.so /usr/local/lib/libopencv_java249.so
+ldconfig
 
 rm -rf /tmp/apache-ant-${ant_version}
 rm -f /tmp/${ant_tgz}
