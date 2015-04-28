@@ -119,10 +119,10 @@ ADD scripts/install-clavin.sh /opt/lumify/scripts/install-clavin.sh
 RUN /bin/bash /opt/lumify/scripts/install-clavin.sh
 
 # Install Lumify Web App
-ADD demo/root.war /opt/jetty/webapps/root.war
-ADD demo/lumify-web-auth-username-only-*.jar /opt/lumify/lib
+ADD demo/tmp/root.war /opt/jetty/webapps/root.war
+# ADD demo/tmp/lumify-web-auth-username-only-*.jar /opt/lumify/lib
+ADD demo/tmp/log4j.xml /opt/lumify/config
 ADD demo/lumify.properties /opt/lumify/config
-ADD demo/log4j.xml /opt/lumify/config
 
 # add scripts
 ADD scripts/docker-entrypoint.sh /opt/docker-entrypoint.sh

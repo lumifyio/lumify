@@ -5,9 +5,11 @@ cd ${DIR}
 
 SRC_DIR=${DIR}/..
 
-cp ${SRC_DIR}/web/war/target/lumify-web-war-*.war demo/root.war
-cp ${SRC_DIR}/web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar demo
-cp ${SRC_DIR}/config/log4j.xml demo
+mkdir -p demo/tmp
+
+cp ${SRC_DIR}/web/war/target/lumify-web-war-*.war demo/tmp/root.war
+# cp ${SRC_DIR}/web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar demo/tmp
+cp ${SRC_DIR}/config/log4j.xml demo/tmp
 
 case $(uname) in
   Linux)
