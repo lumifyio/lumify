@@ -1,9 +1,10 @@
-package io.lumify.it;
+package io.lumify.benchmark;
 
 import com.google.common.base.Stopwatch;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 
+import io.lumify.it.TestClassAndMethod;
 import java.util.concurrent.Callable;
 
 public class TimedExecution {

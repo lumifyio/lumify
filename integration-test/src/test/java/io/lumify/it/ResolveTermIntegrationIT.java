@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class ResolveTermIntegrationTest extends TestBase {
+public class ResolveTermIntegrationIT extends TestBase {
     private String artifactVertexId;
     private ClientApiElement joeFernerVertex;
 

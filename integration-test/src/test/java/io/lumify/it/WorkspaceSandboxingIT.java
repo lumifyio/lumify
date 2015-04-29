@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class WorkspaceSandboxingIntegrationTest extends TestBase {
+public class WorkspaceSandboxingIT extends TestBase {
     private String susanFengVertexId;
     private String artifactVertexId;
 

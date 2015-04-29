@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class WorkspaceUndoIntegrationTest extends TestBase {
+public class WorkspaceUndoIT extends TestBase {
     public static final String FILE_CONTENTS = "Susan Feng knows Jeff Kunkle. They both worked in Reston, VA, 20191";
 
     @Test
