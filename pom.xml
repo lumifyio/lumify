@@ -22,7 +22,7 @@
     <url>https://github.com/lumifyio/lumify</url>
     <licenses>
         <license>
-            <name>The Apache Software License, Veresion 2.0</name>
+            <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
@@ -37,6 +37,7 @@
         <module>web</module>
         <module>dev</module>
         <module>integration-test</module>
+        <module>benchmark</module>
         <module>migrations</module>
     </modules>
 
