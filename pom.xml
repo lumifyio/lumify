@@ -22,7 +22,7 @@
     <url>https://github.com/lumifyio/lumify</url>
     <licenses>
         <license>
-            <name>The Apache Software License, Veresion 2.0</name>
+            <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
@@ -37,6 +37,7 @@
         <module>web</module>
         <module>dev</module>
         <module>integration-test</module>
+        <module>benchmark</module>
         <module>migrations</module>
     </modules>
 
@@ -50,6 +51,9 @@
         <maven.build.timestamp.format>EEE MMM dd HH:mm z yyyy</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <test.memSettings>-Xmx4096m -XX:MaxPermSize=1024m</test.memSettings>
+        <!-- Skip Integration Tests by default -->
+        <skipITs>true</skipITs>
 
         <!-- Dependency Versions -->
         <accumulo.version>1.6.1</accumulo.version>
@@ -728,9 +732,15 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${plugin.maven.surefire.version}</version>
                         <configuration>
-                            <argLine>-Xmx4096m -XX:MaxPermSize=1024m ${argLine}</argLine>
+                            <argLine>${test.memSettings} ${argLine}</argLine>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <argLine>${test.memSettings} ${argLine}</argLine>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -738,16 +748,29 @@
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>default-prepare-agent</id>
+                                <id>prepare-agent</id>
                                 <goals>
                                     <goal>prepare-agent</goal>
                                 </goals>
                             </execution>
                             <execution>
-                                <id>default-report</id>
+                                <id>prepare-integration-agent</id>
+                                <goals>
+                                    <goal>prepare-agent-integration</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
                                 <phase>prepare-package</phase>
                                 <goals>
                                     <goal>report</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>integration-report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report-integration</goal>
                                 </goals>
                             </execution>
                             <!-- Turn on to fail build at specified coverage threshold. -->
@@ -778,6 +801,12 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>ITest</id>
+            <properties>
+                <skipITs>false</skipITs>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
@@ -788,20 +817,29 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${plugin.maven.surefire.version}</version>
                     <configuration>
-                        <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
+                        <argLine>${test.memSettings}</argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.18.1</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <argLine>${test.memSettings}</argLine>
                         <excludes>
                             <exclude>**/*$*</exclude>
-                            <exclude>**/*IntegrationTest.java</exclude>
-                            <exclude>**/*BenchmarkTest.java</exclude>
                         </excludes>
+                        <reuseForks>false</reuseForks>
+                        <skipTests>${skipIts}</skipTests>
                     </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${plugin.maven.surefire.version}</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
 
                 <plugin>
@@ -993,6 +1031,10 @@
             <plugin>
                 <groupId>com.shankyank.mojo</groupId>
                 <artifactId>template-resgen-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

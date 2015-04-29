@@ -16,7 +16,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNull;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PublicItemChangeIntegrationTest extends TestBase {
+public class PublicItemChangeIT extends TestBase {
     private ClientApiEdgeWithVertexData e1;
     private ClientApiElement v1;
     private ClientApiElement v2;

@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class UploadImageFileIntegrationTest extends TestBase {
+public class UploadImageFileIT extends TestBase {
     private String artifactVertexId;
 
     @Test
@@ -34,7 +34,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
-        InputStream imageResourceStream = UploadImageFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/sampleImage.jpg");
+        InputStream imageResourceStream = UploadImageFileIT.class.getResourceAsStream("/io/lumify/it/sampleImage.jpg");
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFiles(
                 new VertexApiExt.FileForImport("auth1", "sampleImage.jpg", imageResourceStream));
         assertEquals(1, artifact.getVertexIds().size());
@@ -64,7 +64,7 @@ public class UploadImageFileIntegrationTest extends TestBase {
     }
 
     private void assertRawRoute() throws ApiException, IOException {
-        byte[] expected = IOUtils.toByteArray(UploadImageFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/sampleImage.jpg"));
+        byte[] expected = IOUtils.toByteArray(UploadImageFileIT.class.getResourceAsStream("/io/lumify/it/sampleImage.jpg"));
 
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 

@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class UploadRdfIntegrationTest extends TestBase {
+public class UploadRdfIT extends TestBase {
     private static final String FILE_CONTENTS = getResourceString("sample.rdf");
     private String artifactVertexId;
     private String joeFernerVertexId;

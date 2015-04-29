@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class UploadFileIntegrationTest extends TestBase {
+public class UploadFileIT extends TestBase {
     public static final String FILE_CONTENTS = "Joe Ferner knows David Singley.";
     private String user2Id;
     private String workspaceId;

@@ -13,7 +13,7 @@ import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class UploadCsvIntegrationTest extends TestBase {
+public class UploadCsvIT extends TestBase {
     private static final String FILE_CONTENTS = getResourceString("sample.csv");
     private static final String MAPPING_JSON = getResourceString("sample.csv.mapping.json");
     private String artifactVertexId;

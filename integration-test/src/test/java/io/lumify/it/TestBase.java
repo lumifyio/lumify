@@ -114,7 +114,7 @@ public class TestBase {
         }
     }
 
-    LumifyApi login(String username) throws ApiException {
+    public LumifyApi login(String username) throws ApiException {
         UserNameOnlyLumifyApi lumifyApi = new UserNameOnlyLumifyApi("https://localhost:" + httpsPort, username);
         lumifyApi.loginAndGetCurrentWorkspace();
         return lumifyApi;
