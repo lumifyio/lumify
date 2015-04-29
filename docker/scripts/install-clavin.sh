@@ -22,4 +22,4 @@ curl -L -o /opt/clavin-${clavin_version}/${clavin_jar} -O https://bits.lumify.io
 curl -L -o /opt/clavin-index-2.0.0_2015-04-28.tar.gz -O https://bits.lumify.io/data/clavin-index-2.0.0_2015-04-28.tar.gz
 tar -zxvf /opt/clavin-index-2.0.0_2015-04-28.tar.gz -C /opt
 
-rm *.txt *.zip
+rm -f *.txt *.zip
