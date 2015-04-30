@@ -10,6 +10,7 @@ cd $DIR
 mkdir -p demo/.tmp
 cp ${SRC_DIR}/web/war/target/lumify-web-war-*.war demo/.tmp/root.war
 cp ${SRC_DIR}/config/log4j.xml demo/.tmp
+cp -R ${SRC_DIR}/examples/ontology-minimal demo/.tmp/ontology-minimal
 # cp ${SRC_DIR}/web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar demo/.tmp
 
 case $(uname) in

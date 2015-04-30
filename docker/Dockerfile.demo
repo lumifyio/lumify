@@ -121,6 +121,7 @@ RUN /bin/bash /opt/lumify/scripts/install-clavin.sh
 # Install Lumify Web App
 ADD demo/.tmp/root.war /opt/jetty/webapps/root.war
 ADD demo/.tmp/log4j.xml /opt/lumify/config/log4j.xml
+ADD demo/.tmp/ontology-minimal /opt/lumify/ontology
 ADD demo/lumify.properties /opt/lumify/config/lumify.properties
 
 # add scripts
