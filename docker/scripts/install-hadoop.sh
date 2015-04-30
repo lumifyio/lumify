@@ -1,8 +1,24 @@
 #!/bin/bash -eu
 
-curl -L -o /opt/hadoop-2.3.0.tar.gz https://bits.lumify.io/extra/hadoop-2.3.0.tar.gz
-tar -xzf /opt/hadoop-2.3.0.tar.gz -C /opt/
-rm /opt/hadoop-2.3.0.tar.gz
+ARCHIVE_DIR=/tmp/lumify/archives
+
+# setup the archive dir
+if [ ! -d "$ARCHIVE_DIR" ]; then
+    mkdir -p $ARCHIVE_DIR
+fi
+
+# download the archive
+if [ ! -f "$ARCHIVE_DIR/hadoop-2.3.0.tar.gz" ]; then
+    curl -L -o $ARCHIVE_DIR/hadoop-2.3.0.tar.gz https://bits.lumify.io/extra/hadoop-2.3.0.tar.gz
+fi
+
+# extract from the archive
+tar -xzf $ARCHIVE_DIR/hadoop-2.3.0.tar.gz -C /opt/
+
+# delete the archive
+rm -rf $ARCHIVE_DIR
+
+# build the package
 ln -s /opt/hadoop-2.3.0 /opt/hadoop
 sed -i '/^export JAVA_HOME/ s:.*:export JAVA_HOME=/opt/jdk\nexport HADOOP_PREFIX=/opt/hadoop\nexport HADOOP_HOME=/opt/hadoop\n:' /opt/hadoop/etc/hadoop/hadoop-env.sh
 sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop/:' /opt/hadoop/etc/hadoop/hadoop-env.sh

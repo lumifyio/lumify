@@ -1,9 +1,25 @@
 #!/bin/bash -eu
 
 # wget --header "Cookie: oraclelicense=accept-securebackup-cookie" -O /opt/jdk-7u71-linux-x64.tar.gz http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.tar.gz
-curl -L -o /opt/jdk-7u71-linux-x64.tar.gz https://bits.lumify.io/extra/jdk-7u71-linux-x64.tar.gz
-tar -xzf /opt/jdk-7u71-linux-x64.tar.gz -C /opt
-rm /opt/jdk-7u71-linux-x64.tar.gz
+ARCHIVE_DIR=/tmp/lumify/archives
+
+# setup the archive dir
+if [ ! -d "$ARCHIVE_DIR" ]; then
+    mkdir -p $ARCHIVE_DIR
+fi
+
+# download the archive
+if [ ! -f "$ARCHIVE_DIR/jdk-7u71-linux-x64.tar.gz" ]; then
+    curl -L -o $ARCHIVE_DIR/jdk-7u71-linux-x64.tar.gz https://bits.lumify.io/extra/jdk-7u71-linux-x64.tar.gz
+fi
+
+# extract from the archive
+tar -xzf $ARCHIVE_DIR/jdk-7u71-linux-x64.tar.gz -C /opt
+
+# delete the archive
+rm -rf $ARCHIVE_DIR
+
+# build the package
 ln -s /opt/jdk1.7.0_71 /opt/jdk
 
 JAI_VERSION=1.1.3

@@ -7,6 +7,34 @@ mkdir $SRC
 
 export PATH=$PATH:$HOME/bin
 
+ARCHIVE_DIR=/tmp/lumify/archives
+
+# setup the archive dir
+if [ ! -d "$ARCHIVE_DIR" ]; then
+    mkdir -p $ARCHIVE_DIR
+fi
+
+# download the archives
+if [ ! -f "$ARCHIVE_DIR/lame-3.99.5.tar.gz" ]; then
+    curl -L -o $ARCHIVE_DIR/lame-3.99.5.tar.gz https://bits.lumify.io/extra/lame-3.99.5.tar.gz
+fi
+if [ ! -f "$ARCHIVE_DIR/libogg-1.3.2.tar.gz" ]; then
+    curl -L -o $ARCHIVE_DIR/libogg-1.3.2.tar.gz https://bits.lumify.io/extra/libogg-1.3.2.tar.gz
+fi
+if [ ! -f "$ARCHIVE_DIR/libvorbis-1.3.4.tar.gz" ]; then
+    curl -L -o $ARCHIVE_DIR/libvorbis-1.3.4.tar.gz https://bits.lumify.io/extra/libvorbis-1.3.4.tar.gz
+fi
+
+# extract from the archives
+tar xzvf $ARCHIVE_DIR/lame-3.99.5.tar.gz -C $SRC
+tar xzvf $ARCHIVE_DIR/libogg-1.3.2.tar.gz -C $SRC
+tar xzvf $ARCHIVE_DIR/libvorbis-1.3.4.tar.gz -C $SRC
+
+# delete the archives
+rm -rf $ARCHIVE_DIR
+
+# build the packages
+
 # Yasm
 cd $SRC
 git clone --depth 1 git://github.com/yasm/yasm.git
@@ -40,10 +68,7 @@ make distclean
 
 
 # libmp3lame
-cd $SRC
-curl -L -O https://bits.lumify.io/extra/lame-3.99.5.tar.gz
-tar xzvf lame-3.99.5.tar.gz
-cd lame-3.99.5
+cd $SRC/lame-3.99.5
 ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --disable-shared --enable-nasm
 make
 make install
@@ -62,20 +87,14 @@ make distclean
 
 
 # libogg
-cd $SRC
-curl -O https://bits.lumify.io/extra/libogg-1.3.2.tar.gz
-tar xzvf libogg-1.3.2.tar.gz
-cd libogg-1.3.2
+cd $SRC/libogg-1.3.2
 ./configure --prefix="$HOME/ffmpeg_build" --disable-shared
 make
 make install
 make distclean
 
 # libvorbis
-cd $SRC
-curl -O https://bits.lumify.io/extra/libvorbis-1.3.4.tar.gz
-tar xzvf libvorbis-1.3.4.tar.gz
-cd libvorbis-1.3.4
+cd $SRC/libvorbis-1.3.4
 LDFLAGS="-L$HOME/ffmeg_build/lib" CPPFLAGS="-I$HOME/ffmpeg_build/include" ./configure --prefix="$HOME/ffmpeg_build" --with-ogg="$HOME/ffmpeg_build" --disable-shared
 make
 make install

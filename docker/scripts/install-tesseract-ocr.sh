@@ -16,9 +16,9 @@ BUILD_TESSERACT=1
 # Get the base directory of where the script is
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR=$BASE_DIR/build
-ARCHIVE_DIR=$BASE_DIR/archives
 SRC_DIR=$BASE_DIR/src
 TESSERACT_DIR=$BASE_DIR/tesseract
+ARCHIVE_DIR=/opt/lumify-source/docker/.archives
 
 #Library Versions
 ZLIB_VERSION=1.2.8
@@ -32,15 +32,15 @@ echo "Base Build Directory: " $BUILD_DIR
 # Functions usefull throughtout the script
 function setupDirs() {
         if [ ! -d "$ARCHIVE_DIR" ]; then
-                mkdir $ARCHIVE_DIR
+                mkdir -p $ARCHIVE_DIR
         fi
 
         if [ ! -d "$SRC_DIR" ]; then
-                mkdir $SRC_DIR
+                mkdir -p $SRC_DIR
         fi
 
         if [ ! -d "$BUILD_DIR" ]; then
-                mkdir $BUILD_DIR
+                mkdir -p $BUILD_DIR
         fi
 }
 
@@ -60,6 +60,8 @@ then
 
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/zlib-$ZLIB_VERSION.tar.gz -C $SRC_DIR
+
+        rm -rf $ARCHIVE_DIR
 
         cd "$SRC_DIR/zlib-$ZLIB_VERSION"
 
@@ -99,6 +101,8 @@ then
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/jpeg.v$LIBJPEG_VERSION.tar.gz -C $SRC_DIR
 
+        rm -rf $ARCHIVE_DIR
+
         cd "$SRC_DIR/jpeg-$LIBJPEG_VERSION"
 
         echo "Configuring Lib Jpeg for Standalone"
@@ -135,6 +139,8 @@ then
 
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/libpng-$LIBPNG_VERSION.tar.gz -C $SRC_DIR
+
+        rm -rf $ARCHIVE_DIR
 
         cd "$SRC_DIR/libpng-$LIBPNG_VERSION"
 
@@ -177,6 +183,8 @@ then
 
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/leptonica-$LEPTONICA_VERSION.tar.gz -C $SRC_DIR
+
+        rm -rf $ARCHIVE_DIR
 
         cd "$SRC_DIR/leptonica-$LEPTONICA_VERSION"
 
@@ -236,6 +244,9 @@ then
 
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/tesseract-ocr-$TESSERACT_VERSION.tar.gz -C $SRC_DIR
+
+        rm -rf $ARCHIVE_DIR
+
         cd "$SRC_DIR/tesseract-ocr"
 
         echo "Configuring Tesseract"
@@ -268,6 +279,8 @@ then
         echo "Installing Languages and OSD"
         tar -xzf $ARCHIVE_DIR/tesseract-ocr-3.02.eng.tar.gz -C $TESSERACT_DIR/bin
         tar -xzf $ARCHIVE_DIR/tesseract-ocr-3.01.osd.tar.gz -C $TESSERACT_DIR/bin
+
+        rm -rf $ARCHIVE_DIR
 
         cd $TESSERACT_DIR/bin
 

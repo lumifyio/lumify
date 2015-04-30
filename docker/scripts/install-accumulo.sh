@@ -1,8 +1,24 @@
 #!/bin/bash -eu
 
-curl -L -o /opt/accumulo-1.6.1-bin.tar.gz https://bits.lumify.io/extra/accumulo-1.6.1-bin.tar.gz
-tar -xzf /opt/accumulo-1.6.1-bin.tar.gz -C /opt
-rm /opt/accumulo-1.6.1-bin.tar.gz
+ARCHIVE_DIR=/tmp/lumify/archives
+
+# setup the archive dir
+if [ ! -d "$ARCHIVE_DIR" ]; then
+    mkdir -p $ARCHIVE_DIR
+fi
+
+# download the archive
+if [ ! -f "$ARCHIVE_DIR/accumulo-1.6.1-bin.tar.gz" ]; then
+    curl -L -o $ARCHIVE_DIR/accumulo-1.6.1-bin.tar.gz https://bits.lumify.io/extra/accumulo-1.6.1-bin.tar.gz
+fi
+
+# extract from the archive
+tar -xzf $ARCHIVE_DIR/accumulo-1.6.1-bin.tar.gz -C /opt
+
+# delete the archive
+rm -rf $ARCHIVE_DIR
+
+# build the package
 ln -s /opt/accumulo-1.6.1 /opt/accumulo
 rm -rf /opt/accumulo-1.6.1/logs
 mkdir -p /var/log/accumulo
