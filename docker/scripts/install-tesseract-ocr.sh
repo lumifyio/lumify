@@ -18,7 +18,7 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR=$BASE_DIR/build
 SRC_DIR=$BASE_DIR/src
 TESSERACT_DIR=$BASE_DIR/tesseract
-ARCHIVE_DIR=/opt/lumify-source/docker/.archives
+ARCHIVE_DIR=/tmp/lumify/archives
 
 #Library Versions
 ZLIB_VERSION=1.2.8
