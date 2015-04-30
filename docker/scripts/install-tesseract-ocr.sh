@@ -44,6 +44,11 @@ function setupDirs() {
         fi
 }
 
+# setup the archive dir
+if [ ! -d "$ARCHIVE_DIR" ]; then
+    mkdir -p $ARCHIVE_DIR
+fi
+
 # First check to see if zlib
 if [ $BUILD_ZLIB = 1 ]
 then
@@ -60,8 +65,6 @@ then
 
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/zlib-$ZLIB_VERSION.tar.gz -C $SRC_DIR
-
-        rm -rf $ARCHIVE_DIR
 
         cd "$SRC_DIR/zlib-$ZLIB_VERSION"
 
@@ -101,8 +104,6 @@ then
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/jpeg.v$LIBJPEG_VERSION.tar.gz -C $SRC_DIR
 
-        rm -rf $ARCHIVE_DIR
-
         cd "$SRC_DIR/jpeg-$LIBJPEG_VERSION"
 
         echo "Configuring Lib Jpeg for Standalone"
@@ -139,8 +140,6 @@ then
 
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/libpng-$LIBPNG_VERSION.tar.gz -C $SRC_DIR
-
-        rm -rf $ARCHIVE_DIR
 
         cd "$SRC_DIR/libpng-$LIBPNG_VERSION"
 
@@ -183,8 +182,6 @@ then
 
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/leptonica-$LEPTONICA_VERSION.tar.gz -C $SRC_DIR
-
-        rm -rf $ARCHIVE_DIR
 
         cd "$SRC_DIR/leptonica-$LEPTONICA_VERSION"
 
@@ -245,8 +242,6 @@ then
         echo "Extracting archive"
         tar -xzf $ARCHIVE_DIR/tesseract-ocr-$TESSERACT_VERSION.tar.gz -C $SRC_DIR
 
-        rm -rf $ARCHIVE_DIR
-
         cd "$SRC_DIR/tesseract-ocr"
 
         echo "Configuring Tesseract"
@@ -289,3 +284,5 @@ then
 else
         echo "Skipping Tesseract"
 fi
+
+rm -rf $ARCHIVE_DIR
