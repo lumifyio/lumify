@@ -18,6 +18,7 @@ tar -xzf $ARCHIVE_DIR/zookeeper-3.4.6.tar.gz -C /opt
 # delete the archive
 rm -rf $ARCHIVE_DIR
 
-# build the packageln -s /opt/zookeeper-3.4.6 /opt/zookeeper
+# build the package
+ln -s /opt/zookeeper-3.4.6 /opt/zookeeper
 cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg
 mkdir -p /tmp/zookeeper
