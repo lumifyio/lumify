@@ -15,7 +15,15 @@ RUN /bin/bash /opt/lumify/scripts/install-npm-packages.sh
 # Passwordless SSH
 ADD scripts/install-ssh.sh /opt/lumify/scripts/install-ssh.sh
 ADD config/ssh_config /root/.ssh/config
-RUN /bin/bash /opt/lumify/scripts/install-ssh.sh
+#RUN /bin/bash /opt/lumify/scripts/install-ssh.sh
+ADD demo/keys/ssh_host_dsa_key /etc/ssh/ssh_host_dsa_key
+ADD demo/keys/ssh_host_dsa_key.pub /etc/ssh/ssh_host_dsa_key.pub
+ADD demo/keys/ssh_host_rsa_key /etc/ssh/ssh_host_rsa_key
+ADD demo/keys/ssh_host_rsa_key.pub /etc/ssh/ssh_host_rsa_key.pub
+ADD demo/keys/id_rsa /root/.ssh/id_rsa
+ADD demo/keys/id_rsa.pub /root/.ssh/id_rsa.pub
+ADD demo/keys/id_rsa.pub /root/.ssh/authorized_keys
+RUN chmod 600 /root/.ssh/config && chown root:root /root/.ssh/config
 EXPOSE 22
 
 # Install Java

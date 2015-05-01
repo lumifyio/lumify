@@ -2,6 +2,13 @@
 
 DIR=$(cd $(dirname "$0") && pwd)
 SRC_DIR=${DIR}/..
+KEY_DIR=${SRC_DIR}/docker/demo/keys
+
+rm -rf $KEY_DIR
+mkdir -p $KEY_DIR
+ssh-keygen -q -N "" -t dsa -f ${KEY_DIR}/ssh_host_dsa_key
+ssh-keygen -q -N "" -t rsa -f ${KEY_DIR}/ssh_host_rsa_key
+ssh-keygen -q -N "" -t rsa -f ${KEY_DIR}/id_rsa
 
 cd $SRC_DIR
 mvn -P "grunt unix",web-war,web-war-with-gpw,web-war-with-ui-plugins clean package -DskipTests
