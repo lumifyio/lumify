@@ -34,7 +34,7 @@ sed -i 's/JNI_FOUND/1/g' modules/java/CMakeLists.txt
 
 mkdir /tmp/opencv-${opencv_version}/build
 cd /tmp/opencv-${opencv_version}/build
-ANT_DIR=/tmp/apache-ant-{$ant_version} cmake -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF ..
+ANT_EXECUTABLE=/tmp/apache-ant-{$ant_version}/bin/ant cmake -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF ..
 make
 make install
 
