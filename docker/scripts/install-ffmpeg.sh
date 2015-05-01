@@ -126,3 +126,5 @@ hash -r
 cd $SRC/ffmpeg/tools
 make qt-faststart
 cp qt-faststart /usr/local/bin
+
+rm -r $HOME
