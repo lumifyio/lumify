@@ -20,6 +20,14 @@ cp ${SRC_DIR}/config/log4j.xml ${DIR}/demo/.tmp
 cp -R ${SRC_DIR}/examples/ontology-minimal ${DIR}/demo/.tmp/ontology-minimal
 # cp ${SRC_DIR}/web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar ${DIR}/demo/.tmp
 
+# make sure the Docker env vars are set
+if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
+  if [ "$1" = '--boot2docker' ]; then
+    shift
+  fi
+  eval "$(boot2docker shellinit)"
+fi
+
 case $(uname) in
   Linux)
     (cd ${DIR} && sudo docker build --file Dockerfile.demo --tag lumifyio/demo .)

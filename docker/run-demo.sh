@@ -3,11 +3,20 @@
 DIR=$(cd $(dirname "$0") && pwd)
 SRC_DIR=${DIR}/..
 
-
 if [ $(uname) = 'Linux' ]; then
   SUDO=sudo
 else
   SUDO=
+fi
+
+# make sure the Docker env vars are set
+if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
+  if [ "$1" = '--boot2docker' ]; then
+    shift
+  fi
+  eval "$(boot2docker shellinit)"
+  sudo sed -i '' 's/.*lumify-demo.*/'"$(boot2docker ip)"'  lumify-demo/' /etc/hosts
+  dscacheutil -flushcache
 fi
 
 (cd ${DIR} &&
