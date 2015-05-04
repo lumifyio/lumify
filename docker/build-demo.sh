@@ -18,7 +18,6 @@ mkdir -p ${DIR}/demo/.tmp
 cp ${SRC_DIR}/web/war/target/lumify-web-war-*.war ${DIR}/demo/.tmp/root.war
 cp ${SRC_DIR}/config/log4j.xml ${DIR}/demo/.tmp
 cp -R ${SRC_DIR}/examples/ontology-minimal ${DIR}/demo/.tmp/ontology-minimal
-# cp ${SRC_DIR}/web/plugins/auth-username-only/target/lumify-web-auth-username-only-*.jar ${DIR}/demo/.tmp
 
 # make sure the Docker env vars are set
 if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
