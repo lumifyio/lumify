@@ -4,6 +4,14 @@ DIR=$(cd $(dirname "$0") && pwd)
 SRC_DIR=${DIR}/..
 KEY_DIR=${DIR}/demo/keys
 
+# make sure the Docker env vars are set
+if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
+  if [ "$1" = '--boot2docker' ]; then
+    shift
+  fi
+  eval "$(boot2docker shellinit)"
+fi
+
 rm -rf $KEY_DIR
 mkdir -p $KEY_DIR
 ssh-keygen -q -N "" -t dsa -f ${KEY_DIR}/ssh_host_dsa_key
@@ -18,14 +26,6 @@ mkdir -p ${DIR}/demo/.tmp
 cp ${SRC_DIR}/web/war/target/lumify-web-war-*.war ${DIR}/demo/.tmp/root.war
 cp ${SRC_DIR}/config/log4j.xml ${DIR}/demo/.tmp
 cp -R ${SRC_DIR}/examples/ontology-minimal ${DIR}/demo/.tmp/ontology-minimal
-
-# make sure the Docker env vars are set
-if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
-  if [ "$1" = '--boot2docker' ]; then
-    shift
-  fi
-  eval "$(boot2docker shellinit)"
-fi
 
 case $(uname) in
   Linux)
