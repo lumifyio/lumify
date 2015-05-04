@@ -17,74 +17,62 @@
             <groupId>io.lumify</groupId>
             <artifactId>lumify-test</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-client-api</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>
             <version>${groovy.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-web-dev-tools</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-graph-property-worker-base</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-tika-mime-type</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-tika-text-extractor</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-phone-number-extractor</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-opennlp-dictionary-extractor</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-opennlp-me-extractor</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-email-extractor</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-zipcode-extractor</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
@@ -95,13 +83,11 @@
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-rdf</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-ccextractor</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
@@ -112,122 +98,99 @@
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-subrip-transcript</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-mime-type-ontology-mapper</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-opencv-object-detector</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-tesseract</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-model-bigtable</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-clavin</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-zipcode-resolver</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-web-auth-username-only</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-video-mp4-encoder</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-video-webm-encoder</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-video-audio-extract</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-audio-mp4-encoder</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-audio-ogg-encoder</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-video-poster-frame</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-video-frame-extract</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
             <artifactId>lumify-gpw-video-metadata</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
-
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>ITest</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${plugin.maven.surefire.version}</version>
-                        <configuration>
-                            <reuseForks>false</reuseForks>
-                            <argLine>-Xmx4096m -XX:MaxPermSize=1024m</argLine>
-                            <excludes>
-                                <exclude>**/*$*</exclude>
-                            </excludes>
-                            <excludedGroups>io.lumify.it.BenchmarkCategory</excludedGroups>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>test-jar</id>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

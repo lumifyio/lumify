@@ -40,7 +40,7 @@ define([
         });
 
         this.onSelectConceptId = function(event, data) {
-            var concept = this.conceptsById[data.conceptId];
+            var concept = this.conceptsById && this.conceptsById[data.conceptId];
             this.select('fieldSelector').val(concept && concept.displayName || '');
         };
 

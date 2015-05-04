@@ -8,33 +8,64 @@ describeComponent('search/types/typeWorkspace', function(TypeWorkspace) {
             setupComponent(this)
         })
 
-        it('should trigger filter on query updated', function() {
-            var c = this.component,
-                searchBegan = $.Deferred(),
-                filter = $.Deferred()
+        describe('on initialize', function(){
 
-            c.on('searchRequestBegan', function(event) {
-                event.stopPropagation()
-                searchBegan.resolve()
+            it('should initialize', function() {
+                var c = this.component;
             })
-            c.on('filterWorkspace', function(event) {
-                event.stopPropagation()
-                filter.resolve()
-            })
-            c.trigger('queryupdated')
-            return $.when(searchBegan, filter).promise()
+
         })
 
-        it('should trigger request completed on filter finish', function(done) {
-            var c = this.component
 
-            c.on('searchRequestCompleted', function() {
-                done()
+        describe('on queryupdated events', function(){
+
+            it('should trigger filter', function() {
+                var c = this.component,
+                    searchBegan = $.Deferred(),
+                    filter = $.Deferred()
+
+                c.on('searchRequestBegan', function(event) {
+                    event.stopPropagation()
+                    searchBegan.resolve()
+                })
+                c.on('filterWorkspace', function(event) {
+                    event.stopPropagation()
+                    filter.resolve()
+                })
+                c.trigger('queryupdated')
+                return $.when(searchBegan, filter).promise()
             })
-            c.trigger('workspaceFiltered', {
-                hits: 0,
-                total: 0
-            })
+
         })
+
+        describe('on workspaceFiltered events', function(){
+
+            it('should trigger request completed', function(done) {
+                var c = this.component
+
+                c.on('searchRequestCompleted', function() {
+                    done();
+                })
+                c.trigger('workspaceFiltered', {
+                    hits: 0,
+                    total: 0
+                })
+            })
+
+        })
+
+        describe('on clearWorkspaceFilter events', function(){
+
+            it('should trigger clearSearch', function(done) {
+                var c = this.component
+
+                c.on('clearSearch', function() {
+                    done();
+                })
+                c.trigger('clearWorkspaceFilter');
+            })
+
+        })
+
     })
 })

@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class UserIntegrationTest extends TestBase {
+public class UserIT extends TestBase {
     private String user1Id;
     private String user2Id;
 

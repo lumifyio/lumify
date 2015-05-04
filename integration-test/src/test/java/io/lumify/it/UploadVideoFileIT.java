@@ -19,7 +19,7 @@ import java.io.InputStream;
 
 import static org.junit.Assert.*;
 
-public class UploadVideoFileIntegrationTest extends TestBase {
+public class UploadVideoFileIT extends TestBase {
     private String artifactVertexId;
 
     @Test
@@ -37,8 +37,8 @@ public class UploadVideoFileIntegrationTest extends TestBase {
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
         addUserAuths(lumifyApi, USERNAME_TEST_USER_1, "auth1");
 
-        InputStream videoResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4");
-        InputStream videoTranscriptResourceStream = UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4.srt");
+        InputStream videoResourceStream = UploadVideoFileIT.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4");
+        InputStream videoTranscriptResourceStream = UploadVideoFileIT.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4.srt");
         ClientApiArtifactImportResponse artifact = lumifyApi.getVertexApi().importFiles(
                 new VertexApiExt.FileForImport("auth1", "shortVideo.mp4", videoResourceStream),
                 new VertexApiExt.FileForImport("auth1", "shortVideo.mp4.srt", videoTranscriptResourceStream));
@@ -70,7 +70,7 @@ public class UploadVideoFileIntegrationTest extends TestBase {
 
     private void assertRawRoute() throws ApiException, IOException {
         LOGGER.info("assertRawRoute");
-        byte[] expected = IOUtils.toByteArray(UploadVideoFileIntegrationTest.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4"));
+        byte[] expected = IOUtils.toByteArray(UploadVideoFileIT.class.getResourceAsStream("/io/lumify/it/shortVideo.mp4"));
 
         LumifyApi lumifyApi = login(USERNAME_TEST_USER_1);
 
