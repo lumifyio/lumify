@@ -419,7 +419,8 @@ define([
                     } else {
                         var dependentIris = ontologyProperty && ontologyProperty.dependentPropertyIris || [];
                         if (dependentIris.length) {
-                            return _.map(dependentIris, _.partial(V.prop, vertex, _, optionalKey, optionalOpts)).join(' ');
+                            return _.map(dependentIris,
+                                            _.partial(V.prop, vertex, _, optionalKey, optionalOpts)).join(' ');
                         } else {
                             return value.join(' ');
                         }

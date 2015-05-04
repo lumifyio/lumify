@@ -70,10 +70,10 @@ define([
             if (this.attr.toolbar.length) {
                 this.$node.html(template(this.attr));
                 this.$node.find('.has-submenu').each(function() {
-                    var $this = $(this);
-                    var displayValues = $this.find('li').map(function() {
-                        return $(this).css('display') === 'none';
-                    }).toArray();
+                    var $this = $(this),
+                        displayValues = $this.find('li').map(function() {
+                            return $(this).css('display') === 'none';
+                        }).toArray();
 
                     if (_.all(displayValues)) {
                         $this.hide();
