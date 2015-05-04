@@ -75,9 +75,9 @@ function ensure_lumify_config {
   hadoop fs -mkdir -p /lumify/config/opencv
   hadoop fs -mkdir -p /lumify/config/opennlp
   hadoop fs -mkdir -p /lumify/config/knownEntities/dictionaries
-  hadoop fs -put /opt/lumify-source/config/opencv/haarcascade_frontalface_alt.xml /lumify/config/opencv/
-  hadoop fs -put /opt/lumify-source/config/opennlp/* /lumify/config/opennlp/
-  hadoop fs -put /opt/lumify-source/config/knownEntities/dictionaries/* /lumify/config/knownEntities/dictionaries/
+  hadoop fs -put /opt/lumify/config/opencv/haarcascade_frontalface_alt.xml /lumify/config/opencv/
+  hadoop fs -put /opt/lumify/config/opennlp/* /lumify/config/opennlp/
+  hadoop fs -put /opt/lumify/config/knownEntities/dictionaries/* /lumify/config/knownEntities/dictionaries/
   hadoop fs -chmod -R a+w /lumify/
 }
 
