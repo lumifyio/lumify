@@ -29,12 +29,14 @@ unzip $ARCHIVE_DIR/${opencv_zip} -d /tmp
 rm -rf $ARCHIVE_DIR
 
 # build the package
+export PATH=$PATH:/tmp/apache-ant-${ant_version}/bin
+
 cd /tmp/opencv-${opencv_version}
 sed -i 's/JNI_FOUND/1/g' modules/java/CMakeLists.txt
 
 mkdir /tmp/opencv-${opencv_version}/build
 cd /tmp/opencv-${opencv_version}/build
-ANT_EXECUTABLE=/tmp/apache-ant-${ant_version}/bin/ant cmake -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF ..
+cmake -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF ..
 make
 make install
 
