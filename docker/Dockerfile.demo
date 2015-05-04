@@ -131,6 +131,9 @@ ADD demo/.tmp/root.war /opt/jetty/webapps/root.war
 ADD demo/.tmp/log4j.xml /opt/lumify/config/log4j.xml
 ADD demo/.tmp/ontology-minimal /opt/lumify/ontology
 ADD demo/lumify.properties /opt/lumify/config/lumify.properties
+ADD demo/.tmp/knownEntities /opt/lumify/config/knownEntities
+ADD demo/.tmp/opencv /opt/lumify/config/opencv
+ADD demo/.tmp/opennlp /opt/lumify/config/opennlp
 
 # add scripts
 ADD scripts/docker-entrypoint.sh /opt/docker-entrypoint.sh
