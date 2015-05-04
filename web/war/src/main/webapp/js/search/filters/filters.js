@@ -65,7 +65,7 @@ define([
                 .done(function(vertices) {
                     var single = vertices[0],
                         title = vertices.length > 1 ? i18n('search.filters.title_multiple', vertices.length)
-                                                    : single && F.vertex.title(single) || single.id;
+                                                    : single && (F.vertex.title(single) || single.id);
                     self.onClearFilters();
 
                     self.entityFilters.relatedToVertexIds = _.pluck(vertices, 'id');

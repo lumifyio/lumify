@@ -3,9 +3,11 @@ define([], function() {
             var self = this;
 
             this.responses = {};
+            this.components = [];
 
-            this.listen = function() {
-                $(document).on('dataRequest', this.handleRequests);
+            this.listen = function(component) {
+                self.components.push(component);
+                component.on(document, 'dataRequest', this.handleRequests);
             };
 
             this.handleRequests = function(event, data) {
@@ -38,7 +40,10 @@ define([], function() {
             };
 
             this.stop = function() {
-                $(document).off('dataRequest');
+                for(var i = 0; i < self.components.length; i++) {
+                    self.components[i].off(document, 'dataRequest');
+                }
+                self.components = [];
                 //this.responses = {};
             };
         };

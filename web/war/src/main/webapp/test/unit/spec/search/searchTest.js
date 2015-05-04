@@ -218,7 +218,7 @@ define(['dataRequestHandler'], function(DataRequestHandler) {
                             };
 
                         DataRequestHandler.setResponse('config', 'properties', true, propertiesData);
-                        DataRequestHandler.listen();
+                        DataRequestHandler.listen(c);
 
                         c.trigger('filterschange', data);
 
@@ -249,7 +249,7 @@ define(['dataRequestHandler'], function(DataRequestHandler) {
                             };
 
                         DataRequestHandler.setResponse('config', 'properties', true, propertiesData);
-                        DataRequestHandler.listen();
+                        DataRequestHandler.listen(c);
 
                         query.val(queryString)
                         c.trigger('filterschange', data);

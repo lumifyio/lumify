@@ -73,7 +73,7 @@ define(['dataRequestHandler'], function(DataRequestHandler) {
                         }
 
                     DataRequestHandler.setResponse('vertex', 'search', success, result);
-                    DataRequestHandler.listen();
+                    DataRequestHandler.listen($c);
 
                     $c.on('searchRequestCompleted', function(event, data) {
                          DataRequestHandler.stop();
@@ -99,7 +99,7 @@ define(['dataRequestHandler'], function(DataRequestHandler) {
                         }
 
                     DataRequestHandler.setResponse('vertex', 'search', success, result);
-                    DataRequestHandler.listen();
+                    DataRequestHandler.listen($c);
 
                     $c.on('searchRequestCompleted', function(event, data) {
                          DataRequestHandler.stop();
@@ -137,7 +137,7 @@ define(['dataRequestHandler'], function(DataRequestHandler) {
                         addInfinite = $.Deferred();
 
                     DataRequestHandler.setResponse('vertex', 'search', true, {});
-                    DataRequestHandler.listen();
+                    DataRequestHandler.listen($c);
 
                     $c.on('addInfiniteVertices', function(event, data){
                         DataRequestHandler.stop();
@@ -155,7 +155,7 @@ define(['dataRequestHandler'], function(DataRequestHandler) {
                         addInfinite = $.Deferred();
 
                     DataRequestHandler.setResponse('vertex', 'search', false, {});
-                    DataRequestHandler.listen();
+                    DataRequestHandler.listen($c);
 
                     $c.on('addInfiniteVertices', function(event, data){
                         DataRequestHandler.stop();
