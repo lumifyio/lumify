@@ -12,7 +12,7 @@ SSH_OPTIONS="-p 2022 -i $SSH_KEY -o UserKnownHostsFile=/dev/null -o StrictHostKe
 SCP_OPTIONS="-P 2022 -i $SSH_KEY -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
 # stop Jetty
-ssh $SSH_OPTIONS root@lumify-demo '/opt/jetty/bin/jetty.sh stop'
+ssh $SSH_OPTIONS root@lumify-demo '/opt/stop.sh'
 
 # deploy Lumify artifacts
 scp $SCP_OPTIONS    $SRC_DIR/config/log4j.xml                     root@lumify-demo:/opt/lumify/config/log4j.xml
@@ -24,6 +24,6 @@ scp $SCP_OPTIONS    $SRC_DIR/web/war/target/lumify-web-war-*.war  root@lumify-de
 scp $SCP_OPTIONS -r $SRC_DIR/examples/ontology-minimal            root@lumify-demo:/opt/lumify/ontology
 
 # start Jetty
-ssh $SSH_OPTIONS root@lumify-demo '/opt/jetty/bin/jetty.sh start </dev/null >/dev/null 2>&1 &'
+ssh $SSH_OPTIONS root@lumify-demo '/opt/start.sh </dev/null >/dev/null 2>&1 &'
 
 exit 0
