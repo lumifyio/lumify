@@ -46,3 +46,10 @@ After running the Lumify Docker Container you can 'ssh' into the instance using 
 ```sh
 $ ssh -p 2022 -i <working dir>/lumify/docker/demo/keys/id_rsa root@lumify-demo
 ```
+
+## Redeploy Lumify to a running Docker container
+Execute the following commands to rebuild and deploy the Lumify web application to the currently running Docker container.
+
+```sh
+$ ~/lumify/docker/deploy-lumify-demo.sh
+```

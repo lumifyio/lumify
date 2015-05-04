@@ -7,6 +7,9 @@
 DIR=$(cd $(dirname "$0") && pwd)
 SRC_DIR=$DIR/..
 
+cd $SRC_DIR
+mvn -P "grunt unix",web-war,web-war-with-gpw,web-war-with-ui-plugins clean package -DskipTests
+
 SSH_KEY=$DIR/demo/keys/id_rsa
 SSH_OPTIONS="-p 2022 -i $SSH_KEY -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 SCP_OPTIONS="-P 2022 -i $SSH_KEY -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
