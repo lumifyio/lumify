@@ -26,6 +26,9 @@ mkdir -p ${DIR}/demo/.tmp
 cp ${SRC_DIR}/web/war/target/lumify-web-war-*.war ${DIR}/demo/.tmp/root.war
 cp ${SRC_DIR}/config/log4j.xml ${DIR}/demo/.tmp
 cp -R ${SRC_DIR}/examples/ontology-minimal ${DIR}/demo/.tmp/ontology-minimal
+cp -R ${SRC_DIR}/config/knownEntities ${DIR}/demo/.tmp/knownEntities
+cp -R ${SRC_DIR}/config/opencv ${DIR}/demo/.tmp/opencv
+cp -R ${SRC_DIR}/config/opennlp ${DIR}/demo/.tmp/opennlp
 
 case $(uname) in
   Linux)
