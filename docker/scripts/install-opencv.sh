@@ -34,11 +34,12 @@ sed -i 's/JNI_FOUND/1/g' modules/java/CMakeLists.txt
 
 mkdir /tmp/opencv-${opencv_version}/build
 cd /tmp/opencv-${opencv_version}/build
-ANT_EXECUTABLE=/tmp/apache-ant-{$ant_version}/bin/ant cmake -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF ..
+ANT_EXECUTABLE=/tmp/apache-ant-${ant_version}/bin/ant cmake -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF ..
 make
 make install
 
-ln -s /usr/local/share/OpenCV/java/libopencv_java249.so /usr/local/lib/libopencv_java249.so
+# create a link to the opencv_java lib where jetty can find it
+ln -s /usr/local/share/OpenCV/java/libopencv_java249.so /usr/lib/libopencv_java249.so
 ldconfig
 
 # delete the src dirs
