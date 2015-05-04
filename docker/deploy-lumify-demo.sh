@@ -5,7 +5,7 @@
 #
 
 DIR=$(cd $(dirname "$0") && pwd)
-SRC_DIR=$DIR/../..
+SRC_DIR=$DIR/..
 
 SSH_KEY=$DIR/keys/id_rsa
 SSH_OPTIONS="-p 2022 -i $SSH_KEY -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
@@ -17,6 +17,9 @@ ssh $SSH_OPTIONS root@lumify-demo '/opt/jetty/bin/jetty.sh stop'
 # deploy Lumify artifacts
 scp $SCP_OPTIONS    $SRC_DIR/config/log4j.xml                     root@lumify-demo:/opt/lumify/config/log4j.xml
 scp $SCP_OPTIONS    $SRC_DIR/docker/demo/lumify.properties        root@lumify-demo:/opt/lumify/config/lumify.properties
+scp $SCP_OPTIONS    $SRC_DIR/config/knownEntities                 root@lumify-demo:/opt/lumify/config/knownEntities
+scp $SCP_OPTIONS    $SRC_DIR/config/opencv                        root@lumify-demo:/opt/lumify/config/opencv
+scp $SCP_OPTIONS    $SRC_DIR/config/opennlp                       root@lumify-demo:/opt/lumify/config/opennlp
 scp $SCP_OPTIONS    $SRC_DIR/web/war/target/lumify-web-war-*.war  root@lumify-demo:/opt/jetty/webapps/root.war
 scp $SCP_OPTIONS -r $SRC_DIR/examples/ontology-minimal            root@lumify-demo:/opt/lumify/ontology
 
