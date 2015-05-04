@@ -21,7 +21,6 @@ fi
 
 (cd ${DIR} &&
   ${SUDO} docker run \
-  -v ${SRC_DIR}:/opt/lumify-source \
   -p 2022:22 `# sshd` \
   -p 2181:2181 `# ZooKeeper` \
   -p 5672:5672 `# RabbitMQ` \
