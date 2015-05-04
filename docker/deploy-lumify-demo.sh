@@ -7,7 +7,7 @@
 DIR=$(cd $(dirname "$0") && pwd)
 SRC_DIR=$DIR/..
 
-SSH_KEY=$DIR/keys/id_rsa
+SSH_KEY=$DIR/demo/keys/id_rsa
 SSH_OPTIONS="-p 2022 -i $SSH_KEY -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 SCP_OPTIONS="-P 2022 -i $SSH_KEY -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
