@@ -33,13 +33,15 @@ cd /tmp/sphinxbase-${sphinxbase_version}
 ./configure
 make
 make install
-rm -rf /tmp/sphinxbase-${sphinxbase_version}
 
 # install pocketshpinx
 cd /tmp/pocketsphinx-${pocketsphinx_version}
 ./configure
 make
 make install
+
+
+rm -rf /tmp/sphinxbase-${sphinxbase_version}
 rm -rf /tmp/pocketsphinx-${pocketsphinx_version}
 
 
