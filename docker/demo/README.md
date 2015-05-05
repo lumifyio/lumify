@@ -129,10 +129,10 @@ The port used for ssh is different on Linux and OSX.
 	$ ssh -p 2022 -i <working dir>/lumify/docker/demo/keys/id_rsa root@lumify-demo
 	```
 
-#### Redeploy Lumify to a running Docker container
+#### Update Lumify in a running Docker container
 
-Execute the following commands to rebuild and deploy the Lumify web application to the currently running Docker container.
+Execute the following commands to update the Lumify web application in the currently running Docker container.
 
 ```sh
-$ ~/lumify/docker/deploy-lumify-demo.sh
+$ ~/lumify/docker/update-lumify-demo.sh
 ```
