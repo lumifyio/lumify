@@ -15,14 +15,62 @@ The following dependencies must be installed before building the Lumify Demo Doc
 	- [Docker](https://www.docker.com/)
 - HTML5 compliant web browser
 
-## Installation
-Execute the following commands to build the Lumify Demo Docker Container.
+## Install on OSX
+Execute the following commands to build the Lumify Demo Docker Container on OSX.
+
+####1. Initialize the Boot2Docker Virtual Machine
+Docker requires a Linux kernal and will not run natively on OSX. From an OSX environment you must initialize and start a Boot2Docker virtual machine to host Docker.  
+
+This command initializes a Boot2Docker virtual machine with 8 GB of memory.  You may adjust this parameter to allocate more memory if desired.
 
 ```sh
 $ boot2docker init -m 8192
-$ boot2docker start 
+```
+
+*\* The Boot2Docker initialization step only needs to be run once.*
+
+####2. Start the Boot2Docker Virtual Machine
+This command will start the Boot2Docker virtual machine within VirtualBox.
+
+```sh
+$ boot2docker start
+```
+
+*\* The Boot2Docker virtual machine only needs to be started if it has not been started or has been stoped.*
+
+####3. Download the Lumify source code
+Downlowad the Lumify source code from GitHub to a local directory.
+
+```sh 
 $ cd ~
 $ git clone https://github.com/lumifyio/lumify.git
+```
+
+####4. Build the Lumify Docker Container
+Executing the build script will complile the Lumify software and build the Docker container hosting a minimal deployment of Lumify.
+
+```sh
+$ cd ~/lumify/docker
+$ ./build-demo.sh
+```
+
+## Install on Linux
+Execute the following commands to build the Lumify Demo Docker Container on Linux.
+
+Docker runs natively on Linux and will have access to the full system resources of the host OS. It is recommended to run the Lumify demo on a machine with 8 GB, or higher, memery.
+
+####1. Download the Lumify source code
+Downlowad the Lumify source code from GitHub to a local directory.
+
+```sh 
+$ cd ~
+$ git clone https://github.com/lumifyio/lumify.git
+```
+
+####2. Build the Lumify Docker Container
+Executing the build script will complile the Lumify software and build the Docker container hosting a minimal deployment of Lumify.  This step may take a significant amount of time to complete.
+
+```sh
 $ cd ~/lumify/docker
 $ ./build-demo.sh
 ```
