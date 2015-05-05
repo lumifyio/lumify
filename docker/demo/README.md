@@ -1,5 +1,5 @@
 # Lumify Demo Docker Container
-The Lumify Demo Docker container encapsulates a minimal deployment of Lumify.  The container is self contained and can be run independant of the development environment, after it is built.  
+The Lumify Demo Docker container encapsulates a minimal deployment of Lumify.  The container is self contained and can be run independent of the development environment, after it is built.
 
 ## Prerequisites to build from source
 The following dependencies must be installed before building the Lumify Demo Docker Container.
