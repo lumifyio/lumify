@@ -88,14 +88,49 @@ After Lumify has fully started, open the Lumify web application in an HTML5 comp
 http://lumify-demo:8080
 ```
 
-## ssh into lumify-demo
-After running the Lumify Docker Container you can 'ssh' into the instance using the following command.
+## Working with the Lumify Demo Container
+
+#### OSX environment variables
+
+If you are working on OSX and wish to execute Docker commands, you will need to set some environment variables.  The following Boot2Docker commad will display the environment variables that must be exported to your shell environment before executing Docker commands.
 
 ```sh
-$ ssh -p 2022 -i <working dir>/lumify/docker/demo/keys/id_rsa root@lumify-demo
+$ boot2docker shellinit
+Writing /Users/mary/.boot2docker/certs/boot2docker-vm/ca.pem
+Writing /Users/mary/.boot2docker/certs/boot2docker-vm/cert.pem
+Writing /Users/mary/.boot2docker/certs/boot2docker-vm/key.pem
+    export DOCKER_HOST=tcp://192.168.59.103:2376
+    export DOCKER_CERT_PATH=/Users/mary/.boot2docker/certs/boot2docker-vm
+    export DOCKER_TLS_VERIFY=1
 ```
 
-## Redeploy Lumify to a running Docker container
+The following command will export the Docker environment variables with a single command.
+
+```sh        
+$ eval "$(boot2docker shellinit)"
+```
+
+#### ssh into lumify-demo
+
+After running the Lumify Docker Container you can 'ssh' into the instance using the following command.
+
+The port used for ssh is different on Linux and OSX.  
+
+
+- For Linux use the standard port **22**
+
+	```sh
+	$ ssh -p 22 -i <working dir>/lumify/docker/demo/keys/id_rsa root@lumify-demo
+	```
+
+- For OSX use port **2022**
+	
+	```sh
+	$ ssh -p 2022 -i <working dir>/lumify/docker/demo/keys/id_rsa root@lumify-demo
+	```
+
+#### Redeploy Lumify to a running Docker container
+
 Execute the following commands to rebuild and deploy the Lumify web application to the currently running Docker container.
 
 ```sh
