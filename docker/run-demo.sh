@@ -14,7 +14,12 @@ if [ $(uname) = 'Darwin' -o "$1" = '--boot2docker' ]; then
   if [ "$1" = '--boot2docker' ]; then
     shift
   fi
-  sudo sed -i '' 's/.*lumify-demo.*/'"$(boot2docker ip)"'  lumify-demo/' /etc/hosts
+  if grep -q 'lumify-demo' /etc/hosts
+  then
+    sudo sed -i '.bk' 's/.*lumify-demo.*/'"$(boot2docker ip)"'  lumify-demo/' /etc/hosts
+  else
+    sudo sh -c "echo \"$(boot2docker ip)  lumify-demo\" >> /etc/hosts"
+  fi
   dscacheutil -flushcache
   eval "$(boot2docker shellinit)"
 fi
