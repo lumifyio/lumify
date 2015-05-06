@@ -8,12 +8,17 @@ The following dependencies must be installed before building the Lumify Demo Doc
 - [Java 7 JDK](http://www.oracle.com/technetwork/java/javase/downloads)
 - [Maven](https://maven.apache.org/)
 - [Git client](http://git-scm.com/)
+- [node.js](https://nodejs.org/)
+- [Bower](http://bower.io/)
+- [Grunt](http://gruntjs.com/)
 - OSX build environments
 	- [VirtualBox](https://www.virtualbox.org/)
 	- [Boot2Docker (includes Docker)](http://boot2docker.io/)
 - Linux build environments
 	- [Docker](https://www.docker.com/)
 - Chrome or Firefox web browser
+
+*Installation requres **sudo** privilages to install*
 
 ## Install on OSX
 Execute the following commands to build the Lumify Demo Docker Container on OSX.
@@ -46,7 +51,16 @@ $ cd ~
 $ git clone https://github.com/lumifyio/lumify.git
 ```
 
-####4. Build the Lumify Docker Container
+####4. Install Bower & Grunt 
+The Lumify web application requires Bower and Grunt to be installed.
+
+```sh
+$ cd ~/lumify/web/war/src/main/webapp
+$ npm install -g inherits bower grunt
+$ npm install -g grunt-cli
+```
+
+####5. Build the Lumify Docker Container
 Executing the build script will complile the Lumify software and build the Docker container hosting a minimal deployment of Lumify.
 
 ```sh
