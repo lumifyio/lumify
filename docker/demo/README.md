@@ -76,7 +76,7 @@ $ ./build-demo.sh
 ```
 
 ## Running the demo
-Execute the following commnd to run the Lumify Demo Docker Container.
+Execute the following command to run the Lumify Demo Docker Container.
 
 ```sh
 $ ~/lumify/docker/run-demo.sh   # may need to enter sudo password
