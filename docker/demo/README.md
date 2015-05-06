@@ -13,7 +13,7 @@ The following dependencies must be installed before building the Lumify Demo Doc
 	- [Boot2Docker (includes Docker)](http://boot2docker.io/)
 - Linux build environments
 	- [Docker](https://www.docker.com/)
-- HTML5 compliant web browser
+- Chrome or Firefox web browser
 
 ## Install on OSX
 Execute the following commands to build the Lumify Demo Docker Container on OSX.
@@ -36,7 +36,7 @@ This command will start the Boot2Docker virtual machine within VirtualBox.
 $ boot2docker start
 ```
 
-*\* The Boot2Docker virtual machine only needs to be started if it has not been started or has been stoped.*
+*\* The Boot2Docker virtual machine only needs to be started if it has not been started or has been stopped.*
 
 ####3. Download the Lumify source code
 Downlowad the Lumify source code from GitHub to a local directory.
