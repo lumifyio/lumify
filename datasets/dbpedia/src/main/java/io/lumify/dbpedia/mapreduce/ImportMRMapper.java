@@ -4,7 +4,6 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.mapreduce.LumifyElementMapperBase;
-import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.InMemoryAuthorizationRepository;
@@ -12,7 +11,6 @@ import io.lumify.core.security.DirectVisibilityTranslator;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.dbpedia.mapreduce.model.LineData;
 import io.lumify.dbpedia.mapreduce.model.LinkValue;
-import io.lumify.securegraph.model.ontology.SecureGraphOntologyRepository;
 import io.lumify.wikipedia.WikipediaConstants;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -25,7 +23,6 @@ import org.securegraph.accumulo.AccumuloAuthorizations;
 import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> {
@@ -35,8 +32,6 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
     private Visibility visibility;
     private Visibility defaultVisibility;
     private AccumuloAuthorizations authorizations;
-    private SecureGraphOntologyRepository ontologyRepository;
-    private static final Map<String, Integer> conceptTypeDepthCache = new HashMap<String, Integer>();
 
     public static String getDbpediaEntityVertexId(String pageTitle) {
         return DBPEDIA_ID_PREFIX + pageTitle.trim().toLowerCase();
@@ -58,8 +53,7 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         try {
             Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
             Configuration config = HashMapConfigurationLoader.load(configurationMap);
-            this.ontologyRepository = new SecureGraphOntologyRepository(getGraph(), config, authorizationRepository);
-        } catch (Exception e) {
+       } catch (Exception e) {
             throw new IOException("Could not configure secure graph ontology repository", e);
         }
         linesProcessedCounter = context.getCounter(DbpediaImportCounters.LINES_PROCESSED);
@@ -125,14 +119,6 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
 
         if (lineData.getPropertyIri().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type") && lineData.getValue() instanceof LinkValue) {
             LinkValue linkValue = (LinkValue) lineData.getValue();
-
-            Integer ontologyDepth = getConceptDepth(linkValue.getValueString());
-            if (ontologyDepth != null) {
-                conceptTypeMetadata = new Metadata();
-                LumifyProperties.CONFIDENCE.setMetadata(conceptTypeMetadata, 0.2 + ((double) ontologyDepth / 1000.0), defaultVisibility);
-                String multiValueKey = ImportMR.MULTI_VALUE_KEY + "#" + linkValue.getValueString();
-                LumifyProperties.CONCEPT_TYPE.addPropertyValue(entityVertexBuilder, multiValueKey, linkValue.getValueString(), conceptTypeMetadata, visibility);
-            }
         }
 
         if (!(lineData.getValue() instanceof LinkValue)) {
@@ -146,29 +132,6 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         addEdge(edgeId, entityVertex, pageVertex, DbpediaOntology.EDGE_LABEL_ENTITY_HAS_WIKIPEDIA_PAGE, visibility, authorizations);
 
         return entityVertex;
-    }
-
-    private Integer getConceptDepth(String conceptIri) {
-        if (conceptTypeDepthCache.containsKey(conceptIri)) {
-            return conceptTypeDepthCache.get(conceptIri);
-        }
-
-        Concept concept = this.ontologyRepository.getConceptByIRI(conceptIri);
-        if (concept == null) {
-            conceptTypeDepthCache.put(conceptIri, null);
-            return null;
-        }
-        int depth = 0;
-        while (true) {
-            Concept parentConcept = this.ontologyRepository.getParentConcept(concept);
-            if (parentConcept == null) {
-                break;
-            }
-            depth++;
-            concept = parentConcept;
-        }
-        conceptTypeDepthCache.put(conceptIri, depth);
-        return depth;
     }
 
     private Vertex createPageVertex(LineData lineData) {
