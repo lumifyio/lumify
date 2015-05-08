@@ -9,6 +9,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.csv.model.Mapping;
 import io.lumify.web.clientapi.model.VisibilityJson;
+import io.lumify.web.clientapi.model.util.ClientApiConverter;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -49,7 +50,9 @@ public class CsvGraphPropertyWorker extends GraphPropertyWorker {
             LumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), csvConceptTypeIri, metadata, data.getVisibility(), getAuthorizations());
         }
 
-        Mapping mapping = CsvOntology.MAPPING_JSON.getPropertyValue(data.getProperty());
+        StreamingPropertyValue mappingStream = LumifyProperties.MAPPING_JSON.getPropertyValue(data.getProperty());
+        String mappingJson = mappingStream != null ? mappingStream.readToString() : "";
+        Mapping mapping = ClientApiConverter.toClientApi(mappingJson, Mapping.class);
         StreamingPropertyValue raw = LumifyProperties.RAW.getPropertyValue(data.getElement());
         try (InputStream rawIn = raw.getInputStream()) {
             processCsvStream(rawIn, mapping, data);
@@ -196,6 +199,6 @@ public class CsvGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        return property.getName().equals(CsvOntology.MAPPING_JSON.getPropertyName());
+        return property.getName().equals(LumifyProperties.MAPPING_JSON.getPropertyName());
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public abstract class VertextTestBase extends TestBase {
+public abstract class VertexTestBase extends TestBase {
     protected static final int NUM_DEFAULT_PROPERTIES = 2;
     protected static final List<String> PUBLIC_VISIBILITY = ImmutableList.of("");
     protected static final String PROPERTY_NAME = "http://lumify.io/test#firstName";

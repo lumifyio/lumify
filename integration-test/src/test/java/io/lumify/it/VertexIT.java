@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class VertexIT extends VertextTestBase {
+public class VertexIT extends VertexTestBase {
 
     private static final String PROPERTY_QUERY_STRING = PROPERTY_VALUE_PREFIX;
     private static final String NO_MATCHING_PROPERTY_VALUE = "NoMatchingProperty";

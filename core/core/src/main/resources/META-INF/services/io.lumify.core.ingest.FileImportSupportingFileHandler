@@ -1,1 +1,2 @@
 io.lumify.core.ingest.MetadataFileImportSupportingFileHandler
+io.lumify.core.ingest.MappingFileImportSupportingFileHandler
