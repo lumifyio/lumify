@@ -7,7 +7,7 @@
         
 1. If you are using Docker in your development environment, make sure your docker container has at least 60GB space and more than 8GB memory. If that's not the case, you need to reintialize your docker image and rebuild it. as below:
 
-		boot2docker init -m 12000 -diskSize 60gb
+		boot2docker init -m 12000 -s 61440
 
 1. After that you need to start docker container with run-dev.sh. If you are not using docker, login to one of the hadoop data nodes.
 1. If you are using docker, create directories datasets/dbpedia/dbpedia-types and datasets/dbpedia/dbpedia-mapping-properties in your workstation under docker/lumify-dev-persistent directory. This should create directories in your docker image as below:
