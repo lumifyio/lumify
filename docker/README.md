@@ -36,7 +36,7 @@ To format your dev image, you can run the format script.
 1. Copy the war file:
 
         cp web/war/target/lumify-web-war*.war \
-           docker/lumify-dev-persistent/opt/jetty/webapps/root.war
+           docker/dev/lumify-dev-persistent/opt/jetty/webapps/root.war
 
 1. Package an auth plugin:
 
@@ -45,7 +45,7 @@ To format your dev image, you can run the format script.
 1. Copy the auth plugin for use in the docker image:
 
         cp web/plugins/auth-username-only/target/lumify-web-auth-username-only-*[0-9T].jar \
-           docker/lumify-dev-persistent/opt/lumify/lib
+           docker/dev/lumify-dev-persistent/opt/lumify/lib
 
 1. Inside the docker image run Jetty:
 

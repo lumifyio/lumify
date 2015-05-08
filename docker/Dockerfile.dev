@@ -2,7 +2,7 @@
 FROM centos:centos6
 
 # Add yum repositories
-ADD yum-repos/elasticsearch.repo /etc/yum.repos.d/elasticsearch.repo
+ADD config/yum-repos/elasticsearch.repo /etc/yum.repos.d/elasticsearch.repo
 
 # Install RPM packages
 ADD scripts/install-rpm-packages.sh /opt/lumify/scripts/install-rpm-packages.sh
@@ -14,13 +14,13 @@ RUN /bin/bash /opt/lumify/scripts/install-npm-packages.sh
 
 # Passwordless SSH
 ADD scripts/install-ssh.sh /opt/lumify/scripts/install-ssh.sh
-ADD ssh_config /root/.ssh/config
+ADD config/ssh_config /root/.ssh/config
 RUN /bin/bash /opt/lumify/scripts/install-ssh.sh
 EXPOSE 22
 
 # Install Java
 ADD scripts/install-java.sh /opt/lumify/scripts/install-java.sh
-ADD java/java.sh /etc/profile.d/java.sh
+ADD config/java/java.sh /etc/profile.d/java.sh
 ENV PATH $PATH:/opt/jdk/bin
 ENV JAVA_HOME /opt/jdk
 ENV _JAVA_OPTIONS -Djava.net.preferIPv4Stack=true
@@ -41,8 +41,8 @@ EXPOSE 2181 2888 3888
 
 # Install Hadoop
 ADD scripts/install-hadoop.sh /opt/lumify/scripts/install-hadoop.sh
-ADD hadoop/core-site.xml.template /opt/hadoop-2.3.0/etc/hadoop/core-site.xml.template
-COPY hadoop/hadoop-native-64bit.tar.gz /opt/hadoop-2.3.0/hadoop-native-64bit.tar.gz
+ADD config/hadoop/core-site.xml.template /opt/hadoop-2.3.0/etc/hadoop/core-site.xml.template
+COPY config/hadoop/hadoop-native-64bit.tar.gz /opt/hadoop-2.3.0/hadoop-native-64bit.tar.gz
 ENV HADOOP_PREFIX /opt/hadoop
 ENV HADOOP_COMMON_HOME /opt/hadoop
 ENV HADOOP_HDFS_HOME /opt/hadoop
@@ -52,9 +52,9 @@ ENV HADOOP_CONF_DIR /opt/hadoop/etc/hadoop
 ENV YARN_CONF_DIR /opt/hadoop/etc/hadoop
 ENV PATH $PATH:/opt/hadoop/bin
 RUN /bin/bash /opt/lumify/scripts/install-hadoop.sh
-ADD hadoop/hdfs-site.xml /opt/hadoop-2.3.0/etc/hadoop/hdfs-site.xml
-ADD hadoop/mapred-site.xml /opt/hadoop-2.3.0/etc/hadoop/mapred-site.xml
-ADD hadoop/yarn-site.xml /opt/hadoop-2.3.0/etc/hadoop/yarn-site.xml
+ADD config/hadoop/hdfs-site.xml /opt/hadoop-2.3.0/etc/hadoop/hdfs-site.xml
+ADD config/hadoop/mapred-site.xml /opt/hadoop-2.3.0/etc/hadoop/mapred-site.xml
+ADD config/hadoop/yarn-site.xml /opt/hadoop-2.3.0/etc/hadoop/yarn-site.xml
 VOLUME ["/var/lib/hadoop-hdfs", "/var/local/hadoop"]
 EXPOSE 8020 8032 8088 9000 50010 50020 50030 50060 50070 50075 50090
 
@@ -68,7 +68,7 @@ EXPOSE 9997 9999 50091 50095
 ADD scripts/install-elasticsearch.sh /opt/lumify/scripts/install-elasticsearch.sh
 ENV PATH $PATH:/opt/elasticsearch/bin
 RUN /bin/bash /opt/lumify/scripts/install-elasticsearch.sh
-ADD elasticsearch/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml
+ADD config/elasticsearch/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml
 VOLUME ["/opt/elasticsearch-1.4.4/data/"]
 EXPOSE 9200 9300
 
@@ -76,29 +76,29 @@ EXPOSE 9200 9300
 ADD scripts/install-rabbitmq.sh /opt/lumify/scripts/install-rabbitmq.sh
 ENV PATH $PATH:/opt/rabbitmq/sbin
 RUN /bin/bash /opt/lumify/scripts/install-rabbitmq.sh
-ADD rabbitmq/etc/rabbitmq/rabbitmq.config /opt/rabbitmq_server-3.4.1/etc/rabbitmq/rabbitmq.config
+ADD config/rabbitmq/etc/rabbitmq/rabbitmq.config /opt/rabbitmq_server-3.4.1/etc/rabbitmq/rabbitmq.config
 VOLUME ["/opt/rabbitmq_server-3.4.1/var"]
 EXPOSE 5672 5673 15672
 
 # Install Jetty
 ADD scripts/install-jetty.sh /opt/lumify/scripts/install-jetty.sh
 RUN /bin/bash /opt/lumify/scripts/install-jetty.sh
-ADD jetty/start.ini /opt/jetty/start.ini
-ADD jetty/jetty-logging.properties /opt/jetty/resources/jetty-logging.properties
-ADD jetty/jetty.xml /opt/jetty/etc/jetty.xml
-ADD jetty/jetty-http.xml /opt/jetty/etc/jetty-http.xml
-ADD jetty/jetty-https.xml /opt/jetty/etc/jetty-https.xml
-ADD jetty/jetty-ssl.xml /opt/jetty/etc/jetty-ssl.xml
-ADD jetty/jetty.jks /opt/jetty/etc/jetty.jks
+ADD config/jetty/start.ini /opt/jetty/start.ini
+ADD config/jetty/jetty-logging.properties /opt/jetty/resources/jetty-logging.properties
+ADD config/jetty/jetty.xml /opt/jetty/etc/jetty.xml
+ADD config/jetty/jetty-http.xml /opt/jetty/etc/jetty-http.xml
+ADD config/jetty/jetty-https.xml /opt/jetty/etc/jetty-https.xml
+ADD config/jetty/jetty-ssl.xml /opt/jetty/etc/jetty-ssl.xml
+ADD config/jetty/jetty.jks /opt/jetty/etc/jetty.jks
 ENV PATH $PATH:/opt/jetty/bin
 VOLUME ["/opt/jetty/webapps"]
 EXPOSE 8080 8443
 
 # add scripts
-ADD docker-entrypoint.sh /opt/docker-entrypoint.sh
-ADD start.sh /opt/start.sh
-ADD stop.sh /opt/stop.sh
-ADD status.sh /opt/status.sh
+ADD scripts/docker-entrypoint.sh /opt/docker-entrypoint.sh
+ADD dev/start.sh /opt/start.sh
+ADD dev/stop.sh /opt/stop.sh
+ADD dev/status.sh /opt/status.sh
 
 RUN \
   chmod +x /opt/start.sh \

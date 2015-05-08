@@ -5,10 +5,10 @@ cd ${DIR}
 
 case $(uname) in
   Linux)
-    (cd ${DIR} && sudo docker build -t lumifyio/dev dev)
+    (cd ${DIR} && sudo docker build --file Dockerfile.dev -t lumifyio/dev .)
     ;;
   Darwin)
-    (cd ${DIR} && docker build -t lumifyio/dev dev)
+    (cd ${DIR} && docker build --file Dockerfile.dev -t lumifyio/dev .)
     ;;
   *)
     echo "unexpected uname: $(uname)"

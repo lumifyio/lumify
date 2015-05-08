@@ -23,9 +23,9 @@ if [ $(uname) = 'Darwin' -o "${SPLIT_PERSISTENT_DIR}" = 'true' ]; then
   gid=$(${BOOT2DOCKER_SSH} id -g)
   PERSISTENT_DIR=${mnt}/lumify-dev-persistent
   ${BOOT2DOCKER_SSH} sudo rm -rf ${PERSISTENT_DIR}
-  LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+  LOCAL_PERSISTENT_DIR=${DIR}/dev/lumify-dev-persistent
   rm -rf ${LOCAL_PERSISTENT_DIR}
 else
-  PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+  PERSISTENT_DIR=${DIR}/dev/lumify-dev-persistent
   rm -rf ${PERSISTENT_DIR}
 fi
