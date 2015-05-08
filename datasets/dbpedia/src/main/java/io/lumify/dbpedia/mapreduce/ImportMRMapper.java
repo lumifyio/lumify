@@ -35,7 +35,7 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
     private Visibility visibility;
     private Visibility defaultVisibility;
     private AccumuloAuthorizations authorizations;
-    private SecureGraphOntologyRepository ontologyRepository;
+   // private SecureGraphOntologyRepository ontologyRepository;
     private static final Map<String, Integer> conceptTypeDepthCache = new HashMap<String, Integer>();
 
     public static String getDbpediaEntityVertexId(String pageTitle) {
@@ -58,7 +58,7 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         try {
             Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
             Configuration config = HashMapConfigurationLoader.load(configurationMap);
-            this.ontologyRepository = new SecureGraphOntologyRepository(getGraph(), config, authorizationRepository);
+          // this.ontologyRepository = new SecureGraphOntologyRepository(getGraph(), config, authorizationRepository);
         } catch (Exception e) {
             throw new IOException("Could not configure secure graph ontology repository", e);
         }
@@ -126,13 +126,13 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         if (lineData.getPropertyIri().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type") && lineData.getValue() instanceof LinkValue) {
             LinkValue linkValue = (LinkValue) lineData.getValue();
 
-            Integer ontologyDepth = getConceptDepth(linkValue.getValueString());
+           /* Integer ontologyDepth = getConceptDepth(linkValue.getValueString());
             if (ontologyDepth != null) {
                 conceptTypeMetadata = new Metadata();
                 LumifyProperties.CONFIDENCE.setMetadata(conceptTypeMetadata, 0.2 + ((double) ontologyDepth / 1000.0), defaultVisibility);
                 String multiValueKey = ImportMR.MULTI_VALUE_KEY + "#" + linkValue.getValueString();
                 LumifyProperties.CONCEPT_TYPE.addPropertyValue(entityVertexBuilder, multiValueKey, linkValue.getValueString(), conceptTypeMetadata, visibility);
-            }
+            } */
         }
 
         if (!(lineData.getValue() instanceof LinkValue)) {
@@ -148,7 +148,7 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         return entityVertex;
     }
 
-    private Integer getConceptDepth(String conceptIri) {
+  /*  private Integer getConceptDepth(String conceptIri) {
         if (conceptTypeDepthCache.containsKey(conceptIri)) {
             return conceptTypeDepthCache.get(conceptIri);
         }
@@ -169,7 +169,7 @@ public class ImportMRMapper extends LumifyElementMapperBase<LongWritable, Text> 
         }
         conceptTypeDepthCache.put(conceptIri, depth);
         return depth;
-    }
+    } */
 
     private Vertex createPageVertex(LineData lineData) {
         String wikipediaPageVertexId = WikipediaConstants.getWikipediaPageVertexId(lineData.getPageTitle());
