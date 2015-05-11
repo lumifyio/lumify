@@ -29,6 +29,7 @@ import javax.servlet.http.Part;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +99,11 @@ public class VertexImport extends BaseRequestHandler {
         for (Part part : request.getParts()) {
             if (part.getName().equals("file")) {
                 String fileName = getFilename(part);
-                File outFile = new File(tempDir, fileName);
+                LOGGER.debug("File Name:{}", fileName);
+                //file names can have special chars, need to encode them to avoid issues related to saving
+                String encodedFileName =  URLEncoder.encode(fileName, "UTF-8");
+                LOGGER.debug("Encoded File Name:{}", encodedFileName);
+                File outFile = new File(tempDir, encodedFileName);
                 copyPartToFile(part, outFile);
                 addFileToFilesList(files, fileIndex++, outFile);
             } else if (part.getName().equals("visibilitySource")) {
