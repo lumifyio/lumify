@@ -1,6 +1,7 @@
 define([], function() {
         var api = function() {
-            var self = this;
+            var self = this,
+                timeoutMilliseconds = 8000;
 
             this.responses = {};
             this.components = [];
@@ -46,6 +47,23 @@ define([], function() {
                 self.components = [];
                 //this.responses = {};
             };
+
+            // Prevent unhandled data requests from breaking everything
+            this.clearRequestTimeouts = function() {
+
+                window.origSetTimeout = window.setTimeout;
+                window.setTimeout = function(func, delay) {
+                    var id = window.origSetTimeout(func, delay);
+
+                    // Assume if it's the correct delay, it's for the data timeout
+                    if(delay == timeoutMilliseconds) {
+                        window.origSetTimeout(function() {
+                            window.clearTimeout(id);
+                        }, 7000);
+                    }
+                    return id;
+                }
+            }
         };
 
         return new api();
