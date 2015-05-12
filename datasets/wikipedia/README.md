@@ -14,6 +14,8 @@
         Program arguments:          enwiki-20140102-pages-articles-lines-10.xml
         Working directory:          <lumify working dir>/datasets/wikipedia/data
         Use classpath of module:    lumify-wikipedia-mr
+        
+1. [Re-index the data](../../tools/reindex-mr)
 
 ## Wikipedia Import via Map Reduce
 
@@ -24,19 +26,17 @@
 1. Get Wikipedia XML data using one of the following:
 
    * Download the whole dataset from http://meta.wikimedia.org/wiki/Data_dump_torrents#enwiki
+     - This file is 11GB, unzipped around 54GB.
    * Use the smaller [sample dataset](data/enwiki-20140102-pages-articles-lines-10.xml) in the data directory.
-
-1. Convert the well-formed XML to one XML page element per line:
-
-        java -cp umify-wikipedia-mr-*-jar-with-dependencies.jar \
-          io.lumify.wikipedia.mapreduce.WikipediaFileToMRFile \
-          -in enwiki-20140102-pages-articles.xml
-          -out enwiki-20140102-pages-articles.MR.txt
+   
+   * The filename will be referenced as <dataset>
+   
+   * Reformat the XML data if it is not one XML page element per line.
 
 1. Copy the MR input file to HDFS:
 
         hadoop fs -mkdir -p /lumify
-        hadoop fs -put enwiki-20140102-pages-articles.MR.txt /lumify
+        hadoop fs -put <dataset> /lumify
 
 1. Pre-split destination Accumulo tables:
 
@@ -44,8 +44,8 @@
 
 1. Submit the MR job:
 
-        hadoop jar lumify-wikipedia-mr-*-jar-with-dependencies.jar /lumify/enwiki-20140102-pages-articles.MR.txt
+        hadoop jar lumify-wikipedia-mr-*-jar-with-dependencies.jar /lumify/<dataset>
 
 1. Wait for the MR job to complete
 
-1. [Re-index the data](https://github.com/lumifyio/lumify/tree/master/tools/reindex-mr)
+1. [Re-index the data](../../tools/reindex-mr)
