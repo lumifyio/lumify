@@ -1,0 +1,215 @@
+{
+  "type": "csv",
+  "skipRows": 3,
+  "entities": {
+    "person": {
+      "signColumn": { "index": 0 },
+      "conceptURI": "person",
+      "useExisting": false,
+      "properties": {
+        "Birth Date": {
+          "type": "required",
+          "column": {
+            "index": 1,
+            "xform": { "dataType": "date" }
+          }
+        },
+        "Gender": {
+          "type": "required",
+          "column": { "index": 2 }
+        },
+        "Deceased": {
+          "type": "required",
+          "column": {
+            "index": 3,
+            "xform": { "dataType": "boolean" }
+          }
+        },
+        "Height_ft": {
+          "type": "required",
+          "column": {
+            "index": 4,
+            "xform": { "dataType": "integer" }
+          }
+        },
+        "Height_in": {
+          "index": 5,
+          "xform": { "dataType": "integer" }
+        },
+        "Weight_lbs": {
+          "index": 6,
+          "xform": { "dataType": "double" }
+        },
+        "Home Address": {
+          "type": "required",
+          "column": {
+            "type": "geopoint",
+            "latitudeColumn": {
+              "index": 7,
+              "xform": { "dataType": "double" }
+            },
+            "longitudeColumn": {
+              "index": 8,
+              "xform": { "dataType": "double" }
+            },
+            "altitudeColumn": {
+              "index": 9,
+              "xform": { "dataType": "double" }
+            }
+          }
+        },
+        "Home Area": {
+          "type": "required",
+          "column": {
+            "type": "geocircle",
+            "latitudeColumn": {
+              "index": 10,
+              "xform": { "dataType": "double" }
+            },
+            "longitudeColumn": {
+              "index": 11,
+              "xform": { "dataType": "double" }
+            },
+            "radiusColumn": {
+              "index": 12,
+              "xform": { "dataType": "double" }
+            }
+          }
+        },
+        "Test Number": {
+          "type": "required",
+          "column": {
+            "index": 29,
+            "xform": { "dataType": "integer" }
+          }
+        }
+      }
+    },
+    "employer": {
+      "signColumn": { "index": 13 },
+      "conceptURI": "organization",
+      "required": true,
+      "properties": {
+        "Location": {
+          "type": "geopoint",
+          "latitudeColumn": {
+            "index": 14,
+            "xform": { "dataType": "double" }
+          },
+          "longitudeColumn": {
+            "index": 15,
+            "xform": { "dataType": "double" }
+          }
+        },
+        "Earnings": {
+          "type": "required",
+          "column": {
+            "index": 16,
+            "xform": { "dataType": "double" }
+          }
+        },
+        "Test Number": {
+          "type": "required",
+          "column": {
+            "index": 29,
+            "xform": { "dataType": "integer" }
+          }
+        }
+      }
+    },
+    "home": {
+      "signColumn": { "index": 17 },
+      "conceptURI": "location",
+      "useExisting": true,
+      "properties": {
+        "City Name": { "index": 18 },
+        "Population": {
+          "type": "required",
+          "column": {
+            "index": 19,
+            "xform": { "dataType": "long" }
+          }
+        },
+        "Test Number": {
+          "type": "required",
+          "column": {
+            "index": 29,
+            "xform": { "dataType": "integer" }
+          }
+        }
+      }
+    },
+    "twitter": {
+      "signColumn": { "index": 20 },
+      "conceptURI": "twitterUser",
+      "useExisting": true,
+      "properties": {
+        "Friend Count": {
+          "index": 21,
+          "xform": { "dataType": "long" }
+        },
+        "hasProfilePic": {
+          "index": 22,
+          "xform": { "dataType": "boolean" }
+        },
+        "Last Tweeted At": {
+          "index": 23,
+          "xform": {
+            "dataType": "date",
+            "format": "yyyyMMdd-HHmmss"
+          }
+        },
+        "Last Tweeted From": {
+          "type": "geocircle",
+          "latitudeColumn": {
+            "index": 24,
+            "xform": { "dataType": "double" }
+          },
+          "longitudeColumn": {
+            "index": 25,
+            "xform": { "dataType": "double" }
+          },
+          "radiusColumn": {
+            "index": 26,
+            "xform": { "dataType": "double" }
+          }
+        },
+        "Test Number": {
+          "type": "required",
+          "column": {
+            "index": 29,
+            "xform": { "dataType": "integer" }
+          }
+        }
+      }
+    },
+    "facebook": {
+      "signColumn": { "index": 27 },
+      "required": true,
+      "conceptURI": "facebookAccount",
+      "useExisting": true
+    }
+  },
+  "relationships": [
+    {
+      "label": "livesAt",
+      "source": "person",
+      "target": "home"
+    },
+    {
+      "label": "employs",
+      "source": "employer",
+      "target": "person"
+    },
+    {
+      "label": "hasOnlinePresence",
+      "source": "person",
+      "target": "twitter"
+    },
+    {
+      "label": "hasOnlinePresence",
+      "source": "person",
+      "target": "facebook"
+    }
+  ]
+}
