@@ -30,6 +30,7 @@
 
     <modules>
         <module>core</module>
+        <module>data-mapping</module>
         <module>datasets</module>
         <module>examples</module>
         <module>graph-property-worker</module>
