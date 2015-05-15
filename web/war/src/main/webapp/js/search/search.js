@@ -322,7 +322,7 @@ define([
         };
 
         this.getSearchTypeNode = function() {
-            if(this.searchType === null) return null;
+            if (this.searchType === null) return null;
             return this.$node.find('.search-type-' + this.searchType.toLowerCase());
         };
 
