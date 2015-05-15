@@ -116,6 +116,7 @@ public abstract class AbstractColumnDocumentMapping implements DocumentMapping {
                             newVertices.add(vertex);
                             graph.flush();
                             state.createHasEntityEdge(vertex);
+                            state.cacheVertex(hash, vertex);
                             state.addVertexToWorkspaceIfNeeded(vertex);
                         } catch (Exception e) {
                             LOGGER.debug("Error processing entity during mapping", e);
@@ -140,6 +141,7 @@ public abstract class AbstractColumnDocumentMapping implements DocumentMapping {
                     // if line is skipped, remove any previously created vertices
                     for (Vertex v : newVertices) {
                         graph.removeVertex(v, auths);
+                        state.removeVertex(v);
                     }
                 }
                 graph.flush();

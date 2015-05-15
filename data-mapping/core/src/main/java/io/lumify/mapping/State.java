@@ -62,6 +62,20 @@ public final class State {
         vertexCache.put(hash, entityVertex);
     }
 
+    public void removeVertex(final Vertex entityVertex) {
+        String hash = null;
+        for (Map.Entry<String, String> idEntry : vertexIdCache.entrySet()) {
+            if (idEntry.getValue().equals(entityVertex.getId())) {
+                hash = idEntry.getKey();
+                break;
+            }
+        }
+        if (hash != null) {
+            vertexIdCache.remove(hash);
+            vertexCache.invalidate(hash);
+        }
+    }
+
     public Vertex getVertex(final String hash) {
         Vertex vertex = vertexCache.getIfPresent(hash);
         if (vertex == null) {
