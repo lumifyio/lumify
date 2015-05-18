@@ -1,0 +1,5 @@
+[lumify]
+name=Lumify
+baseurl=https://bits.lumify.io/yum/
+enabled=1
+gpgcheck=0
