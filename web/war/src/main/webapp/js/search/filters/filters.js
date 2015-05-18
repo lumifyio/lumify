@@ -65,7 +65,7 @@ define([
                 .done(function(vertices) {
                     var single = vertices[0],
                         title = vertices.length > 1 ? i18n('search.filters.title_multiple', vertices.length)
-                                                    : single && F.vertex.title(single) || single.id;
+                                                    : single && (F.vertex.title(single) || single.id);
                     self.onClearFilters();
 
                     self.entityFilters.relatedToVertexIds = _.pluck(vertices, 'id');
@@ -124,6 +124,10 @@ define([
 
         this.notifyOfFilters = function(options) {
             var ontologyProperties = this.ontologyProperties;
+
+            if (ontologyProperties === null || ontologyProperties === undefined) {
+                return;
+            }
 
             this.trigger('filterschange', {
                 entityFilters: this.entityFilters,

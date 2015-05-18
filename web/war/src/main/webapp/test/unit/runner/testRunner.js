@@ -27,6 +27,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             //'util/service/ontology.json': '../test/unit/mocks/ontology.json',
             'util/messages': '../test/unit/mocks/messages',
             'data/web-worker/util/ajax': '../test/unit/mocks/ajax',
+            'dataRequestHandler':'../test/unit/mocks/dataRequestHandler',
             testutils: '../test/unit/utils'
         },
 
@@ -47,10 +48,11 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
 
             require([
                 'chai-datetime',
+                'dataRequestHandler',
                 'util/handlebars/helpers',
                 'util/jquery.flight',
                 'mocha-flight'
-            ], function(chaiDateTime) {
+            ], function(chaiDateTime, dataRequestHandler) {
 
                 chai.should();
                 chai.use(chaiDateTime);
@@ -66,6 +68,8 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
                 // Use the twitter flight interface to mocha
                 mocha.ui('mocha-flight');
                 mocha.options.globals.push('ejs', 'cytoscape', 'DEBUG');
+
+                dataRequestHandler.clearRequestTimeouts();
 
                 // Run tests after loading
                 if (tests.length) {

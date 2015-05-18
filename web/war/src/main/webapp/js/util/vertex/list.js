@@ -185,7 +185,9 @@ define([
 
         this.after('teardown', function() {
             this.$node.off('mouseenter mouseleave');
-            this.scrollNode.off('scroll.vertexList');
+            if (this.scrollNode) {
+                this.scrollNode.off('scroll.vertexList');
+            }
             this.$node.empty();
         });
 

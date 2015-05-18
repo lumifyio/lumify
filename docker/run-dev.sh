@@ -48,18 +48,18 @@ if [ $(uname) = 'Darwin' -o "${SPLIT_PERSISTENT_DIR}" = 'true' ]; then
   ${BOOT2DOCKER_SSH} sudo mkdir -p ${PERSISTENT_DIR}
   ${BOOT2DOCKER_SSH} sudo chown -R ${uid}:${gid} ${PERSISTENT_DIR}
   ${BOOT2DOCKER_SSH} mkdir -p $(dir_list ${PERSISTENT_DIR})
-  LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+  LOCAL_PERSISTENT_DIR=${DIR}/dev/lumify-dev-persistent
   mkdir -p $(dir_list ${LOCAL_PERSISTENT_DIR})
   touch ${LOCAL_PERSISTENT_DIR}/NOT_ALL_OF_YOUR_FILES_ARE_HERE
   touch ${LOCAL_PERSISTENT_DIR}/OTHER_FILES_ARE_PERSISTED_INSIDE_THE_BOOT2DOCKER_VM
 else
-  PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+  PERSISTENT_DIR=${DIR}/dev/lumify-dev-persistent
   mkdir -p $(dir_list ${PERSISTENT_DIR})
-  LOCAL_PERSISTENT_DIR=${DIR}/lumify-dev-persistent
+  LOCAL_PERSISTENT_DIR=${DIR}/dev/lumify-dev-persistent
 fi
 
-cp ${DIR}/../config/lumify.properties ${LOCAL_PERSISTENT_DIR}/opt/lumify/config/lumify.properties
-cp ${DIR}/../config/log4j.xml ${LOCAL_PERSISTENT_DIR}/opt/lumify/config/log4j.xml
+cp ${SRC_DIR}/config/lumify.properties ${LOCAL_PERSISTENT_DIR}/opt/lumify/config/lumify.properties
+cp ${SRC_DIR}/config/log4j.xml ${LOCAL_PERSISTENT_DIR}/opt/lumify/config/log4j.xml
 
 (cd ${DIR} &&
   ${SUDO} docker run \

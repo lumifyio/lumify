@@ -6,87 +6,104 @@ Lumify is an open source big data analysis and visualization platform. Please se
 
 ## Getting Started
 
-To get started quickly, you can try out a hosted installation of Lumify, or download a virtual machine image with Lumify installed and pre-configured.
+To get started quickly, you can try out a hosted installation of Lumify, or build a virtual machine image with Lumify installed and pre-configured.
 
 - [Try Lumify Now](http://lumify.io/try.html)
 - [Watch Lumify Videos](https://www.youtube.com/playlist?list=PLDX7b-6_sNA7SCJw5rB9EF0TDpQyrO2XR)
 
-## Quick Start
+## Lumify Demo Virtual Machine
+The following instructions will build a virtual machine that fully encapsulates a minimal Lumify Demo instance.  The virtual machine is configured with 4 CPUs, 8 GB RAM.  The virtual machine does not include any data but does include a minimal ontology.  You may want to try one of the included sample [datasets](datasets) or create your own.
 
-1. Install and start Docker per their instructions: [https://docs.docker.com/installation](https://docs.docker.com/installation/#installation).  Only follow the instructions to install & start docker skipping any exercises or other steps beyond installation & starting Docker.
-	- Docker will not run natively on OSX or Windows, however, you can use Boot2Docker, a lightweight Linux Virtual Machine, to
-	  host Docker on these platforms.  After installing Boot2Docker you'll need to initialize and start Boot2Docker with
-	  sufficient memory to run the system.
-	  
-	- Initialize and start boot2docker on OSX/Windows with sufficient memory.  The instructions below illustrate initializing
-	  boot2docker with 4GB of memory, however, this can be increased if more memory is needed.
+###1. Prerequisites
+The following prerequisites must be installed prior to building the Lumify Demo Virtual Machine.
+	
+- [VirtualBox](https://www.virtualbox.org/)
+- [Vagrant](https://www.vagrantup.com/)
+- [Git client](http://git-scm.com/)
+- [Chrome](http://www.google.com/chrome/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/) browser
 
-		```sh
-		boot2docker init -m 4096
-		boot2docker start
-		```
-	- Set the Docker environment variables that are returned from the following Boot2Docker command.  To avoid setting environment variables each time Docker is started, configure these environment variables perminantly for your OS/shell.
+###2. Clone the Lumify repo
 
-		```sh
-		boot2docker shellinit
-		
-		Writing <user home dir>/.boot2docker/certs/boot2docker-vm/ca.pem
-		Writing <user home dir>/.boot2docker/certs/boot2docker-vm/cert.pem
-		Writing <user home dir>/.boot2docker/certs/boot2docker-vm/key.pem
-		export DOCKER_HOST=tcp://192.168.59.103:2376
-		export DOCKER_CERT_PATH=<user home dir>/.boot2docker/certs/boot2docker-vm
-		export DOCKER_CERT_PATH=<user home dir>/.boot2docker/certs/boot2docker-vm
-		```
+Checkout the Lumify Source Code using the following Git command.
 
-1. Install node and npm per their instructions: [http://nodejs.org/](http://nodejs.org/)
+	$ cd <working dir>
+	$ git clone https://github.com/lumifyio/lumify.git
 
-1. Clone the Lumify repo:
+###3. Build and run the Lumfy Demo
 
-    ```sh
+The following commands will start the Lumify Demo Virtual Machine.  If the virtual machine has not been built it will be built and then started.
+
+	$ cd <working dir>/lumify
+	$ vagrant up demo
+
+Use the following command to add the lumify-demo IP address to your hosts file.
+
+	sudo echo "192.168.33.12  lumify-demo" >> /etc/hosts
+	
+You can open an ssh shell to the machine as follows
+
+	$ vagrant ssh demo
+	
+Please see the Vagrant help for other commands that may be useful.
+
+###4. Open Lumify in your web browser
+
+Connect to the Lumify Web App that is running on the Virtual Machine using either Chrome or Firefox and the following URL.
+
+	```
+	http://lumify-demo:8080
+	```
+
+## Development Quick Start
+
+###1. Prerequisites to build from source
+
+The following dependencies must be installed before building Lumify on the development machine.
+
+- OSX or Linux required to build
+- [Java 7 JDK](http://www.oracle.com/technetwork/java/javase/downloads)
+- [Maven](https://maven.apache.org/)
+- [Git client](http://git-scm.com/)
+- [node.js](https://nodejs.org/)
+- [Bower](http://bower.io/)
+- [Grunt](http://gruntjs.com/)
+- [VirtualBox](https://www.virtualbox.org/)
+- [Vagrant](https://www.vagrantup.com/)
+- Chrome or Firefox web browser
+
+###2. Clone the Lumify repo
+
     git clone https://github.com/lumifyio/lumify.git
-    ```
     
-    **_This will clone the repo to a `lumify` directory in your current working directory.  This absolute path will be referred to as `<cloned_repo_dir>` for the remainder of these steps._**
+   **_This will clone the repo to a `lumify` directory in your current working directory.  This absolute path will be referred to as `<working dir>` for the remainder of these steps._**
 
-1. Install the Lumify npm dependencies:
+###3. Build and run the Lumify Dev Virtual Machine
+
+The Lumify Dev Virtual Machine includes only the backend servers (Hadoop, Accumulo, Elasticsearch, RabbitMQ, Zookeeper) used for development.  This VM makes it easy for developers to get started without needing to install the full stack on thier develoment machines.
+
+The following commands will start the Lumify Dev Virtual Machine.  If the virtual machine has not been built it will be built and then started.
+
+	$ cd <working dir>/lumify
+	$ vagrant up dev
+
+Use the following command to add the lumify-dev IP address to your hosts file.
+
+	sudo echo "192.168.33.10  lumify-dev" >> /etc/hosts
+	
+You can open an ssh shell to the machine as follows
+
+	$ vagrant ssh dev
+	
+Please see the Vagrant help for other commands that may be useful.
+
+###4. Install the Lumify npm dependencies:
     
-    ```sh
-    cd <cloned_repo_dir>/web/war/src/main/webapp
+    cd <working dir>/lumify/web/war/src/main/webapp
     npm install -g inherits bower grunt
     npm install -g grunt-cli
-    ```
-
-1. Update your hosts file:
-    - Linux
-
-        ```sh
-        echo '127.0.0.1 lumify-dev' >> /etc/hosts
-        ```
-        
-    - OS X
-
-        ```sh
-        echo "$(boot2docker ip 2>/dev/null) lumify-dev" >> /etc/hosts
-        ```
-
-1. Create the docker image:
     
-    ```sh
-    cd <cloned_repo_dir>
-    docker/build-dev.sh
-    ```
-
-1. Run the docker image: (This will start ZooKeeper, HDFS, YARN, ElasticSearch, and RabbitMQ)
-   
-    ```sh
-    docker/run-dev.sh
-    ```
-
-1. Run the web server. Choose one of the following:
-   * [Run in the docker image](docker/README.md#docker-web-server)
-   * [Run locally in an IDE](docs/ide.md#development-jetty-web-server)
-
-See [docker/README.md](docker/) for more information on the docker dev image.
+###5. Run the web server from the IDE
+   * [Run locally in an IDEA Inellij IDE](docs/ide.md)
 
 See [docs/developer.md](docs/developer.md) for more information on developing for Lumify.
 
