@@ -21,5 +21,5 @@ public interface DocumentMapping {
      *
      * @throws IOException if an error occurs while applying the mapping
      */
-    void mapDocument(final InputStream inputDoc, final State state, final String vertexIdPrefix) throws IOException;
+    void mapDocument(final InputStream inputDoc, final MappingState state, final String vertexIdPrefix) throws IOException;
 }

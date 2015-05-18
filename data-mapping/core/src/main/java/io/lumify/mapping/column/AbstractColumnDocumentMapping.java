@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.mapping.DocumentMapping;
-import io.lumify.mapping.State;
+import io.lumify.mapping.MappingState;
 import io.lumify.mapping.column.ColumnRelationshipMapping.RelationshipDef;
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,7 +91,7 @@ public abstract class AbstractColumnDocumentMapping implements DocumentMapping {
     protected abstract Iterable<Row> getRows(final InputStream input) throws IOException;
 
     @Override
-    public void mapDocument(final InputStream inputDoc, final State state, final String vertexIdPrefix) throws IOException {
+    public void mapDocument(final InputStream inputDoc, final MappingState state, final String vertexIdPrefix) throws IOException {
         Graph graph = state.getGraph();
         Visibility visibility = state.getData().getVisibility();
         Authorizations auths = state.getAuthorizations();

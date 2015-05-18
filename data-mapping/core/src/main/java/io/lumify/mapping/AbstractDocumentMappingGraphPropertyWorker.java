@@ -60,7 +60,7 @@ public abstract class AbstractDocumentMappingGraphPropertyWorker<T extends Docum
         DocumentMapping mapping = ClientApiConverter.toClientApi(mappingJson.readToString(), DocumentMapping.class);
         StreamingPropertyValue raw = LumifyProperties.RAW.getPropertyValue(data.getElement());
         try (InputStream rawIn = raw.getInputStream()) {
-            State state = new State(this, data, getGraph(), getAuthorizations(), getClass().getName());
+            MappingState state = new GPWMappingState(this, data, getGraph(), getAuthorizations(), getClass().getName());
             mapping.mapDocument(rawIn, state, getVertexIdPrefix());
         }
     }

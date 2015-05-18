@@ -5,13 +5,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
-import io.lumify.mapping.State;
+import io.lumify.mapping.MappingState;
 import io.lumify.mapping.column.AbstractColumnDocumentMapping.Row;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -116,7 +115,7 @@ public abstract class AbstractColumnEntityMapping implements ColumnEntityMapping
     }
 
     @Override
-    public final void createVertex(final Row row, final VertexBuilder builder, final State state) {
+    public final void createVertex(final Row row, final VertexBuilder builder, final MappingState state) {
         String conceptIRI = getConceptIRI(row);
         if (conceptIRI == null) {
             if (required) {

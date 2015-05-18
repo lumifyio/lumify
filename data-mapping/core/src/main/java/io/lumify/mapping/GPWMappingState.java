@@ -9,7 +9,6 @@ import org.securegraph.Authorizations;
 import org.securegraph.EdgeBuilder;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
-import org.securegraph.VertexBuilder;
 
 /**
  * Maintains State information during a document mapping. This class
@@ -17,7 +16,7 @@ import org.securegraph.VertexBuilder;
  * a Vertex cache that can be used by DocumentMapping implementations to
  * avoid creating duplicate Vertices.
  */
-public final class State {
+public final class GPWMappingState implements MappingState {
     private final AbstractDocumentMappingGraphPropertyWorker<? extends DocumentMapping> worker;
     private final GraphPropertyWorkData data;
     private final Graph graph;
@@ -26,8 +25,8 @@ public final class State {
     private final Map<String, String> vertexIdCache;
     private final Cache<String, Vertex> vertexCache;
 
-    public State(final AbstractDocumentMappingGraphPropertyWorker<? extends DocumentMapping> _worker, final GraphPropertyWorkData _data, final Graph _graph,
-                 final Authorizations _authorizations, final String _multiKey) {
+    public GPWMappingState(final AbstractDocumentMappingGraphPropertyWorker<? extends DocumentMapping> _worker, final GraphPropertyWorkData _data, final Graph _graph,
+                           final Authorizations _authorizations, final String _multiKey) {
         worker = _worker;
         data = _data;
         graph = _graph;
@@ -37,35 +36,42 @@ public final class State {
         vertexCache = CacheBuilder.newBuilder().maximumSize(100).build();
     }
 
+    @Override
     public GraphPropertyWorkData getData() {
         return data;
     }
 
+    @Override
     public Graph getGraph() {
         return graph;
     }
 
+    @Override
     public Authorizations getAuthorizations() {
         return authorizations;
     }
 
+    @Override
     public String getMultiKey() {
         return multiKey;
     }
 
+    @Override
     public String getCachedVertexId(final String hash) {
         return vertexIdCache.get(hash);
     }
 
-    public void cacheVertex(final String hash, final Vertex entityVertex) {
-        vertexIdCache.put(hash, entityVertex.getId());
-        vertexCache.put(hash, entityVertex);
+    @Override
+    public void cacheVertex(final String hash, final Vertex vertex) {
+        vertexIdCache.put(hash, vertex.getId());
+        vertexCache.put(hash, vertex);
     }
 
-    public void removeVertex(final Vertex entityVertex) {
+    @Override
+    public void removeVertex(final Vertex vertex) {
         String hash = null;
         for (Map.Entry<String, String> idEntry : vertexIdCache.entrySet()) {
-            if (idEntry.getValue().equals(entityVertex.getId())) {
+            if (idEntry.getValue().equals(vertex.getId())) {
                 hash = idEntry.getKey();
                 break;
             }
@@ -76,6 +82,7 @@ public final class State {
         }
     }
 
+    @Override
     public Vertex getVertex(final String hash) {
         Vertex vertex = vertexCache.getIfPresent(hash);
         if (vertex == null) {
@@ -87,6 +94,7 @@ public final class State {
         return vertex;
     }
 
+    @Override
     public void createHasEntityEdge(final Vertex entityVertex) {
         Vertex artifactVertex = (Vertex) data.getElement();
         String edgeId = String.format("%s_hasEntity_%s", artifactVertex.getId(), entityVertex.getId());
@@ -95,6 +103,7 @@ public final class State {
         edge.save(authorizations);
     }
 
+    @Override
     public void addVertexToWorkspaceIfNeeded(final Vertex vertex) {
         worker.addVertexToWorkspaceIfNeeded(data, vertex);
     }

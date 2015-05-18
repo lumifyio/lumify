@@ -8,9 +8,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import io.lumify.mapping.State;
+import io.lumify.mapping.MappingState;
 import io.lumify.mapping.column.AbstractColumnDocumentMapping.Row;
-import java.util.List;
 import org.securegraph.VertexBuilder;
 
 /**
@@ -55,5 +54,5 @@ public interface ColumnEntityMapping extends Comparable<ColumnEntityMapping> {
      * @param state the mapping state
      * @return the generated Vertex
      */
-    void createVertex(final Row row, final VertexBuilder builder, final State state);
+    void createVertex(final Row row, final VertexBuilder builder, final MappingState state);
 }
