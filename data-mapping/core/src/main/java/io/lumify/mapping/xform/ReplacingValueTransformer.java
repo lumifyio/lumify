@@ -2,10 +2,10 @@ package io.lumify.mapping.xform;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import io.lumify.mapping.predicate.MappingPredicate;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.lumify.mapping.predicate.MappingPredicate;
 
 /**
  * A ValueTransformer that replaces a set of target values with

@@ -38,7 +38,7 @@ public final class OrPredicate<T> implements MappingPredicate<T> {
     @JsonCreator
     public OrPredicate(@JsonProperty("predicates") final List<MappingPredicate<T>> preds) {
         checkNotNull(preds, "predicates must be provided");
-        List<MappingPredicate<T>> myPreds = new ArrayList<MappingPredicate<T>>(preds);
+        List<MappingPredicate<T>> myPreds = new ArrayList<>(preds);
         // remove all null values from myPreds
         while (myPreds.remove(null)) {}
         checkArgument(!myPreds.isEmpty(), "at least one predicate must be provided");

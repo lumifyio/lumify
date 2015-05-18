@@ -17,7 +17,6 @@ import org.securegraph.property.StreamingPropertyValue;
  * value `mappingJson`.
  */
 public class MappingFileImportSupportingFileHandler extends FileImportSupportingFileHandler {
-    private static final List<String> WORK_PROPERTIES = Arrays.asList(LumifyProperties.MAPPING_JSON.getPropertyName());
     private static final String MAPPING_JSON_FILE_NAME_SUFFIX = ".mapping.json";
 
     @Override
@@ -34,11 +33,6 @@ public class MappingFileImportSupportingFileHandler extends FileImportSupporting
             mappingJsonValue.searchIndex(false);
             LumifyProperties.MAPPING_JSON.setProperty(vertexBuilder, mappingJsonValue, visibility);
             return new AddSupportingFilesResult() {
-                @Override
-                public List<String> getPropertiesToQueue() {
-                    return WORK_PROPERTIES;
-                }
-
                 @Override
                 public void close() throws IOException {
                     mappingJsonInputStream.close();

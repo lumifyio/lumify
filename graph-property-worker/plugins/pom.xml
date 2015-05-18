@@ -37,6 +37,7 @@
         <module>drewnoakes-image-metadata-extractor</module>
         <module>java-code</module>
         <module>mime-type-ontology-mapper</module>
+        <module>data-mapping-base</module>
         <module>csv</module>
         <module>rdf</module>
         <module>video-mp4-encoder</module>
