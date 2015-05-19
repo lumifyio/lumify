@@ -3,6 +3,7 @@ package io.lumify.core.ingest;
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.ingest.FileImportSupportingFileHandler.AddSupportingFilesResult;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -108,7 +109,7 @@ public class FileImport {
         if (vertex != null) {
             LOGGER.warn("vertex already exists with hash %s", hash);
             if (queueDuplicates) {
-                pushOnQueue(vertex, workspace, visibilitySource);
+                pushOnQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName(), workspace, visibilitySource);
             }
             return vertex;
         }
@@ -165,7 +166,12 @@ public class FileImport {
             }
 
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId());
-            pushOnQueue(vertex, workspace, visibilitySource);
+            pushOnQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName(), workspace, visibilitySource);
+            for (AddSupportingFilesResult result : addSupportingFilesResults) {
+                for (String propertyName : result.getPropertiesToQueue()) {
+                    pushOnQueue(vertex, propertyName, workspace, visibilitySource);
+                }
+            }
             return vertex;
         } finally {
             for (FileImportSupportingFileHandler.AddSupportingFilesResult addSupportingFilesResult : addSupportingFilesResults) {
@@ -209,14 +215,18 @@ public class FileImport {
         }
     }
 
-    private void pushOnQueue(Vertex vertex, Workspace workspace, String visibilitySource) {
-        LOGGER.debug("pushing %s on to %s queue", vertex.getId(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
+    private void pushOnQueue(Vertex vertex, String propertyName, Workspace workspace, String visibilitySource) {
+        pushOnQueue(vertex, null, propertyName, workspace, visibilitySource);
+    }
+
+    private void pushOnQueue(Vertex vertex, String propertyKey, String propertyName, Workspace workspace, String visibilitySource) {
+        LOGGER.debug("pushing [%s, %s] on to %s queue", vertex.getId(), propertyName, WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
         this.workQueueRepository.pushElement(vertex);
         if (workspace != null) {
-            this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY,
-                    LumifyProperties.RAW.getPropertyName(), workspace.getWorkspaceId(), visibilitySource);
+            this.workQueueRepository.pushGraphPropertyQueue(vertex, propertyKey,
+                    propertyName, workspace.getWorkspaceId(), visibilitySource);
         } else {
-            this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, LumifyProperties.RAW.getPropertyName());
+            this.workQueueRepository.pushGraphPropertyQueue(vertex, propertyKey, propertyName);
         }
     }
 

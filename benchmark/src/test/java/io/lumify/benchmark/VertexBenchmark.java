@@ -2,7 +2,7 @@ package io.lumify.benchmark;
 
 import com.google.common.collect.ImmutableList;
 import io.lumify.it.TestClassAndMethod;
-import io.lumify.it.VertextTestBase;
+import io.lumify.it.VertexTestBase;
 import io.lumify.web.clientapi.LumifyApi;
 import io.lumify.web.clientapi.codegen.ApiException;
 import io.lumify.web.clientapi.codegen.VertexApi;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @Category(BenchmarkCategory.class)
-public class VertexBenchmark extends VertextTestBase {
+public class VertexBenchmark extends VertexTestBase {
     private TimedExecution timedExecution;
 
     @Rule
