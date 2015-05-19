@@ -31,18 +31,13 @@ The reference implementation of the `DocumentMapping` interface is the `io.lumif
 
 ### `CsvDocumentMapping` Properties
 
-*	**`subject`** _String **(required)**_
-
-	The subject of the ingested document. This will be used as the title of the entity representing the ingested
-	document in Lumify.
-	
 *	`skipRows` _Integer (optional)_
 
 	The number of rows in the input file to skip before extracting data.
 	
 	**Default: `0`**
 	
-*	**`entities`** _Object.<String, [EntityMapping](#entityMapping)> **(required)**_
+*	**`entities`** _Object.\<String, [EntityMapping](#entityMapping)\> **(required)**_
 
 	A mapping of entity keys to mapping definitions for each entity found in a row of the CSV. The keys
 	of this map are used to configure the relationship mappings.
@@ -64,7 +59,6 @@ The reference implementation of the `DocumentMapping` interface is the `io.lumif
 
 	{
 		"type": "csv",
-		"subject": "People Zip Codes",
 		"skipRows": 1,
 		"entities": {
 			"person": {
@@ -98,11 +92,11 @@ The reference implementation of the `DocumentMapping` interface is the `io.lumif
 ## [Entity Mapping](id:entityMapping)
 ---
 
-Lumify can extract one or more entities from a CSV file, optionally setting properties on those entities from the provided data as well.  Each entity is mapped to a configured key so it can be identified for relationship creation.  Entities must be mapped to a known ontological concept.  The URI for this concept can be specified in one of two ways, a known URI for all entities in the document or derived from one or more columns found in each row.
+Lumify can extract one or more entities from a CSV file, optionally setting properties on those entities from the provided data as well.  Each entity is mapped to a configured key so it can be identified for relationship creation.  Entities must be mapped to a known ontological concept.  The IRI for this concept can be specified in one of two ways, a known IRI for all entities in the document or derived from one or more columns found in each row.
 
 ### Entity Mapping Properties
 
-*	`conceptUriType` _String (optional)_
+*	`conceptIRIType` _String (optional)_
 
 	The method of determining the concept URI.  The supported values are:
 	
@@ -111,7 +105,7 @@ Lumify can extract one or more entities from a CSV file, optionally setting prop
 		The concept URI is provided as a known _String_ value.  When using this method of concept URI resoltuion, the
 		following property is also required.
 		
-		*	**`conceptURI`** _String **(required)**_
+		*	**`conceptIRI`** _String **(required)**_
 		
 			The constant concept URI for the mapped entity.
 		
@@ -120,31 +114,13 @@ Lumify can extract one or more entities from a CSV file, optionally setting prop
 		The concept URI is provided as a column value mapping, derived for each entity during ingest.  When using
 		this method of concept URI resolution, the following property is also required.
 		
-		*	**`conceptColumn`** _[ColumnMapping](#columnMapping) **(required)**_
+		*	**`concept`** _[ColumnMapping](#columnMapping) **(required)**_
 		
 			The mapping definition used to resolve the concept URI for the mapped entity during ingest.
 			
-*	`idColumn` _[ColumnMapping](#columnMapping) (optional)_
-
-	If provided, this mapping will be evaluated during ingest to set the unique ID of this entity.  This can be used
-	in combination with the `useExisting` property to ensure entities are not duplicated.  IDs generated with this
-	method should be globally unique to avoid re-use of an incorrect entity (e.g. "SSN-123456789" instead of "John Smith").
-	
-*	**'signColumn`** _[ColumnMapping](#columnMapping) **(required)**_
-
-	The mapping that is evaluated during ingest to determine the sign (title) of this entity.  The sign column must
-	evaluate to a non-empty `String`.
-	
-*	`properties` _Object.<String, [ColumnMapping](#columnMapping)> (optional)_
+*	`properties` _Object.\<String, [ColumnMapping](#columnMapping)\> (optional)_
 
 	A map of property keys to the mappings that will be evaluated to determine the property value for each entity.
-	
-*	`useExisting` _Boolean (optional)_
-
-	If `true`, Lumify will attempt to find and use an existing entity, updating its property values if any were provided
-	instead of creating a new entity from this data row. If an ID column (`idColumn`) was provided, its value will be used
-	to find the existing entity, otherwise the sign will be used.  If no matching entity is found in the system, a new
-	entity will be created.  **Default: `false`**
 	
 *	[`required` _Boolean (optional)_](id:entityRequired)
 
@@ -155,8 +131,7 @@ Lumify can extract one or more entities from a CSV file, optionally setting prop
 ## [Column Mapping](id:columnMapping)
 ---
 
-Column mappings allow you to extract the values from one or more columns in a row, optionally converting them to
-various data types for use as entity IDs, signs or property values.
+Column mappings allow you to extract the values from one or more columns in a row, optionally converting them to various data types.
 
 ### Column Mapping Properties
 
@@ -618,7 +593,7 @@ that is defined in the configured Lumify ontology.
 
 *	`labelType` _String (optional)_
 
-	The method of determining the relationship label.  The supported values are:
+	The method of determining the relationship label (IRI).  The supported values are:
 	
 	*	`constant` _(default)_
 	
@@ -627,11 +602,11 @@ that is defined in the configured Lumify ontology.
 		
 		*	**`label`** _String **(required)**_
 		
-			The constant label for this relationship.
+			The constant label (IRI) for this relationship.
 		
 	*	`conceptMapped`
 	
-		The relationship label is determined by the concept URIs of the source and/or target entities.  When using
+		The relationship label is determined by the concept IRIs of the source and/or target entities.  When using
 		this method, Lumify will traverse the ontological hierarchy to find a match for the provided source/target
 		entities.  For example, if the source entity is a `Terrorist` and you have a relationship defined for `Person`,
 		Lumify will match `Terrorist` against `Person` to identify the relationship label.  When using this method of
@@ -655,6 +630,7 @@ that is defined in the configured Lumify ontology.
 				
 			*	**`label`** _String **(required)**_
 			
-				The relationship label that will be used when the source and/or target entities are
+				The relationship label (IRI) that will be used when the source and/or target entities are
 				of the specified ontological types.
 			
+I
