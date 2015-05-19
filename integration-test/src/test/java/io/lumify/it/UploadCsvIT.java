@@ -34,7 +34,7 @@ public class UploadCsvIT extends TestBase {
 
         lumifyTestCluster.processGraphPropertyQueue();
 
-        assertPublishAll(lumifyApi, 45);
+        assertPublishAll(lumifyApi, 38);
 
         ClientApiVertexSearchResponse searchResults = lumifyApi.getVertexApi().vertexSearch("*");
         LOGGER.info("searchResults (user1): %s", searchResults);
