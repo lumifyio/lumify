@@ -62,9 +62,9 @@ The reference implementation of the `DocumentMapping` interface is the `io.lumif
 		"skipRows": 1,
 		"entities": {
 			"person": {
-				"signColumn": { "index": 0 },
 				"conceptURI": "person",
 				"properties": {
+				        "name": { "index": 0 },
 					"birthDate": {
 						"index": 2,
 						"xform": {
@@ -75,9 +75,10 @@ The reference implementation of the `DocumentMapping` interface is the `io.lumif
 				}
 			},
 			"zip": {
-				"signColumn": { "index": 1 },
 				"conceptURI": "location",
-				"useExisting": true
+				"properties": {
+				        "zip_code": { "index": 1 }
+				}
 			}
 		},
 		"relationships": [
