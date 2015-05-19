@@ -1,10 +1,15 @@
 package io.lumify.clavin;
 
+import static org.securegraph.util.IterableUtils.count;
+
+import com.bericotech.clavin.ClavinException;
 import com.bericotech.clavin.extractor.LocationOccurrence;
 import com.bericotech.clavin.gazetteer.FeatureClass;
 import com.bericotech.clavin.gazetteer.FeatureCode;
 import com.bericotech.clavin.gazetteer.GeoName;
-import com.bericotech.clavin.resolver.LuceneLocationResolver;
+import com.bericotech.clavin.gazetteer.query.Gazetteer;
+import com.bericotech.clavin.gazetteer.query.LuceneGazetteer;
+import com.bericotech.clavin.resolver.ClavinLocationResolver;
 import com.bericotech.clavin.resolver.ResolvedLocation;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -23,15 +28,22 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.clientapi.model.PropertyType;
 import io.lumify.web.clientapi.model.VisibilityJson;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.securegraph.*;
-import org.securegraph.type.GeoPoint;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-
-import static org.securegraph.util.IterableUtils.count;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.securegraph.Authorizations;
+import org.securegraph.Edge;
+import org.securegraph.ElementBuilder;
+import org.securegraph.Metadata;
+import org.securegraph.Vertex;
+import org.securegraph.type.GeoPoint;
 
 /**
  * This TermResolutionWorker uses the CLAVIN processor to refine
@@ -79,7 +91,9 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
 
     private static final String CONFIG_EXCLUDED_IRI_PREFIX = "clavin.excludeIri";
 
-    private LuceneLocationResolver resolver;
+    private ClavinLocationResolver resolver;
+    private int maxHitDepth;
+    private int maxContextWindow;
     private boolean fuzzy;
     private Set<String> targetConcepts;
     private OntologyRepository ontologyRepository;
@@ -141,7 +155,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
         }
     }
 
-    public void prepareClavinLuceneIndex(Configuration config) throws IOException, ParseException {
+    public void prepareClavinLuceneIndex(Configuration config) throws IOException, ParseException, ClavinException {
         String idxDirPath = config.get(CLAVIN_INDEX_DIRECTORY, null);
         if (idxDirPath == null || idxDirPath.trim().isEmpty()) {
             throw new IllegalArgumentException(String.format("%s must be configured.", CLAVIN_INDEX_DIRECTORY));
@@ -153,18 +167,19 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                     CLAVIN_INDEX_DIRECTORY, idxDirPath));
         }
 
-        int maxHitDepth = config.getInt(CLAVIN_MAX_HIT_DEPTH);
+        maxHitDepth = config.getInt(CLAVIN_MAX_HIT_DEPTH);
         if (maxHitDepth < 1) {
             LOGGER.debug("Found %s of %d. Using default: %d", CLAVIN_MAX_HIT_DEPTH, maxHitDepth, DEFAULT_MAX_HIT_DEPTH);
             maxHitDepth = DEFAULT_MAX_HIT_DEPTH;
         }
-        int maxContextWindow = config.getInt(CLAVIN_MAX_CONTEXT_WINDOW);
+        maxContextWindow = config.getInt(CLAVIN_MAX_CONTEXT_WINDOW);
         if (maxContextWindow < 1) {
             LOGGER.debug("Found %s of %d. Using default: %d", CLAVIN_MAX_CONTEXT_WINDOW, maxContextWindow, DEFAULT_MAX_CONTENT_WINDOW);
             maxContextWindow = DEFAULT_MAX_CONTENT_WINDOW;
         }
 
-        resolver = new LuceneLocationResolver(indexDirectory, maxHitDepth, maxContextWindow);
+        Gazetteer gazetteer = new LuceneGazetteer(indexDirectory);
+        resolver = new ClavinLocationResolver(gazetteer);
     }
 
     private void prepareIris() {
@@ -176,10 +191,10 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     }
 
     @Override
-    public void apply(Vertex sourceVertex, Iterable<Vertex> termMentions, Authorizations authorizations) throws IOException, ParseException {
+    public void apply(Vertex sourceVertex, Iterable<Vertex> termMentions, Authorizations authorizations) throws IOException, ParseException, ClavinException {
         List<LocationOccurrence> locationOccurrences = getLocationOccurrencesFromTermMentions(termMentions);
         LOGGER.info("Found %d Locations in %d terms.", locationOccurrences.size(), count(termMentions));
-        List<ResolvedLocation> resolvedLocationNames = resolver.resolveLocations(locationOccurrences, fuzzy);
+        List<ResolvedLocation> resolvedLocationNames = resolver.resolveLocations(locationOccurrences, maxHitDepth, maxContextWindow, fuzzy);
         LOGGER.info("Resolved %d Locations", resolvedLocationNames.size());
 
         if (resolvedLocationNames.isEmpty()) {
