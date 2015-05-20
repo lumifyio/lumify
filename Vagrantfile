@@ -16,14 +16,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "nrel/CentOS-6.6-x86_64"
 
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
-
-  config.vm.network :forwarded_port, :guest => 8080, :host => 8080, :auto_correct => true
-  config.vm.network :forwarded_port, :guest => 8443, :host => 8443, :auto_correct => true
-
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
@@ -56,6 +48,13 @@ Vagrant.configure(2) do |config|
   # Demo configuration
   config.vm.define 'demo' do |demo|
     config.vm.network :private_network, ip: "192.168.33.12"
+    # Create a forwarded port mapping which allows access to a specific port
+    # within the machine from a port on the host machine. In the example below,
+    # accessing "localhost:8080" will access port 80 on the guest machine.
+    # config.vm.network "forwarded_port", guest: 80, host: 8080
+    config.vm.network :forwarded_port, :guest => 8080, :host => 8080, :auto_correct => true
+    config.vm.network :forwarded_port, :guest => 8443, :host => 8443, :auto_correct => true
+
     config.vm.hostname = "lumify-demo"
     config.vm.provider "virtualbox" do |vb|
       vb.name = "lumify-demo"
