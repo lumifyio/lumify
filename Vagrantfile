@@ -16,14 +16,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "nrel/CentOS-6.6-x86_64"
 
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
-
-  config.vm.network :forwarded_port, :guest => 8080, :host => 8080, :auto_correct => true
-  config.vm.network :forwarded_port, :guest => 8443, :host => 8443, :auto_correct => true
-
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
@@ -48,9 +40,6 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", inline: "sed -i 's/lumify-dev *//g' /etc/hosts"
     config.vm.provision "shell", inline: "echo \"192.168.33.10  lumify-dev\" >> /etc/hosts"
     config.vm.provision "shell", path: "vagrant/scripts/install-lumify-dependencies.sh"
-    config.vm.provision "shell", inline: "cp /vagrant/vagrant/dev/start.sh /opt/start.sh"
-    config.vm.provision "shell", inline: "cp /vagrant/vagrant/dev/stop.sh /opt/stop.sh"
-    config.vm.provision "shell", inline: "/bin/bash /opt/start.sh"
   end
 
   # Demo configuration
@@ -62,14 +51,14 @@ Vagrant.configure(2) do |config|
       vb.memory = 8192
       vb.cpus = 4
     end
+    config.vm.network :forwarded_port, :guest => 8080, :host => 8080, :auto_correct => true
+    config.vm.network :forwarded_port, :guest => 8443, :host => 8443, :auto_correct => true
     config.vm.provision "shell", inline: "sed -i 's/lumify-demo *//g' /etc/hosts"
     config.vm.provision "shell", inline: "echo \"192.168.33.12  lumify-demo\" >> /etc/hosts"
     config.vm.provision "shell", path: "vagrant/scripts/install-lumify-dependencies.sh"
     config.vm.provision "shell", inline: "cd /vagrant && mvn -P \"grunt unix\",web-war,web-war-with-gpw,web-war-with-ui-plugins clean package -DskipTests", privileged: false
     config.vm.provision "shell", path: "vagrant/scripts/install-lumify-demo.sh"
-    config.vm.provision "shell", inline: "cp /vagrant/vagrant/demo/start.sh /opt/start.sh"
-    config.vm.provision "shell", inline: "cp /vagrant/vagrant/demo/stop.sh /opt/stop.sh"
-    config.vm.provision "shell", inline: "/bin/bash /opt/start.sh"
+    config.vm.provision "shell", inline: "chkconfig --add jetty && service jetty start"
   end
 
   # Integration test configuration
@@ -81,6 +70,8 @@ Vagrant.configure(2) do |config|
 #      vb.memory = 8192
 #      vb.cpus = 4
 #    end
+#    config.vm.network :forwarded_port, :guest => 8080, :host => 8080, :auto_correct => true
+#    config.vm.network :forwarded_port, :guest => 8443, :host => 8443, :auto_correct => true
 #    config.vm.provision "shell", inline: "sed -i 's/lumify-itest *//g' /etc/hosts"
 #    config.vm.provision "shell", inline: "echo \"192.168.33.11  lumify-itest\" >> /etc/hosts"
 #    config.vm.provision "shell", path: "vagrant/scripts/install-lumify-dependencies.sh"

@@ -17,7 +17,8 @@ if [ ! -f "$ARCHIVE_DIR/clavin-index-2.0.0_2015-04-28.tar.gz" ]; then
 fi
 
 # delete the archive
-tar -zxvf $ARCHIVE_DIR/clavin-index-2.0.0_2015-04-28.tar.gz -C /opt/lumify
+mkdir -p $index_dir
+tar -zxvf $ARCHIVE_DIR/clavin-index-2.0.0_2015-04-28.tar.gz -C $index_dir
 
 # delete the archive
 rm -rf $ARCHIVE_DIR
