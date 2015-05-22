@@ -23,4 +23,3 @@ rm -rf $ARCHIVE_DIR
 
 # build the package
 ln -s /opt/jetty-distribution-${jetty_version} /opt/jetty
-ln -s /opt/jetty/bin/jetty.sh /etc/init.d/jetty
