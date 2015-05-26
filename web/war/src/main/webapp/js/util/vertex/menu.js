@@ -3,8 +3,9 @@ define([
     'flight/lib/component',
     'tpl!./menu',
     'util/vertex/formatters',
-    'util/withDataRequest'
-], function(defineComponent, template, F, withDataRequest) {
+    'util/withDataRequest',
+    'configuration/plugins/graphVertexMenu/plugin'
+], function(defineComponent, template, F, withDataRequest, graphVertexMenu) {
     'use strict';
 
     return defineComponent(Menu, withDataRequest);
@@ -74,6 +75,10 @@ define([
 
             ];
 
+            if (graphVertexMenu.menuItems.length > 0) {
+                items = items.concat([ DIVIDER ], graphVertexMenu.menuItems);
+            }
+
         this.defaultAttrs({
             menuSelector: '.vertex-menu a'
         });
@@ -109,6 +114,15 @@ define([
                 eventName = anchor.data('event');
 
             if (anchor.closest('li.disabled').length) {
+                return;
+            }
+
+            if (eventName.indexOf('vertexMenuPluginClicked') === 0){
+                words = eventName.split(':');
+
+                menuItem = graphVertexMenu.menuItemsById[words[1]];
+                menuItem.clicked(this.attr.vertexId);
+
                 return;
             }
 
