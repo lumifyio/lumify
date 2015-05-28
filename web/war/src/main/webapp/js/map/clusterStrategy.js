@@ -155,7 +155,9 @@ define(['openlayers'], function(OpenLayers) {
 
             if (!this._throttledRedraw) {
                 this._throttledRedraw = _.debounce(function() {
-                    this.layer.redraw();
+                    if (this.layer) {
+                        this.layer.redraw();
+                    }
                 }.bind(this), 250);
             }
 

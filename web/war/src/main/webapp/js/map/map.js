@@ -33,7 +33,7 @@ define([
 
     function MapViewOpenLayers() {
 
-        var ol, latlon, point;
+        var ol, latLon, point;
 
         this.mode = MODE_NORMAL;
 
@@ -644,7 +644,7 @@ define([
         this.initializeMap = function() {
             var self = this,
                 openlayersDeferred = $.Deferred(),
-                clusterStrategyDeferred = $.Deferred()
+                clusterStrategyDeferred = $.Deferred(),
                 mapProviderDeferred = $.Deferred();
 
             require(['openlayers'], openlayersDeferred.resolve);
