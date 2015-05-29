@@ -62,7 +62,7 @@ The reference implementation of the `DocumentMapping` interface is the `io.lumif
 		"skipRows": 1,
 		"entities": {
 			"person": {
-				"conceptURI": "person",
+				"conceptIRI": "person",
 				"properties": {
 				        "name": { "index": 0 },
 					"birthDate": {
@@ -75,7 +75,7 @@ The reference implementation of the `DocumentMapping` interface is the `io.lumif
 				}
 			},
 			"zip": {
-				"conceptURI": "location",
+				"conceptIRI": "location",
 				"properties": {
 				        "zip_code": { "index": 1 }
 				}
