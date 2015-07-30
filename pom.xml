@@ -817,6 +817,12 @@
                 <skipITs>false</skipITs>
             </properties>
         </profile>
+        <profile>
+            <id>grunt unix</id>
+        </profile>
+        <profile>
+            <id>web-war</id>
+        </profile>
     </profiles>
 
     <build>

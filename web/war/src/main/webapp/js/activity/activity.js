@@ -378,7 +378,7 @@ define([
                             this.select('.actions-plugin').each(function() {
                                 var datum = d3.select(this).datum(),
                                     handler = ActivityHandlers.activityHandlersByType[datum.type],
-                                    componentPath = handler.finishedComponentPath
+                                    componentPath = handler.finishedComponentPath,
                                     Component = componentPath && finishedComponents[componentPath];
 
                                 if (Component && datum.endTime) {

@@ -16,7 +16,8 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.securegraph.GraphConfiguration;
 import org.securegraph.elasticsearch.ElasticSearchSearchIndexBase;
 import org.securegraph.elasticsearch.ElasticSearchSearchIndexConfiguration;
-
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.settings.ImmutableSettings;
 import java.util.Map;
 
 public class FormatLumify extends CommandLineBase {
@@ -57,7 +58,12 @@ public class FormatLumify extends CommandLineBase {
         String indexName = (String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexConfiguration.CONFIG_INDEX_NAME);
         String[] esLocations = ((String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexConfiguration.CONFIG_ES_LOCATIONS)).split(",");
         LOGGER.debug("BEGIN deleting elastic search index: " + indexName);
-        TransportClient client = new TransportClient();
+       // TransportClient client = new TransportClient();
+        String clusterName = (String) configuration.get("graph." + GraphConfiguration.SEARCH_INDEX_PROP_PREFIX + "." + ElasticSearchSearchIndexConfiguration.CONFIG_CLUSTER_NAME);
+        LOGGER.debug("clusterName: " + clusterName);
+        Settings settings = ImmutableSettings.settingsBuilder()
+                .put("cluster.name", clusterName).build();
+        TransportClient client =    new TransportClient(settings);
         for (String esLocation : esLocations) {
             String[] locationSocket = esLocation.split(":");
             String host = locationSocket[0];
