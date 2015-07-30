@@ -158,6 +158,10 @@
 
     <repositories>
         <repository>
+            <id>altamira-artifactory</id>
+            <url>https://artifactory.altamiracorp.com/artifactory/libs-release-local</url>
+        </repository>
+        <repository>
             <id>lumify-releases</id>
             <url>https://bits.lumify.io/nexus/content/repositories/releases</url>
         </repository>
@@ -209,6 +213,11 @@
                 <groupId>ant</groupId>
                 <artifactId>ant</artifactId>
                 <version>${ant.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.media</groupId>
+                <artifactId>imageio</artifactId>
+                <version>1.1</version>
             </dependency>
             <dependency>
                 <groupId>com.altamiracorp.bigtable</groupId>
