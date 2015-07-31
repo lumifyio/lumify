@@ -389,7 +389,7 @@ define([
                     .value(),
                 container = this.select('histogramListSelector');
 
-                width = container.width();
+                var width = container.width();
 
             d3.select(container.get(0))
                     .selectAll('li.property-section')
