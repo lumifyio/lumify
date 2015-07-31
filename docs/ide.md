@@ -31,7 +31,7 @@ run/debug configurations for building & running the Lumify Jetty Server.
 ### Maven Projects Plugin pane
 * Open the Maven Projects pane by selecting the **View -> Tool Windows -> Maven Projects** menu item
 * In the Maven Projects pane select the cog icon, in the upper right corner, and select **Group Modules**
-* Ensure that the **web-war** and **grunt unix** Maven Profiles are selected
+* Ensure that the **web-war**, **web-war-with-gpw**, **web-war-with-ui-plugins** and **grunt unix** Maven Profiles are selected
 * Ensure that the **Toggle 'Skip Tests' Mode** tool bar button is selected to disable executing unit tests (unless you want to run unit tests)
 
 ![Maven Projects Configuration](img/intillij-mvn-projects-config.png)
