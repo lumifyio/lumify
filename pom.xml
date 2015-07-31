@@ -159,7 +159,7 @@
     <repositories>
         <repository>
             <id>altamira-artifactory</id>
-            <url>https://artifactory.altamiracorp.com/artifactory/libs-release-local</url>
+            <url>http://artifactory.altamiracorp.com/artifactory/libs-release-local</url>
         </repository>
         <repository>
             <id>lumify-releases</id>
