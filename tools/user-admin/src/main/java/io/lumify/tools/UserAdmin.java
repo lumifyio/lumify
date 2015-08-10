@@ -160,9 +160,12 @@ public class UserAdmin extends CommandLineBase {
     private int create(CommandLine cmd) {
         String username = cmd.getOptionValue(CMD_OPT_USERNAME);
         String password = cmd.getOptionValue(CMD_OPT_PASSWORD);
+        String displayName = cmd.getOptionValue(CMD_OPT_DISPLAYNAME);
+        String emailAddress = cmd.getOptionValue(CMD_OPT_EMAIL);
         String[] authorizations = new String[]{};
 
-        getUserRepository().addUser(username, username, null, password, authorizations);
+        getUserRepository().addUser(username, displayName, emailAddress, password, authorizations);
+        //format: addUser(username, displayName, emailAddress, password, authorizations);
 
         User user = getUserRepository().findByUsername(username);
 
@@ -175,6 +178,32 @@ public class UserAdmin extends CommandLineBase {
             privileges.add(Privilege.READ);
         }
         getUserRepository().setPrivileges(user, privileges);
+
+        if (displayName != null) {
+            getUserRepository().setDisplayName(user, displayName);
+        }
+        else {
+            System.out.println("no display name provided");
+        }
+        if (emailAddress != null) {
+            getUserRepository().setEmailAddress(user, emailAddress);
+        }
+        else {
+            System.out.println("no email address provided");
+        }
+
+        if (username == null) {
+            System.out.println("no username provided");
+            //return -2;
+        }
+        if (password == null) {
+            System.out.println("no password provided");
+            //return -2;
+        }
+        if (authorizations == null) {
+            System.out.println("no authorizations provided");
+            //return -2;
+        }
 
         printUser(user);
         return 0;

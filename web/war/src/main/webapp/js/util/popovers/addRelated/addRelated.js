@@ -40,7 +40,6 @@ define([
             }
             config.template = 'addRelated/template';
         });
-
         this.after('initialize', function() {
             var self = this;
 
@@ -66,18 +65,16 @@ define([
                 });
 
                 RelationshipSelector.attachTo(self.popover.find('.relationship'), {
-                    defaultText: i18n('popovers.add_related.relationship.default_text'),
+                    defaultText: i18n('popovers.add_related.relationship.default_text')
                 });
 
                 this.positionDialog();
             });
         });
-
         this.onRelationshipSelected = function(event, data) {
             this.relationshipId = data.relationship && data.relationship.title;
             this.checkValid();
         };
-
         this.onConceptSelected = function(event, data) {
             this.conceptId = data.concept && data.concept.id;
             this.checkValid();
@@ -101,7 +98,6 @@ define([
             cancelButton.hide();
             addButton.show();
         };
-
         this.onSearch = function(event) {
             this.trigger(document, 'searchByRelatedEntity', {
                 vertexIds: this.attr.relatedToVertexIds,
@@ -113,7 +109,6 @@ define([
 
         this.onPromptAdd = function(event) {
             var self = this;
-
             this.trigger('updateWorkspace', {
                 options: {
                     selectAll: true
@@ -157,7 +152,7 @@ define([
                     searchButton.hide();
                     promptAdd.hide();
                     cancelButton.hide();
-                    self.clearFieldErrors(this.popover);
+                    self.clearFieldErrors(self.popover);
                 })
                 .then(function(results) {
                     var config = results.shift(),
@@ -198,7 +193,8 @@ define([
                     }
 
                 })
-                .catch(function() {
+                .catch(function(error) {
+                    console.warn("Oh no add related error!!!!!!", error);
                     self.markFieldErrors(i18n('popovers.add_related.error'));
                 })
         };
