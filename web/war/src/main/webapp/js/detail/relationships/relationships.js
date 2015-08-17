@@ -184,18 +184,18 @@ define([
 
                 d3.select(self.node)
                     .selectAll('section.collapsible')
-                    .data(relations, _.property('label'))
+                    .data(relations, _.property('label'))  //returns an array of relationship objects and a function that returns properties
                     .call(function() {
                         this.enter()
                             .append('section')
                             .attr('class', 'collapsible')
                             .call(function() {
-                                this.append('h1')
+                                this.append('h1') //title of relationship
                                     .call(function() {
                                         this.append('strong');
                                         this.append('span').attr('class', 'badge');
                                     });
-                                this.append('div');
+                                this.append('div'); //adds functionality to dropdown, actually makes it show/hide
                             });
 
                         this
