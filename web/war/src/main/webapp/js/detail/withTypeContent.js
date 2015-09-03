@@ -126,7 +126,7 @@ define([
 
         this.onOpenFullscreen = function(event, data) {
             var viewing = this.attr.data;
-                vertices = data && data.vertices ?
+            var vertices = data && data.vertices ?
                     data.vertices :
                     _.isObject(viewing) && viewing.vertices ?
                     viewing.vertices :

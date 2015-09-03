@@ -118,7 +118,7 @@ define([
                         return true;
                     })
                     .value();
-                    
+
                 var row = this.contentRoot.select('table')
                     .selectAll('tr')
                     .data(metadata)
