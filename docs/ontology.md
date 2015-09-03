@@ -105,6 +105,8 @@ To override an intent you can add the following to your configuration.
     ontology.intent.relationship.hasMedia=http://lumify.io/dev#hasMedia
     ontology.intent.property.pageCount=http://lumify.io/dev#pageCount
 
+THe following intents are needed for the graph property workers to run correctly:
+
 ### Concepts
 
 | Name         | Description                               |
