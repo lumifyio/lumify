@@ -17,7 +17,7 @@
     "jquery-scrollstop": "git://github.com/ssorallen/jquery-scrollstop.git",
     "jquery-ui": "~1.10.3",
     "jquery.easing": "~1.3.0",
-    "openlayers": "release-2.13.1",
+    "openlayers": "git://github.com/altamiracorp/openlayers.git",
     "rangy-official": "1.3.0-alpha.20140921",
     "require-handlebars-plugin": "~0.8.0",
     "require-less": "~0.1.2",
