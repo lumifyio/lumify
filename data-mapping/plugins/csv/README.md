@@ -89,6 +89,64 @@ The reference implementation of the `DocumentMapping` interface is the `io.lumif
 			}
 		]
 	}
+
+#### Example 2
+
+##### _Sample Data 2_
+
+     	RteDate,RteTimeStart,LPR pings,Lat,Lon,Rte Date & Time
+	10/02/15,17:15,LPR00021,39.2958662,-76.57642701,10/2/15 17:15
+	10/03/15,16:04,LPR00248,39.295344,-76.589438,10/3/15 16:04
+	10/04/15,17:27,LPR00245,39.295344,-76.589438,10/4/15 17:27
+	10/05/15,17:27,LPR00274,39.314247,-76.582127,10/5/15 17:27
+	10/06/15,17:27,LPR00262,39.327704,-76.565993,10/6/15 17:27
+	10/07/15,18:02,LPR00263,39.327704,-76.565993,10/7/15 18:02
+	10/08/15,18:02,LPR00275,39.314247,-76.582127,10/8/15 18:02
+	10/09/15,16:49,LPR00274,39.314247,-76.582127,10/9/15 16:49
+
+##### _Mapping 2_
+
+        {
+        	"type": "csv",
+        	“skipRows": 1,
+        	"entities": 
+		{
+         		“Event”: 
+			{
+                		"conceptIRI": “event”,
+                    		"properties": 
+				{
+                      			“date”: 
+					{	 
+						"index": 5,
+ 						"xform": 
+						{
+                        				"dataType": "date",
+                               	  			"format": "MM/dd/yy HH:mm”
+                            			}
+					},
+                         		“title”: 
+					{ “index”: 2 },
+					“geolocation”:
+					{
+						“type”: “geopoint”,
+						“latitudeColumn”: 
+						{
+							“index”: 3,
+							“xform”:
+							{ “dataType”: “double” }
+						},
+						“longitudeColumn”: 
+						{
+							“index”: 4,
+							“xform”:
+							{ “dataType”: “double” }
+						}
+					}
+                     		}
+              		}
+		}
+        }
 		
 ## [Entity Mapping](id:entityMapping)
 ---
@@ -634,4 +692,3 @@ that is defined in the configured Lumify ontology.
 				The relationship label (IRI) that will be used when the source and/or target entities are
 				of the specified ontological types.
 			
-I
