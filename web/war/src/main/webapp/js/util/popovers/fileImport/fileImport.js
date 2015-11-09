@@ -126,6 +126,27 @@ define([
                     (this.visibilitySource && this.visibilitySource.valid) :
                     _.every(this.visibilitySources, _.property('valid'));
 
+            var totalSize = 0;
+            // In here loop through this.attr.files and add up the size (example this.attr.files[0].size)
+            for (i = 0; i < this.attr.files.length; i++) {
+                totalSize += this.attr.files[i].size;
+            }
+
+            if (totalSize > 500000) {
+                isValid = false;
+
+                if (document.getElementById("warning-text") != null) {
+                    document.getElementById("warning-text").remove();
+                }
+
+                var paragraph = document.createElement("p");
+                paragraph.innerHTML = "File size too large! Please keep uploads under 500 KB.";
+                paragraph.setAttribute("id", "warning-text");
+                paragraph.style.color = "red";
+                var buttonElement = this.popover.find('button')[0];
+                buttonElement.parentNode.insertBefore(paragraph, buttonElement);
+            }
+
             if (isValid) {
                 this.popover.find('button').removeAttr('disabled');
             } else {
@@ -141,7 +162,7 @@ define([
             return checkbox.length === 0 || checkbox.is(':checked');
         };
 
-        this.onCancel = function() {
+        this.onCancel = function() {    ``
             this.teardown();
         };
 

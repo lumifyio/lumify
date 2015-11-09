@@ -29,7 +29,8 @@ public class TermsOfUse extends BaseRequestHandler {
     public static final String TITLE_PROPERTY = "termsOfUse.title";
     public static final String DEFAULT_TITLE = "Terms of Use";
     public static final String HTML_PROPERTY = "termsOfUse.html";
-    public static final String DEFAULT_HTML = "<p>These are the terms to which you must agree before using Lumify:</p><p>With great power comes great responsibility. Please use Lumify responsibly.</p>";
+    public static final String DEFAULT_HTML = "<p>These are the terms to which you must agree before using Lumify:</p><p>This is a demonstration instance of Lumify. Features and data may change at any time.</p>" +
+            "<p>Data entered into Lumify is not private and will not be maintained.</p>";
     public static final String DATE_PROPERTY = "termsOfUse.date";
     public static final String DATE_PROPERTY_FORMAT = "yyyy-MM-dd";
 
